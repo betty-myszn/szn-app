@@ -162,6 +162,34 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
             hey, {data.birthData.name.split(" ")[0]}.<br />
             here&apos;s your <span className="pk">{currentSzn} szn. {sznSymbol}</span>
           </h1>
+          {/* Big 3 */}
+          <div className="flex gap-4 mb-5 flex-wrap">
+            {[
+              { label: "sun", sign: data.sunSign },
+              { label: "moon", sign: data.moonSign },
+              { label: "rising", sign: data.risingSign },
+            ].map(({ label, sign }) => {
+              const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
+              const sym = idx >= 0 ? ZODIAC_SYMBOLS[idx] : "";
+              return (
+                <div
+                  key={label}
+                  className="flex items-center gap-2 px-4 py-2"
+                  style={{
+                    border: "1.5px solid rgba(255,255,255,0.15)",
+                    background: "rgba(255,255,255,0.05)",
+                  }}
+                >
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>
+                    {label}
+                  </span>
+                  <span style={{ fontSize: 14, color: "#fff", fontWeight: 600 }}>
+                    {sign} {sym}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
           <p
             style={{
               fontSize: 14,

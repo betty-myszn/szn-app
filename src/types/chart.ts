@@ -153,6 +153,7 @@ export const PLANET_SYMBOLS: Record<string, string> = {
   Chiron: "⚷",
   "North Node": "☊",
   "South Node": "☋",
+  Ascendant: "AC",
 };
 
 // --- Transit Types ---
@@ -248,6 +249,9 @@ export interface CosmicForecast {
 
 export interface YourSznData {
   birthData: BirthData;
+  risingSign: string;
+  sunSign: string;
+  moonSign: string;
   transits: TransitData;
   theme: MonthlyTheme;
   focusAreas: FocusArea[];

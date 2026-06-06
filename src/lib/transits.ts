@@ -82,7 +82,7 @@ function getMoonPhase(sunLong: number, moonLong: number): MoonPhase {
 // Significance based on which planets are involved
 function getSignificance(transitPlanet: string, natalPlanet: string): "major" | "moderate" | "minor" {
   const outerPlanets = ["Saturn", "Uranus", "Neptune", "Pluto", "Chiron"];
-  const personalPlanets = ["Sun", "Moon", "Mercury", "Venus", "Mars"];
+  const personalPlanets = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Ascendant"];
 
   if (outerPlanets.includes(transitPlanet) && personalPlanets.includes(natalPlanet)) return "major";
   if (outerPlanets.includes(transitPlanet) && outerPlanets.includes(natalPlanet)) return "moderate";
@@ -105,6 +105,7 @@ const PLANET_THEMES: Record<string, Record<string, string>> = {
   Pluto: { conjunction: "deep transformation", opposition: "power dynamics", square: "intense rebirth", trine: "empowered evolution", sextile: "subtle power shift" },
   Chiron: { conjunction: "healing activation", opposition: "wound awareness", square: "healing challenge", trine: "wisdom integration", sextile: "healing opportunity" },
   "North Node": { conjunction: "destiny calling", opposition: "karmic release", square: "purpose tension", trine: "aligned growth", sextile: "soul path opening" },
+  Ascendant: { conjunction: "glow-up activation", opposition: "relationship mirror", square: "identity shake-up", trine: "effortless magnetism", sextile: "fresh energy incoming" },
 };
 
 export function calculateTransits(natalChart: ChartData): TransitData {
@@ -150,8 +151,16 @@ export function calculateTransits(natalChart: ChartData): TransitData {
     Chiron: 2, "North Node": 2,
   };
 
+  // Include the Ascendant (Rising) as a natal sensitive point
+  const ascendantLong = natalChart.ascendant;
+  const ascSignData = longitudeToSign(ascendantLong);
+  const natalPointsToCheck = [
+    ...natalChart.planets,
+    { id: "ascendant", name: "Ascendant", longitude: ascendantLong, sign: ascSignData.sign, degree: ascSignData.degree, minute: ascSignData.minute, house: 1, retrograde: false },
+  ];
+
   for (const transit of currentPositions) {
-    for (const natal of natalChart.planets) {
+    for (const natal of natalPointsToCheck) {
       let diff = Math.abs(transit.longitude - natal.longitude);
       if (diff > 180) diff = 360 - diff;
 
@@ -272,6 +281,10 @@ function generateTheme(transits: TransitData, natalChart: ChartData): MonthlyThe
     "emotional reset": "Coming Home to the Real You",
     "energy surge": "Big Bold Moves Only",
     "mental clarity": "Say It Louder for the People in the Back",
+    "glow-up activation": "Your Rising Sign is Being Activated. GLOW UP INCOMING!",
+    "effortless magnetism": "Main Character Magnetism is OFF THE CHARTS",
+    "identity shake-up": "New Look, New Vibe, New You",
+    "fresh energy incoming": "Fresh Energy Coming In Hot For Your Rising",
   };
 
   const title = titleOptions[themes[0]] || "Growth, Glow-Ups & Cosmic Alignment";
@@ -376,6 +389,7 @@ function generateJournalPrompts(transits: TransitData, natalChart: ChartData): J
     Neptune: ["What is my intuition SCREAMING at me that I keep ignoring?", "Where do I need to surrender control and just trust the process?", "What dream have I been keeping small that's ready to be the full, ridiculous, gorgeous vision?"],
     Uranus: ["Where in my life am I bored, restless and craving total freedom?", "What would I change about my life tomorrow if literally nobody had an opinion?", "What version of me has expired? She was great, but she's done. Who's next?"],
     "North Node": ["What is my soul screaming at me to do that my ego keeps vetoing?", "What fear is standing between me and my actual destiny? Name it!", "If I followed the pull instead of the plan, where would I end up?"],
+    Ascendant: ["How do I want the world to see me? Is that matching who I actually am right now?", "What would change if I dressed, spoke and moved like the most confident version of myself?", "What first impression am I giving vs. what I actually want to be radiating? Time to close the gap!"],
   };
 
   for (const a of activated) {
@@ -415,6 +429,10 @@ function generateManifestationMission(transits: TransitData, natalChart: ChartDa
       "maturity call": { mission: "Build something so solid that future you sends a thank you card", action: "Map out the next 90 days. Pick step one. Commit like your dream life depends on it (because it does)." },
       "sudden awakening": { mission: "Let the universe surprise you and ENJOY the plot twist", action: "Try something wildly new. Shock yourself. That's where the breakthroughs live." },
       "destiny calling": { mission: "Stop playing small and take one bold step toward your actual purpose", action: "Whatever lights you up and makes time disappear? Do more of THAT. Like, starting now." },
+      "glow-up activation": { mission: "Your rising sign is ON. Time to become the most magnetic version of yourself", action: "Update your look, your energy, your vibe. Book the hair appointment, curate the wardrobe, walk into rooms like you own them." },
+      "effortless magnetism": { mission: "You are literally radiating right now. Use this energy to attract everything you want", action: "Show up. Be visible. Post the thing, wear the outfit, take up space. People can't look away and that's the point." },
+      "identity shake-up": { mission: "Who you've been is evolving. Let the new version of you breathe!", action: "Clear out anything that feels like the old you: clothes, habits, energy. Make room for who's coming next." },
+      "fresh energy incoming": { mission: "Fresh cosmic energy is hitting your rising sign. New chapter unlocked!", action: "Try a completely new style, a new routine, or show up somewhere totally unexpected. Reinvention is your superpower right now." },
     };
 
     const m = missions[topActivation.theme] || { mission: `Pour your energy into ${houseTheme.theme}. The cosmos is backing you!`, action: "Journal on what this area of your life is asking for. Then give it that!" };
@@ -572,6 +590,46 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
     });
   }
 
+  // Rising sign / Ascendant activations → style, fashion, identity content
+  const risingActive = activated.find((a) => a.natalPlanet === "Ascendant");
+  const risingSign = natalChart.houses[0]?.sign || "Aries";
+
+  const risingStyleGuides: Record<string, { vibe: string; colours: string; pieces: string }> = {
+    Aries: { vibe: "bold, sporty-chic, red-hot main character", colours: "red, black, metallics", pieces: "structured blazers, statement earrings, anything with edge" },
+    Taurus: { vibe: "luxe, sensual, 'I woke up like this' elegance", colours: "emerald, cream, rose gold", pieces: "cashmere everything, silk scarves, quality over quantity always" },
+    Gemini: { vibe: "playful, trend-forward, never the same outfit twice", colours: "yellow, pastels, colour-blocking", pieces: "layered accessories, mix-and-match sets, conversation-starting prints" },
+    Cancer: { vibe: "soft, romantic, cosy-but-make-it-fashion", colours: "silver, white, soft blue, pearl", pieces: "linen dresses, moonstone jewellery, anything that feels like a hug" },
+    Leo: { vibe: "dramatic, golden, 'all eyes on me' energy", colours: "gold, orange, royal purple", pieces: "statement sunglasses, bold prints, anything with a bit of sparkle" },
+    Virgo: { vibe: "minimal, curated, effortlessly put-together", colours: "sage, navy, cream, earth tones", pieces: "tailored trousers, delicate jewellery, the perfect white shirt" },
+    Libra: { vibe: "balanced, romantic, gallery-opening gorgeous", colours: "pink, baby blue, champagne", pieces: "matching sets, ballet flats, anything symmetrical and pretty" },
+    Scorpio: { vibe: "magnetic, dark-femme, mysteriously chic", colours: "black, burgundy, deep plum", pieces: "leather jackets, dark florals, sunglasses indoors (yes really)" },
+    Sagittarius: { vibe: "adventurous, eclectic, boho-meets-cosmopolitan", colours: "purple, turquoise, burnt orange", pieces: "oversized bags, travel-inspired jewellery, boots that go anywhere" },
+    Capricorn: { vibe: "power-dressing, timeless, 'she means business' chic", colours: "black, charcoal, camel, deep green", pieces: "blazers, pointed-toe shoes, investment accessories" },
+    Aquarius: { vibe: "avant-garde, techy, 'is she from the future?' cool", colours: "electric blue, silver, neon accents", pieces: "unique silhouettes, vintage finds, platform shoes" },
+    Pisces: { vibe: "dreamy, ethereal, mermaid-off-duty glamour", colours: "seafoam, lavender, iridescent", pieces: "flowing fabrics, crystal jewellery, anything that catches the light" },
+  };
+
+  const styleGuide = risingStyleGuides[risingSign] || risingStyleGuides["Aries"];
+
+  // Always include rising sign style guide (it's fashion, it's always relevant!)
+  recs.push({
+    type: "article",
+    title: `${risingSign} Rising Style Guide: Dress Your Chart`,
+    description: `Your rising sign is how the world sees you, so dress like it! Your vibe is ${styleGuide.vibe}. Think ${styleGuide.colours} and ${styleGuide.pieces}.`,
+    basedOn: `${risingSign} Ascendant`,
+    emoji: "👗",
+  });
+
+  if (risingActive) {
+    recs.push({
+      type: "workshop",
+      title: `Your ${risingSign} Rising Glow-Up`,
+      description: `Your Ascendant is literally being activated right now, which means your whole look, energy and first impression is evolving. This is your cosmic makeover moment. Let's go!`,
+      basedOn: `${risingActive.activatedBy} ${risingActive.aspectType} Ascendant`,
+      emoji: "✨",
+    });
+  }
+
   // Always include a placement guide for the most activated natal planet
   if (activated.length > 0) {
     const top = activated[0];
@@ -622,6 +680,22 @@ function generateNextBestStep(transits: TransitData, natalChart: ChartData, recs
       message: `Saturn is building something serious in your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. This isn't a detour, it's the foundation of everything you want. Do the work!`,
       cta: "Start the Boundaries Workshop",
     },
+    "glow-up activation": {
+      message: `Your ${natalChart.houses[0]?.sign || ""} Rising is getting a cosmic glow-up right now. How you present yourself, your style, your whole VIBE is shifting. Lean into it and become magnetic!`,
+      cta: `Shop Your ${natalChart.houses[0]?.sign || ""} Rising Edit`,
+    },
+    "effortless magnetism": {
+      message: `Your ${natalChart.houses[0]?.sign || ""} Rising is absolutely radiating. People are drawn to you right now. Use this energy to show up, be seen, and attract what you want!`,
+      cta: `Style Your ${natalChart.houses[0]?.sign || ""} Rising`,
+    },
+    "identity shake-up": {
+      message: `Your ${natalChart.houses[0]?.sign || ""} Rising is going through a reinvention. New style, new energy, new first impression. Let the transformation happen!`,
+      cta: `Explore Your Rising Sign Style`,
+    },
+    "fresh energy incoming": {
+      message: `Fresh energy is hitting your ${natalChart.houses[0]?.sign || ""} Rising. This is your cosmic permission to reinvent yourself from the outside in. New look, new vibe, new era!`,
+      cta: `Discover Your Rising Sign Edit`,
+    },
   };
 
   const m = messages[top.theme] || {
@@ -642,8 +716,15 @@ export function generateYourSzn(natalChart: ChartData): YourSznData {
   const recommendations = generateRecommendations(transits, natalChart);
   const nextBestStep = generateNextBestStep(transits, natalChart, recommendations);
 
+  const risingSign = natalChart.houses[0]?.sign || "Aries";
+  const sunSign = natalChart.planets.find((p) => p.name === "Sun")?.sign || "Aries";
+  const moonSign = natalChart.planets.find((p) => p.name === "Moon")?.sign || "Aries";
+
   return {
     birthData: natalChart.birthData,
+    risingSign,
+    sunSign,
+    moonSign,
     transits,
     theme,
     focusAreas,

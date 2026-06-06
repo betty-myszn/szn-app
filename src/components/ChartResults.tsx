@@ -165,6 +165,37 @@ export default function ChartResults({ chart }: ChartResultsProps) {
 
           {/* Planet Positions */}
           <div style={{ borderBottom: "var(--border)" }}>
+            {/* Big 3 */}
+            {(() => {
+              const sun = chart.planets.find((p) => p.name === "Sun");
+              const moon = chart.planets.find((p) => p.name === "Moon");
+              const risingSign = chart.houses[0]?.sign || "Aries";
+              const risingIdx = ZODIAC_SIGNS.indexOf(risingSign as (typeof ZODIAC_SIGNS)[number]);
+              const risingSym = risingIdx >= 0 ? ZODIAC_SYMBOLS[risingIdx] : "";
+              const big3 = [
+                { label: "sun", sign: sun?.sign || "", symbol: ZODIAC_SYMBOLS[ZODIAC_SIGNS.indexOf(sun?.sign as (typeof ZODIAC_SIGNS)[number])] || "" },
+                { label: "moon", sign: moon?.sign || "", symbol: ZODIAC_SYMBOLS[ZODIAC_SIGNS.indexOf(moon?.sign as (typeof ZODIAC_SIGNS)[number])] || "" },
+                { label: "rising", sign: risingSign, symbol: risingSym },
+              ];
+              return (
+                <div className="flex gap-3 flex-wrap mb-6">
+                  {big3.map(({ label, sign, symbol }) => (
+                    <div
+                      key={label}
+                      className="flex items-center gap-2 px-4 py-2"
+                      style={{ border: "var(--border)", background: "#fafafa" }}
+                    >
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>
+                        {label}
+                      </span>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "var(--dark)" }}>
+                        {sign} {symbol}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
             <h2 style={sectionHeading}>planet positions</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
