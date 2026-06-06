@@ -154,3 +154,114 @@ export const PLANET_SYMBOLS: Record<string, string> = {
   "North Node": "☊",
   "South Node": "☋",
 };
+
+// --- Transit Types ---
+
+export interface TransitAspect {
+  transitPlanet: string;
+  transitSign: string;
+  transitDegree: number;
+  natalPlanet: string;
+  natalSign: string;
+  natalDegree: number;
+  aspectType: AspectType;
+  orb: number;
+  applying: boolean;
+  significance: "major" | "moderate" | "minor";
+}
+
+export interface TransitPosition {
+  id: string;
+  name: string;
+  longitude: number;
+  sign: string;
+  degree: number;
+  minute: number;
+  retrograde: boolean;
+  natalHouse: number; // which natal house the transit planet is in
+}
+
+export interface TransitData {
+  currentPositions: TransitPosition[];
+  transitAspects: TransitAspect[];
+  activatedPlacements: ActivatedPlacement[];
+  moonPhase: MoonPhase;
+  calculatedAt: string;
+}
+
+export interface ActivatedPlacement {
+  natalPlanet: string;
+  natalSign: string;
+  natalHouse: number;
+  activatedBy: string; // transit planet name
+  aspectType: AspectType;
+  orb: number;
+  theme: string;
+}
+
+export interface MoonPhase {
+  phase: string;
+  illumination: number;
+  emoji: string;
+}
+
+// --- Focus Area Types ---
+
+export interface FocusArea {
+  area: string;
+  emoji: string;
+  summary: string;
+  activePlanets: string[];
+}
+
+export interface MonthlyTheme {
+  title: string;
+  description: string;
+  keyTransits: string[];
+}
+
+export interface JournalPrompt {
+  prompt: string;
+  relatedPlacement: string;
+}
+
+export interface ManifestationMission {
+  mission: string;
+  basedOn: string;
+  actionStep: string;
+}
+
+export interface NextBestStep {
+  message: string;
+  cta: string;
+  link: string;
+}
+
+export interface CosmicForecast {
+  biggestOpportunity: string;
+  biggestChallenge: string;
+  sayYesTo: string;
+  avoid: string;
+  luckyDays: string[];
+  manifestationDates: string[];
+}
+
+export interface YourSznData {
+  birthData: BirthData;
+  transits: TransitData;
+  theme: MonthlyTheme;
+  focusAreas: FocusArea[];
+  manifestationMission: ManifestationMission;
+  journalPrompts: JournalPrompt[];
+  forecast: CosmicForecast;
+  nextBestStep: NextBestStep;
+  recommendations: Recommendation[];
+}
+
+export interface Recommendation {
+  type: "article" | "hypnosis" | "tapping" | "workshop" | "reading" | "placement" | "podcast";
+  title: string;
+  description: string;
+  basedOn: string;
+  emoji: string;
+}

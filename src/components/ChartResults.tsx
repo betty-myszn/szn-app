@@ -11,6 +11,7 @@ import {
   ELEMENT_COLORS,
 } from "@/types/chart";
 import ChartWheel from "./ChartWheel";
+import { encodeBirthData } from "@/lib/url-params";
 
 interface ChartResultsProps {
   chart: ChartData;
@@ -133,6 +134,23 @@ export default function ChartResults({ chart }: ChartResultsProps) {
             >
               {copiedJson ? "copied!" : "copy json"}
             </button>
+            <a
+              href={`/your-szn?${encodeBirthData(chart.birthData)}`}
+              style={{
+                background: "var(--pink)",
+                color: "#fff",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "8px 18px",
+                border: "none",
+                textDecoration: "none",
+                display: "inline-block",
+              }}
+            >
+              your szn →
+            </a>
           </div>
         </div>
       </div>

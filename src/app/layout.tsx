@@ -56,6 +56,9 @@ export default function RootLayout({
               textTransform: "uppercase",
             }}
           >
+            <Link href="/your-szn" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+              your szn
+            </Link>
             <Link href="/chart" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
               chart
             </Link>
