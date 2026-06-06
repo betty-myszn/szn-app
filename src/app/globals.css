@@ -1,26 +1,154 @@
 @import "tailwindcss";
 
+/* ── Design tokens ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --pink: #FF2D87;
+  --lav: #C8B4F8;
+  --lav-light: #E8DFFE;
+  --dark: #1a1a1a;
+  --pink-light: #FFE0F0;
+  --pink-bg: #FFF0F7;
+  --gold: #FFF4D6;
+  --mint: #E1F5EE;
+  --cream: #FFF8F0;
+  --grey: #666;
+  --grey-light: #aaa;
+  --border: 1.5px solid #1a1a1a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ── Reset & base ── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  background: #fff;
+  color: var(--dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Helpers ── */
+.pk { color: var(--pink); }
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+
+/* ── Buttons ── */
+.btn-pink {
+  background: var(--pink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 13px 26px;
+  border: 1.5px solid var(--pink);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-pink:hover { opacity: 0.9; }
+.btn-outline {
+  background: transparent;
+  color: var(--dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 13px 26px;
+  border: 1.5px solid var(--dark);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-outline:hover { background: var(--dark); color: #fff; }
+.btn-outline--white { color: #fff; border-color: rgba(255,255,255,0.3); }
+.btn-outline--white:hover { background: #fff; color: var(--dark); }
+
+/* ── Ticker ── */
+.ticker {
+  background: var(--pink);
+  overflow: hidden;
+  padding: 10px 0;
+  border-bottom: var(--border);
+}
+.ticker-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker-scroll 24s linear infinite;
+}
+.ticker span {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 24px;
+}
+.ticker .dot { color: rgba(255,255,255,0.4); padding: 0 4px; }
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker--lav { background: var(--lav-light); border-top: var(--border); }
+.ticker--lav span { color: #3C2A70; }
+.ticker--lav .ticker-inner { animation-direction: reverse; }
+
+/* ── Placement tags ── */
+.pp-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  flex-shrink: 0;
+}
+.pp-tag--style    { background: var(--pink-light); color: #993556; }
+.pp-tag--money    { background: var(--mint); color: #0F6E56; }
+.pp-tag--heal     { background: var(--lav-light); color: #3C2A70; }
+.pp-tag--manifest { background: var(--gold); color: #854F0B; }
+.pp-tag--identity { background: #F1EFE8; color: #5F5E5A; }
+.pp-tag--drive    { background: #FCEBEB; color: #A32D2D; }
+
+/* ── GeoNames dropdown ── */
+.geo-dropdown {
+  position: absolute;
+  z-index: 50;
+  margin-top: 2px;
+  max-height: 240px;
+  width: 100%;
+  overflow: auto;
+  border: var(--border);
+  background: #fff;
+}
+.geo-dropdown button {
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--dark);
+  border: none;
+  border-bottom: 1px solid #eee;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.geo-dropdown button:hover { background: #fafafa; }
+
+/* ── Print ── */
+@media print {
+  .no-print { display: none !important; }
+  .chart-wheel { max-width: 400px; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px !important; }
+  .nav-links { gap: 16px !important; font-size: 11px !important; }
+  .nav-cta { padding: 8px 14px !important; font-size: 10px !important; }
 }
