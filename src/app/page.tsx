@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PersonalisedShop from "@/components/PersonalisedShop";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -287,86 +288,7 @@ export default function Home() {
       </section>
 
       {/* Shop section */}
-      <section id="shop">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-          <div>
-            <div className="tag">personalised for your placements</div>
-            <h1 style={{ fontFamily: poppins, fontSize: 44, fontWeight: 800, letterSpacing: "-1.2px", color: "#fff", lineHeight: 1.0 }}>
-              shop your <span className="pk">sign.</span>
-            </h1>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", marginTop: 14, maxWidth: 380, lineHeight: 1.65 }}>
-              Every pick is curated to your birth chart. Fashion, beauty, wellness, rituals, and lifestyle upgrades for the version of you that&apos;s already becoming.
-            </p>
-          </div>
-          <div className="flex gap-2.5 mt-5 md:mt-0 flex-wrap">
-            {["venus", "rising", "moon", "jupiter", "chiron"].map((p, i) => (
-              <div
-                key={p}
-                className="cursor-pointer transition-all"
-                style={{
-                  background: i === 0 ? "var(--pink)" : "var(--lav)",
-                  color: i === 0 ? "#fff" : "#3C2A70",
-                  fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "8px 14px",
-                  border: "1.5px solid transparent",
-                }}
-              >
-                {p}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6" style={{ borderBottom: "var(--border)" }}>
-          {[
-            { icon: "✦", bg: "var(--lav-light)", placement: "venus sign", badge: "new", cat: "fashion", name: "Obsidian Power Blazer", price: "$186" },
-            { icon: "☽", bg: "var(--pink-light)", placement: "moon sign", badge: "", cat: "rituals", name: "Pisces Moon Ceremony Kit", price: "$64" },
-            { icon: "♃", bg: "var(--dark)", placement: "jupiter sign", badge: "bestseller", cat: "money mindset", name: "Abundance by Design Journal", price: "$38", iconColor: "var(--lav)" },
-            { icon: "○", bg: "var(--cream)", placement: "chiron", badge: "", cat: "wellness", name: "Chiron Wound Healing Course", price: "$97" },
-            { icon: "↑", bg: "#E0F5EE", placement: "rising sign", badge: "", cat: "fashion", name: "Aquarius Rising Edit — 5 Pieces", price: "$220" },
-            { icon: "♀", bg: "var(--gold)", placement: "venus sign", badge: "szn pick", cat: "beauty", name: "Venus in Scorpio Scent Collection", price: "$78" },
-          ].map((prod, i) => (
-            <div key={i} className="cursor-pointer transition-colors" style={{ border: "var(--border)" }}>
-              <div className="h-40 flex items-center justify-center text-[40px] relative" style={{ background: prod.bg, color: prod.iconColor }}>
-                {prod.icon}
-                <div className="absolute top-2.5 left-2.5" style={{ background: "var(--pink)", color: "#fff", fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "4px 8px" }}>
-                  {prod.placement}
-                </div>
-                {prod.badge && (
-                  <div className="absolute top-2.5 right-2.5" style={{ background: "var(--lav)", color: "#3C2A70", fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "4px 8px" }}>
-                    {prod.badge}
-                  </div>
-                )}
-              </div>
-              <div className="p-3.5" style={{ borderTop: "var(--border)" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 5 }}>{prod.cat}</div>
-                <div style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>{prod.name}</div>
-                <div className="flex items-center justify-between">
-                  <div style={{ fontSize: 14, fontWeight: 700 }}>{prod.price}</div>
-                  <button style={{ background: "var(--dark)", color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px", border: "none", cursor: "pointer" }}>
-                    add
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Featured strip */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ borderBottom: "var(--border)" }}>
-          <div className="p-12" style={{ background: "var(--lav)", borderRight: "var(--border)" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 16 }}>featured drop</div>
-            <h2 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16 }}>Dress like your future self. Start with your rising sign.</h2>
-            <p style={{ fontSize: 13, color: "#3C2A70", lineHeight: 1.7, marginBottom: 24 }}>Your rising sign is how you show up in the world before you say a word. These picks are curated to your Aquarius rising energy — electric, original, ahead of everyone else in the room.</p>
-            <button className="btn-pink">shop rising sign edit</button>
-          </div>
-          <div className="p-12" style={{ background: "var(--pink)" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>this szn&apos;s ritual</div>
-            <h2 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16 }}>Aquarius szn manifestation stack.</h2>
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.7, marginBottom: 24 }}>Aquarius season is for rewiring, visioning, and doing things your way. This ritual stack gives you everything you need to set intentions that actually stick this time.</p>
-            <button style={{ background: "#fff", color: "var(--pink)", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "12px 24px", border: "none", cursor: "pointer" }}>shop the ritual stack</button>
-          </div>
-        </div>
-      </section>
+      <PersonalisedShop />
 
       {/* Ticker */}
       <Ticker items={["manifest with your jupiter sign", "new moon intentions", "lunar cycle living", "subconscious rewiring", "your era is now"]} />

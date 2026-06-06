@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { decodeBirthData, saveBirthData } from "@/lib/url-params";
+import { decodeBirthData, saveBirthData, savePlacements } from "@/lib/url-params";
 import ChartResults from "@/components/ChartResults";
 import type { ChartData } from "@/types/chart";
 
@@ -30,7 +30,23 @@ function ResultsContent() {
         if (!res.ok) throw new Error("Calculation failed");
         return res.json();
       })
-      .then((data) => setChart(data))
+      .then((data) => {
+        setChart(data);
+        // Save key placements for personalisation across the site
+        const find = (name: string) => data.planets?.find((p: { name: string; sign: string }) => p.name === name)?.sign || "";
+        savePlacements({
+          sun: find("Sun"),
+          moon: find("Moon"),
+          rising: data.houses?.[0]?.sign || "",
+          venus: find("Venus"),
+          mars: find("Mars"),
+          jupiter: find("Jupiter"),
+          saturn: find("Saturn"),
+          chiron: find("Chiron"),
+          northNode: find("North Node"),
+          midheaven: data.houses?.[9]?.sign || "",
+        });
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, [searchParams]);

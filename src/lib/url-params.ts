@@ -30,8 +30,44 @@ export function clearSavedBirthData(): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PLACEMENTS_KEY);
   } catch {
     // ignore
+  }
+}
+
+const PLACEMENTS_KEY = "myszn_placements";
+
+export interface SavedPlacements {
+  sun: string;
+  moon: string;
+  rising: string;
+  venus: string;
+  mars: string;
+  jupiter: string;
+  saturn: string;
+  chiron: string;
+  northNode: string;
+  midheaven: string;
+}
+
+export function savePlacements(placements: SavedPlacements): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(PLACEMENTS_KEY, JSON.stringify(placements));
+  } catch {
+    // ignore
+  }
+}
+
+export function getSavedPlacements(): SavedPlacements | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem(PLACEMENTS_KEY);
+    if (!stored) return null;
+    return JSON.parse(stored) as SavedPlacements;
+  } catch {
+    return null;
   }
 }
 
