@@ -217,18 +217,18 @@ export function calculateTransits(natalChart: ChartData): TransitData {
 // --- Content Generation (rule-based, ready for AI layer) ---
 
 const HOUSE_THEMES: Record<number, { area: string; theme: string }> = {
-  1: { area: "Self", theme: "identity and personal power" },
-  2: { area: "Money", theme: "finances, values and self-worth" },
-  3: { area: "Communication", theme: "learning, speaking and connections" },
-  4: { area: "Home", theme: "family, roots and inner security" },
-  5: { area: "Love", theme: "romance, creativity and joy" },
-  6: { area: "Health", theme: "daily routines, wellness and service" },
-  7: { area: "Relationships", theme: "partnerships and one-on-one bonds" },
-  8: { area: "Transformation", theme: "intimacy, shared resources and rebirth" },
-  9: { area: "Growth", theme: "travel, philosophy and expansion" },
-  10: { area: "Career", theme: "public life, reputation and ambition" },
-  11: { area: "Community", theme: "friendships, networks and dreams" },
-  12: { area: "Healing", theme: "spirituality, rest and the unconscious" },
+  1: { area: "Self", theme: "who you are and how you show up in the world" },
+  2: { area: "Money", theme: "your bank account, your values and knowing your worth" },
+  3: { area: "Communication", theme: "your voice, your mind and your social butterfly energy" },
+  4: { area: "Home", theme: "your roots, your safe space and your inner world" },
+  5: { area: "Love", theme: "romance, creativity, pleasure and main character energy" },
+  6: { area: "Health", theme: "your routines, your body and your daily magic" },
+  7: { area: "Relationships", theme: "partnerships, collabs and your ride-or-die connections" },
+  8: { area: "Transformation", theme: "the deep stuff: intimacy, power and total rebirth" },
+  9: { area: "Growth", theme: "travel, big ideas and levelling the heck up" },
+  10: { area: "Career", theme: "your reputation, your legacy and being the boss" },
+  11: { area: "Community", theme: "your squad, your vision and your wildest dreams" },
+  12: { area: "Healing", theme: "your spiritual side, rest and behind-the-scenes magic" },
 };
 
 const FOCUS_AREA_MAP: Record<string, { areas: string[]; emoji: string }> = {
@@ -260,25 +260,25 @@ function generateTheme(transits: TransitData, natalChart: ChartData): MonthlyThe
   );
 
   const titleOptions: Record<string, string> = {
-    "identity awakening": "Stepping Into Your Power",
-    "love activation": "Opening Your Heart",
-    "deep transformation": "Shedding What No Longer Serves You",
-    "expansion & luck": "Expanding Into Abundance",
-    "healing activation": "Healing at the Root",
-    "maturity call": "Building Something Real",
-    "sudden awakening": "Embracing the Unexpected",
-    "spiritual awakening": "Trusting Your Intuition",
-    "destiny calling": "Aligning With Your Purpose",
-    "emotional reset": "Coming Home to Yourself",
-    "energy surge": "Taking Bold Action",
-    "mental clarity": "Speaking Your Truth",
+    "identity awakening": "Main Character Energy Activated",
+    "love activation": "Your Heart is WIDE Open, Babe",
+    "deep transformation": "Burning It Down to Build It Better",
+    "expansion & luck": "Everything is Expanding (Yes, Including Your Bank Account)",
+    "healing activation": "Healing Season is Here and You're So Ready",
+    "maturity call": "Boss Era: Building Something That Lasts",
+    "sudden awakening": "Plot Twist! And You're Going to Love It",
+    "spiritual awakening": "Your Intuition is Screaming. Listen!",
+    "destiny calling": "Your Purpose is Calling. Pick Up!",
+    "emotional reset": "Coming Home to the Real You",
+    "energy surge": "Big Bold Moves Only",
+    "mental clarity": "Say It Louder for the People in the Back",
   };
 
-  const title = titleOptions[themes[0]] || "A Month of Growth & Alignment";
+  const title = titleOptions[themes[0]] || "Growth, Glow-Ups & Cosmic Alignment";
 
   return {
     title,
-    description: `This month, the cosmos is activating your ${houseTheme.area.toLowerCase()} sector — the part of your chart connected to ${houseTheme.theme}. With ${topActivated.length} key placements being lit up, this is a powerful time for ${themes.slice(0, 2).join(" and ")}.`,
+    description: `OK so the universe is literally lighting up your ${houseTheme.area.toLowerCase()} sector right now, which is all about ${houseTheme.theme}. With ${topActivated.length} key placements getting activated, this is a seriously powerful time for ${themes.slice(0, 2).join(" and ")}. Don't sleep on this energy!`,
     keyTransits: keyTransitDescs,
   };
 }
@@ -311,34 +311,34 @@ function generateFocusAreas(transits: TransitData, natalChart: ChartData): Focus
 
     const summaries: Record<string, string[]> = {
       Love: [
-        "Your love sector is receiving attention. Be open to deeper intimacy and honest expression.",
-        "Relationships are evolving. What feels aligned will deepen; what doesn't may shift.",
-        "A quieter period for romance — focus on self-love and what you truly desire.",
+        "Your love sector is getting cosmic attention right now. Stay open, stay honest, and let it get deep!",
+        "Relationships are shifting. What's aligned gets better. What's not? It's giving you the clarity to move on.",
+        "Romance is playing it cool right now, but self-love? That's where the real magic is happening, gorgeous.",
       ],
       Money: [
-        "Financial energy is building. Trust your instincts around money decisions.",
-        "Your value is being redefined. It's time to ask for what you're worth.",
-        "Steady progress in your financial world. Focus on long-term security.",
+        "Money energy is building and your instincts around cash are spot on. Trust yourself!",
+        "Your value is being totally redefined. Stop undercharging, stop over-giving, and start asking for what you're actually worth.",
+        "Slow and steady wins the financial game right now. You're building something real here.",
       ],
       Career: [
-        "Career momentum is growing. Opportunities may appear through unexpected channels.",
-        "Your public presence is shifting. Step into visibility with confidence.",
-        "A time for strategic planning rather than big moves. Lay the groundwork.",
+        "Career momentum is picking up and opportunities are coming from the most unexpected places. Stay ready!",
+        "Your public presence is shifting in a big way. Time to step into the spotlight with zero apologies.",
+        "It's strategy season, not sprint season. Lay the groundwork now so future you can absolutely crush it.",
       ],
       Friendships: [
-        "Community connections are highlighted. Quality over quantity matters now.",
-        "Your social world is evolving. New aligned connections are incoming.",
-        "Deepening existing bonds matters more than expanding your circle right now.",
+        "Your social world is buzzing! Quality over quantity though. Protect your energy and pour into the people who pour back.",
+        "New soul-aligned connections are incoming. Your vibe is literally attracting your tribe right now.",
+        "Go deep with the ones who matter instead of spreading yourself thin. Real friendships are the ultimate luxury.",
       ],
       Healing: [
-        "Deep healing is available to you. Old patterns are ready to release.",
-        "Your body and mind are asking for attention. Honour what you need.",
-        "Spiritual growth is accelerating. Trust the process of transformation.",
+        "Deep healing is SO available to you right now. Old patterns are ready to go. Let them!",
+        "Your body and soul are asking for attention. Give yourself what you need without guilt. You deserve it!",
+        "Spiritual growth is on turbo mode. Trust the process even when it feels messy. That's where the gold is.",
       ],
       "Self-Worth": [
-        "You're being called to know your own value. Step into self-trust.",
-        "Identity is being refined. Let go of who you were to become who you're becoming.",
-        "Self-worth is your superpower right now. Everything flows from that foundation.",
+        "This is your 'know your worth and then add tax' moment. Seriously. Step all the way into it.",
+        "You're outgrowing old versions of yourself and it's beautiful. Let go of who you were. She served her purpose!",
+        "Self-worth is your literal superpower right now. Everything in your life flows from how much you back yourself.",
       ],
     };
 
@@ -364,18 +364,18 @@ function generateJournalPrompts(transits: TransitData, natalChart: ChartData): J
   const activated = transits.activatedPlacements.slice(0, 5);
 
   const planetPrompts: Record<string, string[]> = {
-    Sun: ["What does it mean to truly be myself right now?", "Where am I dimming my light to make others comfortable?", "What would I do if I knew I couldn't fail?"],
-    Moon: ["What emotions am I avoiding, and what are they trying to tell me?", "What does safety and comfort look like for me right now?", "How can I better nurture myself this month?"],
-    Mercury: ["What truth have I been holding back from speaking?", "What am I ready to learn or understand differently?", "How do I communicate my needs without apologising for them?"],
-    Venus: ["What do I truly desire in love and connection?", "Where can I let myself receive more?", "What does beauty and pleasure look like in my life right now?"],
-    Mars: ["What am I ready to fight for?", "Where do I need to take more decisive action?", "What boundary needs to be set and held?"],
-    Jupiter: ["Where is life asking me to expand and trust more?", "What belief about myself is ready to be upgraded?", "How can I welcome more abundance into my life?"],
-    Saturn: ["What responsibility am I avoiding?", "What structure do I need to build for my future self?", "Where do I need to be more disciplined or committed?"],
-    Chiron: ["What wound keeps showing up in different forms?", "How can I transform my pain into wisdom?", "What would healing actually look like for me?"],
-    Pluto: ["What am I holding onto that needs to die so something new can be born?", "Where am I giving away my power?", "What truth am I afraid to face?"],
-    Neptune: ["What does my intuition keep whispering to me?", "Where do I need more faith and less control?", "What dream am I ready to commit to fully?"],
-    Uranus: ["Where in my life am I craving freedom?", "What would I change if nobody was watching?", "What outdated version of myself am I ready to release?"],
-    "North Node": ["What is my soul purpose asking of me right now?", "What fear is standing between me and my destiny?", "If I trusted the direction I'm being pulled, where would I go?"],
+    Sun: ["If I stopped performing and just EXISTED, who would I actually be?", "Where am I dimming my sparkle to make other people comfortable? (Stop that immediately.)", "What would I do RIGHT NOW if failure literally wasn't a thing?"],
+    Moon: ["What feelings am I stuffing down, and what are they really trying to tell me?", "What does feeling truly safe and held look like for me? Am I giving myself that?", "How can I mother myself better this month? Like, actually prioritise MY comfort?"],
+    Mercury: ["What truth have I been swallowing instead of speaking? Time to spit it out, babe.", "What old story am I telling myself that's way past its expiry date?", "How do I ask for what I need without adding 'sorry' or 'if that's OK' to the end?"],
+    Venus: ["What do I ACTUALLY desire in love? Not what I've settled for. What I really, truly want.", "Where am I blocking myself from receiving? Money, love, compliments, all of it!", "What makes me feel gorgeous and alive? Am I doing enough of that?"],
+    Mars: ["What am I ready to go to WAR for? What matters enough to get fierce about?", "Where do I need to stop overthinking and just DO the thing already?", "What boundary needs to be set TODAY? No more being nice about it."],
+    Jupiter: ["Where is the universe literally begging me to dream bigger?", "What limiting belief am I ready to toss in the bin forever?", "How can I let abundance in without feeling guilty about it? (Spoiler: you deserve it.)"],
+    Saturn: ["What am I avoiding that I know would change everything if I just committed?", "What does future me need present me to build RIGHT NOW?", "Where do I need to stop winging it and actually get disciplined?"],
+    Chiron: ["What wound keeps wearing different costumes but it's the same thing every time?", "What if my biggest pain was actually my biggest superpower in disguise?", "What would it look like if I actually, fully, completely healed this?"],
+    Pluto: ["What am I clinging to that needs to be released so I can become who I'm meant to be?", "Where am I leaking my power to people who haven't earned it?", "What truth am I terrified to look at? (That's exactly where the magic is.)"],
+    Neptune: ["What is my intuition SCREAMING at me that I keep ignoring?", "Where do I need to surrender control and just trust the process?", "What dream have I been keeping small that's ready to be the full, ridiculous, gorgeous vision?"],
+    Uranus: ["Where in my life am I bored, restless and craving total freedom?", "What would I change about my life tomorrow if literally nobody had an opinion?", "What version of me has expired? She was great, but she's done. Who's next?"],
+    "North Node": ["What is my soul screaming at me to do that my ego keeps vetoing?", "What fear is standing between me and my actual destiny? Name it!", "If I followed the pull instead of the plan, where would I end up?"],
   };
 
   for (const a of activated) {
@@ -391,7 +391,7 @@ function generateJournalPrompts(transits: TransitData, natalChart: ChartData): J
   while (prompts.length < 3) {
     const moonSign = natalChart.planets.find((p) => p.name === "Moon")?.sign || "Cancer";
     prompts.push({
-      prompt: "What am I grateful for that I haven't acknowledged?",
+      prompt: "What amazing things have happened lately that I haven't even celebrated yet? Time to acknowledge my own magic!",
       relatedPlacement: `Moon in ${moonSign}`,
     });
   }
@@ -407,17 +407,17 @@ function generateManifestationMission(transits: TransitData, natalChart: ChartDa
 
   if (topActivation) {
     const missions: Record<string, { mission: string; action: string }> = {
-      "identity awakening": { mission: "Step into a bolder version of yourself this month", action: "Do one thing this week that scares you in a good way" },
-      "love activation": { mission: "Open yourself to receiving love in all its forms", action: "Write a love letter to yourself and read it every morning" },
-      "deep transformation": { mission: "Release one thing that no longer serves your evolution", action: "Identify your biggest energy drain and remove or transform it" },
-      "expansion & luck": { mission: "Say yes to something bigger than your comfort zone", action: "Make one bold ask or apply for one dream opportunity" },
-      "healing activation": { mission: "Commit to one healing practice daily this month", action: "Start a 10-minute daily ritual that nurtures your wound" },
-      "maturity call": { mission: "Build one new structure that supports your goals", action: "Create a plan for the next 90 days and commit to step one" },
-      "sudden awakening": { mission: "Embrace change and let go of what you can't control", action: "Try something completely new that excites you" },
-      "destiny calling": { mission: "Take one step toward your soul purpose", action: "Identify what lights you up and spend more time doing it" },
+      "identity awakening": { mission: "Be so unapologetically YOU that people can't look away", action: "Do one thing this week that makes you feel electric. The scarier, the better." },
+      "love activation": { mission: "Become a total magnet for love by loving yourself outrageously first", action: "Write yourself the most extra love letter and read it every morning. No cringe allowed!" },
+      "deep transformation": { mission: "Torch the things that are keeping you small. You've outgrown them!", action: "Name your biggest energy vampire. Then cut the cord. Today." },
+      "expansion & luck": { mission: "Say yes to something that makes your comfort zone QUAKE", action: "Send one audacious DM, make one wild ask, or apply for the thing you think you're not ready for. (You are.)" },
+      "healing activation": { mission: "Make healing your most luxurious daily ritual", action: "Give yourself 10 sacred minutes a day. Meditation, tapping, journaling, whatever feels like medicine." },
+      "maturity call": { mission: "Build something so solid that future you sends a thank you card", action: "Map out the next 90 days. Pick step one. Commit like your dream life depends on it (because it does)." },
+      "sudden awakening": { mission: "Let the universe surprise you and ENJOY the plot twist", action: "Try something wildly new. Shock yourself. That's where the breakthroughs live." },
+      "destiny calling": { mission: "Stop playing small and take one bold step toward your actual purpose", action: "Whatever lights you up and makes time disappear? Do more of THAT. Like, starting now." },
     };
 
-    const m = missions[topActivation.theme] || { mission: `Focus on ${houseTheme.theme}`, action: "Journal on what this area of life needs from you" };
+    const m = missions[topActivation.theme] || { mission: `Pour your energy into ${houseTheme.theme}. The cosmos is backing you!`, action: "Journal on what this area of your life is asking for. Then give it that!" };
 
     return {
       mission: m.mission,
@@ -427,9 +427,9 @@ function generateManifestationMission(transits: TransitData, natalChart: ChartDa
   }
 
   return {
-    mission: `Expand into your ${houseTheme.area.toLowerCase()} sector — Jupiter is supporting ${houseTheme.theme}`,
+    mission: `Go ALL IN on your ${houseTheme.area.toLowerCase()} sector because Jupiter is handing you a cosmic permission slip for ${houseTheme.theme}!`,
     basedOn: `Jupiter transiting your ${jupiterHouse}${jupiterHouse === 1 ? "st" : jupiterHouse === 2 ? "nd" : jupiterHouse === 3 ? "rd" : "th"} house`,
-    actionStep: "Spend 10 minutes journaling on what expansion looks like for you right now",
+    actionStep: "Grab your journal and spend 10 minutes writing about what expansion ACTUALLY looks like for you. Get specific. Get excited!",
   };
 }
 
@@ -442,12 +442,12 @@ function generateForecast(transits: TransitData, natalChart: ChartData): CosmicF
   const saturnHouse = transits.currentPositions.find((p) => p.name === "Saturn")?.natalHouse || 1;
 
   const opportunity = trines.length > 0
-    ? `${trines[0].transitPlanet} is supporting your ${trines[0].natalPlanet} — lean into ${PLANET_THEMES[trines[0].natalPlanet]?.[trines[0].aspectType] || "this energy"}`
-    : `Jupiter in your ${HOUSE_THEMES[jupiterHouse].area.toLowerCase()} sector brings expansion to ${HOUSE_THEMES[jupiterHouse].theme}`;
+    ? `${trines[0].transitPlanet} is literally cheering on your ${trines[0].natalPlanet} right now. Lean ALL the way into ${PLANET_THEMES[trines[0].natalPlanet]?.[trines[0].aspectType] || "this energy"}!`
+    : `Jupiter in your ${HOUSE_THEMES[jupiterHouse].area.toLowerCase()} sector is giving you the green light for ${HOUSE_THEMES[jupiterHouse].theme}. Go big!`;
 
   const challenge = squares.length > 0
-    ? `${squares[0].transitPlanet} is creating tension with your ${squares[0].natalPlanet} — work through ${PLANET_THEMES[squares[0].natalPlanet]?.[squares[0].aspectType] || "this challenge"} consciously`
-    : `Saturn in your ${HOUSE_THEMES[saturnHouse].area.toLowerCase()} sector asks for patience with ${HOUSE_THEMES[saturnHouse].theme}`;
+    ? `${squares[0].transitPlanet} is poking your ${squares[0].natalPlanet}, which can feel spicy. Work through ${PLANET_THEMES[squares[0].natalPlanet]?.[squares[0].aspectType] || "this challenge"} instead of pushing against it.`
+    : `Saturn in your ${HOUSE_THEMES[saturnHouse].area.toLowerCase()} sector is testing your patience around ${HOUSE_THEMES[saturnHouse].theme}. Breathe. You've got this.`;
 
   // Generate some lucky days based on moon transits to natal Jupiter/Venus
   const now = DateTime.utc();
@@ -465,11 +465,11 @@ function generateForecast(transits: TransitData, natalChart: ChartData): CosmicF
     biggestOpportunity: opportunity,
     biggestChallenge: challenge,
     sayYesTo: trines.length > 0
-      ? `opportunities related to ${HOUSE_THEMES[transits.currentPositions.find((p) => p.name === trines[0].transitPlanet)?.natalHouse || 1].theme}`
-      : "new connections and unexpected invitations",
+      ? `anything that feels expansive around ${HOUSE_THEMES[transits.currentPositions.find((p) => p.name === trines[0].transitPlanet)?.natalHouse || 1].theme}. Your cosmic green light is ON!`
+      : "new connections, unexpected invitations and anything that makes you feel alive!",
     avoid: squares.length > 0
-      ? "rushing major decisions — give yourself space to process"
-      : "overcommitting and people-pleasing at the expense of your own needs",
+      ? "rushing big decisions just because you feel pressure. Give yourself room to breathe and process first."
+      : "overcommitting, people-pleasing and saying yes when your whole body is screaming no.",
     luckyDays: luckyDays.slice(0, 4),
     manifestationDates: manifestDates.slice(0, 2),
   };
@@ -484,15 +484,15 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (saturnActive) {
     recs.push({
       type: "workshop",
-      title: "Boundaries & Building",
-      description: `Saturn is activating your ${saturnActive.natalPlanet}. Time to build real structure around ${HOUSE_THEMES[saturnActive.natalHouse].theme}.`,
+      title: "Boundaries are Hot",
+      description: `Saturn is coming for your ${saturnActive.natalPlanet} and honestly? It's time to build real structure around ${HOUSE_THEMES[saturnActive.natalHouse].theme}. Boss moves only.`,
       basedOn: `Saturn ${saturnActive.aspectType} ${saturnActive.natalPlanet}`,
       emoji: "🏗️",
     });
     recs.push({
       type: "tapping",
-      title: "Releasing Resistance to Growth",
-      description: "EFT tapping session for when Saturn transits feel heavy and you need to soften into the lesson.",
+      title: "Tap Through the Saturn Feels",
+      description: "Saturn transits can feel heavy, we know. This EFT session helps you soften into the lesson instead of fighting it.",
       basedOn: `Saturn transit in House ${saturnActive.natalHouse}`,
       emoji: "🤲",
     });
@@ -503,15 +503,15 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (venusActive) {
     recs.push({
       type: "hypnosis",
-      title: "Magnetic Self-Worth Activation",
-      description: "A guided hypnosis to reconnect with your inherent value and become magnetic to what you desire.",
+      title: "Become Absolutely Magnetic",
+      description: "A guided hypnosis that reconnects you with your inherent worth so you become a total magnet for everything you desire. Yes, everything.",
       basedOn: `Venus activation in ${venusActive.natalSign}`,
       emoji: "🌹",
     });
     recs.push({
       type: "article",
-      title: `Your Venus in ${venusActive.natalSign} Love Guide`,
-      description: `Deep dive into how your Venus placement shapes what you desire, how you love, and what makes you feel valued.`,
+      title: `Venus in ${venusActive.natalSign}: Your Love Language Decoded`,
+      description: `How your Venus placement shapes what you crave, how you flirt, and what makes you feel like a million bucks. Essential reading!`,
       basedOn: `Venus in ${venusActive.natalSign}`,
       emoji: "💕",
     });
@@ -522,15 +522,15 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (chironActive) {
     recs.push({
       type: "tapping",
-      title: "Healing Your Core Wound",
-      description: `Your Chiron in ${chironActive.natalSign} is being activated — this EFT session targets the wound beneath the wound.`,
+      title: "Heal the Wound Beneath the Wound",
+      description: `Your Chiron in ${chironActive.natalSign} is getting activated. This EFT session goes DEEP to the root of the pattern. Tissues optional but recommended.`,
       basedOn: `Chiron in ${chironActive.natalSign}`,
       emoji: "💚",
     });
     recs.push({
       type: "article",
-      title: `Your Chiron in ${chironActive.natalSign} Healing Guide`,
-      description: "Understanding your deepest wound and how it becomes your greatest gift.",
+      title: `Chiron in ${chironActive.natalSign}: Your Superpower Origin Story`,
+      description: "Your deepest wound is literally the source of your greatest gift. Sounds dramatic because it IS. Let's unpack it.",
       basedOn: `Chiron activation`,
       emoji: "🌿",
     });
@@ -541,8 +541,8 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (plutoActive) {
     recs.push({
       type: "workshop",
-      title: "Shadow Work Intensive",
-      description: "Pluto is asking you to go deep. This workshop guides you through confronting and integrating your shadow.",
+      title: "Shadow Work (But Make It Chic)",
+      description: "Pluto is asking you to go deep. This workshop walks you through confronting your shadow self and honestly? She has so much to teach you.",
       basedOn: `Pluto ${plutoActive.aspectType} ${plutoActive.natalPlanet}`,
       emoji: "🔮",
     });
@@ -553,8 +553,8 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (jupiterActive) {
     recs.push({
       type: "podcast",
-      title: "Expanding Into Your Next Level",
-      description: `Jupiter is activating your ${jupiterActive.natalPlanet} — listen to how to ride this wave of expansion.`,
+      title: "Next Level Loading...",
+      description: `Jupiter is activating your ${jupiterActive.natalPlanet} which means EXPANSION is the vibe. Listen to learn how to ride this wave like a pro.`,
       basedOn: `Jupiter ${jupiterActive.aspectType} ${jupiterActive.natalPlanet}`,
       emoji: "🎧",
     });
@@ -565,8 +565,8 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
   if (nnActive) {
     recs.push({
       type: "reading",
-      title: "Your Purpose & Direction Reading",
-      description: "Your North Node is being activated. Get clarity on your soul's direction with a personalised reading.",
+      title: "Your Soul Has a GPS. Let's Use It.",
+      description: "Your North Node is lit up right now which means destiny is calling LOUD. Get crystal clear on where your soul wants to go.",
       basedOn: `North Node activation`,
       emoji: "🧭",
     });
@@ -577,8 +577,8 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
     const top = activated[0];
     recs.push({
       type: "placement",
-      title: `Your ${top.natalPlanet} in ${top.natalSign} Guide`,
-      description: `This placement is being strongly activated right now. Understanding it deeply will help you navigate this month's energy.`,
+      title: `Your ${top.natalPlanet} in ${top.natalSign} Deep Dive`,
+      description: `This placement is ACTIVATED right now. Understanding it is basically a cheat code for navigating this entire season. You're welcome.`,
       basedOn: `Most activated placement`,
       emoji: "📖",
     });
@@ -591,7 +591,7 @@ function generateNextBestStep(transits: TransitData, natalChart: ChartData, recs
   const top = transits.activatedPlacements[0];
   if (!top) {
     return {
-      message: "Your chart is in a steady phase. Use this time to integrate recent growth and plan your next move.",
+      message: "Your chart is in integration mode right now. Use this calm before the storm to rest, reflect and get ready for what's next. (It's going to be good.)",
       cta: "Explore Your Full Chart",
       link: "/results",
     };
@@ -599,34 +599,34 @@ function generateNextBestStep(transits: TransitData, natalChart: ChartData, recs
 
   const messages: Record<string, { message: string; cta: string }> = {
     "healing activation": {
-      message: `Your chart is calling for deeper healing around ${HOUSE_THEMES[top.natalHouse].theme}. Explore your ${top.natalPlanet} in ${top.natalSign} guide.`,
-      cta: `Explore Your ${top.natalPlanet} Guide`,
+      message: `Your chart is begging you to heal around ${HOUSE_THEMES[top.natalHouse].theme}. This is your moment. Dive into your ${top.natalPlanet} in ${top.natalSign} guide and let it change everything.`,
+      cta: `Read Your ${top.natalPlanet} Guide`,
     },
     "love activation": {
-      message: `Venus is activating your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. Open yourself to receiving.`,
+      message: `Venus is lighting up your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector and the universe wants you to RECEIVE. Stop blocking your own blessings, gorgeous!`,
       cta: "Start the Self-Worth Activation",
     },
     "deep transformation": {
-      message: `Pluto is transforming your ${top.natalPlanet}. Something old is dying so something new can be born.`,
+      message: `Pluto is doing its thing with your ${top.natalPlanet}. Something old needs to go so something incredible can take its place. Trust the process!`,
       cta: "Begin Shadow Work",
     },
     "expansion & luck": {
-      message: `Jupiter is expanding your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. Say yes to bigger things.`,
+      message: `Jupiter is throwing open the doors in your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. Say yes to the big, wild, slightly terrifying thing. You're ready!`,
       cta: "Explore Your Expansion",
     },
     "destiny calling": {
-      message: `Your North Node is highlighted this month. Your purpose is calling louder than ever.`,
+      message: `Your North Node is absolutely ON FIRE right now. Your purpose isn't whispering anymore, it's yelling! Time to listen.`,
       cta: "Read Your Purpose Guide",
     },
     "maturity call": {
-      message: `Saturn is building something real in your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. Commit to the work.`,
+      message: `Saturn is building something serious in your ${HOUSE_THEMES[top.natalHouse].area.toLowerCase()} sector. This isn't a detour, it's the foundation of everything you want. Do the work!`,
       cta: "Start the Boundaries Workshop",
     },
   };
 
   const m = messages[top.theme] || {
-    message: `Your ${top.natalPlanet} in ${top.natalSign} is being activated by ${top.activatedBy}. This is a powerful time for ${top.theme}.`,
-    cta: `Explore Your ${top.natalPlanet} Guide`,
+    message: `Your ${top.natalPlanet} in ${top.natalSign} is being activated by ${top.activatedBy} and it's a powerful time for ${top.theme}. Don't waste this cosmic window!`,
+    cta: `Read Your ${top.natalPlanet} Guide`,
   };
 
   return { message: m.message, cta: m.cta, link: "#" };

@@ -170,7 +170,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
               maxWidth: 520,
             }}
           >
-            Your personalised guide to the month ahead based on your birth chart, current transits, and where you&apos;re being called to grow.
+            Your totally personalised cosmic cheat sheet for right now, based on YOUR chart, the current transits and exactly where you&apos;re being called to level up.
           </p>
           <div
             className="flex items-center gap-4 mt-6"
@@ -183,7 +183,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* Theme of the Month */}
       <Section>
-        <div style={sectionLabel}>your theme of the month</div>
+        <div style={sectionLabel}>the vibe right now</div>
         <h2 style={{ ...sectionHeading, fontSize: 28, marginBottom: 12 }}>
           {theme.title}
         </h2>
@@ -192,7 +192,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
         </p>
         {theme.keyTransits.length > 0 && (
           <div className="mt-6 space-y-2">
-            <div style={{ ...sectionLabel, marginBottom: 10 }}>key transits driving this</div>
+            <div style={{ ...sectionLabel, marginBottom: 10 }}>what&apos;s behind all this energy</div>
             {theme.keyTransits.map((t, i) => (
               <div
                 key={i}
@@ -209,9 +209,9 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* What's Happening in the Sky */}
       <Section id="sky">
-        <div style={sectionLabel}>what&apos;s happening in the sky</div>
+        <div style={sectionLabel}>what the sky is doing to you rn</div>
         <h2 style={{ ...sectionHeading, marginBottom: 20 }}>
-          current transits to your chart
+          current transits hitting your chart
         </h2>
         <div className="space-y-0">
           {transits.transitAspects
@@ -261,7 +261,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
       <Section id="focus">
         <div style={sectionLabel}>focus areas</div>
         <h2 style={{ ...sectionHeading, marginBottom: 20 }}>
-          where energy is moving
+          where the magic is happening
         </h2>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
           {focusAreas.map((area) => (
@@ -331,7 +331,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
                       cursor: "pointer",
                     }}
                   >
-                    go deeper →
+                    tell me everything →
                   </button>
                 </>
               );
@@ -343,7 +343,7 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
       {/* Manifestation Mission */}
       <div className="px-8 py-14" style={{ background: "var(--dark)" }}>
         <div className="mx-auto max-w-4xl">
-          <div style={{ ...sectionLabel, color: "rgba(255,255,255,0.4)" }}>your manifestation mission</div>
+          <div style={{ ...sectionLabel, color: "rgba(255,255,255,0.4)" }}>your manifestation mission (non-negotiable!)</div>
           <h2
             style={{
               fontFamily: poppins,
@@ -374,9 +374,9 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* Journal Prompts */}
       <Section id="journal">
-        <div style={sectionLabel}>your journal prompts</div>
+        <div style={sectionLabel}>journal prompts (grab your pen!)</div>
         <h2 style={{ ...sectionHeading, marginBottom: 20 }}>
-          questions for this month
+          get honest with yourself
         </h2>
         <div className="space-y-0">
           {journalPrompts.map((jp, i) => (
@@ -420,12 +420,12 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* Power Placements */}
       <Section id="power">
-        <div style={sectionLabel}>your power placements</div>
+        <div style={sectionLabel}>your power placements (they&apos;re lit!)</div>
         <h2 style={{ ...sectionHeading, marginBottom: 8 }}>
-          placements being activated right now
+          the parts of your chart that are ON FIRE
         </h2>
         <p style={{ fontSize: 13, color: "var(--grey-light)", marginBottom: 20 }}>
-          These natal placements are receiving direct energy from current transits.
+          These placements in your birth chart are getting hit with cosmic energy right now. Tap any to learn more!
         </p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
           {transits.activatedPlacements.map((ap, i) => (
@@ -474,12 +474,12 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* Recommended For You */}
       <Section id="recommended">
-        <div style={sectionLabel}>recommended for you</div>
+        <div style={sectionLabel}>handpicked for you</div>
         <h2 style={{ ...sectionHeading, marginBottom: 8 }}>
-          curated for your chart & transits
+          picked just for you (you&apos;re welcome)
         </h2>
         <p style={{ fontSize: 13, color: "var(--grey-light)", marginBottom: 20 }}>
-          Content and tools chosen based on what&apos;s active in your chart right now.
+          Content, tools and sessions chosen specifically for what&apos;s going on in YOUR chart. Not generic horoscope vibes. This is personal.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           {recommendations.map((rec, i) => (
@@ -490,35 +490,35 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
 
       {/* Cosmic Forecast */}
       <Section id="forecast">
-        <div style={sectionLabel}>this month&apos;s cosmic forecast</div>
+        <div style={sectionLabel}>your cosmic forecast (spoiler: it&apos;s good)</div>
         <h2 style={{ ...sectionHeading, marginBottom: 20 }}>
-          your personalised outlook
+          the tea on what&apos;s coming
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="p-5" style={{ border: "var(--border)" }}>
             <div style={{ fontSize: 20, marginBottom: 8 }}>✨</div>
-            <div style={{ ...sectionLabel, color: "var(--pink)" }}>biggest opportunity</div>
+            <div style={{ ...sectionLabel, color: "var(--pink)" }}>your biggest opportunity</div>
             <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.6, margin: 0 }}>
               {forecast.biggestOpportunity}
             </p>
           </div>
           <div className="p-5" style={{ border: "var(--border)" }}>
             <div style={{ fontSize: 20, marginBottom: 8 }}>⚡</div>
-            <div style={{ ...sectionLabel, color: "#E25822" }}>biggest challenge</div>
+            <div style={{ ...sectionLabel, color: "#E25822" }}>the spicy bit</div>
             <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.6, margin: 0 }}>
               {forecast.biggestChallenge}
             </p>
           </div>
           <div className="p-5" style={{ border: "var(--border)" }}>
             <div style={{ fontSize: 20, marginBottom: 8 }}>💚</div>
-            <div style={{ ...sectionLabel, color: "#6B8E23" }}>say yes to</div>
+            <div style={{ ...sectionLabel, color: "#6B8E23" }}>say YES to</div>
             <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.6, margin: 0 }}>
               {forecast.sayYesTo}
             </p>
           </div>
           <div className="p-5" style={{ border: "var(--border)" }}>
             <div style={{ fontSize: 20, marginBottom: 8 }}>🚫</div>
-            <div style={{ ...sectionLabel }}>what to avoid</div>
+            <div style={{ ...sectionLabel }}>hard pass on</div>
             <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.6, margin: 0 }}>
               {forecast.avoid}
             </p>
@@ -556,12 +556,12 @@ export default function YourSznDashboard({ data }: { data: YourSznData }) {
         </div>
       </Section>
 
-      {/* Next Best Step — CTA */}
+      {/* Next Best Step CTA */}
       <div className="px-8 py-16" style={{ background: "var(--dark)" }}>
         <div className="mx-auto max-w-4xl text-center">
           <div style={{ fontSize: 32, marginBottom: 16 }}>🌙</div>
           <div style={{ ...sectionLabel, color: "rgba(255,255,255,0.4)", marginBottom: 16 }}>
-            your next best step
+            ok so here&apos;s what you do next
           </div>
           <p
             style={{

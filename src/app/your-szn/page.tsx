@@ -15,7 +15,7 @@ function YourSznContent() {
   useEffect(() => {
     const birthData = decodeBirthData(searchParams);
     if (!birthData) {
-      setError("We need your birth data to create your personalised guide. Generate your chart first.");
+      setError("We can&apos;t create your personalised cosmic guide without your birth details! Generate your chart and we&apos;ll have your whole world mapped out in seconds.");
       setLoading(false);
       return;
     }
@@ -43,7 +43,7 @@ function YourSznContent() {
             style={{ border: "3px solid var(--pink)", borderTopColor: "transparent" }}
           />
           <p style={{ marginTop: 16, fontSize: 13, color: "var(--grey)", letterSpacing: "0.04em" }}>
-            reading the sky for you...
+            reading the stars for you, gorgeous...
           </p>
         </div>
       </div>
@@ -61,7 +61,7 @@ function YourSznContent() {
               textTransform: "uppercase", color: "var(--pink)", marginBottom: 12,
             }}
           >
-            one more step
+            wait, we need your chart first!
           </div>
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7 }}>{error}</p>
           <a
@@ -73,7 +73,7 @@ function YourSznContent() {
               border: "none", textDecoration: "none",
             }}
           >
-            generate my chart
+            let&apos;s go!
           </a>
         </div>
       </div>
