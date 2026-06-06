@@ -1,5 +1,40 @@
 import type { BirthData } from "@/types/chart";
 
+const STORAGE_KEY = "myszn_birth_data";
+
+export function saveBirthData(data: BirthData): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // localStorage full or unavailable
+  }
+}
+
+export function getSavedBirthData(): BirthData | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    const data = JSON.parse(stored);
+    if (data.name && data.dateOfBirth && data.birthTime && data.location) {
+      return data as BirthData;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearSavedBirthData(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 export function encodeBirthData(data: BirthData): string {
   const params = new URLSearchParams();
   params.set("name", data.name);

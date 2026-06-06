@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { decodeBirthData } from "@/lib/url-params";
+import { decodeBirthData, saveBirthData } from "@/lib/url-params";
 import ChartResults from "@/components/ChartResults";
 import type { ChartData } from "@/types/chart";
 
@@ -19,6 +19,7 @@ function ResultsContent() {
       setLoading(false);
       return;
     }
+    saveBirthData(birthData);
 
     fetch("/api/calculate", {
       method: "POST",

@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
-import { encodeBirthData } from "@/lib/url-params";
+import { encodeBirthData, saveBirthData, getSavedBirthData } from "@/lib/url-params";
 
 interface BirthDataFormProps {
   initialData?: Partial<BirthData>;
@@ -12,14 +12,19 @@ interface BirthDataFormProps {
 
 export default function BirthDataForm({ initialData }: BirthDataFormProps) {
   const router = useRouter();
-  const [name, setName] = useState(initialData?.name || "");
-  const [dateOfBirth, setDateOfBirth] = useState(initialData?.dateOfBirth || "");
-  const [birthTime, setBirthTime] = useState(initialData?.birthTime || "");
+
+  // Try to pre-fill from localStorage if no initialData
+  const saved = typeof window !== "undefined" ? getSavedBirthData() : null;
+  const defaults = initialData || saved;
+
+  const [name, setName] = useState(defaults?.name || "");
+  const [dateOfBirth, setDateOfBirth] = useState(defaults?.dateOfBirth || "");
+  const [birthTime, setBirthTime] = useState(defaults?.birthTime || "");
   const [birthTimeApproximate, setBirthTimeApproximate] = useState(
-    initialData?.birthTimeApproximate || false
+    defaults?.birthTimeApproximate || false
   );
   const [location, setLocation] = useState<BirthLocation | null>(
-    initialData?.location || null
+    defaults?.location || null
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +80,7 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
         throw new Error(data.error || "Calculation failed");
       }
 
+      saveBirthData(birthData);
       const params = encodeBirthData(birthData);
       router.push(`/results?${params}`);
     } catch (err) {

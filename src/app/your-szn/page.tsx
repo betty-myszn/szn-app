@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { decodeBirthData } from "@/lib/url-params";
+import { decodeBirthData, getSavedBirthData } from "@/lib/url-params";
 import YourSznDashboard from "@/components/YourSznDashboard";
 import type { YourSznData } from "@/types/chart";
 
@@ -13,9 +13,9 @@ function YourSznContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const birthData = decodeBirthData(searchParams);
+    const birthData = decodeBirthData(searchParams) || getSavedBirthData();
     if (!birthData) {
-      setError("We can&apos;t create your personalised cosmic guide without your birth details! Generate your chart and we&apos;ll have your whole world mapped out in seconds.");
+      setError("We can't create your personalised cosmic guide without your birth details! Generate your chart and we'll have your whole world mapped out in seconds.");
       setLoading(false);
       return;
     }
