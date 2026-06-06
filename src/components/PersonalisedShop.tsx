@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSavedPlacements, getSavedBirthData, type SavedPlacements } from "@/lib/url-params";
+import { getSavedPlacements, getSavedBirthData, savePlacements, type SavedPlacements } from "@/lib/url-params";
 import {
   ZODIAC_SIGNS,
   ZODIAC_SYMBOLS,
@@ -70,16 +70,71 @@ function getCurrentSzn(): { sign: string; symbol: string } {
 export default function PersonalisedShop() {
   const [placements, setPlacements] = useState<SavedPlacements | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setPlacements(getSavedPlacements());
+    const existing = getSavedPlacements();
     const data = getSavedBirthData();
     if (data) setFirstName(data.name.split(" ")[0]);
+
+    if (existing) {
+      setPlacements(existing);
+      setLoading(false);
+    } else if (data) {
+      // Birth data exists but placements were never saved. Fetch chart to get them.
+      fetch("/api/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.ok ? res.json() : null)
+        .then((chart) => {
+          if (chart) {
+            const find = (name: string) => chart.planets?.find((p: { name: string; sign: string }) => p.name === name)?.sign || "";
+            const p: SavedPlacements = {
+              sun: find("Sun"),
+              moon: find("Moon"),
+              rising: chart.houses?.[0]?.sign || "",
+              venus: find("Venus"),
+              mars: find("Mars"),
+              jupiter: find("Jupiter"),
+              saturn: find("Saturn"),
+              chiron: find("Chiron"),
+              northNode: find("North Node"),
+              midheaven: chart.houses?.[9]?.sign || "",
+            };
+            savePlacements(p);
+            setPlacements(p);
+          }
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const szn = getCurrentSzn();
 
-  // If no saved data, show generic version
+  if (loading) {
+    return (
+      <section id="shop">
+        <div className="flex items-center justify-center px-8 py-20" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
+          <div className="text-center">
+            <div
+              className="mx-auto h-8 w-8 animate-spin rounded-full"
+              style={{ border: "3px solid var(--pink)", borderTopColor: "transparent" }}
+            />
+            <p style={{ marginTop: 12, fontSize: 12, color: "rgba(255,255,255,0.4)", letterSpacing: "0.04em" }}>
+              personalising your shop...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // If no saved data at all, show generic version
   if (!placements) {
     return <GenericShop szn={szn} />;
   }
