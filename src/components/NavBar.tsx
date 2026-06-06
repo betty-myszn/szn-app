@@ -49,7 +49,7 @@ export default function NavBar() {
         <Link href="/chart" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           chart
         </Link>
-        <Link href="/#shop" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+        <Link href="/shop" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           shop
         </Link>
         <Link href="/#heal" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">

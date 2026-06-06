@@ -119,18 +119,20 @@ export default function PersonalisedShop() {
             { label: "jupiter", sign: placements.jupiter },
             { label: "chiron", sign: placements.chiron },
           ].map((p, i) => (
-            <div
+            <a
               key={p.label}
+              href={`/shop?filter=${p.label}`}
               className="cursor-pointer transition-all"
               style={{
                 background: i === 0 ? "var(--pink)" : "var(--lav)",
                 color: i === 0 ? "#fff" : "#3C2A70",
                 fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "8px 14px",
                 border: "1.5px solid transparent",
+                textDecoration: "none",
               }}
             >
               {p.label} {getSymbol(p.sign)}
-            </div>
+            </a>
           ))}
         </div>
       </div>
