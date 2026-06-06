@@ -6,21 +6,6 @@ export function getSymbol(sign: string): string {
   return idx >= 0 ? ZODIAC_SYMBOLS[idx] : "";
 }
 
-export const VENUS_PRODUCTS: Record<string, { scent: string; style: string }> = {
-  Aries: { scent: "Fire & Musk", style: "Red Statement Pieces" },
-  Taurus: { scent: "Rose & Sandalwood", style: "Cashmere Essentials" },
-  Gemini: { scent: "Citrus & Verbena", style: "Mix-Match Accessories" },
-  Cancer: { scent: "Moonflower & Vanilla", style: "Silk & Linen Layers" },
-  Leo: { scent: "Gold & Amber", style: "Bold Prints & Jewels" },
-  Virgo: { scent: "Lavender & Cedar", style: "Tailored Minimals" },
-  Libra: { scent: "Peony & Champagne", style: "Romantic Coordinates" },
-  Scorpio: { scent: "Oud & Black Orchid", style: "Dark Femme Edit" },
-  Sagittarius: { scent: "Saffron & Leather", style: "Wanderlust Wardrobe" },
-  Capricorn: { scent: "Vetiver & Suede", style: "Power Dressing Edit" },
-  Aquarius: { scent: "Electric Ozone & Iris", style: "Avant-Garde Capsule" },
-  Pisces: { scent: "Sea Salt & Jasmine", style: "Ethereal Layers" },
-};
-
 export const RISING_VIBES: Record<string, { desc: string; energy: string }> = {
   Aries: { desc: "bold, fierce, and unapologetically first", energy: "fierce, magnetic, ahead of everyone else in the room" },
   Taurus: { desc: "luxe, sensual, and effortlessly expensive-looking", energy: "luxurious, grounded, radiating wealth energy" },
@@ -36,12 +21,30 @@ export const RISING_VIBES: Record<string, { desc: string; energy: string }> = {
   Pisces: { desc: "dreamy, ethereal, and hauntingly beautiful", energy: "mystical, artistic, mermaid-off-duty glamour" },
 };
 
+export const VENUS_PRODUCTS: Record<string, { scent: string; style: string }> = {
+  Aries: { scent: "Fire & Musk", style: "Red Statement Pieces" },
+  Taurus: { scent: "Rose & Sandalwood", style: "Cashmere Essentials" },
+  Gemini: { scent: "Citrus & Verbena", style: "Mix-Match Accessories" },
+  Cancer: { scent: "Moonflower & Vanilla", style: "Silk & Linen Layers" },
+  Leo: { scent: "Gold & Amber", style: "Bold Prints & Jewels" },
+  Virgo: { scent: "Lavender & Cedar", style: "Tailored Minimals" },
+  Libra: { scent: "Peony & Champagne", style: "Romantic Coordinates" },
+  Scorpio: { scent: "Oud & Black Orchid", style: "Dark Femme Edit" },
+  Sagittarius: { scent: "Saffron & Leather", style: "Wanderlust Wardrobe" },
+  Capricorn: { scent: "Vetiver & Suede", style: "Power Dressing Edit" },
+  Aquarius: { scent: "Electric Ozone & Iris", style: "Avant-Garde Capsule" },
+  Pisces: { scent: "Sea Salt & Jasmine", style: "Ethereal Layers" },
+};
+
 export const PRODUCT_IMAGES: Record<string, { gradient: string; overlay: string }> = {
   fashion: { gradient: "linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%)", overlay: "👗" },
   rituals: { gradient: "linear-gradient(135deg, #2d1b4e 0%, #5b3a8c 50%, #2d1b4e 100%)", overlay: "🕯️" },
   "money mindset": { gradient: "linear-gradient(135deg, #1a3a2a 0%, #2d6b4a 50%, #1a3a2a 100%)", overlay: "✨" },
   wellness: { gradient: "linear-gradient(135deg, #3a2a1a 0%, #6b4a2d 50%, #3a2a1a 100%)", overlay: "🌿" },
   beauty: { gradient: "linear-gradient(135deg, #3a1a2a 0%, #8c3a5b 50%, #3a1a2a 100%)", overlay: "🌹" },
+  jewellery: { gradient: "linear-gradient(135deg, #2a2a1a 0%, #6b5a2d 50%, #2a2a1a 100%)", overlay: "💎" },
+  home: { gradient: "linear-gradient(135deg, #1a2a2a 0%, #2d5b6b 50%, #1a2a2a 100%)", overlay: "🏠" },
+  books: { gradient: "linear-gradient(135deg, #2a1a2a 0%, #5b2d6b 50%, #2a1a2a 100%)", overlay: "📖" },
 };
 
 export interface Product {
@@ -52,96 +55,144 @@ export interface Product {
   badge: string;
   cat: string;
   name: string;
+  brand: string;
+  retailer: string;
   price: string;
+  affiliateUrl: string;
   desc: string;
   whyYou: string;
-  includes: string[];
+  details: string[];
   iconColor?: string;
 }
 
+// Sign-specific curated picks from real retailers
+const VENUS_FASHION: Record<string, Product[]> = {
+  Aries: [
+    { slug: "aries-venus-red-blazer", icon: "♀", bg: "var(--pink-light)", placement: "venus in aries", badge: "editor's pick", cat: "fashion", name: "Oversized Red Wool Blazer", brand: "The Frankie Shop", retailer: "Net-a-Porter", price: "$345", affiliateUrl: "#", desc: "A blazer that says 'I just walked in and I'm already the most important person here.' Oversized, red, unapologetic. Peak Aries Venus energy.", whyYou: "Your Venus in Aries is attracted to bold, statement-making pieces that radiate confidence. Red is YOUR colour. This blazer channels your fire sign Venus energy: fierce, direct, impossible to ignore. You don't do subtle and neither does this.", details: ["100% virgin wool", "Oversized fit", "Peak lapels", "Lined interior"] },
+    { slug: "aries-venus-gold-hoops", icon: "♀", bg: "var(--gold)", placement: "venus in aries", badge: "for you", cat: "jewellery", name: "Bold Gold Sculptural Hoops", brand: "Missoma", retailer: "Missoma", price: "$125", affiliateUrl: "#", desc: "Statement gold hoops that catch the light (and everyone's attention). Sculptural, bold, and effortlessly cool.", whyYou: "Venus in Aries gravitates toward jewellery that's bold and eye-catching, never dainty or understated. These hoops match your Venus energy perfectly: gold, sculptural, attention-grabbing. They're the earring equivalent of walking into a room and owning it.", details: ["18ct gold vermeil", "Sculptural design", "Lightweight", "Hypoallergenic posts"] },
+  ],
+  Taurus: [
+    { slug: "taurus-venus-cashmere-wrap", icon: "♀", bg: "var(--cream)", placement: "venus in taurus", badge: "editor's pick", cat: "fashion", name: "Cashmere Travel Wrap", brand: "Johnstons of Elgin", retailer: "Net-a-Porter", price: "$420", affiliateUrl: "#", desc: "The kind of cashmere that makes you close your eyes and sigh. Luxuriously soft, generously sized, and the sort of investment piece your Taurus Venus was literally born for.", whyYou: "Your Venus in Taurus craves luxury you can FEEL. You're drawn to quality over quantity, softness over flash. This cashmere wrap is exactly the kind of piece that makes your Venus placement purr: expensive to the touch, timeless, and worth every penny.", details: ["100% Scottish cashmere", "Generous 200cm x 70cm", "12 colourways available", "Comes in branded gift box"] },
+    { slug: "taurus-venus-le-labo-santal", icon: "♀", bg: "var(--gold)", placement: "venus in taurus", badge: "for you", cat: "beauty", name: "Santal 33 Eau de Parfum", brand: "Le Labo", retailer: "Selfridges", price: "$190", affiliateUrl: "#", desc: "The scent that smells like quiet wealth and excellent taste. Woody, warm, sensual. If your Taurus Venus was a fragrance, this would be it.", whyYou: "Venus in Taurus is ruled by the senses and scent is one of the most powerful. You're drawn to warm, earthy, luxurious fragrances that linger. Santal 33 is the olfactory equivalent of your Venus energy: rich, grounded, impossibly chic.", details: ["50ml Eau de Parfum", "Sandalwood, cardamom, iris", "Hand-poured in NYC", "Iconic minimalist bottle"] },
+  ],
+  Gemini: [
+    { slug: "gemini-venus-print-shirt", icon: "♀", bg: "var(--lav-light)", placement: "venus in gemini", badge: "editor's pick", cat: "fashion", name: "Printed Silk Camp Collar Shirt", brand: "Sandro", retailer: "Sandro Paris", price: "$295", affiliateUrl: "#", desc: "A shirt that's as versatile and interesting as you are. Bold print, relaxed silhouette, equally good with tailored trousers or denim.", whyYou: "Your Venus in Gemini loves variety, wit, and conversation-starting style. You get bored by basics and drawn to pieces with personality. This printed silk shirt is perfect: playful enough to match your energy, sophisticated enough to be worn everywhere.", details: ["100% silk", "Camp collar relaxed fit", "Conversation-starting print", "Versatile day-to-night piece"] },
+    { slug: "gemini-venus-stacking-rings", icon: "♀", bg: "var(--gold)", placement: "venus in gemini", badge: "for you", cat: "jewellery", name: "Gold Stacking Ring Set", brand: "Mejuri", retailer: "Mejuri", price: "$168", affiliateUrl: "#", desc: "Mix, match, stack, rearrange. A set of fine gold rings that lets you change your look every single day. Very Gemini Venus.", whyYou: "Venus in Gemini hates being locked into one look. You crave variety and self-expression through styling. This stacking set lets you create a different combination every day, which is exactly how your Venus likes to operate: playful, changeable, never boring.", details: ["14k solid gold", "Set of 4 stackable rings", "Mix of textures", "Sizes 4-9 available"] },
+  ],
+  Cancer: [
+    { slug: "cancer-venus-silk-robe", icon: "♀", bg: "var(--lav-light)", placement: "venus in cancer", badge: "editor's pick", cat: "fashion", name: "Long Silk Robe", brand: "Olivia von Halle", retailer: "Net-a-Porter", price: "$595", affiliateUrl: "#", desc: "The kind of robe that makes staying home feel like a luxury experience. Silk, floor-length, and deeply romantic.", whyYou: "Your Venus in Cancer finds beauty in intimacy, softness, and the feeling of being held. You're not dressing for the world, you're dressing for how things FEEL against your skin. This silk robe is pure Cancer Venus: romantic, nurturing, and devastatingly elegant in private.", details: ["100% silk", "Floor-length", "Sash tie waist", "Contrast piping detail"] },
+    { slug: "cancer-venus-pearl-necklace", icon: "♀", bg: "var(--cream)", placement: "venus in cancer", badge: "for you", cat: "jewellery", name: "Baroque Pearl Pendant", brand: "Alighieri", retailer: "Liberty London", price: "$220", affiliateUrl: "#", desc: "Pearls for the Moon-ruled Venus. Baroque, organic, and with the kind of quiet beauty that doesn't need to shout.", whyYou: "Venus in Cancer is literally ruled by the Moon, and pearls are the Moon's gemstone. This baroque pearl pendant connects you to your Venus energy on a cosmic level: soft, luminous, with a beauty that reveals itself slowly to those paying attention.", details: ["Gold-plated brass", "Natural baroque pearl", "Adjustable chain", "Handmade in London"] },
+  ],
+  Leo: [
+    { slug: "leo-venus-gold-dress", icon: "♀", bg: "var(--gold)", placement: "venus in leo", badge: "editor's pick", cat: "fashion", name: "Gold Lamé Midi Dress", brand: "Reformation", retailer: "Reformation", price: "$278", affiliateUrl: "#", desc: "You walked in. Everyone looked. You didn't even notice because of course they did. Gold, draped, completely unforgettable.", whyYou: "Your Venus in Leo NEEDS to shine. Literally. You're drawn to pieces that make you feel like royalty, and gold is your Venus colour. This lamé dress doesn't just catch the light, it IS the light. Exactly what your Leo Venus demands.", details: ["Gold lamé fabric", "Draped midi length", "Adjustable straps", "Low back detail"] },
+    { slug: "leo-venus-statement-sunglasses", icon: "♀", bg: "var(--pink-light)", placement: "venus in leo", badge: "for you", cat: "fashion", name: "Oversized Cat-Eye Sunglasses", brand: "Loewe", retailer: "Matches Fashion", price: "$390", affiliateUrl: "#", desc: "The sunglasses that say 'I'm someone' without saying a word. Oversized, dramatic, and giving major leading lady energy.", whyYou: "Venus in Leo treats accessories as performance pieces. You don't want sunglasses that blend in, you want ones that make a scene. These oversized cat-eyes are pure Leo Venus: dramatic, luxurious, and designed to be noticed.", details: ["Acetate frame", "Cat-eye silhouette", "UV400 protection", "Logo detail on temples"] },
+  ],
+  Virgo: [
+    { slug: "virgo-venus-tailored-trousers", icon: "♀", bg: "var(--cream)", placement: "venus in virgo", badge: "editor's pick", cat: "fashion", name: "High-Waist Tailored Trousers", brand: "Totême", retailer: "Net-a-Porter", price: "$350", affiliateUrl: "#", desc: "The perfect trouser. Clean lines, impeccable fit, the kind of piece that makes everything else in your wardrobe work harder. Quietly devastating.", whyYou: "Your Venus in Virgo finds beauty in precision, quality, and understated perfection. You'd rather have one perfect pair of trousers than ten trendy ones. These Totême tailored trousers are peak Virgo Venus: minimal, exquisitely cut, and silently the best thing in any room.", details: ["Wool-blend fabric", "High-rise straight leg", "Pressed crease detail", "Italian-made"] },
+    { slug: "virgo-venus-aesop-kit", icon: "♀", bg: "#E0F5EE", placement: "venus in virgo", badge: "for you", cat: "beauty", name: "Departure Travel Kit", brand: "Aesop", retailer: "Aesop", price: "$85", affiliateUrl: "#", desc: "Because even your travel beauty routine should be curated, minimal, and smell incredible. Aesop for the sign that appreciates thoughtful design.", whyYou: "Venus in Virgo is drawn to clean design, botanical ingredients, and products that feel as intentional as they look. Aesop's entire ethos was basically designed for your Venus placement: understated luxury, functional beauty, nothing wasted.", details: ["10 travel-size essentials", "Signature botanical formulas", "Recycled PET pouch", "TSA-compliant sizes"] },
+  ],
+  Libra: [
+    { slug: "libra-venus-matching-set", icon: "♀", bg: "var(--pink-light)", placement: "venus in libra", badge: "editor's pick", cat: "fashion", name: "Silk Matching Set", brand: "Sleeper", retailer: "Net-a-Porter", price: "$320", affiliateUrl: "#", desc: "A coordinated set that looks effortless but is actually perfectly balanced. The Libra Venus dream: beautiful, harmonious, and endlessly photogenic.", whyYou: "Your Venus is in its home sign, which means your aesthetic instincts are literally world-class. You crave balance, beauty, and pieces that look COMPLETE. This matching set is pure Libra Venus energy: romantic, coordinated, and so pretty it almost hurts.", details: ["100% silk", "Relaxed shirt + trouser set", "Mother of pearl buttons", "Multiple colourways"] },
+    { slug: "libra-venus-diptyque-candle", icon: "♀", bg: "var(--lav-light)", placement: "venus in libra", badge: "for you", cat: "home", name: "Baies Scented Candle", brand: "Diptyque", retailer: "Space NK", price: "$72", affiliateUrl: "#", desc: "Roses and blackcurrant leaves. The most beautiful candle for the sign that rules beauty itself.", whyYou: "Venus in Libra has an almost supernatural sense of aesthetics, and that extends to how your space smells. Diptyque Baies is the gold standard: floral, refined, and the kind of scent that makes everyone ask 'what IS that?' Very you.", details: ["190g scented candle", "Rose and blackcurrant", "60-hour burn time", "Hand-poured in France"] },
+  ],
+  Scorpio: [
+    { slug: "scorpio-venus-leather-trousers", icon: "♀", bg: "var(--dark)", placement: "venus in scorpio", badge: "editor's pick", cat: "fashion", name: "Black Leather Straight-Leg Trousers", brand: "Stand Studio", retailer: "Net-a-Porter", price: "$495", affiliateUrl: "#", desc: "Black leather trousers that mean business. The kind of piece that makes people wonder about you. Dark, sleek, magnetic.", whyYou: "Your Venus in Scorpio is drawn to pieces with power, intensity, and a hint of danger. You don't want pretty, you want MAGNETIC. These black leather trousers are pure Scorpio Venus energy: dark, alluring, and the kind of thing that makes people stare without knowing why.", details: ["Genuine leather", "Straight-leg fit", "High waist", "Fully lined"], iconColor: "#fff" },
+    { slug: "scorpio-venus-tom-ford-noir", icon: "♀", bg: "var(--pink-light)", placement: "venus in scorpio", badge: "for you", cat: "beauty", name: "Black Orchid Eau de Parfum", brand: "Tom Ford", retailer: "Selfridges", price: "$160", affiliateUrl: "#", desc: "Dark, intoxicating, and completely impossible to forget. The fragrance that was basically made for Scorpio Venus.", whyYou: "Venus in Scorpio craves scent that has DEPTH. You want something that lingers on someone's mind hours after you've left the room. Black Orchid is your Venus in a bottle: mysterious, seductive, and darkly glamorous.", details: ["50ml Eau de Parfum", "Black orchid, black truffle, ylang ylang", "Tom Ford signature bottle", "Long-lasting sillage"] },
+  ],
+  Sagittarius: [
+    { slug: "sag-venus-leather-jacket", icon: "♀", bg: "var(--cream)", placement: "venus in sagittarius", badge: "editor's pick", cat: "fashion", name: "Oversized Leather Biker Jacket", brand: "AllSaints", retailer: "AllSaints", price: "$499", affiliateUrl: "#", desc: "A leather jacket that's been everywhere and has the stories to prove it. Oversized, lived-in, endlessly cool.", whyYou: "Your Venus in Sagittarius is drawn to pieces with character, adventure, and a story behind them. You don't want precious, you want COOL. This biker jacket matches your Venus energy perfectly: bold, well-travelled, and the kind of piece that goes everywhere with you.", details: ["Genuine leather", "Oversized biker silhouette", "Antique hardware", "Will only get better with age"] },
+    { slug: "sag-venus-away-carry-on", icon: "♀", bg: "#E0F5EE", placement: "venus in sagittarius", badge: "for you", cat: "fashion", name: "The Bigger Carry-On", brand: "Away", retailer: "Away Travel", price: "$295", affiliateUrl: "#", desc: "Because your Venus sign basically lives at the airport. Thoughtfully designed luggage for the sign that never stops exploring.", whyYou: "Venus in Sagittarius finds beauty in freedom, adventure, and new horizons. You need gear that keeps up with your pace. This carry-on is as well-travelled as your Venus demands: durable, smart, and ready for your next spontaneous trip.", details: ["Polycarbonate shell", "Built-in USB charger", "TSA-approved lock", "Interior compression pad"] },
+  ],
+  Capricorn: [
+    { slug: "cap-venus-blazer", icon: "♀", bg: "var(--dark)", placement: "venus in capricorn", badge: "editor's pick", cat: "fashion", name: "Double-Breasted Wool Blazer", brand: "The Row", retailer: "Net-a-Porter", price: "$2,890", affiliateUrl: "#", desc: "The blazer that closes deals. Impeccable construction, old-money energy, and the kind of piece people remember you in.", whyYou: "Your Venus in Capricorn values quality, status, and timeless investment pieces. You'd rather save for THE blazer than buy ten fast-fashion ones. This Row blazer is peak Capricorn Venus: powerful, understated, and worth every single penny. This is authority dressing.", details: ["Virgin wool", "Double-breasted closure", "Italian-made", "Fully constructed"], iconColor: "#fff" },
+    { slug: "cap-venus-cartier-watch", icon: "♀", bg: "var(--gold)", placement: "venus in capricorn", badge: "for you", cat: "jewellery", name: "Tank Française Watch", brand: "Cartier", retailer: "Cartier", price: "$4,100", affiliateUrl: "#", desc: "The watch that whispers 'I have arrived.' Classic, powerful, and the ultimate Capricorn Venus status piece.", whyYou: "Venus in Capricorn is drawn to pieces with legacy and authority. You don't follow trends, you invest in icons. A Cartier Tank is the ultimate expression of your Venus energy: timeless, powerful, and a statement of exactly who you are.", details: ["Stainless steel case", "Swiss quartz movement", "Iconic Roman numerals", "Adjustable bracelet"] },
+  ],
+  Aquarius: [
+    { slug: "aquarius-venus-sneakers", icon: "♀", bg: "#E0F5EE", placement: "venus in aquarius", badge: "editor's pick", cat: "fashion", name: "Platform Runner Sneakers", brand: "Rick Owens", retailer: "SSENSE", price: "$620", affiliateUrl: "#", desc: "Sneakers from the future. Because your Venus doesn't dress for today, she dresses for a reality that hasn't arrived yet.", whyYou: "Your Venus in Aquarius is drawn to the avant-garde, the unconventional, and anything that makes people say 'what ARE those?' You don't follow trends, you set them three years early. Rick Owens is basically your Venus in shoe form: weird, wonderful, and ahead of absolutely everyone.", details: ["Leather and textile upper", "Exaggerated platform sole", "Signature Rick Owens silhouette", "Made in Italy"] },
+    { slug: "aquarius-venus-byredo-unnamed", icon: "♀", bg: "var(--lav-light)", placement: "venus in aquarius", badge: "for you", cat: "beauty", name: "Unnamed Eau de Parfum", brand: "Byredo", retailer: "Liberty London", price: "$195", affiliateUrl: "#", desc: "A fragrance with no name, no rules, and no category. It just IS. Very Aquarius Venus.", whyYou: "Venus in Aquarius rejects convention, even in scent. You don't want to smell like everyone else, you want something that defies categorisation. Byredo Unnamed is literally a fragrance that refused to be named. If that's not your Venus energy, nothing is.", details: ["100ml Eau de Parfum", "Undisclosed notes (seriously)", "Minimalist bottle design", "Genderless fragrance"] },
+  ],
+  Pisces: [
+    { slug: "pisces-venus-silk-dress", icon: "♀", bg: "var(--lav-light)", placement: "venus in pisces", badge: "editor's pick", cat: "fashion", name: "Floral Silk Midi Dress", brand: "Zimmermann", retailer: "Zimmermann", price: "$850", affiliateUrl: "#", desc: "A dress that looks like it was painted by the ocean. Flowing, romantic, and impossibly dreamy. You'll float through life in this.", whyYou: "Your Venus in Pisces is drawn to the ethereal, the romantic, and anything that makes you feel like you're in a painting. Zimmermann understands your Venus energy perfectly: flowing fabrics, watercolour florals, and the kind of beauty that feels almost otherworldly.", details: ["100% silk", "Watercolour floral print", "Flowing midi length", "Delicate pintuck details"] },
+    { slug: "pisces-venus-crystal-set", icon: "♀", bg: "var(--cream)", placement: "venus in pisces", badge: "for you", cat: "wellness", name: "Intuition Crystal Collection", brand: "Energy Muse", retailer: "Energy Muse", price: "$89", affiliateUrl: "#", desc: "Amethyst, moonstone, and labradorite. The three crystals your psychic sponge Venus needs to stay protected, intuitive, and grounded.", whyYou: "Venus in Pisces is the most intuitive Venus placement of all. You absorb energy like a sponge and need tools that support your sensitivity. This crystal set was basically designed for your placement: amethyst for protection, moonstone for intuition, labradorite for spiritual grounding.", details: ["3 hand-selected crystals", "Amethyst, moonstone, labradorite", "Crystal care guide included", "Ethically sourced"] },
+  ],
+};
+
+// Rising sign fashion picks
+const RISING_FASHION: Record<string, Product> = {
+  Aries: { slug: "aries-rising-red-lip", icon: "↑", bg: "#E0F5EE", placement: "aries rising", badge: "rising pick", cat: "beauty", name: "Ruby Woo Lipstick", brand: "MAC", retailer: "MAC Cosmetics", price: "$22", affiliateUrl: "#", desc: "The most iconic red lip in existence. Bold, matte, and the ultimate power move for Aries Rising.", whyYou: "Your Aries Rising projects confidence, boldness, and fire. A statement red lip is the fastest way to amplify that energy. Ruby Woo is THE red: powerful, retro-matte, and absolutely commanding.", details: ["Retro matte finish", "Blue-red shade", "Long-wearing", "Iconic MAC formula"] },
+  Taurus: { slug: "taurus-rising-silk-scarf", icon: "↑", bg: "var(--cream)", placement: "taurus rising", badge: "rising pick", cat: "fashion", name: "Silk Twill Scarf 90", brand: "Hermès", retailer: "Hermès", price: "$480", affiliateUrl: "#", desc: "The scarf that elevates everything. Tied on a bag, worn as a top, draped at the neck. Taurus Rising luxury at its finest.", whyYou: "Your Taurus Rising radiates luxury, taste, and timeless style. An Hermès scarf is the ultimate Taurus Rising accessory: it signals quality without trying and gets more beautiful with every wear.", details: ["100% silk twill", "90cm x 90cm", "Hand-rolled edges", "Artist-designed print"] },
+  Gemini: { slug: "gemini-rising-crossbody", icon: "↑", bg: "var(--lav-light)", placement: "gemini rising", badge: "rising pick", cat: "fashion", name: "Mini Puzzle Bag", brand: "Loewe", retailer: "Loewe", price: "$2,150", affiliateUrl: "#", desc: "A bag as multifaceted as your personality. Geometric, playful, and endlessly versatile. Very Gemini Rising.", whyYou: "Your Gemini Rising projects versatility, curiosity, and wit. The Loewe Puzzle bag literally shapeshifts depending on how you carry it. It's the bag equivalent of your ever-changing Rising energy.", details: ["Calfskin leather", "Multiple carrying options", "Signature puzzle construction", "Made in Spain"] },
+  Cancer: { slug: "cancer-rising-knit", icon: "↑", bg: "var(--cream)", placement: "cancer rising", badge: "rising pick", cat: "fashion", name: "Oversized Cashmere Cardigan", brand: "Khaite", retailer: "Net-a-Porter", price: "$1,480", affiliateUrl: "#", desc: "The cardigan that feels like a hug. Oversized, impossibly soft, and the kind of piece that makes everyone want to be near you.", whyYou: "Your Cancer Rising radiates warmth, comfort, and nurturing energy. This oversized cashmere cardigan amplifies exactly that: you look approachable, cosy, and quietly luxurious. People will literally want to hug you.", details: ["100% cashmere", "Oversized relaxed fit", "Ribbed trim details", "Button front closure"] },
+  Leo: { slug: "leo-rising-chain", icon: "↑", bg: "var(--gold)", placement: "leo rising", badge: "rising pick", cat: "jewellery", name: "Chunky Gold Chain Necklace", brand: "Bottega Veneta", retailer: "Bottega Veneta", price: "$3,200", affiliateUrl: "#", desc: "The necklace that announces your arrival. Bold gold, chunky links, pure Leo Rising magnetism.", whyYou: "Your Leo Rising was born to be adorned. You project warmth, drama, and star quality, and this gold chain amplifies all of it. It's the piece people notice first, which is exactly how your Rising works.", details: ["18k gold-plated silver", "Chunky curb chain links", "Lobster clasp closure", "Made in Italy"] },
+  Virgo: { slug: "virgo-rising-tote", icon: "↑", bg: "var(--cream)", placement: "virgo rising", badge: "rising pick", cat: "fashion", name: "Classic Leather Tote", brand: "Mansur Gavriel", retailer: "Mansur Gavriel", price: "$595", affiliateUrl: "#", desc: "Clean lines, perfect proportions, and a pop of colour inside. The tote for the Rising sign that values understated perfection.", whyYou: "Your Virgo Rising projects polished, put-together elegance. You need accessories that are functional AND beautiful. This tote is both: minimal exterior, thoughtful design, and that signature interior colour pop that only you know about. Very Virgo.", details: ["Italian vegetable-tanned leather", "Contrast interior lining", "Minimal hardware", "Will develop patina over time"] },
+  Libra: { slug: "libra-rising-ballet-flats", icon: "↑", bg: "var(--pink-light)", placement: "libra rising", badge: "rising pick", cat: "fashion", name: "Bow Ballet Flats", brand: "Repetto", retailer: "Repetto", price: "$345", affiliateUrl: "#", desc: "The most elegant flat shoe in existence. Feminine, Parisian, and perfectly balanced. Libra Rising in shoe form.", whyYou: "Your Libra Rising projects grace, charm, and effortless femininity. Repetto ballet flats are the iconic choice: Parisian chic, perfectly proportioned, and the kind of elegance that never goes out of style. Just like your Rising.", details: ["Lambskin leather", "Signature grosgrain bow", "Leather sole", "Made in France"] },
+  Scorpio: { slug: "scorpio-rising-dark-glasses", icon: "↑", bg: "var(--dark)", placement: "scorpio rising", badge: "rising pick", cat: "fashion", name: "Black Angular Sunglasses", brand: "Saint Laurent", retailer: "YSL", price: "$420", affiliateUrl: "#", desc: "The sunglasses that say 'you'll never fully know me.' Black, angular, and giving powerful mystery.", whyYou: "Your Scorpio Rising projects intensity, mystery, and magnetic allure. Dark sunglasses amplify your enigmatic energy tenfold. Saint Laurent captures your Rising vibe perfectly: sharp, powerful, and leaving everyone wanting more.", details: ["Acetate frame", "Angular cat-eye shape", "100% UV protection", "SL monogram detail"], iconColor: "#fff" },
+  Sagittarius: { slug: "sag-rising-boots", icon: "↑", bg: "var(--cream)", placement: "sagittarius rising", badge: "rising pick", cat: "fashion", name: "Western Suede Boots", brand: "Isabel Marant", retailer: "Mytheresa", price: "$750", affiliateUrl: "#", desc: "Boots that have seen the world. Western-inspired, effortlessly cool, and ready for whatever adventure your Rising sign has planned.", whyYou: "Your Sagittarius Rising projects freedom, adventure, and cosmopolitan cool. Isabel Marant western boots are the perfect match: they reference the world traveller in you while being impossibly chic. Cowboy energy meets Parisian cool.", details: ["Suede upper", "Western-inspired design", "Block heel", "Pull-on style"] },
+  Capricorn: { slug: "cap-rising-briefcase", icon: "↑", bg: "var(--dark)", placement: "capricorn rising", badge: "rising pick", cat: "fashion", name: "Soft Leather Briefcase", brand: "Smythson", retailer: "Smythson", price: "$1,295", affiliateUrl: "#", desc: "The briefcase that says 'I run things.' British heritage, impeccable craftsmanship, and CEO energy radiating from every stitch.", whyYou: "Your Capricorn Rising projects authority, ambition, and timeless sophistication. A Smythson briefcase amplifies your boardroom energy: heritage craftsmanship, serious quality, and the kind of accessory that commands respect before you've even opened your mouth.", details: ["Crossgrain leather", "Nappa-lined interior", "Multiple compartments", "Panama collection"], iconColor: "#fff" },
+  Aquarius: { slug: "aquarius-rising-platforms", icon: "↑", bg: "var(--lav-light)", placement: "aquarius rising", badge: "rising pick", cat: "fashion", name: "Chunky Platform Boots", brand: "Ganni", retailer: "Ganni", price: "$445", affiliateUrl: "#", desc: "Boots that are 4 inches taller and 10 years ahead of everyone else. Chunky, sustainable, and giving total Aquarius Rising energy.", whyYou: "Your Aquarius Rising projects originality, edge, and 'I'm from the future' cool. Ganni's chunky platforms match that frequency perfectly: bold, sustainable (your Aquarius cares), and the kind of boots that make people stop and ask where you got them.", details: ["Recycled materials", "Chunky platform sole", "Side zip closure", "Responsible fashion brand"] },
+  Pisces: { slug: "pisces-rising-moonstone-ring", icon: "↑", bg: "var(--cream)", placement: "pisces rising", badge: "rising pick", cat: "jewellery", name: "Moonstone Statement Ring", brand: "Monica Vinader", retailer: "Monica Vinader", price: "$180", affiliateUrl: "#", desc: "A ring that catches the light like water. Moonstone for the most ethereal Rising sign. Dreamy, mystical, and completely magical.", whyYou: "Your Pisces Rising projects an otherworldly, dreamy magnetism. Moonstone is your Rising sign's gem: it shifts colours, catches light differently depending on the angle, and has a mystical quality that perfectly matches the enchanting energy you radiate.", details: ["18k gold vermeil", "Natural moonstone", "Handcrafted setting", "Ethically sourced stone"] },
+};
+
+// Moon sign rituals/wellness picks
+const MOON_PICKS: Record<string, Product> = {
+  Aries: { slug: "aries-moon-boxing-class", icon: "☽", bg: "var(--pink-light)", placement: "moon in aries", badge: "", cat: "wellness", name: "Boxing Class Pack (10 Sessions)", brand: "KOBOX", retailer: "KOBOX", price: "$250", affiliateUrl: "#", desc: "Because your Aries Moon processes emotions through MOVEMENT. Ten sessions of punching it out never felt so therapeutic.", whyYou: "Your Moon in Aries needs physical release to process emotions. Sitting still with your feelings? Not your thing. Boxing lets you burn through frustration, anger, and restlessness in a way that actually feels good. This is emotional processing, Aries Moon style.", details: ["10-session pack", "All fitness levels welcome", "Gloves provided", "High-energy playlists"] },
+  Taurus: { slug: "taurus-moon-bath-soak", icon: "☽", bg: "var(--cream)", placement: "moon in taurus", badge: "", cat: "rituals", name: "Rose & Chamomile Bath Soak", brand: "Elemis", retailer: "Space NK", price: "$45", affiliateUrl: "#", desc: "A bath soak that turns your bathroom into a luxury spa. Rose, chamomile, and the kind of pampering your Taurus Moon NEEDS.", whyYou: "Your Moon in Taurus processes emotions through physical comfort and sensory pleasure. A luxurious bath isn't indulgent for you, it's essential. This soak is medicine for your Moon: fragrant, soothing, and deeply nourishing.", details: ["400ml bottle", "Rose and chamomile extracts", "Skin-softening formula", "15+ baths per bottle"] },
+  Gemini: { slug: "gemini-moon-journal", icon: "☽", bg: "var(--lav-light)", placement: "moon in gemini", badge: "", cat: "books", name: "The Five Minute Journal", brand: "Intelligent Change", retailer: "Amazon", price: "$29", affiliateUrl: "#", desc: "A journal for the Moon sign that thinks at 100mph. Five minutes, structured prompts, no pressure to write an essay.", whyYou: "Your Moon in Gemini processes emotions through WORDS. You need to get thoughts out of your head and onto paper, but long journaling sessions feel like homework. This journal is perfect: quick, structured, and lets your restless Moon process without overthinking.", details: ["Daily morning + evening prompts", "Guided gratitude practice", "Hardcover linen bound", "6-month journal"] },
+  Cancer: { slug: "cancer-moon-candle-set", icon: "☽", bg: "var(--cream)", placement: "moon in cancer", badge: "", cat: "rituals", name: "Home Comfort Candle Trio", brand: "Boy Smells", retailer: "Boy Smells", price: "$96", affiliateUrl: "#", desc: "Three candles that make your home feel like a sanctuary. Because your Cancer Moon needs her safe space to smell heavenly.", whyYou: "Your Moon is in its home sign, which means your emotional world revolves around feeling SAFE. Your home is your sanctuary and how it smells matters deeply to your Moon. This candle trio creates the exact cosy, nurturing atmosphere your Cancer Moon craves.", details: ["Set of 3 scented candles", "Coconut + beeswax blend", "50-hour burn time each", "Designed in LA"] },
+  Leo: { slug: "leo-moon-mirror", icon: "☽", bg: "var(--gold)", placement: "moon in leo", badge: "", cat: "home", name: "Hollywood Vanity Mirror", brand: "Impressions Vanity", retailer: "Sephora", price: "$199", affiliateUrl: "#", desc: "A vanity mirror with lights, because your Leo Moon deserves to see herself in the best possible light. Always.", whyYou: "Your Moon in Leo needs to feel SEEN, even by herself. A Hollywood vanity mirror turns your daily routine into a self-love ritual. Every time you sit down and those lights come on, your Leo Moon gets exactly what she needs: a reminder that she's the star.", details: ["LED Hollywood lights", "3 colour temperature settings", "Adjustable brightness", "10x magnification mirror included"] },
+  Virgo: { slug: "virgo-moon-planner", icon: "☽", bg: "var(--cream)", placement: "moon in virgo", badge: "", cat: "books", name: "Daily Planner & Wellness Tracker", brand: "Papier", retailer: "Papier", price: "$38", affiliateUrl: "#", desc: "A planner that tracks your habits, mood, water intake, and everything else your Virgo Moon needs to feel in control.", whyYou: "Your Moon in Virgo finds emotional security through ORDER. When things feel chaotic, you feel anxious. This planner gives your Moon what she needs: structure, tracking, and the satisfying feeling of ticking things off. It's emotional regulation disguised as productivity.", details: ["Undated daily planner", "Habit + mood tracker", "Wellness pages", "Lay-flat binding"] },
+  Libra: { slug: "libra-moon-room-spray", icon: "☽", bg: "var(--lav-light)", placement: "moon in libra", badge: "", cat: "home", name: "Room Spray Duo", brand: "Rituals", retailer: "Rituals", price: "$42", affiliateUrl: "#", desc: "Two room sprays that make your space feel balanced, beautiful, and deeply peaceful. Libra Moon approved.", whyYou: "Your Moon in Libra needs HARMONY in your environment to feel emotionally balanced. When your space is beautiful and smells gorgeous, your whole nervous system settles. These room sprays create instant atmosphere, which is instant emotional regulation for you.", details: ["2 x 250ml room sprays", "Complementary scent pairing", "Natural ingredients", "Designed for layering"] },
+  Scorpio: { slug: "scorpio-moon-tarot", icon: "☽", bg: "var(--dark)", placement: "moon in scorpio", badge: "", cat: "rituals", name: "The Wild Unknown Tarot Deck", brand: "The Wild Unknown", retailer: "The Wild Unknown", price: "$50", affiliateUrl: "#", desc: "A tarot deck as deep, intuitive, and beautifully dark as your Scorpio Moon. For when you need answers from the shadows.", whyYou: "Your Moon in Scorpio processes emotions by going DEEP. Surface-level self-care doesn't cut it for you. Tarot gives your Moon what she needs: a tool for diving into the subconscious, confronting what's hidden, and transforming through brutal self-honesty.", details: ["78 hand-illustrated cards", "Guidebook included", "Magnetic closure box", "Art by Kim Krans"], iconColor: "#fff" },
+  Sagittarius: { slug: "sag-moon-book", icon: "☽", bg: "var(--cream)", placement: "moon in sagittarius", badge: "", cat: "books", name: "Atlas of the Heart", brand: "Brené Brown", retailer: "Waterstones", price: "$28", affiliateUrl: "#", desc: "A map of 87 human emotions. Because your Sagittarius Moon needs to understand feelings the way she understands everything else: through learning.", whyYou: "Your Moon in Sagittarius processes emotions by making MEANING out of them. You don't want to just feel things, you want to understand why. This book maps the entire landscape of human emotion, which is exactly the kind of framework your philosophical Moon craves.", details: ["Hardcover edition", "87 emotions mapped", "Research-backed", "Illustrated throughout"] },
+  Capricorn: { slug: "cap-moon-therapy-voucher", icon: "☽", bg: "var(--cream)", placement: "moon in capricorn", badge: "", cat: "wellness", name: "Online Therapy Subscription (3 Months)", brand: "BetterHelp", retailer: "BetterHelp", price: "$240", affiliateUrl: "#", desc: "Because your Capricorn Moon respects structure, even when it comes to healing. Scheduled, professional, and genuinely effective.", whyYou: "Your Moon in Capricorn doesn't do messy emotional processing. You need structure, privacy, and someone qualified to guide you. Online therapy gives your Moon exactly that: professional support on a schedule you control. No fluff, just real work.", details: ["3-month subscription", "Weekly sessions", "Messaging between sessions", "Licensed therapists"] },
+  Aquarius: { slug: "aquarius-moon-sound-bath", icon: "☽", bg: "var(--lav-light)", placement: "moon in aquarius", badge: "", cat: "wellness", name: "Crystal Sound Bowl Set", brand: "Ohm Store", retailer: "Etsy", price: "$165", affiliateUrl: "#", desc: "A crystal singing bowl for at-home sound baths. Because your Aquarius Moon processes emotions through frequency, not feelings.", whyYou: "Your Moon in Aquarius detaches from emotions by default, so traditional emotional processing can feel foreign. Sound healing bypasses the intellect and works directly on your nervous system, which is exactly what your Aquarius Moon needs: a non-verbal way to release.", details: ["8-inch crystal singing bowl", "Suede striker included", "432Hz tuning", "Silicone ring stand"] },
+  Pisces: { slug: "pisces-moon-meditation-app", icon: "☽", bg: "var(--lav-light)", placement: "moon in pisces", badge: "", cat: "wellness", name: "Annual Meditation Subscription", brand: "Insight Timer", retailer: "Insight Timer", price: "$60", affiliateUrl: "#", desc: "200,000+ guided meditations for the Moon sign that needs to dissolve into something bigger than herself. Daily.", whyYou: "Your Moon in Pisces absorbs EVERYTHING and needs regular energetic cleansing. Meditation isn't optional for you, it's survival. Insight Timer gives you unlimited access to guided sessions that help your sponge-like Moon wring out all that absorbed energy.", details: ["Annual premium membership", "200,000+ guided meditations", "Sleep music library", "Courses from expert teachers"] },
+};
+
 export function generateProducts(placements: SavedPlacements): Product[] {
-  const venusProduct = VENUS_PRODUCTS[placements.venus] || VENUS_PRODUCTS["Leo"];
-  const risingVibe = RISING_VIBES[placements.rising] || RISING_VIBES["Aquarius"];
+  const venusPicks = VENUS_FASHION[placements.venus] || VENUS_FASHION["Leo"];
+  const risingPick = RISING_FASHION[placements.rising] || RISING_FASHION["Leo"];
+  const moonPick = MOON_PICKS[placements.moon] || MOON_PICKS["Cancer"];
 
   return [
+    venusPicks[0],
+    risingPick,
+    moonPick,
+    venusPicks[1],
+    // Jupiter pick: always an abundance-related book
     {
-      slug: `${placements.venus.toLowerCase()}-venus-${venusProduct.style.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-      icon: "♀",
-      bg: "var(--pink-light)",
-      placement: `venus in ${placements.venus.toLowerCase()}`,
-      badge: "for you",
-      cat: "fashion",
-      name: `${placements.venus} Venus ${venusProduct.style}`,
-      price: "$186",
-      desc: `Curated specifically for your Venus in ${placements.venus} energy. These pieces match how you express beauty, attract love, and show up in the world. Every item chosen to amplify your natural magnetism.`,
-      whyYou: `Your Venus is in ${placements.venus}, which means you're drawn to ${venusProduct.style.toLowerCase()}. These pieces are designed to make you feel like the most irresistible version of yourself.`,
-      includes: ["5 curated fashion pieces", "Styling guide for your Venus sign", "Colour palette card", "Lookbook PDF"],
-    },
-    {
-      slug: `${placements.rising.toLowerCase()}-rising-edit`,
-      icon: "↑",
-      bg: "#E0F5EE",
-      placement: `${placements.rising.toLowerCase()} rising`,
-      badge: "szn pick",
-      cat: "fashion",
-      name: `${placements.rising} Rising Edit`,
-      price: "$220",
-      desc: `Your rising sign is how the world sees you before you even speak. This capsule is curated to your ${placements.rising} Rising energy: ${risingVibe.desc}. Dress the frequency you broadcast.`,
-      whyYou: `With ${placements.rising} Rising, your vibe is ${risingVibe.energy}. These pieces are chosen to amplify that energy and make your first impression unforgettable.`,
-      includes: ["5-piece capsule wardrobe edit", "Rising sign style manifesto", "How to dress your Ascendant guide", "Seasonal styling notes"],
-    },
-    {
-      slug: `${placements.moon.toLowerCase()}-moon-ceremony-kit`,
-      icon: "☽",
-      bg: "var(--lav-light)",
-      placement: `moon in ${placements.moon.toLowerCase()}`,
-      badge: "",
-      cat: "rituals",
-      name: `${placements.moon} Moon Ceremony Kit`,
-      price: "$64",
-      desc: `A ritual kit designed for your ${placements.moon} Moon. Your emotional world craves specific types of nourishment and this kit delivers exactly that through curated crystals, herbs, candles, and guided ceremony instructions.`,
-      whyYou: `Your Moon in ${placements.moon} means you process emotions in a very specific way. This kit honours that and gives you the tools to create sacred space that actually feels right for YOU.`,
-      includes: ["Curated crystal set", "Herbal blend for your Moon sign", "Soy candle in your Moon's scent", "Guided ceremony card deck", "Moon journal pages"],
-    },
-    {
-      slug: `jupiter-in-${placements.jupiter.toLowerCase()}-abundance-journal`,
+      slug: `jupiter-${placements.jupiter.toLowerCase()}-abundance-book`,
       icon: "♃",
       bg: "var(--dark)",
       placement: `jupiter in ${placements.jupiter.toLowerCase()}`,
       badge: "bestseller",
-      cat: "money mindset",
-      name: `Jupiter in ${placements.jupiter} Abundance Journal`,
-      price: "$38",
+      cat: "books",
+      name: "You Are a Badass at Making Money",
+      brand: "Jen Sincero",
+      retailer: "Waterstones",
+      price: "$16",
+      affiliateUrl: "#",
+      desc: "The money mindset book that actually works. Part LOA, part kick up the arse, and exactly what your Jupiter placement needs to unlock the next level of abundance.",
+      whyYou: `Your Jupiter in ${placements.jupiter} has a specific abundance frequency. This book helps you clear the blocks that stop you from receiving on that frequency. It's blunt, funny, and cuts through the spiritual bypassing. Your Jupiter will thank you.`,
+      details: ["Paperback edition", "288 pages", "Practical exercises throughout", "New York Times bestseller"],
       iconColor: "var(--lav)",
-      desc: `Your Jupiter placement is your personal abundance code. This journal is pre-loaded with prompts, scripting templates, and manifestation methods designed specifically for how Jupiter in ${placements.jupiter} attracts wealth and expansion.`,
-      whyYou: `Jupiter in ${placements.jupiter} means abundance flows to you in a very specific way. Generic manifestation advice won't cut it. This journal speaks YOUR cosmic money language.`,
-      includes: ["90-day guided journal", "Jupiter sign manifestation method", "Money mindset prompts", "Abundance tracking pages", "Scripting templates"],
     },
+    // Chiron pick: always a healing-related product
     {
-      slug: `chiron-in-${placements.chiron.toLowerCase()}-healing-course`,
+      slug: `chiron-${placements.chiron.toLowerCase()}-healing-deck`,
       icon: "⚷",
       bg: "var(--cream)",
       placement: `chiron in ${placements.chiron.toLowerCase()}`,
       badge: "",
       cat: "wellness",
-      name: `Chiron in ${placements.chiron} Healing Course`,
-      price: "$97",
-      desc: `Your Chiron in ${placements.chiron} reveals the core wound you came here to heal and the extraordinary gift that lives on the other side. This 6-week course takes you deep into understanding, processing, and transforming your Chiron wound into your greatest superpower.`,
-      whyYou: `Chiron in ${placements.chiron} carries a very specific wound pattern. This course doesn't do surface-level healing. It goes straight to the root of YOUR pattern and gives you the tools to finally release it.`,
-      includes: ["6-week video course", "EFT tapping sequences", "Guided meditations", "Chiron journal workbook", "Community access"],
-    },
-    {
-      slug: `venus-in-${placements.venus.toLowerCase()}-${venusProduct.scent.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-      icon: "♀",
-      bg: "var(--gold)",
-      placement: `venus in ${placements.venus.toLowerCase()}`,
-      badge: "new",
-      cat: "beauty",
-      name: `Venus in ${placements.venus} ${venusProduct.scent} Collection`,
-      price: "$78",
-      desc: `Scent is one of the most powerful ways to activate your Venus energy. This collection features notes of ${venusProduct.scent.toLowerCase()} chosen specifically for Venus in ${placements.venus}. Because smelling like your chart is the ultimate power move.`,
-      whyYou: `Venus in ${placements.venus} is drawn to very specific scent profiles. These aren't random picks. Every note was chosen to resonate with your Venus placement and make you feel absolutely divine.`,
-      includes: ["Eau de parfum (30ml)", "Body oil", "Scented candle", "Venus activation ritual card"],
+      name: "The Wound Makes the Medicine Oracle Deck",
+      brand: "Pixie Lighthorse",
+      retailer: "Bookshop.org",
+      price: "$24",
+      affiliateUrl: "#",
+      desc: "An oracle deck designed specifically for wound work and healing. Each card holds a message about transforming pain into power. Made for your Chiron.",
+      whyYou: `Your Chiron in ${placements.chiron} carries a very specific wound pattern. This oracle deck helps you dialogue with that wound instead of ignoring it. Pull a card when you're triggered, when you're healing, or when you need a reminder that your deepest pain is your greatest gift.`,
+      details: ["44 oracle cards", "Full guidebook included", "Linen finish cards", "Illustrated by the author"],
     },
   ];
 }

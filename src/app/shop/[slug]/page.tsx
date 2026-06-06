@@ -92,9 +92,9 @@ export default function ProductPage() {
       {/* Breadcrumb */}
       <div className="px-8 py-3" style={{ borderBottom: "var(--border)" }}>
         <div className="flex gap-2 items-center" style={{ fontSize: 11, color: "var(--grey-light)" }}>
-          <a href="/#shop" style={{ color: "var(--grey-light)", textDecoration: "none" }}>shop</a>
+          <a href="/shop" style={{ color: "var(--grey-light)", textDecoration: "none" }}>shop</a>
           <span>/</span>
-          <a href="/#shop" style={{ color: "var(--grey-light)", textDecoration: "none" }}>{product.cat}</a>
+          <a href="/shop" style={{ color: "var(--grey-light)", textDecoration: "none" }}>{product.cat}</a>
           <span>/</span>
           <span style={{ color: "var(--dark)" }}>{product.name}</span>
         </div>
@@ -128,6 +128,17 @@ export default function ProductPage() {
 
         {/* Details */}
         <div className="px-8 py-10 flex flex-col justify-center">
+          {/* Brand + Retailer */}
+          <div className="flex items-center gap-2 mb-2">
+            <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--dark)" }}>
+              {product.brand}
+            </span>
+            <span style={{ fontSize: 10, color: "var(--grey-light)" }}>via</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "var(--grey)" }}>
+              {product.retailer}
+            </span>
+          </div>
+
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
             {product.cat} {product.badge ? ` / ${product.badge}` : ""}
           </div>
@@ -151,13 +162,13 @@ export default function ProductPage() {
             </p>
           </div>
 
-          {/* What's included */}
+          {/* Product details */}
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 12 }}>
-              what&apos;s included
+              details
             </div>
             <div className="space-y-2">
-              {product.includes.map((item, i) => (
+              {product.details.map((item, i) => (
                 <div key={i} className="flex items-center gap-2.5" style={{ fontSize: 13, color: "var(--dark)" }}>
                   <span style={{ color: "var(--pink)", fontSize: 10 }}>&#10003;</span>
                   {item}
@@ -166,18 +177,22 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* CTA */}
-          <button
+          {/* CTA - Affiliate link-out */}
+          <a
+            href={product.affiliateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
+              display: "block", textAlign: "center", textDecoration: "none",
               background: "var(--pink)", color: "#fff", fontSize: 13, fontWeight: 700,
               letterSpacing: "0.08em", textTransform: "uppercase", padding: "16px 32px",
-              border: "none", cursor: "pointer", width: "100%",
+              border: "none", cursor: "pointer", width: "100%", boxSizing: "border-box",
             }}
           >
-            add to bag
-          </button>
-          <p style={{ fontSize: 11, color: "var(--grey-light)", textAlign: "center", marginTop: 10 }}>
-            free shipping on orders over $100
+            shop at {product.retailer} &rarr;
+          </a>
+          <p style={{ fontSize: 10, color: "var(--grey-light)", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
+            this is an affiliate link. we may earn a small commission at no extra cost to you.
           </p>
         </div>
       </div>
@@ -210,7 +225,10 @@ export default function ProductPage() {
                     </div>
                   </div>
                   <div className="p-3.5" style={{ borderTop: "var(--border)" }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 4 }}>{prod.cat}</div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)" }}>{prod.brand}</span>
+                      <span style={{ fontSize: 9, color: "var(--grey-light)" }}>via {prod.retailer}</span>
+                    </div>
                     <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, lineHeight: 1.2, marginBottom: 6 }}>{prod.name}</div>
                     <div style={{ fontSize: 14, fontWeight: 700 }}>{prod.price}</div>
                   </div>

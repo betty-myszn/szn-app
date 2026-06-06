@@ -168,7 +168,10 @@ export default function PersonalisedShop() {
                 </div>
               </div>
               <div className="p-4" style={{ borderTop: "var(--border)" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 6 }}>{prod.cat}</div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)" }}>{prod.brand}</span>
+                  <span style={{ fontSize: 9, color: "var(--grey-light)" }}>via {prod.retailer}</span>
+                </div>
                 <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, lineHeight: 1.2, marginBottom: 6 }}>{prod.name}</div>
                 <div style={{ fontSize: 12, color: "var(--grey)", lineHeight: 1.5, marginBottom: 10 }}>
                   {prod.desc.slice(0, 80)}...
