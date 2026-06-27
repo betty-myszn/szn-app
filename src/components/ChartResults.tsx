@@ -24,6 +24,7 @@ import {
   JUPITER_READINGS,
   MIDHEAVEN_READINGS,
   MERCURY_READINGS,
+  HOUSE_READINGS,
 } from "@/lib/chart-readings";
 
 interface ChartResultsProps {
@@ -70,6 +71,11 @@ function getSign(chart: ChartData, planetName: string): string {
   return p?.sign || "Aries";
 }
 
+function getHouse(chart: ChartData, planetName: string): number {
+  const p = chart.planets.find((pl) => pl.name === planetName);
+  return p?.house || 1;
+}
+
 function getRisingSign(chart: ChartData): string {
   return chart.houses[0]?.sign || "Aries";
 }
@@ -89,7 +95,7 @@ interface ReadingSectionProps {
   title: string;
   subtitle: string;
   bg: string;
-  items: { label: string; sign: string; reading: string }[];
+  items: { label: string; sign: string; reading: string; house?: number }[];
 }
 
 function ReadingSection({ tag, title, subtitle, bg, items }: ReadingSectionProps) {
@@ -122,7 +128,7 @@ function ReadingSection({ tag, title, subtitle, bg, items }: ReadingSectionProps
               <span style={{ fontSize: 22 }}>{getSymbol(item.sign)}</span>
               <div>
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  {item.label}
+                  {item.label}{item.house ? ` · house ${item.house}` : ""}
                 </div>
                 <div style={{ fontFamily: poppins, fontSize: 18, fontWeight: 800, letterSpacing: "-0.3px" }}>
                   {item.sign}
@@ -130,7 +136,7 @@ function ReadingSection({ tag, title, subtitle, bg, items }: ReadingSectionProps
               </div>
             </div>
             <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", margin: 0 }}>
-              {item.reading}
+              {item.reading}{item.house && HOUSE_READINGS[item.house] ? ` ${HOUSE_READINGS[item.house]}` : ""}
             </p>
           </div>
         ))}
@@ -273,8 +279,8 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           subtitle="Your Sun, Moon, and Rising are the three most important placements in your chart. Together they paint the picture of your identity, your inner world, and how the world sees you."
           bg="var(--pink-light)"
           items={[
-            { label: "sun sign", sign: sunSign, reading: SUN_READINGS[sunSign] || "" },
-            { label: "moon sign", sign: moonSign, reading: MOON_READINGS[moonSign] || "" },
+            { label: "sun sign", sign: sunSign, reading: SUN_READINGS[sunSign] || "", house: getHouse(chart, "Sun") },
+            { label: "moon sign", sign: moonSign, reading: MOON_READINGS[moonSign] || "", house: getHouse(chart, "Moon") },
             { label: "rising sign", sign: risingSign, reading: RISING_READINGS[risingSign] || "" },
           ]}
         />
@@ -286,8 +292,8 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           subtitle="Venus shows how you attract, what you find beautiful, and your love language. Mars shows how you go after what you want and what lights your fire."
           bg="var(--lav-light)"
           items={[
-            { label: "venus", sign: venusSign, reading: VENUS_READINGS[venusSign] || "" },
-            { label: "mars", sign: marsSign, reading: MARS_READINGS[marsSign] || "" },
+            { label: "venus", sign: venusSign, reading: VENUS_READINGS[venusSign] || "", house: getHouse(chart, "Venus") },
+            { label: "mars", sign: marsSign, reading: MARS_READINGS[marsSign] || "", house: getHouse(chart, "Mars") },
           ]}
         />
 
@@ -298,8 +304,8 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           subtitle="These placements show your deepest wounds, your biggest life lessons, and the transformation you're here to make. This is where the real growth happens."
           bg="#f5f5f5"
           items={[
-            { label: "chiron", sign: chironSign, reading: CHIRON_READINGS[chironSign] || "" },
-            { label: "saturn", sign: saturnSign, reading: SATURN_READINGS[saturnSign] || "" },
+            { label: "chiron", sign: chironSign, reading: CHIRON_READINGS[chironSign] || "", house: getHouse(chart, "Chiron") },
+            { label: "saturn", sign: saturnSign, reading: SATURN_READINGS[saturnSign] || "", house: getHouse(chart, "Saturn") },
           ]}
         />
 
@@ -310,9 +316,9 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           subtitle="Your North Node is your soul's purpose. Your Midheaven is your career destiny. Jupiter is where luck and abundance flow to you most easily."
           bg="var(--mint)"
           items={[
-            { label: "north node", sign: northNodeSign, reading: NORTH_NODE_READINGS[northNodeSign] || "" },
+            { label: "north node", sign: northNodeSign, reading: NORTH_NODE_READINGS[northNodeSign] || "", house: getHouse(chart, "North Node") },
             { label: "midheaven", sign: midheavenSign, reading: MIDHEAVEN_READINGS[midheavenSign] || "" },
-            { label: "jupiter", sign: jupiterSign, reading: JUPITER_READINGS[jupiterSign] || "" },
+            { label: "jupiter", sign: jupiterSign, reading: JUPITER_READINGS[jupiterSign] || "", house: getHouse(chart, "Jupiter") },
           ]}
         />
 
@@ -323,7 +329,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           subtitle="Mercury is how your mind works. This placement reveals your unique intellectual and creative gifts."
           bg="var(--cream)"
           items={[
-            { label: "mercury", sign: mercurySign, reading: MERCURY_READINGS[mercurySign] || "" },
+            { label: "mercury", sign: mercurySign, reading: MERCURY_READINGS[mercurySign] || "", house: getHouse(chart, "Mercury") },
           ]}
         />
       </div>

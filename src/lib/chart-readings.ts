@@ -1,5 +1,20 @@
 // Personalised sign-by-sign readings for each placement
 
+export const HOUSE_READINGS: Record<number, string> = {
+  1: "And with this sitting in your 1st house? It's literally tattooed on your aura. This isn't background noise. It's the first thing people feel when you walk into a room. It's your identity, babe. Own it.",
+  2: "With this in your 2nd house, it's directly tied to your money, your self-worth, and what you believe you deserve. This placement is basically your abundance blueprint. The question isn't whether you can have it all. It's whether you believe you're allowed to.",
+  3: "This lands in your 3rd house, which means it shows up every time you open your mouth, write a caption, or have a conversation. Your communication style, your ideas, your daily interactions. This energy is woven through all of it.",
+  4: "This lives in your 4th house, right at the emotional core of who you are. Your home, your family, your roots, the foundation everything else is built on. This is the most private, most tender part of your chart. Protect it fiercely.",
+  5: "And this is in your 5th house, which is the most fun, creative, romantic house in the entire chart. This energy fuels your self-expression, your love affairs, your creative projects, and your ability to experience pure joy. This is your inner child on fire.",
+  6: "With this in your 6th house, it plays out in your daily rituals, your health, your work habits. The unglamorous stuff that actually runs your life. The routines you build around this placement will either make you or break you. Choose wisely.",
+  7: "This sits in your 7th house, which means it plays out most intensely in your closest relationships. Romantic partners, business partners, best friends. The people you go all in with. This energy isn't just yours. It's activated by the people you choose.",
+  8: "This is in your 8th house, which is next level. This is the house of transformation, intimacy, other people's money, and everything most people are too scared to look at. You're not most people. This placement gives you power most can only dream of.",
+  9: "With this in your 9th house, it's tied to your quest for meaning, adventure, and truth. Travel, higher learning, philosophy, publishing, big-picture thinking. This placement makes you hungry for experiences that blow your mind wide open.",
+  10: "This lands in your 10th house, which is literally your career and public reputation. Everyone can see this energy in your work, your achievements, your legacy. This isn't hidden. This is how the world knows you. Make it count.",
+  11: "And this is in your 11th house, connecting it to your friendships, your community, and your vision for the future. The groups you belong to, the causes you champion, the collective dreams you're part of. Your people activate this energy in you.",
+  12: "This lives in your 12th house, which means most of it is happening beneath the surface. Your subconscious, your dreams, your spiritual life, the stuff you process when nobody's watching. It's incredibly powerful but deeply private. Trust what you feel even when you can't explain it.",
+};
+
 export const SUN_READINGS: Record<string, string> = {
   Aries: "You're an Aries Sun, which means you were born to go first, lead loud, and never apologise for wanting more. You're the spark that lights the room. You don't wait for permission. You don't need a plan. You need momentum. Your confidence isn't arrogance, it's medicine for everyone around you who's too scared to go after what they want.",
   Taurus: "You're a Taurus Sun, which means you were built for pleasure, beauty, and the long game. You're not slow, you're intentional. While everyone else is chasing shiny things, you're building something that lasts. Your superpower is your taste. You know what's worth your time, your money, and your energy and you refuse to settle for less.",
