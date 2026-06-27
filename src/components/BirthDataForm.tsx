@@ -17,6 +17,7 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
   const saved = typeof window !== "undefined" ? getSavedBirthData() : null;
   const defaults = initialData || saved;
 
+  const [email, setEmail] = useState("");
   const [name, setName] = useState(defaults?.name || "");
   const [dateOfBirth, setDateOfBirth] = useState(defaults?.dateOfBirth || "");
   const [birthTime, setBirthTime] = useState(defaults?.birthTime || "");
@@ -120,6 +121,23 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
       )}
 
       <div>
+        <label htmlFor="email" style={labelStyle}>email address</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={inputStyle}
+          placeholder="you@email.com"
+          className="focus:!border-[var(--pink)]"
+        />
+        <p style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 6 }}>
+          We&apos;ll send your chart results here too. No spam, ever.
+        </p>
+      </div>
+
+      <div>
         <label htmlFor="name" style={labelStyle}>your name</label>
         <input
           id="name"
@@ -217,7 +235,7 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
           marginTop: 8,
         }}
       >
-        {loading ? "calculating your chart..." : "generate my chart"}
+        {loading ? "calculating your chart..." : "get my free chart"}
       </button>
     </form>
   );

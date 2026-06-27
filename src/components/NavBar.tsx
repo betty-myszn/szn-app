@@ -46,31 +46,25 @@ export default function NavBar() {
         <Link href={sznLink} className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           {savedName ? `${savedName}'s szn` : "your szn"}
         </Link>
-        <Link href="/chart" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          chart
+        <Link href="/podcast" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+          podcast
         </Link>
-        <Link href="/shop" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          shop
-        </Link>
-        <Link href="/#heal" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          heal
-        </Link>
-        <Link href="/#manifest" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          manifest
+        <Link href="/mastermind" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+          mastermind
         </Link>
       </div>
       <Link href="/chart" className="nav-cta no-underline" style={{
-        background: "transparent",
-        color: "var(--dark)",
+        background: "var(--pink)",
+        color: "#fff",
         fontSize: 12,
         fontWeight: 700,
         letterSpacing: "0.08em",
         textTransform: "uppercase",
         padding: "10px 20px",
-        border: "1.5px solid var(--dark)",
-        transition: "all 0.15s",
+        border: "none",
+        transition: "opacity 0.15s",
       }}>
-        {savedName ? `${savedName}'s chart` : "get your chart"}
+        free birth chart
       </Link>
     </nav>
   );
