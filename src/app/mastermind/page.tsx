@@ -11,10 +11,21 @@ export default function MastermindPage() {
   const [instagram, setInstagram] = useState("");
   const [why, setWhy] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && name) setSubmitted(true);
+    if (!email || !name) return;
+    setSubmitting(true);
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, source: "mastermind", instagram, why }),
+      });
+    } catch {}
+    setSubmitted(true);
+    setSubmitting(false);
   };
 
   const labelStyle = {
@@ -236,7 +247,7 @@ export default function MastermindPage() {
                         marginTop: 8,
                       }}
                     >
-                      join the mastermind waitlist
+                      {submitting ? "joining..." : "join the mastermind waitlist"}
                     </button>
                   </form>
 

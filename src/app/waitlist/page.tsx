@@ -9,9 +9,21 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (!email) return;
+    setSubmitting(true);
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "waitlist" }),
+      });
+    } catch {}
+    setSubmitted(true);
+    setSubmitting(false);
   };
 
   if (submitted) {
@@ -64,7 +76,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           transition: "opacity 0.15s",
         }}
       >
-        join the waitlist
+        {submitting ? "joining..." : "join the waitlist"}
       </button>
     </form>
   );

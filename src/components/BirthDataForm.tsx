@@ -82,6 +82,16 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
       }
 
       saveBirthData(birthData);
+
+      // Subscribe email to Brevo
+      if (email) {
+        fetch("/api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, name, source: "free-chart" }),
+        }).catch(() => {});
+      }
+
       const params = encodeBirthData(birthData);
       router.push(`/results?${params}`);
     } catch (err) {
