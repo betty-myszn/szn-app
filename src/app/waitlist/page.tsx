@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
@@ -428,30 +429,30 @@ export default function WaitlistPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-12">
             {[
-              { szn: "Aries szn", lesson: "Courage", desc: "Take the leap. Back yourself. Stop waiting for permission." },
-              { szn: "Taurus szn", lesson: "Receiving", desc: "Wealth, pleasure, self-worth. Learn to let good things in." },
-              { szn: "Gemini szn", lesson: "Expression", desc: "Use your voice. Say the thing. Become magnetic." },
-              { szn: "Cancer szn", lesson: "Nurturing", desc: "Heal the inner child. Protect your energy. Come home to yourself." },
-              { szn: "Leo szn", lesson: "Visibility", desc: "Main character energy. Own the room. Stop playing small." },
-              { szn: "Virgo szn", lesson: "Refinement", desc: "Level up the systems. Get organised. Become unshakeable." },
-              { szn: "Libra szn", lesson: "Balance", desc: "Boundaries, beauty, partnerships. Choose yourself first." },
-              { szn: "Scorpio szn", lesson: "Transformation", desc: "Shadow work. Deep healing. Burn it down and rise." },
-              { szn: "Sag szn", lesson: "Expansion", desc: "Dream bigger. Book the flight. Expand beyond the comfort zone." },
-              { szn: "Cap szn", lesson: "Ambition", desc: "Build the empire. Set the goals. Execute like a boss." },
-              { szn: "Aquarius szn", lesson: "Revolution", desc: "Break the rules. Do it differently. Be unapologetically you." },
-              { szn: "Pisces szn", lesson: "Surrender", desc: "Trust the process. Tap into intuition. Let the universe lead." },
+              { slug: "aries", szn: "Aries szn", lesson: "Courage", desc: "Take the leap. Back yourself. Stop waiting for permission." },
+              { slug: "taurus", szn: "Taurus szn", lesson: "Receiving", desc: "Wealth, pleasure, self-worth. Learn to let good things in." },
+              { slug: "gemini", szn: "Gemini szn", lesson: "Expression", desc: "Use your voice. Say the thing. Become magnetic." },
+              { slug: "cancer", szn: "Cancer szn", lesson: "Nurturing", desc: "Heal the inner child. Protect your energy. Come home to yourself." },
+              { slug: "leo", szn: "Leo szn", lesson: "Visibility", desc: "Main character energy. Own the room. Stop playing small." },
+              { slug: "virgo", szn: "Virgo szn", lesson: "Standards", desc: "Raise the bar. Get your life together. No more settling." },
+              { slug: "libra", szn: "Libra szn", lesson: "Balance", desc: "Boundaries, beauty, partnerships. Choose yourself first." },
+              { slug: "scorpio", szn: "Scorpio szn", lesson: "Transformation", desc: "Shadow work. Deep healing. Burn it down and rise." },
+              { slug: "sagittarius", szn: "Sag szn", lesson: "Expansion", desc: "Dream bigger. Book the flight. Expand beyond the comfort zone." },
+              { slug: "capricorn", szn: "Cap szn", lesson: "Ambition", desc: "Build the empire. Set the goals. Execute like a boss." },
+              { slug: "aquarius", szn: "Aquarius szn", lesson: "Revolution", desc: "Break the rules. Do it differently. Be unapologetically you." },
+              { slug: "pisces", szn: "Pisces szn", lesson: "Surrender", desc: "Trust the process. Tap into intuition. Let the universe lead." },
             ].map((s, i) => (
-              <div key={s.szn} className="p-4" style={{ background: i % 2 === 0 ? "rgba(255,45,135,0.08)" : "rgba(200,180,248,0.08)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <Link key={s.szn} href={`/seasons/${s.slug}`} className="no-underline p-4 block" style={{ background: i % 2 === 0 ? "rgba(255,45,135,0.08)" : "rgba(200,180,248,0.08)", border: "1px solid rgba(255,255,255,0.06)", transition: "opacity 0.15s" }}>
                 <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: i % 2 === 0 ? "var(--pink)" : "var(--lav)", marginBottom: 4 }}>
                   {s.szn}
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
                   {s.lesson}
                 </div>
-                <div style={{ fontSize: 11, lineHeight: 1.5, color: "rgba(255,255,255,0.75)" }}>
+                <div style={{ fontSize: 11, lineHeight: 1.5, color: "#fff" }}>
                   {s.desc}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
