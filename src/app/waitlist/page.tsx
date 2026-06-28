@@ -228,19 +228,25 @@ export default function WaitlistPage() {
       {/* ═══════════════ MY STORY ═══════════════ */}
       <section className="px-6 py-24 md:py-32">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          {/* Image placeholder */}
           <div
             className="aspect-[3/4] w-full"
             style={{
-              background: "linear-gradient(135deg, var(--pink-light) 0%, var(--lav-light) 100%)",
-              display: "flex", alignItems: "flex-end", justifyContent: "center",
               position: "relative", overflow: "hidden",
             }}
           >
+            <img
+              src="/betty-founder.png"
+              alt="Betty Andrews, founder of MY SZN"
+              style={{
+                width: "100%", height: "100%",
+                objectFit: "cover", objectPosition: "center top",
+              }}
+            />
             <div style={{
               position: "absolute", bottom: 24, left: 24,
               fontSize: 10, fontWeight: 700, letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "var(--pink)",
+              textTransform: "uppercase", color: "#fff",
+              textShadow: "0 1px 4px rgba(0,0,0,0.5)",
             }}>
               Betty Andrews / Founder
             </div>
