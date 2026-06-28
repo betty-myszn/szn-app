@@ -427,29 +427,29 @@ export default function WaitlistPage() {
             Every month follows the rhythm of the zodiac. Because every zodiac season has something to teach us.
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
             {[
-              { slug: "aries", szn: "Aries szn", lesson: "Courage", desc: "Take the leap. Back yourself. Stop waiting for permission." },
-              { slug: "taurus", szn: "Taurus szn", lesson: "Receiving", desc: "Wealth, pleasure, self-worth. Learn to let good things in." },
-              { slug: "gemini", szn: "Gemini szn", lesson: "Expression", desc: "Use your voice. Say the thing. Become magnetic." },
-              { slug: "cancer", szn: "Cancer szn", lesson: "Nurturing", desc: "Heal the inner child. Protect your energy. Come home to yourself." },
-              { slug: "leo", szn: "Leo szn", lesson: "Visibility", desc: "Main character energy. Own the room. Stop playing small." },
-              { slug: "virgo", szn: "Virgo szn", lesson: "Standards", desc: "Raise the bar. Get your life together. No more settling." },
-              { slug: "libra", szn: "Libra szn", lesson: "Balance", desc: "Boundaries, beauty, partnerships. Choose yourself first." },
-              { slug: "scorpio", szn: "Scorpio szn", lesson: "Transformation", desc: "Shadow work. Deep healing. Burn it down and rise." },
-              { slug: "sagittarius", szn: "Sag szn", lesson: "Expansion", desc: "Dream bigger. Book the flight. Expand beyond the comfort zone." },
-              { slug: "capricorn", szn: "Cap szn", lesson: "Ambition", desc: "Build the empire. Set the goals. Execute like a boss." },
-              { slug: "aquarius", szn: "Aquarius szn", lesson: "Revolution", desc: "Break the rules. Do it differently. Be unapologetically you." },
-              { slug: "pisces", szn: "Pisces szn", lesson: "Surrender", desc: "Trust the process. Tap into intuition. Let the universe lead." },
-            ].map((s, i) => (
-              <Link key={s.szn} href={`/seasons/${s.slug}`} className="no-underline p-4 block" style={{ background: i % 2 === 0 ? "rgba(255,45,135,0.08)" : "rgba(200,180,248,0.08)", border: "1px solid rgba(255,255,255,0.06)", transition: "opacity 0.15s" }}>
-                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: i % 2 === 0 ? "var(--pink)" : "var(--lav)", marginBottom: 4 }}>
+              { slug: "aries", szn: "Aries szn", lesson: "Courage", desc: "The season you stop asking for permission and start taking what's yours. Bold moves only. No more playing it safe while your dreams collect dust.", bg: "var(--pink-light)", accent: "var(--pink)" },
+              { slug: "taurus", szn: "Taurus szn", lesson: "Receiving", desc: "The season you stop hustling for scraps and start letting abundance in. Money, pleasure, self-worth. You learn to receive like the queen you are.", bg: "var(--mint)", accent: "#2d8a6e" },
+              { slug: "gemini", szn: "Gemini szn", lesson: "Expression", desc: "The season you find your voice and weaponise it. Communication, magnetism, social power. You become the woman everyone wants at the table.", bg: "var(--gold)", accent: "var(--pink)" },
+              { slug: "cancer", szn: "Cancer szn", lesson: "Nurturing", desc: "The season you heal the inner child and come home to yourself. Deep emotional work, fierce boundaries, and learning to mother yourself the way you always needed.", bg: "var(--lav-light)", accent: "#7B68AE" },
+              { slug: "leo", szn: "Leo szn", lesson: "Visibility", desc: "The season you stop hiding and start shining so bright people need sunglasses. Main character energy activated. No more dimming your light for people who can't handle the glow.", bg: "var(--gold)", accent: "var(--pink)" },
+              { slug: "virgo", szn: "Virgo szn", lesson: "Standards", desc: "The season you raise the bar so high that settling becomes physically impossible. Systems, rituals, health, habits. You build a life so well-designed that success becomes inevitable.", bg: "var(--mint)", accent: "#2d8a6e" },
+              { slug: "libra", szn: "Libra szn", lesson: "Balance", desc: "The season you stop people-pleasing and start self-choosing. Boundaries that protect your peace. Relationships that match your worth. You choose yourself every single time.", bg: "var(--pink-light)", accent: "var(--pink)" },
+              { slug: "scorpio", szn: "Scorpio szn", lesson: "Transformation", desc: "The season you face every shadow, burn down what's not working, and rise from the ashes completely unrecognisable. Shadow work. Financial intimacy. Go deep or go home.", bg: "var(--lav-light)", accent: "#7B68AE" },
+              { slug: "sagittarius", szn: "Sag szn", lesson: "Expansion", desc: "The season you dream so big it scares you and then go bigger. Adventure, freedom, breaking out of the comfort zone that's been keeping you small. No ceiling.", bg: "var(--cream)", accent: "var(--pink)" },
+              { slug: "capricorn", szn: "Cap szn", lesson: "Ambition", desc: "The season you become the CEO of your own life. Build the business plan. Set the scary goals. Execute like a boss. No permission needed, no apologies given.", bg: "var(--mint)", accent: "#2d8a6e" },
+              { slug: "aquarius", szn: "Aquarius szn", lesson: "Revolution", desc: "The season you break every rule that was never yours to follow. Stop fitting in, start building your own lane. Be so unapologetically yourself that the world makes room.", bg: "var(--lav-light)", accent: "#7B68AE" },
+              { slug: "pisces", szn: "Pisces szn", lesson: "Surrender", desc: "The season you stop forcing and start flowing. Trust the process. Tap into your intuition louder than your overthinking. Let the universe lead for once.", bg: "var(--cream)", accent: "#7B68AE" },
+            ].map((s) => (
+              <Link key={s.szn} href={`/seasons/${s.slug}`} className="no-underline p-6 block" style={{ background: s.bg, border: "1px solid rgba(255,255,255,0.1)", transition: "opacity 0.15s" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: s.accent, marginBottom: 6 }}>
                   {s.szn}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
+                <div style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "var(--dark)", marginBottom: 8, letterSpacing: "-0.3px" }}>
                   {s.lesson}
                 </div>
-                <div style={{ fontSize: 11, lineHeight: 1.5, color: "#fff" }}>
+                <div style={{ fontSize: 13, lineHeight: 1.6, color: "var(--dark)" }}>
                   {s.desc}
                 </div>
               </Link>
