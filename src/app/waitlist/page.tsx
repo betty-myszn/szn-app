@@ -380,11 +380,11 @@ export default function WaitlistPage() {
                 <div style={{ fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 12, color: "var(--dark)" }}>
                   {card.szn}
                 </div>
-                <ul style={{ margin: 0, paddingLeft: 18 }}>
+                <div className="space-y-1">
                   {card.examples.map((ex) => (
-                    <li key={ex} style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", marginBottom: 4 }}>{ex}</li>
+                    <p key={ex} style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", margin: 0 }}>{ex}</p>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
