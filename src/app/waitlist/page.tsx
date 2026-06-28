@@ -49,7 +49,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         onChange={(e) => setName(e.target.value)}
         style={{
           flex: 0.7, padding: "16px 20px", fontSize: 14, fontFamily: dm,
-          border: dark ? "1.5px solid rgba(255,255,255,0.2)" : "var(--border)",
+          border: dark ? "1.5px solid var(--pink)" : "var(--border)",
           background: dark ? "rgba(255,255,255,0.05)" : "#fff",
           color: dark ? "#fff" : "var(--dark)", outline: "none",
         }}
@@ -62,7 +62,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         onChange={(e) => setEmail(e.target.value)}
         style={{
           flex: 1, padding: "16px 20px", fontSize: 14, fontFamily: dm,
-          border: dark ? "1.5px solid rgba(255,255,255,0.2)" : "var(--border)",
+          border: dark ? "1.5px solid var(--pink)" : "var(--border)",
           background: dark ? "rgba(255,255,255,0.05)" : "#fff",
           color: dark ? "#fff" : "var(--dark)", outline: "none",
         }}
@@ -101,15 +101,15 @@ export default function WaitlistPage() {
           </h1>
 
           <p style={{
-            fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.5)",
+            fontSize: 17, lineHeight: 1.8, color: "#fff",
             maxWidth: 520, margin: "0 auto 12px",
           }}>
             Astrology tells you who you are.<br />
-            <span style={{ color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>MY SZN helps you become her.</span>
+            <span style={{ fontWeight: 500 }}>MY SZN helps you become her.</span>
           </p>
 
           <p style={{
-            fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.35)",
+            fontSize: 14, lineHeight: 1.8, color: "#fff",
             maxWidth: 540, margin: "0 auto 36px",
           }}>
             A personalised personal growth platform combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust.
@@ -117,7 +117,7 @@ export default function WaitlistPage() {
 
           <div className="flex flex-col items-center gap-4">
             <WaitlistForm dark id="hero-form" />
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.25)", letterSpacing: "0.04em" }}>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
               Limited founding member spaces available.
             </p>
           </div>
@@ -132,7 +132,7 @@ export default function WaitlistPage() {
             fontFamily: pp, fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 800,
             letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
           }}>
-            Why <span className="pk">MY SZN.</span>
+            Why <span className="pk">MY SZN?</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
@@ -370,20 +370,20 @@ export default function WaitlistPage() {
           {/* Seasonal examples */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
             {[
-              { szn: "Taurus szn", examples: ["Heal your relationship with money.", "Stop undercharging.", "Learn to receive instead of overworking.", "Believe you're worthy of abundance."], bg: "var(--mint)" },
-              { szn: "Leo szn", examples: ["Work on visibility.", "Show up unapologetically.", "Own the room.", "Stop dimming your light for people who can't handle it."], bg: "var(--gold)" },
-              { szn: "Scorpio szn", examples: ["Shadow work and financial intimacy.", "Face what you've been avoiding.", "Transform the pain into power.", "Go deep or go home."], bg: "var(--lav-light)" },
-              { szn: "Capricorn szn", examples: ["Build the business plan.", "Set the goals.", "Get ruthlessly strategic.", "Become the CEO of your own life."], bg: "var(--cream)" },
+              { szn: "Taurus szn", examples: ["Heal your relationship with money", "Stop undercharging and start receiving what you deserve", "Learn to receive instead of overworking yourself into the ground", "Finally believe you are worthy of the abundance that keeps trying to reach you"], bg: "var(--mint)" },
+              { szn: "Leo szn", examples: ["Step into full visibility and stop hiding", "Show up unapologetically in every room you walk into", "Own the stage, the spotlight, the entire room", "Stop dimming your light for people who can't handle the glow"], bg: "var(--gold)" },
+              { szn: "Scorpio szn", examples: ["Go deep on shadow work and financial intimacy", "Face the things you've been avoiding since forever", "Transform every ounce of pain into unstoppable power", "Go deep or go home, there is no in-between"], bg: "var(--lav-light)" },
+              { szn: "Capricorn szn", examples: ["Build the business plan that actually matches your ambition", "Set goals that scare you and then crush every single one", "Get ruthlessly strategic about your next level", "Become the CEO of your own life, no permission needed"], bg: "var(--cream)" },
             ].map((card) => (
               <div key={card.szn} className="p-6 md:p-8" style={{ background: card.bg, border: "var(--border)" }}>
                 <div style={{ fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 12, color: "var(--dark)" }}>
                   {card.szn}
                 </div>
-                <div className="space-y-1">
+                <ul style={{ margin: 0, paddingLeft: 18 }}>
                   {card.examples.map((ex) => (
-                    <p key={ex} style={{ fontSize: 13, lineHeight: 1.6, color: "var(--dark)", margin: 0 }}>{ex}</p>
+                    <li key={ex} style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", marginBottom: 4 }}>{ex}</li>
                   ))}
-                </div>
+                </ul>
               </div>
             ))}
           </div>
@@ -422,31 +422,34 @@ export default function WaitlistPage() {
           }}>
             The Seasonal <span style={{ color: "var(--pink)" }}>Mastermind.</span>
           </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(255,255,255,0.45)", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "#fff", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
             Every month follows the rhythm of the zodiac. Because every zodiac season has something to teach us.
           </p>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-12">
             {[
-              { szn: "Aries", lesson: "Courage" },
-              { szn: "Taurus", lesson: "Receiving" },
-              { szn: "Gemini", lesson: "Expression" },
-              { szn: "Cancer", lesson: "Nurturing" },
-              { szn: "Leo", lesson: "Visibility" },
-              { szn: "Virgo", lesson: "Refinement" },
-              { szn: "Libra", lesson: "Balance" },
-              { szn: "Scorpio", lesson: "Transformation" },
-              { szn: "Sag", lesson: "Expansion" },
-              { szn: "Cap", lesson: "Ambition" },
-              { szn: "Aquarius", lesson: "Revolution" },
-              { szn: "Pisces", lesson: "Surrender" },
+              { szn: "Aries szn", lesson: "Courage", desc: "Take the leap. Back yourself. Stop waiting for permission." },
+              { szn: "Taurus szn", lesson: "Receiving", desc: "Wealth, pleasure, self-worth. Learn to let good things in." },
+              { szn: "Gemini szn", lesson: "Expression", desc: "Use your voice. Say the thing. Become magnetic." },
+              { szn: "Cancer szn", lesson: "Nurturing", desc: "Heal the inner child. Protect your energy. Come home to yourself." },
+              { szn: "Leo szn", lesson: "Visibility", desc: "Main character energy. Own the room. Stop playing small." },
+              { szn: "Virgo szn", lesson: "Refinement", desc: "Level up the systems. Get organised. Become unshakeable." },
+              { szn: "Libra szn", lesson: "Balance", desc: "Boundaries, beauty, partnerships. Choose yourself first." },
+              { szn: "Scorpio szn", lesson: "Transformation", desc: "Shadow work. Deep healing. Burn it down and rise." },
+              { szn: "Sag szn", lesson: "Expansion", desc: "Dream bigger. Book the flight. Expand beyond the comfort zone." },
+              { szn: "Cap szn", lesson: "Ambition", desc: "Build the empire. Set the goals. Execute like a boss." },
+              { szn: "Aquarius szn", lesson: "Revolution", desc: "Break the rules. Do it differently. Be unapologetically you." },
+              { szn: "Pisces szn", lesson: "Surrender", desc: "Trust the process. Tap into intuition. Let the universe lead." },
             ].map((s, i) => (
-              <div key={s.szn} className="p-3 text-center" style={{ background: i % 2 === 0 ? "rgba(255,45,135,0.08)" : "rgba(200,180,248,0.08)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: i % 2 === 0 ? "var(--pink)" : "var(--lav)", marginBottom: 2 }}>
+              <div key={s.szn} className="p-4" style={{ background: i % 2 === 0 ? "rgba(255,45,135,0.08)" : "rgba(200,180,248,0.08)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: i % 2 === 0 ? "var(--pink)" : "var(--lav)", marginBottom: 4 }}>
                   {s.szn}
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
                   {s.lesson}
+                </div>
+                <div style={{ fontSize: 11, lineHeight: 1.5, color: "rgba(255,255,255,0.75)" }}>
+                  {s.desc}
                 </div>
               </div>
             ))}
@@ -457,7 +460,7 @@ export default function WaitlistPage() {
               <div style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 10, letterSpacing: "-0.3px" }}>
                 Transformational Workshops
               </div>
-              <p style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.45)", margin: 0 }}>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", margin: 0 }}>
                 Every month I lead a live workshop based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They embody it.
               </p>
             </div>
@@ -465,7 +468,7 @@ export default function WaitlistPage() {
               <div style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 10, letterSpacing: "-0.3px" }}>
                 Not Astrology Lectures
               </div>
-              <p style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.45)", margin: 0 }}>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", margin: 0 }}>
                 In Scorpio szn we go deep on shadow work and financial intimacy. In Leo szn we work on visibility and showing up unapologetically. In Capricorn szn we build the business plan, set the goals, and get ruthlessly strategic.
               </p>
             </div>
@@ -481,7 +484,7 @@ export default function WaitlistPage() {
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
           }}>
-            Everything you need to <span className="pk">become.</span>
+            Everything you need to become <span className="pk">her.</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
