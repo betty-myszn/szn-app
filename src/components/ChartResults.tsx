@@ -11,7 +11,7 @@ import {
   ELEMENT_COLORS,
 } from "@/types/chart";
 import ChartWheel from "./ChartWheel";
-import { encodeBirthData } from "@/lib/url-params";
+
 import {
   SUN_READINGS,
   MOON_READINGS,
@@ -249,7 +249,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               {copiedUrl ? "copied!" : "share link"}
             </button>
             <a
-              href={`/your-szn?${encodeBirthData(chart.birthData)}`}
+              href="/mastermind"
               style={{
                 background: "var(--pink)",
                 color: "#fff",
@@ -263,7 +263,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 display: "inline-block",
               }}
             >
-              your szn &rarr;
+              join the mastermind &rarr;
             </a>
           </div>
         </div>
@@ -359,7 +359,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <a
-              href={`/your-szn?${encodeBirthData(chart.birthData)}`}
+              href="/mastermind"
               style={{
                 background: "var(--pink)",
                 color: "#fff",
@@ -371,10 +371,10 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 textDecoration: "none",
               }}
             >
-              see your season &rarr;
+              join the mastermind &rarr;
             </a>
             <a
-              href="/mastermind"
+              href="/waitlist"
               style={{
                 background: "transparent",
                 color: "rgba(255,255,255,0.7)",
@@ -387,7 +387,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 textDecoration: "none",
               }}
             >
-              join the mastermind
+              join the waitlist
             </a>
           </div>
         </div>

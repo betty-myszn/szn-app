@@ -1,21 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getSavedBirthData, encodeBirthData } from "@/lib/url-params";
 
 export default function NavBar() {
-  const [savedName, setSavedName] = useState<string | null>(null);
-  const [sznLink, setSznLink] = useState("/your-szn");
-
-  useEffect(() => {
-    const data = getSavedBirthData();
-    if (data) {
-      setSavedName(data.name.split(" ")[0]);
-      setSznLink(`/your-szn?${encodeBirthData(data)}`);
-    }
-  }, []);
-
   return (
     <nav
       className="flex items-center justify-between px-8 py-[18px] sticky top-0 bg-white z-[100]"
@@ -43,14 +30,14 @@ export default function NavBar() {
           textTransform: "uppercase",
         }}
       >
-        <Link href={sznLink} className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          {savedName ? `${savedName}'s szn` : "your szn"}
+        <Link href="/mastermind" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+          mastermind
         </Link>
         <Link href="/podcast" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           podcast
         </Link>
-        <Link href="/mastermind" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          mastermind
+        <Link href="/waitlist" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+          waitlist
         </Link>
       </div>
       <Link href="/chart" className="nav-cta no-underline" style={{
