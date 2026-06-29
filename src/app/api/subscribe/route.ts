@@ -4,6 +4,8 @@ export const runtime = "nodejs";
 
 const BREVO_API = "https://api.brevo.com/v3";
 const LIST_NAME = "MY SZN Signups";
+const N8N_WEBHOOK = "https://n8n-production-999ab.up.railway.app/webhook/myszn-waitlist";
+const N8N_WEBHOOK_TEST = "https://n8n-production-999ab.up.railway.app/webhook-test/myszn-waitlist";
 
 async function brevo(path: string, opts: RequestInit = {}) {
   const key = process.env.BREVO_API_KEY;
@@ -43,32 +45,55 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const listId = await getOrCreateList();
+    const payload = JSON.stringify({ email, name, source, instagram, why });
+    const n8nPromise = Promise.all([
+      fetch(N8N_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).catch((err) => console.error("n8n webhook error:", err)),
+      fetch(N8N_WEBHOOK_TEST, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).catch((err) => console.error("n8n test webhook error:", err)),
+    ]);
 
-    const attributes: Record<string, string> = {};
-    if (name) attributes.FIRSTNAME = name.split(" ")[0];
-    if (name && name.includes(" ")) attributes.LASTNAME = name.split(" ").slice(1).join(" ");
-    if (source) attributes.SOURCE = source;
-    if (instagram) attributes.INSTAGRAM = instagram;
-    if (why) attributes.WHY = why;
+    let brevoOk = false;
+    if (process.env.BREVO_API_KEY) {
+      try {
+        const listId = await getOrCreateList();
 
-    const res = await brevo("/contacts", {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        attributes,
-        listIds: [listId],
-        updateEnabled: true,
-      }),
-    });
+        const attributes: Record<string, string> = {};
+        if (name) attributes.FIRSTNAME = name.split(" ")[0];
+        if (name && name.includes(" ")) attributes.LASTNAME = name.split(" ").slice(1).join(" ");
+        if (source) attributes.SOURCE = source;
+        if (instagram) attributes.INSTAGRAM = instagram;
+        if (why) attributes.WHY = why;
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      if (err.code === "duplicate_parameter") {
-        return NextResponse.json({ success: true, message: "Already subscribed" });
+        const res = await brevo("/contacts", {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            attributes,
+            listIds: [listId],
+            updateEnabled: true,
+          }),
+        });
+
+        if (res.ok) {
+          brevoOk = true;
+        } else {
+          const err = await res.json().catch(() => ({}));
+          if (err.code === "duplicate_parameter") brevoOk = true;
+          else console.error("Brevo error:", err);
+        }
+      } catch (err) {
+        console.error("Brevo error:", err);
       }
-      throw new Error(err.message || "Brevo API error");
     }
+
+    await n8nPromise;
 
     return NextResponse.json({ success: true });
   } catch (err) {
