@@ -30,14 +30,14 @@ export default function NavBar() {
           textTransform: "uppercase",
         }}
       >
+        <Link href="/" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+          home
+        </Link>
         <Link href="/mastermind" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           mastermind
         </Link>
         <Link href="/podcast" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
           podcast
-        </Link>
-        <Link href="/waitlist" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-          waitlist
         </Link>
       </div>
       <Link href="/chart" className="nav-cta no-underline" style={{
