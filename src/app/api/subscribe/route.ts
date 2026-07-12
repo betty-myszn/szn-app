@@ -65,14 +65,6 @@ export async function POST(req: NextRequest) {
         const attributes: Record<string, string> = {};
         if (name) attributes.FIRSTNAME = name.split(" ")[0];
         if (name && name.includes(" ")) attributes.LASTNAME = name.split(" ").slice(1).join(" ");
-        if (source) attributes.SOURCE = source;
-        if (instagram) attributes.INSTAGRAM = instagram;
-        if (why) attributes.WHY = why;
-        if (dateOfBirth) attributes.DATE_OF_BIRTH = dateOfBirth;
-        if (placeOfBirth) attributes.PLACE_OF_BIRTH = placeOfBirth;
-        if (sunSign) attributes.SUN_SIGN = sunSign;
-        if (moonSign) attributes.MOON_SIGN = moonSign;
-        if (risingSign) attributes.RISING_SIGN = risingSign;
 
         const res = await brevo("/contacts", {
           method: "POST",
