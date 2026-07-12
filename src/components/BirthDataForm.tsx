@@ -83,12 +83,28 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
 
       saveBirthData(birthData);
 
-      // Subscribe email to Brevo
+      const chartData = await res.json();
+
+      const sunSign = chartData.planets?.find((p: { id: string }) => p.id === "sun")?.sign || "";
+      const moonSign = chartData.planets?.find((p: { id: string }) => p.id === "moon")?.sign || "";
+      const risingSign = chartData.ascendant?.sign || "";
+
       if (email) {
         fetch("/api/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, name, source: "free-chart" }),
+          body: JSON.stringify({
+            email,
+            name,
+            source: "free-chart",
+            dateOfBirth,
+            birthTime,
+            birthTimeApproximate,
+            placeOfBirth: finalLocation.placeName,
+            sunSign,
+            moonSign,
+            risingSign,
+          }),
         }).catch(() => {});
       }
 
