@@ -26,19 +26,25 @@ export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocomple
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const username = process.env.NEXT_PUBLIC_GEONAMES_USERNAME || "";
+  const [configured, setConfigured] = useState(true);
 
   const search = useCallback(async (query: string) => {
-    if (query.length < 2 || !username) { setResults([]); return; }
+    if (query.length < 2) { setResults([]); return; }
     setLoading(true);
     try {
       const res = await fetch(`/api/geonames?q=${encodeURIComponent(query)}`);
       const data = await res.json();
-      setResults(data.geonames || []);
-      setShowDropdown(true);
+      if (data.error) {
+        setConfigured(false);
+        setResults([]);
+      } else {
+        setConfigured(true);
+        setResults(data.geonames || []);
+        setShowDropdown(true);
+      }
     } catch { setResults([]); }
     finally { setLoading(false); }
-  }, [username]);
+  }, []);
 
   const handleInput = (val: string) => {
     setInputValue(val);
@@ -80,17 +86,6 @@ export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocomple
     background: "#fff",
     outline: "none",
   };
-
-  if (!username) {
-    return (
-      <div>
-        <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="City, Country" style={inputStyle} />
-        <p style={{ marginTop: 4, fontSize: 11, color: "var(--pink)" }}>
-          GeoNames not configured. Use manual entry below.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div ref={wrapperRef} className="relative">
