@@ -94,9 +94,12 @@ export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocomple
         value={inputValue}
         onChange={(e) => handleInput(e.target.value)}
         onFocus={() => results.length > 0 && setShowDropdown(true)}
+        name="birthplace-lookup"
         placeholder="City, Country"
         style={inputStyle}
-        autoComplete="off"
+        autoComplete="new-password"
+        data-form-type="other"
+        data-lpignore="true"
         className="focus:!border-[var(--pink)]"
       />
       {loading && (
