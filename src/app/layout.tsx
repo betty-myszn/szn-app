@@ -17,9 +17,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "MY SZN — Shop your sign. Become your future self.",
+  title: "MY SZN — The Astrology-Led Mastermind",
   description:
-    "MY SZN combines astrology, transformation, and personalised shopping to help you align your inner world and outer identity.",
+    "The astrology-led mastermind for women who are done playing small. Combining astrology, coaching, and community to help you become her.",
 };
 
 export default function RootLayout({
