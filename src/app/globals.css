@@ -147,8 +147,7 @@ body {
 }
 
 /* ── Responsive ── */
+html, body { overflow-x: hidden; }
 @media (max-width: 768px) {
-  .nav { padding: 14px 20px !important; }
-  .nav-links { gap: 16px !important; font-size: 11px !important; }
-  .nav-cta { padding: 8px 14px !important; font-size: 10px !important; }
+  .px-8 { padding-left: 20px !important; padding-right: 20px !important; }
 }
