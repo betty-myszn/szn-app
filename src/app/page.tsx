@@ -258,8 +258,8 @@ export default function Home() {
             {[
               { icon: "○", name: "Full Moon in Capricorn", desc: "Jun 25 · release + receive", badge: "done", opacity: 0.5 },
               { icon: "◐", name: "Last Quarter in Aries", desc: "Jul 2 · surrender phase", badge: "done", opacity: 0.5 },
-              { icon: "●", name: "New Moon in Cancer", desc: "Jul 10 · intention setting", badge: "done", opacity: 0.5 },
-              { icon: "◑", name: "First Quarter in Libra", desc: "Jul 18 · action phase", badge: "up next", opacity: 1, active: true },
+              { icon: "●", name: "New Moon in Cancer", desc: "Jul 14 · intention setting", badge: "now", opacity: 1, active: true },
+              { icon: "◑", name: "First Quarter in Libra", desc: "Jul 21 · action phase", badge: "up next", opacity: 1 },
               { icon: "○", name: "Full Moon in Aquarius", desc: "Jul 25 · release + receive", badge: "up next", opacity: 1 },
             ].map((moon, i) => (
               <div
