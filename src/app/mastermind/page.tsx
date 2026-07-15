@@ -798,7 +798,7 @@ export default function MastermindPage() {
                 $1,999
               </div>
               <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                one payment · 3 months of transformation
+                3-month minimum commitment · payment plans available
               </div>
 
               <div className="space-y-3 mb-8">
@@ -841,7 +841,7 @@ export default function MastermindPage() {
                 $3,998
               </div>
               <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
-                one payment · 6 months of transformation
+                3-month minimum commitment · payment plans available
               </div>
 
               <div className="space-y-3 mb-6">
