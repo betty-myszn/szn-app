@@ -1,7 +1,13 @@
 import BirthDataForm from "@/components/BirthDataForm";
 
 export const metadata = {
-  title: "Free Birth Chart — MY SZN",
+  title: "Free Birth Chart Calculator | Sun, Moon & Rising Sign",
+  description:
+    "Get your free birth chart instantly. Discover your sun sign, moon sign, rising sign, Venus, Mars, Jupiter, and every placement in your natal chart. Swiss Ephemeris precision. No signup required.",
+  openGraph: {
+    title: "Free Birth Chart Calculator — MY SZN",
+    description: "Calculate your full natal chart for free. Sun, moon, rising, Venus, Mars, Jupiter, Chiron and all 12 houses. Enter your birth details and discover your cosmic blueprint.",
+  },
 };
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";

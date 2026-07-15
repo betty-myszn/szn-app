@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import LaunchCountdown from "@/components/LaunchCountdown";
+
+export const metadata: Metadata = {
+  title: "Astrology Mastermind for Women | Free Birth Chart & Live Coaching",
+  description:
+    "Join MY SZN, the astrology-led mastermind for ambitious women. Get your free birth chart, live monthly workshops, subconscious rewiring, and a community that helps you step into your power. Launching July 2026.",
+  openGraph: {
+    title: "MY SZN — Your Szn Starts Now",
+    description: "The astrology-led mastermind for women who are done playing small. Free birth chart calculator, live coaching, and community. Launches July 2026.",
+  },
+};
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 

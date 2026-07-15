@@ -17,9 +17,37 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "MY SZN — The Astrology-Led Mastermind",
+  title: {
+    default: "MY SZN — Astrology Mastermind for Women | Birth Chart, Coaching & Community",
+    template: "%s | MY SZN",
+  },
   description:
-    "The astrology-led mastermind for women who are done playing small. Combining astrology, coaching, and community to help you become her.",
+    "The astrology-led mastermind for ambitious women. Free birth chart calculator, live coaching, subconscious rewiring, and a community that helps you become her. Launches July 2026.",
+  keywords: [
+    "astrology mastermind", "birth chart calculator", "free birth chart",
+    "astrology for women", "zodiac coaching", "manifestation",
+    "astrology community", "sun moon rising", "natal chart",
+    "astrology course", "women's coaching", "self development for women",
+    "human design", "subconscious reprogramming", "astrology 2026",
+    "zodiac season", "venus sign", "chiron healing", "jupiter abundance",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://itsmyszn.com",
+    siteName: "MY SZN",
+    title: "MY SZN — Astrology Mastermind for Women",
+    description: "Stop reading your horoscope. Start becoming her. The astrology-led mastermind with free birth charts, live coaching, and a community of women who are done playing small.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MY SZN — Astrology Mastermind for Women",
+    description: "Stop reading your horoscope. Start becoming her. Free birth chart calculator + astrology-led mastermind launching July 2026.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -1,7 +1,13 @@
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
 export const metadata = {
-  title: "Podcast — MY SZN",
+  title: "Astrology, Confidence & Manifestation Podcast for Women",
+  description:
+    "The MY SZN podcast. Astrology, confidence, money, manifestation, and becoming the version of yourself your chart has been pointing toward. New episodes weekly on Spotify and Apple Podcasts.",
+  openGraph: {
+    title: "MY SZN Podcast — Astrology, Confidence & Manifestation",
+    description: "The weekly pep talk your future self would give you. Astrology, money, manifestation and main character energy.",
+  },
 };
 
 export default function PodcastPage() {
