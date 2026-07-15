@@ -91,7 +91,7 @@ export default function Home() {
             <LaunchCountdown variant="dark" />
           </div>
           <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 12, letterSpacing: "0.04em" }}>
-            Doors open 21 July. Close 23 July. 3-month mastermind commitment.
+            Doors open 21 July. Close 23 July. 3 or 6-month transformation.
           </p>
         </div>
       </section>
@@ -162,7 +162,7 @@ export default function Home() {
         items={[
           "venus sign · rising sign · moon sign",
           "jupiter · chiron · midheaven",
-          "3-month mastermind commitment",
+          "3 or 6-month transformation",
           "launches 23 july · doors open 3 days",
         ]}
       />
@@ -306,7 +306,7 @@ export default function Home() {
               how the mastermind <span className="pk">works</span>
             </h2>
             <p style={{ fontSize: 14, color: "var(--dark)", marginTop: 8 }}>
-              This is a mastermind, not a membership. A 3-month minimum commitment to actually becoming her.
+              This is a transformation container, not a membership. 3 or 6 months of becoming her.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ borderTop: "var(--border)" }}>
@@ -467,35 +467,35 @@ export default function Home() {
             This is the party you&apos;ve been <span className="pk">waiting for.</span>
           </h2>
           <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--dark)", textAlign: "center", maxWidth: 560, margin: "0 auto 12px" }}>
-            The room where women stop playing small, start embodying their astrology, and actually change their lives. Founding member pricing is live right now. Two ways in.
+            This is the room where women stop talking about change and start living it. A transformation container built around your astrology, your goals, and your next level. Founding member pricing is live.
           </p>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
-            Doors open 21 July. Close 23 July. 3 days only. This is a mastermind, not a membership. 3-month minimum commitment.
+            Doors open 21 July. Close 23 July. 3 days only.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {/* Tier 1 */}
+            {/* 3-Month */}
             <div className="p-8 md:p-12" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
-                the mastermind
+                3-month transformation
               </div>
               <div style={{ fontFamily: poppins, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                $111
+                $1,999
               </div>
               <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                per month · 3-month minimum commitment
+                one payment · 3 months of transformation
               </div>
 
               <div className="space-y-3 mb-8">
                 {[
-                  "Full access to the MY SZN mastermind",
-                  "2 live group coaching classes every month",
-                  "Monthly seasonal workshops with Betty",
+                  "1:1 coaching call with Betty every month",
+                  "2 live group coaching sessions monthly",
+                  "Monthly seasonal workshops and masterclasses",
                   "Guest expert sessions every month",
-                  "Full community access",
+                  "Subconscious rewiring: hypnosis, EFT, reprogramming",
+                  "Your personalised birth chart portal",
+                  "Full community of ambitious women",
                   "The Vault: every session recorded forever",
-                  "Subconscious rewiring sessions",
-                  "Personalised to your birth chart",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
                     <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
@@ -509,34 +509,34 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Tier 2 */}
+            {/* 6-Month */}
             <div className="p-8 md:p-12" style={{ background: "var(--dark)" }}>
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  the inner circle
+                  6-month transformation
                 </div>
                 <span style={{
                   fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
                   color: "#fff", background: "var(--pink)", padding: "4px 10px",
                 }}>
-                  only 7 spots
+                  best value
                 </span>
               </div>
               <div style={{ fontFamily: poppins, fontSize: 48, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>
-                $333
+                $3,998
               </div>
               <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
-                per month · 3-month minimum commitment
+                one payment · 6 months of transformation
               </div>
 
               <div className="space-y-3 mb-6">
                 {[
-                  "Everything in The Mastermind",
-                  "1 hour private 1:1 coaching with Betty every month",
-                  "Personalised to your astrology, goals, and vision",
-                  "Deep-dive into your chart, blocks, and next moves",
+                  "Everything in the 3-month transformation",
+                  "1:1 coaching call with Betty every month",
+                  "6 months of deep, sustained transformation",
+                  "Watch two full zodiac seasons reshape your life",
+                  "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
-                  "Priority for guest expert Q&A",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
                     <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
@@ -547,7 +547,7 @@ export default function Home() {
 
               <div className="p-4 mb-8" style={{ background: "rgba(255,45,135,0.1)", border: "1px solid rgba(255,45,135,0.3)" }}>
                 <p style={{ fontSize: 13, color: "#fff", lineHeight: 1.6, margin: 0 }}>
-                  7 women. 3-month commitment. That&apos;s it. If you want the version of this where I&apos;m in your corner every single month, this is it.
+                  The women who commit to 6 months are the ones who come out unrecognisable. This is the container for the full transformation.
                 </p>
               </div>
 
