@@ -10,12 +10,13 @@ const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [invested, setInvested] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !name || !invested) return;
     setSubmitting(true);
     try {
       await fetch("/api/subscribe", {
@@ -26,6 +27,27 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
     } catch {}
     setSubmitted(true);
     setSubmitting(false);
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px 16px",
+    fontSize: 14,
+    fontFamily: dm,
+    border: dark ? "1.5px solid var(--pink)" : "var(--border)",
+    background: dark ? "rgba(255,255,255,0.05)" : "#fff",
+    color: dark ? "#fff" : "var(--dark)",
+    outline: "none",
+  };
+
+  const labelStyle = {
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+    color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)",
+    marginBottom: 8,
+    display: "block",
   };
 
   if (submitted) {
@@ -43,39 +65,39 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-lg" id={id}>
-      <input
-        type="text"
-        placeholder="your name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        style={{
-          flex: 0.7, padding: "16px 20px", fontSize: 14, fontFamily: dm,
-          border: dark ? "1.5px solid var(--pink)" : "var(--border)",
-          background: dark ? "rgba(255,255,255,0.05)" : "#fff",
-          color: dark ? "#fff" : "var(--dark)", outline: "none",
-        }}
-      />
-      <input
-        type="email"
-        required
-        placeholder="your email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{
-          flex: 1, padding: "16px 20px", fontSize: 14, fontFamily: dm,
-          border: dark ? "1.5px solid var(--pink)" : "var(--border)",
-          background: dark ? "rgba(255,255,255,0.05)" : "#fff",
-          color: dark ? "#fff" : "var(--dark)", outline: "none",
-        }}
-      />
+    <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4" id={id}>
+      <div>
+        <label style={labelStyle}>first name</label>
+        <input type="text" required placeholder="Your first name" value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} />
+      </div>
+      <div>
+        <label style={labelStyle}>email address</label>
+        <input type="email" required placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
+      </div>
+      <label style={{ display: "flex", gap: 12, alignItems: "flex-start", cursor: "pointer", padding: "12px 16px", background: dark ? "rgba(255,45,135,0.08)" : "var(--pink-light)", border: dark ? "1px solid rgba(255,45,135,0.25)" : "1px solid rgba(255,45,135,0.15)" }}>
+        <input
+          type="checkbox"
+          required
+          checked={invested}
+          onChange={(e) => setInvested(e.target.checked)}
+          style={{ marginTop: 3, accentColor: "var(--pink)", width: 18, height: 18, flexShrink: 0 }}
+        />
+        <div>
+          <span style={{ fontSize: 14, fontWeight: 600, color: dark ? "#fff" : "var(--dark)", lineHeight: 1.5 }}>
+            I&apos;m ready to invest $1,999+ in my transformation
+          </span>
+          <span style={{ display: "block", fontSize: 12, color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)", marginTop: 4, opacity: 0.7 }}>
+            3-month minimum commitment · payment plans available
+          </span>
+        </div>
+      </label>
       <button
         type="submit"
+        className="w-full cursor-pointer"
         style={{
           background: "var(--pink)", color: "#fff", fontFamily: dm,
-          fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
+          fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
           textTransform: "uppercase", padding: "16px 32px", border: "none",
-          cursor: "pointer", whiteSpace: "nowrap",
         }}
       >
         {submitting ? "joining..." : "join the waitlist"}
@@ -84,96 +106,6 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
   );
 }
 
-function FullWaitlistForm() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [why, setWhy] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !name) return;
-    setSubmitting(true);
-    try {
-      await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, source: "mastermind", instagram, why }),
-      });
-    } catch {}
-    setSubmitted(true);
-    setSubmitting(false);
-  };
-
-  const labelStyle = {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase" as const,
-    color: "var(--dark)",
-    marginBottom: 8,
-    display: "block",
-  };
-
-  const inputStyle = {
-    width: "100%",
-    padding: "14px 16px",
-    border: "var(--border)",
-    fontFamily: dm,
-    fontSize: 14,
-    color: "var(--dark)",
-    background: "#fff",
-    outline: "none",
-  };
-
-  if (submitted) {
-    return (
-      <div className="text-center py-8">
-        <div style={{ fontSize: 32, marginBottom: 16 }}>&#10024;</div>
-        <h3 style={{ fontFamily: pp, fontSize: 22, fontWeight: 800, marginBottom: 10 }}>
-          You&apos;re on the list, gorgeous.
-        </h3>
-        <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7 }}>
-          Doors open 21 July. We&apos;ll be in your inbox with everything you need to enrol. First live class is 23 July at 7pm LA time. Your season is about to begin.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label style={labelStyle}>your name</label>
-        <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="First name" style={inputStyle} />
-      </div>
-      <div>
-        <label style={labelStyle}>email address</label>
-        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" style={inputStyle} />
-      </div>
-      <div>
-        <label style={labelStyle}>instagram (optional)</label>
-        <input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="@yourhandle" style={inputStyle} />
-      </div>
-      <div>
-        <label style={labelStyle}>why do you want in? (optional)</label>
-        <textarea value={why} onChange={(e) => setWhy(e.target.value)} placeholder="Tell us what you're working on becoming..." rows={3} style={{ ...inputStyle, resize: "vertical" as const }} />
-      </div>
-      <button
-        type="submit"
-        className="w-full cursor-pointer"
-        style={{
-          background: "var(--pink)", color: "#fff", fontFamily: dm,
-          fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
-          textTransform: "uppercase", padding: "16px 32px", border: "none", marginTop: 8,
-        }}
-      >
-        {submitting ? "joining..." : "join the mastermind waitlist"}
-      </button>
-    </form>
-  );
-}
 
 export default function MastermindPage() {
   return (
@@ -929,7 +861,7 @@ export default function MastermindPage() {
               <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
                 Early access. Founding pricing. First in. Doors open 3 days only.
               </p>
-              <FullWaitlistForm />
+              <WaitlistForm />
               <div className="flex flex-wrap gap-2 mt-6">
                 {["Founding pricing", "Launches 23 July", "3 or 6-month transformation"].map((b) => (
                   <span key={b} style={{
