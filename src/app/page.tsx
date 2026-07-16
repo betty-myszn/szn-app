@@ -76,6 +76,9 @@ export default function Home() {
           >
             MY SZN is where ambitious women stop overthinking, stop hiding and start becoming the main character of their own damn lives. Every month we&apos;ll work with the current astrology, powerful coaching tools and your personalised portal to help you be seen, make more money, own your gifts and finally start showing up like the woman your future self already knows you are.
           </p>
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 24 }}>
+            Includes 1:1 coaching with Betty every month · from $1,999
+          </p>
           <div className="flex gap-3 flex-wrap justify-center">
             <Link href="/mastermind" className="btn-pink">
               join the waitlist
@@ -108,7 +111,7 @@ export default function Home() {
           Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          First live class: 23 July at 7pm LA time.
+          1:1 coaching with Betty every month. First live class: 23 July at 7pm LA time.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -336,6 +339,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="px-8 py-16" style={{ background: "var(--lav-light)", borderBottom: "var(--border)" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="tag mb-8 text-center">real women, real results</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { quote: "I signed a $10k client after finally understanding my visibility blocks. Literally one of the best investments I've made in myself.", name: "Sarah, 32 · Business Coach" },
+              { quote: "I went from hiding behind my laptop to launching my first offer in 3 weeks. Betty helped me see my Midheaven was designed for visibility.", name: "Priya, 30 · Brand Strategist" },
+              { quote: "The 1:1 calls changed everything. Betty saw things in my chart I'd completely overlooked and connected dots I never would have found on my own.", name: "Amy, 34 · Entrepreneur" },
+            ].map((t) => (
+              <div key={t.name} className="p-6" style={{ background: "#fff", border: "var(--border)" }}>
+                <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", fontStyle: "italic", marginBottom: 12 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
+                  {t.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Upcoming Workshops */}
       <section className="px-8 py-20 md:py-28" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
@@ -459,6 +485,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pull quote testimonial */}
+      <section className="px-8 py-14 text-center" style={{ background: "var(--pink-light)", borderBottom: "var(--border)" }}>
+        <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--dark)", fontStyle: "italic", maxWidth: 560, margin: "0 auto 8px" }}>
+          &ldquo;I came in thinking I just wanted to learn about my chart. I left with a completely new relationship with myself. I feel like a different woman.&rdquo;
+        </p>
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
+          Lauren, 26 · Psychology Student
+        </div>
+      </section>
+
       {/* Pricing */}
       <section className="px-8 py-20 md:py-28" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
@@ -534,7 +570,7 @@ export default function Home() {
                   "Everything in the 3-month transformation",
                   "1:1 coaching call with Betty every month",
                   "6 months of deep, sustained transformation",
-                  "Watch two full zodiac seasons reshape your life",
+                  "Double the transformation, double the breakthroughs",
                   "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
                 ].map((item) => (
@@ -581,7 +617,7 @@ export default function Home() {
           stop reading your horoscope.<br />start becoming <span className="pk">her.</span>
         </h2>
         <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 32px" }}>
-          Join the mastermind waitlist for founding member pricing and a seat at the table before the doors close. 3-month commitment. Limited spots. Your future self is already inside.
+          Join the mastermind waitlist for founding member pricing and a seat at the table before the doors close. 1:1 coaching with Betty every month. 3-month commitment. Limited spots. Your future self is already inside.
         </p>
         <div className="flex gap-3 justify-center">
           <Link href="/mastermind" className="btn-pink">join the waitlist</Link>

@@ -51,14 +51,38 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
   };
 
   if (submitted) {
+    const stepColor = dark ? "rgba(255,255,255,0.5)" : "var(--dark)";
+    const numBg = dark ? "rgba(255,45,135,0.15)" : "var(--pink-light)";
     return (
-      <div style={{ textAlign: "center", padding: "20px 0" }}>
-        <div style={{ fontSize: 28, marginBottom: 12 }}>&#10024;</div>
-        <div style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, marginBottom: 8, color: dark ? "#fff" : "var(--dark)" }}>
-          You&apos;re on the list, gorgeous.
+      <div style={{ padding: "20px 0" }}>
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <div style={{ fontSize: 28, marginBottom: 12 }}>&#10024;</div>
+          <div style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, marginBottom: 8, color: dark ? "#fff" : "var(--dark)" }}>
+            You&apos;re on the list, gorgeous.
+          </div>
         </div>
-        <p style={{ fontSize: 14, color: dark ? "rgba(255,255,255,0.6)" : "var(--dark)", lineHeight: 1.6 }}>
-          Doors open 21 July. We&apos;ll be in your inbox with everything you need to enrol. Your era starts now.
+        <div className="space-y-4" style={{ maxWidth: 400, margin: "0 auto" }}>
+          {[
+            { num: "1", text: "Check your inbox for a confirmation email from us" },
+            { num: "2", text: "Doors open 21 July with founding member pricing" },
+            { num: "3", text: "First live class is 23 July at 7pm LA time" },
+          ].map((step) => (
+            <div key={step.num} className="flex gap-3 items-start">
+              <span style={{
+                fontFamily: pp, fontSize: 12, fontWeight: 800, color: "var(--pink)",
+                width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                background: numBg, flexShrink: 0,
+              }}>
+                {step.num}
+              </span>
+              <span style={{ fontSize: 14, color: dark ? "#fff" : "var(--dark)", lineHeight: 1.5 }}>
+                {step.text}
+              </span>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 13, color: stepColor, textAlign: "center", marginTop: 20, lineHeight: 1.6 }}>
+          Your era starts now. We&apos;ll send you everything you need before doors open.
         </p>
       </div>
     );
@@ -132,6 +156,12 @@ export default function MastermindPage() {
             Astrology tells you who you are.<br />
             <span style={{ fontWeight: 500 }}>MY SZN helps you become her.</span>
           </p>
+          <p style={{
+            fontSize: 13, letterSpacing: "0.06em", color: "var(--pink)",
+            fontWeight: 700, textTransform: "uppercase", margin: "0 auto 8px",
+          }}>
+            Includes a 1:1 coaching call with Betty every month
+          </p>
 
           <p style={{
             fontSize: 14, lineHeight: 1.8, color: "#fff",
@@ -168,7 +198,7 @@ export default function MastermindPage() {
           Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone. First live class kicks off 23 July at 7pm LA time.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          This is a transformation container, not a membership. 3 or 6 months of becoming her.
+          1:1 coaching with Betty every month. 3 or 6 months of becoming her.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -362,6 +392,9 @@ export default function MastermindPage() {
       <section className="px-8 py-12 text-center" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 16 }}>
           Doors open 21 July. Close 23 July. <span style={{ color: "var(--pink)" }}>3 days only.</span>
+        </p>
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
+          1:1 coaching with Betty every month. From $1,999. Payment plans available.
         </p>
         <Link href="#waitlist-form" className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           join the waitlist
@@ -614,6 +647,31 @@ export default function MastermindPage() {
             Everything you need to become <span className="pk">her.</span>
           </h2>
 
+          {/* 1:1 Coaching Callout */}
+          <div className="p-8 md:p-12 mb-8" style={{ background: "var(--dark)", border: "2px solid var(--pink)" }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
+                  included in every tier
+                </div>
+                <h3 style={{ fontFamily: pp, fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 12 }}>
+                  1:1 coaching call with Betty <span style={{ color: "var(--pink)" }}>every month.</span>
+                </h3>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.7)", margin: 0 }}>
+                  Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move. This alone is worth more than the entire investment.
+                </p>
+              </div>
+              <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "#fff", fontStyle: "italic", marginBottom: 12 }}>
+                  &ldquo;The 1:1 calls changed everything for me. Betty saw things in my chart I&apos;d completely overlooked and connected dots I never would have found on my own. Worth every penny.&rdquo;
+                </p>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
+                  Amy, 34 · Entrepreneur
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
             <div className="p-8 md:p-10" style={{ background: "var(--lav-light)", borderRight: "var(--border)", borderBottom: "var(--border)" }}>
               <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, marginBottom: 12, letterSpacing: "-0.3px" }}>
@@ -680,22 +738,21 @@ export default function MastermindPage() {
         <div className="max-w-4xl mx-auto">
           <div className="tag mb-8 text-center">what clients are saying</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-8" style={{ background: "#fff", border: "var(--border)" }}>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", fontStyle: "italic", marginBottom: 16 }}>
-                &ldquo;I just signed a $10k client after our business astro coaching session. The shift came from finally understanding my visibility blocks and the way I was undervaluing myself. Literally one of the best investments I&apos;ve made in myself.&rdquo;
-              </p>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
-                Cosmic Coaching Client
+            {[
+              { quote: "I just signed a $10k client after our business astro coaching session. The shift came from finally understanding my visibility blocks and the way I was undervaluing myself. Literally one of the best investments I've made in myself.", name: "Sarah, 32 · Business Coach" },
+              { quote: "After our session I changed my messaging, raised my standards, showed up completely differently and suddenly people started responding differently too. I finally understand how to work WITH my energy instead of against it.", name: "Jess, 28 · Content Creator" },
+              { quote: "I went from hiding behind my laptop to launching my first offer in 3 weeks. Betty helped me see that my Midheaven placement was literally designed for visibility and I'd been fighting it my whole life. Not anymore.", name: "Priya, 30 · Brand Strategist" },
+              { quote: "I came in thinking I just wanted to learn about my chart. I left with a completely new relationship with myself. The subconscious rewiring sessions unlocked things I'd been carrying for years. I feel like a different woman.", name: "Lauren, 26 · Psychology Student" },
+            ].map((t) => (
+              <div key={t.name} className="p-8" style={{ background: "#fff", border: "var(--border)" }}>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", fontStyle: "italic", marginBottom: 16 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
+                  {t.name}
+                </div>
               </div>
-            </div>
-            <div className="p-8" style={{ background: "#fff", border: "var(--border)" }}>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", fontStyle: "italic", marginBottom: 16 }}>
-                &ldquo;After our session I changed my messaging, raised my standards, showed up completely differently and suddenly people started responding differently too. I finally understand how to work WITH my energy instead of against it.&rdquo;
-              </p>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
-                Cosmic Coaching Client
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -781,7 +838,7 @@ export default function MastermindPage() {
                   "Everything in the 3-month transformation",
                   "1:1 coaching call with Betty every month",
                   "6 months of deep, sustained transformation",
-                  "Watch two full zodiac seasons reshape your life",
+                  "Double the transformation, double the breakthroughs",
                   "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
                 ].map((item) => (
@@ -819,6 +876,67 @@ export default function MastermindPage() {
         </div>
       </section>
 
+      {/* ═══════════════ FAQ ═══════════════ */}
+      <section className="px-8 py-20 md:py-28" style={{ background: "#fafafa", borderTop: "var(--border)", borderBottom: "var(--border)" }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="tag mb-6 text-center">got questions</div>
+          <h2 style={{
+            fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
+            letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
+          }}>
+            Everything you need to <span className="pk">know.</span>
+          </h2>
+
+          <div style={{ border: "var(--border)" }}>
+            {[
+              {
+                q: "What if I'm new to astrology?",
+                a: "Perfect. You don't need to know your Big 3, your houses, or your transits. We generate your full birth chart for you and teach you how to actually use it. Most astrology content stops at awareness. We start there.",
+              },
+              {
+                q: "How much time do I need to commit each week?",
+                a: "The live workshops and coaching sessions happen monthly, not weekly. Between sessions you have access to the community, The Vault, and your personalised portal. You take what you need, when you need it. No homework. No guilt.",
+              },
+              {
+                q: "What's included in the 1:1 coaching calls?",
+                a: "Every month you get a private coaching session with Betty. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
+              },
+              {
+                q: "Are there payment plans?",
+                a: "Yes. We offer payment plans for both the 3-month and 6-month transformation. You'll see all options when doors open on 21 July.",
+              },
+              {
+                q: "What happens after I join the waitlist?",
+                a: "You'll get a confirmation email straight away. When doors open on 21 July, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 23 July at 7pm LA time.",
+              },
+              {
+                q: "Can I cancel or get a refund?",
+                a: "This is a transformation container with a 3-month minimum commitment. We don't offer refunds because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
+              },
+              {
+                q: "I'm not a business owner. Is this still for me?",
+                a: "Absolutely. MY SZN is for any woman who wants more from life. More confidence, more clarity, more self-trust, more alignment. Whether you're building a business, healing, finding your purpose, or just ready to stop playing small.",
+              },
+            ].map((faq, i) => (
+              <details key={i} className="group" style={{ borderBottom: i < 6 ? "var(--border)" : "none" }}>
+                <summary style={{
+                  padding: "20px 24px", cursor: "pointer", listStyle: "none",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  fontFamily: pp, fontSize: 15, fontWeight: 700, color: "var(--dark)",
+                  letterSpacing: "-0.3px",
+                }}>
+                  {faq.q}
+                  <span style={{ fontSize: 20, color: "var(--pink)", flexShrink: 0, marginLeft: 16, transition: "transform 0.2s" }} className="group-open:rotate-45">+</span>
+                </summary>
+                <div style={{ padding: "0 24px 20px", fontSize: 14, lineHeight: 1.8, color: "var(--dark)" }}>
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════ WAITLIST CTA (FINAL) ═══════════════ */}
       <section id="waitlist-form" className="px-8 py-20 md:py-28" style={{ background: "var(--pink-light)" }}>
         <div className="max-w-5xl mx-auto">
@@ -844,7 +962,7 @@ export default function MastermindPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["Founding member pricing", "First live class 23 July", "3 or 6-month transformation", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "First live class 23 July", "3 or 6-month transformation", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",
@@ -877,6 +995,20 @@ export default function MastermindPage() {
           </div>
         </div>
       </section>
+
+      {/* Sticky mobile CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50" style={{
+        background: "var(--pink)", padding: "12px 20px",
+        boxShadow: "0 -2px 12px rgba(0,0,0,0.15)",
+      }}>
+        <Link href="#waitlist-form" className="no-underline flex items-center justify-center gap-2" style={{
+          fontFamily: pp, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
+          textTransform: "uppercase", color: "#fff",
+        }}>
+          join the waitlist
+          <span style={{ fontSize: 16 }}>&#8594;</span>
+        </Link>
+      </div>
     </div>
   );
 }

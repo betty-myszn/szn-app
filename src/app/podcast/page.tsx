@@ -145,6 +145,28 @@ export default function PodcastPage() {
           </div>
         </div>
       </div>
+      {/* Mastermind CTA */}
+      <div className="px-8 py-14 text-center" style={{ background: "var(--dark)", borderTop: "var(--border)" }}>
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
+          love the podcast? go deeper.
+        </div>
+        <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 12 }}>
+          Join the MY SZN mastermind.
+        </h2>
+        <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.7)", maxWidth: 480, margin: "0 auto 8px" }}>
+          Everything from the podcast, taken to the next level. Live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty every month.
+        </p>
+        <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
+          From $1,999 · Payment plans available · Launches 23 July
+        </p>
+        <a href="/mastermind" style={{
+          display: "inline-block", background: "var(--pink)", color: "#fff",
+          fontFamily: pp, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
+          textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
+        }}>
+          join the waitlist
+        </a>
+      </div>
     </>
   );
 }
