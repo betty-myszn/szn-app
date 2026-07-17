@@ -3,12 +3,12 @@ import Link from "next/link";
 import LaunchCountdown from "@/components/LaunchCountdown";
 
 export const metadata: Metadata = {
-  title: "Astrology Mastermind for Women | Free Birth Chart & Live Coaching",
+  title: "Astrology Membership for Women | Free Birth Chart & Live Coaching",
   description:
-    "Join MY SZN, the astrology-led mastermind for ambitious women. Get your free birth chart, live monthly workshops, subconscious rewiring, and a community that helps you step into your power. Launching July 2026.",
+    "Join MY SZN, the astrology-led membership for ambitious women. Get your free birth chart, live monthly workshops, subconscious rewiring, and a community that helps you step into your power. Launching July 2026.",
   openGraph: {
     title: "MY SZN — Your Szn Starts Now",
-    description: "The astrology-led mastermind for women who are done playing small. Free birth chart calculator, live coaching, and community. Launches July 2026.",
+    description: "The astrology-led membership for women who are done playing small. Free birth chart calculator, live coaching, and community. Launches July 2026.",
   },
 };
 
@@ -80,7 +80,7 @@ export default function Home() {
             Includes a 1:1 coaching call with Betty · from $111/mo
           </p>
           <div className="flex gap-3 flex-wrap justify-center">
-            <Link href="/mastermind" className="btn-pink">
+            <Link href="/membership" className="btn-pink">
               join the waitlist
             </Link>
             <Link href="/chart" className="btn-outline btn-outline--white">
@@ -116,7 +116,7 @@ export default function Home() {
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
         </div>
-        <Link href="/mastermind" className="no-underline" style={{
+        <Link href="/membership" className="no-underline" style={{
           display: "inline-block", background: "#fff", color: "var(--pink)",
           fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           textTransform: "uppercase", padding: "14px 32px",
@@ -252,8 +252,8 @@ export default function Home() {
 
       <Ticker items={["manifest with your jupiter sign", "new moon intentions", "lunar cycle living", "subconscious rewiring", "your era starts now"]} />
 
-      {/* Lunar cycle + how mastermind works */}
-      <section id="mastermind-preview">
+      {/* Lunar cycle + how membership works */}
+      <section id="membership-preview">
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ borderBottom: "var(--border)" }}>
           <div className="px-8 py-14" style={{ borderRight: "var(--border)" }}>
             <div className="tag">cancer szn · jun 21 - jul 22</div>
@@ -261,10 +261,10 @@ export default function Home() {
               every season<br />is your<br /><span className="pk">season.</span>
             </h1>
             <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", marginBottom: 32, maxWidth: 360 }}>
-              The mastermind follows the current zodiac season every single month. Your lunar cycle, your rituals, your workshops, your growth. All synced with the cosmic weather so you&apos;re always moving in the energy that&apos;s already working for you.
+              The membership follows the current zodiac season every single month. Your lunar cycle, your rituals, your workshops, your growth. All synced with the cosmic weather so you&apos;re always moving in the energy that&apos;s already working for you.
             </p>
             <div className="flex gap-3">
-              <Link href="/mastermind" className="btn-pink">join the mastermind</Link>
+              <Link href="/membership" className="btn-pink">join the membership</Link>
               <Link href="/seasons/cancer" className="btn-outline">explore cancer szn</Link>
             </div>
           </div>
@@ -302,14 +302,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* How the mastermind works */}
+        {/* How the membership works */}
         <div style={{ borderBottom: "var(--border)" }}>
           <div className="px-8 pt-10 pb-7">
             <h2 style={{ fontFamily: poppins, fontSize: 30, fontWeight: 800, letterSpacing: "-0.5px" }}>
-              how the mastermind <span className="pk">works</span>
+              how the membership <span className="pk">works</span>
             </h2>
             <p style={{ fontSize: 14, color: "var(--dark)", marginTop: 8 }}>
-              This is a transformation container, not a membership. 3 or 6 months of becoming her.
+              A transformation container designed around your astrology. 3 or 6 months of becoming her.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ borderTop: "var(--border)" }}>
@@ -365,7 +365,7 @@ export default function Home() {
       {/* Upcoming Workshops */}
       <section className="px-8 py-20 md:py-28" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">your first workshops inside the mastermind</div>
+          <div className="tag mb-6 text-center">your first workshops inside the membership</div>
           <h2 style={{ fontFamily: poppins, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800, letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48 }}>
             Leo szn is about to <span className="pk">hit different.</span>
           </h2>
@@ -399,7 +399,7 @@ export default function Home() {
                   Because your next era isn&apos;t waiting for permission. It&apos;s waiting for <span style={{ color: "var(--pink)" }}>you.</span>
                 </p>
               </div>
-              <Link href="/mastermind" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+              <Link href="/membership" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
                 join the waitlist
               </Link>
             </div>
@@ -410,7 +410,7 @@ export default function Home() {
                 leo szn workshop 2
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                date tbc · inside the mastermind
+                date tbc · inside the membership
               </div>
               <h3 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, color: "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Visible AF: How to Show Up &amp; Get Paid
@@ -427,7 +427,7 @@ export default function Home() {
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 24 }}>
                 Create content that feels magnetic, talk about your offers without feeling awkward, own your expertise, and build the kind of visibility that creates real momentum in your business. Wrapping up with powerful tapping and embodiment work to help you release the fear of being seen, back yourself unapologetically, and start showing up like the woman who&apos;s already decided she&apos;s getting paid.
               </p>
-              <Link href="/mastermind" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+              <Link href="/membership" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
                 join the waitlist
               </Link>
             </div>
@@ -540,7 +540,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <Link href="/mastermind" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+              <Link href="/membership" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
                 join the waitlist
               </Link>
             </div>
@@ -587,7 +587,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <Link href="/mastermind" className="block text-center no-underline" style={{
+              <Link href="/membership" className="block text-center no-underline" style={{
                 background: "var(--pink)", color: "#fff",
                 fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
                 textTransform: "uppercase", padding: "16px 32px", border: "none",
@@ -617,10 +617,10 @@ export default function Home() {
           stop reading your horoscope.<br />start becoming <span className="pk">her.</span>
         </h2>
         <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 32px" }}>
-          Join the mastermind waitlist for founding member pricing and a seat at the table before the doors close. Includes a 1:1 coaching call with Betty. 3-month commitment. Limited spots. Your future self is already inside.
+          Join the membership waitlist for founding member pricing and a seat at the table before the doors close. Includes a 1:1 coaching call with Betty. 3-month commitment. Limited spots. Your future self is already inside.
         </p>
         <div className="flex gap-3 justify-center">
-          <Link href="/mastermind" className="btn-pink">join the waitlist</Link>
+          <Link href="/membership" className="btn-pink">join the waitlist</Link>
           <Link href="/chart" className="btn-outline">generate my chart</Link>
         </div>
       </section>

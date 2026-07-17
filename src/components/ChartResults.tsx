@@ -249,7 +249,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               {copiedUrl ? "copied!" : "share link"}
             </button>
             <a
-              href="/mastermind"
+              href="/membership"
               style={{
                 background: "var(--pink)",
                 color: "#fff",
@@ -263,7 +263,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 display: "inline-block",
               }}
             >
-              join the mastermind &rarr;
+              join the membership &rarr;
             </a>
           </div>
         </div>
@@ -355,11 +355,11 @@ export default function ChartResults({ chart }: ChartResultsProps) {
             this is just the <span className="pk">beginning.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.5)", marginBottom: 24 }}>
-            Your chart is a blueprint. Now learn how to use it. Join the MY SZN mastermind for live workshops, coaching, and a community of women who actually get it.
+            Your chart is a blueprint. Now learn how to use it. Join the MY SZN membership for live workshops, coaching, and a community of women who actually get it.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <a
-              href="/mastermind"
+              href="/membership"
               style={{
                 background: "var(--pink)",
                 color: "#fff",
@@ -371,7 +371,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 textDecoration: "none",
               }}
             >
-              join the mastermind &rarr;
+              join the membership &rarr;
             </a>
             <a
               href="/waitlist"

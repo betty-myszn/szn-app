@@ -18,13 +18,13 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "MY SZN — Astrology Mastermind for Women | Birth Chart, Coaching & Community",
+    default: "MY SZN — Astrology Membership for Women | Birth Chart, Coaching & Community",
     template: "%s | MY SZN",
   },
   description:
-    "The astrology-led mastermind for ambitious women. Free birth chart calculator, live coaching, subconscious rewiring, and a community that helps you become her. Launches July 2026.",
+    "The astrology-led membership for ambitious women. Free birth chart calculator, live coaching, subconscious rewiring, and a community that helps you become her. Launches July 2026.",
   keywords: [
-    "astrology mastermind", "birth chart calculator", "free birth chart",
+    "astrology membership", "birth chart calculator", "free birth chart",
     "astrology for women", "zodiac coaching", "manifestation",
     "astrology community", "sun moon rising", "natal chart",
     "astrology course", "women's coaching", "self development for women",
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://itsmyszn.com",
     siteName: "MY SZN",
-    title: "MY SZN — Astrology Mastermind for Women",
-    description: "Stop reading your horoscope. Start becoming her. The astrology-led mastermind with free birth charts, live coaching, and a community of women who are done playing small.",
+    title: "MY SZN — Astrology Membership for Women",
+    description: "Stop reading your horoscope. Start becoming her. The astrology-led membership with free birth charts, live coaching, and a community of women who are done playing small.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MY SZN — Astrology Mastermind for Women",
-    description: "Stop reading your horoscope. Start becoming her. Free birth chart calculator + astrology-led mastermind launching July 2026.",
+    title: "MY SZN — Astrology Membership for Women",
+    description: "Stop reading your horoscope. Start becoming her. Free birth chart calculator + astrology-led membership launching July 2026.",
   },
   robots: {
     index: true,

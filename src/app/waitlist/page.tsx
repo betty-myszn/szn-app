@@ -407,7 +407,7 @@ export default function WaitlistPage() {
         </div>
       </section>
 
-      {/* ═══════════════ THE SEASONAL MASTERMIND ═══════════════ */}
+      {/* ═══════════════ THE SEASONAL MEMBERSHIP ═══════════════ */}
       <section className="px-8 py-20 md:py-28" style={{ background: "var(--dark)", borderTop: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
           <div style={{
@@ -421,7 +421,7 @@ export default function WaitlistPage() {
             letterSpacing: "-1.2px", lineHeight: 1.15, color: "#fff", marginBottom: 16,
             textAlign: "center",
           }}>
-            The Seasonal <span style={{ color: "var(--pink)" }}>Mastermind.</span>
+            The Seasonal <span style={{ color: "var(--pink)" }}>Membership.</span>
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "#fff", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
             Every month follows the rhythm of the zodiac. Because every zodiac season has something to teach us.

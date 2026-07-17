@@ -22,7 +22,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
       await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, source: "mastermind" }),
+        body: JSON.stringify({ email, name, source: "membership" }),
       });
     } catch {}
     setSubmitted(true);
@@ -131,7 +131,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
 }
 
 
-export default function MastermindPage() {
+export default function MembershipPage() {
   return (
     <div>
       {/* ═══════════════ HERO ═══════════════ */}
@@ -167,7 +167,7 @@ export default function MastermindPage() {
             fontSize: 14, lineHeight: 1.8, color: "#fff",
             maxWidth: 540, margin: "0 auto 36px",
           }}>
-            The astrology-led mastermind for women who are done playing small. Combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust. 3 or 6-month transformation. This is not a membership you forget about. This is the container that changes your life.
+            The astrology-led membership for women who are done playing small. Combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust. 3 or 6-month transformation. This is not something you forget about. This is the container that changes your life.
           </p>
 
           <div style={{ marginBottom: 28 }}>
@@ -272,7 +272,7 @@ export default function MastermindPage() {
                 Every season can be your season. That&apos;s the entire philosophy behind MY SZN.
               </p>
               <p style={{ fontSize: 14, color: "var(--dark)", marginTop: 12 }}>
-                Not another astrology app. A mastermind that helps you actually <em>live</em> your astrology and become the woman your chart always knew you could be.
+                Not another astrology app. A membership that helps you actually <em>live</em> your astrology and become the woman your chart always knew you could be.
               </p>
             </div>
           </div>
@@ -331,10 +331,10 @@ export default function MastermindPage() {
                 Not thin enough. Not successful enough. Not healed enough. That narrative ends here.
               </p>
               <p style={{ marginBottom: 16 }}>
-                MY SZN was born from wanting to create the mastermind I wished existed while rebuilding my own life. Becoming isn&apos;t about fixing yourself. It&apos;s about <strong>remembering</strong> yourself. The version of you that was always there before the world told you to be smaller.
+                MY SZN was born from wanting to create the membership I wished existed while rebuilding my own life. Becoming isn&apos;t about fixing yourself. It&apos;s about <strong>remembering</strong> yourself. The version of you that was always there before the world told you to be smaller.
               </p>
               <p style={{ fontStyle: "italic", color: "var(--dark)", fontWeight: 500 }}>
-                This is the mastermind I wish I&apos;d had. So I built it.
+                This is the membership I wish I&apos;d had. So I built it.
               </p>
             </div>
           </div>
@@ -404,12 +404,12 @@ export default function MastermindPage() {
       {/* ═══════════════ A PLATFORM THAT GROWS WITH YOU ═══════════════ */}
       <section className="px-8 py-20 md:py-32">
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">the mastermind</div>
+          <div className="tag mb-6 text-center">the membership</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(30px, 5.5vw, 48px)", fontWeight: 800,
             letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
           }}>
-            A mastermind that grows with <span className="pk">you.</span>
+            A membership that grows with <span className="pk">you.</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 mb-12" style={{ border: "var(--border)" }}>
@@ -449,7 +449,7 @@ export default function MastermindPage() {
 
           <div className="max-w-2xl mx-auto mb-12">
             <p style={{ fontSize: 16, lineHeight: 1.9, color: "var(--dark)", marginBottom: 20 }}>
-              When you join MY SZN, your entire experience is built around your birth chart, your Human Design, and the season you&apos;re moving through right now. As the seasons change, your mastermind changes too. New lessons. New guidance. New invitations. All aligned with the cosmic weather and the version of yourself that&apos;s ready to emerge.
+              When you join MY SZN, your entire experience is built around your birth chart, your Human Design, and the season you&apos;re moving through right now. As the seasons change, your membership changes too. New lessons. New guidance. New invitations. All aligned with the cosmic weather and the version of yourself that&apos;s ready to emerge.
             </p>
           </div>
 
@@ -475,7 +475,7 @@ export default function MastermindPage() {
 
           <div className="max-w-2xl mx-auto mb-12">
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)", marginBottom: 20 }}>
-              Someone else opens the mastermind the same day and receives something completely different. Because she&apos;s here to learn different lessons. Her chart has a different story. Her season is asking her to grow in a different direction. That&apos;s the whole point.
+              Someone else opens the membership the same day and receives something completely different. Because she&apos;s here to learn different lessons. Her chart has a different story. Her season is asking her to grow in a different direction. That&apos;s the whole point.
             </p>
           </div>
 
@@ -484,7 +484,7 @@ export default function MastermindPage() {
               fontFamily: pp, fontSize: 18, fontWeight: 800, color: "var(--dark)",
               lineHeight: 1.4, margin: 0,
             }}>
-              This isn&apos;t content you binge and forget. It&apos;s a living, breathing, evolving mastermind built entirely around <span className="pk">you.</span>
+              This isn&apos;t content you binge and forget. It&apos;s a living, breathing, evolving membership built entirely around <span className="pk">you.</span>
             </p>
           </div>
         </div>
@@ -493,7 +493,7 @@ export default function MastermindPage() {
       {/* ═══════════════ UPCOMING WORKSHOPS ═══════════════ */}
       <section className="px-8 py-20 md:py-28" style={{ background: "#fafafa", borderTop: "var(--border)", borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">your first workshops inside the mastermind</div>
+          <div className="tag mb-6 text-center">your first workshops inside the membership</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
@@ -541,7 +541,7 @@ export default function MastermindPage() {
                 leo szn workshop 2
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                date tbc · inside the mastermind
+                date tbc · inside the membership
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Visible AF: How to Show Up &amp; Get Paid
@@ -566,21 +566,21 @@ export default function MastermindPage() {
         </div>
       </section>
 
-      {/* ═══════════════ THE SEASONAL MASTERMIND ═══════════════ */}
+      {/* ═══════════════ THE SEASONAL MEMBERSHIP ═══════════════ */}
       <section className="px-8 py-20 md:py-28" style={{ background: "var(--dark)", borderTop: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
           <div style={{
             fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
             color: "var(--lav)", marginBottom: 24, opacity: 0.7, textAlign: "center",
           }}>
-            inside the mastermind
+            inside the membership
           </div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.15, color: "#fff", marginBottom: 16,
             textAlign: "center",
           }}>
-            The Seasonal <span style={{ color: "var(--pink)" }}>Mastermind.</span>
+            The Seasonal <span style={{ color: "var(--pink)" }}>Membership.</span>
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "#fff", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
             Every month follows the zodiac. Because every season has something to teach you and you&apos;re done leaving those lessons on the table. 3 or 6-month commitment so you actually see the transformation.
@@ -639,7 +639,7 @@ export default function MastermindPage() {
       {/* ═══════════════ WHAT YOU GET ═══════════════ */}
       <section className="px-8 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">inside the mastermind</div>
+          <div className="tag mb-6 text-center">inside the membership</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,

@@ -39,8 +39,8 @@ export default function NavBar() {
           <Link href="/" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
             home
           </Link>
-          <Link href="/mastermind" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
-            mastermind
+          <Link href="/membership" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
+            membership
           </Link>
           <Link href="/podcast" className="no-underline text-[var(--dark)] hover:text-[var(--pink)] transition-colors">
             podcast
@@ -104,8 +104,8 @@ export default function NavBar() {
           <Link href="/" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
             home
           </Link>
-          <Link href="/mastermind" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
-            mastermind
+          <Link href="/membership" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
+            membership
           </Link>
           <Link href="/podcast" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
             podcast

@@ -72,13 +72,13 @@ export default function ChartPage() {
         <BirthDataForm />
       </div>
 
-      {/* Mastermind CTA */}
+      {/* Membership CTA */}
       <div className="px-8 py-14 text-center" style={{ background: "var(--pink-light)", borderTop: "var(--border)" }}>
         <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
           want to go deeper than your chart?
         </p>
         <h2 style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 800, lineHeight: 1.15, marginBottom: 12 }}>
-          Join the MY SZN mastermind.
+          Join the MY SZN membership.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
           Your chart is just the beginning. Get live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty to help you actually live your astrology.
@@ -86,7 +86,7 @@ export default function ChartPage() {
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           From $111/mo · Cancel anytime after 3 months · Launches 23 July
         </p>
-        <a href="/mastermind" style={{
+        <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "#fff",
           fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 700,
           letterSpacing: "0.1em", textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
