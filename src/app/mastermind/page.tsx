@@ -108,7 +108,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         />
         <div>
           <span style={{ fontSize: 14, fontWeight: 600, color: dark ? "#fff" : "var(--dark)", lineHeight: 1.5 }}>
-            I&apos;m ready to invest $1,999+ in my transformation
+            I&apos;m ready to invest in my transformation
           </span>
           <span style={{ display: "block", fontSize: 12, color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)", marginTop: 4, opacity: 0.7 }}>
             3-month minimum commitment · payment plans available
@@ -160,7 +160,7 @@ export default function MastermindPage() {
             fontSize: 13, letterSpacing: "0.06em", color: "var(--pink)",
             fontWeight: 700, textTransform: "uppercase", margin: "0 auto 8px",
           }}>
-            Includes a 1:1 coaching call with Betty every month
+            Includes a 1:1 coaching call with Betty
           </p>
 
           <p style={{
@@ -198,7 +198,7 @@ export default function MastermindPage() {
           Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone. First live class kicks off 23 July at 7pm LA time.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching with Betty every month. 3 or 6 months of becoming her.
+          1:1 coaching call with Betty. 3 or 6 months of becoming her.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -394,7 +394,7 @@ export default function MastermindPage() {
           Doors open 21 July. Close 23 July. <span style={{ color: "var(--pink)" }}>3 days only.</span>
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
-          1:1 coaching with Betty every month. From $1,999. Payment plans available.
+          Includes a 1:1 coaching call with Betty. From $111/mo.
         </p>
         <Link href="#waitlist-form" className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           join the waitlist
@@ -655,10 +655,10 @@ export default function MastermindPage() {
                   included in every tier
                 </div>
                 <h3 style={{ fontFamily: pp, fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 12 }}>
-                  1:1 coaching call with Betty <span style={{ color: "var(--pink)" }}>every month.</span>
+                  Includes a 1:1 coaching call with <span style={{ color: "var(--pink)" }}>Betty.</span>
                 </h3>
                 <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.7)", margin: 0 }}>
-                  Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move. This alone is worth more than the entire investment.
+                  Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move.
                 </p>
               </div>
               <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
@@ -778,21 +778,21 @@ export default function MastermindPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {/* 3-Month */}
+            {/* Monthly */}
             <div className="p-8 md:p-12" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
-                3-month transformation
+                monthly membership
               </div>
               <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                $1,999
+                $111<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · payment plans available
+                3-month minimum commitment · cancel anytime after
               </div>
 
               <div className="space-y-3 mb-8">
                 {[
-                  "1:1 coaching call with Betty every month",
+                  "1:1 coaching call with Betty",
                   "2 live group coaching sessions monthly",
                   "Monthly seasonal workshops and masterclasses",
                   "Guest expert sessions every month",
@@ -813,11 +813,11 @@ export default function MastermindPage() {
               </Link>
             </div>
 
-            {/* 6-Month */}
+            {/* VIP */}
             <div className="p-8 md:p-12" style={{ background: "var(--dark)" }}>
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  6-month transformation
+                  vip membership
                 </div>
                 <span style={{
                   fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
@@ -827,20 +827,20 @@ export default function MastermindPage() {
                 </span>
               </div>
               <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>
-                $3,998
+                $555<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · payment plans available
+                3-month minimum commitment · cancel anytime after
               </div>
 
               <div className="space-y-3 mb-6">
                 {[
-                  "Everything in the 3-month transformation",
-                  "1:1 coaching call with Betty every month",
-                  "6 months of deep, sustained transformation",
-                  "Double the transformation, double the breakthroughs",
+                  "Everything in the monthly membership",
+                  "1:1 coaching call with Betty",
                   "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
+                  "First access to new features and content",
+                  "VIP-only bonus workshops",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
                     <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
@@ -851,7 +851,7 @@ export default function MastermindPage() {
 
               <div className="p-4 mb-8" style={{ background: "rgba(255,45,135,0.1)", border: "1px solid rgba(255,45,135,0.3)" }}>
                 <p style={{ fontSize: 13, color: "#fff", lineHeight: 1.6, margin: 0 }}>
-                  The women who commit to 6 months are the ones who come out unrecognisable. This is the container for the full transformation.
+                  The women who go VIP are the ones who come out unrecognisable. This is the container for the full transformation.
                 </p>
               </div>
 
@@ -899,11 +899,11 @@ export default function MastermindPage() {
               },
               {
                 q: "What's included in the 1:1 coaching calls?",
-                a: "Every month you get a private coaching session with Betty. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
+                a: "You get a private 1:1 coaching session with Betty. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
               },
               {
                 q: "Are there payment plans?",
-                a: "Yes. We offer payment plans for both the 3-month and 6-month transformation. You'll see all options when doors open on 21 July.",
+                a: "The membership starts at $111/mo with a 3-month minimum commitment. VIP is $555/mo. You'll see all options when doors open on 21 July.",
               },
               {
                 q: "What happens after I join the waitlist?",

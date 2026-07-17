@@ -81,10 +81,10 @@ export default function ChartPage() {
           Join the MY SZN mastermind.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Your chart is just the beginning. Get live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty every month to help you actually live your astrology.
+          Your chart is just the beginning. Get live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty to help you actually live your astrology.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $1,999 · Payment plans available · Launches 23 July
+          From $111/mo · Cancel anytime after 3 months · Launches 23 July
         </p>
         <a href="/mastermind" style={{
           display: "inline-block", background: "var(--pink)", color: "#fff",

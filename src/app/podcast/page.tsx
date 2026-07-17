@@ -154,10 +154,10 @@ export default function PodcastPage() {
           Join the MY SZN mastermind.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.7)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Everything from the podcast, taken to the next level. Live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty every month.
+          Everything from the podcast, taken to the next level. Live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $1,999 · Payment plans available · Launches 23 July
+          From $111/mo · Cancel anytime after 3 months · Launches 23 July
         </p>
         <a href="/mastermind" style={{
           display: "inline-block", background: "var(--pink)", color: "#fff",

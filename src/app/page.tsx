@@ -77,7 +77,7 @@ export default function Home() {
             MY SZN is where ambitious women stop overthinking, stop hiding and start becoming the main character of their own damn lives. Every month we&apos;ll work with the current astrology, powerful coaching tools and your personalised portal to help you be seen, make more money, own your gifts and finally start showing up like the woman your future self already knows you are.
           </p>
           <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 24 }}>
-            Includes 1:1 coaching with Betty every month · from $1,999
+            Includes a 1:1 coaching call with Betty · from $111/mo
           </p>
           <div className="flex gap-3 flex-wrap justify-center">
             <Link href="/mastermind" className="btn-pink">
@@ -111,7 +111,7 @@ export default function Home() {
           Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching with Betty every month. First live class: 23 July at 7pm LA time.
+          Includes a 1:1 coaching call with Betty. First live class: 23 July at 7pm LA time.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -510,21 +510,21 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {/* 3-Month */}
+            {/* Monthly */}
             <div className="p-8 md:p-12" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
-                3-month transformation
+                monthly membership
               </div>
               <div style={{ fontFamily: poppins, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                $1,999
+                $111<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · payment plans available
+                3-month minimum commitment · cancel anytime after
               </div>
 
               <div className="space-y-3 mb-8">
                 {[
-                  "1:1 coaching call with Betty every month",
+                  "1:1 coaching call with Betty",
                   "2 live group coaching sessions monthly",
                   "Monthly seasonal workshops and masterclasses",
                   "Guest expert sessions every month",
@@ -545,11 +545,11 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* 6-Month */}
+            {/* VIP */}
             <div className="p-8 md:p-12" style={{ background: "var(--dark)" }}>
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  6-month transformation
+                  vip membership
                 </div>
                 <span style={{
                   fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
@@ -559,20 +559,20 @@ export default function Home() {
                 </span>
               </div>
               <div style={{ fontFamily: poppins, fontSize: 48, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>
-                $3,998
+                $555<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · payment plans available
+                3-month minimum commitment · cancel anytime after
               </div>
 
               <div className="space-y-3 mb-6">
                 {[
-                  "Everything in the 3-month transformation",
-                  "1:1 coaching call with Betty every month",
-                  "6 months of deep, sustained transformation",
-                  "Double the transformation, double the breakthroughs",
+                  "Everything in the monthly membership",
+                  "1:1 coaching call with Betty",
                   "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
+                  "First access to new features and content",
+                  "VIP-only bonus workshops",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
                     <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
@@ -583,7 +583,7 @@ export default function Home() {
 
               <div className="p-4 mb-8" style={{ background: "rgba(255,45,135,0.1)", border: "1px solid rgba(255,45,135,0.3)" }}>
                 <p style={{ fontSize: 13, color: "#fff", lineHeight: 1.6, margin: 0 }}>
-                  The women who commit to 6 months are the ones who come out unrecognisable. This is the container for the full transformation.
+                  The women who go VIP are the ones who come out unrecognisable. This is the container for the full transformation.
                 </p>
               </div>
 
@@ -617,7 +617,7 @@ export default function Home() {
           stop reading your horoscope.<br />start becoming <span className="pk">her.</span>
         </h2>
         <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 32px" }}>
-          Join the mastermind waitlist for founding member pricing and a seat at the table before the doors close. 1:1 coaching with Betty every month. 3-month commitment. Limited spots. Your future self is already inside.
+          Join the mastermind waitlist for founding member pricing and a seat at the table before the doors close. Includes a 1:1 coaching call with Betty. 3-month commitment. Limited spots. Your future self is already inside.
         </p>
         <div className="flex gap-3 justify-center">
           <Link href="/mastermind" className="btn-pink">join the waitlist</Link>
