@@ -17,6 +17,7 @@ import {
 interface ChartWheelProps {
   chart: ChartData;
   size?: number;
+  onSelectPlanet?: (planetId: string) => void;
 }
 
 const CX = 300;
@@ -79,7 +80,7 @@ function spreadPlanets(
   return items;
 }
 
-export default function ChartWheel({ chart, size = 600 }: ChartWheelProps) {
+export default function ChartWheel({ chart, size = 600, onSelectPlanet }: ChartWheelProps) {
   const { ascendant } = chart;
 
   const signSegments = ZODIAC_SIGNS.map((sign, i) => {
@@ -108,7 +109,7 @@ export default function ChartWheel({ chart, size = 600 }: ChartWheelProps) {
 
   const houseMidpoints = chart.houses.map((h, i) => {
     const nextI = (i + 1) % 12;
-    let start = chartAngle(h.longitude, ascendant);
+    const start = chartAngle(h.longitude, ascendant);
     let end = chartAngle(chart.houses[nextI].longitude, ascendant);
     if (end < start) end += 360;
     const mid = ((start + end) / 2) % 360;
@@ -161,7 +162,7 @@ export default function ChartWheel({ chart, size = 600 }: ChartWheelProps) {
         </radialGradient>
       </defs>
 
-      {/* Background — clean white with dark chart circle */}
+      {/* Background, clean white with dark chart circle */}
       <rect width="600" height="600" fill="#ffffff" />
       <circle cx={CX} cy={CY} r={OUTER_R + 6} fill="url(#bgGrad)" />
 
@@ -268,7 +269,28 @@ export default function ChartWheel({ chart, size = 600 }: ChartWheelProps) {
         const symbol = PLANET_SYMBOLS[planet.name] || planet.name[0];
 
         return (
-          <g key={planet.id}>
+          <g
+            key={planet.id}
+            onClick={onSelectPlanet ? () => onSelectPlanet(planet.id) : undefined}
+            onKeyDown={
+              onSelectPlanet
+                ? (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      onSelectPlanet(planet.id);
+                    }
+                  }
+                : undefined
+            }
+            role={onSelectPlanet ? "button" : undefined}
+            tabIndex={onSelectPlanet ? 0 : undefined}
+            aria-label={onSelectPlanet ? `${planet.name} in ${planet.sign}` : undefined}
+            style={onSelectPlanet ? { cursor: "pointer" } : undefined}
+          >
+            {onSelectPlanet && (
+              // invisible hit area so small glyphs are easy to tap
+              <circle cx={pos.x} cy={pos.y} r={14} fill="transparent" />
+            )}
             <line
               x1={tickInner.x}
               y1={tickInner.y}

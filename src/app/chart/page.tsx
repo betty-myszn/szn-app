@@ -5,7 +5,7 @@ export const metadata = {
   description:
     "Get your free birth chart instantly. Discover your sun sign, moon sign, rising sign, Venus, Mars, Jupiter, and every placement in your natal chart. Swiss Ephemeris precision. No signup required.",
   openGraph: {
-    title: "Free Birth Chart Calculator — MY SZN",
+    title: "Free Birth Chart Calculator, MY SZN",
     description: "Calculate your full natal chart for free. Sun, moon, rising, Venus, Mars, Jupiter, Chiron and all 12 houses. Enter your birth details and discover your cosmic blueprint.",
   },
 };
@@ -87,7 +87,7 @@ export default function ChartPage() {
           From $111/mo · Cancel anytime after 3 months · Launches 23 July
         </p>
         <a href="/membership" style={{
-          display: "inline-block", background: "var(--pink)", color: "#fff",
+          display: "inline-block", background: "var(--pink)", color: "var(--dark)",
           fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 700,
           letterSpacing: "0.1em", textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
         }}>

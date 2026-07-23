@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Apply to MY SZN, the 3-month astrology membership for women ready to stop playing small. Live workshops, subconscious rewiring, personalised birth chart portal, and a community of ambitious women. Limited founding member spots.",
   openGraph: {
-    title: "MY SZN Membership — Your Era Starts Now",
+    title: "MY SZN Membership, Your Era Starts Now",
     description: "The astrology-led membership for ambitious women. 3-month commitment. Live coaching, birth chart portal, subconscious rewiring. Limited spots launching July 2026.",
   },
 };

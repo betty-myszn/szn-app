@@ -1,11 +1,15 @@
 import type { BirthData } from "@/types/chart";
 
 const STORAGE_KEY = "myszn_birth_data";
+const CHART_CACHE_KEY = "myszn_chart_cache";
 
 export function saveBirthData(data: BirthData): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    // Always invalidate the cached chart on save, a location-only edit (same dob/time,
+    // different city) wouldn't otherwise trip the cache's dob/time comparison.
+    sessionStorage.removeItem(CHART_CACHE_KEY);
   } catch {
     // localStorage full or unavailable
   }
@@ -24,6 +28,16 @@ export function getSavedBirthData(): BirthData | null {
   } catch {
     return null;
   }
+}
+
+// Patches just the name on the saved birth data, used by settings so changing your display
+// name doesn't require redoing the whole birth-details form. Chart cache still invalidates
+// (saveBirthData always clears it) but recalculating from identical dob/time/location produces
+// an identical chart, so this costs a wasted recompute, not a correctness issue.
+export function updateSavedName(name: string): void {
+  const existing = getSavedBirthData();
+  if (!existing) return;
+  saveBirthData({ ...existing, name });
 }
 
 export function clearSavedBirthData(): void {
@@ -69,6 +83,25 @@ export function getSavedPlacements(): SavedPlacements | null {
   } catch {
     return null;
   }
+}
+
+export function placementsFromChart(data: {
+  planets?: { name: string; sign: string }[];
+  houses?: { sign: string }[];
+}): SavedPlacements {
+  const find = (name: string) => data.planets?.find((p) => p.name === name)?.sign || "";
+  return {
+    sun: find("Sun"),
+    moon: find("Moon"),
+    rising: data.houses?.[0]?.sign || "",
+    venus: find("Venus"),
+    mars: find("Mars"),
+    jupiter: find("Jupiter"),
+    saturn: find("Saturn"),
+    chiron: find("Chiron"),
+    northNode: find("North Node"),
+    midheaven: data.houses?.[9]?.sign || "",
+  };
 }
 
 export function encodeBirthData(data: BirthData): string {

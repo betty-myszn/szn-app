@@ -65,7 +65,7 @@ function findNatalHouse(longitude: number, natalCusps: number[]): number {
 }
 
 function getMoonPhase(sunLong: number, moonLong: number): MoonPhase {
-  let angle = ((moonLong - sunLong + 360) % 360);
+  const angle = ((moonLong - sunLong + 360) % 360);
   const illumination = Math.round((1 - Math.cos((angle * Math.PI) / 180)) / 2 * 100);
 
   if (angle < 11.25) return { phase: "New Moon", illumination, emoji: "🌑" };

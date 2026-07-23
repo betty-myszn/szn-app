@@ -204,8 +204,8 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
           />
         </div>
         <div>
-          <label style={labelStyle}>place of birth</label>
-          <PlacesAutocomplete onSelect={setLocation} value={location?.placeName} />
+          <label htmlFor="birth-place" style={labelStyle}>place of birth</label>
+          <PlacesAutocomplete id="birth-place" onSelect={setLocation} value={location?.placeName} />
         </div>
       </div>
 
@@ -251,7 +251,7 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
         className="w-full cursor-pointer disabled:opacity-50"
         style={{
           background: "var(--pink)",
-          color: "#fff",
+          color: "var(--dark)",
           fontSize: 13,
           fontWeight: 700,
           letterSpacing: "0.08em",

@@ -153,7 +153,10 @@ export const PLANET_SYMBOLS: Record<string, string> = {
   Chiron: "⚷",
   "North Node": "☊",
   "South Node": "☋",
+  Lilith: "⚸",
+  "Part of Fortune": "⊗",
   Ascendant: "AC",
+  Midheaven: "MC",
 };
 
 // --- Transit Types ---

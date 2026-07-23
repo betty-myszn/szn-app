@@ -5,7 +5,7 @@ export const metadata = {
   description:
     "The MY SZN podcast. Astrology, confidence, money, manifestation, and becoming the version of yourself your chart has been pointing toward. New episodes weekly on Spotify and Apple Podcasts.",
   openGraph: {
-    title: "MY SZN Podcast — Astrology, Confidence & Manifestation",
+    title: "MY SZN Podcast, Astrology, Confidence & Manifestation",
     description: "The weekly pep talk your future self would give you. Astrology, money, manifestation and main character energy.",
   },
 };
@@ -160,7 +160,7 @@ export default function PodcastPage() {
           From $111/mo · Cancel anytime after 3 months · Launches 23 July
         </p>
         <a href="/membership" style={{
-          display: "inline-block", background: "var(--pink)", color: "#fff",
+          display: "inline-block", background: "var(--pink)", color: "var(--dark)",
           fontFamily: pp, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
         }}>

@@ -29,6 +29,7 @@ const PLANETS = [
   { id: "pluto", name: "Pluto", swissId: swisseph.SE_PLUTO },
   { id: "chiron", name: "Chiron", swissId: swisseph.SE_CHIRON },
   { id: "north_node", name: "North Node", swissId: swisseph.SE_TRUE_NODE },
+  { id: "lilith", name: "Lilith", swissId: swisseph.SE_MEAN_APOG },
 ];
 
 const RULERSHIPS: PlanetaryRulership[] = [
@@ -71,8 +72,8 @@ function findHouse(longitude: number, cusps: number[]): number {
   const normalized = ((longitude % 360) + 360) % 360;
   for (let i = 0; i < 12; i++) {
     const nextI = (i + 1) % 12;
-    let cuspStart = cusps[i];
-    let cuspEnd = cusps[nextI];
+    const cuspStart = cusps[i];
+    const cuspEnd = cusps[nextI];
 
     if (cuspEnd < cuspStart) {
       if (normalized >= cuspStart || normalized < cuspEnd) {
@@ -224,6 +225,30 @@ export function calculateChart(birthData: BirthData): ChartData {
     ...southSignData,
     house: southHouse,
     retrograde: northNode.retrograde,
+  });
+
+  // Part of Fortune: sect-aware (day chart Asc + Moon − Sun; night chart Asc + Sun − Moon).
+  // Day chart = Sun above the horizon (houses 7–12).
+  const sun = planets.find((p) => p.id === "sun")!;
+  const moon = planets.find((p) => p.id === "moon")!;
+  const isDayChart = sun.house >= 7;
+  const fortuneLng =
+    ((isDayChart
+      ? ascendant + moon.longitude - sun.longitude
+      : ascendant + sun.longitude - moon.longitude) %
+      360 +
+      360) %
+    360;
+  const fortuneSignData = longitudeToSign(fortuneLng);
+
+  planets.push({
+    id: "part_of_fortune",
+    name: "Part of Fortune",
+    longitude: fortuneLng,
+    latitude: 0,
+    ...fortuneSignData,
+    house: findHouse(fortuneLng, cusps),
+    retrograde: false,
   });
 
   const houses: HouseCusp[] = cusps.map((cusp, i) => {

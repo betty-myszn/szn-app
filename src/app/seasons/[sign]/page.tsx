@@ -326,7 +326,7 @@ function WaitlistForm() {
       <button
         type="submit"
         style={{
-          background: "var(--pink)", color: "#fff", fontFamily: dm,
+          background: "var(--pink)", color: "var(--dark)", fontFamily: dm,
           fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           textTransform: "uppercase", padding: "16px 32px", border: "none",
           cursor: "pointer", whiteSpace: "nowrap",

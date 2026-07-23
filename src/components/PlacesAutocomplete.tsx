@@ -6,6 +6,7 @@ import type { BirthLocation } from "@/types/chart";
 interface PlacesAutocompleteProps {
   onSelect: (location: BirthLocation) => void;
   value?: string;
+  id?: string;
 }
 
 interface GeoNameResult {
@@ -18,7 +19,7 @@ interface GeoNameResult {
   timezone?: { timeZoneId: string };
 }
 
-export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocompleteProps) {
+export default function PlacesAutocomplete({ onSelect, value, id }: PlacesAutocompleteProps) {
   const [inputValue, setInputValue] = useState(value || "");
   const [results, setResults] = useState<GeoNameResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -90,6 +91,7 @@ export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocomple
   return (
     <div ref={wrapperRef} className="relative">
       <input
+        id={id}
         type="text"
         value={inputValue}
         onChange={(e) => handleInput(e.target.value)}
@@ -119,7 +121,7 @@ export default function PlacesAutocomplete({ onSelect, value }: PlacesAutocomple
               >
                 <span style={{ fontWeight: 600 }}>{r.name}</span>
                 {r.adminName1 && <span style={{ color: "var(--grey)" }}>, {r.adminName1}</span>}
-                <span style={{ color: "var(--grey-light)" }}> — {r.countryName}</span>
+                <span style={{ color: "var(--grey-light)" }}>, {r.countryName}</span>
                 {r.timezone && (
                   <span style={{ marginLeft: 8, fontSize: 10, color: "var(--grey-light)" }}>
                     {r.timezone.timeZoneId}

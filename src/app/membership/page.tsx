@@ -3,9 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import LaunchCountdown from "@/components/LaunchCountdown";
+import CheckoutButton from "@/components/CheckoutButton";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
+
+// Real Stripe payment links.
+const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/3cIdRacULeUf3XA7SR7kc0g";
+const THREE_MONTH_CHECKOUT_URL = "https://buy.stripe.com/7sYfZi7AreUf51E3CB7kc0h";
+const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 
 function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }) {
   const [email, setEmail] = useState("");
@@ -65,7 +71,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
             { num: "2", text: "Doors open 21 July with founding member pricing" },
-            { num: "3", text: "First live class is 23 July at 7pm LA time" },
+            { num: "3", text: "First live class is 26 July at 6pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
               <span style={{
@@ -119,7 +125,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         type="submit"
         className="w-full cursor-pointer"
         style={{
-          background: "var(--pink)", color: "#fff", fontFamily: dm,
+          background: "var(--pink)", color: "var(--dark)", fontFamily: dm,
           fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
           textTransform: "uppercase", padding: "16px 32px", border: "none",
         }}
@@ -195,7 +201,7 @@ export default function MembershipPage() {
           MY SZN launches 23 July.
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
-          Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone. First live class kicks off 23 July at 7pm LA time.
+          Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone. First live class kicks off 26 July at 6pm LA time.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
           1:1 coaching call with Betty. 3 or 6 months of becoming her.
@@ -508,7 +514,7 @@ export default function MembershipPage() {
                 leo szn workshop 1
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                23 july · 7pm la time · first live class
+                26 july · 6pm la time · first live class
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Leo Season: Enter Your Main Character Era
@@ -777,9 +783,9 @@ export default function MembershipPage() {
             Doors open 21 July. Close 23 July. 3 days only.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
             {/* Monthly */}
-            <div className="p-8 md:p-12" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
+            <div className="p-8 md:p-10" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
                 monthly membership
               </div>
@@ -808,20 +814,47 @@ export default function MembershipPage() {
                 ))}
               </div>
 
-              <Link href="#waitlist-form" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
-                join the waitlist
-              </Link>
+              <CheckoutButton checkoutUrl={MONTHLY_CHECKOUT_URL} label="join · $111/mo" />
+            </div>
+
+            {/* 3 months upfront */}
+            <div className="p-8 md:p-10" style={{ background: "var(--cream)", borderRight: "var(--border)" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#854F0B", marginBottom: 20 }}>
+                3 months upfront
+              </div>
+              <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
+                $333
+              </div>
+              <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
+                covers your full 3-month minimum in one payment, no monthly charges
+              </div>
+
+              <div className="space-y-3 mb-8">
+                {[
+                  "everything in the monthly membership",
+                  "one payment, nothing to remember each month",
+                  "1:1 coaching call with Betty",
+                  "your full 3-month commitment, settled upfront",
+                ].map((item) => (
+                  <div key={item} className="flex gap-3 items-start">
+                    <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
+                    <span style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.5 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <CheckoutButton checkoutUrl={THREE_MONTH_CHECKOUT_URL} label="join · pay for 3 months" />
             </div>
 
             {/* VIP */}
-            <div className="p-8 md:p-12" style={{ background: "var(--dark)" }}>
+            <div className="p-8 md:p-10" style={{ background: "var(--dark)" }}>
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
                   vip membership
                 </div>
                 <span style={{
                   fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: "#fff", background: "var(--pink)", padding: "4px 10px",
+                  color: "var(--dark)", background: "var(--pink)", padding: "4px 10px",
                 }}>
                   best value
                 </span>
@@ -855,13 +888,7 @@ export default function MembershipPage() {
                 </p>
               </div>
 
-              <Link href="#waitlist-form" className="block text-center no-underline" style={{
-                background: "var(--pink)", color: "#fff", fontFamily: dm,
-                fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
-                textTransform: "uppercase", padding: "16px 32px", border: "none",
-              }}>
-                join the waitlist
-              </Link>
+              <CheckoutButton checkoutUrl={VIP_CHECKOUT_URL} label="join · $555/mo" dark />
             </div>
           </div>
 
@@ -903,11 +930,11 @@ export default function MembershipPage() {
               },
               {
                 q: "Are there payment plans?",
-                a: "The membership starts at $111/mo with a 3-month minimum commitment. VIP is $555/mo. You'll see all options when doors open on 21 July.",
+                a: "The membership starts at $111/mo with a 3-month minimum commitment, or pay for your 3 months upfront in one payment if you'd rather not think about it monthly. VIP is $555/mo. All options are shown on the pricing section above.",
               },
               {
                 q: "What happens after I join the waitlist?",
-                a: "You'll get a confirmation email straight away. When doors open on 21 July, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 23 July at 7pm LA time.",
+                a: "You'll get a confirmation email straight away. When doors open on 21 July, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 26 July at 6pm LA time.",
               },
               {
                 q: "Can I cancel or get a refund?",
@@ -962,7 +989,7 @@ export default function MembershipPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "First live class 23 July", "3 or 6-month transformation", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "First live class 26 July", "3 or 6-month transformation", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",

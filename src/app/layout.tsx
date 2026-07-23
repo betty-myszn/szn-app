@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "MY SZN — Astrology Membership for Women | Birth Chart, Coaching & Community",
+    default: "MY SZN, Astrology Membership for Women | Birth Chart, Coaching & Community",
     template: "%s | MY SZN",
   },
   description:
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://itsmyszn.com",
     siteName: "MY SZN",
-    title: "MY SZN — Astrology Membership for Women",
-    description: "Stop reading your horoscope. Start becoming her. The astrology-led membership with free birth charts, live coaching, and a community of women who are done playing small.",
+    title: "MY SZN, Astrology Membership for Women",
+    description: "Stop guessing. Start becoming her. The astrology-led membership with free birth charts, live coaching, and a community of women who are done playing small.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MY SZN — Astrology Membership for Women",
-    description: "Stop reading your horoscope. Start becoming her. Free birth chart calculator + astrology-led membership launching July 2026.",
+    title: "MY SZN, Astrology Membership for Women",
+    description: "Stop guessing. Start becoming her. Free birth chart calculator + astrology-led membership launching July 2026.",
   },
   robots: {
     index: true,
@@ -66,7 +66,7 @@ export default function RootLayout({
 
         {/* Footer */}
         <footer
-          className="flex items-center justify-between px-8 py-9"
+          className="flex flex-col md:flex-row items-center justify-between gap-4 px-8 py-9 text-center md:text-left"
           style={{ background: "var(--dark)" }}
         >
           <div
@@ -89,10 +89,16 @@ export default function RootLayout({
             &copy; 2026 The Cosmic Co. All rights reserved.
           </div>
           <div className="flex gap-6">
-            {["privacy", "terms", "instagram"].map((link) => (
+            {[
+              { label: "privacy", href: "/privacy" },
+              { label: "terms", href: "/terms" },
+              { label: "instagram", href: "https://instagram.com/itsmyszn" },
+            ].map((link) => (
               <a
-                key={link}
-                href="#"
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 style={{
                   fontSize: 11,
                   fontWeight: 700,
@@ -103,7 +109,7 @@ export default function RootLayout({
                 }}
                 className="hover:!text-white transition-colors"
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>

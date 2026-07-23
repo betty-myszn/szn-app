@@ -252,7 +252,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               href="/membership"
               style={{
                 background: "var(--pink)",
-                color: "#fff",
+                color: "var(--dark)",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
@@ -362,7 +362,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               href="/membership"
               style={{
                 background: "var(--pink)",
-                color: "#fff",
+                color: "var(--dark)",
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: "0.08em",

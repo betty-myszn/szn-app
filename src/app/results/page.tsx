@@ -2,7 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { decodeBirthData, saveBirthData, savePlacements } from "@/lib/url-params";
+import { decodeBirthData, saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
+import { syncBirthDataToSupabase, syncChartToSupabase } from "@/lib/chart-sync";
 import ChartResults from "@/components/ChartResults";
 import type { ChartData } from "@/types/chart";
 
@@ -20,6 +21,7 @@ function ResultsContent() {
       return;
     }
     saveBirthData(birthData);
+    syncBirthDataToSupabase(birthData);
 
     fetch("/api/calculate", {
       method: "POST",
@@ -33,19 +35,9 @@ function ResultsContent() {
       .then((data) => {
         setChart(data);
         // Save key placements for personalisation across the site
-        const find = (name: string) => data.planets?.find((p: { name: string; sign: string }) => p.name === name)?.sign || "";
-        savePlacements({
-          sun: find("Sun"),
-          moon: find("Moon"),
-          rising: data.houses?.[0]?.sign || "",
-          venus: find("Venus"),
-          mars: find("Mars"),
-          jupiter: find("Jupiter"),
-          saturn: find("Saturn"),
-          chiron: find("Chiron"),
-          northNode: find("North Node"),
-          midheaven: data.houses?.[9]?.sign || "",
-        });
+        const placements = placementsFromChart(data);
+        savePlacements(placements);
+        syncChartToSupabase(data, placements);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -89,7 +81,7 @@ function ResultsContent() {
             className="inline-block mt-6"
             style={{
               background: "var(--pink)",
-              color: "#fff",
+              color: "var(--dark)",
               fontSize: 12,
               fontWeight: 700,
               letterSpacing: "0.08em",
