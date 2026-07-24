@@ -145,21 +145,42 @@ export default function LifeAreaPage() {
         </div>
       </section>
 
-      {/* The ruler of this house, the factual anchor + clickable planet, kept tight since the
-          synthesis above already interprets it. */}
-      {reading.rulerPlacement && (
-        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
-            <div className="tag mb-3">the ruler of your {ordinalHouse(reading.house)} house</div>
-            <h2 style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 12, color: "var(--dark)" }}>
-              {reading.cuspSign.toLowerCase()} is ruled by{" "}
-              <Link href={`/my-chart/${reading.rulerPlacement.rulerId}`} className="pk" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
-                {reading.rulerPlacement.rulerName.toLowerCase()}
-              </Link>
-              , in {reading.rulerPlacement.rulerSign.toLowerCase()}
-              {reading.rulerPlacement.rulerRetrograde && <span style={{ color: "var(--pink)" }}> (Rx)</span>}, in your {ordinalHouse(reading.rulerPlacement.rulerHouse)} house.
-            </h2>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.rulerPlacement.synthesis}</p>
+      {/* The paired house read as one axis: the secondary house's own full ruler chain, how it
+          interacts with the primary house, and how the season activates both at once. Replaces
+          the old separate "ruler of your house" card and "adds on top" card, one synthesis
+          instead of the primary chain, the secondary house and the interaction each getting
+          their own repeated restatement of the same facts. */}
+      {reading.axisSynthesis.length > 0 && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "2px solid var(--lav)", background: "var(--lav-light)" }}>
+            <div className="tag mb-5">your {reading.label} axis</div>
+            <div className="flex flex-col gap-5">
+              {reading.axisSynthesis.map((para, i) => (
+                <p key={i} style={{ fontSize: 15, lineHeight: 1.9, color: "#3C2A70" }}>{para}</p>
+              ))}
+            </div>
+            {(reading.rulerPlacement || reading.secondaryRulerPlacement) && (
+              <div className="flex gap-6 flex-wrap" style={{ marginTop: 22 }}>
+                {reading.rulerPlacement && (
+                  <Link
+                    href={`/my-chart/${reading.rulerPlacement.rulerId}`}
+                    className="pk no-underline"
+                    style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: "1.5px solid currentColor", paddingBottom: 2 }}
+                  >
+                    go deeper on {reading.rulerPlacement.rulerName.toLowerCase()} →
+                  </Link>
+                )}
+                {reading.secondaryRulerPlacement && (
+                  <Link
+                    href={`/my-chart/${reading.secondaryRulerPlacement.rulerId}`}
+                    className="pk no-underline"
+                    style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: "1.5px solid currentColor", paddingBottom: 2 }}
+                  >
+                    go deeper on {reading.secondaryRulerPlacement.rulerName.toLowerCase()} →
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -183,14 +204,6 @@ export default function LifeAreaPage() {
               <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70" }}>{reading.quickContext.ruler}</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* In your chart: the tenants + aspects layer, chart-specific detail the synthesis draws on */}
-      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
-          <div className="tag mb-3">the fine detail in your chart</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.inYourChart}</p>
         </div>
       </section>
 

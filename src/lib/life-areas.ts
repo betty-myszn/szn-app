@@ -1,6 +1,6 @@
-import type { ChartData, TransitData, ActivatedPlacement } from "@/types/chart";
+import type { ChartData, TransitData, ActivatedPlacement, PlanetPosition } from "@/types/chart";
 import type { SeasonInfo } from "@/lib/seasons";
-import { SIGN_TRAITS, SIGN_OVERVIEWS, HOUSE_MEANINGS, ordinalHouse, findRootBlock, getBodyMeaning, interpretAspect, composeRulerPlacement, rulerRef, type RulerPlacement } from "@/lib/interpretations";
+import { SIGN_TRAITS, SIGN_OVERVIEWS, HOUSE_MEANINGS, ordinalHouse, findRootBlock, getBodyMeaning, interpretAspect, composeRulerPlacement, rulerRef, type RulerPlacement, type SignTraits } from "@/lib/interpretations";
 import { LIFE_AREA_TO_GOAL_CATEGORY, type Goal } from "@/lib/goals-store";
 
 export interface LifeAreaMeta {
@@ -547,6 +547,109 @@ const BLIND_SPOT_TELLS: Record<string, string> = {
   healing: "You call it \"already dealt with\" or \"old news\", but notice how quickly it can still knock you sideways when it actually shows up. Something you've truly integrated doesn't need the story repeated to prove it's handled, the fact that it still needs defending is the tell.",
 };
 
+interface AxisMeta {
+  label: string; // e.g. "money axis"
+  framing: string; // what the two houses jointly represent, the polarity between them
+  prompts: string[]; // reflective, stated as observations rather than literal questions
+}
+
+// Every life area with a secondary house sits on an axis, not just a primary house with a
+// footnote. This is what makes the second house a real, named relationship instead of "adds
+// another layer": the specific polarity the pair represents, and the pattern to actually notice
+// in how the two sides pull against or reinforce each other. Generic per life area, not per
+// chart, composeLifeArea substitutes each member's own rulers and placements into it.
+const AXIS_CONTEXT: Record<string, AxisMeta> = {
+  mindset: {
+    label: "mindset axis",
+    framing: "the gap between the mind you run day to day and the bigger belief system underneath it, how you see yourself versus what you actually believe is possible for you",
+    prompts: [
+      "notice whether the way you talk to yourself day to day actually matches what you believe is possible for you, or whether one has quietly outgrown the other.",
+      "watch for a belief that sounds expansive out loud but still gets contradicted by the smaller story running underneath it.",
+    ],
+  },
+  confidence: {
+    label: "confidence axis",
+    framing: "the gap between how you carry yourself and how freely you actually let yourself be seen creating, playing or being romantically visible",
+    prompts: [
+      "notice whether your outward composure is quietly doing the work that real creative or romantic risk-taking is avoiding.",
+      "watch for confidence that holds up in how you present yourself but thins out the moment something asks you to actually perform, create or be chosen.",
+    ],
+  },
+  career: {
+    label: "career axis",
+    framing: "the gap between the public reputation you're building and the daily habits and service actually holding it up",
+    prompts: [
+      "notice whether your ambition for how you're seen professionally is being backed by daily discipline, or whether the two have drifted apart.",
+      "watch for a career image you're proud of that isn't yet matched by the unglamorous daily systems that would actually sustain it.",
+    ],
+  },
+  business: {
+    label: "business axis",
+    framing: "what you're building publicly versus what you're actually keeping and earning from it personally",
+    prompts: [
+      "notice whether your public-facing ambition for the business is outpacing what you're actually charging or keeping for yourself.",
+      "watch for a gap between how big the brand looks from the outside and how secure your personal income from it actually feels.",
+    ],
+  },
+  purpose: {
+    label: "purpose axis",
+    framing: "the gap between the purpose you can articulate out loud and the quieter, less conscious pull actually guiding you underneath it",
+    prompts: [
+      "notice whether the purpose you talk about out loud is the same one your gut is actually pulling you toward, or whether there's a quieter version underneath it.",
+      "watch for clarity that lives entirely in your head while the real signal is still arriving through feeling, dreams or intuition.",
+    ],
+  },
+  money: {
+    label: "money axis",
+    framing: "what you build through your own effort versus what moves through you because of other people, debt, investment or merged resources",
+    prompts: [
+      "notice whether you try to create security entirely through your own effort while quietly struggling to actually receive support.",
+      "watch for how much your self-worth decides your comfort charging, borrowing, investing or letting someone else contribute.",
+      "pay attention to how trust, control and power show up the moment money involves another person, not just you.",
+    ],
+  },
+  "style-fashion": {
+    label: "style axis",
+    framing: "the gap between how you present yourself by default and how freely you actually let yourself experiment, play or stand out",
+    prompts: [
+      "notice whether your everyday look is doing safer work than the more expressive version of you actually wants.",
+      "watch for a gap between the image you maintain and the bolder expression you keep saving for later.",
+    ],
+  },
+  relationships: {
+    label: "relationships axis",
+    framing: "the gap between how you show up in committed partnership and how freely you actually let yourself flirt, play or be romantically expressive",
+    prompts: [
+      "notice whether commitment is genuinely where you feel safest, or whether romance and play come more naturally, with real partnership something you're still learning to trust.",
+      "watch for a gap between the seriousness you bring to relationships and how much actual joy or spontaneity survives inside them.",
+    ],
+  },
+  "health-body": {
+    label: "health axis",
+    framing: "the gap between the daily habits and routines you actually keep and how you see and inhabit your body itself",
+    prompts: [
+      "notice whether your daily habits genuinely serve how you want to feel in your body, or run on autopilot separate from it.",
+      "watch for a gap between the discipline you apply day to day and how at home you actually feel in your own body.",
+    ],
+  },
+  "spiritual-growth": {
+    label: "spiritual growth axis",
+    framing: "the gap between what you sense quietly beneath the surface and the bigger belief system you consciously hold",
+    prompts: [
+      "notice whether your conscious beliefs have actually caught up with what you already sense intuitively.",
+      "watch for a gap between the philosophy you'd explain out loud and the quieter, harder-to-name knowing underneath it.",
+    ],
+  },
+  healing: {
+    label: "healing axis",
+    framing: "the gap between the wound that lives quietly beneath the surface and what actually happens to it once real intimacy or a power dynamic brings it into the open",
+    prompts: [
+      "notice whether you keep this wound private and manageable until real intimacy or a power dynamic forces it into the open.",
+      "watch for a pattern where you can name the wound alone but it behaves completely differently once another person, or real stakes, are involved.",
+    ],
+  },
+};
+
 export interface LifeAreaReading {
   id: string;
   label: string;
@@ -566,6 +669,9 @@ export interface LifeAreaReading {
   quickContext: { house: string; cuspSign: string; ruler: string }; // the compact 20%: one short line each for the raw ingredients, so the page can teach fast and interpret slow
   secondaryHouse: number | null; // the other house this area touches, when the area has one
   secondaryHouseMeaning: { title: string; text: string; naturalSign: string } | null;
+  secondaryCuspSign: string | null; // the sign on the secondary house's cusp
+  secondaryRulerPlacement: RulerPlacement | null; // the secondary house's own ruler chain, resolved exactly like the primary house's
+  axisSynthesis: string[]; // primary + secondary house read together as one axis: secondary's own chain, how the two interact, how the season activates both at once
   inYourChart: string;
   natalAspectLines: string[]; // the actual aspects your ruling planet carries, in plain english
   bettysTake: string;
@@ -596,6 +702,12 @@ function pick<T>(arr: T[], seed: number): T {
   return arr[seed % arr.length];
 }
 
+// describeOccupants reads lowercase so it can sit mid-sentence (e.g. "...where no other planet
+// sits there..."), but two callers open a fresh sentence with it, this capitalises just those.
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function seedFrom(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
@@ -608,8 +720,39 @@ function signForBody(chart: ChartData, bodyId: string): string {
   return chart.planets.find((p) => p.id === bodyId)?.sign || "Leo";
 }
 
-function houseTenantsOf(chart: ChartData, houseNumber: number): string[] {
-  return chart.planets.filter((p) => p.house === houseNumber).map((p) => p.name);
+// Where this life area's archetypal planet (e.g. Jupiter for money) actually sits natally, so
+// the copy can state its real house instead of assuming it shares the life area's own house.
+function bodyHouseFor(chart: ChartData, bodyId: string): number {
+  if (bodyId === "rising") return 1;
+  if (bodyId === "midheaven") return 10;
+  return chart.planets.find((p) => p.id === bodyId)?.house ?? 1;
+}
+
+function houseTenantsOf(chart: ChartData, houseNumber: number): PlanetPosition[] {
+  return chart.planets.filter((p) => p.house === houseNumber);
+}
+
+// Turns raw house occupants into synthesised prose instead of a flat list of names. One
+// occupant gets named directly, two get named together, three or more is a genuine stellium
+// and gets called out as a concentration in its own right, with the loudest voice (the Sun,
+// when present) actually interpreted. That's what "prioritised, not dumped" looks like in code.
+function describeOccupants(tenants: PlanetPosition[], areaLabel: string, traitKey: keyof SignTraits): string {
+  if (tenants.length === 0) {
+    return `no other planet sits there natally, so that house runs almost entirely on its ruler's terms, undiluted by a competing voice`;
+  }
+  const names = tenants.map((p) => p.name.toLowerCase());
+  if (tenants.length === 1) {
+    return `your ${names[0]} also sits there, adding its own voice to ${areaLabel}, though it's an occupant, not the one steering`;
+  }
+  if (tenants.length === 2) {
+    return `your ${names[0]} and ${names[1]} both sit there too, two extra voices shaping ${areaLabel} alongside the ruler`;
+  }
+  const loud = tenants.find((p) => p.name === "Sun") || tenants[0];
+  const loudTraits = SIGN_TRAITS[loud.sign];
+  const loudClause = loudTraits ? cleanClause((loudTraits[traitKey] as string) || loudTraits.essence) : "";
+  return `that's a genuine stellium, ${tenants.length} placements stacked in one house: ${names.join(", ")}. The concentration is the headline on its own, this isn't a quiet corner of your chart, it's one of the most loaded rooms in it${
+    loudClause ? `, and with your ${loud.sign.toLowerCase()} ${loud.name.toLowerCase()} the loudest voice among them, that means ${loudClause}` : ""
+  }`;
 }
 
 export function composeLifeArea(
@@ -635,6 +778,15 @@ export function composeLifeArea(
   const secondaryHouseNumber = meta.houseNumbers[1] && meta.houseNumbers[1] !== primaryHouse ? meta.houseNumbers[1] : null;
   const secondaryHouseMeaningRaw = secondaryHouseNumber ? HOUSE_MEANINGS[secondaryHouseNumber - 1] : null;
   const secondaryTenants = secondaryHouseNumber ? houseTenantsOf(chart, secondaryHouseNumber) : [];
+  // The secondary house gets the exact same ruler resolution as the primary one, cusp sign,
+  // ruler, ruler's natal sign and house, not just a generic "here's what this house means" blurb.
+  // That's what makes it a real second half of the story instead of a footnote bolted on top.
+  const secondaryCuspSign = secondaryHouseNumber
+    ? chart.houses[secondaryHouseNumber - 1]?.sign || secondaryHouseMeaningRaw?.naturalSign || "Aries"
+    : undefined;
+  const secondaryRulerPlacement = secondaryHouseNumber && secondaryCuspSign
+    ? composeRulerPlacement(secondaryCuspSign, secondaryHouseNumber, chart)
+    : null;
 
   const seed = seedFrom(`${areaId}-${season.sign}-${sign}-${chart.birthData.name}`);
   const stretchMove = pick(content.stretchMoves, seed);
@@ -658,19 +810,6 @@ export function composeLifeArea(
   };
   const traitKey = areaFieldMap[areaId] || "essence";
   const traitLine = Array.isArray(traits[traitKey]) ? (traits[traitKey] as string[]).join(", ") : (traits[traitKey] as string);
-
-  const tenantsLine =
-    houseTenants.length > 0
-      ? ` You've also got ${houseTenants.map((p) => p.toLowerCase()).join(" and ")} sitting right there in that house, adding extra intensity to this area this szn.`
-      : ` No other planets sit in that house natally, which means ${sign.toLowerCase()} ${bodyLabel} is running this area largely on its own, undiluted by any other placement's competing agenda.`;
-
-  const secondaryLine = secondaryHouseNumber && secondaryHouseMeaningRaw
-    ? ` This area doesn't stop at one house either, your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title} feeds into it too, ${secondaryHouseMeaningRaw.rules}.${
-        secondaryTenants.length > 0
-          ? ` With ${secondaryTenants.map((p) => p.toLowerCase()).join(" and ")} placed there, that second angle is doing real work on this area as well, not just background noise.`
-          : ""
-      }`
-    : "";
 
   const planetName = chart.planets.find((p) => p.id === meta.bodyId)?.name;
   const natalAspectLines = natalAspectsFor(chart, planetName, 2);
@@ -710,12 +849,20 @@ export function composeLifeArea(
   const seasonOverview = SIGN_OVERVIEWS[season.sign];
   const rulerOverview = rulerPlacement ? SIGN_OVERVIEWS[rulerPlacement.rulerSign] : undefined;
 
+  // Every life area has a fixed archetypal planet (Jupiter for money, Venus for relationships,
+  // etc.) as well as a chart-specific house ruler, and those are frequently two different
+  // planets. Naming both without saying which one actually governs the house creates a real
+  // contradiction, the page ends up implying two different planets each "run" the same area.
+  // This states the hierarchy explicitly: the ruler runs the house, the archetypal planet is
+  // texture riding on top of it, only said when they actually differ.
+  const bodyHouse = bodyHouseFor(chart, meta.bodyId);
+  const bodyIsRuler = !!rulerPlacement && rulerPlacement.rulerId === meta.bodyId;
+  const archetypalAside = rulerPlacement && !bodyIsRuler
+    ? ` One honest distinction worth naming: your ${sign.toLowerCase()} ${bodyLabel}, sitting in your ${ordinalHouse(bodyHouse)} house, is the planet astrology traditionally hands ${meta.label} to, and it still colours how you handle it. But it doesn't rule this house, ${rName} does, so treat ${bodyLabel} as texture riding on the engine, not a second driver competing with it.`
+    : "";
+
   const signature = rulerPlacement
-    ? `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, that's where this szn's pressure on ${meta.label} is actually landing. Your ${ordinalHouse(primaryHouse)} house begins in ${cuspSign}, so ${rName} rules your ${meta.label} story, not whichever planet happens to feel relevant. ${rName} sits in ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${rulerPlacement.rulerHouse === primaryHouse ? ", right where it governs, no detour needed" : `, of ${HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1]?.title}`}, which means ${houseMeaning.rules} runs through ${rulerSignTraits?.essence || cuspTraits.essence}.${
-        houseTenants.length > 0
-          ? ` ${houseTenants.map((p) => p.toLowerCase()).join(" and ")} also ${houseTenants.length === 1 ? "sits" : "sit"} inside your ${ordinalHouse(primaryHouse)} house, adding real texture to ${meta.label}, but ${houseTenants.length === 1 ? "it's a planet occupying the house" : "they're planets occupying the house"}, not its ruler, that distinction matters.`
-          : ` No other planet occupies that house natally, so this area runs almost entirely on the ruler's terms, undiluted.`
-      } That's your actual ${meta.label} signature this szn: the specific mechanics of your own ${houseMeaning.title}, not a generic ${cuspSign.toLowerCase()} readout.`
+    ? `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, that's where this szn's pressure on ${meta.label} is actually landing. Your ${ordinalHouse(primaryHouse)} house begins in ${cuspSign}, so ${rName} rules your ${meta.label} story, not whichever planet happens to feel relevant. ${rName} sits in ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${rulerPlacement.rulerHouse === primaryHouse ? ", right where it governs, no detour needed" : `, of ${HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1]?.title}`}, which means ${houseMeaning.rules} runs through ${rulerSignTraits?.essence || cuspTraits.essence}. ${capitalize(describeOccupants(houseTenants, meta.label, traitKey))}.${archetypalAside} That's your actual ${meta.label} signature this szn: the specific mechanics of your own ${houseMeaning.title}, not a generic ${cuspSign.toLowerCase()} readout.`
     : `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}. ${cuspSign} on that house cusp means ${houseMeaning.rules} runs through ${cuspTraits.essence}.`;
 
   // The interpretive payoff, the 80%. Each paragraph answers one of the "why does this matter"
@@ -723,18 +870,18 @@ export function composeLifeArea(
   // action, rather than defining planets and signs in isolation. Falls back gracefully when the
   // ruler somehow can't be resolved (it always can for a real chart), so the page never empties.
   const sameElement = !!(seasonOverview && rulerOverview && seasonOverview.element === rulerOverview.element);
+  // Each paragraph below is only allowed to say a raw fact (ruler, sign, house) once, in the
+  // signature above. From here every paragraph has to add something the signature didn't
+  // already say, interpretation, not restatement, that's the difference between three shorter
+  // versions of the same information and one synthesis that keeps building.
   const deepSynthesis: string[] = rulerPlacement && rulerSignTraits && rulerHouseMeaning
     ? [
-        `Here's what makes your ${meta.label} specifically yours, and not the same as anyone else with ${cuspSign.toLowerCase()} on this house: ${rName} runs it, and your ${rName.replace(/^the /, "")} is in ${rulerPlacement.rulerSign.toLowerCase()}. That's the detail that changes everything. It means your instinct around ${meta.label} is ${cleanClause(rulerSignTraits.gift)}, and when you're stretched or scared, it tips into ${cleanClause(rulerSignTraits.shadow)}. The sign your ruler sits in is doing more to shape this area than the cusp sign everyone would read first.`,
-        `And ${rName} doesn't operate in a vacuum, it lives in your ${ordinalHouse(rulerPlacement.rulerHouse)} house of ${rulerHouseMeaning.title}. That's why your ${meta.label} is never really separate from ${rulerHouseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you: the engine behind this area is physically wired into that part of your life. Progress in ${meta.label} tends to come through ${rulerHouseMeaning.lifeAreas[0]}, and stalls there too. ${
-          houseTenants.length > 0
-            ? `Meanwhile ${houseTenants.map((p) => p.toLowerCase()).join(" and ")} ${houseTenants.length === 1 ? "sits" : "sit"} inside the house itself, adding pressure and colour, but ${houseTenants.length === 1 ? "it's an occupant, not the one steering" : "they're occupants, not the ones steering"}.`
-            : `With no planets sitting in the house itself, there's no competing voice, your ruler's placement is the whole story here.`
-        }`,
-        `${season.sign} season now changes the temperature on all of this. ${season.focus} The season's ${seasonTraits.essence} is pushing your ${meta.label} to move, and ${
+        `That ${rulerPlacement.rulerSign.toLowerCase()} placement is the detail that changes everything about your ${meta.label}, and not in the way anyone else with ${cuspSign.toLowerCase()} on this house would experience it: it means your instinct here is ${cleanClause(rulerSignTraits.gift)}, and when you're stretched or scared, it tips into ${cleanClause(rulerSignTraits.shadow)}. The sign your ruler sits in is doing more to shape ${meta.label} than the cusp sign everyone would read first.`,
+        `And that placement doesn't operate in a vacuum, it's physically wired into your ${ordinalHouse(rulerPlacement.rulerHouse)} house of ${rulerHouseMeaning.title}. That's why your ${meta.label} is never really separate from ${rulerHouseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you: progress in ${meta.label} tends to come through ${rulerHouseMeaning.lifeAreas[0]}, and stalls there too.`,
+        `Here's what ${season.sign} season specifically does to a ${rulerPlacement.rulerSign.toLowerCase()} ${rName.replace(/^the /, "")} living in your ${ordinalHouse(rulerPlacement.rulerHouse)} house, not a generic seasonal theme, this exact pattern: ${
           sameElement
-            ? `because that's the same elemental current your ruler already runs on, this szn feels like a tailwind, the pattern you're already built for gets amplified. The risk is coasting on what's easy instead of using the momentum.`
-            : `because that pulls against your ruler's more ${rulerSignTraits.essence.split(",")[0]} default, there's real friction this szn, the season wants one thing, your natal wiring wants another. That tension is the opportunity: it's exactly where growth lives, as long as you don't just retreat to the comfortable pattern.`
+            ? `it shares the same ${rulerOverview?.element.toLowerCase() || "elemental"} current your ruler already runs on, so the season doesn't introduce anything new, it turns the volume up on what you're already built for. ${season.focus} lands directly inside ${rulerHouseMeaning.lifeAreas[0]}, amplifying the ${cleanClause(rulerSignTraits.gift)} that already defines how you handle ${meta.label}. The risk isn't struggle, it's coasting on what's already easy instead of actually using the momentum.`
+            : `it pulls against your ruler's more ${rulerSignTraits.essence.split(",")[0]} default, so ${season.focus.toLowerCase()} doesn't land as gentle encouragement, it lands as real friction between what the season wants and what your ${rulerPlacement.rulerSign.toLowerCase()} ${rName.replace(/^the /, "")} was built for. That friction shows up specifically where ${rulerHouseMeaning.lifeAreas[0]} meets ${meta.label}: this season is asking your ${cuspSign.toLowerCase()}-cusp ${meta.label} instinct to move through a lens it doesn't naturally default to. That tension is the opportunity, as long as you don't just retreat to the comfortable pattern.`
         }`,
         `In real life over the next few weeks, expect ${meta.label} to keep surfacing through ${rulerHouseMeaning.lifeAreas[0]}, that's where the season will keep knocking. The move that works with your wiring instead of against it: lead with ${rulerSignTraits.gift.split(",")[0] || traitLine}, watch for the ${rulerSignTraits.shadow.split(".")[0].toLowerCase()} default, and let ${season.sign.toLowerCase()} szn's ${seasonTraits.gift} carry the part of this you've been avoiding. Small, specific, this week, not a someday overhaul.`,
       ]
@@ -742,6 +889,31 @@ export function composeLifeArea(
         `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, the part of your chart that runs ${meta.label}. ${houseMeaning.coach}`,
         `This szn's job for you: ${season.focus} Point that at ${houseMeaning.lifeAreas[0]} specifically, and use the protocol below rather than just reading about it.`,
       ];
+
+  // The paired house read as one axis, not a footnote. Paragraph one gives the secondary house
+  // its own full ruler chain, exactly like the primary house got above, plus its occupants,
+  // prioritised rather than dumped as a list. Paragraph two names the specific polarity between
+  // the two houses for this life area and puts a reflective prompt in front of the member, in
+  // her own chart's terms. Paragraph three ties the season to both sides at once, not just the
+  // primary house, since the season doesn't pick a side of the axis, it presses on the whole thing.
+  const axisContext = AXIS_CONTEXT[areaId];
+  const axisSynthesis: string[] = secondaryHouseNumber && secondaryHouseMeaningRaw && secondaryCuspSign
+    ? [
+        `Your ${meta.label} doesn't stop at your ${ordinalHouse(primaryHouse)} house though. Just as much of this story runs through your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title}, ${secondaryHouseMeaningRaw.rules}. It begins in ${secondaryCuspSign}${
+          secondaryRulerPlacement
+            ? `, ruled by ${rulerRef(secondaryRulerPlacement.rulerName)}, and ${rulerRef(secondaryRulerPlacement.rulerName)} sits in ${secondaryRulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(secondaryRulerPlacement.rulerHouse)} house${secondaryRulerPlacement.rulerHouse === secondaryHouseNumber ? ", right there governing its own house directly" : ""}.`
+            : "."
+        } ${capitalize(describeOccupants(secondaryTenants, meta.label, traitKey))}.`,
+        axisContext
+          ? `Read together, these two houses make up your whole ${axisContext.label}: ${axisContext.framing}. Your ${ordinalHouse(primaryHouse)} house runs through ${rName} in ${rulerPlacement?.rulerSign.toLowerCase()}${
+              secondaryRulerPlacement ? `, your ${ordinalHouse(secondaryHouseNumber)} through ${rulerRef(secondaryRulerPlacement.rulerName)} in ${secondaryRulerPlacement.rulerSign.toLowerCase()}` : ""
+            }, and neither side tells the whole story without the other. ${axisContext.prompts.join(" ")}`
+          : `Read together with your ${ordinalHouse(primaryHouse)} house, this is one continuous story about ${meta.label}, not two separate ones.`,
+        `${season.sign} season presses on both sides of this axis at once, it doesn't pick one. ${season.focus} doesn't just ask something of your ${ordinalHouse(primaryHouse)} house, it puts real weight on ${secondaryHouseMeaningRaw.lifeAreas[0]} too, since that's exactly where your ${
+          secondaryRulerPlacement ? `${rulerRef(secondaryRulerPlacement.rulerName)} in ${secondaryRulerPlacement.rulerSign.toLowerCase()}` : `${ordinalHouse(secondaryHouseNumber)} house`
+        } already lives. Expect this season to keep asking you to hold both ${houseMeaning.lifeAreas[0]} and ${secondaryHouseMeaningRaw.lifeAreas[0]} as one connected story, not a choice between them.`,
+      ]
+    : [];
 
   const quickContext = {
     house: `your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}`,
@@ -776,13 +948,23 @@ export function composeLifeArea(
     secondaryHouseMeaning: secondaryHouseNumber && secondaryHouseMeaningRaw
       ? { title: secondaryHouseMeaningRaw.title, text: secondaryHouseMeaningRaw.deepDive, naturalSign: secondaryHouseMeaningRaw.naturalSign }
       : null,
-    inYourChart: `Your ${sign.toLowerCase()} ${bodyLabel} runs this area of your life: ${traitLine}. And it lives in your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}.${tenantsLine}${secondaryLine}${aspectSummaryLine}`,
+    secondaryCuspSign: secondaryCuspSign ?? null,
+    secondaryRulerPlacement,
+    axisSynthesis,
+    // A short, accurate capsule, used standalone (e.g. the dashboard goal card) where this is
+    // the only fragment of the reading shown, so it states the ruler correctly rather than
+    // repeating the fuller signature/axis synthesis shown above it on this page.
+    inYourChart: rulerPlacement
+      ? `${rName} rules your ${meta.label} story from ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${bodyIsRuler ? "" : `, with your ${sign.toLowerCase()} ${bodyLabel} adding its own texture rather than steering`}. It lives through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}, where ${describeOccupants(houseTenants, meta.label, traitKey)}.${
+          secondaryHouseNumber && secondaryHouseMeaningRaw ? ` Your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title} is the other half of this story, not a footnote.` : ""
+        }${aspectSummaryLine}`
+      : `Your ${sign.toLowerCase()} ${bodyLabel} lives in your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}.${aspectSummaryLine}`,
     natalAspectLines,
     bettysTake: content.bettysTake,
     blindSpot: BLIND_SPOT_TELLS[areaId] || "You're closer to seeing this pattern than you think, the fact that this section made you pause is the first clue.",
     rootPattern: `${content.rootFrame(blockText)}${
       secondaryHouseNumber && secondaryTenants.length > 0
-        ? ` It compounds through your ${ordinalHouse(secondaryHouseNumber)} house too, where ${secondaryTenants.map((p) => p.toLowerCase()).join(" and ")} ${secondaryTenants.length > 1 ? "keep" : "keeps"} giving the same pattern a second stage to play out on, so this isn't a one-off trigger, it's a loop with two separate rooms in your chart to run through.`
+        ? ` It compounds through your ${ordinalHouse(secondaryHouseNumber)} house too, where ${secondaryTenants.map((p) => p.name.toLowerCase()).join(" and ")} ${secondaryTenants.length > 1 ? "keep" : "keeps"} giving the same pattern a second stage to play out on, so this isn't a one-off trigger, it's a loop with two separate rooms in your chart to run through.`
         : ""
     }`,
     shiftBefore: content.shiftBefore,
