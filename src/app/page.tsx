@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
+import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -28,6 +29,7 @@ export default function Home() {
   const router = useRouter();
   const { member, ready } = useMember();
   const season = useSeason();
+  const enrolmentOpen = useEnrolmentOpen();
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
 
@@ -60,7 +62,7 @@ export default function Home() {
           "become your future self",
           `it's ${season.sign.toLowerCase()} szn`,
           "your era starts now",
-          "doors open soon",
+          enrolmentOpen ? "enrolment is open" : "doors open soon",
         ]}
       />
 
@@ -70,7 +72,11 @@ export default function Home() {
         style={{ background: "var(--dark)", borderBottom: "var(--border)" }}
       >
         <div className="max-w-2xl mx-auto">
-          <div className="tag mb-4">the membership · {season.sign.toLowerCase()} szn edition</div>
+          <div className="tag mb-4">
+            {enrolmentOpen
+              ? `enrolment open now · ${season.sign.toLowerCase()} szn edition`
+              : `the membership · ${season.sign.toLowerCase()} szn edition`}
+          </div>
           <h1
             style={{
               fontFamily: poppins,
@@ -89,9 +95,21 @@ export default function Home() {
             MY SZN is the astrology-led membership where your birth chart powers everything: deep personalised chart readings, live workshops, shadow work, style codes, goals and a community of women becoming her. Every szn, the whole portal shifts with the sky.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <a href="#waitlist" className="btn-pink">join the waitlist</a>
+            {/* While the doors are open the primary CTA goes straight into the payment-first
+                flow (pricing, then Stripe Checkout). Once the window closes it reverts to
+                collecting leads, no redesign needed. See src/lib/enrolment.ts. */}
+            {enrolmentOpen ? (
+              <Link href="/membership" className="btn-pink">join my szn</Link>
+            ) : (
+              <a href="#waitlist" className="btn-pink">join the waitlist</a>
+            )}
             <Link href="/login" className="btn-outline btn-outline--white">member login</Link>
           </div>
+          {enrolmentOpen && (
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 16 }}>
+              Doors close in 72 hours. Founding member pricing, limited spots.
+            </p>
+          )}
         </div>
       </section>
 
@@ -156,7 +174,7 @@ export default function Home() {
       {/* Waitlist */}
       <section id="waitlist" className="px-5 md:px-8 py-20 text-center" style={{ background: "var(--dark)" }}>
         <div className="max-w-xl mx-auto">
-          <div className="tag mb-4">doors open intermittently</div>
+          <div className="tag mb-4">{enrolmentOpen ? "enrolment open · 72 hours only" : "doors open intermittently"}</div>
           <h2
             style={{
               fontFamily: poppins,
@@ -172,12 +190,18 @@ export default function Home() {
             <span className="pk">it&apos;s waiting for you.</span>
           </h2>
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: 20 }}>
-            Join the waitlist and you&apos;ll be first through the doors when they open.
+            {enrolmentOpen
+              ? "The doors are open right now. Pick your membership and your personalised portal is built the moment you're in."
+              : "Join the waitlist and you'll be first through the doors when they open."}
           </p>
           <p style={{ fontSize: 13, color: "var(--lav)", lineHeight: 1.7, marginBottom: 30, fontWeight: 600 }}>
             When you join, you sign up with your birth date, time and place. That builds your natal chart and personalises everything inside to you.
           </p>
-          {!joined ? (
+          {enrolmentOpen ? (
+            <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
+              join my szn
+            </Link>
+          ) : !joined ? (
             <form onSubmit={handleWaitlist} className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto" style={{ border: "1.5px solid #fff" }}>
               <input
                 type="email"

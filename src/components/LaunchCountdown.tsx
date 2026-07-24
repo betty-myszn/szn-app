@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ENROLMENT_OPENS } from "@/lib/enrolment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-const LAUNCH = new Date("2026-07-23T19:00:00-07:00"); // 7pm LA time
+// Shared with the homepage CTAs so the countdown and the buttons can never disagree about when
+// the doors open, see src/lib/enrolment.ts.
+const LAUNCH = ENROLMENT_OPENS;
 
 function getTimeLeft() {
   const now = new Date();
