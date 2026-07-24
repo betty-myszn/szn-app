@@ -63,6 +63,9 @@ export default function OnboardingPage() {
 
   const handleChartStep = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Guard against a double-submit racing two save+redirect flows (the button is also disabled
+    // while loading, this is the belt to that braces).
+    if (loading) return;
     setError(null);
     if (!location) {
       setError("Pick your birth place from the suggestions so we can find your exact sky.");
@@ -90,10 +93,17 @@ export default function OnboardingPage() {
       }
       const chartData = await res.json();
       const placements = placementsFromChart(chartData);
+      // Local save first so the browser has it instantly (offline-friendly, no flicker).
       saveBirthData(birthData);
       savePlacements(placements);
-      syncBirthDataToSupabase(birthData);
-      syncChartToSupabase(chartData, placements);
+      // Confirmed remote persistence BEFORE going anywhere: a member must never leave onboarding
+      // believing they're saved when they aren't. Both writes are upserts keyed on user_id, so a
+      // retry after a failure updates the one row rather than creating duplicates.
+      const birthSaved = await syncBirthDataToSupabase(birthData);
+      const chartSaved = await syncChartToSupabase(chartData, placements);
+      if (!birthSaved || !chartSaved) {
+        throw new Error("We calculated your chart but couldn't save it to your account. Check your connection and press save again, nothing was lost.");
+      }
 
       if (isEditing) {
         // Correcting an existing chart, no need to re-ask for a goal, send them straight back to
@@ -126,12 +136,21 @@ export default function OnboardingPage() {
   const handleGoalStep = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
+    setError(null);
     setLoading(true);
     addGoal(goal, goalCategory);
-    // Must finish before navigating: the route gate reads onboarded on the way into /dashboard,
-    // so a fire-and-forget write here would race and bounce her straight back to onboarding.
-    await markOnboarded();
-    router.push("/dashboard");
+    // Must finish AND succeed before navigating: the route gate reads onboarded on the way into
+    // /dashboard, so a failed or unawaited write would bounce her straight back to onboarding. If
+    // it genuinely fails, surface it here instead (birth data and chart are already saved from the
+    // previous step, so nothing is lost, she just retries the unlock). A full-page navigation
+    // re-runs the gate cleanly against the committed row.
+    const onboarded = await markOnboarded();
+    if (!onboarded) {
+      setError("We saved your details but couldn't unlock your portal. Check your connection and press continue again.");
+      setLoading(false);
+      return;
+    }
+    window.location.href = "/dashboard";
   };
 
   if (!checkedExisting) return null;
@@ -342,8 +361,13 @@ export default function OnboardingPage() {
                       ))}
                     </div>
                   </div>
-                  <button type="submit" className="btn-pink w-full" style={{ cursor: "pointer" }}>
-                    enter my portal
+                  {error && (
+                    <div style={{ background: "var(--pink-light)", color: "#993556", padding: "12px 16px", fontSize: 13, border: "1.5px solid var(--pink)" }}>
+                      {error}
+                    </div>
+                  )}
+                  <button type="submit" disabled={loading} className="btn-pink w-full disabled:opacity-50" style={{ cursor: "pointer" }}>
+                    {loading ? "unlocking your portal..." : "enter my portal"}
                   </button>
                   <button
                     type="button"

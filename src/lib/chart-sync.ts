@@ -32,16 +32,19 @@ function mapRowToBirthData(row: {
   };
 }
 
-// Fire-and-forget: called wherever birth data is already saved locally (results, onboarding),
-// so it costs nothing when nobody's logged in yet (getUser resolves null and this no-ops).
-export async function syncBirthDataToSupabase(data: BirthData): Promise<void> {
+// Returns whether the birth data is now definitely persisted for this member. Callers that need
+// confirmed persistence (onboarding) await and check this before navigating; callers that don't
+// (results, settings) can ignore it and it behaves like the old fire-and-forget. No logged-in
+// user is a no-op that reports false (nothing was saved), never an error. The upsert is keyed on
+// user_id (the table's primary key), so retrying only ever updates the one row, never duplicates.
+export async function syncBirthDataToSupabase(data: BirthData): Promise<boolean> {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) return false;
 
-  await supabase.from("birth_data").upsert({
+  const { error } = await supabase.from("birth_data").upsert({
     user_id: user.id,
     name: data.name,
     date_of_birth: data.dateOfBirth,
@@ -55,9 +58,15 @@ export async function syncBirthDataToSupabase(data: BirthData): Promise<void> {
     timezone: data.location.timezone,
     updated_at: new Date().toISOString(),
   });
+  if (error) {
+    console.error("birth_data upsert failed", error);
+    return false;
+  }
   // profiles.name starts empty (the signup trigger only ever sets email), birth data is the
-  // first place a real display name shows up, so keep it in sync here too.
+  // first place a real display name shows up, so keep it in sync here too. Non-critical: a
+  // failure here shouldn't fail the whole save, the birth data (what actually matters) is stored.
   await supabase.from("profiles").update({ name: data.name }).eq("id", user.id);
+  return true;
 }
 
 // Marks the member onboarded, the actual "portal unlocked" moment. Returns whether the flag is
@@ -81,19 +90,27 @@ export async function markOnboarded(): Promise<boolean> {
   return data?.onboarded === true;
 }
 
-export async function syncChartToSupabase(chart: ChartData, placements: SavedPlacements): Promise<void> {
+// Returns whether the computed chart is now definitely persisted. Same contract as
+// syncBirthDataToSupabase: awaited/checked by onboarding, ignored by fire-and-forget callers,
+// no-op-false when logged out, retry-safe via the user_id primary key (no duplicate rows).
+export async function syncChartToSupabase(chart: ChartData, placements: SavedPlacements): Promise<boolean> {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) return false;
 
-  await supabase.from("chart_cache").upsert({
+  const { error } = await supabase.from("chart_cache").upsert({
     user_id: user.id,
     chart_data: chart,
     placements,
     calculated_at: new Date().toISOString(),
   });
+  if (error) {
+    console.error("chart_cache upsert failed", error);
+    return false;
+  }
+  return true;
 }
 
 // Pulls birth data + the cached chart down from Supabase into this browser's localStorage and
