@@ -51,7 +51,7 @@ export default function PlacementSectionPage() {
             {!chart ? "add your birth details first." : "we couldn't find that page."}
           </h1>
           <Link href={!chart ? "/onboarding" : "/my-chart"} className="btn-pink">
-            {!chart ? "add my birth details" : "back to my chart"}
+            {!chart ? "add your chart" : "back to my chart"}
           </Link>
         </div>
       </section>

@@ -1,10 +1,41 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { hasAccessFromRow } from "@/lib/membership-gate";
 
 // This project's Next.js version renamed middleware.ts to proxy.ts (the export is named
-// `proxy`, not `middleware`), see node_modules/next/dist/docs for details. Functionally this
-// plays the same role as the standard Supabase middleware: refresh the auth session cookie on
-// every request so server components always see a valid, up-to-date session.
+// `proxy`, not `middleware`), see node_modules/next/dist/docs for details. It does two jobs:
+// refresh the Supabase auth session cookie on every request, and enforce membership access on
+// the member-only routes server-side, so a URL typed straight into the bar is gated the same as
+// a hidden button. All access logic lives in one place (membership-gate.ts) shared with the auth
+// callback, so the two can never disagree about who gets in.
+
+// Full portal: requires a logged-in member with active access who has finished onboarding.
+const MEMBER_AREA = [
+  "/dashboard",
+  "/my-chart",
+  "/your-season",
+  "/community",
+  "/goals",
+  "/journal",
+  "/challenges",
+  "/affirmations",
+  "/style",
+];
+
+// Requires access already granted but onboarding NOT yet finished, this is the one place she's
+// sent before the portal opens. Its own gate below stops it being reached without access, or
+// re-run once already complete.
+const ONBOARDING = "/onboarding";
+
+// A session is enough (no active-membership requirement): billing and account management must
+// stay reachable even for a lapsed member trying to fix or renew. Admin authorization is enforced
+// inside that page itself; here we only require being logged in.
+const LOGIN_ONLY = ["/settings", "/admin"];
+
+function pathMatches(pathname: string, prefixes: string[]): boolean {
+  return prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
+}
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -26,9 +57,59 @@ export async function proxy(request: NextRequest) {
   );
 
   // Touches the session so Supabase can refresh an expiring token before it reaches a page.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
+  const { pathname } = request.nextUrl;
+  const inMemberArea = pathMatches(pathname, MEMBER_AREA);
+  const inOnboarding = pathname === ONBOARDING || pathname.startsWith(ONBOARDING + "/");
+  const inLoginOnly = pathMatches(pathname, LOGIN_ONLY);
+
+  // Public route: nothing to gate, just carry the refreshed session forward.
+  if (!inMemberArea && !inOnboarding && !inLoginOnly) return response;
+
+  // Any gated route requires a session first.
+  if (!user) {
+    return redirectPreservingSession(request, response, `/login?redirect=${encodeURIComponent(pathname)}`);
+  }
+
+  // Logged in is all these need.
+  if (inLoginOnly) return response;
+
+  // Member area and onboarding both hinge on the real membership row, read under her own session
+  // so RLS only ever exposes her own.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, onboarded")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const access = hasAccessFromRow(profile);
+
+  if (inOnboarding) {
+    if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+    if (profile?.onboarded) return redirectPreservingSession(request, response, "/dashboard");
+    return response;
+  }
+
+  // Member area.
+  if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+  if (!profile?.onboarded) return redirectPreservingSession(request, response, "/onboarding");
   return response;
+}
+
+// A bare NextResponse.redirect would drop the Set-Cookie headers Supabase may have just written
+// to rotate the session, logging her out on the very hop we're redirecting through. Copy them
+// onto the redirect so the refreshed session survives.
+function redirectPreservingSession(request: NextRequest, sessionResponse: NextResponse, to: string): NextResponse {
+  const url = request.nextUrl.clone();
+  const [pathname, search = ""] = to.split("?");
+  url.pathname = pathname;
+  url.search = search ? `?${search}` : "";
+  const redirect = NextResponse.redirect(url);
+  sessionResponse.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+  return redirect;
 }
 
 export const config = {

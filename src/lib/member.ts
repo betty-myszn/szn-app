@@ -17,6 +17,8 @@ export interface Member {
   subscriptionStatus: string | null;
   subscriptionCurrentPeriodEnd: string | null;
   subscriptionCancelAtPeriodEnd: boolean;
+  /** True once she's finished onboarding, gates entry to the real portal */
+  onboarded: boolean;
 }
 
 // Standing in for a real chart until onboarding has saved one, keeps every page that reads
@@ -44,7 +46,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end"
     )
     .eq("id", user.id)
     .single();
@@ -64,6 +66,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionStatus: profile?.subscription_status ?? null,
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
+    onboarded: !!profile?.onboarded,
   };
 }
 

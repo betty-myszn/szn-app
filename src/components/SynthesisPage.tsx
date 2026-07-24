@@ -43,7 +43,7 @@ export default function SynthesisPage({ slug }: { slug: string }) {
           <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>
             add your birth details to unlock this reading.
           </h1>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );

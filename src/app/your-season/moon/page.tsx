@@ -65,7 +65,7 @@ function MoonPageContent() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             Cosmic calendar readings are personalised to your exact chart. Add your birth details and every date opens up for you.
           </p>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );

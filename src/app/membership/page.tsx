@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 
@@ -137,9 +138,35 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
 }
 
 
+// Shown when the route gate sent her here, so the pricing page explains why she landed on it
+// instead of just silently appearing. Reads ?reason= set by the proxy / auth callback.
+const REASON_COPY: Record<string, string> = {
+  none: "You'll need an active membership to enter your portal. Choose your plan below to unlock it.",
+  expired: "Your membership has ended. Renew below and you're straight back into your portal.",
+  canceled: "Your membership was cancelled. Rejoin whenever you're ready, your chart and history are still here.",
+  billing: "There's a problem with your last payment. Rejoin or update your card below to keep your access.",
+};
+
+function MembershipReasonBanner() {
+  const reason = useSearchParams().get("reason");
+  if (!reason) return null;
+  const message = REASON_COPY[reason] ?? REASON_COPY.none;
+  return (
+    <div
+      className="px-6 py-3 text-center"
+      style={{ background: "var(--pink-light)", borderBottom: "1.5px solid var(--pink)", color: "#993556", fontSize: 13, fontWeight: 600 }}
+    >
+      {message}
+    </div>
+  );
+}
+
 export default function MembershipPage() {
   return (
     <div>
+      <Suspense fallback={null}>
+        <MembershipReasonBanner />
+      </Suspense>
       {/* ═══════════════ HERO ═══════════════ */}
       <section
         className="px-8 py-20 md:py-28 text-center"

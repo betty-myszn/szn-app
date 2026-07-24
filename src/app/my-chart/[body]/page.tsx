@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
-import { composePlacement, getBodyMeaning, ordinalHouse, HOUSE_MEANINGS, SIGN_OVERVIEWS } from "@/lib/interpretations";
+import { composePlacement, getBodyMeaning, ordinalHouse, HOUSE_MEANINGS, SIGN_OVERVIEWS, degreeMeaning } from "@/lib/interpretations";
 import { PLANET_SYMBOLS } from "@/types/chart";
 import { getSymbol } from "@/lib/style-data";
 
@@ -59,7 +59,7 @@ export default function PlacementPage() {
             {!chart ? "add your birth details first." : "we couldn't find that placement."}
           </h1>
           <Link href={!chart ? "/onboarding" : "/my-chart"} className="btn-pink">
-            {!chart ? "add my birth details" : "back to my chart"}
+            {!chart ? "add your chart" : "back to my chart"}
           </Link>
         </div>
       </section>
@@ -71,14 +71,17 @@ export default function PlacementPage() {
   let house: number | undefined;
   let retrograde = false;
   let degreeLabel = "";
+  let degreeNum = 0;
   if (bodyId === "rising") {
     sign = chart.houses[0]?.sign || "";
     house = 1;
     degreeLabel = chart.houses[0]?.formattedDegree || "";
+    degreeNum = chart.houses[0]?.degree ?? 0;
   } else if (bodyId === "midheaven") {
     sign = chart.houses[9]?.sign || "";
     house = 10;
     degreeLabel = chart.houses[9]?.formattedDegree || "";
+    degreeNum = chart.houses[9]?.degree ?? 0;
   } else {
     const planet = chart.planets.find((p) => p.id === bodyId);
     if (planet) {
@@ -86,6 +89,7 @@ export default function PlacementPage() {
       house = planet.house;
       retrograde = planet.retrograde;
       degreeLabel = planet.formattedDegree;
+      degreeNum = planet.degree;
     }
   }
 
@@ -175,6 +179,16 @@ export default function PlacementPage() {
           </div>
         </section>
       )}
+
+      {/* What the exact degree means */}
+      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "#fafafa" }}>
+          <div className="tag mb-3">what {degreeLabel} actually means</div>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>
+            Your {body.name.toLowerCase()} sits at {degreeMeaning(degreeNum)}
+          </p>
+        </div>
+      </section>
 
       {/* What this house actually governs */}
       {houseMeaning && house && (

@@ -265,17 +265,57 @@ export async function GET() {
   events.sort((a, b) => a.date.localeCompare(b.date));
   const majorTransits = scanMajorTransits(startJd);
 
+  // Shadow period: the forward scan above only ever catches a Mercury retrograde_end that
+  // hasn't happened yet, so "just came out of retrograde" is invisible to it. Mercury is still
+  // retracing the same degrees for ~2 weeks either side of a station, worth flagging even once
+  // it's technically direct again. Only Mercury's stations need looking backward for, so this
+  // stays a small dedicated scan rather than re-running the whole 60-day event loop in reverse.
+  const SHADOW_WINDOW_DAYS = 14;
+  let mercuryShadow: { phase: "pre" | "post"; date: string; sign: string; degree: number } | null = null;
+  let prevMercurySpeedBack = calcAt(startJd, swisseph.SE_MERCURY).speed;
+  for (let d = -1; d >= -SHADOW_WINDOW_DAYS; d--) {
+    const jd = startJd + d;
+    const mercury = calcAt(jd, swisseph.SE_MERCURY);
+    // Walking backward in time, speed going from direct to retrograde means the station in
+    // between (at jd+1) was actually a retrograde_end when read forward in time.
+    if (prevMercurySpeedBack >= 0 && mercury.speed < 0) {
+      const { sign, degree } = signAt(calcAt(jd + 1, swisseph.SE_MERCURY).longitude);
+      mercuryShadow = { phase: "post", date: jdToIso(jd + 1), sign, degree };
+      break;
+    }
+    prevMercurySpeedBack = mercury.speed;
+  }
+  if (!mercuryShadow) {
+    const upcomingStart = events.find((e) => e.type === "retrograde_start" && e.planet === "Mercury");
+    if (upcomingStart) {
+      const daysAway = Math.round(
+        DateTime.fromISO(upcomingStart.date).diff(DateTime.utc().startOf("day"), "days").days
+      );
+      if (daysAway <= SHADOW_WINDOW_DAYS) {
+        mercuryShadow = { phase: "pre", date: upcomingStart.date, sign: upcomingStart.sign, degree: upcomingStart.degree };
+      }
+    }
+  }
+
   // Note whether Mercury is currently retrograde, and where the nodal axis sits today
   const mercuryNow = calcAt(startJd, swisseph.SE_MERCURY);
   const nodeNow = signAt(((calcAt(startJd, swisseph.SE_MEAN_NODE).longitude % 360) + 360) % 360);
+
+  // Eclipse season = the Sun is within the solar ecliptic limit (~18°) of a lunar node right now,
+  // the ~34-day window in which eclipses are actually possible. The old check flagged it whenever
+  // any eclipse fell in the next 60 days, so it read "eclipse season right now" up to two months
+  // early. 18° of solar motion ≈ 18 days either side of the node, matching the real season length.
+  const sunNow = calcAt(startJd, swisseph.SE_SUN);
+  const eclipseSeason = distanceToNode(startJd, sunNow.longitude) <= 18;
 
   return NextResponse.json(
     {
       events,
       majorTransits,
       mercuryRetrogradeNow: mercuryNow.speed < 0,
+      mercuryShadow,
       northNodeNow: nodeNow.sign,
-      eclipseSeason: events.some((e) => e.type === "solar_eclipse" || e.type === "lunar_eclipse"),
+      eclipseSeason,
     },
     { headers: { "Cache-Control": "public, max-age=21600" } }
   );

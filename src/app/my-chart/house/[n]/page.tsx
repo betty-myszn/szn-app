@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
-import { HOUSE_MEANINGS, SIGN_TRAITS, getBodyMeaning, ordinalHouse } from "@/lib/interpretations";
+import { HOUSE_MEANINGS, SIGN_TRAITS, getBodyMeaning, ordinalHouse, degreeMeaning } from "@/lib/interpretations";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { PLANET_SYMBOLS } from "@/types/chart";
 import { getSymbol } from "@/lib/style-data";
@@ -50,7 +50,7 @@ export default function HousePage() {
             {!chart ? "add your birth details first." : "that house doesn't exist, there are only 12."}
           </h1>
           <Link href={!chart ? "/onboarding" : "/my-chart"} className="btn-pink">
-            {!chart ? "add my birth details" : "back to my chart"}
+            {!chart ? "add your chart" : "back to my chart"}
           </Link>
         </div>
       </section>
@@ -137,7 +137,7 @@ export default function HousePage() {
               ))}
             </div>
             <p style={{ fontSize: 13, color: "#3C2A70", lineHeight: 1.7 }}>
-              Cusp at {cusp.formattedDegree} {cusp.sign.toLowerCase()}.
+              Cusp at {cusp.formattedDegree} {cusp.sign.toLowerCase()}, {degreeMeaning(cusp.degree)}
             </p>
           </div>
         </div>
@@ -149,6 +149,29 @@ export default function HousePage() {
           <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
             <div className="tag mb-3">textbook house vs your house</div>
             <p style={{ fontSize: 14, lineHeight: 1.85, color: "#854F0B" }}>{deepDive.rulerLine}</p>
+          </div>
+        </section>
+      )}
+
+      {/* The ruler of this house, and where it actually sits */}
+      {deepDive?.rulerPlacement && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">the ruler of this house</div>
+            <h2 style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.4px", marginBottom: 12 }}>
+              {cusp.sign.toLowerCase()} is ruled by{" "}
+              <Link href={`/my-chart/${deepDive.rulerPlacement.rulerId}`} className="pk" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+                {deepDive.rulerPlacement.rulerName.toLowerCase()}
+              </Link>
+              , in {deepDive.rulerPlacement.rulerSign.toLowerCase()}
+              {deepDive.rulerPlacement.rulerRetrograde && <span style={{ color: "var(--pink)" }}> (Rx)</span>}, in your {ordinalHouse(deepDive.rulerPlacement.rulerHouse)} house.
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{deepDive.rulerPlacement.synthesis}</p>
+            {planetsInside.length > 0 && (
+              <p style={{ fontSize: 12, lineHeight: 1.7, color: "var(--grey-light)", marginTop: 14, fontStyle: "italic" }}>
+                Worth keeping separate: {planetsInside.map((p) => p.name).join(", ")} {planetsInside.length === 1 ? "sits" : "sit"} inside this house too, that&apos;s a different layer to the ruler above, see &ldquo;planets living here&rdquo; below for what {planetsInside.length === 1 ? "it" : "they"} add.
+              </p>
+            )}
           </div>
         </section>
       )}

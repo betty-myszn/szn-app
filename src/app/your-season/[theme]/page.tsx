@@ -50,7 +50,7 @@ export default function ThemePage() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             Theme guidance is personalised to your exact chart. Add your birth details and every szn theme opens up for you.
           </p>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );

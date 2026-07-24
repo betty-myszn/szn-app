@@ -22,10 +22,18 @@ interface MajorTransit {
   aspectType?: "conjunction" | "sextile" | "square" | "trine" | "opposition";
 }
 
+interface MercuryShadow {
+  phase: "pre" | "post";
+  date: string;
+  sign: string;
+  degree: number;
+}
+
 interface CalendarResponse {
   events: CalendarEvent[];
   majorTransits: MajorTransit[];
   mercuryRetrogradeNow: boolean;
+  mercuryShadow: MercuryShadow | null;
   northNodeNow: string;
   eclipseSeason: boolean;
 }
@@ -67,7 +75,19 @@ export default function SkyAlert() {
       return until >= 0 && until <= MAJOR_WINDOW_DAYS;
     })
     .slice(0, 2);
-  if (bigEvents.length === 0 && !data.mercuryRetrogradeNow && nearMajorTransits.length === 0) return null;
+  const showShadow = !data.mercuryRetrogradeNow && !!data.mercuryShadow;
+  if (bigEvents.length === 0 && !data.mercuryRetrogradeNow && !showShadow && nearMajorTransits.length === 0) return null;
+
+  // Merge eclipses/nodal shifts and bigger-picture transits into one list sorted by date, so the
+  // soonest event always leads, a retrograde 4 days out never sits below an eclipse a month away.
+  // Each card keeps its own styling via the `kind` discriminator when rendered below.
+  type SkyItem =
+    | { kind: "big"; date: string; event: CalendarEvent }
+    | { kind: "transit"; date: string; transit: MajorTransit };
+  const items: SkyItem[] = [
+    ...bigEvents.map((e): SkyItem => ({ kind: "big", date: e.date, event: e })),
+    ...nearMajorTransits.map((t): SkyItem => ({ kind: "transit", date: t.date, transit: t })),
+  ].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
@@ -79,7 +99,11 @@ export default function SkyAlert() {
           </p>
         )}
         <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
-          {bigEvents.map((event, i) => {
+          {items.map((item, i) => {
+            const showBorder = i < items.length - 1 || data.mercuryRetrogradeNow;
+
+            if (item.kind === "big") {
+            const event = item.event;
             const until = daysUntil(event.date);
             const isNow = until <= 0;
             const timing = isNow ? "happening now" : until === 1 ? "tomorrow" : `in ${until} days`;
@@ -106,10 +130,7 @@ export default function SkyAlert() {
                 href={href}
                 className="no-underline p-6 flex items-start gap-4 hover:opacity-90 transition-opacity"
                 style={{
-                  borderBottom:
-                    i < bigEvents.length - 1 || nearMajorTransits.length > 0 || data.mercuryRetrogradeNow
-                      ? "var(--border)"
-                      : undefined,
+                  borderBottom: showBorder ? "var(--border)" : undefined,
                   background: "var(--dark)",
                   color: "#fff",
                 }}
@@ -136,8 +157,9 @@ export default function SkyAlert() {
                 </div>
               </Link>
             );
-          })}
-          {nearMajorTransits.map((t, i) => {
+            }
+
+            const t = item.transit;
             const until = daysUntil(t.date);
             const isNow = until <= 0;
             const timing = isNow ? "happening now" : until === 1 ? "tomorrow" : `in ${until} days`;
@@ -171,7 +193,7 @@ export default function SkyAlert() {
                 href={href}
                 className="no-underline p-6 flex items-start gap-4 hover:opacity-90 transition-opacity"
                 style={{
-                  borderBottom: i < nearMajorTransits.length - 1 || data.mercuryRetrogradeNow ? "var(--border)" : undefined,
+                  borderBottom: showBorder ? "var(--border)" : undefined,
                   background: "var(--dark)",
                   color: "#fff",
                 }}
@@ -209,6 +231,18 @@ export default function SkyAlert() {
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "#854F0B" }}>
                 Mercury is retrograde. Reread before you send, review before you sign, this window is for revisiting, not launching.
+              </p>
+            </div>
+          )}
+          {showShadow && data.mercuryShadow && (
+            <div className="p-6" style={{ background: "var(--gold)" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#854F0B", marginBottom: 4 }}>
+                right now · mercury shadow
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "#854F0B" }}>
+                {data.mercuryShadow.phase === "post"
+                  ? `Mercury stationed direct on ${formatDate(data.mercuryShadow.date)}, but it's still in its post-retrograde shadow, retracing the same degrees for about two weeks. Treat this as clearing the backlog, not a fresh green light yet.`
+                  : `Mercury enters its pre-retrograde shadow around ${formatDate(data.mercuryShadow.date)}, the run-up where things start feeling slightly off before the retrograde officially begins. Worth finishing up loose ends now.`}
               </p>
             </div>
           )}

@@ -1,5 +1,5 @@
 import type { ChartData } from "@/types/chart";
-import { SIGN_TRAITS, HOUSE_MEANINGS, ordinalHouse, houseForSign } from "@/lib/interpretations";
+import { SIGN_TRAITS, HOUSE_MEANINGS, ordinalHouse, houseForSign, degreeMeaning } from "@/lib/interpretations";
 
 export type LunationType =
   | "new_moon"
@@ -118,7 +118,7 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
   const date = new Date(`${event.date}T12:00:00Z`);
   const dateLabel = date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-  const inYourChart = `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. ${houseMeaning.coach}`;
+  const inYourChart = `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. It's landing at ${degreeMeaning(event.degree)} ${houseMeaning.coach}`;
 
   const bettysTake = `${meta.bettysTakeGeneric} With this one landing in your ${event.sign.toLowerCase()} ${ordinalHouse(house)} house, that plays out through ${houseArea}: expect this to move through ${traits.essence}, not through anyone else's version of it.`;
 

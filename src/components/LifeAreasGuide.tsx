@@ -33,7 +33,10 @@ export default function LifeAreasGuide({
           Tap any area for its full landing page: what&apos;s actually being activated in your chart, the live transit hitting it right now, Betty&apos;s take, your protocol, affirmations and activation ritual.
         </p>
         {!chart ? (
-          <p style={{ fontSize: 13, color: "var(--grey-light)" }}>Add your birth details to unlock this for every area of your life.</p>
+          <div>
+            <p style={{ fontSize: 13, color: "var(--grey-light)", marginBottom: 16 }}>Add your birth details to unlock this for every area of your life.</p>
+            <Link href="/onboarding" className="btn-pink">add your chart</Link>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
             {LIFE_AREAS.map((area, i) => {

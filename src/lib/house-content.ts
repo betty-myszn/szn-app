@@ -1,5 +1,5 @@
 import type { ChartData } from "@/types/chart";
-import { SIGN_TRAITS, HOUSE_MEANINGS, findRootBlock, ordinalHouse } from "@/lib/interpretations";
+import { SIGN_TRAITS, HOUSE_MEANINGS, findRootBlock, ordinalHouse, composeRulerPlacement, type RulerPlacement } from "@/lib/interpretations";
 
 interface HouseContent {
   bettysTake: string;
@@ -386,6 +386,7 @@ export interface HouseDeepDive {
   cuspSign: string;
   naturalSign: string;
   rulerLine: string; // compares the house's natural sign to the actual cusp sign
+  rulerPlacement: RulerPlacement | null; // the planet that actually rules the cusp sign, and where it natally sits
   bettysTake: string;
   rootPattern: string;
   shiftBefore: string;
@@ -413,6 +414,8 @@ export function composeHouseDeepDive(houseNum: number, chart: ChartData): HouseD
       ? `Your ${ordinalHouse(houseNum)} house has ${cuspSign.toLowerCase()} right where it naturally belongs, no translation layer here, this house runs exactly the way the textbook says it should, undiluted.`
       : `Naturally this house runs on ${meaning.naturalSign.toLowerCase()} energy, ${naturalTraits.essence}. Yours has ${cuspSign.toLowerCase()} on the door instead, ${cuspTraits.essence}, which means you experience ${meaning.lifeAreas[0]} through a noticeably different lens than the classic textbook version of this house.`;
 
+  const rulerPlacement = composeRulerPlacement(cuspSign, houseNum, chart);
+
   const seed = seedFrom(`house${houseNum}-${cuspSign}-${chart.birthData.name}`);
   const stretchMove = pick(content.stretchMoves, seed);
   const proofMarkers = pickMany(content.proofMarkers, seed + 1, 3);
@@ -428,6 +431,7 @@ export function composeHouseDeepDive(houseNum: number, chart: ChartData): HouseD
     cuspSign,
     naturalSign: meaning.naturalSign,
     rulerLine,
+    rulerPlacement,
     bettysTake: content.bettysTake,
     rootPattern: content.rootFrame(blockText),
     shiftBefore: content.shiftBefore,

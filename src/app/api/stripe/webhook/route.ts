@@ -50,45 +50,95 @@ async function findProfileId(
   return { profileId: null, matchedBy: "none" };
 }
 
+// The membership facts we write, identical shape whether they land on a real profile row or get
+// parked in pending_memberships for a not-yet-activated buyer.
+type MembershipFacts = {
+  membership_level: string;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  stripe_price_id: string | null;
+  subscription_status: string;
+  subscription_current_period_end: string | null;
+  subscription_cancel_at_period_end: boolean;
+};
+
+// Payment-first: a buyer can pay before she has any auth account, so there's no profile to write
+// onto yet. Rather than drop the payment, park it keyed by the email she checked out with. When
+// she later clicks her activation magic link, auth/callback merges this onto her real profile.
+// Email is the primary key so a repeat payment from the same not-yet-activated email upserts.
+async function parkPendingMembership(
+  admin: SupabaseAdmin,
+  email: string | null | undefined,
+  facts: MembershipFacts
+): Promise<void> {
+  if (!email) {
+    console.error("stripe webhook: cannot park pending membership, no email on the Stripe object");
+    return;
+  }
+  const { error } = await admin
+    .from("pending_memberships")
+    .upsert(
+      { email: email.toLowerCase(), ...facts, updated_at: new Date().toISOString() },
+      { onConflict: "email" }
+    );
+  if (error) {
+    console.error("stripe webhook: failed to park pending membership", error.message);
+    return;
+  }
+  console.log("stripe webhook: parked pending membership for activation", { email: email.toLowerCase(), tier: facts.membership_level });
+}
+
 // Applies a Stripe subscription's true current state onto a profile, used by
 // customer.subscription.created/updated directly, and by the invoice events (which only carry
 // a subscription id, so they re-fetch the subscription rather than trust partial invoice
 // fields). This is the one place membership_level actually gets decided, from the Price ID the
-// subscription is actually on, never from anything a client passed in.
+// subscription is actually on, never from anything a client passed in. If no profile exists yet
+// (a subscription event that arrived before, or without, an activated account) the state is
+// parked in pending_memberships against the customer's email instead of being lost.
 async function syncSubscriptionOntoProfile(
   admin: SupabaseAdmin,
+  stripe: Stripe,
   subscription: Stripe.Subscription
 ): Promise<void> {
   const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
   const priceId = subscription.items.data[0]?.price?.id ?? null;
   const tier = tierForPriceId(priceId);
+  const grantsAccess = ACCESS_GRANTING_STATUSES.has(subscription.status);
+  const item = subscription.items.data[0];
+
+  const facts: MembershipFacts = {
+    membership_level: grantsAccess ? tier : "none",
+    stripe_customer_id: customerId,
+    stripe_subscription_id: subscription.id,
+    stripe_price_id: priceId,
+    subscription_status: subscription.status,
+    subscription_current_period_end: item?.current_period_end
+      ? new Date(item.current_period_end * 1000).toISOString()
+      : null,
+    subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+  };
 
   const { profileId, matchedBy } = await findProfileId(admin, {
     subscriptionId: subscription.id,
     customerId,
   });
   if (!profileId) {
-    console.error("stripe webhook: no matching profile for subscription", { customerId, subscriptionId: subscription.id });
+    // No activated account yet. Look up the customer's email so this can be parked and picked up
+    // at activation. A subscription event can genuinely arrive before checkout.session.completed.
+    let email: string | null = null;
+    try {
+      const customer = await stripe.customers.retrieve(customerId);
+      if (customer && !customer.deleted) email = customer.email ?? null;
+    } catch (e) {
+      console.error("stripe webhook: could not fetch customer email to park pending", e instanceof Error ? e.message : e);
+    }
+    await parkPendingMembership(admin, email, facts);
     return;
   }
 
-  const grantsAccess = ACCESS_GRANTING_STATUSES.has(subscription.status);
-  const item = subscription.items.data[0];
-
   await admin
     .from("profiles")
-    .update({
-      membership_level: grantsAccess ? tier : "none",
-      stripe_customer_id: customerId,
-      stripe_subscription_id: subscription.id,
-      stripe_price_id: priceId,
-      subscription_status: subscription.status,
-      subscription_current_period_end: item?.current_period_end
-        ? new Date(item.current_period_end * 1000).toISOString()
-        : null,
-      subscription_cancel_at_period_end: subscription.cancel_at_period_end,
-      membership_updated_at: new Date().toISOString(),
-    })
+    .update({ ...facts, membership_updated_at: new Date().toISOString() })
     .eq("id", profileId);
 
   console.log("stripe webhook: profile synced", { profileId, matchedBy, tier, status: subscription.status });
@@ -152,6 +202,20 @@ export async function POST(request: Request) {
             break;
           }
 
+          const grantsAccess = ACCESS_GRANTING_STATUSES.has(subscription.status);
+          const item = subscription.items.data[0];
+          const facts: MembershipFacts = {
+            membership_level: grantsAccess ? tier : "none",
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscription.id,
+            stripe_price_id: priceId,
+            subscription_status: subscription.status,
+            subscription_current_period_end: item?.current_period_end
+              ? new Date(item.current_period_end * 1000).toISOString()
+              : null,
+            subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+          };
+
           const { profileId, matchedBy } = await findProfileId(admin, {
             clientReferenceId: session.client_reference_id,
             customerId,
@@ -164,29 +228,15 @@ export async function POST(request: Request) {
             });
           }
           if (!profileId) {
-            console.error("stripe webhook: no matching profile for checkout", { sessionId: session.id, customerId });
+            // Payment-first buyer with no account yet: park it, don't drop it.
+            await parkPendingMembership(admin, session.customer_details?.email, facts);
             break;
           }
 
-          const grantsAccess = ACCESS_GRANTING_STATUSES.has(subscription.status);
-          const item = subscription.items.data[0];
           const now = new Date().toISOString();
-
           await admin
             .from("profiles")
-            .update({
-              membership_level: grantsAccess ? tier : "none",
-              stripe_customer_id: customerId,
-              stripe_subscription_id: subscription.id,
-              stripe_price_id: priceId,
-              subscription_status: subscription.status,
-              subscription_current_period_end: item?.current_period_end
-                ? new Date(item.current_period_end * 1000).toISOString()
-                : null,
-              subscription_cancel_at_period_end: subscription.cancel_at_period_end,
-              membership_started_at: now,
-              membership_updated_at: now,
-            })
+            .update({ ...facts, membership_started_at: now, membership_updated_at: now })
             .eq("id", profileId);
           break;
         }
@@ -203,6 +253,23 @@ export async function POST(request: Request) {
 
           const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? null;
 
+          // No subscription object exists for a one-time payment, so there's no Stripe-driven
+          // renewal or expiry event coming later, "3 months upfront" is honoured by computing the
+          // period end here, once, at purchase time. cancel_at_period_end is set true on purpose
+          // (not because anything was cancelled, but because this genuinely will not auto-renew),
+          // that's what makes the account page correctly say "ends on" instead of "renews on".
+          const periodEnd = new Date();
+          periodEnd.setMonth(periodEnd.getMonth() + 3);
+          const facts: MembershipFacts = {
+            membership_level: tier,
+            stripe_customer_id: customerId,
+            stripe_subscription_id: null,
+            stripe_price_id: priceId,
+            subscription_status: "active",
+            subscription_current_period_end: periodEnd.toISOString(),
+            subscription_cancel_at_period_end: true,
+          };
+
           const { profileId, matchedBy } = await findProfileId(admin, {
             clientReferenceId: session.client_reference_id,
             customerId,
@@ -215,33 +282,15 @@ export async function POST(request: Request) {
             });
           }
           if (!profileId) {
-            console.error("stripe webhook: no matching profile for one-time checkout", { sessionId: session.id, customerId });
+            // Payment-first buyer with no account yet: park it, don't drop it.
+            await parkPendingMembership(admin, session.customer_details?.email, facts);
             break;
           }
 
-          // No subscription object exists for a one-time payment, so there's no Stripe-driven
-          // renewal or expiry event coming later, "3 months upfront" is honoured by computing the
-          // period end here, once, at purchase time. cancel_at_period_end is set true on purpose
-          // (not because anything was cancelled, but because this genuinely will not auto-renew),
-          // that's what makes the account page correctly say "ends on" instead of "renews on".
-          const now = new Date();
-          const periodEnd = new Date(now);
-          periodEnd.setMonth(periodEnd.getMonth() + 3);
-          const nowIso = now.toISOString();
-
+          const nowIso = new Date().toISOString();
           await admin
             .from("profiles")
-            .update({
-              membership_level: tier,
-              stripe_customer_id: customerId,
-              stripe_subscription_id: null,
-              stripe_price_id: priceId,
-              subscription_status: "active",
-              subscription_current_period_end: periodEnd.toISOString(),
-              subscription_cancel_at_period_end: true,
-              membership_started_at: nowIso,
-              membership_updated_at: nowIso,
-            })
+            .update({ ...facts, membership_started_at: nowIso, membership_updated_at: nowIso })
             .eq("id", profileId);
 
           console.log("stripe webhook: one-time payment granted membership", { profileId, matchedBy, tier, periodEnd: periodEnd.toISOString() });
@@ -251,7 +300,7 @@ export async function POST(request: Request) {
 
       case "customer.subscription.created":
       case "customer.subscription.updated": {
-        await syncSubscriptionOntoProfile(admin, event.data.object as Stripe.Subscription);
+        await syncSubscriptionOntoProfile(admin, stripe, event.data.object as Stripe.Subscription);
         break;
       }
 
@@ -261,7 +310,21 @@ export async function POST(request: Request) {
 
         const { profileId } = await findProfileId(admin, { subscriptionId: subscription.id, customerId });
         if (!profileId) {
-          console.error("stripe webhook: no matching profile for subscription deletion", { customerId });
+          // No activated account. If a pending row was parked for this customer, downgrade it so
+          // a subscription cancelled before the buyer ever activated can't later grant access.
+          let email: string | null = null;
+          try {
+            const customer = await stripe.customers.retrieve(customerId);
+            if (customer && !customer.deleted) email = customer.email ?? null;
+          } catch (e) {
+            console.error("stripe webhook: could not fetch customer email for pending cancellation", e instanceof Error ? e.message : e);
+          }
+          if (email) {
+            await admin
+              .from("pending_memberships")
+              .update({ membership_level: "none", subscription_status: "canceled", subscription_cancel_at_period_end: false, updated_at: new Date().toISOString() })
+              .eq("email", email.toLowerCase());
+          }
           break;
         }
 
@@ -285,7 +348,7 @@ export async function POST(request: Request) {
         if (!subscriptionId) break;
 
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        await syncSubscriptionOntoProfile(admin, subscription);
+        await syncSubscriptionOntoProfile(admin, stripe, subscription);
         break;
       }
 
@@ -299,7 +362,7 @@ export async function POST(request: Request) {
         // failed payment should actually cost her access, one failed attempt alone usually
         // leaves the subscription 'past_due', which ACCESS_GRANTING_STATUSES still allows.
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        await syncSubscriptionOntoProfile(admin, subscription);
+        await syncSubscriptionOntoProfile(admin, stripe, subscription);
         break;
       }
 

@@ -52,11 +52,24 @@ Set the confirmation page to a custom URL:
 https://itsmyszn.com/checkout/success?session_id={CHECKOUT_SESSION_ID}
 ```
 
-Stripe fills in `{CHECKOUT_SESSION_ID}` automatically, leave it exactly like that. Payment Links
-don't have a separate "cancel" redirect the way a dynamically-created Checkout Session does
-(there's no cancel step, she just closes the tab or hits back), `/checkout/cancel` exists as a
-general "changed my mind, here's the way back to pricing" page you can link to from anywhere,
-it's not wired into the Payment Link flow automatically.
+Stripe fills in `{CHECKOUT_SESSION_ID}` automatically, leave it exactly like that. The
+`session_id` is now important, not optional: the flow is **payment-first**, so most buyers pay
+before they have an account. The success page uses that `session_id` to verify the payment
+server-side and send the activation magic link automatically. Without it the page still works, it
+just falls back to asking her to type the email she paid with. Set it on all three links.
+
+Payment Links don't have a separate "cancel" redirect the way a dynamically-created Checkout
+Session does (there's no cancel step, she just closes the tab or hits back), `/checkout/cancel`
+exists as a general "changed my mind, here's the way back to pricing" page you can link to from
+anywhere, it's not wired into the Payment Link flow automatically.
+
+**The flow, end to end:** she picks a plan → pays on Stripe (no login required first) → the
+webhook parks her membership in `pending_memberships` keyed by the email she paid with → the
+success page sends her an activation magic link → she clicks it → `/auth/callback` claims that
+parked membership onto her new account (matched by her verified email) and deletes the pending
+row → she's forced through onboarding → then the portal opens. An existing, already-logged-in
+member skips all that: her checkout carries `client_reference_id`, so the webhook writes straight
+to her profile and she's never re-charged or asked to re-activate.
 
 ## 5. Add the webhook endpoint
 
@@ -104,7 +117,9 @@ Redeploy after adding these, env var changes don't apply to an already-running d
 ## 7. Run the schema migration
 
 Supabase Dashboard → SQL Editor → New query → paste all of `supabase/schema.sql` → Run. Safe to
-re-run any time, every statement is guarded.
+re-run any time, every statement is guarded. **Re-run it after this update:** it adds the new
+`pending_memberships` table that the payment-first flow depends on. Skip this and a logged-out
+buyer's payment has nowhere to be parked, so activation can't grant her access.
 
 ## 8. Send a test event
 

@@ -112,6 +112,28 @@ create table if not exists stripe_webhook_events (
 
 alter table stripe_webhook_events enable row level security;
 
+-- Payment-first flow: a member can pay before she's ever logged in, so at checkout time there's
+-- no auth.users row (and therefore no profiles row) to write membership onto yet. The webhook
+-- parks the paid membership here, keyed by the email she checked out with, until she clicks her
+-- activation magic link. At that first login auth/callback merges this row onto her real profile
+-- (matched by verified email), then deletes it. Email is the primary key so a second payment from
+-- the same not-yet-activated email upserts rather than duplicating. Service-role only: RLS is on
+-- with zero policies, so a normal member session can never read or write anyone's pending row.
+create table if not exists pending_memberships (
+  email text primary key,
+  membership_level text not null,
+  stripe_customer_id text,
+  stripe_subscription_id text,
+  stripe_price_id text,
+  subscription_status text,
+  subscription_current_period_end timestamptz,
+  subscription_cancel_at_period_end boolean not null default false,
+  membership_started_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table pending_memberships enable row level security;
+
 -- ============================================================================
 -- REFERRALS
 -- Every member gets a stable short code the moment her profile is created. Sharing her invite
@@ -519,6 +541,54 @@ drop policy if exists "community_comments_delete_own_or_admin" on community_comm
 create policy "community_comments_delete_own_or_admin" on community_comments for delete using (auth.uid() = user_id or is_admin());
 
 -- ============================================================================
+-- CONTENT MODULES
+-- Foundation for moving astrology copy out of hardcoded TypeScript over time. Not a full CMS,
+-- no editor UI yet, just the table + the repository layer in src/lib/content-repository.ts. The
+-- app checks here first for a matching module and falls back to the existing compiled-in content
+-- when nothing matches, so this table can start empty and grow one override at a time without
+-- ever being able to break a page (a missing/unpublished row is exactly the same as no override).
+-- One flexible table rather than one per content type, since the shape (a body of text keyed by
+-- some combination of astrology facets) is the same across all of them.
+-- ============================================================================
+
+create table if not exists content_modules (
+  id uuid primary key default gen_random_uuid(),
+  content_type text not null, -- e.g. 'ruler_placement_synthesis', 'house_cusp', 'life_area_signature', 'shadow_pattern', 'season_activation', 'coaching_action', 'ritual', 'journal_prompt', 'affirmation'
+  astrology_object_type text, -- 'sign' | 'house' | 'planet' | 'aspect' | 'transit' | 'season', which of the facets below is the primary key for this row
+  sign text,
+  house int,
+  planet text,
+  aspect_type text,
+  life_area text,
+  season text,
+  tone text not null default 'coach',
+  depth_level text not null default 'standard', -- 'quick' | 'standard' | 'deep'
+  body text not null,
+  status text not null default 'draft', -- 'draft' | 'published', only 'published' rows are ever read by the app
+  version int not null default 1,
+  source text, -- who/what wrote it, e.g. 'betty' or 'claude'
+  review_status text not null default 'unreviewed', -- 'unreviewed' | 'approved' | 'needs_revision'
+  fallback_priority int not null default 0, -- when multiple rows could match, highest priority wins
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+-- The lookup this table actually needs to serve fast: "give me the best published module for
+-- this content type + these facets".
+create index if not exists content_modules_lookup on content_modules (content_type, status, sign, house, planet, life_area, season);
+
+alter table content_modules enable row level security;
+
+-- Published content is genuinely public reading material, same trust level as the hardcoded
+-- copy it's meant to override, no reason to require auth just to read it.
+drop policy if exists "content_modules_select_published" on content_modules;
+create policy "content_modules_select_published" on content_modules for select using (status = 'published');
+
+-- Admin can read drafts too (to review before publishing) and is the only one who can write.
+drop policy if exists "content_modules_admin_all" on content_modules;
+create policy "content_modules_admin_all" on content_modules for all using (is_admin()) with check (is_admin());
+
+-- ============================================================================
 -- SAFETY VERIFICATION
 -- Every table above already has its own `enable row level security` line right next to its
 -- `create table`, this block re-asserts it one more time for all of them, in one place, at the
@@ -529,6 +599,7 @@ create policy "community_comments_delete_own_or_admin" on community_comments for
 
 alter table profiles enable row level security;
 alter table stripe_webhook_events enable row level security;
+alter table pending_memberships enable row level security;
 alter table birth_data enable row level security;
 alter table chart_cache enable row level security;
 alter table goals enable row level security;
@@ -548,3 +619,5 @@ alter table room_seen enable row level security;
 alter table community_posts enable row level security;
 alter table community_likes enable row level security;
 alter table community_comments enable row level security;
+
+alter table content_modules enable row level security;

@@ -113,10 +113,14 @@ export default function OnboardingPage() {
     }
   };
 
-  const handleGoalStep = (e: React.FormEvent) => {
+  const handleGoalStep = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    setLoading(true);
     addGoal(goal, goalCategory);
-    markOnboarded();
+    // Must finish before navigating: the route gate reads onboarded on the way into /dashboard,
+    // so a fire-and-forget write here would race and bounce her straight back to onboarding.
+    await markOnboarded();
     router.push("/dashboard");
   };
 

@@ -52,7 +52,7 @@ export default function MyChartPage() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             Add your birth details and your entire personalised portal unlocks, placements, houses, aspects, all of it.
           </p>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );
@@ -74,11 +74,11 @@ export default function MyChartPage() {
 
   // All 17 placements: rising + midheaven derived from angles, the rest from planets
   const placements = BODY_MEANINGS.map((body) => {
-    if (body.id === "rising") return { body, sign: risingSign, house: 1, retrograde: false };
-    if (body.id === "midheaven") return { body, sign: midheavenSign, house: 10, retrograde: false };
+    if (body.id === "rising") return { body, sign: risingSign, house: 1, retrograde: false, degree: chart.houses[0]?.degree ?? 0, minute: chart.houses[0]?.minute ?? 0 };
+    if (body.id === "midheaven") return { body, sign: midheavenSign, house: 10, retrograde: false, degree: chart.houses[9]?.degree ?? 0, minute: chart.houses[9]?.minute ?? 0 };
     const planet = chart.planets.find((p) => p.id === body.id);
-    return planet ? { body, sign: planet.sign, house: planet.house, retrograde: planet.retrograde } : null;
-  }).filter(Boolean) as { body: (typeof BODY_MEANINGS)[number]; sign: string; house: number; retrograde: boolean }[];
+    return planet ? { body, sign: planet.sign, house: planet.house, retrograde: planet.retrograde, degree: planet.degree, minute: planet.minute } : null;
+  }).filter(Boolean) as { body: (typeof BODY_MEANINGS)[number]; sign: string; house: number; retrograde: boolean; degree: number; minute: number }[];
 
   return (
     <>
@@ -201,7 +201,7 @@ export default function MyChartPage() {
                   {p.retrograde && <span style={{ color: "var(--pink)", fontSize: 10, marginLeft: 5 }}>Rx</span>}
                 </div>
                 <div style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 2 }}>
-                  {ordinalHouse(p.house)} house
+                  {p.degree}&deg;{String(p.minute).padStart(2, "0")}&apos; · {ordinalHouse(p.house)} house
                 </div>
               </Link>
             ))}
@@ -235,7 +235,7 @@ export default function MyChartPage() {
                     {meaning.title}
                   </div>
                   <div style={{ fontSize: 11, color: "var(--grey)" }}>
-                    {getSymbol(h.sign)} {h.sign.toLowerCase()} cusp
+                    {getSymbol(h.sign)} {h.sign.toLowerCase()} {h.degree}&deg;{String(h.minute).padStart(2, "0")}&apos; cusp
                     {planetsInside.length > 0 && (
                       <span style={{ color: "var(--pink)", marginLeft: 6 }}>
                         {planetsInside.map((p) => PLANET_SYMBOLS[p.name] || "•").join(" ")}
@@ -255,7 +255,9 @@ export default function MyChartPage() {
           <div className="tag mb-5">my aspects · how your planets talk to each other</div>
           <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
             {chart.aspects.slice(0, 12).map((a, i) => {
-              const text = interpretAspect(a.planet1, a.planet2, a.type);
+              const signOf = (name: string) =>
+                name === "Ascendant" ? chart.houses[0]?.sign : name === "Midheaven" ? chart.houses[9]?.sign : chart.planets.find((p) => p.name === name)?.sign;
+              const text = interpretAspect(a.planet1, a.planet2, a.type, { sign1: signOf(a.planet1), sign2: signOf(a.planet2), orb: a.orb });
               if (!text) return null;
               return (
                 <div key={`${a.planet1}-${a.planet2}-${i}`} className="p-6" style={{ borderBottom: i < 11 ? "1px solid #eee" : undefined }}>

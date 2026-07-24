@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
-import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign } from "@/lib/interpretations";
+import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign, composeRulerPlacement } from "@/lib/interpretations";
 import { LIFE_AREAS } from "@/lib/life-areas";
 import {
   getPatternBreaking,
@@ -89,7 +89,7 @@ export default function SeasonPersonalised() {
           <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.8, maxWidth: 480, margin: "0 auto 20px" }}>
             Add your birth details and this page transforms, where the szn lands in your chart, your opportunities, your challenges and your main character mission.
           </p>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );
@@ -102,6 +102,9 @@ export default function SeasonPersonalised() {
   const houseHref = `/my-chart/house/${activatedHouse}`;
   const themeLifeAreaId = findLifeAreaForHouse(activatedHouse);
   const themeHref = themeLifeAreaId ? `/your-season/life/${themeLifeAreaId}` : houseHref;
+  const activatedCuspSign = chart.houses[activatedHouse - 1]?.sign || houseMeaning.naturalSign;
+  const activatedRuler = composeRulerPlacement(activatedCuspSign, activatedHouse, chart);
+  const activatedTenants = chart.planets.filter((p) => p.house === activatedHouse);
   const name = chart.birthData.name || "babe";
   const risingSign = chart.houses[0]?.sign || "";
   const sunSign = chart.planets.find((p) => p.id === "sun")?.sign || "";
@@ -166,6 +169,19 @@ export default function SeasonPersonalised() {
               </span>
             </Link>
           </div>
+          {activatedRuler && (
+            <div style={{ border: "var(--border)", borderTop: "none" }}>
+              <div className="p-8">
+                <div className="tag mb-3">the chain: season → house → sign → ruler → you</div>
+                <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>
+                  <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it, not just whichever planet feels topical. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
+                  {activatedTenants.length > 0
+                    ? ` ${activatedTenants.map((p) => p.name).join(" and ")} also ${activatedTenants.length === 1 ? "lives" : "live"} inside this house, adding to the picture, but ${activatedTenants.length === 1 ? "it isn't" : "they aren't"} the ruler.`
+                    : ""}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
