@@ -485,6 +485,181 @@ export function composeRulerPlacement(cuspSign: string, ruledHouse: number, char
   };
 }
 
+// Reverse rulership: which of the member's own houses this planet rules, read from the sign on
+// each house cusp in this specific chart. A planet can rule two houses (e.g. Mercury rules both
+// a Gemini-cusp and a Virgo-cusp house). This is what lets a planet layer say "your Mercury also
+// rules your 3rd and 12th houses", wiring the life area to those parts of the chart, instead of
+// treating the planet as a free-floating influence.
+export function planetRulesHouses(planetId: string, chart: ChartData): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < 12; i++) {
+    const sign = chart.houses[i]?.sign;
+    if (!sign) continue;
+    if (SIGN_RULERS[sign]?.rulerId === planetId) out.push(i + 1);
+  }
+  return out;
+}
+
+// Classical essential dignity, keyed by planet id. Only the seven traditional planets have a
+// settled dignity scheme, so the outer planets, Chiron and the nodes are deliberately absent and
+// simply return null (no dignity claim made), rather than inventing one.
+const DIGNITIES: Record<string, { domicile: string[]; exalt?: string; detriment: string[]; fall?: string }> = {
+  sun: { domicile: ["Leo"], exalt: "Aries", detriment: ["Aquarius"], fall: "Libra" },
+  moon: { domicile: ["Cancer"], exalt: "Taurus", detriment: ["Capricorn"], fall: "Scorpio" },
+  mercury: { domicile: ["Gemini", "Virgo"], exalt: "Virgo", detriment: ["Sagittarius", "Pisces"], fall: "Pisces" },
+  venus: { domicile: ["Taurus", "Libra"], exalt: "Pisces", detriment: ["Aries", "Scorpio"], fall: "Virgo" },
+  mars: { domicile: ["Aries", "Scorpio"], exalt: "Capricorn", detriment: ["Taurus", "Libra"], fall: "Cancer" },
+  jupiter: { domicile: ["Sagittarius", "Pisces"], exalt: "Cancer", detriment: ["Gemini", "Virgo"], fall: "Capricorn" },
+  saturn: { domicile: ["Capricorn", "Aquarius"], exalt: "Libra", detriment: ["Cancer", "Leo"], fall: "Aries" },
+};
+
+export type Dignity = "domicile" | "exaltation" | "detriment" | "fall";
+
+export function planetDignity(planetId: string, sign: string): Dignity | null {
+  const d = DIGNITIES[planetId];
+  if (!d) return null;
+  if (d.domicile.includes(sign)) return "domicile";
+  if (d.exalt === sign) return "exaltation";
+  if (d.detriment.includes(sign)) return "detriment";
+  if (d.fall === sign) return "fall";
+  return null;
+}
+
+// A short, plain-English gloss of what a dignity actually means for strength, used so the copy can
+// say "especially strong here" or "working uphill here" instead of dumping the technical term raw.
+export function dignityGloss(dignity: Dignity): string {
+  switch (dignity) {
+    case "domicile":
+      return "the sign it rules, so it's operating at full strength here, completely at home, doing exactly what it does best with nothing diluting it";
+    case "exaltation":
+      return "the sign of its exaltation, so it's unusually strong and elevated here, this planet is one of the real power sources in the chart";
+    case "detriment":
+      return "the sign opposite the one it rules, so it's working slightly uphill here, capable but having to earn its expression rather than getting it for free";
+    case "fall":
+      return "the sign of its fall, so it's at its most tender and least automatic here, real ability, but it needs conscious support rather than running on instinct";
+  }
+}
+
+export type Occupancy = "empty" | "single" | "occupied" | "stellium";
+
+// A single house read as a complete unit: its meaning, the sign on its cusp, the full ruler
+// chain (via composeRulerPlacement), who lives inside it, and whether it's empty, singly
+// tenanted or a stellium. This is the reusable unit every life-area recipe is built from, so a
+// tertiary house (the 8th in Business, the 12th in Health) gets exactly the same depth as the
+// primary one, per the composition rule that any house included is interpreted completely.
+export interface HouseChain {
+  house: number;
+  title: string;
+  rules: string;
+  lifeAreas: string[];
+  cuspSign: string;
+  ruler: RulerPlacement | null;
+  occupants: { id: string; name: string; sign: string; house: number }[];
+  occupancy: Occupancy;
+}
+
+export function composeHouseChain(house: number, chart: ChartData): HouseChain {
+  const meaning = HOUSE_MEANINGS[house - 1];
+  const cuspSign = chart.houses[house - 1]?.sign || meaning.naturalSign;
+  const ruler = composeRulerPlacement(cuspSign, house, chart);
+  const occupants = chart.planets
+    .filter((p) => p.house === house)
+    .map((p) => ({ id: p.id, name: p.name, sign: p.sign, house: p.house }));
+  const occupancy: Occupancy =
+    occupants.length === 0 ? "empty" : occupants.length === 1 ? "single" : occupants.length >= 3 ? "stellium" : "occupied";
+  return {
+    house,
+    title: meaning.title,
+    rules: meaning.rules,
+    lifeAreas: meaning.lifeAreas,
+    cuspSign,
+    ruler,
+    occupants,
+    occupancy,
+  };
+}
+
+// A planet read as a complete layer of a life area: where it sits (sign + house), what it
+// governs, which of the member's houses it rules, and its dignity. This is what makes "Mercury
+// relates to business" into "your Gemini Mercury in the 10th, ruling your 2nd and 5th, runs your
+// business communication through visibility and earning". Reused by any recipe that names a planet.
+export interface PlanetLayer {
+  id: string;
+  name: string;
+  sign: string;
+  house: number;
+  retrograde: boolean;
+  rulesHouses: number[];
+  dignity: Dignity | null;
+  synthesis: string;
+}
+
+export function composePlanetLayer(planetId: string, chart: ChartData): PlanetLayer | null {
+  const planet = chart.planets.find((p) => p.id === planetId);
+  if (!planet) return null;
+  const body = getBodyMeaning(planetId);
+  const traits = SIGN_TRAITS[planet.sign];
+  const houseMeaning = HOUSE_MEANINGS[planet.house - 1];
+  const rulesHouses = planetRulesHouses(planetId, chart);
+  const dignity = planetDignity(planetId, planet.sign);
+  const pName = rulerRef(planet.name);
+
+  const rulesClause =
+    rulesHouses.length > 0
+      ? ` In your chart ${pName} also rules your ${rulesHouses.map((h) => ordinalHouse(h)).join(" and ")} house${rulesHouses.length > 1 ? "s" : ""} of ${rulesHouses.map((h) => HOUSE_MEANINGS[h - 1].title).join(" and ")}, so this placement quietly wires this area to ${rulesHouses.map((h) => HOUSE_MEANINGS[h - 1].lifeAreas[0]).join(" and ")} too.`
+      : "";
+  const dignityClause = dignity ? ` ${pName} is in ${dignityGloss(dignity)}.` : "";
+
+  const synthesis = `Your ${planet.sign.toLowerCase()} ${planet.name.toLowerCase()}${planet.retrograde ? " (Rx)" : ""} sits in your ${ordinalHouse(planet.house)} house of ${houseMeaning.title}. ${body ? `${pName} governs ${body.domainShort}, and in ${planet.sign.toLowerCase()} that runs through ${traits?.essence || "its own distinct texture"}` : `In ${planet.sign.toLowerCase()} it runs through ${traits?.essence || "its own texture"}`}, playing out most visibly through ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")}.${rulesClause}${dignityClause}`;
+
+  return {
+    id: planet.id,
+    name: planet.name,
+    sign: planet.sign,
+    house: planet.house,
+    retrograde: planet.retrograde,
+    rulesHouses,
+    dignity,
+    synthesis,
+  };
+}
+
+// A chart point (North Node, South Node) read completely: sign, house and the growth or release
+// theme its placement describes. Points don't rule houses, so this is lighter than a planet layer
+// but still refuses to name the node without interpreting its actual sign and house placement.
+export interface PointLayer {
+  id: string;
+  name: string;
+  sign: string;
+  house: number;
+  retrograde: boolean;
+  synthesis: string;
+}
+
+export function composePointLayer(pointId: string, chart: ChartData): PointLayer | null {
+  const point = chart.planets.find((p) => p.id === pointId);
+  if (!point) return null;
+  const traits = SIGN_TRAITS[point.sign];
+  const houseMeaning = HOUSE_MEANINGS[point.house - 1];
+  const isNorth = pointId === "north_node";
+  const themeVerb = isNorth
+    ? `your growth edge points toward ${cleanTrailing(traits?.gift)}, deliberately unfamiliar, and it's asking you to build that specifically through your ${ordinalHouse(point.house)} house of ${houseMeaning.title}, ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")}`
+    : `your comfort zone, the pull you already over-rely on, is ${cleanTrailing(traits?.gift)}, and it plays out through your ${ordinalHouse(point.house)} house of ${houseMeaning.title}, the well-worn groove this area keeps defaulting back into`;
+  const synthesis = `Your ${point.name.toLowerCase()} in ${point.sign.toLowerCase()} in your ${ordinalHouse(point.house)} house is a direction, not a placement you were born fluent in: ${themeVerb}.`;
+  return {
+    id: point.id,
+    name: point.name,
+    sign: point.sign,
+    house: point.house,
+    retrograde: point.retrograde,
+    synthesis,
+  };
+}
+
+function cleanTrailing(s: string | undefined): string {
+  return (s || "").trim().replace(/[.\s]+$/, "");
+}
+
 export interface PlacementSections {
   gifts: string;
   shadow: string;

@@ -84,6 +84,21 @@ export default function LifeAreaPage() {
 
   const otherAreas = LIFE_AREAS.filter((a) => a.id !== areaId);
 
+  // One clickable "go deeper" link per distinct planet in the framework: the recipe-house rulers,
+  // the named planet layers, the point layers and the ascendant ruler, de-duplicated so a planet
+  // that plays several roles only appears once.
+  const frameworkLinks: { id: string; name: string }[] = [];
+  const seenLinks = new Set<string>();
+  const addLink = (id: string | undefined, name: string | undefined) => {
+    if (!id || !name || seenLinks.has(id)) return;
+    seenLinks.add(id);
+    frameworkLinks.push({ id, name });
+  };
+  reading.recipeHouses.forEach((c) => addLink(c.ruler?.rulerId, c.ruler?.rulerName));
+  reading.planetLayers.forEach((p) => addLink(p.id, p.name));
+  reading.pointLayers.forEach((p) => addLink(p.id, p.name));
+  addLink(reading.ascendantLayer?.ruler?.rulerId, reading.ascendantLayer?.ruler?.rulerName);
+
   return (
     <>
       {/* Hero */}
@@ -145,45 +160,43 @@ export default function LifeAreaPage() {
         </div>
       </section>
 
-      {/* The paired house read as one axis: the secondary house's own full ruler chain, how it
-          interacts with the primary house, and how the season activates both at once. Replaces
-          the old separate "ruler of your house" card and "adds on top" card, one synthesis
-          instead of the primary chain, the secondary house and the interaction each getting
-          their own repeated restatement of the same facts. */}
-      {reading.axisSynthesis.length > 0 && (
-        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "2px solid var(--lav)", background: "var(--lav-light)" }}>
-            <div className="tag mb-5">your {reading.label} axis</div>
-            <div className="flex flex-col gap-5">
-              {reading.axisSynthesis.map((para, i) => (
-                <p key={i} style={{ fontSize: 15, lineHeight: 1.9, color: "#3C2A70" }}>{para}</p>
+      {/* What matters most: the engine's prioritisation lead, so the framework opens by telling
+          the member what to weight most in their specific chart rather than giving every factor
+          equal airtime. */}
+      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ border: "2px solid var(--gold)", background: "var(--gold)" }}>
+          <div className="tag mb-3" style={{ color: "#854F0B" }}>what matters most in your chart</div>
+          <p style={{ fontSize: 16, lineHeight: 1.9, color: "#854F0B", fontWeight: 600 }}>{reading.priorityLead}</p>
+        </div>
+      </section>
+
+      {/* The full framework: every house in this area's recipe with its complete rulership chain,
+          every named planet layer, any chart points and the rising sign, all woven together and
+          tied to the season. Generalises the old two-house axis to each area's own recipe. */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ border: "2px solid var(--lav)", background: "var(--lav-light)" }}>
+          <div className="tag mb-5">your {reading.axisLabel}</div>
+          <div className="flex flex-col gap-5">
+            {reading.frameworkSynthesis.map((para, i) => (
+              <p key={i} style={{ fontSize: 15, lineHeight: 1.9, color: "#3C2A70" }}>{para}</p>
+            ))}
+          </div>
+          {frameworkLinks.length > 0 && (
+            <div className="flex gap-6 flex-wrap" style={{ marginTop: 22 }}>
+              {frameworkLinks.map((l) => (
+                <Link
+                  key={l.id}
+                  href={`/my-chart/${l.id}`}
+                  className="pk no-underline"
+                  style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: "1.5px solid currentColor", paddingBottom: 2 }}
+                >
+                  go deeper on {l.name.toLowerCase()} →
+                </Link>
               ))}
             </div>
-            {(reading.rulerPlacement || reading.secondaryRulerPlacement) && (
-              <div className="flex gap-6 flex-wrap" style={{ marginTop: 22 }}>
-                {reading.rulerPlacement && (
-                  <Link
-                    href={`/my-chart/${reading.rulerPlacement.rulerId}`}
-                    className="pk no-underline"
-                    style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: "1.5px solid currentColor", paddingBottom: 2 }}
-                  >
-                    go deeper on {reading.rulerPlacement.rulerName.toLowerCase()} →
-                  </Link>
-                )}
-                {reading.secondaryRulerPlacement && (
-                  <Link
-                    href={`/my-chart/${reading.secondaryRulerPlacement.rulerId}`}
-                    className="pk no-underline"
-                    style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: "1.5px solid currentColor", paddingBottom: 2 }}
-                  >
-                    go deeper on {reading.secondaryRulerPlacement.rulerName.toLowerCase()} →
-                  </Link>
-                )}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
       {/* The 20%: the raw ingredients, compact. Three short lines, not three full textbook
           sections, so the page teaches fast and interprets slow. */}
