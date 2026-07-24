@@ -19,6 +19,8 @@ export interface Member {
   subscriptionCancelAtPeriodEnd: boolean;
   /** True once she's finished onboarding, gates entry to the real portal */
   onboarded: boolean;
+  /** False for legacy magic-link-only accounts, drives the optional "add a password" banner */
+  passwordSet: boolean;
 }
 
 // Standing in for a real chart until onboarding has saved one, keeps every page that reads
@@ -46,7 +48,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, password_set"
     )
     .eq("id", user.id)
     .single();
@@ -67,6 +69,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
     onboarded: !!profile?.onboarded,
+    passwordSet: !!profile?.password_set,
   };
 }
 

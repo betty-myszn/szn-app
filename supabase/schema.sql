@@ -61,6 +61,12 @@ create policy "profiles_admin_read" on profiles for select using (is_admin());
 alter table profiles add column if not exists dashboard_prefs jsonb;
 alter table profiles add column if not exists email_prefs jsonb;
 
+-- Tracks whether this member has ever set a login password. False for the legacy magic-link-only
+-- accounts, which lets us gently prompt them to add one after a magic-link login. Set true by the
+-- password signup / reset / set-password flows. Deliberately NOT in the membership REVOKE below:
+-- it's a non-sensitive UX flag a member's own session is allowed to flip.
+alter table profiles add column if not exists password_set boolean not null default false;
+
 -- ============================================================================
 -- MEMBERSHIP / STRIPE
 -- Written only by the Stripe webhook (service role, bypasses RLS and the REVOKE below), a
@@ -151,12 +157,23 @@ returns text as $$
 $$ language sql volatile;
 
 -- Replaces the earlier version of this trigger (only set id/email) so every new profile also
--- gets a referral code the moment it's created, safe to re-run since create or replace.
+-- gets a referral code the moment it's created, safe to re-run since create or replace. Also
+-- copies the first name and password_set flag out of the signup metadata (raw_user_meta_data,
+-- populated by supabase.auth.signUp's options.data on the password signup flow) so a member's
+-- name lands on the profile from the very first insert, and password-signup accounts are marked
+-- as already having a password. Magic-link signups pass no metadata, so name stays null and
+-- password_set stays false, which is exactly what drives the "add a password" prompt later.
 create or replace function handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, email, referral_code)
-  values (new.id, new.email, generate_referral_code())
+  insert into public.profiles (id, email, referral_code, name, password_set)
+  values (
+    new.id,
+    new.email,
+    generate_referral_code(),
+    nullif(new.raw_user_meta_data ->> 'first_name', ''),
+    coalesce((new.raw_user_meta_data ->> 'password_set')::boolean, false)
+  )
   on conflict (id) do nothing;
   return new;
 end;
@@ -621,3 +638,39 @@ alter table community_likes enable row level security;
 alter table community_comments enable row level security;
 
 alter table content_modules enable row level security;
+
+-- ============================================================================
+-- ACCOUNT CLAIM TOKENS + AUTH RATE LIMITING
+-- Service-role only (RLS on, zero policies): a member session must never read or write these.
+-- ============================================================================
+
+-- Single-use, short-lived proof that authorises creating an account for a specific paid email.
+-- Minted server-side only after a live Stripe Checkout Session is verified paid and matched to an
+-- unclaimed pending_memberships row. Only the SHA-256 hash of the token is stored, never the raw
+-- value. Consumed atomically (used_at set) so it can't be replayed. This is what makes "email
+-- knowledge alone" insufficient to claim a membership.
+create table if not exists account_claim_tokens (
+  token_hash text primary key,
+  email text not null,
+  purpose text not null check (purpose in ('stripe', 'recovery')),
+  stripe_session_id text,
+  expires_at timestamptz not null,
+  used_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists account_claim_tokens_email_idx on account_claim_tokens (email);
+alter table account_claim_tokens enable row level security;
+
+-- Append-only log used to rate-limit the abandoned-signup recovery endpoint (and the magic-link
+-- OTP path) by email and by IP, so knowing an email can't be turned into inbox spam or a probing
+-- oracle. Old rows can be pruned on any schedule, they only matter within the rate window.
+create table if not exists auth_rate_events (
+  id bigint generated always as identity primary key,
+  bucket text not null,
+  ip text,
+  email text,
+  created_at timestamptz not null default now()
+);
+create index if not exists auth_rate_events_email_idx on auth_rate_events (bucket, email, created_at);
+create index if not exists auth_rate_events_ip_idx on auth_rate_events (bucket, ip, created_at);
+alter table auth_rate_events enable row level security;

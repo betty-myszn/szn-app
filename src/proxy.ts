@@ -29,8 +29,9 @@ const ONBOARDING = "/onboarding";
 
 // A session is enough (no active-membership requirement): billing and account management must
 // stay reachable even for a lapsed member trying to fix or renew. Admin authorization is enforced
-// inside that page itself; here we only require being logged in.
-const LOGIN_ONLY = ["/settings", "/admin"];
+// inside that page itself; here we only require being logged in. /set-password is the optional
+// "add a password" step a logged-in legacy member is routed to after a magic-link login.
+const LOGIN_ONLY = ["/settings", "/admin", "/set-password"];
 
 function pathMatches(pathname: string, prefixes: string[]): boolean {
   return prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -43,6 +44,10 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      // ~60 days: keeps members logged in well past 30 days unless they explicitly sign out. Must
+      // match the browser and server clients so the refreshed cookie written here on every request
+      // carries the same long lifetime.
+      cookieOptions: { maxAge: 60 * 60 * 24 * 60 },
       cookies: {
         getAll() {
           return request.cookies.getAll();

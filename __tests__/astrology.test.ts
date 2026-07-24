@@ -135,8 +135,10 @@ describe("calculateChart - Obama sample", () => {
     expect(chart.aspects.length).toBeGreaterThan(0);
   });
 
-  it("has all 14 celestial bodies", () => {
-    expect(chart.planets).toHaveLength(13);
+  // 15 = the 13 bodies calculated directly from the ephemeris, plus South Node (derived opposite
+  // the North Node) and Part of Fortune (derived from sun/moon/ascendant).
+  it("has all 15 celestial bodies", () => {
+    expect(chart.planets).toHaveLength(15);
     const names = chart.planets.map((p) => p.name);
     expect(names).toContain("Sun");
     expect(names).toContain("Moon");
@@ -151,6 +153,8 @@ describe("calculateChart - Obama sample", () => {
     expect(names).toContain("Chiron");
     expect(names).toContain("North Node");
     expect(names).toContain("South Node");
+    expect(names).toContain("Lilith");
+    expect(names).toContain("Part of Fortune");
   });
 
   it("has South Node opposite North Node", () => {

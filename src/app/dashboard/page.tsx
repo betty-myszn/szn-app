@@ -25,6 +25,7 @@ import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SkyAlert from "@/components/SkyAlert";
+import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -134,6 +135,7 @@ export default function DashboardPage() {
 
   return (
     <>
+      <PasswordPromptBanner />
       {/* Header */}
       <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)", position: "relative", overflow: "hidden" }}>
         <div className="hidden md:block" style={{ position: "absolute", top: 18, right: 32 }}>

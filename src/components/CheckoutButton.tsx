@@ -30,7 +30,7 @@ function withClientReferenceId(checkoutUrl: string, userId: string): string {
 // Payment-first: she does NOT need to log in before paying. If she happens to already be logged
 // in, we attach her user id via client_reference_id for a clean id-based link; if she's logged
 // out, she checks out on the plain link and the webhook parks her membership by email, which she
-// claims when she clicks her activation magic link afterwards.
+// claims when she sets up her account (password) on /create-account afterwards.
 export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form" }: CheckoutButtonProps) {
   const [agreed, setAgreed] = useState(false);
   const { member } = useMember();

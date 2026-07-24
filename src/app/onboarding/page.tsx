@@ -8,6 +8,7 @@ import type { BirthData, BirthLocation } from "@/types/chart";
 import { ZODIAC_SIGNS, ZODIAC_SYMBOLS } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart, getSavedBirthData, type SavedPlacements } from "@/lib/url-params";
 import { syncBirthDataToSupabase, syncChartToSupabase, markOnboarded } from "@/lib/chart-sync";
+import { createClient } from "@/lib/supabase/client";
 import { addGoal, CATEGORY_STYLES, type GoalCategory } from "@/lib/goals-store";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -47,7 +48,9 @@ export default function OnboardingPage() {
   const [justUpdated, setJustUpdated] = useState(false);
   const [revealPlacements, setRevealPlacements] = useState<SavedPlacements | null>(null);
 
-  // Pre-fill from an existing chart so editing corrects a mistake instead of starting over
+  // Pre-fill from an existing chart so editing corrects a mistake instead of starting over. A
+  // brand new member has no birth data yet, so seed just the name from the first name she gave at
+  // account creation (stored on her profile), so she doesn't retype it here.
   useEffect(() => {
     const existing = getSavedBirthData();
     if (existing) {
@@ -57,8 +60,17 @@ export default function OnboardingPage() {
       setTime(existing.birthTime);
       setApprox(existing.birthTimeApproximate);
       setLocation(existing.location);
+      setCheckedExisting(true);
+      return;
     }
-    setCheckedExisting(true);
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (user) {
+        const { data: profile } = await supabase.from("profiles").select("name").eq("id", user.id).single();
+        if (profile?.name) setName(profile.name);
+      }
+      setCheckedExisting(true);
+    });
   }, []);
 
   const handleChartStep = async (e: React.FormEvent) => {
