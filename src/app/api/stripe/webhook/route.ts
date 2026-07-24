@@ -401,6 +401,16 @@ export async function POST(request: Request) {
     }
   } catch (err) {
     console.error("stripe webhook handler error", event.type, err instanceof Error ? err.message : err);
+    // Roll back the idempotency claim so this event can actually be retried. The event id was
+    // recorded up front (before the switch) to dedupe genuine duplicate deliveries, but if the
+    // processing itself failed, leaving that row behind would make every Stripe retry hit the
+    // duplicate short-circuit above and silently drop the membership/email work forever. Deleting
+    // it here lets the next retry reprocess from scratch. Happy-path idempotency is unchanged: on
+    // success the row stays and real duplicates are still deduped.
+    const { error: rollbackError } = await admin.from("stripe_webhook_events").delete().eq("id", event.id);
+    if (rollbackError) {
+      console.error("stripe webhook: failed to roll back event record after handler error", rollbackError.message);
+    }
     return NextResponse.json({ error: "webhook handler failed" }, { status: 500 });
   }
 
