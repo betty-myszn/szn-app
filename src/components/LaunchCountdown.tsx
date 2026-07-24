@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ENROLMENT_OPENS } from "@/lib/enrolment";
+import { ENROLMENT_OPENS, useEnrolmentOpen } from "@/lib/enrolment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-// Shared with the homepage CTAs so the countdown and the buttons can never disagree about when
-// the doors open, see src/lib/enrolment.ts.
+// Shared with the CTAs so the countdown and the buttons can never disagree about whether the
+// doors are open, see src/lib/enrolment.ts.
 const LAUNCH = ENROLMENT_OPENS;
 
 function getTimeLeft() {
@@ -24,13 +24,19 @@ function getTimeLeft() {
 
 export default function LaunchCountdown({ variant = "dark" }: { variant?: "dark" | "pink" | "inline" }) {
   const [time, setTime] = useState(getTimeLeft);
+  const enrolmentOpen = useEnrolmentOpen();
 
   useEffect(() => {
     const id = setInterval(() => setTime(getTimeLeft()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  if (time.launched) {
+  // "WE'RE LIVE." must mean the doors are actually open, not merely that the launch date has
+  // passed. Deciding that from the date alone was a second source of truth: once the date slipped
+  // by, this claimed live while the CTAs (which read the enrolment flag) still showed a waitlist.
+  // Both now hang off the same switch. When the date has passed but enrolment isn't open, there's
+  // nothing truthful left to count down to, so render nothing rather than a stale countdown.
+  if (enrolmentOpen) {
     return (
       <div className="text-center py-4">
         <div style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, color: variant === "dark" ? "#fff" : "var(--dark)" }}>
@@ -39,6 +45,10 @@ export default function LaunchCountdown({ variant = "dark" }: { variant?: "dark"
       </div>
     );
   }
+
+  // Doors shut and the launch moment already gone: a countdown to a past date would read as
+  // "00 00 00 00", so show nothing at all and let the surrounding waitlist copy speak.
+  if (time.launched) return null;
 
   const isDark = variant === "dark";
   const isPink = variant === "pink";

@@ -157,7 +157,7 @@ export default function PodcastPage() {
           Everything from the podcast, taken to the next level. Live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime after 3 months · Launches 23 July
+          From $111/mo · Cancel anytime after 3 months
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

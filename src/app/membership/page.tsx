@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
+import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
@@ -71,7 +72,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         <div className="space-y-4" style={{ maxWidth: 400, margin: "0 auto" }}>
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
-            { num: "2", text: "Doors open 21 July with founding member pricing" },
+            { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
             { num: "3", text: "First live class is 26 July at 6pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
@@ -162,6 +163,14 @@ function MembershipReasonBanner() {
 }
 
 export default function MembershipPage() {
+  // Single source of truth for every launch-related CTA on this page, shared with the homepage
+  // and LaunchCountdown. While the doors are open there is no waitlist anywhere: every primary
+  // CTA scrolls to the pricing cards, which hold the real Stripe checkout buttons. When the
+  // window closes it all reverts to lead capture automatically.
+  const enrolmentOpen = useEnrolmentOpen();
+  const ctaHref = enrolmentOpen ? "#pricing" : "#waitlist-form";
+  const ctaLabel = enrolmentOpen ? "join my szn" : "join the waitlist";
+
   return (
     <div>
       <Suspense fallback={null}>
@@ -173,7 +182,9 @@ export default function MembershipPage() {
         style={{ background: "var(--dark)", borderBottom: "var(--border)" }}
       >
         <div className="max-w-3xl mx-auto">
-          <div className="tag mb-4">launches 23 july · doors open 3 days only</div>
+          <div className="tag mb-4">
+            {enrolmentOpen ? "enrolment open now · doors close soon" : "enrolment opens soon · limited spots"}
+          </div>
 
           <h1 style={{
             fontFamily: pp, fontSize: "clamp(42px, 7vw, 72px)", fontWeight: 800,
@@ -205,30 +216,45 @@ export default function MembershipPage() {
 
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 10, textAlign: "center" }}>
-              countdown to launch
+              {enrolmentOpen ? "enrolment is open" : "countdown to launch"}
             </div>
             <LaunchCountdown variant="dark" />
           </div>
 
-          <div className="flex flex-col items-center gap-4">
-            <WaitlistForm dark id="hero-form" />
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
-              Doors open 21 July. Close 23 July. Limited founding member spots.
-            </p>
-          </div>
+          {/* Doors open: no waitlist anywhere. The primary CTA drops her into the pricing cards
+              (real Stripe checkout). Doors closed: collect the lead. See src/lib/enrolment.ts. */}
+          {enrolmentOpen ? (
+            <div className="flex flex-col items-center gap-4">
+              <Link href="#pricing" className="btn-pink no-underline" style={{ display: "inline-block", padding: "16px 44px" }}>
+                join my szn
+              </Link>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
+                Doors are open. Choose your plan below. Founding member pricing, limited spots.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <WaitlistForm dark id="hero-form" />
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
+                Join the waitlist and you&apos;ll be first through the doors when they open.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Launch banner */}
       <section className="px-8 py-10 text-center" style={{ background: "var(--pink)", borderBottom: "var(--border)" }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 10 }}>
-          mark your calendar
+          {enrolmentOpen ? "the doors are open" : "mark your calendar"}
         </div>
         <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 10 }}>
-          MY SZN launches 23 July.
+          {enrolmentOpen ? "MY SZN is open now." : "MY SZN opens soon."}
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
-          Doors open for enrolment on 21 July and close on 23 July. That&apos;s 3 days. Limited founding member spots. Once they&apos;re gone, they&apos;re gone. First live class kicks off 26 July at 6pm LA time.
+          {enrolmentOpen
+            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 26 July at 6pm LA time."
+            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 26 July at 6pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
           1:1 coaching call with Betty. 3 or 6 months of becoming her.
@@ -236,12 +262,12 @@ export default function MembershipPage() {
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
         </div>
-        <Link href="#waitlist-form" className="no-underline" style={{
+        <Link href={ctaHref} className="no-underline" style={{
           display: "inline-block", background: "#fff", color: "var(--pink)",
           fontFamily: pp, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           textTransform: "uppercase", padding: "14px 32px",
         }}>
-          join the waitlist
+          {ctaLabel}
         </Link>
       </section>
 
@@ -415,7 +441,7 @@ export default function MembershipPage() {
               <span className="pk">Embodiment</span> changes your life.
             </p>
             <p style={{ fontSize: 14, color: "var(--dark)", marginTop: 12 }}>
-              MY SZN bridges that gap. And we launch on 23 July.
+              MY SZN bridges that gap. This is where awareness finally becomes change.
             </p>
           </div>
         </div>
@@ -424,13 +450,15 @@ export default function MembershipPage() {
       {/* Mid-page waitlist CTA */}
       <section className="px-8 py-12 text-center" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 16 }}>
-          Doors open 21 July. Close 23 July. <span style={{ color: "var(--pink)" }}>3 days only.</span>
+          {enrolmentOpen
+            ? <>Enrolment is open. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>
+            : <>Doors open for a limited time only. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
           Includes a 1:1 coaching call with Betty. From $111/mo.
         </p>
-        <Link href="#waitlist-form" className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
-          join the waitlist
+        <Link href={ctaHref} className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
+          {ctaLabel}
         </Link>
       </section>
 
@@ -563,8 +591,8 @@ export default function MembershipPage() {
                   Because your next era isn&apos;t waiting for permission. It&apos;s waiting for <span style={{ color: "var(--pink)" }}>you.</span>
                 </p>
               </div>
-              <Link href="#waitlist-form" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
-                join the waitlist
+              <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+                {ctaLabel}
               </Link>
             </div>
 
@@ -591,8 +619,8 @@ export default function MembershipPage() {
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 24 }}>
                 Create content that feels magnetic, talk about your offers without feeling awkward, own your expertise, and build the kind of visibility that creates real momentum in your business. Wrapping up with powerful tapping and embodiment work to help you release the fear of being seen, back yourself unapologetically, and start showing up like the woman who&apos;s already decided she&apos;s getting paid.
               </p>
-              <Link href="#waitlist-form" className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
-                join the waitlist
+              <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+                {ctaLabel}
               </Link>
             </div>
           </div>
@@ -791,7 +819,7 @@ export default function MembershipPage() {
       </section>
 
       {/* ═══════════════ PRICING ═══════════════ */}
-      <section className="px-8 py-20 md:py-28">
+      <section id="pricing" className="px-8 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
           <div className="tag mb-6 text-center">you&apos;re invited</div>
           <h2 style={{
@@ -807,7 +835,9 @@ export default function MembershipPage() {
             This is the room where women stop talking about change and start living it. A transformation container built around your astrology, your goals, and your next level. Founding member pricing is live.
           </p>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
-            Doors open 21 July. Close 23 July. 3 days only.
+            {enrolmentOpen
+              ? "Enrolment is open now. Choose your plan below. Limited founding member spots."
+              : "Enrolment is currently closed. Join the waitlist to be first in when doors reopen."}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
@@ -841,7 +871,7 @@ export default function MembershipPage() {
                 ))}
               </div>
 
-              <CheckoutButton checkoutUrl={MONTHLY_CHECKOUT_URL} label="join · $111/mo" />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" />
             </div>
 
             {/* 3 months upfront */}
@@ -870,7 +900,7 @@ export default function MembershipPage() {
                 ))}
               </div>
 
-              <CheckoutButton checkoutUrl={THREE_MONTH_CHECKOUT_URL} label="join · pay for 3 months" />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? THREE_MONTH_CHECKOUT_URL : undefined} label="join · pay for 3 months" />
             </div>
 
             {/* VIP */}
@@ -915,7 +945,7 @@ export default function MembershipPage() {
                 </p>
               </div>
 
-              <CheckoutButton checkoutUrl={VIP_CHECKOUT_URL} label="join · $555/mo" dark />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark />
             </div>
           </div>
 
@@ -924,7 +954,7 @@ export default function MembershipPage() {
               fontFamily: pp, fontSize: 16, fontWeight: 800, color: "#fff",
               lineHeight: 1.4, margin: 0,
             }}>
-              This is how you stop reading about astrology and start <span style={{ textDecoration: "underline", textUnderlineOffset: 4 }}>living</span> it. Launches 23 July.
+              This is how you stop reading about astrology and start <span style={{ textDecoration: "underline", textUnderlineOffset: 4 }}>living</span> it.{enrolmentOpen ? " Enrolment is open now." : " Enrolment opens soon."}
             </p>
           </div>
         </div>
@@ -961,7 +991,7 @@ export default function MembershipPage() {
               },
               {
                 q: "What happens after I join the waitlist?",
-                a: "You'll get a confirmation email straight away. When doors open on 21 July, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 26 July at 6pm LA time.",
+                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 26 July at 6pm LA time.",
               },
               {
                 q: "Can I cancel or get a refund?",
@@ -1000,7 +1030,7 @@ export default function MembershipPage() {
                 fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "var(--pink)", marginBottom: 24,
               }}>
-                doors open 21 july · close 23 july
+                {enrolmentOpen ? "enrolment open · limited spots" : "doors open intermittently"}
               </div>
               <h2 style={{
                 fontFamily: pp, fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 800,
@@ -1012,7 +1042,9 @@ export default function MembershipPage() {
                 fontSize: 15, lineHeight: 1.8, color: "var(--dark)", maxWidth: 440,
                 marginBottom: 28,
               }}>
-                We&apos;re opening the doors to a limited number of founding members on 21 July. Doors close 23 July. 3 or 6-month transformation. This is your invite. Don&apos;t sleep on it.
+                {enrolmentOpen
+                  ? "The doors are open right now to a limited number of founding members. 3 or 6-month transformation. Choose your plan and your personalised portal is built the moment you're in."
+                  : "We open the doors to a limited number of founding members at a time. 3 or 6-month transformation. Join the waitlist and this is your invite the moment they reopen."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
@@ -1029,22 +1061,47 @@ export default function MembershipPage() {
             </div>
 
             <div className="p-8 md:p-10" style={{ border: "var(--border)", background: "#fff" }}>
-              <div className="tag mb-3">join the waitlist</div>
-              <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
-                Early access. Founding pricing. First in. Doors open 3 days only.
-              </p>
-              <WaitlistForm />
-              <div className="flex flex-wrap gap-2 mt-6">
-                {["Founding pricing", "Launches 23 July", "3 or 6-month transformation"].map((b) => (
-                  <span key={b} style={{
-                    fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
-                    color: "var(--dark)", padding: "6px 12px",
-                    background: "var(--pink-light)",
-                  }}>
-                    {b}
-                  </span>
-                ))}
-              </div>
+              {enrolmentOpen ? (
+                <>
+                  <div className="tag mb-3">choose your plan</div>
+                  <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
+                    Enrolment is open. Pick your membership and continue to secure checkout. Founding pricing, limited spots.
+                  </p>
+                  <Link href="#pricing" className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
+                    see the plans
+                  </Link>
+                  <div className="flex flex-wrap gap-2 mt-6">
+                    {["Founding pricing", "1:1 coaching with Betty", "3 or 6-month transformation"].map((b) => (
+                      <span key={b} style={{
+                        fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
+                        color: "var(--dark)", padding: "6px 12px",
+                        background: "var(--pink-light)",
+                      }}>
+                        {b}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="tag mb-3">join the waitlist</div>
+                  <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
+                    Early access. Founding pricing. First in when the doors reopen.
+                  </p>
+                  <WaitlistForm />
+                  <div className="flex flex-wrap gap-2 mt-6">
+                    {["Founding pricing", "First in line", "3 or 6-month transformation"].map((b) => (
+                      <span key={b} style={{
+                        fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
+                        color: "var(--dark)", padding: "6px 12px",
+                        background: "var(--pink-light)",
+                      }}>
+                        {b}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -1055,11 +1112,11 @@ export default function MembershipPage() {
         background: "var(--pink)", padding: "12px 20px",
         boxShadow: "0 -2px 12px rgba(0,0,0,0.15)",
       }}>
-        <Link href="#waitlist-form" className="no-underline flex items-center justify-center gap-2" style={{
+        <Link href={ctaHref} className="no-underline flex items-center justify-center gap-2" style={{
           fontFamily: pp, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
           textTransform: "uppercase", color: "#fff",
         }}>
-          join the waitlist
+          {ctaLabel}
           <span style={{ fontSize: 16 }}>&#8594;</span>
         </Link>
       </div>
