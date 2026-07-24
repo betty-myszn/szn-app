@@ -4,16 +4,48 @@
 // three prices but only two real tiers, "3 months upfront" is the same 'monthly' membership as
 // the $111/mo plan, just paid on a different schedule, both map to the same tier here.
 export type MembershipLevel = "none" | "monthly" | "vip";
+type PaidTier = Exclude<MembershipLevel, "none">;
 
-export const PRICE_TO_TIER: Record<string, Exclude<MembershipLevel, "none">> = {
-  [process.env.STRIPE_PRICE_MONTHLY || "__unset_monthly__"]: "monthly",
-  [process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT || "__unset_3mo__"]: "monthly",
-  [process.env.STRIPE_PRICE_VIP || "__unset_vip__"]: "vip",
+// The real, live Price IDs, hardcoded as the canonical mapping. These were previously read only
+// from env vars, but a live incident proved that fragile: when the deployed STRIPE_PRICE_* values
+// drift, go missing, or carry a stray space/newline, tierForPriceId returned "none" and a paying
+// customer's checkout was silently dropped (the webhook logged "unrecognised price" and granted
+// nothing). Price IDs aren't secrets and these three don't change, so they belong in code as the
+// backstop. Env vars still work and take precedence for anything NEW (see below), they just can't
+// break these known ones any more.
+const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
+  price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month
+  price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "monthly", // $333 once, 3 months upfront (same tier)
+  price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
 };
 
+// Trim so a trailing space or newline pasted into a Railway variable can't silently break the
+// exact-string match (the exact failure mode that dropped a live checkout).
+function cleanEnvPriceId(v: string | undefined): string | null {
+  const t = v?.trim();
+  return t ? t : null;
+}
+
+function buildPriceMap(): Record<string, PaidTier> {
+  const map: Record<string, PaidTier> = {};
+  // Env first so it can register additional / future prices...
+  const envMonthly = cleanEnvPriceId(process.env.STRIPE_PRICE_MONTHLY);
+  const env3mo = cleanEnvPriceId(process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT);
+  const envVip = cleanEnvPriceId(process.env.STRIPE_PRICE_VIP);
+  if (envMonthly) map[envMonthly] = "monthly";
+  if (env3mo) map[env3mo] = "monthly";
+  if (envVip) map[envVip] = "vip";
+  // ...but the canonical mapping is applied last so the known live IDs always win, no matter what
+  // the deployed env happens to hold.
+  return { ...map, ...CANONICAL_PRICE_TO_TIER };
+}
+
+export const PRICE_TO_TIER: Record<string, PaidTier> = buildPriceMap();
+
 export function tierForPriceId(priceId: string | null | undefined): MembershipLevel {
-  if (!priceId) return "none";
-  return PRICE_TO_TIER[priceId] ?? "none";
+  const id = priceId?.trim();
+  if (!id) return "none";
+  return PRICE_TO_TIER[id] ?? "none";
 }
 
 // Stripe subscription statuses that should keep paid content unlocked. 'active' and 'trialing'

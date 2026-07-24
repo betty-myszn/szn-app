@@ -17,22 +17,48 @@ interface WelcomeSpec {
 }
 
 function numericEnv(v: string | undefined): number | null {
-  return v && /^\d+$/.test(v) ? parseInt(v, 10) : null;
+  const t = v?.trim();
+  return t && /^\d+$/.test(t) ? parseInt(t, 10) : null;
 }
 
 // Live-confirmed mapping (amounts verified against Stripe):
-//   STRIPE_PRICE_MONTHLY            price_1TwER7…  $111/month    -> Brevo template #31 (env _MONTHLY)
-//   STRIPE_PRICE_MONTHLY_3MO_UPFRONT price_1TwEXM… $333 one-time -> Brevo template #32 (env _3MO)
-//   STRIPE_PRICE_VIP               price_1TwEZj…  $555/month    -> Brevo template #33 (env _VIP)
+//   price_1TwER7…  $111/month    -> welcome_monthly -> Brevo template #31
+//   price_1TwEXM…  $333 one-time -> welcome_3mo     -> Brevo template #32
+//   price_1TwEZj…  $555/month    -> welcome_vip     -> Brevo template #33
+//
+// Both the price->kind and the kind->template lookups are hardcoded as the backstop, for the same
+// reason as the tier map in stripe-tiers.ts: the earlier version matched the incoming price id
+// against raw STRIPE_PRICE_* env vars and read template ids straight from BREVO_TEMPLATE_* env
+// vars, so a drifted, missing, or whitespace-corrupted variable silently sent no welcome email at
+// all. Env still overrides (trimmed) for anything new; it just can't break the known live plans.
+const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
+  price_1TwER7J6s9fRhiJooQRyfcwQ: "welcome_monthly",
+  price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "welcome_3mo",
+  price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
+};
+
+const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
+  welcome_monthly: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_MONTHLY, fallbackTemplate: 31, planName: "Monthly Membership" },
+  welcome_3mo: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_3MO, fallbackTemplate: 32, planName: "3-Month Membership" },
+  welcome_vip: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_VIP, fallbackTemplate: 33, planName: "VIP Membership" },
+};
+
+function kindForPrice(priceId: string): WelcomeKind | null {
+  const id = priceId.trim();
+  if (CANONICAL_PRICE_KIND[id]) return CANONICAL_PRICE_KIND[id];
+  // Env-registered prices (trimmed) cover any future additions not yet in the canonical map.
+  if (id === process.env.STRIPE_PRICE_MONTHLY?.trim()) return "welcome_monthly";
+  if (id === process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT?.trim()) return "welcome_3mo";
+  if (id === process.env.STRIPE_PRICE_VIP?.trim()) return "welcome_vip";
+  return null;
+}
+
 function specForPrice(priceId: string | null | undefined): WelcomeSpec | null {
   if (!priceId) return null;
-  if (priceId === process.env.STRIPE_PRICE_MONTHLY)
-    return { kind: "welcome_monthly", templateId: numericEnv(process.env.BREVO_TEMPLATE_WELCOME_MONTHLY), planName: "Monthly Membership" };
-  if (priceId === process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT)
-    return { kind: "welcome_3mo", templateId: numericEnv(process.env.BREVO_TEMPLATE_WELCOME_3MO), planName: "3-Month Membership" };
-  if (priceId === process.env.STRIPE_PRICE_VIP)
-    return { kind: "welcome_vip", templateId: numericEnv(process.env.BREVO_TEMPLATE_WELCOME_VIP), planName: "VIP Membership" };
-  return null;
+  const kind = kindForPrice(priceId);
+  if (!kind) return null;
+  const s = SPEC_BY_KIND[kind];
+  return { kind, templateId: numericEnv(s.templateEnv) ?? s.fallbackTemplate, planName: s.planName };
 }
 
 // The public origin the activation link must use. Configurable so it can be switched to the custom
