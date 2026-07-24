@@ -674,3 +674,28 @@ create table if not exists auth_rate_events (
 create index if not exists auth_rate_events_email_idx on auth_rate_events (bucket, email, created_at);
 create index if not exists auth_rate_events_ip_idx on auth_rate_events (bucket, ip, created_at);
 alter table auth_rate_events enable row level security;
+
+-- ============================================================================
+-- TRANSACTIONAL EMAILS
+-- Append-only log of one-off transactional sends via Brevo (welcome emails now; password reset,
+-- failed payment, cancellation and renewal later). It doubles as the idempotency guard for the
+-- post-payment welcome flow: the partial unique index below allows at most ONE successful send per
+-- (stripe_session_id, kind), so Stripe webhook retries and manual resends can never double-send.
+-- Service-role only: RLS is on with zero policies, so a member session can't read anyone's send
+-- history. 'kind' is a stable string like welcome_monthly / welcome_3mo / welcome_vip.
+create table if not exists transactional_emails (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  kind text not null,
+  stripe_session_id text,
+  status text not null,                       -- 'sent' | 'failed'
+  provider text not null default 'brevo',
+  provider_message_id text,
+  error text,
+  created_at timestamptz not null default now()
+);
+create unique index if not exists transactional_emails_sent_once
+  on transactional_emails (stripe_session_id, kind)
+  where status = 'sent' and stripe_session_id is not null;
+create index if not exists transactional_emails_email_idx on transactional_emails (email, created_at);
+alter table transactional_emails enable row level security;

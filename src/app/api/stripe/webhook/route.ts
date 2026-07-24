@@ -2,10 +2,27 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { tierForPriceId, ACCESS_GRANTING_STATUSES } from "@/lib/stripe-tiers";
+import { sendWelcomeEmail } from "@/lib/email/welcome";
 
 export const runtime = "nodejs";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
+
+// Fire-and-forget welcome email, called only AFTER the membership has been stored (parked or
+// applied). sendWelcomeEmail is written never to throw and is idempotent per (session, kind); this
+// wrapper is belt-and-braces so an email problem can never fail the webhook. A failed webhook would
+// make Stripe retry and could read as a payment problem, so email is deliberately decoupled from
+// the 2xx we return.
+async function trySendWelcome(
+  admin: SupabaseAdmin,
+  args: { sessionId: string; email: string | null | undefined; name?: string | null; priceId: string | null | undefined }
+): Promise<void> {
+  try {
+    await sendWelcomeEmail(admin, args);
+  } catch (e) {
+    console.error("stripe webhook: welcome email threw (membership unaffected)", e instanceof Error ? e.message : e);
+  }
+}
 
 // Recent Stripe API versions moved the subscription reference off the top-level invoice.subscription
 // field (removed from this SDK's types entirely) and onto invoice.parent.subscription_details.subscription.
@@ -230,14 +247,21 @@ export async function POST(request: Request) {
           if (!profileId) {
             // Payment-first buyer with no account yet: park it, don't drop it.
             await parkPendingMembership(admin, session.customer_details?.email, facts);
-            break;
+          } else {
+            const now = new Date().toISOString();
+            await admin
+              .from("profiles")
+              .update({ ...facts, membership_started_at: now, membership_updated_at: now })
+              .eq("id", profileId);
           }
 
-          const now = new Date().toISOString();
-          await admin
-            .from("profiles")
-            .update({ ...facts, membership_started_at: now, membership_updated_at: now })
-            .eq("id", profileId);
+          // Membership is now stored (parked or applied). Send the plan's welcome email.
+          await trySendWelcome(admin, {
+            sessionId: session.id,
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            priceId,
+          });
           break;
         }
 
@@ -284,16 +308,22 @@ export async function POST(request: Request) {
           if (!profileId) {
             // Payment-first buyer with no account yet: park it, don't drop it.
             await parkPendingMembership(admin, session.customer_details?.email, facts);
-            break;
+          } else {
+            const nowIso = new Date().toISOString();
+            await admin
+              .from("profiles")
+              .update({ ...facts, membership_started_at: nowIso, membership_updated_at: nowIso })
+              .eq("id", profileId);
+            console.log("stripe webhook: one-time payment granted membership", { profileId, matchedBy, tier, periodEnd: periodEnd.toISOString() });
           }
 
-          const nowIso = new Date().toISOString();
-          await admin
-            .from("profiles")
-            .update({ ...facts, membership_started_at: nowIso, membership_updated_at: nowIso })
-            .eq("id", profileId);
-
-          console.log("stripe webhook: one-time payment granted membership", { profileId, matchedBy, tier, periodEnd: periodEnd.toISOString() });
+          // Membership is now stored (parked or applied). Send the plan's welcome email.
+          await trySendWelcome(admin, {
+            sessionId: session.id,
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            priceId,
+          });
         }
         break;
       }
