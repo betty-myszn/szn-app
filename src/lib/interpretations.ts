@@ -411,6 +411,80 @@ export const HOUSE_MEANINGS: HouseMeaning[] = [
   },
 ];
 
+// Which planet rules each sign. Modern rulership is primary (Pluto/Uranus/Neptune for the three
+// signs discovered after the classical system), traditional co-rulers included since a lot of
+// working astrologers still weigh both, especially for Scorpio/Aquarius/Pisces. Every house's
+// story runs through whichever planet rules the sign actually sitting on that house's cusp, not
+// just whatever planet happens to be posited inside it, those are two different layers.
+export interface SignRuler {
+  rulerId: string;
+  rulerName: string;
+  traditionalRulerId?: string;
+  traditionalRulerName?: string;
+}
+
+export const SIGN_RULERS: Record<string, SignRuler> = {
+  Aries: { rulerId: "mars", rulerName: "Mars" },
+  Taurus: { rulerId: "venus", rulerName: "Venus" },
+  Gemini: { rulerId: "mercury", rulerName: "Mercury" },
+  Cancer: { rulerId: "moon", rulerName: "Moon" },
+  Leo: { rulerId: "sun", rulerName: "Sun" },
+  Virgo: { rulerId: "mercury", rulerName: "Mercury" },
+  Libra: { rulerId: "venus", rulerName: "Venus" },
+  Scorpio: { rulerId: "pluto", rulerName: "Pluto", traditionalRulerId: "mars", traditionalRulerName: "Mars" },
+  Sagittarius: { rulerId: "jupiter", rulerName: "Jupiter" },
+  Capricorn: { rulerId: "saturn", rulerName: "Saturn" },
+  Aquarius: { rulerId: "uranus", rulerName: "Uranus", traditionalRulerId: "saturn", traditionalRulerName: "Saturn" },
+  Pisces: { rulerId: "neptune", rulerName: "Neptune", traditionalRulerId: "jupiter", traditionalRulerName: "Jupiter" },
+};
+
+export interface RulerPlacement {
+  rulerId: string;
+  rulerName: string;
+  rulerSign: string;
+  rulerHouse: number;
+  rulerRetrograde: boolean;
+  synthesis: string;
+}
+
+// Finds the planet that actually rules a given cusp sign, then reads where that planet natally
+// sits, sign and house, and synthesises what that specifically means for the house it rules.
+// This is the layer that was missing: not "you have Jupiter here" (a planet posited in the
+// house) but "Sagittarius rules this house, and your Jupiter, its ruler, sits in Capricorn in
+// your 6th house" (where the house's actual engine natally lives).
+// The Sun and Moon read as "the Sun"/"the Moon" in prose, every other ruler is used bare. One
+// helper so every synthesis string gets the article right rather than "Sun rules your...".
+export function rulerRef(name: string): string {
+  return name === "Sun" || name === "Moon" ? `the ${name}` : name;
+}
+
+export function composeRulerPlacement(cuspSign: string, ruledHouse: number, chart: ChartData): RulerPlacement | null {
+  const ruler = SIGN_RULERS[cuspSign];
+  if (!ruler) return null;
+
+  const rulerPlanet = chart.planets.find((p) => p.id === ruler.rulerId);
+  if (!rulerPlanet) return null;
+
+  const rulerTraits = SIGN_TRAITS[rulerPlanet.sign];
+  const rulerHouseMeaning = HOUSE_MEANINGS[rulerPlanet.house - 1];
+  const ruledHouseMeaning = HOUSE_MEANINGS[ruledHouse - 1];
+  const rName = rulerRef(ruler.rulerName);
+
+  const sameHouse = rulerPlanet.house === ruledHouse;
+  const synthesis = sameHouse
+    ? `${cuspSign} rules your ${ordinalHouse(ruledHouse)} house, and its ruler, ${rName}, sits right there too, in ${rulerPlanet.sign.toLowerCase()}. That's a house running its own engine, ${ruledHouseMeaning?.rules} is powered directly by ${rulerTraits?.essence}, with nothing external pulling it off course.`
+    : `${cuspSign} rules your ${ordinalHouse(ruledHouse)} house, but the actual engine behind it, ${rName}, sits somewhere else entirely: in ${rulerPlanet.sign.toLowerCase()}, in your ${ordinalHouse(rulerPlanet.house)} house of ${rulerHouseMeaning?.title}. That means ${ruledHouseMeaning?.rules} runs through ${rulerTraits?.essence}, filtered through ${rulerHouseMeaning?.rules}, not a standalone story, a partnership between the two houses.`;
+
+  return {
+    rulerId: ruler.rulerId,
+    rulerName: ruler.rulerName,
+    rulerSign: rulerPlanet.sign,
+    rulerHouse: rulerPlanet.house,
+    rulerRetrograde: rulerPlanet.retrograde,
+    synthesis,
+  };
+}
+
 export interface PlacementSections {
   gifts: string;
   shadow: string;
@@ -432,6 +506,26 @@ const ORDINALS = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th",
 
 export function ordinalHouse(house: number): string {
   return ORDINALS[house - 1] ?? `${house}th`;
+}
+
+// What the exact degree within a sign actually means, standard degree theory: early degrees
+// carry the sign's rawest, least-filtered expression, late degrees carry its most refined and
+// worldly-wise version, and the 29th degree (anaretic/critical) is the sign's energy under
+// pressure to resolve before the shift into the next sign. Real astrology, not filler text.
+export function degreeMeaning(degree: number): string {
+  if (degree >= 29) {
+    return "the anaretic degree, the very last degree of the sign. This placement carries urgency, it's the sign's energy pushed to its final, most concentrated point, right before the shift into what's next. Nothing here is casual.";
+  }
+  if (degree === 0) {
+    return "0 degrees, the freshest point of the sign. This placement runs on raw, unfiltered energy, less refined by experience, more instinctive and immediate than a placement sitting deeper in the sign.";
+  }
+  if (degree <= 9) {
+    return "an early degree. This placement expresses the sign in its most direct, least complicated form, close to the sign's purest instinct, before life experience adds nuance.";
+  }
+  if (degree <= 19) {
+    return "a middle degree. This placement has settled into the sign, its themes are established and consistently expressed rather than still forming.";
+  }
+  return "a late degree. This placement carries the sign's most developed, worldly-wise expression, matured by the full run through everything that sign has to teach.";
 }
 
 export function getBodyMeaning(id: string): BodyMeaning | undefined {
@@ -622,12 +716,43 @@ const ASPECT_CONNECTORS: Record<string, { verb: string; coach: string }> = {
   },
 };
 
-export function interpretAspect(planet1: string, planet2: string, type: string): string | null {
+// Optional per-pair context, when the caller has the actual signs and orb from the natal chart
+// available, this is what stops every square in the app reading as the same recycled line, two
+// different squares involving different signs genuinely mean different things.
+export interface AspectContext {
+  sign1?: string;
+  sign2?: string;
+  orb?: number;
+}
+
+export function interpretAspect(planet1: string, planet2: string, type: string, context?: AspectContext): string | null {
   const nameToId = (n: string) =>
     n === "Ascendant" ? "rising" : n === "Midheaven" ? "midheaven" : n.toLowerCase().replace(/ /g, "_");
   const b1 = getBodyMeaning(nameToId(planet1));
   const b2 = getBodyMeaning(nameToId(planet2));
   const connector = ASPECT_CONNECTORS[type];
   if (!b1 || !b2 || !connector) return null;
-  return `Your ${b1.domainShort} and your ${b2.domainShort} ${connector.verb}. ${connector.coach}`;
+
+  const base = `Your ${b1.domainShort} and your ${b2.domainShort} ${connector.verb}. ${connector.coach}`;
+  if (!context?.sign1 || !context?.sign2) return base;
+
+  const t1 = SIGN_TRAITS[context.sign1];
+  const t2 = SIGN_TRAITS[context.sign2];
+  if (!t1 || !t2) return base;
+
+  const isHard = type === "square" || type === "opposition";
+  const specific = isHard
+    ? ` Specifically: your ${context.sign1.toLowerCase()} ${planet1.toLowerCase()} wants ${t1.gift}, while your ${context.sign2.toLowerCase()} ${planet2.toLowerCase()} is pulling toward ${t2.gift}. That's a real, nameable tug-of-war, not a vague vibe.`
+    : ` Specifically: your ${context.sign1.toLowerCase()} ${planet1.toLowerCase()}'s ${t1.gift} and your ${context.sign2.toLowerCase()} ${planet2.toLowerCase()}'s ${t2.gift} back each other up directly.`;
+
+  const orbLine =
+    context.orb !== undefined
+      ? context.orb <= 2
+        ? " Under a 2° orb, this is about as exact as this pattern gets, it runs loud, not subtle."
+        : context.orb > 5
+          ? " With a wider orb, this shows up more as background texture than a constant pull."
+          : ""
+      : "";
+
+  return `${base}${specific}${orbLine}`;
 }

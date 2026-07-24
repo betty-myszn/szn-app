@@ -1,6 +1,6 @@
 import type { ChartData, TransitData, ActivatedPlacement } from "@/types/chart";
 import type { SeasonInfo } from "@/lib/seasons";
-import { SIGN_TRAITS, SIGN_OVERVIEWS, HOUSE_MEANINGS, ordinalHouse, findRootBlock, getBodyMeaning, interpretAspect } from "@/lib/interpretations";
+import { SIGN_TRAITS, SIGN_OVERVIEWS, HOUSE_MEANINGS, ordinalHouse, findRootBlock, getBodyMeaning, interpretAspect, composeRulerPlacement, rulerRef, type RulerPlacement } from "@/lib/interpretations";
 import { LIFE_AREA_TO_GOAL_CATEGORY, type Goal } from "@/lib/goals-store";
 
 export interface LifeAreaMeta {
@@ -507,6 +507,12 @@ function describeActivation(a: ActivatedPlacement, primaryHouse: number): string
 // The natal aspects your ruling planet actually carries, in plain English, sorted tightest orb
 // first, this is what makes "the real block" and "in your chart" sections feel earned rather
 // than generic, they're reading your actual chart geometry, not just your sign placement.
+function signForName(chart: ChartData, name: string): string | undefined {
+  if (name === "Ascendant") return chart.houses[0]?.sign;
+  if (name === "Midheaven") return chart.houses[9]?.sign;
+  return chart.planets.find((p) => p.name === name)?.sign;
+}
+
 function natalAspectsFor(chart: ChartData, planetName: string | undefined, limit = 2): string[] {
   if (!planetName) return [];
   const relevant = chart.aspects
@@ -516,7 +522,11 @@ function natalAspectsFor(chart: ChartData, planetName: string | undefined, limit
   return relevant
     .map((a) => {
       const other = a.planet1 === planetName ? a.planet2 : a.planet1;
-      return interpretAspect(planetName, other, a.type);
+      return interpretAspect(planetName, other, a.type, {
+        sign1: signForName(chart, planetName),
+        sign2: signForName(chart, other),
+        orb: a.orb,
+      });
     })
     .filter((line): line is string => !!line);
 }
@@ -549,6 +559,11 @@ export interface LifeAreaReading {
   planetMeaning: string; // sign-agnostic: what this planet/point actually governs
   signMeaning: string; // planet-agnostic: what this sign's own energy actually is
   houseMeaning: { title: string; text: string; naturalSign: string }; // planet-agnostic: what this house actually governs
+  cuspSign: string; // the actual sign on this area's house cusp, distinct from meta.bodyId's sign
+  rulerPlacement: RulerPlacement | null; // the planet that actually rules the house's cusp sign, and where it natally sits
+  signature: string; // one cohesive paragraph synthesising house + cusp + ruler + ruler placement + tenants into "your X signature"
+  deepSynthesis: string[]; // the interpretive payoff: why the chain creates a pattern, why ruler-sign matters, why ruler-house matters, how the season shifts it, tension/opportunity, real life, what to do. Paragraphs.
+  quickContext: { house: string; cuspSign: string; ruler: string }; // the compact 20%: one short line each for the raw ingredients, so the page can teach fast and interpret slow
   secondaryHouse: number | null; // the other house this area touches, when the area has one
   secondaryHouseMeaning: { title: string; text: string; naturalSign: string } | null;
   inYourChart: string;
@@ -568,6 +583,13 @@ export interface LifeAreaReading {
   activation: AreaActivation;
   transitLine: string | null;
   transitLines: string[]; // every live transit currently touching this area, not just the closest one
+}
+
+// Trait fields are authored inconsistently, some end with a full stop, some don't. When one is
+// spliced mid-sentence (e.g. "it tips into <shadow>."), strip any trailing punctuation/space so
+// the composed sentence doesn't run on or double up its period.
+function cleanClause(s: string): string {
+  return s.trim().replace(/[.\s]+$/, "");
 }
 
 function pick<T>(arr: T[], seed: number): T {
@@ -607,6 +629,8 @@ export function composeLifeArea(
   const primaryHouse = meta.houseNumbers[0];
   const houseMeaning = HOUSE_MEANINGS[primaryHouse - 1];
   const houseTenants = houseTenantsOf(chart, primaryHouse);
+  const cuspSign = chart.houses[primaryHouse - 1]?.sign || houseMeaning.naturalSign;
+  const rulerPlacement = composeRulerPlacement(cuspSign, primaryHouse, chart);
 
   const secondaryHouseNumber = meta.houseNumbers[1] && meta.houseNumbers[1] !== primaryHouse ? meta.houseNumbers[1] : null;
   const secondaryHouseMeaningRaw = secondaryHouseNumber ? HOUSE_MEANINGS[secondaryHouseNumber - 1] : null;
@@ -670,6 +694,62 @@ export function composeLifeArea(
 
   const bodyMeaning = getBodyMeaning(meta.bodyId);
   const signOverview = SIGN_OVERVIEWS[sign];
+  const cuspTraits = SIGN_TRAITS[cuspSign] || SIGN_TRAITS.Leo;
+
+  // The signature: one cohesive read that actually connects the layers, house, cusp sign,
+  // ruler, where the ruler sits, who else lives in the house, instead of leaving her to piece
+  // together separate sections herself. This is meant to be the single line she'd screenshot.
+  // The full chain, in order: season activates the house, the house has a cusp sign, that sign
+  // has a ruler, the ruler sits somewhere specific, and whatever else lives in the house is a
+  // separate layer on top, not the same thing as the ruler. This is the one paragraph meant to
+  // read as "an astrologer connected the pieces" rather than several facts stacked together.
+  const rName = rulerPlacement ? rulerRef(rulerPlacement.rulerName) : "";
+  const rulerSignTraits = rulerPlacement ? SIGN_TRAITS[rulerPlacement.rulerSign] : undefined;
+  const rulerHouseMeaning = rulerPlacement ? HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1] : undefined;
+  const seasonTraits = SIGN_TRAITS[season.sign] || SIGN_TRAITS.Leo;
+  const seasonOverview = SIGN_OVERVIEWS[season.sign];
+  const rulerOverview = rulerPlacement ? SIGN_OVERVIEWS[rulerPlacement.rulerSign] : undefined;
+
+  const signature = rulerPlacement
+    ? `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, that's where this szn's pressure on ${meta.label} is actually landing. Your ${ordinalHouse(primaryHouse)} house begins in ${cuspSign}, so ${rName} rules your ${meta.label} story, not whichever planet happens to feel relevant. ${rName} sits in ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${rulerPlacement.rulerHouse === primaryHouse ? ", right where it governs, no detour needed" : `, of ${HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1]?.title}`}, which means ${houseMeaning.rules} runs through ${rulerSignTraits?.essence || cuspTraits.essence}.${
+        houseTenants.length > 0
+          ? ` ${houseTenants.map((p) => p.toLowerCase()).join(" and ")} also ${houseTenants.length === 1 ? "sits" : "sit"} inside your ${ordinalHouse(primaryHouse)} house, adding real texture to ${meta.label}, but ${houseTenants.length === 1 ? "it's a planet occupying the house" : "they're planets occupying the house"}, not its ruler, that distinction matters.`
+          : ` No other planet occupies that house natally, so this area runs almost entirely on the ruler's terms, undiluted.`
+      } That's your actual ${meta.label} signature this szn: the specific mechanics of your own ${houseMeaning.title}, not a generic ${cuspSign.toLowerCase()} readout.`
+    : `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}. ${cuspSign} on that house cusp means ${houseMeaning.rules} runs through ${cuspTraits.essence}.`;
+
+  // The interpretive payoff, the 80%. Each paragraph answers one of the "why does this matter"
+  // questions using the real chain, ruler-in-sign, ruler-in-house, season, tension, real life,
+  // action, rather than defining planets and signs in isolation. Falls back gracefully when the
+  // ruler somehow can't be resolved (it always can for a real chart), so the page never empties.
+  const sameElement = !!(seasonOverview && rulerOverview && seasonOverview.element === rulerOverview.element);
+  const deepSynthesis: string[] = rulerPlacement && rulerSignTraits && rulerHouseMeaning
+    ? [
+        `Here's what makes your ${meta.label} specifically yours, and not the same as anyone else with ${cuspSign.toLowerCase()} on this house: ${rName} runs it, and your ${rName.replace(/^the /, "")} is in ${rulerPlacement.rulerSign.toLowerCase()}. That's the detail that changes everything. It means your instinct around ${meta.label} is ${cleanClause(rulerSignTraits.gift)}, and when you're stretched or scared, it tips into ${cleanClause(rulerSignTraits.shadow)}. The sign your ruler sits in is doing more to shape this area than the cusp sign everyone would read first.`,
+        `And ${rName} doesn't operate in a vacuum, it lives in your ${ordinalHouse(rulerPlacement.rulerHouse)} house of ${rulerHouseMeaning.title}. That's why your ${meta.label} is never really separate from ${rulerHouseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you: the engine behind this area is physically wired into that part of your life. Progress in ${meta.label} tends to come through ${rulerHouseMeaning.lifeAreas[0]}, and stalls there too. ${
+          houseTenants.length > 0
+            ? `Meanwhile ${houseTenants.map((p) => p.toLowerCase()).join(" and ")} ${houseTenants.length === 1 ? "sits" : "sit"} inside the house itself, adding pressure and colour, but ${houseTenants.length === 1 ? "it's an occupant, not the one steering" : "they're occupants, not the ones steering"}.`
+            : `With no planets sitting in the house itself, there's no competing voice, your ruler's placement is the whole story here.`
+        }`,
+        `${season.sign} season now changes the temperature on all of this. ${season.focus} The season's ${seasonTraits.essence} is pushing your ${meta.label} to move, and ${
+          sameElement
+            ? `because that's the same elemental current your ruler already runs on, this szn feels like a tailwind, the pattern you're already built for gets amplified. The risk is coasting on what's easy instead of using the momentum.`
+            : `because that pulls against your ruler's more ${rulerSignTraits.essence.split(",")[0]} default, there's real friction this szn, the season wants one thing, your natal wiring wants another. That tension is the opportunity: it's exactly where growth lives, as long as you don't just retreat to the comfortable pattern.`
+        }`,
+        `In real life over the next few weeks, expect ${meta.label} to keep surfacing through ${rulerHouseMeaning.lifeAreas[0]}, that's where the season will keep knocking. The move that works with your wiring instead of against it: lead with ${rulerSignTraits.gift.split(",")[0] || traitLine}, watch for the ${rulerSignTraits.shadow.split(".")[0].toLowerCase()} default, and let ${season.sign.toLowerCase()} szn's ${seasonTraits.gift} carry the part of this you've been avoiding. Small, specific, this week, not a someday overhaul.`,
+      ]
+    : [
+        `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, the part of your chart that runs ${meta.label}. ${houseMeaning.coach}`,
+        `This szn's job for you: ${season.focus} Point that at ${houseMeaning.lifeAreas[0]} specifically, and use the protocol below rather than just reading about it.`,
+      ];
+
+  const quickContext = {
+    house: `your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}`,
+    cuspSign: `${cuspSign.toLowerCase()} on the cusp: ${cuspTraits.essence}`,
+    ruler: rulerPlacement
+      ? `ruled by ${rulerPlacement.rulerName.toLowerCase()}, in ${rulerPlacement.rulerSign.toLowerCase()}, in your ${ordinalHouse(rulerPlacement.rulerHouse)} house`
+      : `${cuspSign.toLowerCase()} carries this house's whole story`,
+  };
 
   return {
     id: areaId,
@@ -687,6 +767,11 @@ export function composeLifeArea(
       ? `${signOverview.archetype} That's ${sign.toLowerCase()} on its own, an element (${signOverview.element}), a modality (${signOverview.modality}) and a ruling planet, ${signOverview.ruler}, that together give it this specific texture.`
       : "",
     houseMeaning: { title: houseMeaning.title, text: houseMeaning.deepDive, naturalSign: houseMeaning.naturalSign },
+    cuspSign,
+    rulerPlacement,
+    signature,
+    deepSynthesis,
+    quickContext,
     secondaryHouse: secondaryHouseNumber,
     secondaryHouseMeaning: secondaryHouseNumber && secondaryHouseMeaningRaw
       ? { title: secondaryHouseMeaningRaw.title, text: secondaryHouseMeaningRaw.deepDive, naturalSign: secondaryHouseMeaningRaw.naturalSign }

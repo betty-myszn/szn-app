@@ -10,6 +10,7 @@ import { useYourSzn } from "@/lib/use-your-szn";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { ordinalHouse } from "@/lib/interpretations";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
+import ShareButtons from "@/components/ShareButtons";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -60,7 +61,7 @@ export default function LifeAreaPage() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             Life area guidance is personalised to your exact chart. Add your birth details and every area opens up for you.
           </p>
-          <Link href="/onboarding" className="btn-pink">add my birth details</Link>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );
@@ -119,55 +120,76 @@ export default function LifeAreaPage() {
         </div>
       </section>
 
-      {/* What the ruling planet actually governs, before any personalised reasoning */}
-      {reading.planetMeaning && (
-        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
-            <div className="tag mb-3">what your {reading.bodyLabel} actually governs</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.planetMeaning}</p>
-          </div>
-        </section>
-      )}
-
-      {/* What that sign's own energy is, independent of the planet */}
-      {reading.signMeaning && (
-        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--gold)" }}>
-            <div className="tag mb-3">what {reading.sign.toLowerCase()} energy actually is</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#854F0B" }}>{reading.signMeaning}</p>
-          </div>
-        </section>
-      )}
-
-      {/* What the house itself governs */}
-      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--mint)" }}>
-          <div className="tag mb-3">what your {ordinalHouse(reading.house)} house actually governs</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#0F6E56" }}>{reading.houseMeaning.text}</p>
-          <p style={{ fontSize: 12, color: "#0F6E56", marginTop: 14, opacity: 0.8 }}>
-            Naturally associated with {reading.houseMeaning.naturalSign}, in your chart it&apos;s where {reading.label} actually lives, which is what the rest of this page is about.
+      {/* Your Signature: the one paragraph that actually connects house, cusp, ruler and ruler
+          placement into a single cohesive read, the piece worth screenshotting. */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)" }}>
+          <div className="tag mb-3" style={{ color: "var(--pink)" }}>your {reading.label} signature</div>
+          <p style={{ fontSize: 16, lineHeight: 1.9, color: "var(--dark)", fontWeight: 500, marginBottom: 18 }}>
+            {reading.signature}
           </p>
+          <ShareButtons text={`my ${reading.label} signature: ${reading.cuspSign.toLowerCase()} on my ${ordinalHouse(reading.house)} house cusp, ruled by ${reading.rulerPlacement?.rulerName.toLowerCase() || reading.sign.toLowerCase()}. this app actually reads charts properly ✨`} />
         </div>
       </section>
 
-      {/* The second house feeding this area, when there is one, so the page covers every angle
-          of the chart touching this life area, not just the primary house */}
-      {reading.secondaryHouse && reading.secondaryHouseMeaning && (
+      {/* The interpretive payoff: the 80%. Deep synthesis that connects the whole chain and
+          answers why it matters, how the season shifts it, and what to do, in coaching voice. */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-5">what this actually means for you</div>
+          <div className="flex flex-col gap-5">
+            {reading.deepSynthesis.map((para, i) => (
+              <p key={i} style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>{para}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The ruler of this house, the factual anchor + clickable planet, kept tight since the
+          synthesis above already interprets it. */}
+      {reading.rulerPlacement && (
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--mint)", opacity: 0.85 }}>
-            <div className="tag mb-3">and what your {ordinalHouse(reading.secondaryHouse)} house adds on top</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#0F6E56" }}>{reading.secondaryHouseMeaning.text}</p>
-            <p style={{ fontSize: 12, color: "#0F6E56", marginTop: 14, opacity: 0.8 }}>
-              Naturally associated with {reading.secondaryHouseMeaning.naturalSign}, this is the second angle your chart uses to shape {reading.label}, worth reading alongside your {ordinalHouse(reading.house)} house, not instead of it.
-            </p>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">the ruler of your {ordinalHouse(reading.house)} house</div>
+            <h2 style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 12, color: "var(--dark)" }}>
+              {reading.cuspSign.toLowerCase()} is ruled by{" "}
+              <Link href={`/my-chart/${reading.rulerPlacement.rulerId}`} className="pk" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+                {reading.rulerPlacement.rulerName.toLowerCase()}
+              </Link>
+              , in {reading.rulerPlacement.rulerSign.toLowerCase()}
+              {reading.rulerPlacement.rulerRetrograde && <span style={{ color: "var(--pink)" }}> (Rx)</span>}, in your {ordinalHouse(reading.rulerPlacement.rulerHouse)} house.
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.rulerPlacement.synthesis}</p>
           </div>
         </section>
       )}
 
-      {/* In your chart */}
+      {/* The 20%: the raw ingredients, compact. Three short lines, not three full textbook
+          sections, so the page teaches fast and interprets slow. */}
+      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-4">the ingredients, quickly</div>
+          <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
+            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--mint)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#0F6E56", marginBottom: 6 }}>the house</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#0F6E56" }}>{reading.quickContext.house}</p>
+            </div>
+            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#854F0B", marginBottom: 6 }}>the sign on it</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#854F0B" }}>{reading.quickContext.cuspSign}</p>
+            </div>
+            <div className="p-5" style={{ background: "var(--lav-light)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 6 }}>its ruler</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70" }}>{reading.quickContext.ruler}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* In your chart: the tenants + aspects layer, chart-specific detail the synthesis draws on */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
-          <div className="tag mb-3">putting it together, {reading.label} in your chart specifically</div>
+          <div className="tag mb-3">the fine detail in your chart</div>
           <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.inYourChart}</p>
         </div>
       </section>
@@ -363,7 +385,10 @@ export default function LifeAreaPage() {
                 href={`/your-season/life/${area.id}`}
                 className="no-underline p-5 text-center hover:bg-[#fafafa] transition-colors"
                 style={{
-                  borderRight: (i + 1) % 4 !== 0 && i < otherAreas.length - 1 ? "var(--border)" : undefined,
+                  // Right border on every cell except those in the last column. The last item can
+                  // land mid-row (11 areas in a 4-col grid ends 4/4/3), so it still needs its right
+                  // border to close the box, otherwise it merges into the empty trailing cell.
+                  borderRight: (i + 1) % 4 !== 0 ? "var(--border)" : undefined,
                   borderBottom: Math.floor(i / 4) < Math.floor((otherAreas.length - 1) / 4) ? "var(--border)" : undefined,
                   color: "var(--dark)",
                 }}
