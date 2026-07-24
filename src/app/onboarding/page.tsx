@@ -98,13 +98,18 @@ export default function OnboardingPage() {
       if (isEditing) {
         // Correcting an existing chart, no need to re-ask for a goal, send them straight back to
         // see the fixed chart with a quick confirmation. She's already a real member, so make
-        // sure the onboarded flag is set before sending her into the portal: the member-area gate
-        // reads `onboarded` on the way into /my-chart, and an edit saved before the goal step was
-        // ever completed would otherwise leave it false and bounce her straight back here in a
-        // loop. Awaited so the write commits before we navigate, same reason the goal step awaits.
-        await markOnboarded();
+        // sure the onboarded flag is actually set before sending her into the portal: the
+        // member-area gate reads `onboarded` on the way into /my-chart, and an edit saved before
+        // the goal step was ever completed would otherwise leave it false and bounce her straight
+        // back here in a loop. If the write genuinely fails, surface it instead of navigating into
+        // a bounce. A full-page navigation (not router.push) re-runs the gate cleanly against the
+        // committed row.
+        const onboarded = await markOnboarded();
+        if (!onboarded) {
+          throw new Error("We saved your chart but couldn't unlock your portal. Refresh and try once more, or contact support if it persists.");
+        }
         setJustUpdated(true);
-        setTimeout(() => router.push("/my-chart"), 1400);
+        setTimeout(() => { window.location.href = "/my-chart"; }, 1400);
       } else {
         // A brand new member's first ever look at her real chart, worth a moment before the
         // goal-setting form, not just an instant hop to another blank form.

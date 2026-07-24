@@ -60,14 +60,25 @@ export async function syncBirthDataToSupabase(data: BirthData): Promise<void> {
   await supabase.from("profiles").update({ name: data.name }).eq("id", user.id);
 }
 
-// Called once onboarding's goal step completes, the actual "portal unlocked" moment.
-export async function markOnboarded(): Promise<void> {
+// Marks the member onboarded, the actual "portal unlocked" moment. Returns whether the flag is
+// now definitely set, so callers can avoid navigating into a gated route that would just bounce
+// them back. supabase-js does NOT throw on an RLS-denied or failed update, it returns { error },
+// so a silent failure here previously left the flag false while the caller thought it succeeded.
+// This updates (the row already exists for anyone past the access gate), reads the flag back
+// under the member's own session, and reports the real result instead of swallowing it.
+export async function markOnboarded(): Promise<boolean> {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
-  await supabase.from("profiles").update({ onboarded: true }).eq("id", user.id);
+  if (!user) return false;
+  const { error } = await supabase.from("profiles").update({ onboarded: true }).eq("id", user.id);
+  if (error) {
+    console.error("markOnboarded update failed", error);
+    return false;
+  }
+  const { data } = await supabase.from("profiles").select("onboarded").eq("id", user.id).maybeSingle();
+  return data?.onboarded === true;
 }
 
 export async function syncChartToSupabase(chart: ChartData, placements: SavedPlacements): Promise<void> {
