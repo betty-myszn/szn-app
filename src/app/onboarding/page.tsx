@@ -96,8 +96,13 @@ export default function OnboardingPage() {
       syncChartToSupabase(chartData, placements);
 
       if (isEditing) {
-        // Correcting an existing chart, no need to re-ask for a goal, send them
-        // straight back to see the fixed chart with a quick confirmation.
+        // Correcting an existing chart, no need to re-ask for a goal, send them straight back to
+        // see the fixed chart with a quick confirmation. She's already a real member, so make
+        // sure the onboarded flag is set before sending her into the portal: the member-area gate
+        // reads `onboarded` on the way into /my-chart, and an edit saved before the goal step was
+        // ever completed would otherwise leave it false and bounce her straight back here in a
+        // loop. Awaited so the write commits before we navigate, same reason the goal step awaits.
+        await markOnboarded();
         setJustUpdated(true);
         setTimeout(() => router.push("/my-chart"), 1400);
       } else {
