@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
+import { getPublicOrigin } from "@/lib/request-origin";
 
 export const runtime = "nodejs";
 
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
   // vars are filled in), and the Stripe constructor throws immediately on a missing key, which
   // would otherwise fail the whole production build rather than just this route at request time.
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  const { origin } = new URL(request.url);
+  const origin = getPublicOrigin(request);
   const supabase = await createClient();
 
   const {
