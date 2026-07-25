@@ -11,6 +11,7 @@ import DiscoPlanet from "@/components/DiscoPlanet";
 
 const memberLinks = [
   { href: "/my-chart", label: "my chart" },
+  { href: "/events", label: "events" },
   { href: "/community", label: "community" },
   { href: "/journal", label: "journal" },
 ];
@@ -391,9 +392,9 @@ export default function NavBar() {
                     zIndex: 200,
                   }}
                 >
+                  {/* Events used to live here, it's a top-level member link now. */}
                   {[
                     { href: "/goals", label: "my goals" },
-                    { href: "/events", label: "workshops" },
                     { href: "/settings", label: "settings" },
                     ...(admin ? [{ href: "/admin", label: "admin" }] : []),
                   ].map((item) => (
@@ -568,9 +569,7 @@ export default function NavBar() {
               >
                 notifications{notifUnread > 0 ? ` (${notifUnread})` : ""}
               </Link>
-              <Link href="/events" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
-                events
-              </Link>
+              {/* Events comes through the shared `links` list above now, no separate entry. */}
               <Link href="/settings" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
                 settings
               </Link>

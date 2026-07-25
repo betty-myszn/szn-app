@@ -26,6 +26,7 @@ import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SkyAlert from "@/components/SkyAlert";
+import UpcomingEvents from "@/components/UpcomingEvents";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -238,6 +239,10 @@ export default function DashboardPage() {
       {/* Eclipses, nodal axis shifts, Mercury retrograde, fetched fresh every load so this is
           always accurate to today's actual date, not a static seasonal blurb. */}
       <SkyAlert />
+
+      {/* Live workshops with a ticking countdown, an action section so it isn't behind a
+          customize toggle, a class she's paid for shouldn't be possible to hide by accident. */}
+      <UpcomingEvents />
 
       <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
 

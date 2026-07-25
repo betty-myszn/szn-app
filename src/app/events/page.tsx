@@ -16,60 +16,13 @@ import {
   setNotifyMe,
   type RsvpRecord,
 } from "@/lib/rsvp";
+import { WORKSHOPS, type Workshop } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // Angles for the pink star burst that fires when she RSVPs going, reuses the same particle
 // animation as the challenge-completion burst, just pink stars instead of emoji confetti.
 const STAR_BURST_ANGLES = Array.from({ length: 8 }, (_, i) => (i / 8) * Math.PI * 2);
-
-const WORKSHOPS = [
-  {
-    id: "leo-szn-workshop-1",
-    label: "leo szn workshop 1",
-    meta: "26 july · 6pm la time · first live class",
-    title: "Leo Season: Enter Your Main Character Era",
-    dark: true,
-    startIso: "2026-07-26T18:00:00-07:00",
-    durationMinutes: 75,
-    location: "live on zoom, join link below once you're rsvp'd",
-    zoomUrl: "https://us06web.zoom.us/j/87348495713?pwd=eVykh1qIwFdS5xYVsT6dbUmklWRbCa.1",
-    zoomMeetingId: "873 4849 5713",
-    zoomPasscode: "391862",
-    paragraphs: [
-      "Leo season is your cosmic reminder that you didn't come here to watch everyone else live the life you want.",
-      "If you've been overthinking every move, watering yourself down, waiting until you feel “ready”, or hiding the parts of you that were always meant to be seen… this is your invitation to leave that version of yourself behind.",
-      "We'll dive into the astrology of confidence, visibility and self-expression, exploring the placements that reveal where you're designed to shine, what's been keeping you playing smaller than your potential, and how to work with this Leo season to become the woman who walks into every room knowing she belongs there.",
-      "Powerful prompts, astrology, tapping and embodiment exercises to help you release the fear of being seen, reconnect with your natural magnetism and start showing up like the main character of your own damn life.",
-    ],
-    callout: null as { plain: string; pink: string } | null,
-  },
-  {
-    id: "leo-szn-workshop-2",
-    label: "leo szn workshop 2",
-    meta: "date tbc · inside the membership",
-    title: "Visible AF: How to Show Up & Get Paid",
-    dark: false,
-    startIso: null as string | null,
-    durationMinutes: 75,
-    location: "live on zoom, link emailed before class",
-    zoomUrl: null as string | null,
-    zoomMeetingId: null as string | null,
-    zoomPasscode: null as string | null,
-    paragraphs: [
-      "You weren't born to be the internet's best kept secret.",
-      "If you've been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines… we're changing that.",
-      "We're diving into the astrology behind visibility, personal branding and becoming known for what you do. The placements that reveal how you're designed to communicate, market yourself, attract opportunities and build a brand that people actually remember. Plus the fears that keep you hiding, people-pleasing, overthinking and making yourself smaller than your vision.",
-      "Create content that feels magnetic, talk about your offers without feeling awkward, own your expertise, and build the kind of visibility that creates real momentum in your business. Wrapping up with powerful tapping and embodiment work to help you release the fear of being seen, back yourself unapologetically, and start showing up like the woman who's already decided she's getting paid.",
-    ],
-    callout: null as { plain: string; pink: string } | null,
-  },
-];
-
-WORKSHOPS[0].callout = {
-  plain: "Because your next era isn't waiting for permission. It's waiting for ",
-  pink: "you.",
-};
 
 export default function EventsPage() {
   const { member, ready } = useMember();
@@ -116,7 +69,7 @@ export default function EventsPage() {
     setRsvps((prev) => ({ ...prev, [eventId]: updated }));
   };
 
-  const handleAddToCalendar = (workshop: (typeof WORKSHOPS)[number]) => {
+  const handleAddToCalendar = (workshop: Workshop) => {
     if (!workshop.startIso) return;
     const ics = buildIcs({
       id: workshop.id,
