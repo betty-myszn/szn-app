@@ -7,7 +7,7 @@ import PlacesAutocomplete from "@/components/PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { ZODIAC_SIGNS, ZODIAC_SYMBOLS } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart, getSavedBirthData, type SavedPlacements } from "@/lib/url-params";
-import { syncBirthDataToSupabase, syncChartToSupabase, markOnboarded } from "@/lib/chart-sync";
+import { syncBirthDataToSupabase, syncChartToSupabase, markOnboarded, hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
 import { createClient } from "@/lib/supabase/client";
 import { addGoal, CATEGORY_STYLES, type GoalCategory } from "@/lib/goals-store";
 
@@ -52,8 +52,7 @@ export default function OnboardingPage() {
   // brand new member has no birth data yet, so seed just the name from the first name she gave at
   // account creation (stored on her profile), so she doesn't retype it here.
   useEffect(() => {
-    const existing = getSavedBirthData();
-    if (existing) {
+    const applyExisting = (existing: BirthData) => {
       setIsEditing(true);
       setName(existing.name);
       setDob(existing.dateOfBirth);
@@ -61,16 +60,43 @@ export default function OnboardingPage() {
       setApprox(existing.birthTimeApproximate);
       setLocation(existing.location);
       setCheckedExisting(true);
+    };
+
+    const local = getSavedBirthData();
+    if (local) {
+      applyExisting(local);
       return;
     }
-    const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
+
+    // Nothing in this browser yet. That does NOT mean she has no chart: on a new device (or a
+    // fresh tab before hydration has run) her real birth data is still in Supabase. Pull it down
+    // before deciding, otherwise the edit form would open blank and a save would overwrite good
+    // birth details with whatever she retyped.
+    (async () => {
+      try {
+        const restored = await hydrateMemberDataFromSupabase();
+        if (restored) {
+          const remote = getSavedBirthData();
+          if (remote) {
+            applyExisting(remote);
+            return;
+          }
+        }
+      } catch {
+        // Offline or the fetch failed: fall through to the brand-new-member path below rather
+        // than leaving her stuck on a blank screen.
+      }
+
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase.from("profiles").select("name").eq("id", user.id).single();
         if (profile?.name) setName(profile.name);
       }
       setCheckedExisting(true);
-    });
+    })();
   }, []);
 
   const handleChartStep = async (e: React.FormEvent) => {
@@ -219,7 +245,7 @@ export default function OnboardingPage() {
                 <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 28 }}>
                   {isEditing
                     ? "Fix your name, date, time or place of birth below and we'll recalculate your entire chart, every placement, house and reading updates to match."
-                    : "Your birth details unlock everything, we calculate your full chart with the Swiss Ephemeris, the same data professional astrologers use."}
+                    : "Your birth details unlock everything, we calculate your full chart with the Swiss Ephemeris, precise to the minute and place you were born."}
                 </p>
                 {error && (
                   <div style={{ background: "var(--pink-light)", color: "#993556", padding: "12px 16px", fontSize: 13, border: "1.5px solid var(--pink)", marginBottom: 20 }}>

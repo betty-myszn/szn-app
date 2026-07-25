@@ -94,7 +94,12 @@ export async function proxy(request: NextRequest) {
 
   if (inOnboarding) {
     if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
-    if (profile?.onboarded) return redirectPreservingSession(request, response, "/dashboard");
+    // Deliberately NOT bounced when already onboarded: /onboarding is also the birth-details
+    // edit form ("chart looks wrong? edit it", and the same link in settings). It detects
+    // existing birth data, pre-fills, and returns to /my-chart on save. Redirecting an onboarded
+    // member to /dashboard here made it impossible to correct a wrong birth time or place, which
+    // silently poisons every chart-derived reading. Mandatory onboarding is still enforced by the
+    // member-area rule below (not onboarded -> /onboarding), which is what actually guarantees it.
     return response;
   }
 
