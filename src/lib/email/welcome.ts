@@ -61,16 +61,24 @@ function specForPrice(priceId: string | null | undefined): WelcomeSpec | null {
   return { kind, templateId: numericEnv(s.templateEnv) ?? s.fallbackTemplate, planName: s.planName };
 }
 
-// The public origin the activation link must use. Configurable so it can be switched to the custom
-// domain the moment that domain actually serves the app's /create-account route, with no code
-// change. Falls back through the app url and finally a known-good default, so the CTA is never a
-// relative or broken link. (Today itsmyszn.com is a stale deploy that 404s on /create-account, so
-// leave NEXT_PUBLIC_SITE_URL on the Railway app domain until that custom domain is repointed.)
+// The human-readable plan name for a price, exported so the Brevo contact sync (brevo-contact.ts)
+// files the same PLAN_NAME the welcome email uses for {{ params.plan_name }}. Returns null for an
+// unmapped price so the caller can fall back.
+export function planNameForPrice(priceId: string | null | undefined): string | null {
+  return specForPrice(priceId)?.planName ?? null;
+}
+
+// The public origin the activation link ("Create my account" button in the welcome email) points
+// at. Prefers a configured canonical origin (NEXT_PUBLIC_SITE_URL, then NEXT_PUBLIC_APP_URL); when
+// neither is present at build it falls back to the live public domain, so the CTA is never a
+// relative or Railway-internal link. itsmyszn.com now serves this app, so it is the correct
+// default here. (NEXT_PUBLIC_* values are inlined at build time, so changing the env needs a fresh
+// deploy to take effect.)
 function siteOrigin(): string {
   const raw =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||
-    "https://szn-app-production.up.railway.app";
+    "https://itsmyszn.com";
   return raw.replace(/\/+$/, "");
 }
 
