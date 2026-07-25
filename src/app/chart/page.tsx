@@ -81,10 +81,10 @@ export default function ChartPage() {
           Join the MY SZN membership.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Your chart is just the beginning. Get live workshops, subconscious rewiring, community, and a 1:1 coaching call with Betty to help you actually live your astrology.
+          Your chart is just the beginning. Get live workshops, group coaching, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime after 3 months
+          From $111/mo · Cancel anytime after 3 months · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

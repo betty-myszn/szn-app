@@ -15,6 +15,23 @@ const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/3cIdRacULeUf3XA7SR7kc0g";
 const THREE_MONTH_CHECKOUT_URL = "https://buy.stripe.com/7sYfZi7AreUf51E3CB7kc0h";
 const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 
+// The one line on the non-VIP cards that says what she isn't getting. Deliberately styled as a
+// struck-through exclusion rather than another pink asterisk, so it can't be skim-read as a
+// feature: 1:1 time with Betty is the single thing that separates VIP from the rest.
+function NotIncluded({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="flex gap-3 items-start p-3 mb-6"
+      style={{ background: "rgba(0,0,0,0.04)", border: "1px dashed rgba(0,0,0,0.18)" }}
+    >
+      <span style={{ color: "var(--grey-light)", fontSize: 14, marginTop: 1, flexShrink: 0 }}>&#10007;</span>
+      <span style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.5 }}>
+        <span style={{ textDecoration: "line-through" }}>{children}</span>
+      </span>
+    </div>
+  );
+}
+
 function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -73,7 +90,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
             { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
-            { num: "3", text: "First live class is 26 July at 6pm LA time" },
+            { num: "3", text: "First live class is 26 July at 6.30pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
               <span style={{
@@ -204,7 +221,7 @@ export default function MembershipPage() {
             fontSize: 13, letterSpacing: "0.06em", color: "var(--pink)",
             fontWeight: 700, textTransform: "uppercase", margin: "0 auto 8px",
           }}>
-            Includes a 1:1 coaching call with Betty
+            1:1 coaching with Betty · VIP only, $555/mo
           </p>
 
           <p style={{
@@ -253,11 +270,11 @@ export default function MembershipPage() {
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
           {enrolmentOpen
-            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 26 July at 6pm LA time."
-            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 26 July at 6pm LA time."}
+            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 26 July at 6.30pm LA time."
+            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 26 July at 6.30pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching call with Betty. 3 or 6 months of becoming her.
+          1:1 coaching with Betty is VIP only. 3 or 6 months of becoming her.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -455,7 +472,7 @@ export default function MembershipPage() {
             : <>Doors open for a limited time only. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
-          Includes a 1:1 coaching call with Betty. From $111/mo.
+          Membership from $111/mo. 1:1 coaching with Betty is on VIP, $555/mo.
         </p>
         <Link href={ctaHref} className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           {ctaLabel}
@@ -569,7 +586,7 @@ export default function MembershipPage() {
                 leo szn workshop 1
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                26 july · 6pm la time · first live class
+                26 july · 6.30pm la time · first live class
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Leo Season: Enter Your Main Character Era
@@ -713,13 +730,16 @@ export default function MembershipPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
-                  included in every tier
+                  vip membership only · $555/mo
                 </div>
                 <h3 style={{ fontFamily: pp, fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 12 }}>
-                  Includes a 1:1 coaching call with <span style={{ color: "var(--pink)" }}>Betty.</span>
+                  1:1 coaching with <span style={{ color: "var(--pink)" }}>Betty.</span>
                 </h3>
                 <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.7)", margin: 0 }}>
                   Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move.
+                </p>
+                <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", fontWeight: 700, marginTop: 14, marginBottom: 0 }}>
+                  This is the one thing the $111 and $333 plans don&apos;t include. Working with me privately only happens on VIP.
                 </p>
               </div>
               <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
@@ -853,9 +873,8 @@ export default function MembershipPage() {
                 3-month minimum commitment · cancel anytime after
               </div>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6">
                 {[
-                  "1:1 coaching call with Betty",
                   "2 live group coaching sessions monthly",
                   "Monthly seasonal workshops and masterclasses",
                   "Guest expert sessions every month",
@@ -870,6 +889,8 @@ export default function MembershipPage() {
                   </div>
                 ))}
               </div>
+
+              <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
 
               <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" />
             </div>
@@ -886,11 +907,10 @@ export default function MembershipPage() {
                 covers your full 3-month minimum in one payment, no monthly charges
               </div>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6">
                 {[
                   "everything in the monthly membership",
                   "one payment, nothing to remember each month",
-                  "1:1 coaching call with Betty",
                   "your full 3-month commitment, settled upfront",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
@@ -899,6 +919,8 @@ export default function MembershipPage() {
                   </div>
                 ))}
               </div>
+
+              <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
 
               <CheckoutButton checkoutUrl={enrolmentOpen ? THREE_MONTH_CHECKOUT_URL : undefined} label="join · pay for 3 months" />
             </div>
@@ -923,10 +945,23 @@ export default function MembershipPage() {
                 3-month minimum commitment · cancel anytime after
               </div>
 
+              {/* The 1:1 is the whole reason VIP exists, so it sits above the feature list with
+                  its own treatment rather than reading as one bullet among six. */}
+              <div className="p-4 mb-5" style={{ background: "var(--pink)" }}>
+                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 6 }}>
+                  only on vip
+                </div>
+                <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", lineHeight: 1.3 }}>
+                  1:1 coaching call with Betty
+                </div>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.9)", lineHeight: 1.6, margin: "6px 0 0" }}>
+                  Private, one to one, just you and me. Not available on any other plan.
+                </p>
+              </div>
+
               <div className="space-y-3 mb-6">
                 {[
                   "Everything in the monthly membership",
-                  "1:1 coaching call with Betty",
                   "Priority access to all guest experts",
                   "Direct access to Betty between sessions",
                   "First access to new features and content",
@@ -982,16 +1017,20 @@ export default function MembershipPage() {
                 a: "The live workshops and coaching sessions happen monthly, not weekly. Between sessions you have access to the community, The Vault, and your personalised portal. You take what you need, when you need it. No homework. No guilt.",
               },
               {
-                q: "What's included in the 1:1 coaching calls?",
-                a: "You get a private 1:1 coaching session with Betty. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
+                q: "Do I get a 1:1 coaching call with Betty?",
+                a: "Only on VIP, $555/mo. That's the one thing the $111/mo and $333 upfront plans don't include, and it's the reason VIP exists. On those plans you still get the 2 live group coaching sessions every month, the workshops, the guest experts, the portal, the community and The Vault. Private time with me is VIP only.",
+              },
+              {
+                q: "What's included in the 1:1 coaching call?",
+                a: "A private 1:1 session with Betty, VIP members only. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
               },
               {
                 q: "Are there payment plans?",
-                a: "The membership starts at $111/mo with a 3-month minimum commitment, or pay for your 3 months upfront in one payment if you'd rather not think about it monthly. VIP is $555/mo. All options are shown on the pricing section above.",
+                a: "The membership starts at $111/mo with a 3-month minimum commitment, or pay for your 3 months upfront in one payment if you'd rather not think about it monthly. VIP is $555/mo and is the only plan with 1:1 coaching with Betty. All options are shown on the pricing section above.",
               },
               {
                 q: "What happens after I join the waitlist?",
-                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 26 July at 6pm LA time.",
+                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 26 July at 6.30pm LA time.",
               },
               {
                 q: "Can I cancel or get a refund?",
@@ -1001,8 +1040,8 @@ export default function MembershipPage() {
                 q: "I'm not a business owner. Is this still for me?",
                 a: "Absolutely. MY SZN is for any woman who wants more from life. More confidence, more clarity, more self-trust, more alignment. Whether you're building a business, healing, finding your purpose, or just ready to stop playing small.",
               },
-            ].map((faq, i) => (
-              <details key={i} className="group" style={{ borderBottom: i < 6 ? "var(--border)" : "none" }}>
+            ].map((faq, i, faqs) => (
+              <details key={i} className="group" style={{ borderBottom: i < faqs.length - 1 ? "var(--border)" : "none" }}>
                 <summary style={{
                   padding: "20px 24px", cursor: "pointer", listStyle: "none",
                   display: "flex", alignItems: "center", justifyContent: "space-between",

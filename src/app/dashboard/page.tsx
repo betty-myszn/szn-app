@@ -711,22 +711,11 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* Upcoming event */}
+      {/* The "next live event" card that used to sit beside this is gone: UpcomingEvents at the
+          top of the page covers it now, off the shared WORKSHOPS list and with a live countdown,
+          rather than a second copy of the same class with its date and title hardcoded here. */}
       <section className="px-5 md:px-8 py-10">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-          <div className="p-8" style={{ background: "var(--dark)", borderRight: "var(--border)" }}>
-            <div className="tag mb-3" style={{ color: "var(--lav)" }}>next live event</div>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
-              26 july · 6pm la time · first live class
-            </div>
-            <h3 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 12 }}>
-              Leo Season: Enter Your Main Character Era
-            </h3>
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, marginBottom: 20 }}>
-              The astrology of confidence, visibility and self-expression, plus tapping and embodiment work to release the fear of being seen.
-            </p>
-            <Link href="/events" className="btn-pink">save my seat</Link>
-          </div>
+        <div className="max-w-6xl mx-auto" style={{ border: "var(--border)" }}>
           <div className="p-8" style={{ background: "var(--lav-light)" }}>
             <div className="tag mb-3">community</div>
             <h3 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 12 }}>

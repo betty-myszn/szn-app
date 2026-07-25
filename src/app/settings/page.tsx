@@ -197,7 +197,7 @@ export default function SettingsPage() {
                         className="no-underline"
                         style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}
                       >
-                        upgrade to VIP
+                        upgrade to VIP for 1:1 coaching with Betty
                       </Link>
                     )}
                   </div>
