@@ -21,6 +21,7 @@ import { loadSignals, detectAvoidance, type AvoidancePattern } from "@/lib/signa
 import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type DashboardPrefs } from "@/lib/dashboard-preferences";
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
 import DiscoPlanet from "@/components/DiscoPlanet";
+import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
@@ -136,6 +137,16 @@ export default function DashboardPage() {
   return (
     <>
       <PasswordPromptBanner />
+      <Ticker
+        items={[
+          `it's ${season.sign.toLowerCase()} szn, baby`,
+          "live the dreaaam",
+          "wear the outfit",
+          "say yaaaaas",
+          "post the video",
+          "take up space",
+        ]}
+      />
       {/* Header */}
       <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)", position: "relative", overflow: "hidden" }}>
         <div className="hidden md:block" style={{ position: "absolute", top: 18, right: 32 }}>
