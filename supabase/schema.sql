@@ -699,3 +699,53 @@ create unique index if not exists transactional_emails_sent_once
   where status = 'sent' and stripe_session_id is not null;
 create index if not exists transactional_emails_email_idx on transactional_emails (email, created_at);
 alter table transactional_emails enable row level security;
+
+-- ============================================================================
+-- MEMBERSHIP LIFECYCLE · Phase 1 (additive only, no behaviour change)
+-- Raw commitment + lifecycle facts. All DERIVED values (next billing date, minimum-commitment end,
+-- eligibility, lifecycle status) are computed in src/lib/membership/derive.ts and are never stored,
+-- so a stale column can never contradict Stripe. Every column defaults safe, so applying this
+-- leaves all existing members exactly as they are: level, status and access are untouched.
+-- ============================================================================
+
+alter table profiles add column if not exists commitment_started_at      timestamptz;
+alter table profiles add column if not exists successful_payments_count  integer not null default 0;
+alter table profiles add column if not exists cancellation_requested_at  timestamptz;
+alter table profiles add column if not exists access_ends_at             timestamptz;
+alter table profiles add column if not exists last_payment_at            timestamptz;
+alter table profiles add column if not exists total_payments_count       integer not null default 0;
+alter table profiles add column if not exists lifetime_value_cents       bigint  not null default 0;
+
+-- Mirror the counters onto pending_memberships so a payment-first buyer's commitment survives the
+-- park -> claim merge at activation. The code that copies these across is Phase 3; the columns are
+-- added now to avoid a second migration. Nothing reads them yet.
+alter table pending_memberships add column if not exists commitment_started_at     timestamptz;
+alter table pending_memberships add column if not exists successful_payments_count integer not null default 0;
+alter table pending_memberships add column if not exists last_payment_at           timestamptz;
+alter table pending_memberships add column if not exists total_payments_count      integer not null default 0;
+alter table pending_memberships add column if not exists lifetime_value_cents      bigint  not null default 0;
+
+-- Structured per-event audit trail so no Stripe webhook event ever silently returns success.
+-- Append-only (surrogate primary key): deliberately NOT foreign-keyed to stripe_webhook_events,
+-- whose row is rolled back on handler failure, because the audit of a FAILED attempt must survive
+-- that rollback. One row per processing attempt. Service-role only: RLS on with zero policies.
+create table if not exists stripe_event_log (
+  id                 uuid primary key default gen_random_uuid(),
+  event_id           text not null,
+  type               text not null,
+  stripe_customer_id text,
+  profile_id         uuid references profiles(id) on delete set null,
+  actions            jsonb not null default '{}'::jsonb,  -- {membership_updated, brevo_synced, email_sent, commitment_incremented}
+  status             text  not null default 'ok',          -- 'ok' | 'partial' | 'failed'
+  error              text,
+  created_at         timestamptz not null default now()
+);
+create index if not exists stripe_event_log_event_idx    on stripe_event_log (event_id);
+create index if not exists stripe_event_log_type_idx     on stripe_event_log (type, created_at desc);
+create index if not exists stripe_event_log_customer_idx on stripe_event_log (stripe_customer_id);
+alter table stripe_event_log enable row level security;
+
+-- Supports the daily Railway grace sweep (Phase 3), which selects on access_ends_at.
+create index if not exists profiles_access_ends_at_idx
+  on profiles (access_ends_at)
+  where access_ends_at is not null and membership_level <> 'none';

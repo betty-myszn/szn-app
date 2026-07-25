@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { tierForPriceId, ACCESS_GRANTING_STATUSES } from "@/lib/stripe-tiers";
-import { sendWelcomeEmail } from "@/lib/email/welcome";
+import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
+import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
+import { logStripeEvent } from "@/lib/stripe/event-log";
 
 export const runtime = "nodejs";
 
@@ -21,6 +23,42 @@ async function trySendWelcome(
     await sendWelcomeEmail(admin, args);
   } catch (e) {
     console.error("stripe webhook: welcome email threw (membership unaffected)", e instanceof Error ? e.message : e);
+  }
+}
+
+// Fire-and-forget Brevo CONTACT upsert, called only AFTER the membership has been stored (parked or
+// applied) and before the welcome email. This is the step that explicitly tells Brevo the buyer has
+// paid: it creates/updates their contact by email, sets the paid membership attributes + Stripe
+// subscription status, and files them on the paid-members list. Like trySendWelcome it is decoupled
+// from the 2xx we return, a Brevo problem can never fail the webhook or make Stripe retry a good
+// payment. planName is resolved from the price so it matches the welcome email's plan_name exactly.
+async function trySyncBrevoContact(args: {
+  email: string | null | undefined;
+  name?: string | null;
+  membershipLevel: string;
+  priceId: string | null | undefined;
+  subscriptionStatus: string;
+  stripeCustomerId: string | null | undefined;
+}): Promise<void> {
+  try {
+    if (!args.email) {
+      console.error("stripe webhook: cannot sync Brevo contact, no email on the Stripe object");
+      return;
+    }
+    const planName = planNameForPrice(args.priceId) ?? `${args.membershipLevel} membership`;
+    const result = await syncPaidMemberToBrevo({
+      email: args.email,
+      name: args.name,
+      membershipLevel: args.membershipLevel,
+      planName,
+      subscriptionStatus: args.subscriptionStatus,
+      stripeCustomerId: args.stripeCustomerId,
+    });
+    if (!result.ok) {
+      console.error("stripe webhook: Brevo contact sync failed (membership unaffected)", result.error);
+    }
+  } catch (e) {
+    console.error("stripe webhook: Brevo contact sync threw (membership unaffected)", e instanceof Error ? e.message : e);
   }
 }
 
@@ -255,7 +293,16 @@ export async function POST(request: Request) {
               .eq("id", profileId);
           }
 
-          // Membership is now stored (parked or applied). Send the plan's welcome email.
+          // Membership is now stored (parked or applied). Tell Brevo the buyer has paid (contact +
+          // paid attributes + subscription status on the paid list), then send the welcome email.
+          await trySyncBrevoContact({
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            membershipLevel: tier,
+            priceId,
+            subscriptionStatus: subscription.status,
+            stripeCustomerId: customerId,
+          });
           await trySendWelcome(admin, {
             sessionId: session.id,
             email: session.customer_details?.email,
@@ -317,7 +364,17 @@ export async function POST(request: Request) {
             console.log("stripe webhook: one-time payment granted membership", { profileId, matchedBy, tier, periodEnd: periodEnd.toISOString() });
           }
 
-          // Membership is now stored (parked or applied). Send the plan's welcome email.
+          // Membership is now stored (parked or applied). Tell Brevo the buyer has paid, then send
+          // the welcome email. A one-time payment has no subscription object, so the status filed on
+          // the contact is "active", matching the membership facts written above.
+          await trySyncBrevoContact({
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            membershipLevel: tier,
+            priceId,
+            subscriptionStatus: "active",
+            stripeCustomerId: customerId,
+          });
           await trySendWelcome(admin, {
             sessionId: session.id,
             email: session.customer_details?.email,
@@ -411,8 +468,13 @@ export async function POST(request: Request) {
     if (rollbackError) {
       console.error("stripe webhook: failed to roll back event record after handler error", rollbackError.message);
     }
+    // Fail-soft audit of the failed attempt. Written after the rollback and intentionally not tied
+    // to the (now deleted) idempotency row, so the failure record survives. Never throws.
+    await logStripeEvent(admin, event, { status: "failed", error: err instanceof Error ? err.message : String(err) });
     return NextResponse.json({ error: "webhook handler failed" }, { status: 500 });
   }
 
+  // Fail-soft audit of the successful processing. Additive only: does not alter any effect above.
+  await logStripeEvent(admin, event, { status: "ok" });
   return NextResponse.json({ received: true });
 }
