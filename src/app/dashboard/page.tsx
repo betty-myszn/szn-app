@@ -138,6 +138,7 @@ export default function DashboardPage() {
     <>
       <PasswordPromptBanner />
       <Ticker
+        variant="lav"
         items={[
           `it's ${season.sign.toLowerCase()} szn, baby`,
           "live the dreaaam",
