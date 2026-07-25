@@ -6,6 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { logout, isAdminMember } from "@/lib/member";
 import { useMember } from "@/lib/use-member";
 import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadCount, type Broadcast } from "@/lib/broadcasts";
+import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 import DiscoPlanet from "@/components/DiscoPlanet";
 
 const memberLinks = [
@@ -32,6 +33,9 @@ export default function NavBar() {
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [unread, setUnread] = useState(0);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifs, setNotifs] = useState<AppNotification[]>([]);
+  const [notifUnread, setNotifUnread] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const { member } = useMember();
@@ -48,6 +52,11 @@ export default function NavBar() {
       setBroadcasts(list);
       setUnread(getUnreadCount(list, await loadReadBroadcastIds()));
     })();
+    (async () => {
+      const n = await loadNotifications();
+      setNotifs(n);
+      setNotifUnread(notifUnreadCount(n));
+    })();
   }, [member]);
 
   const toggleBell = () => {
@@ -56,6 +65,17 @@ export default function NavBar() {
       if (next && broadcasts.length > 0) {
         markAllBroadcastsRead(broadcasts);
         setUnread(0);
+      }
+      return next;
+    });
+  };
+
+  const toggleNotif = () => {
+    setNotifOpen((o) => {
+      const next = !o;
+      if (next && notifUnread > 0) {
+        markAllNotificationsRead();
+        setNotifUnread(0);
       }
       return next;
     });
@@ -243,6 +263,98 @@ export default function NavBar() {
                   >
                     see all messages
                   </Link>
+                </div>
+              )}
+            </div>
+          )}
+          {member && (
+            <div className="hidden md:block" style={{ position: "relative" }}>
+              <button
+                onClick={toggleNotif}
+                title="notifications"
+                style={{
+                  position: "relative",
+                  width: 34,
+                  height: 34,
+                  background: "#fff",
+                  border: "var(--border)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span style={{ fontSize: 15 }}>{"🔔"}</span>
+                {notifUnread > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: -4,
+                      right: -4,
+                      minWidth: 16,
+                      height: 16,
+                      padding: "0 3px",
+                      borderRadius: 8,
+                      background: "var(--pink)",
+                      color: "var(--dark)",
+                      fontSize: 9,
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {notifUnread}
+                  </span>
+                )}
+              </button>
+              {notifOpen && (
+                <div
+                  className="flex flex-col"
+                  style={{
+                    position: "absolute",
+                    top: 42,
+                    right: 0,
+                    width: 300,
+                    maxHeight: 360,
+                    overflowY: "auto",
+                    background: "#fff",
+                    border: "var(--border)",
+                    zIndex: 200,
+                  }}
+                >
+                  {notifs.length === 0 ? (
+                    <p style={{ fontSize: 12, color: "var(--grey-light)", padding: "16px 14px" }}>No notifications yet.</p>
+                  ) : (
+                    notifs.slice(0, 8).map((n) => {
+                      const inner = (
+                        <>
+                          <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 800, marginBottom: 4 }}>
+                            {n.title}
+                          </div>
+                          {n.body && <p style={{ fontSize: 11, color: "var(--grey)", lineHeight: 1.6 }}>{n.body}</p>}
+                          <div style={{ fontSize: 9, color: "var(--grey-light)", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                            {notificationTimeAgo(n.createdAt)}
+                          </div>
+                        </>
+                      );
+                      return n.link ? (
+                        <Link
+                          key={n.id}
+                          href={n.link}
+                          onClick={() => setNotifOpen(false)}
+                          className="no-underline text-[var(--dark)] p-4"
+                          style={{ borderBottom: "1px solid #eee", background: n.read ? "#fff" : "var(--pink-bg)" }}
+                        >
+                          {inner}
+                        </Link>
+                      ) : (
+                        <div key={n.id} className="p-4" style={{ borderBottom: "1px solid #eee", background: n.read ? "#fff" : "var(--pink-bg)" }}>
+                          {inner}
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               )}
             </div>
@@ -442,6 +554,19 @@ export default function NavBar() {
                 className="no-underline text-[var(--dark)] hover:text-[var(--pink)]"
               >
                 messages{unread > 0 ? ` (${unread})` : ""}
+              </Link>
+              <Link
+                href="/community"
+                onClick={() => {
+                  setOpen(false);
+                  if (notifUnread > 0) {
+                    markAllNotificationsRead();
+                    setNotifUnread(0);
+                  }
+                }}
+                className="no-underline text-[var(--dark)] hover:text-[var(--pink)]"
+              >
+                notifications{notifUnread > 0 ? ` (${notifUnread})` : ""}
               </Link>
               <Link href="/events" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
                 events

@@ -701,6 +701,85 @@ create index if not exists transactional_emails_email_idx on transactional_email
 alter table transactional_emails enable row level security;
 
 -- ============================================================================
+-- NOTIFICATIONS
+-- Per-member activity feed behind the nav bell (separate from admin broadcasts, which are the
+-- "messages" envelope). A row is one thing that happened that a specific member should see:
+-- someone replied to or reacted to their post, or a new poll opened. Rows are created ONLY by the
+-- security-definer triggers below, never by clients directly (there is no insert policy), so a
+-- member can't forge a notification for anyone. Each member can read, mark-read, and delete only
+-- their own.
+create table if not exists notifications (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id) on delete cascade,
+  type text not null,                    -- 'reply' | 'reaction' | 'poll' | 'event'
+  title text not null,
+  body text,
+  link text,
+  actor text,                            -- display name of whoever triggered it, when relevant
+  read boolean not null default false,
+  created_at timestamptz not null default now()
+);
+create index if not exists notifications_user_idx on notifications (user_id, read, created_at desc);
+alter table notifications enable row level security;
+
+drop policy if exists "notifications_select_own" on notifications;
+create policy "notifications_select_own" on notifications for select using (auth.uid() = user_id);
+drop policy if exists "notifications_update_own" on notifications;
+create policy "notifications_update_own" on notifications for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists "notifications_delete_own" on notifications;
+create policy "notifications_delete_own" on notifications for delete using (auth.uid() = user_id);
+
+-- Reply on a community post -> notify the post's author (never yourself).
+create or replace function notify_on_comment() returns trigger as $$
+declare post_owner uuid;
+begin
+  select user_id into post_owner from public.community_posts where id = NEW.post_id;
+  if post_owner is not null and post_owner <> NEW.user_id then
+    insert into public.notifications (user_id, type, title, body, link, actor)
+    values (post_owner, 'reply', coalesce(nullif(NEW.author, ''), 'Someone') || ' replied to your post',
+            left(NEW.content, 140), '/community', NEW.author);
+  end if;
+  return NEW;
+end;
+$$ language plpgsql security definer set search_path = public;
+drop trigger if exists trg_notify_on_comment on community_comments;
+create trigger trg_notify_on_comment after insert on community_comments
+for each row execute function notify_on_comment();
+
+-- Reaction (like) on a community post -> notify the post's author (never yourself).
+create or replace function notify_on_like() returns trigger as $$
+declare post_owner uuid; liker_name text;
+begin
+  select user_id into post_owner from public.community_posts where id = NEW.post_id;
+  if post_owner is not null and post_owner <> NEW.user_id then
+    select coalesce(nullif(name, ''), split_part(email, '@', 1)) into liker_name
+      from public.profiles where id = NEW.user_id;
+    insert into public.notifications (user_id, type, title, link, actor)
+    values (post_owner, 'reaction', coalesce(liker_name, 'Someone') || ' reacted to your post',
+            '/community', liker_name);
+  end if;
+  return NEW;
+end;
+$$ language plpgsql security definer set search_path = public;
+drop trigger if exists trg_notify_on_like on community_likes;
+create trigger trg_notify_on_like after insert on community_likes
+for each row execute function notify_on_like();
+
+-- New poll opened -> notify every member except whoever created it. One row per member (fan-out).
+create or replace function notify_on_poll() returns trigger as $$
+begin
+  insert into public.notifications (user_id, type, title, body, link)
+  select p.id, 'poll', 'New poll: ' || left(NEW.question, 100), 'Tap to cast your vote.', '/dashboard'
+  from public.profiles p
+  where p.email is distinct from NEW.author_email;
+  return NEW;
+end;
+$$ language plpgsql security definer set search_path = public;
+drop trigger if exists trg_notify_on_poll on polls;
+create trigger trg_notify_on_poll after insert on polls
+for each row execute function notify_on_poll();
+
+-- ============================================================================
 -- MEMBERSHIP LIFECYCLE · Phase 1 (additive only, no behaviour change)
 -- Raw commitment + lifecycle facts. All DERIVED values (next billing date, minimum-commitment end,
 -- eligibility, lifecycle status) are computed in src/lib/membership/derive.ts and are never stored,
