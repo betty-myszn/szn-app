@@ -3,6 +3,7 @@ import swisseph from "swisseph";
 import path from "path";
 import { DateTime } from "luxon";
 import { ZODIAC_SIGNS } from "@/types/chart";
+import { SKY_ZONE } from "@/lib/sky-zone";
 
 const EPHE_PATH = path.join(process.cwd(), "ephe");
 swisseph.swe_set_ephe_path(EPHE_PATH);
@@ -82,8 +83,9 @@ function calcAt(jd: number, body: number): { longitude: number; speed: number } 
 }
 
 function jdToIso(jd: number): string {
-  // JD 2440587.5 = 1970-01-01T00:00Z
-  return DateTime.fromMillis((jd - 2440587.5) * 86400000, { zone: "utc" }).toISODate() ?? "";
+  // JD 2440587.5 = 1970-01-01T00:00Z. Dates are published in SKY_ZONE, not UTC, see that module
+  // for why, anything rendering these strings has to measure "today" the same way.
+  return DateTime.fromMillis((jd - 2440587.5) * 86400000, { zone: SKY_ZONE }).toISODate() ?? "";
 }
 
 function signAt(longitude: number): { sign: string; degree: number } {

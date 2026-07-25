@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { daysUntilSkyDate } from "@/lib/sky-zone";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -41,12 +42,9 @@ interface CalendarResponse {
 const BIG_TYPES = new Set(["solar_eclipse", "lunar_eclipse", "node_ingress"]);
 const MAJOR_WINDOW_DAYS = 45;
 
-function daysUntil(dateIso: string): number {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const target = new Date(dateIso + "T00:00:00");
-  return Math.round((target.getTime() - today.getTime()) / 86400000);
-}
+// "today" has to be measured in the same zone the API publishes its dates in, otherwise a member
+// in Asia sits up to a day ahead of the dates she's reading and every countdown is out by one.
+const daysUntil = daysUntilSkyDate;
 
 function formatDate(dateIso: string): string {
   return new Date(dateIso + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long" });
