@@ -4,6 +4,17 @@ import type { BirthData, ChartData } from "@/types/chart";
 
 const SESSION_CHART_KEY = "myszn_chart_cache";
 
+// Postgres `time` columns come back with seconds ("16:30:00"), but everything downstream expects
+// bare HH:mm: <input type="time"> and /api/calculate's ^\d{2}:\d{2}$ check both do. Feeding the
+// raw value straight through made "save & recalculate" fail with "Invalid time format. Use HH:mm"
+// on an edit where the member had changed nothing, because the saved time itself was the thing
+// being rejected. Trims to HH:mm and leaves an already-clean value untouched.
+export function normalizeBirthTime(raw: string): string {
+  const match = /^(\d{1,2}):(\d{2})/.exec(raw.trim());
+  if (!match) return raw;
+  return `${match[1].padStart(2, "0")}:${match[2]}`;
+}
+
 function mapRowToBirthData(row: {
   name: string;
   date_of_birth: string;
@@ -19,7 +30,7 @@ function mapRowToBirthData(row: {
   return {
     name: row.name,
     dateOfBirth: row.date_of_birth,
-    birthTime: row.birth_time,
+    birthTime: normalizeBirthTime(row.birth_time),
     birthTimeApproximate: row.birth_time_approximate,
     location: {
       placeName: row.place_name,

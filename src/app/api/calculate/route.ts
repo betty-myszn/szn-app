@@ -31,13 +31,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const timeRegex = /^\d{2}:\d{2}$/;
-    if (!timeRegex.test(birthData.birthTime)) {
+    // Accepts an optional :ss tail because a birth time round-tripped through Postgres' `time`
+    // type comes back as "16:30:00". Rejecting that made editing birth details impossible: the
+    // member's own saved, valid time failed validation before she'd changed anything. Seconds are
+    // dropped rather than honoured, birth times are only ever minute-precision here.
+    const timeMatch = /^(\d{1,2}):(\d{2})(?::\d{2})?$/.exec(birthData.birthTime.trim());
+    if (!timeMatch) {
       return NextResponse.json(
         { error: "Invalid time format. Use HH:mm" },
         { status: 400 }
       );
     }
+    const hours = Number(timeMatch[1]);
+    const minutes = Number(timeMatch[2]);
+    if (hours > 23 || minutes > 59) {
+      return NextResponse.json(
+        { error: "Invalid time format. Use HH:mm" },
+        { status: 400 }
+      );
+    }
+    birthData.birthTime = `${timeMatch[1].padStart(2, "0")}:${timeMatch[2]}`;
 
     const chart = calculateChart(birthData);
     return NextResponse.json(chart);
