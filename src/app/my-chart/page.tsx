@@ -160,6 +160,8 @@ export default function MyChartPage() {
                   borderRight: (i + 1) % 4 !== 0 && i < SYNTHESIS_PAGES.length - 1 ? "var(--border)" : undefined,
                   borderBottom: Math.floor(i / 4) < Math.floor((SYNTHESIS_PAGES.length - 1) / 4) ? "var(--border)" : undefined,
                   color: page.light ? "#fff" : "var(--dark)",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 <h3 style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 6 }}>
@@ -168,6 +170,29 @@ export default function MyChartPage() {
                 <p style={{ fontSize: 12, lineHeight: 1.6, color: page.light ? "rgba(255,255,255,0.7)" : "var(--grey)" }}>
                   {page.desc}
                 </p>
+                <span
+                  className="inline-block self-start"
+                  style={{
+                    marginTop: "auto",
+                    paddingTop: 16,
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      fontFamily: poppins,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      padding: "9px 16px",
+                      background: page.light ? "#fff" : "var(--dark)",
+                      color: page.light ? "var(--dark)" : "#fff",
+                    }}
+                  >
+                    read your reading &#8594;
+                  </span>
+                </span>
               </Link>
             ))}
           </div>
@@ -203,6 +228,22 @@ export default function MyChartPage() {
                 <div style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 2 }}>
                   {p.degree}&deg;{String(p.minute).padStart(2, "0")}&apos; · {ordinalHouse(p.house)} house
                 </div>
+                <span
+                  style={{
+                    display: "inline-block",
+                    marginTop: 12,
+                    fontFamily: poppins,
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    padding: "6px 12px",
+                    background: "var(--dark)",
+                    color: "#fff",
+                  }}
+                >
+                  read &#8594;
+                </span>
               </Link>
             ))}
           </div>
@@ -242,6 +283,22 @@ export default function MyChartPage() {
                       </span>
                     )}
                   </div>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      marginTop: 12,
+                      fontFamily: poppins,
+                      fontSize: 9,
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      padding: "6px 12px",
+                      background: "var(--dark)",
+                      color: "#fff",
+                    }}
+                  >
+                    read &#8594;
+                  </span>
                 </Link>
               );
             })}
