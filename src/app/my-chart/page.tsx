@@ -186,8 +186,8 @@ export default function MyChartPage() {
                       letterSpacing: "0.08em",
                       textTransform: "uppercase",
                       padding: "9px 16px",
-                      background: page.light ? "#fff" : "var(--dark)",
-                      color: page.light ? "var(--dark)" : "#fff",
+                      background: page.bg === "var(--pink)" ? "#fff" : "var(--pink)",
+                      color: "var(--dark)",
                     }}
                   >
                     read your reading &#8594;
@@ -238,8 +238,8 @@ export default function MyChartPage() {
                     letterSpacing: "0.08em",
                     textTransform: "uppercase",
                     padding: "6px 12px",
-                    background: "var(--dark)",
-                    color: "#fff",
+                    background: "var(--pink)",
+                    color: "var(--dark)",
                   }}
                 >
                   read &#8594;
@@ -293,8 +293,8 @@ export default function MyChartPage() {
                       letterSpacing: "0.08em",
                       textTransform: "uppercase",
                       padding: "6px 12px",
-                      background: "var(--dark)",
-                      color: "#fff",
+                      background: "var(--pink)",
+                      color: "var(--dark)",
                     }}
                   >
                     read &#8594;
