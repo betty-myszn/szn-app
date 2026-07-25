@@ -28,10 +28,21 @@ const DEFAULT_SENDER = {
   name: process.env.BREVO_SENDER_NAME || "Betty from MY SZN",
 };
 
-export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<BrevoSendResult> {
-  const key = process.env.BREVO_API_KEY;
-  if (!key) return { ok: false, error: "BREVO_API_KEY not set" };
+/**
+ * A self-contained email whose subject and HTML live in code rather than in a Brevo template.
+ * Used for internal alerts to the team, where the copy is functional, changes with the code that
+ * produces it, and nobody needs a designer in Brevo to edit it. Member-facing mail should keep
+ * using sendBrevoTemplateEmail so its design stays editable without a deploy.
+ */
+export interface BrevoRawEmail {
+  to: { email: string; name?: string };
+  subject: string;
+  htmlContent: string;
+  sender?: { email: string; name?: string };
+  replyTo?: { email: string; name?: string };
+}
 
+async function postBrevoEmail(key: string, payload: Record<string, unknown>): Promise<BrevoSendResult> {
   try {
     const res = await fetch(`${BREVO_API}/smtp/email`, {
       method: "POST",
@@ -40,13 +51,7 @@ export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<B
         "Content-Type": "application/json",
         accept: "application/json",
       },
-      body: JSON.stringify({
-        sender: msg.sender ?? DEFAULT_SENDER,
-        replyTo: msg.replyTo ?? DEFAULT_SENDER,
-        to: [msg.to],
-        templateId: msg.templateId,
-        params: msg.params,
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
@@ -58,4 +63,30 @@ export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<B
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
+}
+
+export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<BrevoSendResult> {
+  const key = process.env.BREVO_API_KEY;
+  if (!key) return { ok: false, error: "BREVO_API_KEY not set" };
+
+  return postBrevoEmail(key, {
+    sender: msg.sender ?? DEFAULT_SENDER,
+    replyTo: msg.replyTo ?? DEFAULT_SENDER,
+    to: [msg.to],
+    templateId: msg.templateId,
+    params: msg.params,
+  });
+}
+
+export async function sendBrevoEmail(msg: BrevoRawEmail): Promise<BrevoSendResult> {
+  const key = process.env.BREVO_API_KEY;
+  if (!key) return { ok: false, error: "BREVO_API_KEY not set" };
+
+  return postBrevoEmail(key, {
+    sender: msg.sender ?? DEFAULT_SENDER,
+    replyTo: msg.replyTo ?? DEFAULT_SENDER,
+    to: [msg.to],
+    subject: msg.subject,
+    htmlContent: msg.htmlContent,
+  });
 }

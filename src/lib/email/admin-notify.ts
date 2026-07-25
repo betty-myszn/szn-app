@@ -1,0 +1,194 @@
+import type { createAdminClient } from "@/lib/supabase/admin";
+import { sendBrevoEmail } from "@/lib/email/brevo";
+import { planNameForPrice } from "@/lib/email/welcome";
+
+type SupabaseAdmin = ReturnType<typeof createAdminClient>;
+
+// One row per checkout in transactional_emails, same table and the same partial unique index on
+// (stripe_session_id, kind) that makes the welcome email exactly-once. Reusing it means a Stripe
+// webhook retry can't send a second "new member" alert, with no new schema.
+const ADMIN_ALERT_KIND = "admin_new_member";
+
+/**
+ * Where new-member alerts go. Defaults to the Brevo sender identity (the support inbox) so this
+ * works without any new configuration; set ADMIN_NOTIFY_EMAIL to send somewhere else. Comma
+ * separated addresses are allowed, each gets its own send so one bad address can't drop the rest.
+ */
+function adminRecipients(): string[] {
+  const raw =
+    process.env.ADMIN_NOTIFY_EMAIL ||
+    process.env.BREVO_SENDER_EMAIL ||
+    "hello@thecosmicco.com";
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+// Buyer-supplied values (name, email) go into an HTML body, so they get escaped. A member can set
+// their Stripe name to anything, and this email is read in an inbox that renders HTML.
+function esc(v: string | null | undefined): string {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// The buyer types their own name into Stripe Checkout, and it ends up in an email subject line.
+// Escaping covers the HTML body, but a subject is plain text: strip control characters (which can
+// confuse mail headers), collapse whitespace, and cap the length so one long name can't push the
+// plan out of a truncated inbox preview.
+function cleanName(name: string | null | undefined): string {
+  // eslint-disable-next-line no-control-regex
+  const flat = String(name ?? "").replace(/[\x00-\x1F\x7F]+/g, " ").replace(/\s+/g, " ").trim();
+  return flat.length > 60 ? `${flat.slice(0, 60)}…` : flat;
+}
+
+function formatAmount(amountTotal: number | null | undefined, currency: string | null | undefined): string {
+  if (amountTotal == null) return "not reported";
+  // Stripe reports minor units for every currency this store sells in.
+  const major = amountTotal / 100;
+  const code = (currency || "usd").toUpperCase();
+  return `${major.toFixed(2)} ${code}`;
+}
+
+export interface NewMemberAlertArgs {
+  sessionId: string;
+  email: string | null | undefined;
+  name?: string | null;
+  priceId: string | null | undefined;
+  /** 'monthly' | 'vip', already resolved from the price by the webhook. */
+  tier: string;
+  amountTotal?: number | null;
+  currency?: string | null;
+  stripeCustomerId?: string | null;
+  /**
+   * False when the buyer paid before creating an account, so the membership is parked against
+   * their email until they claim it. Worth calling out: those are the ones who go quiet.
+   */
+  accountClaimed: boolean;
+}
+
+/**
+ * Builds the subject and HTML body for the alert. Separate from the send so the copy can be
+ * rendered and eyeballed without putting anything in anyone's inbox.
+ */
+export function buildNewMemberAlert(args: NewMemberAlertArgs): { subject: string; htmlContent: string } {
+  const planName = planNameForPrice(args.priceId) ?? `${args.tier} membership`;
+  const displayName = cleanName(args.name) || "(no name given)";
+  const accountClaimed = args.accountClaimed;
+
+  const rows: [string, string][] = [
+    ["Name", displayName],
+    ["Email", args.email || "(none on the checkout session)"],
+    ["Plan", planName],
+    ["Tier", args.tier],
+    ["Paid", formatAmount(args.amountTotal, args.currency)],
+    ["Account", accountClaimed ? "Created, membership is live" : "Not created yet, membership parked until they claim it"],
+    ["Stripe customer", args.stripeCustomerId || "not reported"],
+    ["Checkout session", args.sessionId],
+    ["When", new Date().toISOString()],
+  ];
+
+  const htmlContent = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1a1a1a;line-height:1.6">
+      <p style="font-size:17px;font-weight:700;margin:0 0 4px">New MY SZN member 🎉</p>
+      <p style="margin:0 0 18px;color:#666">${esc(displayName)} just joined on ${esc(planName)}.</p>
+      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:520px">
+        ${rows
+          .map(
+            ([label, value]) => `
+        <tr>
+          <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;color:#888;white-space:nowrap;vertical-align:top">${esc(label)}</td>
+          <td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;word-break:break-word">${esc(value)}</td>
+        </tr>`
+          )
+          .join("")}
+      </table>
+      ${
+        accountClaimed
+          ? ""
+          : `<p style="margin:18px 0 0;padding:12px;background:#FFF7E6;border:1px solid #F0D9A8;color:#7A5A10">
+               They paid before creating an account. The welcome email has their activation link, so
+               no action is needed unless they never turn up.
+             </p>`
+      }
+    </div>`;
+
+  return { subject: `New member: ${displayName} · ${planName}`, htmlContent };
+}
+
+export type AdminAlertOutcome =
+  | { status: "sent"; messageId: string | null }
+  | { status: "skipped"; reason: string }
+  | { status: "failed"; error: string };
+
+/**
+ * Tells the team a new paid member just joined. Best-effort and idempotent per checkout session,
+ * called from the Stripe webhook after the membership is stored. NEVER throws: an alerting problem
+ * must not fail the webhook, because a failed webhook makes Stripe retry and reads as a payment
+ * problem to the buyer.
+ */
+export async function sendNewMemberAdminAlert(
+  admin: SupabaseAdmin,
+  args: NewMemberAlertArgs
+): Promise<AdminAlertOutcome> {
+  const { sessionId, email, priceId, tier, accountClaimed } = args;
+
+  const recipients = adminRecipients();
+  if (recipients.length === 0) return { status: "skipped", reason: "no_admin_recipient" };
+
+  // Avoids a duplicate alert on the common retry path; the unique index is the hard backstop.
+  const { data: prior } = await admin
+    .from("transactional_emails")
+    .select("id")
+    .eq("stripe_session_id", sessionId)
+    .eq("kind", ADMIN_ALERT_KIND)
+    .eq("status", "sent")
+    .maybeSingle();
+  if (prior) return { status: "skipped", reason: "already_sent" };
+
+  const { subject, htmlContent } = buildNewMemberAlert(args);
+
+  // One send per recipient so a single bad address can't take the others down with it. The alert
+  // counts as sent if any recipient got it.
+  let messageId: string | null = null;
+  let lastError = "";
+  let anyOk = false;
+  for (const to of recipients) {
+    const result = await sendBrevoEmail({
+      to: { email: to },
+      subject,
+      htmlContent,
+    });
+    if (result.ok) {
+      anyOk = true;
+      messageId = messageId ?? result.messageId;
+    } else {
+      lastError = result.error;
+      console.error("admin new-member alert failed for a recipient", { to, error: result.error });
+    }
+  }
+
+  const { error: logError } = await admin.from("transactional_emails").insert({
+    email: recipients.join(","),
+    kind: ADMIN_ALERT_KIND,
+    stripe_session_id: sessionId,
+    status: anyOk ? "sent" : "failed",
+    provider: "brevo",
+    provider_message_id: messageId,
+    error: anyOk ? null : lastError,
+  });
+  // 23505 means a concurrent webhook delivery already recorded the 'sent' row, the index working.
+  if (logError && logError.code !== "23505") {
+    console.error("transactional_emails: admin alert log insert failed", logError.message);
+  }
+
+  if (anyOk) {
+    console.log("admin new-member alert sent", { sessionId, tier, recipients });
+    return { status: "sent", messageId };
+  }
+  console.error("admin new-member alert FAILED (membership unaffected)", { sessionId, error: lastError });
+  return { status: "failed", error: lastError };
+}

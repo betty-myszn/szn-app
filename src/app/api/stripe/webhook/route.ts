@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { tierForPriceId, ACCESS_GRANTING_STATUSES } from "@/lib/stripe-tiers";
 import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
+import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
 import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 
@@ -23,6 +24,18 @@ async function trySendWelcome(
     await sendWelcomeEmail(admin, args);
   } catch (e) {
     console.error("stripe webhook: welcome email threw (membership unaffected)", e instanceof Error ? e.message : e);
+  }
+}
+
+// Fire-and-forget "a new member just joined" alert to the team, called last, once the membership is
+// stored and the buyer's own email is away. Same reasoning as trySendWelcome: sendNewMemberAdminAlert
+// is idempotent per checkout session and written never to throw, and this wrapper makes certain an
+// alerting problem can never turn a good payment into a failed webhook Stripe will retry.
+async function trySendAdminAlert(admin: SupabaseAdmin, args: NewMemberAlertArgs): Promise<void> {
+  try {
+    await sendNewMemberAdminAlert(admin, args);
+  } catch (e) {
+    console.error("stripe webhook: admin new-member alert threw (membership unaffected)", e instanceof Error ? e.message : e);
   }
 }
 
@@ -309,6 +322,17 @@ export async function POST(request: Request) {
             name: session.customer_details?.name,
             priceId,
           });
+          await trySendAdminAlert(admin, {
+            sessionId: session.id,
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            priceId,
+            tier,
+            amountTotal: session.amount_total,
+            currency: session.currency,
+            stripeCustomerId: customerId,
+            accountClaimed: !!profileId,
+          });
           break;
         }
 
@@ -380,6 +404,17 @@ export async function POST(request: Request) {
             email: session.customer_details?.email,
             name: session.customer_details?.name,
             priceId,
+          });
+          await trySendAdminAlert(admin, {
+            sessionId: session.id,
+            email: session.customer_details?.email,
+            name: session.customer_details?.name,
+            priceId,
+            tier,
+            amountTotal: session.amount_total,
+            currency: session.currency,
+            stripeCustomerId: customerId,
+            accountClaimed: !!profileId,
           });
         }
         break;
