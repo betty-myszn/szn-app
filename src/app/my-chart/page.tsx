@@ -319,8 +319,10 @@ export default function MyChartPage() {
               return (
                 <div key={`${a.planet1}-${a.planet2}-${i}`} className="p-6" style={{ borderBottom: i < 11 ? "1px solid #eee" : undefined }}>
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800 }}>
-                      {PLANET_SYMBOLS[a.planet1] || ""} {a.planet1.toLowerCase()} {a.type} {PLANET_SYMBOLS[a.planet2] || ""} {a.planet2.toLowerCase()}
+                    <span style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, color: "var(--dark)" }}>
+                      <span style={{ color: "var(--pink)" }}>{PLANET_SYMBOLS[a.planet1] || ""}</span> {a.planet1.toLowerCase()}{" "}
+                      <span style={{ color: "var(--pink)" }}>{a.type}</span>{" "}
+                      <span style={{ color: "var(--pink)" }}>{PLANET_SYMBOLS[a.planet2] || ""}</span> {a.planet2.toLowerCase()}
                     </span>
                     <span style={{ fontSize: 10, color: "var(--grey-light)" }}>orb {a.orb.toFixed(1)}°</span>
                   </div>
