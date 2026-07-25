@@ -212,9 +212,28 @@ export async function GET() {
 
   let prevAngle = phaseAngle(startJd);
   let prevMercurySpeed = calcAt(startJd, swisseph.SE_MERCURY).speed;
-  // Mean node for ingress detection: the true node oscillates direct/retrograde and would
-  // produce flapping sign changes, the mean node moves steadily so it crosses each cusp once.
-  let prevNodeSignIndex = Math.floor((((calcAt(startJd, swisseph.SE_MEAN_NODE).longitude % 360) + 360) % 360) / 30);
+  // True node for ingress detection, matching the eclipse classification above and everyone's
+  // natal chart, both of which read SE_TRUE_NODE. The mean node is a smoothed average that can
+  // sit more than a degree off the real axis and reach a cusp weeks late, e.g. it puts the 2026
+  // Aquarius ingress on 19 August, three weeks after the true node crossed and a week after the
+  // 12 August eclipse that the new Leo/Aquarius axis is what produced.
+  const NODE_BODY = swisseph.SE_TRUE_NODE;
+  const nodeSignIndexAt = (jd: number) =>
+    Math.floor(((((calcAt(jd, NODE_BODY).longitude % 360) + 360) % 360)) / 30);
+  let prevNodeSignIndex = nodeSignIndexAt(startJd);
+  // Raw crossings, held back from `events` until the reversal collapse after the loop.
+  const nodeIngresses: { fromSignIndex: number; toSignIndex: number; event: CalendarEvent }[] = [];
+
+  // The daily scan only narrows a crossing to "somewhere in the last 24 hours", which rounds the
+  // announced date up to a day late. Bisect for the moment the node actually changed sign.
+  const refineNodeIngress = (lo: number, hi: number, toSignIndex: number): number => {
+    for (let i = 0; i < 24; i++) {
+      const mid = (lo + hi) / 2;
+      if (nodeSignIndexAt(mid) === toSignIndex) hi = mid;
+      else lo = mid;
+    }
+    return hi;
+  };
 
   for (let d = 1; d <= 60; d++) {
     const jd = startJd + d;
@@ -249,18 +268,36 @@ export async function GET() {
     }
     prevMercurySpeed = mercury.speed;
 
-    // Nodal axis ingress: the mean node backing into a new sign shifts the collective
-    // north/south node axis for the next ~18 months, a genuinely big deal.
-    const nodeLongitude = ((calcAt(jd, swisseph.SE_MEAN_NODE).longitude % 360) + 360) % 360;
-    const nodeSignIndex = Math.floor(nodeLongitude / 30);
+    // Nodal axis ingress: the node backing into a new sign shifts the collective north/south
+    // node axis for the next ~18 months, a genuinely big deal.
+    const nodeSignIndex = nodeSignIndexAt(jd);
     if (nodeSignIndex !== prevNodeSignIndex) {
-      const { sign, degree } = signAt(nodeLongitude);
-      events.push({ type: "node_ingress", date: jdToIso(jd), sign, degree, planet: "North Node" });
+      const exact = refineNodeIngress(jd - 1, jd, nodeSignIndex);
+      const { sign, degree } = signAt(calcAt(exact, NODE_BODY).longitude);
+      nodeIngresses.push({
+        fromSignIndex: prevNodeSignIndex,
+        toSignIndex: nodeSignIndex,
+        event: { type: "node_ingress", date: jdToIso(exact), sign, degree, planet: "North Node" },
+      });
       prevNodeSignIndex = nodeSignIndex;
     }
 
     prevAngle = angle;
   }
+
+  // The true node oscillates rather than moving steadily, so it can in principle nick a cusp and
+  // cross straight back. That is wobble, not an axis shift, so drop both halves of any such pair
+  // rather than announcing a once-in-18-months event twice. Empirically the true node crosses
+  // cleanly every time between 2015 and 2035, so this is a guard, not a routine correction.
+  for (let i = 0; i < nodeIngresses.length - 1; ) {
+    if (nodeIngresses[i].fromSignIndex === nodeIngresses[i + 1].toSignIndex) {
+      nodeIngresses.splice(i, 2);
+      if (i > 0) i--;
+    } else {
+      i++;
+    }
+  }
+  events.push(...nodeIngresses.map((n) => n.event));
 
   events.sort((a, b) => a.date.localeCompare(b.date));
   const majorTransits = scanMajorTransits(startJd);
@@ -299,7 +336,7 @@ export async function GET() {
 
   // Note whether Mercury is currently retrograde, and where the nodal axis sits today
   const mercuryNow = calcAt(startJd, swisseph.SE_MERCURY);
-  const nodeNow = signAt(((calcAt(startJd, swisseph.SE_MEAN_NODE).longitude % 360) + 360) % 360);
+  const nodeNow = signAt(((calcAt(startJd, swisseph.SE_TRUE_NODE).longitude % 360) + 360) % 360);
 
   // Eclipse season = the Sun is within the solar ecliptic limit (~18°) of a lunar node right now,
   // the ~34-day window in which eclipses are actually possible. The old check flagged it whenever
