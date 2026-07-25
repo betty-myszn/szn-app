@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import {
@@ -132,6 +133,10 @@ export default function EventsPage() {
 
   return (
     <>
+      <Ticker
+        variant="lav"
+        items={["class is in session", "live and unfiltered", "show up as her", "replays saved forever", "bring your questions"]}
+      />
       {/* Header */}
       <section className="px-5 md:px-8 py-14 text-center" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-3xl mx-auto">

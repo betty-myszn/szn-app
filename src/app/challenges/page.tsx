@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
@@ -117,6 +118,9 @@ export default function ChallengesPage() {
 
   return (
     <>
+      <Ticker
+        items={["one small move today", "momentum is magnetic", "streaks over perfection", "show up for her"]}
+      />
       {/* Hero */}
       <section className="px-5 md:px-8 py-14" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto">

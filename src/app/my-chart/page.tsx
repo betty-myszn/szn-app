@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Ticker from "@/components/Ticker";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
@@ -82,6 +83,10 @@ export default function MyChartPage() {
 
   return (
     <>
+      <Ticker
+        variant="lav"
+        items={["your whole chart, decoded", "the blueprint of you", "awareness to embodiment", "read it, live it"]}
+      />
       {/* Hero with interactive wheel */}
       <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">

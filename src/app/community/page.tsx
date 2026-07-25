@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess, hasBillingIssue } from "@/lib/membership-access";
 import { useSeason } from "@/lib/use-season";
@@ -151,6 +152,9 @@ export default function CommunityPage() {
 
   return (
     <>
+      <Ticker
+        items={["your people are here", "celebrate her, become her", "post the win", "no dimming allowed", "cheer her on"]}
+      />
       <section className="px-5 md:px-8 py-14" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
           <div className="tag mb-3">the community · your members&apos; club</div>
