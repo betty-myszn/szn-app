@@ -58,7 +58,7 @@ export default function Home() {
     <>
       <Ticker
         items={[
-          "the astrology-led membership",
+          "the astrology coaching membership",
           "become your future self",
           `it's ${season.sign.toLowerCase()} szn`,
           "your era starts now",
@@ -74,8 +74,8 @@ export default function Home() {
         <div className="max-w-2xl mx-auto">
           <div className="tag mb-4">
             {enrolmentOpen
-              ? `enrolment open now · ${season.sign.toLowerCase()} szn edition`
-              : `the membership · ${season.sign.toLowerCase()} szn edition`}
+              ? "enrolment open now · astrology coaching membership"
+              : `astrology coaching membership · ${season.sign.toLowerCase()} szn edition`}
           </div>
           <h1
             style={{
@@ -92,7 +92,7 @@ export default function Home() {
             aligned with <span className="pk">your chart.</span>
           </h1>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(255,255,255,0.65)", maxWidth: 560, margin: "0 auto 32px" }}>
-            MY SZN is the astrology-led membership where your birth chart powers everything: deep personalised chart readings, live workshops, shadow work, style codes, goals and a community of women becoming her. Every szn, the whole portal shifts with the sky.
+            MY SZN is an astrology coaching membership for women. Your birth chart powers everything: deep personalised chart readings, live coaching workshops, shadow work, style codes, goals and a community of women becoming her. Every szn, the whole portal shifts with the sky.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             {/* While the doors are open the primary CTA goes straight into the payment-first
