@@ -477,54 +477,52 @@ export default function MyChartPage() {
         </div>
       </section>
 
-      {/* Houses */}
+      {/* Houses: the same card language as the placements above */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "2px solid var(--pink)" }}>
         <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">my houses · your 12 life arenas</div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
+          <div className="tag mb-2">your 12 life arenas</div>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, maxWidth: 540, marginBottom: 22 }}>
+            Every planet lands in a house, the area of life it colours most. This is where your chart actually plays out.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {chart.houses.map((h, i) => {
               const meaning = HOUSE_MEANINGS[i];
               const planetsInside = chart.planets.filter((p) => p.house === h.house);
               return (
-                <Link
-                  key={h.house}
-                  href={`/my-chart/house/${h.house}`}
-                  className="no-underline p-5 hover:bg-[#fafafa] transition-colors"
-                  style={{
-                    color: "var(--dark)",
-                    borderRight: "1px solid #eee",
-                    borderBottom: i < 8 ? "1px solid #eee" : undefined,
-                  }}
-                >
-                  <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 3 }}>
-                    {ordinalHouse(h.house)} house
-                  </div>
-                  <div style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 3 }}>
-                    {meaning.title}
-                  </div>
-                  <div style={{ fontSize: 11, color: "var(--grey)" }}>
-                    {getSymbol(h.sign)} {h.sign.toLowerCase()} {h.degree}&deg;{String(h.minute).padStart(2, "0")}&apos; cusp
-                    {planetsInside.length > 0 && (
-                      <span style={{ color: "var(--pink)", marginLeft: 6 }}>
-                        {planetsInside.map((p) => PLANET_SYMBOLS[p.name] || "•").join(" ")}
-                      </span>
-                    )}
-                  </div>
-                  <span
+                <Link key={h.house} href={`/my-chart/house/${h.house}`} className="pcard no-underline" style={{ padding: 18 }}>
+                  <div
+                    aria-hidden
                     style={{
-                      display: "inline-block",
-                      marginTop: 12,
+                      width: 36,
+                      height: 36,
+                      display: "grid",
+                      placeItems: "center",
+                      background: "var(--lav-light)",
                       fontFamily: poppins,
-                      fontSize: 9,
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      padding: "6px 12px",
-                      background: "var(--pink)",
+                      fontSize: 15,
+                      fontWeight: 800,
                       color: "var(--dark)",
+                      marginBottom: 12,
                     }}
                   >
-                    read &#8594;
+                    {h.house}
+                  </div>
+                  <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 4 }}>
+                    {ordinalHouse(h.house)} house
+                  </div>
+                  <div style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, letterSpacing: "-0.3px", lineHeight: 1.1 }}>
+                    {meaning.title}
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 3 }}>
+                    {textGlyph(getSymbol(h.sign))} {h.sign.toLowerCase()} {h.degree}&deg;{String(h.minute).padStart(2, "0")}&apos; cusp
+                  </div>
+                  {planetsInside.length > 0 && (
+                    <div style={{ fontSize: 14, color: "var(--pink)", marginTop: 6, letterSpacing: "0.06em" }}>
+                      {planetsInside.map((p) => textGlyph(PLANET_SYMBOLS[p.name] || "•")).join(" ")}
+                    </div>
+                  )}
+                  <span className="pcard-cta" style={{ marginTop: "auto", paddingTop: 14 }}>
+                    step inside &#8594;
                   </span>
                 </Link>
               );
@@ -533,23 +531,30 @@ export default function MyChartPage() {
         </div>
       </section>
 
-      {/* Aspects in plain English */}
+      {/* Aspects in plain English, as cards to match the rest of the page */}
       <section className="px-5 md:px-8 py-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">my aspects · how your planets talk to each other</div>
-          <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="tag mb-2">how your planets talk to each other</div>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, maxWidth: 540, marginBottom: 22 }}>
+            Aspects are the conversations between your placements, the angles that make your chart hang together as one
+            person instead of a list of parts.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {chart.aspects.slice(0, 12).map((a, i) => {
               const signOf = (name: string) =>
                 name === "Ascendant" ? chart.houses[0]?.sign : name === "Midheaven" ? chart.houses[9]?.sign : chart.planets.find((p) => p.name === name)?.sign;
               const text = interpretAspect(a.planet1, a.planet2, a.type, { sign1: signOf(a.planet1), sign2: signOf(a.planet2), orb: a.orb });
               if (!text) return null;
               return (
-                <div key={`${a.planet1}-${a.planet2}-${i}`} className="p-6" style={{ borderBottom: i < 11 ? "1px solid #eee" : undefined }}>
+                <div
+                  key={`${a.planet1}-${a.planet2}-${i}`}
+                  style={{ background: "#fff", border: "1.5px solid #ececec", padding: 22 }}
+                >
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <span style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, color: "var(--dark)" }}>
-                      <span style={{ color: "var(--pink)" }}>{PLANET_SYMBOLS[a.planet1] || ""}</span> {a.planet1.toLowerCase()}{" "}
+                      <span style={{ color: "var(--pink)" }}>{textGlyph(PLANET_SYMBOLS[a.planet1] || "")}</span> {a.planet1.toLowerCase()}{" "}
                       <span style={{ color: "var(--pink)" }}>{a.type}</span>{" "}
-                      <span style={{ color: "var(--pink)" }}>{PLANET_SYMBOLS[a.planet2] || ""}</span> {a.planet2.toLowerCase()}
+                      <span style={{ color: "var(--pink)" }}>{textGlyph(PLANET_SYMBOLS[a.planet2] || "")}</span> {a.planet2.toLowerCase()}
                     </span>
                     <span style={{ fontSize: 10, color: "var(--grey-light)" }}>orb {a.orb.toFixed(1)}°</span>
                   </div>
