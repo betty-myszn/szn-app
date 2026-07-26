@@ -8,7 +8,7 @@ import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import ChartWheel from "@/components/ChartWheel";
 import { BODY_MEANINGS, HOUSE_MEANINGS, interpretAspect, ordinalHouse } from "@/lib/interpretations";
-import { PLANET_SYMBOLS } from "@/types/chart";
+import { PLANET_SYMBOLS, textGlyph } from "@/types/chart";
 import { getSymbol } from "@/lib/style-data";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -30,6 +30,162 @@ const BIG_THREE = [
   { id: "moon", label: "moon", glyph: "☽", role: "your emotions" },
   { id: "rising", label: "rising", glyph: "↑", role: "how people experience you" },
 ] as const;
+
+// A guided tour instead of a flat grid: the chart, grouped by the story each
+// cluster tells, biggest placements first. Every one of the 17 keeps a home.
+type Placement = {
+  body: (typeof BODY_MEANINGS)[number];
+  sign: string;
+  house: number;
+  retrograde: boolean;
+  degree: number;
+  minute: number;
+};
+
+// One personalised call to action per placement, so no two buttons read alike.
+const PLACEMENT_CTA: Record<string, string> = {
+  sun: "explore your identity",
+  moon: "understand your emotions",
+  rising: "see your magnetism",
+  mercury: "hear how you think",
+  venus: "love deeper",
+  mars: "unlock your drive",
+  jupiter: "grow your abundance",
+  saturn: "master your lessons",
+  uranus: "break the mould",
+  neptune: "enter your dream world",
+  pluto: "meet your power",
+  chiron: "heal your wound",
+  north_node: "walk toward your destiny",
+  south_node: "know your comfort zone",
+  lilith: "free your untamed self",
+  part_of_fortune: "find your joy",
+  midheaven: "claim your legacy",
+};
+
+// Size tiers: the big three lead, the personal planets sit in the middle, the
+// slower and derived points round it out.
+const PLACEMENT_SIZE: Record<string, "lg" | "md" | "sm"> = {
+  sun: "lg",
+  moon: "lg",
+  rising: "lg",
+  mercury: "md",
+  venus: "md",
+  mars: "md",
+  jupiter: "md",
+  saturn: "md",
+  midheaven: "md",
+};
+
+// Five groups, a soft brand tint each, ordered for emotional impact.
+const PLACEMENT_GROUPS: {
+  key: string;
+  label: string;
+  blurb: string;
+  accent: string;
+  ids: string[];
+  cols: string;
+}[] = [
+  {
+    key: "core",
+    label: "core identity",
+    blurb: "start here. these four run the whole show.",
+    accent: "var(--gold)",
+    ids: ["sun", "moon", "rising", "mercury"],
+    cols: "md:grid-cols-3",
+  },
+  {
+    key: "love",
+    label: "love & connection",
+    blurb: "how you're wired to want, attract and pursue.",
+    accent: "var(--pink-light)",
+    ids: ["venus", "mars"],
+    cols: "md:grid-cols-2",
+  },
+  {
+    key: "purpose",
+    label: "success & purpose",
+    blurb: "where you're built to grow, master and be seen.",
+    accent: "var(--mint)",
+    ids: ["jupiter", "saturn", "midheaven"],
+    cols: "md:grid-cols-3",
+  },
+  {
+    key: "shadow",
+    label: "shadow & soul",
+    blurb: "the deeper work: your power, your wound, your direction.",
+    accent: "var(--lav-light)",
+    ids: ["pluto", "chiron", "north_node", "south_node", "lilith"],
+    cols: "sm:grid-cols-2 md:grid-cols-3",
+  },
+  {
+    key: "outer",
+    label: "the outer edges",
+    blurb: "the generational planets and the finishing touches.",
+    accent: "var(--cream)",
+    ids: ["uranus", "neptune", "part_of_fortune"],
+    cols: "sm:grid-cols-2 md:grid-cols-3",
+  },
+];
+
+function PlacementCard({ p, size, accent }: { p: Placement; size: "lg" | "md" | "sm"; accent: string }) {
+  const symbol = textGlyph(PLANET_SYMBOLS[p.body.name] || getSymbol(p.sign));
+  const cta = PLACEMENT_CTA[p.body.id] || "read";
+  const tile = size === "lg" ? 52 : size === "md" ? 44 : 36;
+  const signSize = size === "lg" ? 26 : size === "md" ? 20 : 16;
+  const pad = size === "lg" ? 26 : size === "md" ? 22 : 18;
+  const showPreview = size !== "sm";
+  const clamp = size === "lg" ? 3 : 2;
+
+  return (
+    <Link href={`/my-chart/${p.body.id}`} className="pcard no-underline" style={{ padding: pad }}>
+      <div
+        aria-hidden
+        style={{
+          width: tile,
+          height: tile,
+          display: "grid",
+          placeItems: "center",
+          background: accent,
+          fontSize: tile * 0.46,
+          color: "var(--dark)",
+          marginBottom: 12,
+        }}
+      >
+        {symbol}
+      </div>
+      <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 4 }}>
+        {p.body.name.toLowerCase()} · {p.body.title}
+      </div>
+      <div style={{ fontFamily: poppins, fontSize: signSize, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.1 }}>
+        {p.sign.toLowerCase()}
+        {p.retrograde && <span style={{ color: "var(--pink)", fontSize: signSize * 0.5, marginLeft: 6, verticalAlign: "middle" }}>Rx</span>}
+      </div>
+      <div style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 3 }}>
+        {p.degree}&deg;{String(p.minute).padStart(2, "0")}&apos; · {ordinalHouse(p.house)} house
+      </div>
+      {showPreview && (
+        <p
+          style={{
+            fontSize: 12.5,
+            color: "var(--grey)",
+            lineHeight: 1.55,
+            marginTop: 10,
+            display: "-webkit-box",
+            WebkitLineClamp: clamp,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {p.body.intro}
+        </p>
+      )}
+      <span className="pcard-cta" style={{ marginTop: "auto", paddingTop: 14 }}>
+        {cta} &#8594;
+      </span>
+    </Link>
+  );
+}
 
 export default function MyChartPage() {
   const router = useRouter();
@@ -89,7 +245,9 @@ export default function MyChartPage() {
     if (body.id === "midheaven") return { body, sign: midheavenSign, house: 10, retrograde: false, degree: chart.houses[9]?.degree ?? 0, minute: chart.houses[9]?.minute ?? 0 };
     const planet = chart.planets.find((p) => p.id === body.id);
     return planet ? { body, sign: planet.sign, house: planet.house, retrograde: planet.retrograde, degree: planet.degree, minute: planet.minute } : null;
-  }).filter(Boolean) as { body: (typeof BODY_MEANINGS)[number]; sign: string; house: number; retrograde: boolean; degree: number; minute: number }[];
+  }).filter(Boolean) as Placement[];
+
+  const byId = new Map(placements.map((p) => [p.body.id, p]));
 
   return (
     <>
@@ -261,54 +419,61 @@ export default function MyChartPage() {
         </div>
       </section>
 
-      {/* Placements grid */}
+      {/* Placements: a guided tour of the chart, grouped by the story each cluster tells */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "2px solid var(--pink)" }}>
         <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">my placements · tap to explore</div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
-            {placements.map((p, i) => (
-              <Link
-                key={p.body.id}
-                href={`/my-chart/${p.body.id}`}
-                className="no-underline p-5 hover:bg-[#fafafa] transition-colors"
-                style={{
-                  color: "var(--dark)",
-                  borderRight: "1px solid #eee",
-                  borderBottom: i < placements.length - 4 ? "1px solid #eee" : undefined,
-                }}
-              >
-                <div style={{ fontSize: 18, marginBottom: 6, color: "var(--pink)" }}>
-                  {PLANET_SYMBOLS[p.body.name] || getSymbol(p.sign)}
+          <div className="tag mb-2">your blueprint · a guided tour</div>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, maxWidth: 540 }}>
+            Every placement tells a different story about who you are. Start with the foundations, then explore the
+            deeper layers of your chart.
+          </p>
+
+          {PLACEMENT_GROUPS.map((group) => {
+            const items = group.ids.map((id) => byId.get(id)).filter(Boolean) as Placement[];
+            if (items.length === 0) return null;
+
+            const heading = (
+              <div className="flex items-baseline gap-3 mb-4 flex-wrap">
+                <h3 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px" }}>
+                  {group.label}
+                </h3>
+                <span style={{ fontSize: 13, color: "var(--grey-light)" }}>{group.blurb}</span>
+              </div>
+            );
+
+            if (group.key === "core") {
+              const lead = items.filter((p) => PLACEMENT_SIZE[p.body.id] === "lg");
+              const rest = items.filter((p) => PLACEMENT_SIZE[p.body.id] !== "lg");
+              return (
+                <div key={group.key} style={{ marginTop: 44 }}>
+                  {heading}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {lead.map((p) => (
+                      <PlacementCard key={p.body.id} p={p} size="lg" accent={group.accent} />
+                    ))}
+                  </div>
+                  {rest.length > 0 && (
+                    <div className="grid grid-cols-1 gap-3 mt-3">
+                      {rest.map((p) => (
+                        <PlacementCard key={p.body.id} p={p} size={PLACEMENT_SIZE[p.body.id] || "md"} accent={group.accent} />
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 3 }}>
-                  {p.body.name.toLowerCase()} · {p.body.title}
+              );
+            }
+
+            return (
+              <div key={group.key} style={{ marginTop: 44 }}>
+                {heading}
+                <div className={`grid grid-cols-1 ${group.cols} gap-3`}>
+                  {items.map((p) => (
+                    <PlacementCard key={p.body.id} p={p} size={PLACEMENT_SIZE[p.body.id] || "sm"} accent={group.accent} />
+                  ))}
                 </div>
-                <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, letterSpacing: "-0.3px" }}>
-                  {p.sign.toLowerCase()}
-                  {p.retrograde && <span style={{ color: "var(--pink)", fontSize: 10, marginLeft: 5 }}>Rx</span>}
-                </div>
-                <div style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 2 }}>
-                  {p.degree}&deg;{String(p.minute).padStart(2, "0")}&apos; · {ordinalHouse(p.house)} house
-                </div>
-                <span
-                  style={{
-                    display: "inline-block",
-                    marginTop: 12,
-                    fontFamily: poppins,
-                    fontSize: 9,
-                    fontWeight: 700,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    padding: "6px 12px",
-                    background: "var(--pink)",
-                    color: "var(--dark)",
-                  }}
-                >
-                  read &#8594;
-                </span>
-              </Link>
-            ))}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
