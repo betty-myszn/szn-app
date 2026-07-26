@@ -186,6 +186,105 @@ html, body { overflow-x: hidden; }
   animation: challenge-burst-particle 0.9s ease-out forwards;
 }
 
+/* ── Natal chart wheel ── */
+.chart-wheel {
+  -webkit-tap-highlight-color: transparent;
+}
+.chart-wheel .cw-t,
+.chart-wheel .cw-planet,
+.chart-wheel .cw-glyph {
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    fill-opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    fill 0.3s ease,
+    stroke 0.3s ease;
+}
+/* Hub label crossfades when the active planet changes */
+.chart-wheel .cw-hub-in {
+  animation: cw-hub-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cw-hub-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+/* Focusing a planet already selects it, which lights the glyph, rings it in pink and fills
+   the hub with its label. That is a stronger focus indicator than the global ring, and the
+   global ring draws a huge offset box around the SVG group, so suppress it here only. */
+.chart-wheel [role="button"]:focus,
+.chart-wheel [role="button"]:focus-visible {
+  outline: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-wheel *,
+  .chart-wheel *::before {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+}
+
+/* ── Big three placement cards ── */
+.big3 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  text-align: left;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+}
+.big3:hover,
+.big3.is-active {
+  background: rgba(255, 45, 135, 0.09);
+  border-color: var(--pink);
+  transform: translateX(4px);
+  box-shadow: 0 0 24px rgba(255, 45, 135, 0.18);
+}
+.big3-glyph {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 21px;
+  color: var(--pink);
+  background: rgba(255, 45, 135, 0.1);
+  border: 1px solid rgba(255, 45, 135, 0.35);
+  transition: box-shadow 0.25s ease, color 0.25s ease;
+}
+.big3:hover .big3-glyph,
+.big3.is-active .big3-glyph {
+  color: #fff;
+  box-shadow: 0 0 18px rgba(255, 45, 135, 0.55);
+}
+.big3-arrow {
+  margin-left: auto;
+  flex: none;
+  color: var(--pink);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.big3:hover .big3-arrow,
+.big3.is-active .big3-arrow {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .big3, .big3-arrow, .big3-glyph { transition: none !important; }
+  .big3:hover, .big3.is-active { transform: none; }
+}
+
 /* ── MY SZN disco planet ── */
 @keyframes myszn-facet-spin {
   from { transform: rotate(0deg); }

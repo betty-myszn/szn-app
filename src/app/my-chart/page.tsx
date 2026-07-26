@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import Ticker from "@/components/Ticker";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
@@ -23,10 +24,19 @@ const SYNTHESIS_PAGES = [
   { slug: "purpose", title: "soul expression & purpose", desc: "why you're actually here, beyond the job title", bg: "var(--mint)", light: false },
 ];
 
+// The three placements a beginner actually cares about, in plain English.
+const BIG_THREE = [
+  { id: "sun", label: "sun", glyph: "☉", role: "your identity" },
+  { id: "moon", label: "moon", glyph: "☽", role: "your emotions" },
+  { id: "rising", label: "rising", glyph: "↑", role: "how people experience you" },
+] as const;
+
 export default function MyChartPage() {
   const router = useRouter();
   const { member, ready } = useMember();
   const { chart, loading } = useChart();
+  // Shared highlight between the big-three cards and the wheel
+  const [activeBody, setActiveBody] = useState<string | null>(null);
 
   if (!ready) return null;
 
@@ -87,12 +97,12 @@ export default function MyChartPage() {
         variant="lav"
         items={["your whole chart, decoded", "the blueprint of you", "awareness to embodiment", "read it, live it"]}
       />
-      {/* Hero with interactive wheel */}
-      <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+      {/* Hero: your big three first, the wheel beside it as the visual */}
+      <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "2px solid var(--pink)" }}>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
             <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-              <div className="tag">my chart · placidus · tap any planet</div>
+              <div className="tag">my chart · your big three</div>
               <Link
                 href="/onboarding"
                 className="no-underline"
@@ -112,46 +122,93 @@ export default function MyChartPage() {
             <h1
               style={{
                 fontFamily: poppins,
-                fontSize: "clamp(32px, 5vw, 48px)",
+                fontSize: "clamp(30px, 4.4vw, 44px)",
                 fontWeight: 800,
                 letterSpacing: "-1px",
                 lineHeight: 1.08,
                 color: "#fff",
-                marginBottom: 14,
+                marginBottom: 20,
               }}
             >
-              this is your <span className="pk">cosmic blueprint.</span>
+              start here. this is <span className="pk">you.</span>
             </h1>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 20 }}>
-              The exact sky the moment you arrived, calculated to the degree. Every planet is a chapter of your story. Tap one on the wheel or explore your placements below.
-            </p>
-            <div className="flex gap-3 flex-wrap">
-              {[
-                { label: "sun", sign: placements.find((p) => p.body.id === "sun")?.sign },
-                { label: "moon", sign: placements.find((p) => p.body.id === "moon")?.sign },
-                { label: "rising", sign: risingSign },
-              ].map((b) => (
-                <div key={b.label} style={{ border: "1.5px solid rgba(255,255,255,0.25)", padding: "8px 14px" }}>
-                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--lav)", marginRight: 8 }}>
-                    {b.label}
-                  </span>
-                  <span style={{ fontFamily: poppins, fontSize: 13, fontWeight: 700, color: "#fff" }}>
-                    {b.sign?.toLowerCase()}
-                  </span>
-                </div>
-              ))}
+
+            <div className="flex flex-col gap-3">
+              {BIG_THREE.map((b) => {
+                const p = placements.find((x) => x.body.id === b.id);
+                if (!p) return null;
+                return (
+                  <Link
+                    key={b.id}
+                    href={`/my-chart/${b.id}`}
+                    className={`big3 no-underline${activeBody === b.id ? " is-active" : ""}`}
+                    style={{ color: "#fff" }}
+                    onMouseEnter={() => setActiveBody(b.id)}
+                    onMouseLeave={() => setActiveBody(null)}
+                    onFocus={() => setActiveBody(b.id)}
+                    onBlur={() => setActiveBody(null)}
+                  >
+                    <span className="big3-glyph" aria-hidden>
+                      {b.glyph}
+                    </span>
+                    <span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontFamily: poppins,
+                          fontSize: 21,
+                          fontWeight: 800,
+                          letterSpacing: "-0.4px",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {p.sign.toLowerCase()} {b.label}
+                      </span>
+                      <span style={{ display: "block", fontSize: 12.5, color: "rgba(255,255,255,0.55)", marginTop: 3 }}>
+                        {b.role}
+                      </span>
+                    </span>
+                    <span className="big3-arrow" aria-hidden>
+                      &#8594;
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
+
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, maxWidth: 460, marginTop: 20 }}>
+              These three run the show. Everything else in your chart adds detail on top. When you&apos;re ready for the
+              rest, the wheel is the whole sky the moment you arrived, hover or tap any planet to see what it is.
+            </p>
           </div>
-          <div className="flex justify-center">
-            <div style={{ width: "100%", maxWidth: 480 }}>
-              <ChartWheel chart={chart} onSelectPlanet={(id) => router.push(`/my-chart/${id}`)} />
+
+          <div className="flex flex-col items-center">
+            <div style={{ width: "100%", maxWidth: 580 }}>
+              <ChartWheel
+                chart={chart}
+                activeId={activeBody}
+                onActiveChange={setActiveBody}
+                onSelectPlanet={(id) => router.push(`/my-chart/${id}`)}
+              />
+            </div>
+            <div
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.35)",
+                marginTop: 14,
+              }}
+            >
+              placidus · tap a planet, tap again to read it
             </div>
           </div>
         </div>
       </section>
 
       {/* Synthesis pages */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "2px solid var(--pink)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-5">your full-chart readings</div>
           <div className="grid md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
@@ -205,7 +262,7 @@ export default function MyChartPage() {
       </section>
 
       {/* Placements grid */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "2px solid var(--pink)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-5">my placements · tap to explore</div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
@@ -256,7 +313,7 @@ export default function MyChartPage() {
       </section>
 
       {/* Houses */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "2px solid var(--pink)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-5">my houses · your 12 life arenas</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>

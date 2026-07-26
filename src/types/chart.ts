@@ -139,6 +139,14 @@ export const ASPECT_CONFIG: Record<
   opposition: { angle: 180, orb: 8, color: "#FF4500", symbol: "☍" },
 };
 
+// macOS and iOS render several astrological characters (♈, ♀, ♂, ♃, ☉ …) as full-colour
+// emoji by default, which is exactly the "clip art" look the chart is trying to avoid.
+// U+FE0E is the text presentation selector: it forces the monochrome glyph so the symbol
+// takes whatever `fill`/`color` we give it.
+export function textGlyph(symbol: string): string {
+  return symbol ? symbol + "\uFE0E" : symbol;
+}
+
 export const PLANET_SYMBOLS: Record<string, string> = {
   Sun: "☉",
   Moon: "☽",
