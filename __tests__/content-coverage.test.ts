@@ -16,7 +16,10 @@ import {
   BODY_MEANINGS,
   composeRulerPlacement,
   interpretAspect,
+  ordinalHouse,
+  houseForSign,
 } from "@/lib/interpretations";
+import { composeLunation } from "@/lib/moon-content";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { SEASONS } from "@/lib/seasons";
@@ -355,6 +358,96 @@ describe("aspect interpretation covers every aspect type", () => {
     for (const type of ASPECT_TYPES) {
       const text = interpretAspect("Mars", "Saturn", type, { sign1: "Aries", sign2: "Capricorn", orb: 1.5 });
       assertRealText(text, `aspect ${type}`);
+    }
+  });
+});
+
+// ── Nodal axis readings across every sign and every chart rotation ───────────
+
+describe("nodal ingress readings cover both ends of the axis", () => {
+  // A nodal ingress can land in any of the 12 signs, and that sign can fall in any of the
+  // member's 12 houses depending on their rising sign. Every one of those 144 combinations has to
+  // resolve to a complete reading, because this event only comes round once every 18 months.
+  it("every north node sign against every chart rotation composes fully", () => {
+    for (const sign of SIGNS) {
+      for (let rotation = 0; rotation < 12; rotation++) {
+        const cuspSigns = HOUSES.map((h) => SIGNS[(h - 1 + rotation) % 12]);
+        const chart = makeChart({ cuspSigns });
+        // the node always ingresses at the very end of a sign, it travels backwards
+        const reading = composeLunation(
+          { type: "node_ingress", date: "2026-01-11", sign, degree: 29, planet: "North Node" },
+          chart,
+        );
+        const where = `node ingress in ${sign}, rotation ${rotation}`;
+
+        assertRealText(reading.title, `${where} title`, 15);
+        assertRealText(reading.whatThisIs, `${where} whatThisIs`, 200);
+        assertRealText(reading.bettysTake, `${where} bettysTake`, 300);
+        assertRealText(reading.theMove, `${where} theMove`, 100);
+        expect(reading.moveOptions?.length).toBe(5);
+        for (const option of reading.moveOptions!) {
+          assertRealText(option, `${where} move option`, 30);
+        }
+        assertRealText(reading.journalPrompt, `${where} journalPrompt`, 40);
+        assertRealText(reading.affirmation, `${where} affirmation`, 40);
+
+        // the teaching layer: what the nodes are, before any interpretation happens
+        expect(reading.primer?.length).toBe(6);
+        for (const section of reading.primer!) {
+          assertRealText(section.heading, `${where} primer heading`, 10);
+          assertRealText(section.body, `${where} primer "${section.heading}"`, 200);
+        }
+
+        // both ends of the axis get read, never the north node alone
+        expect(reading.chartParagraphs?.length).toBe(4);
+        for (const para of reading.chartParagraphs!) {
+          assertRealText(para, `${where} chart paragraph`, 150);
+        }
+
+        assertRealText(reading.degreeNote?.body, `${where} anaretic note`, 400);
+
+        expect(reading.moveQuestions?.length).toBe(5);
+        for (const question of reading.moveQuestions!) {
+          assertRealText(question, `${where} move question`, 40);
+        }
+      }
+    }
+  });
+
+  it("names the opposite house explicitly, so the axis reads as an axis", () => {
+    for (const sign of SIGNS) {
+      const chart = makeChart();
+      const northHouse = houseForSign(sign, chart.houses.map((h) => h.longitude));
+      const southHouse = ((northHouse + 5) % 12) + 1;
+      const reading = composeLunation(
+        { type: "node_ingress", date: "2026-01-11", sign, degree: 29, planet: "North Node" },
+        chart,
+      );
+      const chartText = reading.chartParagraphs!.join(" ");
+      expect(chartText).toContain(`${ordinalHouse(northHouse)} house of ${HOUSE_MEANINGS[northHouse - 1].title}`);
+      expect(chartText).toContain(`${ordinalHouse(southHouse)} house of ${HOUSE_MEANINGS[southHouse - 1].title}`);
+      // the south node is never framed as something to abandon
+      expect(chartText).toContain("What you keep");
+    }
+  });
+
+  it("holds the house style rules: no em dashes, no rhetorical questions in the prose", () => {
+    for (const sign of SIGNS) {
+      const reading = composeLunation(
+        { type: "node_ingress", date: "2026-01-11", sign, degree: 29, planet: "North Node" },
+        makeChart(),
+      );
+      const prose = [
+        reading.whatThisIs,
+        ...reading.primer!.map((s) => s.body),
+        ...reading.chartParagraphs!,
+        reading.degreeNote!.body,
+        reading.bettysTake,
+        reading.theMove,
+        reading.affirmation,
+      ].join(" ");
+      expect(prose).not.toMatch(/[—–]/);
+      expect(prose).not.toMatch(/\?/);
     }
   });
 });

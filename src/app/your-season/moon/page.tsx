@@ -121,13 +121,63 @@ function MoonPageContent() {
         </div>
       </section>
 
+      {/* Primer: the astrology behind the event, for members meeting it for the first time */}
+      {reading.primer && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="tag mb-5">{reading.primerTitle || "the astrology, explained"}</div>
+            <div style={{ border: "var(--border)" }}>
+              {reading.primer.map((section, i) => (
+                <div
+                  key={section.heading}
+                  className="p-7 md:p-8"
+                  style={{ borderTop: i === 0 ? undefined : "var(--border)" }}
+                >
+                  <h2
+                    style={{
+                      fontFamily: poppins,
+                      fontSize: 19,
+                      fontWeight: 800,
+                      letterSpacing: "-0.4px",
+                      lineHeight: 1.3,
+                      color: "#3C2A70",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {section.heading}
+                  </h2>
+                  <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{section.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* In your chart */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
           <div className="tag mb-3">what this means in your chart</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.inYourChart}</p>
+          {(reading.chartParagraphs || [reading.inYourChart]).map((para, i) => (
+            <p
+              key={i}
+              style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}
+            >
+              {para}
+            </p>
+          ))}
         </div>
       </section>
+
+      {/* Degree note, e.g. the anaretic 29th */}
+      {reading.degreeNote && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">{reading.degreeNote.heading}</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.degreeNote.body}</p>
+          </div>
+        </section>
+      )}
 
       {/* Betty's Take */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
@@ -142,6 +192,59 @@ function MoonPageContent() {
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
           <div className="tag mb-3">the move</div>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>{reading.theMove}</p>
+          {reading.moveOptions && (
+            <ul style={{ listStyle: "none", padding: 0, margin: "18px 0 0" }}>
+              {reading.moveOptions.map((option) => (
+                <li
+                  key={option}
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.7,
+                    color: "#854F0B",
+                    fontWeight: 600,
+                    paddingLeft: 20,
+                    marginTop: 10,
+                    position: "relative",
+                  }}
+                >
+                  <span aria-hidden style={{ position: "absolute", left: 0, fontWeight: 800 }}>
+                    ·
+                  </span>
+                  {option}
+                </li>
+              ))}
+            </ul>
+          )}
+          {reading.moveQuestions && (
+            <>
+              <div
+                className="tag"
+                style={{ color: "#854F0B", marginTop: 28, marginBottom: 4, paddingTop: 20, borderTop: "1px solid rgba(133,79,11,0.3)" }}
+              >
+                then sit with these
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {reading.moveQuestions.map((question) => (
+                  <li
+                    key={question}
+                    style={{
+                      fontFamily: poppins,
+                      fontSize: 15,
+                      lineHeight: 1.6,
+                      letterSpacing: "-0.2px",
+                      color: "#854F0B",
+                      fontWeight: 700,
+                      paddingTop: 12,
+                      marginTop: 12,
+                      borderTop: "1px solid rgba(133,79,11,0.18)",
+                    }}
+                  >
+                    {question}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import type { ChartData } from "@/types/chart";
 import { SIGN_TRAITS, HOUSE_MEANINGS, ordinalHouse, houseForSign, degreeMeaning } from "@/lib/interpretations";
+import { composeNodeIngress } from "@/lib/nodal-content";
 
 export type LunationType =
   | "new_moon"
@@ -28,7 +29,10 @@ interface EventTypeMeta {
   affirmationFrame: (houseArea: string) => string;
 }
 
-const EVENT_TYPE_META: Record<LunationType, EventTypeMeta> = {
+// A nodal ingress is the one event on the calendar that needs to teach the astrology from scratch
+// and read both ends of an axis, so it gets its own composer in nodal-content.ts rather than a row
+// in this table.
+const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMeta> = {
   new_moon: {
     label: "new moon",
     emoji: "\u{1F311}",
@@ -83,30 +87,41 @@ const EVENT_TYPE_META: Record<LunationType, EventTypeMeta> = {
     promptFraming: "What did I pause during this retrograde that's actually ready to move now?",
     affirmationFrame: (area) => `I'm clear to move forward on my ${area} now, the review period did its job.`,
   },
-  node_ingress: {
-    label: "nodal axis shift",
-    emoji: "\u{260A}",
-    whatThisIs: "The north and south nodes are calculated points, not planets, marking where the moon's orbit crosses the sun's path. They move backward through the zodiac and switch signs roughly every year and a half, which sounds small but isn't, this is the axis astrologers use to read the collective's growth direction for that entire window. When it moves into a new sign pair, the whole cultural \"what are we all being asked to grow into\" conversation resets, not just for you, for everyone at once. It's one of the rarer, bigger shifts on the calendar, worth actually noticing.",
-    bettysTakeGeneric: "Most people have never heard of a nodal ingress and that's exactly why it's worth explaining: this is the collective version of your own north node story, a stretch direction versus a comfort zone, except it's happening to an entire generation at once, not just you. You'll feel the culture itself start pulling toward the new node's themes over the next year and a half. Your personal chart still runs the show for you specifically, but this is useful context for why everyone around you might suddenly be circling similar questions.",
-    actionFraming: "notice which theme the culture around you is suddenly all talking about, and where that shows up for you personally",
-    promptFraming: "What's the bigger, more collective version of my own growth edge that this shift is pointing at?",
-    affirmationFrame: (area) => `I stay aware of the bigger shift happening around me, and I still grow my ${area} at my own pace, not the collective's.`,
-  },
 };
+
+// A headed block of explainer copy. Used by readings that need to teach something before they can
+// interpret it, rather than assuming the member already knows the mechanics.
+export interface ReadingSection {
+  heading: string;
+  body: string;
+}
 
 export interface LunationReading {
   title: string;
   dateLabel: string;
   emoji: string;
   whatThisIs: string;
+  /** Optional teaching section, rendered between the hero and the chart reading. */
+  primerTitle?: string;
+  primer?: ReadingSection[];
   inYourChart: string;
+  /** Richer multi-paragraph version of inYourChart, preferred by the page when present. */
+  chartParagraphs?: string[];
+  /** Optional explainer for a notable degree, e.g. the anaretic 29th. */
+  degreeNote?: ReadingSection;
   bettysTake: string;
   theMove: string;
+  /** Optional concrete actions to pick from, rendered as a list under the move. */
+  moveOptions?: string[];
+  /** Optional reflective questions rendered underneath the move. */
+  moveQuestions?: string[];
   journalPrompt: string;
   affirmation: string;
 }
 
 export function composeLunation(event: CalendarEventInput, chart: ChartData): LunationReading {
+  if (event.type === "node_ingress") return composeNodeIngress(event, chart);
+
   const meta = EVENT_TYPE_META[event.type];
   const cusps = chart.houses.map((h) => h.longitude);
   const house = houseForSign(event.sign, cusps);
