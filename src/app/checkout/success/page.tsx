@@ -4,8 +4,25 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMember } from "@/lib/use-member";
+import { track, EVENTS } from "@/lib/analytics";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+
+// Guards against double-counting revenue. This page both redirects and is a plausible thing to
+// land on twice (back button, refresh, a second tab left open from the Stripe hand-off), and GA4
+// will happily record the same purchase again if we let it. Keyed by Stripe session id, in
+// localStorage rather than state because the redirect below destroys the component either way.
+function markPurchaseTracked(sessionId: string): boolean {
+  const key = `myszn-purchase-tracked:${sessionId}`;
+  try {
+    if (window.localStorage.getItem(key)) return false;
+    window.localStorage.setItem(key, "1");
+    return true;
+  } catch {
+    // Storage unavailable. Better to record a possible duplicate than to lose the conversion.
+    return true;
+  }
+}
 
 type Phase = "working" | "loggedIn";
 
@@ -21,6 +38,16 @@ function CheckoutSuccessContent() {
   const { member, ready } = useMember();
 
   const [phase, setPhase] = useState<Phase>("working");
+
+  // Fires before the redirect below, and in its own effect so a change to the routing logic can't
+  // accidentally drop the conversion. No `value` is sent: Stripe Payment Links don't hand the
+  // amount back, and a made-up number is worse than an absent one. See the note in the README on
+  // sending accurate revenue from the Stripe webhook via the Measurement Protocol.
+  useEffect(() => {
+    if (!sessionId) return;
+    if (!markPurchaseTracked(sessionId)) return;
+    track(EVENTS.PURCHASE, { transaction_id: sessionId, currency: "USD" });
+  }, [sessionId]);
 
   useEffect(() => {
     if (!ready) return;

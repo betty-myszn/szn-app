@@ -2,9 +2,11 @@ import Link from "next/link";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+// The title deliberately omits the brand: the root layout's template already appends " | MY SZN".
 export const metadata = {
-  title: "Terms & Conditions | MY SZN",
+  title: "Terms & Conditions",
   description: "The terms that govern your use of the MY SZN membership platform.",
+  alternates: { canonical: "/terms" },
 };
 
 const sectionStyle = { marginBottom: 40 };

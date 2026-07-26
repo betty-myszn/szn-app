@@ -23,6 +23,7 @@ const sznMenu = [
 
 const guestLinks = [
   { href: "/", label: "home" },
+  { href: "/seasons", label: "seasons" },
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
 ];

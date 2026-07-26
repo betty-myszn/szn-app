@@ -37,8 +37,32 @@ function pathMatches(pathname: string, prefixes: string[]): boolean {
   return prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
+// Supabase stores the session in `sb-<project-ref>-auth-token`, split across `.0`/`.1` suffixes
+// when it outgrows one cookie. No such cookie means there is no session to refresh and no
+// membership to check, so there is nothing for a round trip to Supabase to discover.
+function hasSessionCookie(request: NextRequest): boolean {
+  return request.cookies.getAll().some((c) => c.name.startsWith("sb-") && c.name.includes("auth-token"));
+}
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+
+  // Fast path for anonymous traffic on public pages: skip the auth round trip entirely. This was
+  // costing every visitor, and every crawler hit on the home page, /chart and /seasons/*, a full
+  // network call to Supabase before the page could start rendering. A gated route still falls
+  // through to the real check below, where a missing session is what redirects to /login anyway.
+  if (!hasSessionCookie(request)) {
+    const { pathname: anonPath } = request.nextUrl;
+    const needsAuth =
+      pathMatches(anonPath, MEMBER_AREA) ||
+      anonPath === ONBOARDING ||
+      anonPath.startsWith(ONBOARDING + "/") ||
+      pathMatches(anonPath, LOGIN_ONLY);
+    if (!needsAuth) return response;
+    return NextResponse.redirect(
+      new URL(`/login?redirect=${encodeURIComponent(anonPath)}`, request.url)
+    );
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

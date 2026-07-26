@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
@@ -370,10 +371,12 @@ export default function MembershipPage() {
       <section className="px-8 py-20 md:py-28">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
           <div style={{ position: "relative", overflow: "hidden", minHeight: 400 }}>
-            <img
+            <Image
               src="/betty-founder.png"
               alt="Betty Andrews, founder of MY SZN"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover", objectPosition: "center top" }}
             />
             <div style={{
               position: "absolute", bottom: 20, left: 20,
@@ -892,7 +895,7 @@ export default function MembershipPage() {
 
               <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
 
-              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" plan="monthly" value={111} />
             </div>
 
             {/* 3 months upfront */}
@@ -922,7 +925,7 @@ export default function MembershipPage() {
 
               <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
 
-              <CheckoutButton checkoutUrl={enrolmentOpen ? THREE_MONTH_CHECKOUT_URL : undefined} label="join · pay for 3 months" />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? THREE_MONTH_CHECKOUT_URL : undefined} label="join · pay for 3 months" plan="monthly_3mo_upfront" value={333} />
             </div>
 
             {/* VIP */}
@@ -980,7 +983,7 @@ export default function MembershipPage() {
                 </p>
               </div>
 
-              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark plan="vip" value={555} />
             </div>
           </div>
 

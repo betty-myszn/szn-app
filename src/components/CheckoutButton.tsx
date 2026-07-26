@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMember } from "@/lib/use-member";
+import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -11,6 +12,11 @@ interface CheckoutButtonProps {
   label: string;
   dark?: boolean;
   waitlistHref?: string;
+  /** Plan slug for analytics, e.g. "monthly". Passed explicitly rather than parsed out of
+   *  `label`, so rewording a button can never quietly rename a funnel step in GA4. */
+  plan?: string;
+  /** Charge in USD for this plan, sent as the begin_checkout value. */
+  value?: number;
 }
 
 // Appends client_reference_id so the webhook can link the completed checkout straight back to
@@ -31,7 +37,7 @@ function withClientReferenceId(checkoutUrl: string, userId: string): string {
 // in, we attach her user id via client_reference_id for a clean id-based link; if she's logged
 // out, she checks out on the plain link and the webhook parks her membership by email, which she
 // claims when she sets up her account (password) on /create-account afterwards.
-export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form" }: CheckoutButtonProps) {
+export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form", plan, value }: CheckoutButtonProps) {
   const [agreed, setAgreed] = useState(false);
   const { member } = useMember();
 
@@ -60,8 +66,27 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
     );
   }
 
+  // Ticking the commitment box is its own funnel step. If lots of people reach the button and few
+  // ever tick, the 3-month terms are where the sale is being lost, which is worth knowing
+  // separately from "never scrolled this far".
+  const handleAgreedChange = (next: boolean) => {
+    setAgreed(next);
+    if (next) track(EVENTS.TERMS_AGREED, { plan });
+  };
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!agreed) e.preventDefault();
+    if (!agreed) {
+      e.preventDefault();
+      return;
+    }
+    // Last event we can see. Stripe Payment Links open on Stripe's own domain, so everything from
+    // here until the redirect back to /checkout/success is invisible to GA4.
+    track(EVENTS.BEGIN_CHECKOUT, {
+      plan,
+      value,
+      currency: "USD",
+      logged_in: Boolean(member),
+    });
   };
 
   return (
@@ -78,7 +103,7 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
         <input
           type="checkbox"
           checked={agreed}
-          onChange={(e) => setAgreed(e.target.checked)}
+          onChange={(e) => handleAgreedChange(e.target.checked)}
           style={{ marginTop: 3, accentColor: "var(--pink)", width: 18, height: 18, flexShrink: 0 }}
         />
         <span style={{ fontSize: 12, lineHeight: 1.6, color: textColor }}>

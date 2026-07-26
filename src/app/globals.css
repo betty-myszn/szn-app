@@ -45,6 +45,136 @@ body {
   color: var(--pink);
 }
 
+/* ── Home: editorial sections ──
+   The homepage reads as a magazine: every block changes background colour AND
+   layout skeleton, so the eye never learns the pattern. These are the shared
+   primitives those blocks are built from. */
+
+/* Oversized display type. Sizes are set per-use with clamp(). */
+.display {
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+/* ✦ SECTION LABEL ✦ — the divider that gives the page its chapter breaks */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.rule::before,
+.rule::after {
+  content: "";
+  flex: 1;
+  height: 1.5px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+/* Full-bleed split: copy one side, image or product frame the other */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .split { grid-template-columns: 1fr 1fr; }
+  .split--wide-left { grid-template-columns: 1.15fr 1fr; }
+  .split--wide-right { grid-template-columns: 1fr 1.15fr; }
+  /* Swaps the visual to the other side without reordering the DOM */
+  .split--flip > :first-child { order: 2; }
+}
+
+/* Stat row: big numbers, tiny copy, ✦ between */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+}
+.stat-n {
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-size: clamp(52px, 9vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* Bento: deliberately unequal tiles instead of four matching cards */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+}
+.bento > * { min-height: 150px; }
+@media (min-width: 900px) {
+  .bento { grid-template-columns: repeat(4, 1fr); }
+  .bento-a { grid-column: span 2; grid-row: span 2; }
+  .bento-b { grid-column: span 2; }
+  .bento-c { grid-column: span 1; }
+  .bento-d { grid-column: span 1; }
+  .bento-e { grid-column: span 4; min-height: 0; }
+}
+
+/* Newspaper columns with hairline rules between stories */
+.news {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 860px) {
+  .news { grid-template-columns: repeat(3, 1fr); }
+  .news > * + * { border-left: 1.5px solid var(--dark); }
+}
+
+/* Graphic tile: a flat colour panel carrying a shape motif, used where a
+   screenshot would normally go. Hard offset shadow, no soft blur. */
+.tile {
+  position: relative;
+  overflow: hidden;
+  border: var(--border);
+  box-shadow: 14px 14px 0 var(--dark);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+.tile-glyph {
+  position: relative;
+  font-size: clamp(90px, 16vw, 170px);
+  line-height: 1;
+}
+
+/* Sections that let a shape bleed past their edge */
+.bleed { position: relative; overflow: hidden; }
+.bleed > .bleed-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.bleed > .bleed-content { position: relative; z-index: 1; }
+
+/* Rotated sticker badge, the trick both reference sites use to break the grid */
+.sticker {
+  display: inline-block;
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: var(--border);
+  transform: rotate(-6deg);
+}
+
 /* ── Buttons ── */
 .btn-pink {
   background: var(--pink);
