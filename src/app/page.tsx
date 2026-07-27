@@ -276,7 +276,7 @@ export default function Home() {
         items={[
           `✦ ${szn} szn`,
           enrolmentOpen ? "✦ doors close in 72 hours" : "✦ doors open soon",
-          "✦ live workshop sunday",
+          "✦ live workshop tuesday",
           "✦ your personal birth chart",
           "✦ the astrology community",
         ]}
