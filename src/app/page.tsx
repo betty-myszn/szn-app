@@ -165,7 +165,7 @@ export default function Home() {
             Leo szn is about to <span className="pk">hit different.</span>
           </h2>
           <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.8, maxWidth: 520, margin: "0 auto 24px" }}>
-            Two live workshops on confidence, visibility and getting paid to be fully yourself, starting 26 july.
+            Two live workshops on confidence, visibility and getting paid to be fully yourself, starting 28 july.
           </p>
           <Link href="/events" className="btn-pink">see the workshops</Link>
         </div>
