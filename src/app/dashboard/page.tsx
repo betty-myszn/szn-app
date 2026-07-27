@@ -692,7 +692,7 @@ export default function DashboardPage() {
             >
               <div className="tag mb-2" style={{ color: "#854F0B" }}>events · this szn</div>
               <p style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.5, marginBottom: 6, color: "#854F0B" }}>
-                your first live class lands 26 july.
+                your first live class lands 28 july.
               </p>
               <p style={{ fontSize: 12, color: "#854F0B", opacity: 0.8, lineHeight: 1.6 }}>Enter Your Main Character Era. Save your seat.</p>
             </Link>
