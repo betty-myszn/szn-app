@@ -23,10 +23,10 @@ export const WORKSHOPS: Workshop[] = [
   {
     id: "leo-szn-workshop-1",
     label: "leo szn workshop 1",
-    meta: "26 july · 6.30pm la time · first live class",
+    meta: "28 july · 7pm la time · first live class",
     title: "Leo Season: Enter Your Main Character Era",
     dark: true,
-    startIso: "2026-07-26T18:30:00-07:00",
+    startIso: "2026-07-28T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, join link below once you're rsvp'd",
     zoomUrl: "https://us06web.zoom.us/j/87348495713?pwd=eVykh1qIwFdS5xYVsT6dbUmklWRbCa.1",
@@ -108,7 +108,7 @@ export function upcomingWorkshops(nowMs: number): Workshop[] {
   });
 }
 
-/** Local-time date/time label for a workshop, e.g. "Sun 26 July · 18:00". */
+/** Local-time date/time label for a workshop, e.g. "Tue 28 July · 19:00". */
 export function formatWorkshopWhen(startIso: string): string {
   const d = new Date(startIso);
   const date = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
