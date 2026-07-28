@@ -167,21 +167,67 @@ body {
    Sized in vw so it keeps the same relationship to the headline at every width, with a max so it
    can't run away on an ultrawide monitor. Slightly translucent because it's a photographic mark
    sitting under body copy: at full opacity the mirrored facets fight the text for contrast. */
+/* The planet's placement lives in custom properties so the sticker can be positioned from the
+   same numbers. Move the planet and the sticker follows it, at every width. */
+.birth-chart-block {
+  --planet-w: clamp(400px, 56vw, 820px);
+  --planet-right: -3vw;
+  --planet-bottom: -8vw;
+}
 .disco-planet-mark {
-  right: -6vw;
-  bottom: -8vw;
-  width: clamp(300px, 42vw, 620px);
+  right: var(--planet-right);
+  bottom: var(--planet-bottom);
+  width: var(--planet-w);
   height: auto;
   opacity: 0.85;
 }
+
+/* Sticker pinned to the ring's lower-right arm.
+   The fractions are measured off the artwork's own alpha channel rather than eyeballed. At 0.68 of
+   the way down the PNG the ball occupies x 0.418 to 0.589 and the ring's lower-right arm is a
+   separate band from 0.666 to 0.838. Anchoring the sticker's top-left corner at (0.666, 0.68)
+   therefore puts it exactly on that arm's leading edge, a clear 0.077 of the width away from the
+   ball, and the sticker then runs down and right across the arm into open lilac. So the overlap is
+   deliberate, the ball itself stays uncovered, and nothing is clipped by the section edge.
+   right/bottom place the sticker's far corner; the translate pushes it by its own size so the
+   TOP-LEFT lands on the anchor point, and transform-origin keeps the rotation pivoting on that
+   corner instead of swinging it off the ring. */
+.birth-chart-block .ring-sticker {
+  position: absolute;
+  z-index: 2;
+  right: calc(var(--planet-right) + 0.334 * var(--planet-w));
+  bottom: calc(var(--planet-bottom) + 0.32 * var(--planet-w));
+  transform: translate(100%, 100%) rotate(-6deg);
+  transform-origin: top left;
+  white-space: nowrap;
+}
+
+/* Below roughly 1150px the anchor point is closer to the section's right edge than the sticker is
+   wide, so pinning it to the ring would clip it. It drops back into normal flow under the
+   paragraph instead, which is exactly where the old flex-wrap put it. This threshold is about the
+   sticker's width, not the device, so it's deliberately not the 899px layout breakpoint below. */
+@media (max-width: 1149px) {
+  .birth-chart-block .ring-sticker {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    transform: rotate(-6deg);
+    transform-origin: center;
+    display: inline-block;
+    margin-top: 28px;
+  }
+}
+
 @media (max-width: 899px) {
-  /* On narrow screens the copy stacks and would land straight on top of the busiest part of the
-     ball, so it moves further out and fades back to stay legible. */
+  /* Narrow screens: the copy stacks and would land on the busiest part of the ball, so the planet
+     sits further out and fades back to keep the text legible. */
+  .birth-chart-block {
+    --planet-right: -18vw;
+    --planet-bottom: -6vw;
+    --planet-w: clamp(300px, 76vw, 520px);
+  }
   .disco-planet-mark {
-    right: -22vw;
-    bottom: -10vw;
-    width: clamp(260px, 62vw, 420px);
-    opacity: 0.55;
+    opacity: 0.5;
   }
 }
 

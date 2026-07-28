@@ -300,13 +300,12 @@ export default function Home() {
 
       {/* ── 4. GIANT LILAC BLOCK: type over the disco planet ── */}
       <section
-        className="bleed px-5 md:px-8"
+        className="bleed birth-chart-block px-5 md:px-8"
         style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 96, paddingBottom: 96 }}
       >
         {/* Sits behind everything via .bleed-shape (z-index 0) while .bleed-content below is
-            z-index 1, so the headline, the paragraph and the pink sticker all read over the top
-            of it. Anchored to the lower right so the sticker lands on the ball rather than the
-            empty ring. aria-hidden and empty alt: it's decoration, not content. */}
+            z-index 1, so the headline and the paragraph read over the top of it. aria-hidden and
+            empty alt: it's decoration, not content. */}
         <Image
           src="/disco-planet.png"
           alt=""
@@ -328,11 +327,16 @@ export default function Home() {
             <p style={{ fontSize: 17, lineHeight: 1.7, color: "#3C2A70", maxWidth: 420, fontWeight: 500 }}>
               Calculated to the degree, then rewritten every szn as the sky moves over it.
             </p>
-            <span className="sticker" style={{ background: "var(--pink)", color: "#fff" }}>
-              updated every szn
-            </span>
           </div>
         </div>
+        {/* Pinned to the ring rather than left in the paragraph row, so it tracks the planet at
+            every width instead of drifting away from it. Lives outside .bleed-content because the
+            planet is positioned against the section box, and both need the same coordinate space.
+            Last child so that on mobile, where it drops back into normal flow, it still lands
+            under the paragraph exactly as the old flex-wrap put it. */}
+        <span className="ring-sticker sticker" style={{ background: "var(--pink)", color: "#fff" }}>
+          updated every szn
+        </span>
       </section>
 
       {/* ── 5. NEWSPAPER: three stories, hairline rules ── */}
