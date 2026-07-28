@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { logout, isAdminMember } from "@/lib/member";
 import { useMember } from "@/lib/use-member";
 import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadCount, type Broadcast } from "@/lib/broadcasts";
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
-import DiscoPlanet from "@/components/DiscoPlanet";
 
 const memberLinks = [
   { href: "/my-chart", label: "my chart" },
@@ -106,7 +106,15 @@ export default function NavBar() {
             color: "var(--dark)",
           }}
         >
-          <DiscoPlanet size={28} interactive={false} />
+          <Image
+            src="/disco-planet-logo.png"
+            alt=""
+            aria-hidden
+            width={840}
+            height={532}
+            priority
+            style={{ width: "auto", height: 28 }}
+          />
           my<span style={{ color: "var(--pink)" }}>szn</span>
         </Link>
 
