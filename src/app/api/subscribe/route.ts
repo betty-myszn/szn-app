@@ -77,11 +77,18 @@ export async function POST(req: NextRequest) {
       dateOfBirth, birthTime, birthTimeApproximate, placeOfBirth,
       sunSign, moonSign, risingSign,
     });
-    const n8nPromise = fetch(N8N_WEBHOOK, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: payload,
-    }).catch((err) => console.error("n8n webhook error:", err));
+    // The n8n workflow behind this URL is the waitlist one, and it files everyone it receives onto
+    // the waitlist regardless of the source in the payload. Firing it for a free-chart signup is
+    // what put every chart contact on the waitlist list as well as their own: the overlap was exact,
+    // 3 of 3. Getting a free birth chart is not asking to join the waitlist. Someone who wants both
+    // posts the waitlist form too, which arrives here as its own request with its own source.
+    const n8nPromise = source === "free-chart"
+      ? null
+      : fetch(N8N_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: payload,
+        }).catch((err) => console.error("n8n webhook error:", err));
 
     let brevoOk = false;
     if (!process.env.BREVO_API_KEY) {
@@ -127,7 +134,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    await n8nPromise;
+    if (n8nPromise) await n8nPromise;
 
     // Still a 200 either way: the free-chart form fires this in the background and must never block
     // someone seeing their chart. brevoOk is returned so a failure is visible rather than silent,
