@@ -485,11 +485,11 @@ export default function Home() {
       >
         <div className="bleed-content max-w-4xl mx-auto">
           <h2 className="display" style={{ fontSize: "clamp(40px, 8vw, 104px)", color: "#fff" }}>
-            ready to make
+            ready to
             <br />
-            your birth chart
+            become your
             <br />
-            <span className="pk">your personality?</span>
+            <span className="pk">Future You? ✨</span>
           </h2>
           <p
             style={{
@@ -501,7 +501,7 @@ export default function Home() {
             }}
           >
             {enrolmentOpen
-              ? "The doors are open right now. Pick your membership and your personalised portal is built the moment you're in."
+              ? "Join MY SZN and unlock a personalised astrology portal built around your unique birth chart, helping you become the woman you're here to be."
               : "Join the waitlist and you'll be first through the doors when they open. You sign up with your birth date, time and place, and that builds the whole portal around you."}
           </p>
           {enrolmentOpen ? (
