@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
@@ -297,11 +298,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 4. GIANT LILAC BLOCK: type only ── */}
+      {/* ── 4. GIANT LILAC BLOCK: type over the disco planet ── */}
       <section
         className="bleed px-5 md:px-8"
         style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 96, paddingBottom: 96 }}
       >
+        {/* Sits behind everything via .bleed-shape (z-index 0) while .bleed-content below is
+            z-index 1, so the headline, the paragraph and the pink sticker all read over the top
+            of it. Anchored to the lower right so the sticker lands on the ball rather than the
+            empty ring. aria-hidden and empty alt: it's decoration, not content. */}
+        <Image
+          src="/disco-planet.png"
+          alt=""
+          aria-hidden
+          width={1080}
+          height={1080}
+          priority={false}
+          className="bleed-shape disco-planet-mark"
+        />
         <div className="bleed-content max-w-6xl mx-auto">
           <h2 className="display" style={{ fontSize: "clamp(46px, 10vw, 132px)", color: "#3C2A70" }}>
             your

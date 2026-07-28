@@ -162,6 +162,29 @@ body {
 }
 .bleed > .bleed-content { position: relative; z-index: 1; }
 
+/* The disco-ball planet behind the "your personalised birth chart" block. Anchored to the lower
+   right so the pink "updated every szn" sticker lands over the ball itself, not the empty ring.
+   Sized in vw so it keeps the same relationship to the headline at every width, with a max so it
+   can't run away on an ultrawide monitor. Slightly translucent because it's a photographic mark
+   sitting under body copy: at full opacity the mirrored facets fight the text for contrast. */
+.disco-planet-mark {
+  right: -6vw;
+  bottom: -8vw;
+  width: clamp(300px, 42vw, 620px);
+  height: auto;
+  opacity: 0.85;
+}
+@media (max-width: 899px) {
+  /* On narrow screens the copy stacks and would land straight on top of the busiest part of the
+     ball, so it moves further out and fades back to stay legible. */
+  .disco-planet-mark {
+    right: -22vw;
+    bottom: -10vw;
+    width: clamp(260px, 62vw, 420px);
+    opacity: 0.55;
+  }
+}
+
 /* Rotated sticker badge, the trick both reference sites use to break the grid */
 .sticker {
   display: inline-block;
