@@ -391,20 +391,30 @@ describe("nodal ingress readings cover both ends of the axis", () => {
         assertRealText(reading.journalPrompt, `${where} journalPrompt`, 40);
         assertRealText(reading.affirmation, `${where} affirmation`, 40);
 
-        // the teaching layer: what the nodes are, before any interpretation happens
-        expect(reading.primer?.length).toBe(6);
+        // The teaching layer: what the nodes are, then what each sign of this specific axis means
+        // for everyone, before any personal interpretation happens. 4 generic node sections, then
+        // 6 covering the two signs collectively, then the bridge into her own chart.
+        expect(reading.primer?.length).toBe(11);
         for (const section of reading.primer!) {
           assertRealText(section.heading, `${where} primer heading`, 10);
           assertRealText(section.body, `${where} primer "${section.heading}"`, 200);
         }
 
         // both ends of the axis get read, never the north node alone
-        expect(reading.chartParagraphs?.length).toBe(4);
+        expect(reading.chartParagraphs?.length).toBe(5);
         for (const para of reading.chartParagraphs!) {
           assertRealText(para, `${where} chart paragraph`, 150);
         }
 
         assertRealText(reading.degreeNote?.body, `${where} anaretic note`, 400);
+
+        // Questions are punctuated as questions. They were shipping as full stops, which read as
+        // flat instructions rather than as something to actually sit with, and it was inconsistent
+        // with every other reading type in moon-content.ts.
+        for (const question of reading.moveQuestions!) {
+          expect(question.endsWith("?")).toBe(true);
+        }
+        expect(reading.journalPrompt.endsWith("?")).toBe(true);
 
         expect(reading.moveQuestions?.length).toBe(5);
         for (const question of reading.moveQuestions!) {

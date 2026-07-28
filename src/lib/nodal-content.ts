@@ -324,6 +324,325 @@ const COLLECTIVE: Record<string, CollectiveShift> = {
   },
 };
 
+// The sign layer. The house notes above answer "which part of your life", these answer "what kind
+// of energy", and without them a nodal reading names the two signs in the title and then never
+// explains what either one actually means. Each entry is written to work at BOTH ends of the axis:
+// when the sign holds the north node it supplies the growth ask and the honest note on how that
+// growth feels, and when it holds the south node it supplies the genuine strength being kept and
+// the reflex being outgrown. Voice as everywhere else: cosmic coach, British spellings, plain.
+interface SignNodeNote {
+  /** What this sign is actually about, in one sentence someone new to astrology can hold. */
+  essence: string;
+  /** What growing towards this sign asks of you in practice. */
+  northAsk: string;
+  /** Honestly, how that growth feels at first. This is what stops people thinking they went wrong. */
+  northFeels: string;
+  /** The real, hard-won strength this sign built. Never framed as something to abandon. */
+  southGift: string;
+  /** The reflex, not the strength: the automatic move that has quietly stopped growing you. */
+  southReflex: string;
+}
+
+const SIGN_NODE: Record<string, SignNodeNote> = {
+  Aries: {
+    essence:
+      "the raw start of the zodiac, self as a starting point rather than a conclusion, all instinct, courage and appetite for going first",
+    northAsk:
+      "wanting something openly and moving on it before you have consensus, permission or a guarantee it will work",
+    northFeels:
+      "selfish, at first. Anyone who has spent years being accommodating tends to read their own straightforward wanting as rudeness, and it usually is not, it is just unfamiliar volume",
+    southGift:
+      "genuine courage, the ability to start from nothing, and a nervous system that does not need a committee before it acts",
+    southReflex:
+      "charging at everything alone, treating every situation as something to be won, and mistaking speed for direction",
+  },
+  Taurus: {
+    essence:
+      "the steady, embodied end of the zodiac, concerned with what is real and touchable, what lasts, and what is genuinely enough",
+    northAsk:
+      "slowing down enough to build something that holds, and letting your own comfort, pleasure and worth be legitimate reasons for a decision",
+    northFeels:
+      "boring, and slightly like you are getting away with something. If your worth has been tied to intensity, steadiness reads as stagnation before it starts reading as peace",
+    southGift:
+      "real staying power, an instinct for value, and the ability to make anything you touch feel solid and safe",
+    southReflex:
+      "digging in past the point of usefulness, calling stubbornness loyalty, and staying somewhere comfortable long after it stopped being alive",
+  },
+  Gemini: {
+    essence:
+      "the curious, quicksilver end of the zodiac, the part of us that asks, connects, chats, tries things and refuses to pretend it already knows",
+    northAsk:
+      "asking the question instead of nodding, staying interested in the detail in front of you, and letting yourself be a beginner in public",
+    northFeels:
+      "scattered and unserious, especially if you are used to having the whole answer. Curiosity looks like a lack of conviction from the inside, right up until it starts opening doors",
+    southGift:
+      "a genuinely nimble mind, the ability to talk to anyone, and a knack for making complicated things land simply",
+    southReflex:
+      "collecting information instead of acting on it, and keeping everything light and clever so nothing ever has to get deep enough to matter",
+  },
+  Cancer: {
+    essence:
+      "the feeling, belonging end of the zodiac, concerned with care, safety, roots and the people who count as yours",
+    northAsk:
+      "letting yourself actually need people, tending to your inner life as seriously as your output, and building something that feels like home",
+    northFeels:
+      "exposing, and inefficient. Softness feels like a liability when you have been rewarded for competence, and asking for care can feel more frightening than doing it all yourself",
+    southGift:
+      "deep emotional intelligence, real loyalty, and the ability to make people feel held without being asked",
+    southReflex:
+      "mothering everyone as a way of staying needed, retreating into the familiar when you are hurt, and calling avoidance self-protection",
+  },
+  Leo: {
+    essence:
+      "the heart of the zodiac, the part of us that wants to be seen as itself, that creates for the joy of it and needs to be genuinely witnessed",
+    northAsk:
+      "letting yourself be the one in the room, taking up space as you actually are, and making the thing you would make even if nobody clapped",
+    northFeels:
+      "arrogant and dangerously visible. Everyone who has spent years being the reliable one behind the scenes feels like a fraud the first few times they step forward",
+    southGift:
+      "warmth, courage, presence, and the rare ability to make other people feel like the main character when you are with them",
+    southReflex:
+      "needing the applause to know you are real, performing a version of yourself instead of being one, and going quiet the moment attention moves elsewhere",
+  },
+  Virgo: {
+    essence:
+      "the craft and service end of the zodiac, concerned with the useful detail, doing the work properly and getting quietly better at things",
+    northAsk:
+      "showing up for the unglamorous daily version of your ambition, refining rather than expanding, and being genuinely useful to real people",
+    northFeels:
+      "small. After years of big-picture thinking, attending to the practical detail can feel like a demotion, right up until the detail is what makes the vision actually work",
+    southGift:
+      "discernment, real competence, and the ability to see exactly what needs fixing and then fix it",
+    southReflex:
+      "perfecting as a way of postponing, criticising yourself into paralysis, and being so useful to everyone that nobody thinks to ask what you need",
+  },
+  Libra: {
+    essence:
+      "the relational end of the zodiac, concerned with the other person, with fairness, and with what beauty and balance do to a life",
+    northAsk:
+      "genuinely letting someone else in, choosing partnership over doing it all yourself, and caring how it lands for the other person",
+    northFeels:
+      "like a loss of control. If independence is your identity, consulting someone can feel like giving away power rather than building something two people are actually in",
+    southGift:
+      "grace, real fairness, and the ability to make almost anyone feel considered and comfortable",
+    southReflex:
+      "keeping the peace at the cost of the truth, dissolving into whoever you are with, and mistaking being agreeable for being kind",
+  },
+  Scorpio: {
+    essence:
+      "the depth end of the zodiac, concerned with truth under the surface, real intimacy, power and everything people prefer not to say out loud",
+    northAsk:
+      "going all the way in, saying the true thing, and letting something matter enough that losing it would genuinely cost you",
+    northFeels:
+      "unsafe. Depth asks you to stop managing the situation, and for anyone used to keeping things pleasant and level, that feels less like growth and more like freefall",
+    southGift:
+      "emotional honesty, a total absence of naivety about people, and the ability to sit with what most people flinch from",
+    southReflex:
+      "treating intensity as proof of meaning, controlling through withholding, and creating a crisis when things get calm enough to feel exposed",
+  },
+  Sagittarius: {
+    essence:
+      "the meaning-seeking end of the zodiac, concerned with the wider view, with faith, freedom and what all of this is actually for",
+    northAsk:
+      "trusting your own read of the bigger picture, saying the honest thing without over-qualifying it, and going somewhere you have not been",
+    northFeels:
+      "reckless and under-researched. If you are used to knowing every detail before you move, acting on conviction alone feels like guessing",
+    southGift:
+      "genuine perspective, honesty, and a refusal to shrink a big idea down to make other people comfortable",
+    southReflex:
+      "always looking at the next horizon so you never have to be present in this one, and preaching the philosophy instead of living the specific",
+  },
+  Capricorn: {
+    essence:
+      "the structural end of the zodiac, concerned with the long build, real authority, and what you are willing to be responsible for",
+    northAsk:
+      "committing to something that takes years, being the adult in the room, and building a structure that holds without you having to hold it",
+    northFeels:
+      "heavy and exposing. Taking responsibility publicly means being visibly accountable if it fails, which is precisely why it grows you",
+    southGift:
+      "discipline, real credibility, and the ability to keep going long after the initial enthusiasm has worn off",
+    southReflex:
+      "achieving as a way of earning the right to exist, carrying everything alone, and calling self-abandonment being professional",
+  },
+  Aquarius: {
+    essence:
+      "the collective end of the zodiac, the outsider and the systems thinker, concerned with the whole, the future, and what should be different for everyone rather than just for you",
+    northAsk:
+      "contributing to something bigger than your own name, thinking in systems rather than in personalities, and letting your difference be the point rather than the problem",
+    northFeels:
+      "cold and a bit lonely at first, especially coming from leo. Mattering without applause is a genuinely different sensation to being adored, and it takes a while before it stops feeling like being ignored",
+    southGift:
+      "originality, a clear head under pressure, and the ability to see the whole board when everyone else is arguing about one square",
+    southReflex:
+      "detaching the second something gets emotionally close, hiding behind ideas and principles, and staying the outsider because belonging would mean risking something",
+  },
+  Pisces: {
+    essence:
+      "the dissolving end of the zodiac, concerned with compassion, imagination, surrender and everything that cannot be measured",
+    northAsk:
+      "trusting what you sense before you can prove it, letting go of the need to have it all planned, and making room for rest, art and the unexplainable",
+    northFeels:
+      "vague and irresponsible. Anyone trained to justify every decision with a reason finds intuition almost impossible to take seriously at first",
+    southGift:
+      "deep empathy, imagination, and an instinct for what someone is really feeling underneath what they are saying",
+    southReflex:
+      "escaping instead of deciding, absorbing everyone else's feelings until you cannot locate your own, and calling drift open-mindedness",
+  },
+};
+
+function signNode(sign: string): SignNodeNote {
+  return SIGN_NODE[sign] ?? SIGN_NODE.Aries;
+}
+
+// The collective layer, and the biggest block of writing on the page. A nodal shift is genuinely
+// world-level news before it is personal news, so the reading now teaches the whole story first,
+// at length, and only then narrows into her chart. Keyed by sign and written to work at either end
+// of the axis: whichever sign holds the north node supplies asNorth/asNorthWorld, and its opposite
+// supplies asSouth/asSouthRelease. Twelve entries therefore cover all twelve axes.
+interface SignCollective {
+  /** What this growth direction means for everyone, the meaning of the next eighteen months. */
+  asNorth: string;
+  /** What that actually looks like out in the world: culture, work, technology, relationships. */
+  asNorthWorld: string;
+  /** What the collective genuinely built while this sign held the north node, the last cycle. */
+  asSouth: string;
+  /** What the culture is loosening now, and the part of it worth carrying forward. */
+  asSouthRelease: string;
+}
+
+const SIGN_COLLECTIVE: Record<string, SignCollective> = {
+  Aquarius: {
+    asNorth:
+      "With the north node in aquarius, the growth direction for everyone alive right now points away from the individual and towards the whole. Aquarius is the sign of the collective, the network, the system and the future, and it is fundamentally uninterested in who gets the credit. For the next eighteen months the question sitting underneath almost every conversation becomes some version of whether a thing works for everybody, or only for the person standing at the front. That is a genuinely different question to the one we have been asking, and it reorganises what gets rewarded. Aquarius is also the sign of the outsider, so this cycle tends to hand influence to the people who were previously considered too strange, too early or too far outside the room, and it asks the rest of us to actually listen to them.",
+    asNorthWorld:
+      "In practice this looks like a return to the group. Expect community to stop being a marketing word and start being the actual product, audiences that participate rather than watch, and movements that outlive whoever started them. Work reorganises around networks, collaboration and shared ownership, and the lone genius model starts to look dated. Technology accelerates hard and becomes openly political, because aquarius rules both innovation and the ethics of who it is for, so the fights of this cycle are about access, automation, data and who exactly benefits. Reform energy rises: systems that have quietly not worked for most people get named and challenged rather than tolerated. Relationships widen towards chosen family, friendship as a primary bond, and structures that suit the people in them rather than the traditional template. It can feel impersonal and occasionally cold, and that is the trade of this axis being made in public.",
+    asSouth:
+      "For the last cycle the collective has been living the aquarius end, and it built real things. We got radical individuality, an enormous appetite for the new, technology adopted at speed, and a genuine loosening of the rules about who is allowed to belong to what. Aquarius taught the culture to question the system rather than assume it was correct, to organise across distance, and to treat difference as interesting rather than shameful. Whole communities that could never have found each other did, because aquarius makes the network do the work that geography used to do.",
+    asSouthRelease:
+      "What is loosening is the aquarius reflex rather than the aquarius gift: detachment dressed up as objectivity, having the correct opinion about everything while remaining at a careful distance from all of it, and belonging to a cause more comfortably than belonging to an actual person. The endless novelty tires too, the sense that the next new thing will fix what the last new thing did not. What is worth carrying forward is aquarius's clear-eyed refusal to accept a broken system just because it is the one we inherited, because warmth without that clarity turns into sentiment that changes nothing.",
+  },
+  Leo: {
+    asNorth:
+      "With the north node in leo, the collective growth direction points towards the heart, the individual and the courage to be seen as yourself. Leo is the sign of creative self-expression, play, generosity and genuine presence, and it insists that a person is not a data point. After a stretch of thinking in systems, this cycle asks everyone to remember that everything is made by somebody, and that being witnessed and loved as you actually are is a real human need rather than a vanity. The growth here is permission: to want, to make, to be delighted by something, and to stop hiding the parts of yourself that are not strategically useful.",
+    asNorthWorld:
+      "Expect the individual voice to come back into focus. Culture rewards personality, craft and things that are obviously made by a human, and there is a visible hunger for warmth, showmanship, colour and joy after a colder period. Creative work matters more than analysis of creative work. Leadership becomes personal again, and people follow people rather than institutions. Romance, performance and celebration return as things worth taking seriously rather than as frivolous. The risk everyone runs in a leo cycle is confusing being seen with being valuable, so the culture will also produce a great deal of noise made purely for attention, and the work is telling the two apart.",
+    asSouth:
+      "The leo end of the axis is where the collective has been living, and it built genuinely good things. We learned that anyone can make and publish, that visibility is not reserved for the already powerful, and that self-expression is not the same as arrogance. Leo gave the culture heart, courage, colour and a real democratisation of who gets to be looked at, and an enormous number of people found their voice inside that.",
+    asSouthRelease:
+      "What is loosening is the spotlight economy: the assumption that a personal brand is the same thing as a contribution, that being widely seen proves the work was worth doing, and that the loudest presence in the room is the most valuable one. The exhausting part of this era, performing yourself constantly in order to stay real, is the reflex being outgrown. What is worth carrying forward is leo's heart, because a movement with no warmth in it does not hold people for long, and a system designed by people who forgot how to be delighted tends not to be a system anyone wants to live inside.",
+  },
+  Aries: {
+    asNorth:
+      "With the north node in aries, the collective growth direction points towards self-determination, courage and the willingness to move first. Aries is the raw start of the zodiac, and it has no patience for consensus that never resolves into action. For eighteen months the culture rewards deciding, going, and being willing to be wrong in public rather than being carefully undecided in private. The invitation is to stop waiting for everyone to agree before anything is allowed to happen.",
+    asNorthWorld:
+      "Expect speed. Solo founders over committees, direct speech over careful diplomacy, conviction over consensus, and a general impatience with process for its own sake. Business gets faster and more willing to break something. Technology favours tools that let one person do what used to take a team. Relationships get an honesty audit, and the polite arrangements that were quietly costing somebody their identity tend not to survive it. Conflict rises, because aries would rather have the argument than maintain a peace that is not real.",
+    asSouth:
+      "The aries end built genuine courage into the culture: a willingness to start from nothing, to back yourself, and to act without a committee's blessing. It taught people that wanting something openly is not shameful and that beginning badly beats not beginning.",
+    asSouthRelease:
+      "What is loosening is the reflex of charging at everything alone, treating every situation as something to be won, and mistaking speed for direction. What is worth keeping is the courage itself, because collaboration made only of people who cannot act alone is just a slower way of avoiding the decision.",
+  },
+  Taurus: {
+    asNorth:
+      "With the north node in taurus, the collective growth direction points towards what is real, slow and touchable. Taurus is the body, the land, the material and the question of what is genuinely enough. After a period of intensity and leverage, this cycle asks everyone to build something that actually holds, and to accept that steady is not the same as stagnant.",
+    asNorthWorld:
+      "Expect conversations about ownership, land, food, craft, the body and money you can see. Business starts favouring steady margins over leveraged bets. Technology gets judged on whether it improves material life rather than on how clever it sounds. Relationships get quieter and more practical, built on consistency rather than intensity. Slowness itself becomes aspirational, and there is a visible turn towards making things properly and keeping them.",
+    asSouth:
+      "The taurus end gave the collective an instinct for value, real staying power, and the ability to make things solid. It taught the culture to care about quality, comfort and the difference between price and worth.",
+    asSouthRelease:
+      "What is loosening is digging in past the point of usefulness, calling stubbornness loyalty, and staying somewhere comfortable long after it stopped being alive. What is worth keeping is the respect for what lasts, because transformation with nothing solid underneath it is just churn.",
+  },
+  Gemini: {
+    asNorth:
+      "With the north node in gemini, the collective growth direction points towards curiosity, questions and the willingness to not already know. Gemini is the sign of the nimble mind, the conversation and the local detail, and this cycle asks everyone to get interested again rather than defending a fixed position.",
+    asNorthWorld:
+      "Expect a return to talking. Conversation formats, local news, neighbourhood-scale connection, writing, teaching and the small exchange become more valuable than the grand pronouncement. Culture rewards people who can explain complicated things simply and who change their mind in public. Information moves fast and gets messier, and media fragments further towards many voices rather than a few authorities.",
+    asSouth:
+      "The gemini end built genuine agility into the culture: an ability to talk to anyone, to move between worlds, and to make complicated things land simply.",
+    asSouthRelease:
+      "What is loosening is collecting information instead of acting on it, and keeping everything light and clever so nothing ever has to get deep enough to matter. What is worth keeping is the curiosity, because conviction without it hardens into something nobody can talk to.",
+  },
+  Cancer: {
+    asNorth:
+      "With the north node in cancer, the collective growth direction points towards care, belonging and the inner life. Cancer is home, roots, family both given and chosen, and the honest admission that people need each other. After a stretch of achievement and structure, this cycle asks what all the building was actually for.",
+    asNorthWorld:
+      "Expect home, housing, care work and the domestic to become political and central rather than background. Emotional honesty becomes acceptable in places that previously did not allow it, including work. Business is judged on how it treats people, not only on what it produces. Relationships deepen towards safety and real belonging, and there is a broad turn inward, towards fewer people and more depth.",
+    asSouth:
+      "The cancer end built deep emotional intelligence and real loyalty into the culture, and it taught people to make each other feel held.",
+    asSouthRelease:
+      "What is loosening is retreating into the familiar whenever things get hard, and mothering everyone as a way of staying needed. What is worth keeping is the care itself, because ambition with no tenderness in it burns through the people it needs.",
+  },
+  Virgo: {
+    asNorth:
+      "With the north node in virgo, the collective growth direction points towards craft, usefulness and the unglamorous daily detail. Virgo is the sign of doing the work properly, and this cycle rewards competence, repair and getting quietly better at things over vision that never touches the ground.",
+    asNorthWorld:
+      "Expect a turn towards health, routine, food, systems that actually function, and work that is genuinely useful to real people. Craft and expertise regain status. Culture gets impatient with grand promises and interested in whether the thing works. Repair, maintenance and improvement start to matter as much as invention.",
+    asSouth:
+      "The virgo end built discernment and real competence into the culture, and an eye for exactly what needs fixing.",
+    asSouthRelease:
+      "What is loosening is perfectionism as postponement and criticism as a personality. What is worth keeping is the standard, because compassion with no rigour behind it does not actually help anybody.",
+  },
+  Libra: {
+    asNorth:
+      "With the north node in libra, the collective growth direction points towards the other person: fairness, partnership, and what beauty and balance do to a life. Libra insists that how something lands for someone else is part of whether it was right, and this cycle asks everyone to stop doing it all alone.",
+    asNorthWorld:
+      "Expect diplomacy, negotiation, alliances and design to matter more. Conversations about fairness, justice and who is at the table get louder. Business leans towards partnership and away from the solo empire. Relationships become a serious subject rather than a soft one, and aesthetics return as something worth caring about.",
+    asSouth:
+      "The libra end built grace and fairness into the culture, and an ability to make people feel considered.",
+    asSouthRelease:
+      "What is loosening is keeping the peace at the cost of the truth, and dissolving into whoever is loudest. What is worth keeping is the fairness, because independence without it is just selfishness with better branding.",
+  },
+  Scorpio: {
+    asNorth:
+      "With the north node in scorpio, the collective growth direction points towards depth, truth and everything sitting under the surface. Scorpio is intimacy, power and honesty about both, and this cycle asks everyone to stop managing the situation and say the true thing.",
+    asNorthWorld:
+      "Expect what was hidden to surface: money, power, abuse, ownership and who really controls what. Investigations, exposures and reckonings define the period. Culture loses patience with the pleasant surface and wants the real story. Relationships get more intense and less casual, and shared resources become a central question.",
+    asSouth:
+      "The scorpio end built emotional honesty into the culture and an absence of naivety about power.",
+    asSouthRelease:
+      "What is loosening is treating intensity as proof of meaning, and creating crisis when things get calm. What is worth keeping is the refusal to look away, because comfort without honesty about power curdles into complacency.",
+  },
+  Sagittarius: {
+    asNorth:
+      "With the north node in sagittarius, the collective growth direction points towards meaning, faith and the wider view. Sagittarius asks what all of this is actually for, and this cycle rewards conviction, honesty and a willingness to go somewhere unfamiliar.",
+    asNorthWorld:
+      "Expect big questions to return: belief, philosophy, education, travel, and the stories a culture tells about itself. Publishing, teaching and long-form thinking gain ground. There is an appetite for optimism and for people who will say what they actually think without qualifying it into meaninglessness.",
+    asSouth:
+      "The sagittarius end gave the culture perspective, honesty and a refusal to shrink big ideas down to keep everyone comfortable.",
+    asSouthRelease:
+      "What is loosening is always looking at the next horizon so nobody has to be present in this one, and preaching the philosophy rather than living the specific. What is worth keeping is the faith, because detail with no meaning behind it is just admin.",
+  },
+  Capricorn: {
+    asNorth:
+      "With the north node in capricorn, the collective growth direction points towards structure, responsibility and the long build. Capricorn asks who is actually accountable, and this cycle rewards the people willing to be the adult in the room and to commit to something that takes years.",
+    asNorthWorld:
+      "Expect institutions, law, governance and infrastructure to dominate. Culture gets serious and more interested in competence than charisma. Business favours durability over hype. Authority itself is the theme, both the demand for it and the argument about who has earned it.",
+    asSouth:
+      "The capricorn end built discipline and credibility into the culture, and the ability to keep going after the enthusiasm wore off.",
+    asSouthRelease:
+      "What is loosening is achievement as the price of existing, and carrying everything alone. What is worth keeping is the discipline, because care with no structure behind it cannot hold anyone for long.",
+  },
+  Pisces: {
+    asNorth:
+      "With the north node in pisces, the collective growth direction points towards compassion, imagination and everything that cannot be measured. Pisces dissolves the hard edges, and this cycle asks everyone to trust what they sense, make room for rest and art, and accept that not all of it will be provable.",
+    asNorthWorld:
+      "Expect spirituality, art, music, film and the unexplainable to matter more, alongside a real turn towards collective compassion, care for the vulnerable and the limits of pure logic. Boundaries blur, in both the beautiful and the confusing sense. Rest becomes a legitimate subject rather than a failure.",
+    asSouth:
+      "The pisces end gave the culture empathy and imagination, and an instinct for what people are really feeling underneath what they say.",
+    asSouthRelease:
+      "What is loosening is escaping instead of deciding, and drifting while calling it open-mindedness. What is worth keeping is the compassion, because precision with no mercy in it is just cruelty that files its paperwork correctly.",
+  },
+};
+
+function signCollective(sign: string): SignCollective {
+  return SIGN_COLLECTIVE[sign] ?? SIGN_COLLECTIVE.Aries;
+}
+
+// Sign names are lowercased throughout this reading to match the brand voice, so they need
+// re-capitalising when one has to open a sentence.
+function capitalise(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function oppositeSign(sign: string): string {
   const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
   if (idx < 0) return sign;
@@ -337,7 +656,7 @@ function oppositeHouse(house: number): number {
   return ((house + 5) % 12) + 1;
 }
 
-function primerSections(northSign: string, southSign: string, shift: CollectiveShift): ReadingSection[] {
+function primerSections(northSign: string, southSign: string): ReadingSection[] {
   const north = northSign.toLowerCase();
   const south = southSign.toLowerCase();
   return [
@@ -358,8 +677,28 @@ function primerSections(northSign: string, southSign: string, shift: CollectiveS
       body: "This is the part most people get wrong. The work is not to abandon your south node and start again as someone else. Everything you built there is the material you grow with. The invitation is to carry the wisdom of the south node forward, consciously, while deliberately choosing the north node direction when the two of them pull in opposite ways. Keep the skills, drop the reflex. That is the whole practice.",
     },
     {
+      heading: `first, what ${north} actually is`,
+      body: `Knowing the nodes have moved is not much use until you know what they moved into, so here is ${north} itself. ${capitalise(northSign)} is ${signNode(northSign).essence}. With the north node here, the growth ask for the next eighteen months is ${signNode(northSign).northAsk}. Worth saying plainly, because most people panic at this part: ${signNode(northSign).northFeels}. That is the correct experience of a north node, not a sign you have misread it.`,
+    },
+    {
+      heading: `the ${north} north node: what all of us are growing towards`,
+      body: `${signCollective(northSign).asNorth}`,
+    },
+    {
+      heading: `what the ${north} shift looks like out in the world`,
+      body: `${signCollective(northSign).asNorthWorld}`,
+    },
+    {
+      heading: `the ${south} south node: what we already built together`,
+      body: `Now the other end, because an axis is one story. ${capitalise(southSign)} is ${signNode(southSign).essence}, and it is not the villain here. ${signCollective(southSign).asSouth}`,
+    },
+    {
+      heading: "what the culture is loosening now, and what it keeps",
+      body: `${signCollective(southSign).asSouthRelease} This is the distinction that matters for the whole eighteen months, collectively and personally: the reflex goes, the strength stays. Nobody is being asked to stop being ${south}, only to stop reaching for it automatically the moment something is at stake.`,
+    },
+    {
       heading: "why a nodal shift matters for everyone at once",
-      body: `Your birth chart holds your own personal nodal axis, fixed from the moment you were born. What is happening now is the collective version: the nodes in the sky have changed signs, moving into ${north} and ${south}, which resets the direction the whole culture is being asked to grow in. ${shift.collective}`,
+      body: `Your birth chart holds your own personal nodal axis, fixed from the moment you were born, and it never changes. What is happening now is the collective version: the nodes in the sky have changed signs, moving into ${north} and ${south}, which resets the direction the whole culture is being asked to grow in for the next year and a half. It is the rarest shift on the calendar, roughly one every eighteen months, which is why it is worth understanding properly rather than noting and moving on. Everything above is the same for everyone alive. What follows is the part that is only yours.`,
     },
     {
       heading: "your chart still comes first",
@@ -389,9 +728,13 @@ export function composeNodeIngress(event: CalendarEventInput, chart: ChartData):
   const date = new Date(`${event.date}T12:00:00Z`);
   const dateLabel = date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
+  const northNodeSign = signNode(northSign);
+  const southNodeSign = signNode(southSign);
+
   const chartParagraphs = [
-    `The north node moves into your ${ordinalHouse(northHouse)} house of ${nh.title}, ${nh.rules}. That makes this the part of your life the sky spends the next eighteen months pushing you to grow into, and specifically it is asking for ${northNote.growingToward}. ${nh.coach}`,
-    `At the same time, the south node activates the house directly opposite, your ${ordinalHouse(southHouse)} house of ${sh.title}, ${sh.rules}. This is the end of the axis you already know how to work. When things get uncertain, your reflex is ${southNote.comfort}, because it has worked before and it costs you nothing to reach for.`,
+    `The north node moves into ${north} in your ${ordinalHouse(northHouse)} house of ${nh.title}, ${nh.rules}. Those two things are one instruction, not two: ${north} is the ${northNodeSign.essence.replace(/^the /, "")}, and your ${ordinalHouse(northHouse)} house is where you will be asked to live it. That makes this the part of your life the sky spends the next eighteen months pushing you to grow into, and specifically it is asking for ${northNote.growingToward}. ${nh.coach}`,
+    `In practice, ${north} growth here means ${northNodeSign.northAsk}. Be ready for how it lands: ${northNodeSign.northFeels}.`,
+    `At the same time, the south node activates ${south} in the house directly opposite, your ${ordinalHouse(southHouse)} house of ${sh.title}, ${sh.rules}. This is the end of the axis you already know how to work. Your ${south} strength is genuine, ${southNodeSign.southGift}, and you are keeping every bit of it. When things get uncertain, though, your reflex is ${southNote.comfort}, because it has worked before and it costs you nothing to reach for. The ${south} habit being outgrown is the narrow one: ${southNodeSign.southReflex}.`,
     `The two houses are one story, not two. Every time something is at stake and you fall back on your ${southArea}, you are choosing the familiar end of the axis. Every time you put your attention and your risk into your ${northArea} instead, you are choosing the growth end. Nothing here turns on a single dramatic decision, it happens in the small choices where you could genuinely go either way.`,
     `What you are gently releasing is ${southNote.outgrow}. Not the whole house, just the reflex. What you keep, and what the north node genuinely needs from you, is the strength you built over there: ${southNote.gift}. Carry that into your ${ordinalHouse(northHouse)} house work and it stops being a leap into the unknown, it becomes an experienced person trying something new.`,
   ];
@@ -409,11 +752,11 @@ export function composeNodeIngress(event: CalendarEventInput, chart: ChartData):
   const theMove = `Growing into your ${ordinalHouse(northHouse)} house is not a mindset, it is a set of choices, and one real move beats a year of understanding the theory. Pick one of these and actually do it this month.`;
 
   const moveQuestions = [
-    `What version of yourself have you outgrown, the one built around your ${southArea}, that you are still describing as the real you.`,
-    `Where are you still introducing yourself as an older version of yourself, at work, in your relationships or in your own head.`,
-    `What familiar pattern are you ready to release, knowing it is the reflex going and not the strength underneath it.`,
-    `What are you keeping from your ${ordinalHouse(southHouse)} house, and where could it genuinely help you in your ${ordinalHouse(northHouse)} house.`,
-    `What are you choosing instead, in one plain sentence, specific enough that you would notice yourself living it.`,
+    `What version of yourself have you outgrown, the one built around your ${southArea}, that you are still describing as the real you?`,
+    `Where are you still introducing yourself as an older version of yourself, at work, in your relationships or in your own head?`,
+    `What familiar pattern are you ready to release, knowing it is the reflex going and not the strength underneath it?`,
+    `What are you keeping from your ${ordinalHouse(southHouse)} house, and where could it genuinely help you in your ${ordinalHouse(northHouse)} house?`,
+    `What are you choosing instead, in one plain sentence, specific enough that you would notice yourself living it?`,
   ];
 
   return {
@@ -422,7 +765,7 @@ export function composeNodeIngress(event: CalendarEventInput, chart: ChartData):
     emoji: "\u{260A}",
     whatThisIs: `Roughly every eighteen months the lunar nodes change signs, and the growth direction for the entire collective changes with them. On this date the north node moves into ${north} and the south node into ${south}, which resets what the culture is being pulled towards for the next year and a half. Most people have never heard of the nodes, so here is what they actually are, what this shift means for everyone, and what it means in your chart specifically.`,
     primerTitle: "the nodes, explained",
-    primer: primerSections(northSign, southSign, shift),
+    primer: primerSections(northSign, southSign),
     inYourChart: chartParagraphs.join(" "),
     chartParagraphs,
     degreeNote,
@@ -430,7 +773,7 @@ export function composeNodeIngress(event: CalendarEventInput, chart: ChartData):
     theMove,
     moveOptions: northNote.moves,
     moveQuestions,
-    journalPrompt: `When things feel uncertain I reach for my ${southArea}. What would I do differently if I trusted my ${northArea} to hold me.`,
+    journalPrompt: `When things feel uncertain I reach for my ${southArea}. What would I do differently if I trusted my ${northArea} to hold me?`,
     affirmation: `I bring the wisdom of my ${southArea} with me, and I keep choosing my ${northArea} anyway.`,
   };
 }
