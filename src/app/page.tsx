@@ -25,135 +25,6 @@ function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
   );
 }
 
-/* ── Shape kit ──
-   The page gets its interest from colour fields and geometry rather than
-   photography, so these are the recurring marks: orbit rings, a starburst
-   badge and a solid disc. All flat, all brand palette. */
-
-function Orbit({
-  size = 520,
-  stroke = "var(--dark)",
-  rings = 4,
-  opacity = 1,
-  className,
-  style,
-}: {
-  size?: number;
-  stroke?: string;
-  rings?: number;
-  opacity?: number;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 200 200"
-      aria-hidden
-      className={className}
-      style={style}
-      opacity={opacity}
-    >
-      {Array.from({ length: rings }).map((_, i) => (
-        <circle
-          key={i}
-          cx="100"
-          cy="100"
-          r={98 - i * (90 / rings)}
-          fill="none"
-          stroke={stroke}
-          strokeWidth={i === 0 ? 1.6 : 1}
-        />
-      ))}
-    </svg>
-  );
-}
-
-function Starburst({
-  label,
-  fill = "var(--pink)",
-  color = "#fff",
-  size = 132,
-  style,
-}: {
-  label: string;
-  fill?: string;
-  color?: string;
-  size?: number;
-  style?: React.CSSProperties;
-}) {
-  const points = Array.from({ length: 32 }).map((_, i) => {
-    const r = i % 2 === 0 ? 50 : 39;
-    const a = (i / 32) * Math.PI * 2 - Math.PI / 2;
-    return `${(50 + r * Math.cos(a)).toFixed(2)},${(50 + r * Math.sin(a)).toFixed(2)}`;
-  });
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden style={style}>
-      <polygon points={points.join(" ")} fill={fill} stroke="var(--dark)" strokeWidth="1.2" />
-      <text
-        x="50"
-        y="50"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={color}
-        fontSize="11"
-        fontFamily={poppins}
-        fontWeight="800"
-        letterSpacing="0.5"
-      >
-        {label}
-      </text>
-    </svg>
-  );
-}
-
-/* A flat colour panel with a glyph and rings, used where a screenshot would go. */
-function Tile({
-  bg,
-  glyph,
-  glyphColor,
-  ringColor,
-  caption,
-  captionColor,
-}: {
-  bg: string;
-  glyph: string;
-  glyphColor: string;
-  ringColor: string;
-  caption: string;
-  captionColor: string;
-}) {
-  return (
-    <div className="tile" style={{ background: bg }}>
-      <Orbit
-        size={620}
-        stroke={ringColor}
-        rings={6}
-        style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxWidth: "130%" }}
-      />
-      <div className="tile-glyph" style={{ color: glyphColor }}>
-        {glyph}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          left: 22,
-          bottom: 20,
-          fontFamily: poppins,
-          fontSize: 11,
-          fontWeight: 800,
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
-          color: captionColor,
-        }}
-      >
-        {caption}
-      </div>
-    </div>
-  );
-}
-
 const STATS = [
   { n: "365", label: "days of guidance personalised to your chart" },
   { n: "2", label: "live coaching workshops every single szn" },
@@ -282,18 +153,11 @@ export default function Home() {
         ]}
       />
 
-      {/* ── 1. HERO: pink field, one statement, orbit bleeding off the edge ── */}
+      {/* ── 1. HERO: pink field, one statement ── */}
       <section
         className="bleed px-5 md:px-8"
         style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
       >
-        <Orbit
-          className="bleed-shape"
-          size={720}
-          stroke="rgba(255,255,255,0.45)"
-          rings={7}
-          style={{ position: "absolute", right: "-190px", top: "50%", transform: "translateY(-50%)" }}
-        />
         <div className="bleed-content max-w-6xl mx-auto">
           <div
             style={{
@@ -373,9 +237,6 @@ export default function Home() {
             <Link href="/login" className="btn-outline no-underline">
               member login
             </Link>
-            {enrolmentOpen && (
-              <Starburst label="72 HRS" fill="var(--dark)" color="var(--pink)" size={116} style={{ marginLeft: 6 }} />
-            )}
           </div>
         </div>
       </section>
@@ -410,53 +271,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3. SPLIT: tile left, copy right ── */}
+      {/* ── 3. COSMIC HOME: copy only. This was a two-column split with a flat colour placeholder
+           panel standing in for a product screenshot. The placeholder was cut, and rather than
+           leave a dead column the section is now a single centred block. When real portal
+           screenshots exist, this is the place to put one back. ── */}
       <section className="px-5 md:px-8" style={{ background: "#fff", paddingTop: 72, paddingBottom: 72, borderBottom: "var(--border)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="rule mb-12" style={{ color: "var(--dark)" }}>
             <span>&#10022;&nbsp; inside my szn &nbsp;&#10022;</span>
           </div>
-          <div className="split split--wide-right gap-12 md:gap-16 items-center">
-            <div style={{ maxWidth: 460 }}>
-              <Tile
-                bg="var(--lav-light)"
-                glyph="☉"
-                glyphColor="var(--dark)"
-                ringColor="rgba(60,42,112,0.28)"
-                caption="your cosmic home"
-                captionColor="#3C2A70"
-              />
-            </div>
-            <div>
-              <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
-                your cosmic
-                <br />
-                <span className="pk">home.</span>
-              </h2>
-              <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 460, margin: "24px 0 28px" }}>
-                One portal that already knows your sun, moon, rising and every placement underneath. Your readings, your
-                prompts, your workshops and your guidance, all rebuilt around the exact sky you were born under.
-              </p>
-              <Link href="/membership" className="btn-pink no-underline">
-                see what&apos;s inside
-              </Link>
-            </div>
+          <div style={{ maxWidth: 720 }}>
+            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
+              your cosmic
+              <br />
+              <span className="pk">home.</span>
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
+              One portal that already knows your sun, moon, rising and every placement underneath. Your readings, your
+              prompts, your workshops and your guidance, all rebuilt around the exact sky you were born under.
+            </p>
+            <Link href="/membership" className="btn-pink no-underline">
+              see what&apos;s inside
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── 4. GIANT LILAC BLOCK: type only, shape bleeding off ── */}
+      {/* ── 4. GIANT LILAC BLOCK: type only ── */}
       <section
         className="bleed px-5 md:px-8"
         style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 96, paddingBottom: 96 }}
       >
-        <Orbit
-          className="bleed-shape"
-          size={640}
-          stroke="rgba(60,42,112,0.22)"
-          rings={8}
-          style={{ position: "absolute", left: "-170px", bottom: "-200px" }}
-        />
         <div className="bleed-content max-w-6xl mx-auto">
           <h2 className="display" style={{ fontSize: "clamp(46px, 10vw, 132px)", color: "#3C2A70" }}>
             your
@@ -590,37 +435,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 8. SPLIT FLIPPED: copy left, tile right ── */}
+      {/* ── 8. CONFIDENCE ERA: copy only, same reason as section 3. The placeholder panel that
+           used to sit beside this copy was cut; a real workshop photo would go here. ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--cream)", paddingTop: 72, paddingBottom: 72, borderBottom: "var(--border)" }}>
         <div className="max-w-6xl mx-auto">
-          <div className="split split--wide-left split--flip gap-12 md:gap-16 items-center">
-            <div style={{ maxWidth: 460, justifySelf: "end", width: "100%" }}>
-              <Tile
-                bg="var(--dark)"
-                glyph="★"
-                glyphColor="var(--pink)"
-                ringColor="rgba(200,180,248,0.3)"
-                caption="live every szn"
-                captionColor="var(--lav)"
-              />
-            </div>
-            <div>
-              <div className="tag mb-4">your first workshops inside</div>
-              <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
-                your
-                <br />
-                confidence
-                <br />
-                <span className="pk">era.</span>
-              </h2>
-              <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 440, margin: "24px 0 28px" }}>
-                {szn} szn isn&apos;t something you read about. Two live workshops on visibility, confidence and getting
-                paid to be fully yourself, then the tools to actually live it.
-              </p>
-              <Link href="/events" className="btn-pink no-underline">
-                see the workshops
-              </Link>
-            </div>
+          <div style={{ maxWidth: 720 }}>
+            <div className="tag mb-4">your first workshops inside</div>
+            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
+              your
+              <br />
+              confidence
+              <br />
+              <span className="pk">era.</span>
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
+              {szn} szn isn&apos;t something you read about. Two live workshops on visibility, confidence and getting
+              paid to be fully yourself, then the tools to actually live it.
+            </p>
+            <Link href="/events" className="btn-pink no-underline">
+              see the workshops
+            </Link>
           </div>
         </div>
       </section>
@@ -631,13 +465,6 @@ export default function Home() {
         className="bleed px-5 md:px-8 text-center"
         style={{ background: "var(--dark)", paddingTop: 100, paddingBottom: 100 }}
       >
-        <Orbit
-          className="bleed-shape"
-          size={760}
-          stroke="rgba(200,180,248,0.16)"
-          rings={9}
-          style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
-        />
         <div className="bleed-content max-w-4xl mx-auto">
           <h2 className="display" style={{ fontSize: "clamp(40px, 8vw, 104px)", color: "#fff" }}>
             ready to make
