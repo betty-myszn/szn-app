@@ -1,9 +1,10 @@
-// Guards the launch switch: the homepage CTA must send new visitors into the payment flow while
-// the doors are open, and must revert to lead capture once the window closes, without a code
-// change. Isolated modules per case because the flag is read once at module load (build time).
-
-const OPEN = new Date("2026-07-24T12:00:00-07:00"); // inside the 72h window
-const AFTER = new Date("2026-07-27T12:00:00-07:00"); // after ENROLMENT_CLOSES
+// Guards the launch switch: the homepage CTA must send new visitors into the payment flow, and
+// must only fall back to lead capture when someone deliberately closes the doors. Isolated modules
+// per case because the flag is read once at module load (build time).
+//
+// These assertions are deliberately the inverse of what they used to be. The old switch defaulted
+// to closed and auto-closed after a 72-hour window; that expired and silently turned the whole
+// site into a waitlist. Open is now the default and closing is explicit.
 
 function loadWithFlag(flag: string | undefined) {
   let mod!: typeof import("@/lib/enrolment");
@@ -19,39 +20,30 @@ function loadWithFlag(flag: string | undefined) {
 }
 
 describe("enrolment switch", () => {
-  it("is CLOSED by default, so the site can never accidentally sell a closed intake", () => {
-    expect(loadWithFlag(undefined).isEnrolmentOpen(OPEN)).toBe(false);
+  it("is OPEN by default, with no env var set", () => {
+    expect(loadWithFlag(undefined).isEnrolmentOpen()).toBe(true);
   });
 
-  it("is CLOSED for any value other than the exact string 'true'", () => {
-    expect(loadWithFlag("false").isEnrolmentOpen(OPEN)).toBe(false);
-    expect(loadWithFlag("TRUE").isEnrolmentOpen(OPEN)).toBe(false);
-    expect(loadWithFlag("1").isEnrolmentOpen(OPEN)).toBe(false);
-    expect(loadWithFlag("").isEnrolmentOpen(OPEN)).toBe(false);
+  it("closes only for the exact string 'false'", () => {
+    expect(loadWithFlag("false").isEnrolmentOpen()).toBe(false);
   });
 
-  it("OPENS when the flag is on and we're inside the window", () => {
-    expect(loadWithFlag("true").isEnrolmentOpen(OPEN)).toBe(true);
+  it("fails OPEN for any other value, so a typo can't take the doors down", () => {
+    expect(loadWithFlag("FALSE").isEnrolmentOpen()).toBe(true);
+    expect(loadWithFlag("0").isEnrolmentOpen()).toBe(true);
+    expect(loadWithFlag("").isEnrolmentOpen()).toBe(true);
+    expect(loadWithFlag("no").isEnrolmentOpen()).toBe(true);
   });
 
-  it("auto-reverts to closed after the window, even if the flag is left on", () => {
-    expect(loadWithFlag("true").isEnrolmentOpen(AFTER)).toBe(false);
+  it("stays open for the legacy 'true' value, so an existing Railway variable is harmless", () => {
+    expect(loadWithFlag("true").isEnrolmentOpen()).toBe(true);
   });
 
-  it("the close date can only close, never open: flag off inside the window stays closed", () => {
-    expect(loadWithFlag(undefined).isEnrolmentOpen(OPEN)).toBe(false);
-  });
-
-  it("closes exactly at ENROLMENT_CLOSES, not a moment later", () => {
-    const mod = loadWithFlag("true");
-    const justBefore = new Date(mod.ENROLMENT_CLOSES.getTime() - 1000);
-    expect(mod.isEnrolmentOpen(justBefore)).toBe(true);
-    expect(mod.isEnrolmentOpen(mod.ENROLMENT_CLOSES)).toBe(false);
-  });
-
-  it("the window is 72 hours", () => {
-    const mod = loadWithFlag("true");
-    const hours = (mod.ENROLMENT_CLOSES.getTime() - mod.ENROLMENT_OPENS.getTime()) / 3_600_000;
-    expect(hours).toBe(72);
+  it("never closes on its own: no date can flip it back", () => {
+    // The regression this guards: a hard-coded close date meant the doors shut with no deploy and
+    // no way to reopen them from the dashboard. Enrolment state must depend on the flag alone.
+    const mod = loadWithFlag(undefined);
+    expect(mod.isEnrolmentOpen()).toBe(true);
+    expect(mod).not.toHaveProperty("ENROLMENT_CLOSES");
   });
 });
