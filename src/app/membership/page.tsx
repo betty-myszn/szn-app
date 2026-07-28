@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
@@ -10,9 +11,12 @@ import { useEnrolmentOpen } from "@/lib/enrolment";
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 
-// Real Stripe payment links.
+// Real Stripe payment links. The "$333, 3 months upfront" link
+// (buy.stripe.com/7sYfZi7AreUf51E3CB7kc0h) was deliberately dropped when that plan was retired,
+// not lost. Its Stripe price is still mapped to the 'monthly' tier in stripe-tiers.ts so existing
+// upfront members keep access; only the way to newly buy it is gone. Deactivate the payment link
+// in the Stripe dashboard too, otherwise anyone holding the old URL can still check out on it.
 const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/3cIdRacULeUf3XA7SR7kc0g";
-const THREE_MONTH_CHECKOUT_URL = "https://buy.stripe.com/7sYfZi7AreUf51E3CB7kc0h";
 const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 
 // The one line on the non-VIP cards that says what she isn't getting. Deliberately styled as a
@@ -136,7 +140,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
             I&apos;m ready to invest in my transformation
           </span>
           <span style={{ display: "block", fontSize: 12, color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)", marginTop: 4, opacity: 0.7 }}>
-            3-month minimum commitment · payment plans available
+            cancel anytime · payment plans available
           </span>
         </div>
       </label>
@@ -370,10 +374,12 @@ export default function MembershipPage() {
       <section className="px-8 py-20 md:py-28">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
           <div style={{ position: "relative", overflow: "hidden", minHeight: 400 }}>
-            <img
+            <Image
               src="/betty-founder.png"
               alt="Betty Andrews, founder of MY SZN"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover", objectPosition: "center top" }}
             />
             <div style={{
               position: "absolute", bottom: 20, left: 20,
@@ -739,7 +745,7 @@ export default function MembershipPage() {
                   Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move.
                 </p>
                 <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", fontWeight: 700, marginTop: 14, marginBottom: 0 }}>
-                  This is the one thing the $111 and $333 plans don&apos;t include. Working with me privately only happens on VIP.
+                  This is the one thing the $111 plan doesn&apos;t include. Working with me privately only happens on VIP.
                 </p>
               </div>
               <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
@@ -860,7 +866,12 @@ export default function MembershipPage() {
               : "Enrolment is currently closed. Join the waitlist to be first in when doors reopen."}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
+          {/* Two tiers, not three. The "$333 for 3 months upfront" card was removed when the
+              3-month minimum went: with no minimum to pre-satisfy and no discount on the price,
+              it asked for three months of money in exchange for nothing the monthly plan didn't
+              already give. Its Stripe price stays mapped in stripe-tiers.ts so anyone who already
+              bought it keeps her access and her welcome email. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
             {/* Monthly */}
             <div className="p-8 md:p-10" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
@@ -870,7 +881,7 @@ export default function MembershipPage() {
                 $111<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · cancel anytime after
+                billed monthly · cancel anytime
               </div>
 
               <div className="space-y-3 mb-6">
@@ -892,37 +903,7 @@ export default function MembershipPage() {
 
               <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
 
-              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" />
-            </div>
-
-            {/* 3 months upfront */}
-            <div className="p-8 md:p-10" style={{ background: "var(--cream)", borderRight: "var(--border)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#854F0B", marginBottom: 20 }}>
-                3 months upfront
-              </div>
-              <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                $333
-              </div>
-              <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
-                covers your full 3-month minimum in one payment, no monthly charges
-              </div>
-
-              <div className="space-y-3 mb-6">
-                {[
-                  "everything in the monthly membership",
-                  "one payment, nothing to remember each month",
-                  "your full 3-month commitment, settled upfront",
-                ].map((item) => (
-                  <div key={item} className="flex gap-3 items-start">
-                    <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
-                    <span style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.5 }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
-
-              <CheckoutButton checkoutUrl={enrolmentOpen ? THREE_MONTH_CHECKOUT_URL : undefined} label="join · pay for 3 months" />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" plan="monthly" value={111} />
             </div>
 
             {/* VIP */}
@@ -942,7 +923,7 @@ export default function MembershipPage() {
                 $555<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
               <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
-                3-month minimum commitment · cancel anytime after
+                billed monthly · cancel anytime
               </div>
 
               {/* The 1:1 is the whole reason VIP exists, so it sits above the feature list with
@@ -980,7 +961,7 @@ export default function MembershipPage() {
                 </p>
               </div>
 
-              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark plan="vip" value={555} />
             </div>
           </div>
 
@@ -1018,7 +999,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get a 1:1 coaching call with Betty?",
-                a: "Only on VIP, $555/mo. That's the one thing the $111/mo and $333 upfront plans don't include, and it's the reason VIP exists. On those plans you still get the 2 live group coaching sessions every month, the workshops, the guest experts, the portal, the community and The Vault. Private time with me is VIP only.",
+                a: "Only on VIP, $555/mo. That's the one thing the $111/mo plan doesn't include, and it's the reason VIP exists. On monthly you still get the 2 live group coaching sessions every month, the workshops, the guest experts, the portal, the community and The Vault. Private time with me is VIP only.",
               },
               {
                 q: "What's included in the 1:1 coaching call?",
@@ -1026,7 +1007,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Are there payment plans?",
-                a: "The membership starts at $111/mo with a 3-month minimum commitment, or pay for your 3 months upfront in one payment if you'd rather not think about it monthly. VIP is $555/mo and is the only plan with 1:1 coaching with Betty. All options are shown on the pricing section above.",
+                a: "The membership is $111/mo, billed monthly, cancel whenever you want. VIP is $555/mo and is the only plan with 1:1 coaching with Betty. Both options are shown on the pricing section above.",
               },
               {
                 q: "What happens after I join the waitlist?",
@@ -1034,7 +1015,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I cancel or get a refund?",
-                a: "This is a transformation container with a 3-month minimum commitment. We don't offer refunds because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
+                a: "You can cancel anytime from your settings, and you'll keep access until the end of the month you've already paid for. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
               },
               {
                 q: "I'm not a business owner. Is this still for me?",

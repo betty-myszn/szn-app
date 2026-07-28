@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
@@ -23,6 +25,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
         body: JSON.stringify({ email, name, source: "waitlist" }),
       });
     } catch {}
+    track(EVENTS.LEAD, { source: "waitlist" });
     setSubmitted(true);
     setSubmitting(false);
   };
@@ -214,10 +217,12 @@ export default function WaitlistPage() {
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
           {/* Photo */}
           <div style={{ position: "relative", overflow: "hidden", minHeight: 400 }}>
-            <img
+            <Image
               src="/betty-founder.png"
               alt="Betty Andrews, founder of MY SZN"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover", objectPosition: "center top" }}
             />
             <div style={{
               position: "absolute", bottom: 20, left: 20,

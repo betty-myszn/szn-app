@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMember } from "@/lib/use-member";
+import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -11,6 +12,11 @@ interface CheckoutButtonProps {
   label: string;
   dark?: boolean;
   waitlistHref?: string;
+  /** Plan slug for analytics, e.g. "monthly". Passed explicitly rather than parsed out of
+   *  `label`, so rewording a button can never quietly rename a funnel step in GA4. */
+  plan?: string;
+  /** Charge in USD for this plan, sent as the begin_checkout value. */
+  value?: number;
 }
 
 // Appends client_reference_id so the webhook can link the completed checkout straight back to
@@ -23,15 +29,16 @@ function withClientReferenceId(checkoutUrl: string, userId: string): string {
   return url.toString();
 }
 
-// Real money changes hands through this button, so the 3-month-minimum / no-refund agreement
-// isn't a footnote, it's a required checkbox standing between her and the Stripe link. Renders
-// a waitlist fallback when checkoutUrl isn't set yet (VIP / 3-month-upfront until those links
-// exist), so swapping a plan from "coming soon" to "live" is a one-line prop change later.
+// Real money changes hands through this button, so the no-refund agreement isn't a footnote, it's
+// a required checkbox standing between her and the Stripe link. The minimum-term commitment that
+// used to sit alongside it was dropped: membership is now cancel-anytime, and the only thing left
+// to acknowledge is that payments already taken aren't refunded. Renders a waitlist fallback when
+// checkoutUrl isn't set yet, so swapping a plan from "coming soon" to "live" is a prop change.
 // Payment-first: she does NOT need to log in before paying. If she happens to already be logged
 // in, we attach her user id via client_reference_id for a clean id-based link; if she's logged
 // out, she checks out on the plain link and the webhook parks her membership by email, which she
 // claims when she sets up her account (password) on /create-account afterwards.
-export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form" }: CheckoutButtonProps) {
+export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form", plan, value }: CheckoutButtonProps) {
   const [agreed, setAgreed] = useState(false);
   const { member } = useMember();
 
@@ -60,8 +67,27 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
     );
   }
 
+  // Ticking the agreement box is its own funnel step. If lots of people reach the button and few
+  // ever tick, the no-refund terms are where the sale is being lost, which is worth knowing
+  // separately from "never scrolled this far".
+  const handleAgreedChange = (next: boolean) => {
+    setAgreed(next);
+    if (next) track(EVENTS.TERMS_AGREED, { plan });
+  };
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!agreed) e.preventDefault();
+    if (!agreed) {
+      e.preventDefault();
+      return;
+    }
+    // Last event we can see. Stripe Payment Links open on Stripe's own domain, so everything from
+    // here until the redirect back to /checkout/success is invisible to GA4.
+    track(EVENTS.BEGIN_CHECKOUT, {
+      plan,
+      value,
+      currency: "USD",
+      logged_in: Boolean(member),
+    });
   };
 
   return (
@@ -78,12 +104,12 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
         <input
           type="checkbox"
           checked={agreed}
-          onChange={(e) => setAgreed(e.target.checked)}
+          onChange={(e) => handleAgreedChange(e.target.checked)}
           style={{ marginTop: 3, accentColor: "var(--pink)", width: 18, height: 18, flexShrink: 0 }}
         />
         <span style={{ fontSize: 12, lineHeight: 1.6, color: textColor }}>
-          I understand MY SZN is a <strong>minimum 3-month commitment</strong> and payments are{" "}
-          <strong>non-refundable</strong>. Monthly billing makes membership more accessible, it doesn&apos;t change the commitment.
+          I understand payments are <strong>non-refundable</strong>. You can cancel anytime, and
+          cancelling stops future billing rather than refunding what&apos;s already been paid.
         </span>
       </label>
       <a

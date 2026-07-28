@@ -2,9 +2,11 @@ import Link from "next/link";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+// The title deliberately omits the brand: the root layout's template already appends " | MY SZN".
 export const metadata = {
-  title: "Privacy Policy | MY SZN",
+  title: "Privacy Policy",
   description: "How MY SZN collects, uses and protects your personal data, including birth data, journal entries and goals.",
+  alternates: { canonical: "/privacy" },
 };
 
 const sectionStyle = { marginBottom: 40 };

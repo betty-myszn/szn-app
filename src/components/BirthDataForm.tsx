@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { encodeBirthData, saveBirthData, getSavedBirthData } from "@/lib/url-params";
+import { track, EVENTS } from "@/lib/analytics";
 
 interface BirthDataFormProps {
   initialData?: Partial<BirthData>;
@@ -69,6 +70,14 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
 
     setLoading(true);
 
+    // Fired here rather than on first keystroke: this is the moment she's committed to the form,
+    // and it's the denominator for every completion rate below it. Nothing identifying goes in,
+    // only whether she gave an exact birth time and whether she opted in to email.
+    track(EVENTS.CHART_STARTED, {
+      birth_time_approximate: birthTimeApproximate,
+      email_provided: Boolean(email),
+    });
+
     try {
       const res = await fetch("/api/calculate", {
         method: "POST",
@@ -89,6 +98,14 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
       const moonSign = chartData.planets?.find((p: { id: string }) => p.id === "moon")?.sign || "";
       const risingSign = chartData.ascendant?.sign || "";
 
+      // The big three go in as event params so GA4 can segment audiences by placement later
+      // (which signs convert, which signs churn). Signs are not personal data on their own.
+      track(EVENTS.CHART_COMPLETED, {
+        sun_sign: sunSign,
+        moon_sign: moonSign,
+        rising_sign: risingSign,
+      });
+
       if (email) {
         fetch("/api/subscribe", {
           method: "POST",
@@ -106,12 +123,18 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
             risingSign,
           }),
         }).catch(() => {});
+
+        track(EVENTS.LEAD, { source: "free-chart" });
       }
 
       const params = encodeBirthData(birthData);
       router.push(`/results?${params}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      const message = err instanceof Error ? err.message : "An unexpected error occurred";
+      // Distinguishing a failed calculation from an abandoned one matters: a drop between
+      // chart_started and chart_completed is a copy problem, a spike here is a bug.
+      track(EVENTS.CHART_FAILED, { reason: message });
+      setError(message);
     } finally {
       setLoading(false);
     }

@@ -1,8 +1,10 @@
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+// The title deliberately omits the brand: the root layout's template already appends " | MY SZN".
 export const metadata = {
-  title: "Community Guidelines | MY SZN",
+  title: "Community Guidelines",
   description: "How we keep the MY SZN community a safe, honest space for women becoming her.",
+  alternates: { canonical: "/community-guidelines" },
 };
 
 const headingStyle: React.CSSProperties = {

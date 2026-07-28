@@ -1,20 +1,82 @@
+import Link from "next/link";
 import BirthDataForm from "@/components/BirthDataForm";
+import { OG_IMAGE } from "@/lib/site";
 
 export const metadata = {
   title: "Free Birth Chart Calculator | Sun, Moon & Rising Sign",
   description:
     "Get your free birth chart instantly. Discover your sun sign, moon sign, rising sign, Venus, Mars, Jupiter, and every placement in your natal chart. Swiss Ephemeris precision. No signup required.",
+  alternates: { canonical: "/chart" },
   openGraph: {
     title: "Free Birth Chart Calculator, MY SZN",
     description: "Calculate your full natal chart for free. Sun, moon, rising, Venus, Mars, Jupiter, Chiron and all 12 houses. Enter your birth details and discover your cosmic blueprint.",
+    url: "/chart",
+    type: "website",
+    images: [OG_IMAGE],
   },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE.url] },
 };
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+// Answers to what people actually type alongside "free birth chart". Rendered on the page as well
+// as marked up below, because FAQ schema describing content a visitor cannot see is a violation of
+// Google's structured data guidelines and gets the markup ignored at best.
+const FAQS = [
+  {
+    q: "Do I need my exact birth time for a birth chart?",
+    a: "For your sun sign, no. For your rising sign and house placements, yes, and it matters more than people expect. The rising sign changes roughly every two hours, so being an hour out can hand you the wrong chart entirely. Your birth time is usually on your birth certificate. If you genuinely cannot find it, enter 12:00 and treat the rising sign and houses as unreliable while the planets stay accurate.",
+  },
+  {
+    q: "Is this birth chart calculator really free?",
+    a: "Yes. The full chart, every placement and the written breakdown are free, and there is no signup or card required to see them.",
+  },
+  {
+    q: "What is the difference between my sun, moon and rising sign?",
+    a: "Your sun sign is your core identity, the thing you are growing into. Your moon sign is your inner emotional world, how you self-soothe and what you need to feel safe. Your rising sign, or ascendant, is the version of you people meet first. Most people only know their sun sign, which is why astrology often feels like it does not fit.",
+  },
+  {
+    q: "How accurate is this chart?",
+    a: "Positions are calculated with the Swiss Ephemeris, the same astronomical data professional astrologers use, and we use the true lunar node rather than the mean node. Accuracy depends on the birth date, time and place you enter being correct.",
+  },
+  {
+    q: "What is a birth chart, exactly?",
+    a: "A birth chart, also called a natal chart, is a map of where every planet sat in the sky at the moment and place you were born. It never repeats in the same way twice, which is why it is used as a blueprint for personality, patterns and timing.",
+  },
+];
+
+const chartJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "MY SZN Birth Chart Calculator",
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Any",
+      url: "https://itsmyszn.com/chart",
+      description:
+        "Free natal chart calculator returning sun, moon, rising, Venus, Mars, Jupiter, Chiron and all twelve house placements, calculated with the Swiss Ephemeris.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ],
+};
+
 export default function ChartPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(chartJsonLd) }}
+      />
+
       <div
         className="px-8 py-12"
         style={{ background: "var(--dark)", borderBottom: "var(--border)" }}
@@ -72,6 +134,45 @@ export default function ChartPage() {
         <BirthDataForm />
       </div>
 
+      {/* FAQ */}
+      <section className="px-8 py-14 md:py-20" style={{ borderTop: "var(--border)" }}>
+        <div className="max-w-2xl mx-auto">
+          <h2 style={{
+            fontFamily: poppins, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 800,
+            letterSpacing: "-0.8px", lineHeight: 1.15, marginBottom: 32, textAlign: "center",
+          }}>
+            Birth chart <span className="pk">questions,</span> answered.
+          </h2>
+
+          <div style={{ borderTop: "var(--border)" }}>
+            {FAQS.map((f) => (
+              <details
+                key={f.q}
+                style={{ borderBottom: "var(--border)", padding: "18px 0" }}
+              >
+                <summary style={{
+                  fontFamily: poppins, fontSize: 16, fontWeight: 700, color: "var(--dark)",
+                  cursor: "pointer", listStyle: "none",
+                }}>
+                  {f.q}
+                </summary>
+                <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--dark)", marginTop: 12 }}>
+                  {f.a}
+                </p>
+              </details>
+            ))}
+          </div>
+
+          <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", marginTop: 28, textAlign: "center" }}>
+            Curious what the current sky is asking of you?{" "}
+            <Link href="/seasons" className="pk" style={{ fontWeight: 700 }}>
+              Read up on every zodiac season
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       {/* Membership CTA */}
       <div className="px-8 py-14 text-center" style={{ background: "var(--pink-light)", borderTop: "var(--border)" }}>
         <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
@@ -84,7 +185,7 @@ export default function ChartPage() {
           Your chart is just the beginning. Get live workshops, group coaching, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime after 3 months · 1:1 coaching on VIP, $555/mo
+          From $111/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

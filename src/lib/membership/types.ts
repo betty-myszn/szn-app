@@ -13,10 +13,12 @@ export type MembershipStatus =
   | "expired"
   | "inactive";
 
-// The minimum number of successful monthly payments before a $111 subscription can be cancelled,
-// and the extra platform-access grant (in days) after a subscription genuinely ends. Both are the
-// confirmed product decisions; kept here so every layer reads one source.
-export const MINIMUM_COMMITMENT_PAYMENTS = 3;
+// The extra platform-access grant (in days) after a subscription genuinely ends. Kept here so
+// every layer reads one source.
+//
+// There is deliberately no MINIMUM_COMMITMENT_PAYMENTS constant: membership is cancel-anytime.
+// The 3-payment minimum that used to live here was removed as a product decision, along with the
+// matching clauses in the terms page and the checkout agreement.
 export const GRACE_PERIOD_DAYS = 7;
 
 // Stripe subscription statuses that keep paid content unlocked. Mirrors the existing

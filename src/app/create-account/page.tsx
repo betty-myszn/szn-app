@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { captureReferralCodeFromUrl } from "@/lib/referral";
 import { validatePassword, PASSWORD_HINT } from "@/lib/password";
+import { track, EVENTS } from "@/lib/analytics";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -159,6 +160,10 @@ function CreateAccountContent() {
         setSubmitting(false);
         return;
       }
+      // Bottom of the funnel: she paid, and she now has an account she can actually log into.
+      // Tracked here rather than on the destination page because that's behind the member gate,
+      // where a declined-cookies visitor and a first-time member look identical.
+      track(EVENTS.SIGN_UP, { method: "stripe_checkout" });
       window.location.assign(data.destination);
     } catch {
       setError("Something went wrong creating your account. Try again in a moment.");

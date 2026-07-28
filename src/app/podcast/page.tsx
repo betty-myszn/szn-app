@@ -1,13 +1,21 @@
+import Image from "next/image";
+import { OG_IMAGE } from "@/lib/site";
+
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
 export const metadata = {
   title: "Astrology, Confidence & Manifestation Podcast for Women",
   description:
     "The MY SZN podcast. Astrology, confidence, money, manifestation, and becoming the version of yourself your chart has been pointing toward. New episodes weekly on Spotify and Apple Podcasts.",
+  alternates: { canonical: "/podcast" },
   openGraph: {
     title: "MY SZN Podcast, Astrology, Confidence & Manifestation",
     description: "The weekly pep talk your future self would give you. Astrology, money, manifestation and main character energy.",
+    url: "/podcast",
+    type: "website",
+    images: [OG_IMAGE],
   },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE.url] },
 };
 
 export default function PodcastPage() {
@@ -20,12 +28,17 @@ export default function PodcastPage() {
       >
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="flex justify-center md:justify-end">
-            <img
+            <Image
               src="/myszn-podcast.png"
-              alt="MY SZN Podcast"
+              alt="MY SZN Podcast cover art"
+              width={752}
+              height={754}
+              priority
+              sizes="(max-width: 768px) 100vw, 340px"
               style={{
                 width: "100%",
                 maxWidth: 340,
+                height: "auto",
                 aspectRatio: "1",
                 objectFit: "cover",
                 border: "1px solid rgba(255,255,255,0.1)",
@@ -157,7 +170,7 @@ export default function PodcastPage() {
           Everything from the podcast, taken to the next level. Live workshops, group coaching, subconscious rewiring and community. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime after 3 months · 1:1 coaching on VIP, $555/mo
+          From $111/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
