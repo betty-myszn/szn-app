@@ -185,7 +185,7 @@ export default function ChartPage() {
           Your chart is just the beginning. Get live workshops, group coaching, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime after 3 months · 1:1 coaching on VIP, $555/mo
+          From $111/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

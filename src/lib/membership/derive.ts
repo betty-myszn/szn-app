@@ -5,7 +5,6 @@
 
 import {
   GRACE_PERIOD_DAYS,
-  MINIMUM_COMMITMENT_PAYMENTS,
   type LifecycleFacts,
   type MembershipStatus,
 } from "./types";
@@ -59,23 +58,14 @@ export function hasAccess(facts: LifecycleFacts, now: Date = new Date()): boolea
   return status === "active" || status === "past_due" || status === "cancelling" || status === "cancelled_with_access";
 }
 
-// $333 upfront meets the commitment by construction. A $111 subscription needs three successful
-// invoice.paid payments. A former member (level none) can't cancel anything.
+// Membership is cancel-anytime: there is no minimum term and no payment count to satisfy, so the
+// only thing that can't be cancelled is a membership that has already ended. This used to gate on
+// three successful invoice.paid payments; that minimum was removed as a product decision, and the
+// helpers that existed purely to explain it (minimumCommitmentEndDate, earliestCancellationDate,
+// commitmentProgress) went with it. Don't reintroduce a payment-count gate here without changing
+// the terms page and the checkout agreement to match, they're the contract this backs.
 export function eligibleToCancel(facts: LifecycleFacts): boolean {
-  if (facts.membershipLevel === "none") return false;
-  if (!facts.hasSubscription) return true;
-  return facts.successfulPaymentsCount >= MINIMUM_COMMITMENT_PAYMENTS;
-}
-
-// Display-only estimate of when the 3-payment minimum is satisfied (commitment start + 3 months).
-// Eligibility itself is driven by the payment COUNT, never by this date; this is only for the
-// "You can cancel from [date]" line.
-export function minimumCommitmentEndDate(facts: LifecycleFacts): Date | null {
-  const start = iso(facts.commitmentStartedAt);
-  if (!start) return null;
-  const d = new Date(start);
-  d.setMonth(d.getMonth() + MINIMUM_COMMITMENT_PAYMENTS);
-  return d;
+  return facts.membershipLevel !== "none";
 }
 
 // The next date Stripe will charge. Null for the upfront plan (no renewal) and for a cancelling
@@ -84,20 +74,6 @@ export function nextBillingDate(facts: LifecycleFacts): Date | null {
   if (!facts.hasSubscription) return null;
   if (facts.subscriptionCancelAtPeriodEnd) return null;
   return iso(facts.subscriptionCurrentPeriodEnd);
-}
-
-// The earliest date the member may cancel, or null if already eligible.
-export function earliestCancellationDate(facts: LifecycleFacts): Date | null {
-  if (eligibleToCancel(facts)) return null;
-  return minimumCommitmentEndDate(facts);
-}
-
-// How many of the minimum payments are done, for "You've completed X of 3 minimum payments".
-export function commitmentProgress(facts: LifecycleFacts): { completed: number; required: number } {
-  return {
-    completed: Math.min(facts.successfulPaymentsCount, MINIMUM_COMMITMENT_PAYMENTS),
-    required: MINIMUM_COMMITMENT_PAYMENTS,
-  };
 }
 
 // The hard access cutoff (paid period end + 7-day grant), given the paid-through date. Used in

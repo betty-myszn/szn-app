@@ -63,12 +63,12 @@ export default function TermsPage() {
           </div>
 
           <div style={sectionStyle}>
-            <h2 style={headingStyle}>billing, commitment and refunds</h2>
+            <h2 style={headingStyle}>billing and refunds</h2>
             <p style={bodyStyle}>
-              Every membership tier, whether billed monthly or paid upfront, requires a <strong>minimum 3-month commitment</strong>. Monthly billing exists to make membership more accessible, not to let you commit for less than three months, the same minimum applies either way. You confirm this at checkout before payment is taken.
+              There is <strong>no minimum term</strong>. Monthly memberships bill each month until you cancel, and you can cancel at any time. If you choose an upfront plan, you pay once for the period it covers and it doesn&apos;t renew automatically.
             </p>
             <p style={{ ...bodyStyle, marginTop: 12 }}>
-              <strong>Payments are non-refundable.</strong> Once a payment is taken, whether it's a single month or a full upfront term, we don&apos;t refund it, including if you stop using the membership before your 3-month commitment ends.
+              <strong>Payments are non-refundable.</strong> Once a payment is taken, whether it&apos;s a single month or a full upfront term, we don&apos;t refund it, including if you stop using the membership partway through a period you&apos;ve already paid for. You confirm this at checkout before payment is taken.
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function TermsPage() {
             <h2 style={headingStyle}>cancelling</h2>
             <p style={bodyStyle}>
               You can cancel future billing at any time from{" "}
-              <Link href="/settings" style={{ color: "var(--pink)", fontWeight: 700 }}>settings</Link>, but your 3-month minimum commitment still applies, cancelling doesn&apos;t refund payments already taken or waive months still owed within that minimum. Cancelling stops future billing, it doesn&apos;t automatically delete your data, see our{" "}
+              <Link href="/settings" style={{ color: "var(--pink)", fontWeight: 700 }}>settings</Link>. You&apos;ll keep access until the end of the period you&apos;ve already paid for, and you won&apos;t be billed again. Cancelling doesn&apos;t refund payments already taken, and it doesn&apos;t automatically delete your data, see our{" "}
               <Link href="/privacy" style={{ color: "var(--pink)", fontWeight: 700 }}>privacy policy</Link> for how to request full deletion.
             </p>
           </div>

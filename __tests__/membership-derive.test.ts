@@ -2,10 +2,7 @@ import {
   membershipStatus,
   hasAccess,
   eligibleToCancel,
-  minimumCommitmentEndDate,
   nextBillingDate,
-  earliestCancellationDate,
-  commitmentProgress,
   graceEndFrom,
 } from "@/lib/membership/derive";
 import type { LifecycleFacts } from "@/lib/membership/types";
@@ -90,18 +87,21 @@ describe("hasAccess", () => {
 });
 
 describe("eligibleToCancel", () => {
-  it("blocks a monthly member before 3 successful payments", () => {
-    expect(eligibleToCancel(facts({ successfulPaymentsCount: 1 }))).toBe(false);
-    expect(eligibleToCancel(facts({ successfulPaymentsCount: 2 }))).toBe(false);
-  });
-
-  it("allows a monthly member at or beyond 3 payments", () => {
-    expect(eligibleToCancel(facts({ successfulPaymentsCount: 3 }))).toBe(true);
+  // Membership is cancel-anytime. These cases exist specifically to catch a minimum term being
+  // reintroduced by accident: every payment count, including the very first, must be cancellable.
+  it("allows a monthly member at any payment count, including zero", () => {
+    expect(eligibleToCancel(facts({ successfulPaymentsCount: 0 }))).toBe(true);
+    expect(eligibleToCancel(facts({ successfulPaymentsCount: 1 }))).toBe(true);
+    expect(eligibleToCancel(facts({ successfulPaymentsCount: 2 }))).toBe(true);
     expect(eligibleToCancel(facts({ successfulPaymentsCount: 5 }))).toBe(true);
   });
 
-  it("allows the upfront plan immediately (commitment met by construction)", () => {
+  it("allows the upfront plan immediately", () => {
     expect(eligibleToCancel(facts({ hasSubscription: false, successfulPaymentsCount: 0 }))).toBe(true);
+  });
+
+  it("allows a VIP member", () => {
+    expect(eligibleToCancel(facts({ membershipLevel: "vip", successfulPaymentsCount: 0 }))).toBe(true);
   });
 
   it("denies a former member", () => {
@@ -109,16 +109,7 @@ describe("eligibleToCancel", () => {
   });
 });
 
-describe("commitment and billing dates", () => {
-  it("minimumCommitmentEndDate is commitment start + 3 months", () => {
-    const d = minimumCommitmentEndDate(facts({ commitmentStartedAt: "2026-07-24T00:00:00.000Z" }));
-    expect(d?.toISOString()).toBe("2026-10-24T00:00:00.000Z");
-  });
-
-  it("minimumCommitmentEndDate is null with no commitment start", () => {
-    expect(minimumCommitmentEndDate(facts({ commitmentStartedAt: null }))).toBeNull();
-  });
-
+describe("billing dates", () => {
   it("nextBillingDate is the period end for a renewing subscription", () => {
     const end = future(20);
     expect(nextBillingDate(facts({ subscriptionCurrentPeriodEnd: end }))?.toISOString()).toBe(end);
@@ -127,18 +118,6 @@ describe("commitment and billing dates", () => {
   it("nextBillingDate is null when cancelling or upfront", () => {
     expect(nextBillingDate(facts({ subscriptionCancelAtPeriodEnd: true }))).toBeNull();
     expect(nextBillingDate(facts({ hasSubscription: false }))).toBeNull();
-  });
-
-  it("earliestCancellationDate is null once eligible, otherwise the commitment end", () => {
-    expect(earliestCancellationDate(facts({ successfulPaymentsCount: 3 }))).toBeNull();
-    expect(
-      earliestCancellationDate(facts({ successfulPaymentsCount: 1, commitmentStartedAt: "2026-07-24T00:00:00.000Z" }))?.toISOString()
-    ).toBe("2026-10-24T00:00:00.000Z");
-  });
-
-  it("commitmentProgress caps completed at the required count", () => {
-    expect(commitmentProgress(facts({ successfulPaymentsCount: 1 }))).toEqual({ completed: 1, required: 3 });
-    expect(commitmentProgress(facts({ successfulPaymentsCount: 9 }))).toEqual({ completed: 3, required: 3 });
   });
 
   it("graceEndFrom adds exactly 7 days", () => {

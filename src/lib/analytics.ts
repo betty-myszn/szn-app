@@ -120,7 +120,7 @@ export const EVENTS = {
   CHART_FAILED: "chart_failed",
   /** Email captured anywhere (free chart opt-in, waitlist). GA4 recommended name. */
   LEAD: "generate_lead",
-  /** The 3-month commitment checkbox, the last friction point before money. */
+  /** The non-refundable agreement checkbox, the last friction point before money. */
   TERMS_AGREED: "checkout_terms_agreed",
   /** Clicked through to Stripe. GA4 recommended name. */
   BEGIN_CHECKOUT: "begin_checkout",
