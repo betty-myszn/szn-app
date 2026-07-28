@@ -232,7 +232,7 @@ export default function MembershipPage() {
             fontSize: 14, lineHeight: 1.8, color: "#fff",
             maxWidth: 540, margin: "0 auto 36px",
           }}>
-            The astrology-led membership for women who are done playing small. Combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust. 3 or 6-month transformation. This is not something you forget about. This is the container that changes your life.
+            The astrology-led membership for women who are done playing small. Combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust. Stay as long as it&apos;s working for you. This is not something you forget about. This is the container that changes your life.
           </p>
 
           <div style={{ marginBottom: 28 }}>
@@ -278,7 +278,7 @@ export default function MembershipPage() {
             : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 28 July at 7pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching with Betty is VIP only. 3 or 6 months of becoming her.
+          1:1 coaching with Betty is VIP only. However many months of becoming her you want.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -667,7 +667,7 @@ export default function MembershipPage() {
             The Seasonal <span style={{ color: "var(--pink)" }}>Membership.</span>
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "#fff", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
-            Every month follows the zodiac. Because every season has something to teach you and you&apos;re done leaving those lessons on the table. 3 or 6-month commitment so you actually see the transformation.
+            Every month follows the zodiac. Because every season has something to teach you and you&apos;re done leaving those lessons on the table. Stay for as many seasons as you need.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
@@ -1063,12 +1063,12 @@ export default function MembershipPage() {
                 marginBottom: 28,
               }}>
                 {enrolmentOpen
-                  ? "The doors are open right now to a limited number of founding members. 3 or 6-month transformation. Choose your plan and your personalised portal is built the moment you're in."
-                  : "We open the doors to a limited number of founding members at a time. 3 or 6-month transformation. Join the waitlist and this is your invite the moment they reopen."}
+                  ? "The doors are open right now to a limited number of founding members. Cancel anytime. Choose your plan and your personalised portal is built the moment you're in."
+                  : "We open the doors to a limited number of founding members at a time. Cancel anytime. Join the waitlist and this is your invite the moment they reopen."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "First live class 28 July", "3 or 6-month transformation", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "First live class 28 July", "Cancel anytime", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",
@@ -1091,7 +1091,7 @@ export default function MembershipPage() {
                     see the plans
                   </Link>
                   <div className="flex flex-wrap gap-2 mt-6">
-                    {["Founding pricing", "1:1 coaching with Betty", "3 or 6-month transformation"].map((b) => (
+                    {["Founding pricing", "1:1 coaching with Betty", "Cancel anytime"].map((b) => (
                       <span key={b} style={{
                         fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
                         color: "var(--dark)", padding: "6px 12px",
@@ -1110,7 +1110,7 @@ export default function MembershipPage() {
                   </p>
                   <WaitlistForm />
                   <div className="flex flex-wrap gap-2 mt-6">
-                    {["Founding pricing", "First in line", "3 or 6-month transformation"].map((b) => (
+                    {["Founding pricing", "First in line", "Cancel anytime"].map((b) => (
                       <span key={b} style={{
                         fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
                         color: "var(--dark)", padding: "6px 12px",
