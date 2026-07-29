@@ -39,7 +39,18 @@ interface CalendarResponse {
   eclipseSeason: boolean;
 }
 
-const BIG_TYPES = new Set(["solar_eclipse", "lunar_eclipse", "node_ingress"]);
+// New and full moons used to be excluded here on the reasoning that they are routine and belong
+// further down the page. In practice that meant a full moon exact tonight was nowhere on the page
+// a member actually looks at, while an eclipse three weeks out sat at the top. A lunation is the
+// most immediate thing in the sky and the one people feel, so it belongs in this panel too. Sorting
+// is by date, so whatever is closest still leads and the eclipses keep their place.
+const BIG_TYPES = new Set([
+  "solar_eclipse",
+  "lunar_eclipse",
+  "node_ingress",
+  "full_moon",
+  "new_moon",
+]);
 const MAJOR_WINDOW_DAYS = 45;
 
 // "today" has to be measured in the same zone the API publishes its dates in, otherwise a member
@@ -66,7 +77,8 @@ export default function SkyAlert() {
 
   if (!data) return null;
 
-  const bigEvents = data.events.filter((e) => BIG_TYPES.has(e.type)).slice(0, 3);
+  // Four rather than three, so adding lunations back in cannot push an eclipse off the panel.
+  const bigEvents = data.events.filter((e) => BIG_TYPES.has(e.type)).slice(0, 4);
   const nearMajorTransits = (data.majorTransits || [])
     .filter((t) => {
       const until = daysUntil(t.date);
@@ -120,7 +132,15 @@ export default function SkyAlert() {
                 label: "the nodal axis shifts",
                 body: `the collective's north node moves into ${event.sign.toLowerCase()} ${timing}, the whole cultural growth direction resets for the next ~18 months. Genuinely rare, worth knowing about.`,
               },
-            }[event.type as "solar_eclipse" | "lunar_eclipse" | "node_ingress"];
+              full_moon: {
+                label: "full moon",
+                body: `a full moon lands in ${event.sign.toLowerCase()} ${timing}. This is the peak of the cycle, the point things become visible whether or not you went looking. Good for finishing, deciding and releasing what the light just made obvious.`,
+              },
+              new_moon: {
+                label: "new moon",
+                body: `a new moon lands in ${event.sign.toLowerCase()} ${timing}. The darkest point of the cycle and the start of a fresh one, which makes it the moment to begin something rather than to keep planning it.`,
+              },
+            }[event.type as "solar_eclipse" | "lunar_eclipse" | "node_ingress" | "full_moon" | "new_moon"];
 
             return (
               <Link
