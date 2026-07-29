@@ -94,7 +94,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
             { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
-            { num: "3", text: "First live class is 28 July at 7pm LA time" },
+            { num: "3", text: "First live class is 3 August at 7pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
               <span style={{
@@ -274,8 +274,8 @@ export default function MembershipPage() {
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
           {enrolmentOpen
-            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 28 July at 7pm LA time."
-            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 28 July at 7pm LA time."}
+            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 3 August at 7pm LA time."
+            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 3 August at 7pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
           1:1 coaching with Betty is VIP only. However many months of becoming her you want.
@@ -592,7 +592,7 @@ export default function MembershipPage() {
                 leo szn workshop 1
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                28 july · 7pm la time · first live class
+                3 august · 7pm la time · first live class
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Leo Season: Enter Your Main Character Era
@@ -1011,7 +1011,7 @@ export default function MembershipPage() {
               },
               {
                 q: "What happens after I join the waitlist?",
-                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 28 July at 7pm LA time.",
+                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 3 August at 7pm LA time.",
               },
               {
                 q: "Can I cancel or get a refund?",
@@ -1068,7 +1068,7 @@ export default function MembershipPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "First live class 28 July", "Cancel anytime", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "First live class 3 August", "Cancel anytime", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",

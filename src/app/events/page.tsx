@@ -379,7 +379,7 @@ export default function EventsPage() {
                 every workshop, saved for you.
               </h2>
               <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 480, margin: "0 auto" }}>
-                Replays land here within 24 hours of each live class. Your first one arrives after the 28 july workshop, the vault starts filling this szn.
+                Replays land here within 24 hours of each live class. Your first one arrives after the 3 august workshop, the vault starts filling this szn.
               </p>
             </div>
           </div>

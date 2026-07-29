@@ -468,7 +468,7 @@ export default function Home() {
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
               {szn} szn isn&apos;t something you read about. Two live workshops on visibility, confidence and getting
-              paid to be fully yourself, starting 28 july, then the tools to actually live it.
+              paid to be fully yourself, starting 3 august, then the tools to actually live it.
             </p>
             <Link href="/events" className="btn-pink no-underline">
               see the workshops
