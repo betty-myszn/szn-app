@@ -14,6 +14,9 @@ const memberLinks = [
   { href: "/events", label: "events" },
   { href: "/community", label: "community" },
   { href: "/journal", label: "journal" },
+  // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
+  // lands on a post from search should still see where she is in the site.
+  { href: "/blog", label: "blog" },
 ];
 
 const sznMenu = [
@@ -24,6 +27,7 @@ const sznMenu = [
 const guestLinks = [
   { href: "/", label: "home" },
   { href: "/seasons", label: "seasons" },
+  { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
 ];
