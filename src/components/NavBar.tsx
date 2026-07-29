@@ -23,7 +23,9 @@ const sznMenu = [
   { href: "/challenges", label: "challenges", indent: true },
 ];
 
-// Astrology and Human Design are two separate charts, grouped under one "chart" menu.
+// Two readings of the same birth data, so they sit together under one "my chart" menu rather than
+// Human Design taking its own top-level nav slot. Desktop renders this as the dropdown's contents;
+// mobile has no dropdown, so it indents them under a "my chart" heading to show the same nesting.
 const chartMenu = [
   { href: "/my-chart", label: "astrology chart" },
   { href: "/human-design", label: "human design chart" },
@@ -212,7 +214,7 @@ export default function NavBar() {
                   fontWeight: chartSectionActive ? 800 : undefined,
                 }}
               >
-                chart ▾
+                my chart ▾
               </button>
               {chartOpen && (
                 <div
@@ -606,18 +608,34 @@ export default function NavBar() {
                 {item.label}
               </Link>
             ))}
-          {member &&
-            chartMenu.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="no-underline hover:text-[var(--pink)]"
-                style={{ color: isActive(item.href) ? "var(--pink)" : "var(--dark)" }}
+          {member && (
+            <>
+              {/* Heading, not a link: both charts underneath are real destinations, and /my-chart
+                  is already one of them, so making this tappable would just be a duplicate. */}
+              <span
+                style={{
+                  color: chartSectionActive ? "var(--pink)" : "var(--dark)",
+                  fontWeight: chartSectionActive ? 800 : undefined,
+                }}
               >
-                {item.label}
-              </Link>
-            ))}
+                my chart
+              </span>
+              {chartMenu.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="no-underline hover:text-[var(--pink)]"
+                  style={{
+                    paddingLeft: 16,
+                    color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </>
+          )}
           {links.map((link) => (
             <Link
               key={link.href}
