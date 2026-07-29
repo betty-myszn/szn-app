@@ -2,6 +2,7 @@ import type { ChartData } from "@/types/chart";
 import {
   SIGN_TRAITS,
   SIGN_OVERVIEWS,
+  getBodyMeaning,
   HOUSE_MEANINGS,
   ordinalHouse,
   houseForSign,
@@ -157,13 +158,39 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
   // Natal planets standing in the house this lunation lands in. If she has any, this transit is
   // not abstract, it is landing directly on something she already carries.
   const natalHere = chart.planets.filter((p) => p.house === house);
-  const natalNames = natalHere.map((p) => p.name.toLowerCase());
+  // Naming a natal planet and then saying "whatever that placement normally does" is the laziest
+  // line in astrology writing, and this file has every planet's actual domain sitting right there
+  // in BODY_MEANINGS. So each planet found in the house gets interpreted properly: what it governs,
+  // what sign it is wearing, and what it therefore means that this lunation is landing on it.
+  const natalDetail = natalHere.map((planet) => {
+    const meaningOf = getBodyMeaning(planet.id);
+    return {
+      name: planet.name,
+      sign: planet.sign.toLowerCase(),
+      domain: meaningOf?.domain ?? meaningOf?.domainShort ?? "this part of you",
+      domainShort: meaningOf?.domainShort ?? "this part of you",
+    };
+  });
+
+  const natalClauses = natalDetail.map(
+    (d) => `your ${d.name} in ${d.sign}, which runs ${d.domain}`
+  );
   const natalList =
-    natalNames.length === 1
-      ? natalNames[0]
-      : natalNames.length === 2
-        ? `${natalNames[0]} and ${natalNames[1]}`
-        : `${natalNames.slice(0, -1).join(", ")} and ${natalNames[natalNames.length - 1]}`;
+    natalClauses.length === 1
+      ? natalClauses[0]
+      : natalClauses.length === 2
+        ? `${natalClauses[0]}, and ${natalClauses[1]}`
+        : `${natalClauses.slice(0, -1).join("; ")}; and ${natalClauses[natalClauses.length - 1]}`;
+
+  // The short domains, used to say plainly which parts of her get loud, without repeating the
+  // full clause a second time.
+  const natalDomains = natalDetail.map((d) => `your ${d.domainShort}`);
+  const natalDomainList =
+    natalDomains.length === 1
+      ? natalDomains[0]
+      : natalDomains.length === 2
+        ? `${natalDomains[0]} and ${natalDomains[1]}`
+        : `${natalDomains.slice(0, -1).join(", ")} and ${natalDomains[natalDomains.length - 1]}`;
 
   // Where the ruler of this sign sits natally. The transit happens in one house, but the planet
   // that governs the sign is where the work actually gets done.
@@ -183,7 +210,7 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
       : `Even though this one concentrates in a single house, the opposite end of the axis quietly sets the terms. Your ${ordinalHouse(oppositeHouse)} house of ${oppMeaning.title} governs ${oppMeaning.rules}, and it tends to be the thing that has to give a little for the new start in your ${houseArea} to have anywhere to go. Worth noticing what you are protecting over there before you commit to anything here.`,
 
     natalHere.length > 0
-      ? `This is not landing on empty space in your chart. You have ${natalList} sitting in that same ${ordinalHouse(house)} house, which means this transit is switching on something you already carry rather than introducing a new theme. Whatever ${natalNames.length === 1 ? "that placement" : "those placements"} normally ${natalNames.length === 1 ? "does" : "do"} in your life is the part that gets loud right now, amplified rather than altered. If this area of life has a familiar pattern for you, expect the familiar pattern, at volume.`
+      ? `This isn't landing on an empty patch of sky, it's landing directly on ${natalList}. That's what makes this one personal for you rather than general. When a ${meta.label} sets off a placement you were born with, it doesn't hand you a new theme, it turns the volume up on ${natalDomainList}, the part of you that's been running quietly in the background of this area of your life since the day you were born. ${natalDetail.length === 1 ? `Your ${natalDetail[0].name} wears ${natalDetail[0].sign} here, so expect it to come through as ${SIGN_TRAITS[natalHere[0].sign]?.essence ?? "its own flavour"}, at full strength.` : `Both get switched on at once, which is why this one is likely to feel bigger than the date alone suggests.`} You'll probably recognise the feeling when it arrives. It tends to land less like news and more like something you already knew, finally impossible to ignore.`
       : `You have no natal planets sitting in that house, which is genuinely useful to know rather than a disappointment. It means this area of life is not somewhere you have a fixed, built-in pattern running, so a transit here tends to be felt through circumstances and other people rather than as an old personal reflex. There is less to unlearn, and more room for whatever this lunation brings to actually be new.`,
 
     rulerPlanet
