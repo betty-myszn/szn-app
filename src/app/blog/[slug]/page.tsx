@@ -196,6 +196,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <Prose text={para} />
                   </p>
                 ))}
+
+                {/* Reference lists (every sign, every house) as h3s nested under the section's h2.
+                    Each entry is its own heading so it can be linked to and picked up as a distinct
+                    answer, without flattening twelve more h2s into the page outline. */}
+                {section.items && (
+                  <div style={{ border: "var(--border)", marginTop: 20 }}>
+                    {section.items.map((item, i) => (
+                      <div key={item.name} className="p-5" style={{ borderTop: i === 0 ? undefined : "var(--border)" }}>
+                        <h3
+                          id={item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+                          style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "-0.2px", color: "var(--dark)", marginBottom: 6 }}
+                        >
+                          {item.name}
+                        </h3>
+                        <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)" }}>
+                          <Prose text={item.body} />
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Contextual CTA, placed after the second section rather than at the very bottom.

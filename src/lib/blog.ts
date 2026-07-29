@@ -129,6 +129,103 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "full-moon-in-aquarius-2026",
+    title: "Full Moon in Aquarius 2026: What It Means for Every Sign",
+    metaTitle: "Full Moon in Aquarius 2026: What It Means for Your Sign",
+    description:
+      "The Aquarius full moon on 29 July 2026 lights up what you have been carrying alone. Here is what it means, what to do with it, and how it lands for all 12 signs.",
+    category: "moon-transits",
+    publishedAt: "2026-07-29",
+    updatedAt: "2026-07-29",
+    readingMinutes: 8,
+    excerpt:
+      "The Aquarius full moon arrives with the nodes freshly on the Leo and Aquarius axis. What it means, and how it lands for every sign.",
+    intro: [
+      "The full moon in Aquarius falls on 29 July 2026, at 6 degrees of Aquarius, opposite the Sun in Leo. A full moon is the peak of the lunar cycle, the point where the Moon is fully lit and things become visible whether or not you went looking for them. This one is asking about the space between who you are and who you are to everybody else.",
+      "It carries extra weight this year because the lunar nodes have just moved onto the Leo and Aquarius axis, the same line this full moon is sitting on. That makes it less of a routine monthly marker and more of an early, loud signal of the eighteen month story now beginning.",
+    ],
+    sections: [
+      {
+        heading: "What a full moon in Aquarius actually does",
+        body: [
+          "Every full moon puts the Sun and Moon in opposite signs, so it always reads as a tension between two things that both want something. Here it is Leo and Aquarius: the individual and the collective, being adored and being useful, your own name and everybody else's.",
+          "Aquarius is the sign of the group, the network, the system and the future. When the Moon is full here, what tends to surface is everything you have been feeling about where you belong. Friendships get clarified. Group dynamics that have quietly stopped working become impossible to keep ignoring. The distance between the version of you a community expects and the version you actually are becomes visible.",
+          "The Leo side matters just as much, because that is where the Sun is. Something in you wants to be seen as yourself, not as a function of the group. This full moon is where those two needs stop coexisting politely and ask to be reconciled.",
+        ],
+      },
+      {
+        heading: "Why this one is bigger than usual",
+        body: [
+          "The lunar nodes shifted onto the Leo and Aquarius axis just days ago, which means the collective growth direction for the next eighteen months runs along exactly the line this full moon is illuminating. A full moon on a fresh nodal axis works like an opening statement.",
+          "It sits at 6 degrees, early in the sign, which tends to feel raw and unfiltered rather than refined. Expect the themes to arrive as feeling first and understanding later.",
+          "Practically, this is a good moment to notice what comes up rather than to act on all of it immediately. Full moons show you the situation. They are rarely the best moment to make the irreversible decision about it.",
+        ],
+      },
+      {
+        heading: "What to do with it",
+        body: [
+          "Look at what became visible in the two or three days around it, because that is the actual message. A friendship that suddenly feels one-sided, a group you have outgrown, a piece of work you have been hiding, a want you have been embarrassed by.",
+          "Full moons are for completing and releasing rather than starting. If something has been overdue to end, this is the window where ending it feels less like a decision and more like an acknowledgement. If something has been building, this is where it becomes undeniable.",
+          "The Aquarius instruction underneath all of it is fairly plain: stop editing yourself down to stay acceptable to a room you have already outgrown.",
+        ],
+      },
+      {
+        heading: "What the Aquarius full moon means for every sign",
+        body: [
+          "Read for your rising sign first, because that is what determines which house this full moon actually lands in. If you do not know it, read for your sun sign.",
+        ],
+        items: [
+          { name: "Aries", body: "This lands in your house of friendship, community and the future. Expect clarity about which people are genuinely walking towards the same thing as you. A group, a network or a long-held ambition reaches a point of honesty. Something about who you spend your energy on is asking to change." },
+          { name: "Taurus", body: "This lands at the very top of your chart, in your house of career and public life. What you are known for, and whether it still matches who you are, becomes visible. A professional situation reaches a conclusion, or your ambition finally says what it actually wants out loud." },
+          { name: "Gemini", body: "This lands in your house of belief, study and the wider world. Something you have believed for a long time is asking to be updated. Travel, a course, a publishing or teaching opportunity, or a genuine change of mind. Your perspective widens, sometimes uncomfortably." },
+          { name: "Cancer", body: "This lands in your house of intimacy, shared resources and what is under the surface. Money you share with someone, a debt, an investment, or an emotional truth you have been managing rather than saying. Depth is the whole assignment here, and avoiding it costs more than facing it." },
+          { name: "Leo", body: "This lands squarely in your house of partnership, with the Sun in your own sign opposite it. The tension between what you need and what someone close to you needs is fully lit. A relationship, business partnership or one-to-one dynamic reaches a point of clarity that has been coming for a while." },
+          { name: "Virgo", body: "This lands in your house of daily routine, work and health. The way you have been living day to day gets audited. A job, a habit, a workload or a health pattern reaches the point where it either changes or breaks. Small, practical adjustments matter more than dramatic ones." },
+          { name: "Libra", body: "This lands in your house of creativity, romance and joy. What genuinely delights you becomes visible, along with how long you have been postponing it. A creative project, a romance, or the simple question of whether your life currently contains any pleasure that is not productive." },
+          { name: "Scorpio", body: "This lands at the base of your chart, in your house of home, family and roots. Something about where you live, or the family patterns you carry, comes to light. This one is felt privately before it is understood. Foundations are the theme, both literal and emotional." },
+          { name: "Sagittarius", body: "This lands in your house of voice, ideas and everyday communication. Something you have been sitting on wants to be said or published. Conversations land differently now, and the thing you have been drafting privately is ready to be heard by somebody else." },
+          { name: "Capricorn", body: "This lands in your house of money, values and self-worth. Your income, your rates or your sense of what you deserve reaches a point of clarity. This is often where undercharging becomes impossible to keep justifying, and where you see what you actually value." },
+          { name: "Aquarius", body: "This is your full moon, landing in your own sign and your house of identity. You see yourself clearly, which is both the gift and the difficulty. Something about how you present, what you are called, or who you have been performing as reaches its natural conclusion. A genuine reset of self." },
+          { name: "Pisces", body: "This lands in your most private house, the one of rest, endings and the inner world. This is a quiet full moon for you rather than a loud one. Something is finishing beneath the surface, and the useful response is rest and reflection rather than action. Pay attention to your dreams this week." },
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where this full moon lands in your chart",
+      body: "Reading for your sign is the general version. Your birth chart shows the exact house this full moon is lighting up, which is what turns a horoscope into something you can actually act on.",
+      label: "get your free birth chart",
+      href: "/chart",
+    },
+    faqs: [
+      {
+        question: "When is the full moon in Aquarius 2026?",
+        answer:
+          "It is exact on 29 July 2026, at 6 degrees of Aquarius, with the Sun opposite in Leo. Its effects are generally felt across the two or three days either side.",
+      },
+      {
+        question: "What does a full moon in Aquarius mean?",
+        answer:
+          "It highlights the tension between the individual and the collective: being seen as yourself versus belonging to a group. Friendships, communities and your sense of where you fit tend to become clear.",
+      },
+      {
+        question: "Why is this full moon more significant than usual?",
+        answer:
+          "Because the lunar nodes have just moved onto the Leo and Aquarius axis, so this full moon sits on the same line as the collective growth direction for the next eighteen months.",
+      },
+      {
+        question: "Should I read for my sun sign or rising sign?",
+        answer:
+          "Rising sign first, because it determines which house of your chart the full moon actually falls in. Your sun sign works as a second read if you do not know your birth time.",
+      },
+      {
+        question: "What should I do on a full moon?",
+        answer:
+          "Full moons are for completing, deciding and releasing rather than starting. Notice what becomes visible in the days around it, since that is usually the real message, and leave the biggest irreversible decisions until just after.",
+      },
+    ],
+    related: ["new-moon-vs-full-moon", "north-node-and-life-purpose", "leo-season-2026"],
+  },
+  {
     slug: "leo-season-2026",
     title: "Leo Season 2026: It's Time to Become the Main Character",
     metaTitle: "Leo Season 2026: Astrology Guide to Confidence, Visibility & Success",
