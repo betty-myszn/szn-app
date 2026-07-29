@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useEnrolmentOpen } from "@/lib/enrolment";
+import { WORKSHOPS, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -119,6 +120,11 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
 
+  // Read the next dated class straight off the workshop data rather than retyping it here. The
+  // ticker previously hardcoded the weekday, and when the class moved from 28 July to 3 August it
+  // carried on telling every homepage visitor the wrong day. Derived, it can't drift again.
+  const nextWorkshop = WORKSHOPS.find((w) => w.startIso);
+
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
   }, [ready, member, router]);
@@ -148,7 +154,9 @@ export default function Home() {
         items={[
           `✦ ${szn} szn`,
           enrolmentOpen ? "✦ doors close in 72 hours" : "✦ doors open soon",
-          "✦ live workshop monday",
+          nextWorkshop?.startIso
+            ? `✦ live workshop ${formatWorkshopWhenLA(nextWorkshop.startIso)}`
+            : "✦ live workshops every szn",
           "✦ your personal birth chart",
           "✦ the astrology community",
         ]}

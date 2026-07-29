@@ -1,4 +1,4 @@
-import { WORKSHOPS } from "@/lib/workshops";
+import { WORKSHOPS, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const w = WORKSHOPS.find((x) => x.id === "leo-szn-workshop-1")!;
 
@@ -19,4 +19,23 @@ it("is Monday 3 August 2026 at 19:00 LA time", () => {
 
 it("copy label matches the real instant", () => {
   expect(w.meta).toBe("3 august · 7pm la time · first live class");
+});
+
+// The homepage ticker builds its label from this, so it tracks the data instead of restating it.
+// That is the bug this file exists to catch: the ticker said "tuesday" for weeks after the class
+// moved to a Monday, because the weekday was typed in by hand.
+it("the LA marketing label matches the workshop data", () => {
+  expect(formatWorkshopWhenLA(w.startIso!)).toBe("mon 3 august · 7pm la time");
+});
+
+// Pinned to LA, not the reader. Run it from Betty's own zone (UTC+7), where 7pm LA is already the
+// next calendar day, and it must still say Monday the 3rd.
+it("stays anchored to LA when read from another timezone", () => {
+  const original = process.env.TZ;
+  process.env.TZ = "Asia/Ho_Chi_Minh";
+  try {
+    expect(formatWorkshopWhenLA(w.startIso!)).toBe("mon 3 august · 7pm la time");
+  } finally {
+    process.env.TZ = original;
+  }
 });

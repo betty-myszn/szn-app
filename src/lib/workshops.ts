@@ -108,10 +108,38 @@ export function upcomingWorkshops(nowMs: number): Workshop[] {
   });
 }
 
-/** Local-time date/time label for a workshop, e.g. "Mon 3 August · 19:00". */
+/** Local-time date/time label for a workshop, e.g. "Mon 3 August · 19:00". Renders in the viewer's
+ *  own zone, which is what a member wants on her event card ("when is this for me?"). */
 export function formatWorkshopWhen(startIso: string): string {
   const d = new Date(startIso);
   const date = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
   const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   return `${date} · ${time}`;
+}
+
+// Classes are scheduled and advertised in LA time, so marketing copy is pinned to that zone
+// rather than the reader's.
+const CLASS_ZONE = "America/Los_Angeles";
+
+/** Marketing label for a workshop, anchored to LA, e.g. "mon 3 august · 7pm la time".
+ *
+ *  Deliberately NOT viewer-local, unlike formatWorkshopWhen above. Two reasons: every other piece
+ *  of copy on the site quotes this class as "7pm la time", so a viewer-local render would
+ *  contradict it; and 7pm LA is already the next day in Asia, so Betty in Vietnam (UTC+7) would be
+ *  shown "tue 4 august" while an LA reader saw "mon 3 august". It would also differ between the
+ *  server render and the client render, which is a hydration mismatch. */
+export function formatWorkshopWhenLA(startIso: string): string {
+  const d = new Date(startIso);
+  const date = new Intl.DateTimeFormat("en-GB", {
+    timeZone: CLASS_ZONE,
+    weekday: "short",
+    day: "numeric",
+    month: "long",
+  }).format(d);
+  const hour = new Intl.DateTimeFormat("en-US", {
+    timeZone: CLASS_ZONE,
+    hour: "numeric",
+    hour12: true,
+  }).format(d);
+  return `${date.toLowerCase()} · ${hour.toLowerCase().replace(/\s+/g, "")} la time`;
 }
