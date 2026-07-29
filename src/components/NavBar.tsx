@@ -610,30 +610,50 @@ export default function NavBar() {
             ))}
           {member && (
             <>
-              {/* Heading, not a link: both charts underneath are real destinations, and /my-chart
-                  is already one of them, so making this tappable would just be a duplicate. */}
-              <span
+              {/* A real toggle, not a heading. The desktop nav is `hidden md:flex`, so below 768px
+                  this panel is the only menu there is, and leaving the two charts permanently
+                  expanded here meant "my chart" wasn't a dropdown on exactly the screens most
+                  people use. Shares chartOpen with the desktop dropdown deliberately: both are
+                  mounted at once (the desktop row is only display:none below md, not unmounted),
+                  and one open/closed state across both is the behaviour you want anyway. */}
+              <button
+                type="button"
+                onClick={() => setChartOpen((o) => !o)}
+                aria-expanded={chartOpen}
+                className="hover:text-[var(--pink)] transition-colors"
                 style={{
+                  background: "none",
+                  border: "none",
+                  font: "inherit",
+                  letterSpacing: "inherit",
+                  textTransform: "inherit",
+                  cursor: "pointer",
+                  padding: 0,
+                  textAlign: "left",
                   color: chartSectionActive ? "var(--pink)" : "var(--dark)",
                   fontWeight: chartSectionActive ? 800 : undefined,
                 }}
               >
-                my chart
-              </span>
-              {chartMenu.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="no-underline hover:text-[var(--pink)]"
-                  style={{
-                    paddingLeft: 16,
-                    color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
+                my chart {chartOpen ? "▴" : "▾"}
+              </button>
+              {chartOpen &&
+                chartMenu.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => {
+                      setChartOpen(false);
+                      setOpen(false);
+                    }}
+                    className="no-underline hover:text-[var(--pink)]"
+                    style={{
+                      paddingLeft: 16,
+                      color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
             </>
           )}
           {links.map((link) => (
