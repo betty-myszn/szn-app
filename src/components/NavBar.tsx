@@ -10,7 +10,6 @@ import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadC
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 
 const memberLinks = [
-  { href: "/my-chart", label: "my chart" },
   { href: "/events", label: "events" },
   { href: "/community", label: "community" },
   { href: "/journal", label: "journal" },
@@ -22,6 +21,12 @@ const memberLinks = [
 const sznMenu = [
   { href: "/dashboard", label: "my szn" },
   { href: "/challenges", label: "challenges", indent: true },
+];
+
+// Astrology and Human Design are two separate charts, grouped under one "chart" menu.
+const chartMenu = [
+  { href: "/my-chart", label: "astrology chart" },
+  { href: "/human-design", label: "human design chart" },
 ];
 
 const guestLinks = [
@@ -36,6 +41,7 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [sznOpen, setSznOpen] = useState(false);
+  const [chartOpen, setChartOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [unread, setUnread] = useState(0);
@@ -50,6 +56,7 @@ export default function NavBar() {
   const links = member ? memberLinks : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznSectionActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/challenges") || pathname?.startsWith("/your-season");
+  const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
 
   useEffect(() => {
     if (!member) return;
@@ -176,6 +183,62 @@ export default function NavBar() {
                         letterSpacing: "0.06em",
                         textTransform: "uppercase",
                         padding: item.indent ? "10px 14px 10px 26px" : "10px 14px",
+                        borderBottom: "1px solid #eee",
+                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {member && (
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setChartOpen((o) => !o)}
+                className="hover:text-[var(--pink)] transition-colors"
+                style={{
+                  background: "none",
+                  border: "none",
+                  font: "inherit",
+                  letterSpacing: "inherit",
+                  textTransform: "inherit",
+                  cursor: "pointer",
+                  padding: 0,
+                  color: chartSectionActive ? "var(--pink)" : "var(--dark)",
+                  fontWeight: chartSectionActive ? 800 : undefined,
+                }}
+              >
+                chart ▾
+              </button>
+              {chartOpen && (
+                <div
+                  className="flex flex-col"
+                  style={{
+                    position: "absolute",
+                    top: 28,
+                    left: 0,
+                    minWidth: 180,
+                    background: "#fff",
+                    border: "var(--border)",
+                    zIndex: 200,
+                  }}
+                >
+                  {chartMenu.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setChartOpen(false)}
+                      className="no-underline hover:text-[var(--pink)]"
+                      style={{
+                        fontSize: 11,
+                        fontWeight: isActive(item.href) ? 800 : 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        padding: "10px 14px",
                         borderBottom: "1px solid #eee",
                         color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
                         background: isActive(item.href) ? "var(--lav-light)" : undefined,
@@ -539,6 +602,18 @@ export default function NavBar() {
                   paddingLeft: item.indent ? 16 : undefined,
                   color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
                 }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          {member &&
+            chartMenu.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="no-underline hover:text-[var(--pink)]"
+                style={{ color: isActive(item.href) ? "var(--pink)" : "var(--dark)" }}
               >
                 {item.label}
               </Link>
