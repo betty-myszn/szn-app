@@ -11,6 +11,10 @@
 export interface BlogSection {
   heading: string;
   body: string[];
+  /** Optional sub-entries rendered as h3s, e.g. one per zodiac sign inside a single section. Keeps
+   *  a long reference list semantically nested under its h2 rather than flattening 12 more h2s
+   *  into the page. */
+  items?: { name: string; body: string }[];
 }
 
 export interface BlogFaq {
@@ -330,55 +334,81 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "big-three-sun-moon-rising",
-    title: "Your Big Three: Sun, Moon and Rising Explained",
-    metaTitle: "Sun, Moon and Rising Signs Explained (Your Big Three)",
+    title: "Your Big Three: Sun, Moon and Rising Signs Explained",
+    metaTitle: "Sun, Moon and Rising Signs Explained: Understanding Your Big Three Birth Chart Placements",
     description:
-      "Your sun, moon and rising signs cover identity, emotional needs and first impressions. Here is what each one actually governs and how they work together.",
+      "Discover what your sun, moon and rising signs really mean, why they are the foundation of your birth chart, and how understanding your big three can completely transform the way you understand yourself.",
     category: "birth-chart",
     publishedAt: "2026-07-28",
-    updatedAt: "2026-07-28",
-    readingMinutes: 6,
+    updatedAt: "2026-07-29",
+    readingMinutes: 9,
     excerpt:
-      "Identity, inner world and first impressions. What each of the big three governs, and why they can feel like three different people.",
+      "Identity, emotional world and first impressions. What your sun, moon and rising each govern, why they can feel like three different people, and how they work together as one.",
     intro: [
-      "Your big three are your sun sign, your moon sign and your rising sign. Together they describe who you are at your core, what you need emotionally, and how you come across before you have said a word.",
-      "They are the starting point because they cover the most ground. Everything else in [your birth chart](/blog/what-is-a-birth-chart) adds detail to a picture these three have already sketched.",
+      "If you have ever downloaded your birth chart, looked at the colourful wheel full of symbols and immediately felt overwhelmed, you are in very good company, because almost everyone starts in exactly the same place. One minute you think astrology is simply about knowing you are a Libra or a Capricorn, and the next you are looking at planets, houses, degrees, aspects and symbols in what feels like an entirely different language.",
+      "The good news is you do not need to understand your whole [birth chart](/blog/what-is-a-birth-chart) overnight. Every experienced astrologer starts in the same place, with your big three: your sun sign, your moon sign and your rising sign. Together they describe who you are beneath the expectations you have picked up throughout life, what you need emotionally in order to thrive, and the energy other people instinctively feel when they meet you.",
+      "The mistake many people make is believing their sun sign is their entire personality, which is exactly why so many eventually decide astrology does not fit them. Reducing yourself to one zodiac sign is a little like describing an entire city by looking at a single street. It gives you a glimpse, but it misses almost everything that makes the place unique.",
     ],
     sections: [
       {
-        heading: "Your sun: the identity you are growing into",
+        heading: "Why they are called your big three",
         body: [
-          "The sun is the sign most people know, because it is the one determined by your date of birth alone. It describes your core identity, your sense of purpose, and what genuinely energises you.",
-          "It is worth thinking of the sun as a direction rather than a finished description. It is the version of yourself you are steadily becoming, which is partly why it can feel more true in your thirties than it did at nineteen.",
+          "Your birth chart contains far more than three placements. Every planet sits in a zodiac sign, every planet falls into one of the twelve houses, and every planet forms mathematical relationships with the others through aspects, creating a detailed blueprint of your strengths, your challenges, your purpose and the themes you meet throughout your lifetime.",
+          "You also have your midheaven, which speaks to your public life and career, your north node, which points towards where your soul is growing, your south node, which reveals old patterns you are here to outgrow, and Chiron, which highlights your deepest wound and greatest gift, alongside asteroids, progressions and current transits that keep shaping your experience.",
+          "There is a reason almost every astrologer begins with the big three: these three placements influence nearly every experience you have. Your sun describes your identity. Your moon describes your emotional landscape. Your rising describes how you move through the world.",
+          "Once you understand those three pieces, the rest of your chart begins fitting together like a puzzle that finally makes sense. Instead of a collection of disconnected placements, you start recognising how each one supports, challenges or strengthens another part of your personality.",
         ],
       },
       {
-        heading: "Your moon: what you need to feel safe",
+        heading: "Your sun sign: the woman you are continually becoming",
         body: [
-          "The moon governs your emotional world, your instincts, and what you need in order to feel secure. It is the most private of the three, and it is usually the one closest friends and partners see rather than colleagues.",
-          "Because the moon moves quickly, changing sign roughly every two and a half days, you need a reasonably accurate birth date and often a time to pin it down. It describes how you self-soothe, what makes you feel held, and what you reach for when things get hard.",
+          "Your sun sign is the placement most people already know, because it is set by your date of birth and forms the basis of newspaper horoscopes. The sun represents your identity, your life force, your purpose, your confidence, your vitality and the qualities your soul keeps encouraging you to develop.",
+          "One of the biggest misconceptions is that your sun sign perfectly describes who you already are. In reality, your sun often represents who you are growing into. Think back to who you were at eighteen compared with today, more confident expressing yourself, clearer on what genuinely matters, less interested in becoming the version other people expected. That is your sun beginning to shine more brightly.",
+          "The sun is not interested in helping you fit in, it is interested in helping you become authentic. A Leo sun is not simply here to enjoy attention, they are learning to express their creativity without apologising for taking up space. A Virgo sun is not here to be endlessly productive, they are learning to refine their gifts so they genuinely improve the lives of others. A Pisces sun is not simply emotional, they are here to develop compassion and intuition while learning where healthy boundaries matter as much as kindness.",
+          "This is also why people often feel more connected to their sun sign as they move into their thirties and forties. With every year that passes, we strip away more conditioning, release identities that no longer fit, and grow more comfortable expressing the qualities our sun has quietly been encouraging all along.",
         ],
       },
       {
-        heading: "Your rising: the door people come through",
+        heading: "Your moon sign: the emotional blueprint nobody else can see",
         body: [
-          "Your rising sign, or ascendant, is the sign that was on the eastern horizon when you were born. It is the energy you radiate on arrival, the way strangers read you, and the style you instinctively approach new situations with.",
-          "It also sets your whole house structure, which makes it the most structurally important of the three. Your rising sign decides which area of life every planet in your chart is working in.",
+          "While your sun represents the conscious part of your personality, your moon governs the deeply personal emotional world that usually stays hidden beneath the surface. It describes your instincts, your subconscious habits, your emotional needs, your inner child and the things that help you feel safe when life becomes uncertain.",
+          "If your sun is the version of yourself you confidently introduce to the world, your moon is the person sitting quietly at home after everyone else has gone. It becomes most visible under stress: the part of you that decides whether you reach out for support or pull away, whether you need conversation or solitude, whether you process emotions immediately or carry them quietly for weeks before talking about them.",
+          "A Cancer moon may naturally seek comfort through family, familiar spaces and emotional connection. A Gemini moon often processes emotions by talking them through. An Aquarius moon might need space before opening up, processing feelings through observation and perspective. A Scorpio moon often feels everything with extraordinary intensity while revealing very little on the surface. None of these is healthier than another, they are simply different emotional languages.",
+          "Once you understand your moon sign, you stop trying to regulate your nervous system in ways designed for somebody else, and start building a life that genuinely supports how you are wired. That usually leads to healthier relationships, stronger boundaries and a much deeper sense of emotional self trust.",
         ],
       },
       {
-        heading: "When your big three contradict each other",
+        heading: "Your rising sign: the lens your whole life unfolds through",
         body: [
-          "Plenty of people have a big three that appears to be in conflict: a bold fire sun, a private water moon, and a cool air rising, for example. That is not a mistake in the chart, it is an accurate description of being a person.",
-          "It usually means you present one way, feel another way privately, and are working towards something different again. Understanding which part of you is running at any given moment tends to be more useful than trying to resolve them into one tidy label.",
+          "Your rising sign, also known as your ascendant, is one of the most fascinating and important placements in your chart, and unlike your sun sign it needs your exact birth time to calculate accurately. It was the sign rising over the eastern horizon at the exact moment you took your first breath, long viewed as the beginning of your unique relationship with the world around you.",
+          "People often hear the rising sign is about first impressions, and that is true, it shapes your natural body language, your personal style, the energy you radiate and how you approach unfamiliar environments. A Leo rising may appear confident and charismatic before they have even introduced themselves. A Capricorn rising often gives an impression of maturity and competence, even young. A Libra rising frequently comes across as approachable, charming and socially aware.",
+          "But your rising sign goes much deeper than appearances, because it sets the framework for your entire chart. The ascendant determines where every single house begins, which means it decides which area of life every planet operates through. Your career, relationships, finances, friendships, family and creativity are all interpreted through the structure your rising sign creates.",
+          "This is why two people can both be Libra suns yet live completely different lives. One person's Libra sun may fall in the tenth house of career and public recognition, while another's activates the fourth house of home and emotional foundations. The sun is the same, the expression is completely different. That is the power of the rising sign.",
+        ],
+      },
+      {
+        heading: "When your big three seem to contradict each other",
+        body: [
+          "One of the most reassuring things to discover is that you were never supposed to feel like just one zodiac sign. Human beings are wonderfully complex, and your big three often explain why you have felt pulled in different directions throughout your life.",
+          "You might have an Aries sun constantly dreaming up new ideas, a Pisces moon that feels deeply sensitive beneath the surface, and a Virgo rising that carefully analyses every decision before acting. Or a Capricorn sun that is incredibly ambitious, a Sagittarius moon that needs freedom and adventure, and a Cancer rising that quietly nurtures everyone around them first. These placements are not competing, they are collaborating.",
+          "Different parts of your personality naturally step forward in different situations. Your rising sign often takes the lead when you meet new people or step into unfamiliar environments. Your moon becomes more visible in intimate relationships and emotionally vulnerable moments. Your sun gradually grows stronger as you build confidence and move towards the person you are here to become.",
+          "Learning to recognise which part of yourself is leading at any given moment creates an extraordinary level of self awareness, because you stop expecting every part of your personality to behave the same way all the time.",
+        ],
+      },
+      {
+        heading: "Your big three are only the beginning of your story",
+        body: [
+          "Understanding your sun, moon and rising signs will completely change the way you see yourself, and they are still only the opening chapter of a rich and beautifully detailed chart. Your Mercury explains how you communicate, think and learn. Your Venus reveals how you experience love, beauty, relationships and even money. Your Mars shows how you pursue your goals. Your Jupiter highlights where opportunity and abundance naturally flow. Your Saturn reveals the lessons that ultimately become your greatest strengths.",
+          "Your north node points towards the future your soul is growing into, while your south node reveals the patterns you are gently being encouraged to release. Then come the houses, aspects, progressions and transits, which explain why different seasons of your life activate different parts of you, and why certain years feel completely transformative while others are quieter periods of integration.",
+          "This is why astrology is so much more than personality typing. Done properly, it is a roadmap for understanding yourself with greater compassion, making decisions that genuinely align with who you are, and recognising the timing of your life instead of constantly fighting against it.",
         ],
       },
     ],
     cta: {
-      heading: "Find your big three in under a minute",
-      body: "Your sun is easy. Your moon and rising need your birth time and place. Calculate your chart free and get all three at once, with what each one means for you.",
-      label: "find my big three",
-      href: "/chart",
+      heading: "Discover your own big three inside MY SZN",
+      body: "Reading about your sun, moon and rising signs is a brilliant place to begin, but seeing how those placements interact inside your own birth chart is where astrology truly comes alive. MY SZN is built around your exact birth details, with personalised insight into your big three, your houses, your money, your relationships, your purpose, your confidence and the transits shaping your life right now, plus live seasonal coaching workshops and a community of women stepping into their next chapter together.",
+      label: "explore MY SZN",
+      href: "/membership",
     },
     faqs: [
       {
@@ -402,59 +432,93 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "how-to-read-your-birth-chart",
     title: "How to Read Your Birth Chart, Step by Step",
-    metaTitle: "How to Read Your Birth Chart: A Step-by-Step Guide",
+    metaTitle: "How to Read Your Birth Chart Step by Step: A Beginner's Guide",
     description:
-      "A practical order for reading a natal chart without getting overwhelmed. Start with the big three, then houses, then aspects, then patterns.",
+      "Learn how to read your birth chart in five clear steps, from your sun, moon and rising signs to houses, aspects, repeating patterns and current transits.",
     category: "birth-chart",
     publishedAt: "2026-07-28",
-    updatedAt: "2026-07-28",
+    updatedAt: "2026-07-29",
     readingMinutes: 8,
     excerpt:
-      "The order to read a chart in, so you build a picture instead of drowning in symbols.",
+      "The order to read a chart in, in five layers, so you build a real picture instead of drowning in symbols on the very first look.",
     intro: [
-      "The reason most people bounce off their birth chart is that they try to read everything at once. A chart has roughly forty moving pieces, and looked at simultaneously they cancel each other out.",
-      "Read it in layers instead. Start with the big three, add the houses, then the aspects, then look for repeating patterns. Each layer refines the one before it rather than replacing it.",
+      "Most people open their birth chart, stare at it for a few minutes and quietly close the tab, because they are trying to understand every symbol, planet, house, aspect, degree and sign at exactly the same time. A chart holds dozens of pieces of information, and given equal attention from the start they seem to contradict one another until the whole thing feels more confusing than useful.",
+      "You might read that your sun makes you confident, your moon makes you private, your rising makes you appear calm and your Mars suggests you act impulsively, then wonder which one is the real you. They are all describing different functions within the same person, and the way to see how they fit is to read the chart in the right order.",
+      "The easiest way to read a chart is in layers. Start with your big three, move into the houses, explore the aspects between your planets, find the themes that repeat, and only then look at timing through transits. Each layer refines the one before it rather than replacing it.",
     ],
     sections: [
       {
-        heading: "Step one: your big three",
+        heading: "Before you begin: what your birth chart actually shows",
         body: [
-          "Find [your sun, moon and rising](/blog/big-three-sun-moon-rising), and read them as one sentence rather than three separate horoscopes. Sun for identity and direction, moon for emotional needs, rising for how you arrive.",
-          "This gives you a working shape before any detail is added, and it is enough on its own to explain a lot about how you operate.",
+          "Your birth chart is a map of the sky at the exact moment and place of your birth, showing where the sun, moon and planets sat across the twelve zodiac signs and twelve houses. It also shows the angles those planets made to one another, known as aspects, which tell you whether different parts of your personality work together naturally or create a tension that asks for growth.",
+          "There is a simple formula underneath all of it. The planets describe what part of you is operating. The signs describe how that energy behaves. The houses describe where in your life it shows up. The aspects describe how those parts interact with one another.",
+          "Venus, for example, represents love, attraction, values, beauty and receiving, but Venus in Aries expresses those themes very differently from Venus in Pisces. In the tenth house, Venus may tie relationships and values closely to career and public identity, while in the fourth house it may pour that same energy into beauty, comfort and emotional security at home.",
+          "Once you understand this formula, a chart stops being intimidating, because you are no longer memorising hundreds of disconnected meanings. You are learning to combine four simple layers into one clear interpretation.",
         ],
       },
       {
-        heading: "Step two: which houses everything sits in",
+        heading: "Step one: begin with your big three",
         body: [
-          "Now find which house each planet is in. The house tells you which area of life that planet is most active in, and it is often the fastest route to a moment of recognition.",
-          "A cluster of planets in one house is worth noticing immediately. It means a disproportionate amount of your energy goes into that area of life, and that area will keep coming up as a theme whether or not you planned it that way.",
+          "Start by finding your sun sign, moon sign and rising sign, often called [your big three](/blog/big-three-sun-moon-rising) because they describe the broadest and most recognisable layers of your personality. Your sun is your core identity, confidence and purpose. Your moon is your emotional needs, instincts and what helps you feel safe. Your rising, or ascendant, is the energy you bring into new situations and the lens the rest of your chart operates through.",
+          "Rather than reading these as three separate horoscopes, combine them into one sentence. You might be a Libra sun who wants harmony and meaningful connection, with an Aquarius moon that needs independence and breathing room, while a Leo rising makes you appear expressive and comfortable with attention you may privately not feel.",
+          "That single sentence already tells you more than any one sign could on its own, because it shows the difference between your conscious identity, your private emotional world and the energy people meet first. It also explains why you might identify strongly with some parts of your sun sign and feel disconnected from others: a sensitive water moon can soften a bold fire sun, and an earth rising can make an imaginative air sun look far more practical and reserved. You do not need to force your big three into one perfectly consistent personality, because people are not perfectly consistent. The goal is to see which part of you tends to lead in different situations.",
         ],
       },
       {
-        heading: "Step three: the aspects between planets",
+        heading: "Step two: find which houses your planets sit in",
         body: [
-          "Aspects are the angles planets make to each other, and they describe how the different parts of you get along. A conjunction fuses two functions together. A trine or sextile means they cooperate easily. A square or opposition means they pull against each other and generate friction.",
-          "Hard aspects are not bad news. Squares in particular tend to produce the most drive, because something in you refuses to leave that tension alone. The easy aspects describe talents you may not even notice you have, precisely because they never cost you anything.",
+          "Once you have the broad shape, look at which house each planet sits in. The houses divide the chart into twelve areas of life, from identity, money and communication to home, relationships, career and spirituality. The planet tells you which energy is involved, the house tells you where it becomes most active.",
+          "Mars in the second house may drive you to earn, build independence and defend your values, while Mars in the seventh brings that same intensity into relationships and conflict. Jupiter in the tenth may expand career and visibility, while Jupiter in the fourth may bring growth through family, property and building a home that genuinely supports you.",
+          "This is often where people have their first real moment of recognition, because house placements explain why some areas of life carry far more energy and drama than others. Several planets clustered in one house, sometimes called a stellium, tell you that area carries disproportionate importance and will keep returning as a theme, whether you choose it or life keeps placing it in front of you.",
+          "Do not panic about empty houses. An empty house does not mean that area will never matter. It simply has no natal planets permanently emphasising it, so you read the sign on the house cusp and then find that sign's ruling planet elsewhere in the chart for the rest of the story.",
         ],
       },
       {
-        heading: "Step four: look for what repeats",
+        heading: "Step three: understand the aspects between your planets",
         body: [
-          "This is the step that separates reading a chart from listing a chart. Look for the same theme arriving from several directions: a lot of one element, several planets in one house, a sign repeated across your big three.",
-          "Anything the chart says three different ways is a genuine headline. Anything it says once is a detail. Weighting them equally is the single most common beginner mistake, and it is what produces those readings that feel simultaneously true and useless.",
+          "Once you know your planets, their signs and their houses, look at the aspects between them, the angles they form. Aspects describe how the different parts of your personality communicate, cooperate, compete or create pressure.",
+          "A conjunction sits two planets close together, blending their functions so tightly they can be hard to separate. A trine shows energy flowing easily, creating natural talents you may barely notice. A sextile also supports cooperation, though it usually asks for more conscious effort before its opportunities pay off. Squares and oppositions create more friction: a square puts two functions at an uncomfortable angle, while an opposition pulls between two sides of the chart, often surfacing through relationships.",
+          "Hard aspects are not punishments and they do not mean you are doomed to struggle. They show the parts of you that need more awareness and active development, which is exactly why they so often become sources of strength. A Mercury square can bring early challenges with communication and then produce someone unusually precise and powerful with language. A Mars square can bring frustration and then generate enormous determination, because some part of you refuses to leave the tension unresolved.",
+          "Easy aspects describe abilities you take for granted. Harder aspects describe where you have built skill, resilience and self awareness. Both matter, and neither should be read in isolation from the rest of the chart.",
         ],
       },
       {
-        heading: "Step five: check the timing",
+        heading: "Step four: look for the patterns that repeat",
         body: [
-          "Your natal chart never changes, but the sky keeps moving over it, and that movement is called transits. This is where astrology becomes practical rather than descriptive.",
-          "Once you know your chart, you can look at what is currently being activated, from [moon phases](/blog/new-moon-vs-full-moon) to longer transits, and get a genuine sense of which themes are loud right now. That is what makes the difference between a personality read and something you can actually plan around.",
+          "This is the step that separates reading a chart from listing one, because an accurate interpretation depends on noticing which themes appear again and again, and giving those more weight than isolated details.",
+          "Start with the balance of elements. Fire brings action, confidence and instinct. Earth brings practicality, patience and a focus on tangible results. Air brings thought, communication and perspective. Water brings emotion, intuition and depth. A chart heavy in one element leans naturally on that mode, while a missing element often describes something you develop more consciously or seek through relationships.",
+          "Then look at the modalities. Cardinal signs initiate, fixed signs sustain, mutable signs adapt. A heavily cardinal chart may start endless projects but struggle to maintain them, strong fixed energy may have staying power but resist necessary change, and a mutable chart may adapt beautifully while finding it hard to commit to one direction.",
+          "Then look for repetition across everything: repeated signs, several planets in one house, multiple planets ruled by the same planet, recurring themes across your big three, houses and aspects. If communication shows up through a Gemini moon, Mercury on the ascendant, several third house planets and a strong Mercury aspect, communication is no longer a small detail, it is one of the chart's headlines. Anything the chart says three different ways deserves serious attention, while something that appears once is supporting detail. The chart has a hierarchy, and repetition shows you what sits near the top.",
+        ],
+      },
+      {
+        heading: "Step five: check the timing through transits",
+        body: [
+          "Your natal chart never changes, because it records the exact sky you were born under, but the planets keep moving and forming new relationships with your placements. Those ongoing movements are transits, and they are what turn astrology from personality description into timing.",
+          "A transit activates part of your natal chart for a period, bringing certain themes closer to the surface. The [moon](/blog/new-moon-vs-full-moon) may activate a placement for a few hours, while Saturn, Uranus, Neptune or Pluto can influence one area for months or years. That difference in speed matters: a short lunar transit may colour a single day, while Saturn crossing your sun, moon, ascendant or midheaven can mark a much larger period of restructuring and maturity.",
+          "When reading a transit, start with which natal planet or house is being activated, then consider the transiting planet and the aspect it is making. Jupiter crossing your tenth house may bring expansion and opportunity around career, while Saturn through the same area may ask for commitment, patience and stronger foundations. Neither is automatically good or bad, the value is in understanding the energy present and responding to it consciously.",
+          "This is where astrology becomes genuinely practical, because you stop expecting every week to produce the same results. Some periods support launching and visibility, others are better for reviewing, repairing, resting or finishing what is already in motion. Your chart is the blueprint, transits show which room currently has all the lights switched on.",
+        ],
+      },
+      {
+        heading: "How to bring everything together",
+        body: [
+          "Once you have moved through all five steps, resist the urge to write a paragraph about every placement. Summarise instead, using a few central themes that reflect the patterns you found. Begin with the big three and the relationship between identity, emotions and presentation. Add the most occupied houses to show where your energy concentrates. Include the strongest aspects for the major internal dynamics, then name any repeated signs, elements, planets or topics.",
+          "A useful interpretation might sound like this: this is someone who appears confident and expressive but privately needs independence and emotional space, whose career, visibility and communication are major life themes, with a strong Saturn pattern showing that confidence is built through discipline, patience and learning to trust their own authority.",
+          "That summary might come from ten or fifteen placements, but it brings them into something you can actually use. A good chart reading helps you see the pattern beneath the detail, it should not leave you with forty disconnected labels and a bigger identity crisis than the one you started with.",
+        ],
+      },
+      {
+        heading: "Read your chart inside MY SZN",
+        body: [
+          "Learning to read your own chart can change how you understand your personality, relationships, money, career and emotional patterns, but most people still reach a point where they know the individual meanings and cannot see how it all fits together. That is where personalised astrology becomes far more useful than another generic list of placements.",
+          "Inside [MY SZN](/membership), the platform is built around your own birth chart, helping you understand your big three, house placements, money patterns, relationships, confidence, purpose and current transits without decoding the whole thing alone. You also get seasonal guidance, live coaching workshops and practical support for using your chart when you make decisions and build your future. Your chart is not a collection of random labels, it is a complete system, and once you can read the pattern you start seeing yourself with a clarity that changes everything.",
         ],
       },
     ],
     cta: {
       heading: "Read along with your own chart",
-      body: "This is far easier with your chart in front of you than in the abstract. Calculate yours free, then work through the five steps above using your own placements.",
+      body: "This process is dramatically easier with your chart open in front of you than in the abstract. Calculate yours free, then work through the five steps above using your own placements, writing down your big three first and marking any house with several planets in it.",
       label: "calculate my chart",
       href: "/chart",
     },
@@ -462,17 +526,32 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         question: "What order should I read a birth chart in?",
         answer:
-          "Big three first, then house placements, then aspects, then repeating patterns. Reading in layers stops the detail cancelling itself out.",
+          "Begin with your sun, moon and rising signs, then look at the house placement of each planet before moving into aspects, repeated themes and current transits. Reading in layers gives each new piece of information a clear context and stops smaller details overwhelming the main story.",
       },
       {
-        question: "Are hard aspects like squares bad?",
+        question: "Are hard aspects like squares and oppositions bad?",
         answer:
-          "No. Squares and oppositions create friction, and friction creates drive. They usually describe the areas you have worked hardest on, which is why they often end up being strengths.",
+          "Squares and oppositions create friction, but friction often produces growth, determination and highly developed skills. These aspects usually describe the areas you have had to work on most consciously, which is why they frequently become some of your greatest strengths later in life.",
       },
       {
-        question: "How long does it take to learn to read a chart?",
+        question: "What does it mean if I have several planets in one house?",
         answer:
-          "You can read your own chart usefully within a few hours of focused effort. Reading other people's fluently takes considerably longer, mostly because you lose the shortcut of already knowing the person.",
+          "A cluster of planets in one house means that area of life carries a great deal of your attention, energy and personal development. The themes of that house are likely to appear repeatedly and may become central to your purpose, challenges or major life decisions.",
+      },
+      {
+        question: "Is an empty house a bad sign?",
+        answer:
+          "No. An empty house does not mean nothing will happen in that area of life. You interpret it through the zodiac sign on the house cusp, the location of that sign's ruling planet, and any transits moving through the house over time.",
+      },
+      {
+        question: "Do I need an exact birth time?",
+        answer:
+          "An accurate birth time matters most for your rising sign and house placements, because both can change considerably through the day. You can still learn from your planetary signs without a birth time, but you lose much of the chart's structure and personal detail.",
+      },
+      {
+        question: "How long does it take to learn to read a birth chart?",
+        answer:
+          "You can start reading your own chart usefully within a few focused hours, especially when you follow a clear order instead of memorising everything at once. Reading other people's charts fluently takes longer, because interpretation needs practice, pattern recognition and the ability to read someone without leaning on what you already know about yourself.",
       },
     ],
     related: ["what-is-a-birth-chart", "big-three-sun-moon-rising", "new-moon-vs-full-moon"],
@@ -515,6 +594,46 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           "Venus in the fifth house wants romance, play and being delighted. The same Venus sign in the tenth house channels the same energy into status, public life and being admired for what you do.",
           "If your Venus sign description has never quite landed, the house is usually the missing piece. It tells you where this way of loving actually plays out.",
+        ],
+      },
+      {
+        heading: "Venus in every sign, explained",
+        body: [
+          "Your Venus sign is the how of loving: the way affection comes out of you, and the way you most easily recognise it coming back. Find yours below.",
+        ],
+        items: [
+          { name: "Venus in Aries", body: "You love directly and fast. Attraction hits immediately, you would rather say it than wonder, and the chase genuinely excites you. You need a partner who keeps some spark and independence alive, because the thing that dulls this Venus quickest is a relationship with nothing left to pursue." },
+          { name: "Venus in Taurus", body: "You love slowly, physically and loyally. Touch, food, comfort and consistency are how affection registers for you, and you show it by showing up the same way every day. You need steadiness and sensuality, and you struggle badly with hot-and-cold behaviour." },
+          { name: "Venus in Gemini", body: "You fall for a mind. Conversation is foreplay, curiosity is affection, and you need to stay interested to stay in love. Variety and mental stimulation keep you engaged, and the fastest way to lose you is to become predictable and stop talking." },
+          { name: "Venus in Cancer", body: "You love protectively and emotionally. You nurture the people you care about, you remember everything, and you need to feel safe before you can properly open. You want to be someone's home, and you need reassurance more than you tend to admit." },
+          { name: "Venus in Leo", body: "You love wholeheartedly and generously, and you want to be adored back. Romance, effort and being visibly chosen matter to you, and none of that is vanity, it is how you know it is real. You wilt in relationships where affection is quiet, ironic or withheld." },
+          { name: "Venus in Virgo", body: "You love through usefulness. You show it in the practical, unglamorous things: the noticed detail, the sorted problem, the way you make someone's life work better. You need appreciation for that effort, and you can be quietly hard on yourself and on the people you love." },
+          { name: "Venus in Libra", body: "You love beautifully and fairly. Harmony, courtesy and genuine partnership matter to you, and you are unusually good at making someone feel considered. Your risk is conceding too much to keep the peace, so the growth is saying the true thing before the resentment builds." },
+          { name: "Venus in Scorpio", body: "You love intensely and all the way in. Surface-level connection reads as rejection to you, and you want the real, private version of a person. You need loyalty and depth, and you feel betrayal for a long time, so trust is slow and worth everything once given." },
+          { name: "Venus in Sagittarius", body: "You love freely and adventurously. You want a partner who is also a co-conspirator, someone to learn with and go places with, literally or otherwise. Space is not rejection for you, it is oxygen, and you disappear from anything that starts feeling like an obligation." },
+          { name: "Venus in Capricorn", body: "You love seriously and for the long term. You show affection through commitment, reliability and building something real, and you are not especially interested in anything with no future in it. You can be slow to open, and you value being someone's safe, permanent thing." },
+          { name: "Venus in Aquarius", body: "You love as a best friend first. You need mental connection, freedom and a partner who genuinely celebrates the strange parts of you rather than tolerating them. Conventional romance can feel performative to you, and you attach to people who let you stay fully yourself." },
+          { name: "Venus in Pisces", body: "You love romantically and boundlessly. You are deeply compassionate, you feel what your partner feels, and you tend to see the best version of someone before they have earned it. Your growth is staying attached to reality while keeping the tenderness, which is the whole gift of this placement." },
+        ],
+      },
+      {
+        heading: "Venus in every house, explained",
+        body: [
+          "If your Venus sign is how you love, the house is where it plays out. This is the piece most Venus descriptions leave out, and it is usually why a sign description alone has never quite landed for you.",
+        ],
+        items: [
+          { name: "Venus in the 1st house", body: "Your charm is part of how you arrive. People read you as warm, attractive or stylish before they know you, and relating is woven into your identity rather than being a separate part of life." },
+          { name: "Venus in the 2nd house", body: "Love, money and self-worth are tangled together for you. You value comfort and beauty, you can earn through them, and your sense of being valued is closely tied to what you feel you deserve." },
+          { name: "Venus in the 3rd house", body: "You love through words and everyday contact. Flirting, texting, conversation and the small daily exchange are where affection lives, and you tend to fall for how someone communicates." },
+          { name: "Venus in the 4th house", body: "You love through home and belonging. A beautiful, peaceful space matters to you, family shapes your idea of love, and what you are ultimately building is somewhere that feels safe." },
+          { name: "Venus in the 5th house", body: "You love through romance, play and creativity. Dating, flirtation, art and joy are where this Venus comes alive, and you want being with you to feel genuinely delightful." },
+          { name: "Venus in the 6th house", body: "You love through service and routine. Affection shows up in daily acts of care, and you often meet people through work or shared everyday life rather than grand occasions." },
+          { name: "Venus in the 7th house", body: "Partnership is the main stage. One-to-one commitment matters enormously to you, you are good at it, and the growth is making sure you exist fully outside the relationship too." },
+          { name: "Venus in the 8th house", body: "You love deeply and privately. You want total intimacy and merged lives, including the practical merging of money and resources, and you are not interested in anything shallow." },
+          { name: "Venus in the 9th house", body: "You love expansively. You are drawn to people who widen your world, through culture, distance, study or belief, and shared meaning matters more to you than shared logistics." },
+          { name: "Venus in the 10th house", body: "Your relationships are somewhat public, and your charm is a genuine professional asset. You may meet partners through work, and you care how a relationship reflects on the life you are building." },
+          { name: "Venus in the 11th house", body: "You love through friendship and community. Your closest relationships often start as friendships, you value chosen family, and you want a partner who fits into the future you are heading towards." },
+          { name: "Venus in the 12th house", body: "You love quietly and inwardly. This Venus is private, compassionate and sometimes secretive, and the work is letting yourself be seen and loved in the ordinary daylight rather than only imagined." },
         ],
       },
       {
