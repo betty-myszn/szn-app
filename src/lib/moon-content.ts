@@ -1,5 +1,12 @@
 import type { ChartData } from "@/types/chart";
-import { SIGN_TRAITS, HOUSE_MEANINGS, ordinalHouse, houseForSign, degreeMeaning } from "@/lib/interpretations";
+import {
+  SIGN_TRAITS,
+  SIGN_OVERVIEWS,
+  HOUSE_MEANINGS,
+  ordinalHouse,
+  houseForSign,
+  degreeMeaning,
+} from "@/lib/interpretations";
 import { composeNodeIngress } from "@/lib/nodal-content";
 
 export type LunationType =
@@ -46,7 +53,7 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     label: "full moon",
     emoji: "\u{1F315}",
     whatThisIs: "A full moon is the culmination point, the moon sits opposite the sun and the sky goes fully bright. Whatever's been building quietly for the last two weeks tends to come to a head here, emotionally, practically, or both. This is a moment for release and clarity, not for starting something new.",
-    bettysTakeGeneric: "Full moons get a reputation for chaos, and honestly, some of that's earned. But the chaos is usually just something that was already unstable finally becoming visible. I tell clients not to fight what a full moon reveals, the information showing up now was always true, you just couldn't see it in the dark two weeks ago.",
+    bettysTakeGeneric: "Full moons get a reputation for chaos, and some of that reputation is earned. But the chaos is usually just something that was already unstable finally becoming visible. I tell clients not to fight what a full moon reveals, the information showing up now was always true, you just couldn't see it in the dark two weeks ago.",
     actionFraming: "name one thing this illuminated that you can no longer pretend not to see",
     promptFraming: "What has this brought to light that I've been quietly avoiding looking at directly?",
     affirmationFrame: (area) => `I release what no longer serves my ${area}, and I trust what this has shown me.`,
@@ -119,6 +126,10 @@ export interface LunationReading {
   affirmation: string;
 }
 
+function capitaliseFirst(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export function composeLunation(event: CalendarEventInput, chart: ChartData): LunationReading {
   if (event.type === "node_ingress") return composeNodeIngress(event, chart);
 
@@ -133,7 +144,56 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
   const date = new Date(`${event.date}T12:00:00Z`);
   const dateLabel = date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-  const inYourChart = `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. It's landing at ${degreeMeaning(event.degree)} ${houseMeaning.coach}`;
+  // The chart section used to be a single paragraph, which made every transit page read like the
+  // same template with two words swapped. These paragraphs pull on the parts of her actual chart
+  // that genuinely change the reading: the house axis this activates (a full moon always lights
+  // both ends), any natal planets sitting in the house being hit, and where the ruler of this sign
+  // lives in her chart, which is where the follow-through has to happen.
+  const oppositeHouse = ((house + 5) % 12) + 1;
+  const oppMeaning = HOUSE_MEANINGS[oppositeHouse - 1];
+  const overview = SIGN_OVERVIEWS[event.sign];
+  const isOppositionEvent = event.type === "full_moon" || event.type === "lunar_eclipse";
+
+  // Natal planets standing in the house this lunation lands in. If she has any, this transit is
+  // not abstract, it is landing directly on something she already carries.
+  const natalHere = chart.planets.filter((p) => p.house === house);
+  const natalNames = natalHere.map((p) => p.name.toLowerCase());
+  const natalList =
+    natalNames.length === 1
+      ? natalNames[0]
+      : natalNames.length === 2
+        ? `${natalNames[0]} and ${natalNames[1]}`
+        : `${natalNames.slice(0, -1).join(", ")} and ${natalNames[natalNames.length - 1]}`;
+
+  // Where the ruler of this sign sits natally. The transit happens in one house, but the planet
+  // that governs the sign is where the work actually gets done.
+  // SIGN_OVERVIEWS.ruler is written for display ("Uranus (traditionally Saturn)", "the Moon"), so
+  // strip the article and any parenthetical before trying to match it against a natal planet name.
+  const rulerName = (overview?.ruler || "")
+    .replace(/^the /i, "")
+    .split(/\s*\(/)[0]
+    .trim();
+  const rulerPlanet = chart.planets.find((p) => p.name.toLowerCase() === rulerName.toLowerCase());
+
+  const chartParagraphs: string[] = [
+    `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. It's landing at ${degreeMeaning(event.degree)} ${houseMeaning.coach}`,
+
+    isOppositionEvent
+      ? `A full moon is always an axis rather than a single point, because the sun sits directly opposite the moon. So while your ${ordinalHouse(house)} house is the one being lit, your ${ordinalHouse(oppositeHouse)} house of ${oppMeaning.title} is holding the other end, ${oppMeaning.rules}. That is usually where the pressure is coming from. What surfaces in your ${houseArea} this week is very often the cost of something you have been carrying in your ${oppMeaning.lifeAreas[0]}, and the resolution is rarely picking one, it is finding the version where both get to exist.`
+      : `Even though this one concentrates in a single house, the opposite end of the axis quietly sets the terms. Your ${ordinalHouse(oppositeHouse)} house of ${oppMeaning.title} governs ${oppMeaning.rules}, and it tends to be the thing that has to give a little for the new start in your ${houseArea} to have anywhere to go. Worth noticing what you are protecting over there before you commit to anything here.`,
+
+    natalHere.length > 0
+      ? `This is not landing on empty space in your chart. You have ${natalList} sitting in that same ${ordinalHouse(house)} house, which means this transit is switching on something you already carry rather than introducing a new theme. Whatever ${natalNames.length === 1 ? "that placement" : "those placements"} normally ${natalNames.length === 1 ? "does" : "do"} in your life is the part that gets loud right now, amplified rather than altered. If this area of life has a familiar pattern for you, expect the familiar pattern, at volume.`
+      : `You have no natal planets sitting in that house, which is genuinely useful to know rather than a disappointment. It means this area of life is not somewhere you have a fixed, built-in pattern running, so a transit here tends to be felt through circumstances and other people rather than as an old personal reflex. There is less to unlearn, and more room for whatever this lunation brings to actually be new.`,
+
+    rulerPlanet
+      ? `One more layer, and it is the one most horoscopes skip. ${capitaliseFirst(event.sign.toLowerCase())} is ruled by ${overview?.ruler}, and your natal ${rulerPlanet.name.toLowerCase()} sits in ${rulerPlanet.sign.toLowerCase()} in your ${ordinalHouse(rulerPlanet.house)} house. That makes your ${ordinalHouse(rulerPlanet.house)} house the place this actually gets handled. The event shows up in your ${houseArea}, but the follow-through, the practical resolution, happens through ${HOUSE_MEANINGS[rulerPlanet.house - 1].lifeAreas[0]}. If you want one place to direct effort this week, that is it.`
+      : `${capitaliseFirst(event.sign.toLowerCase())} is ruled by ${overview?.ruler || "its traditional ruler"}, which is the planet setting the tone for how this lunation behaves in your chart, and it is worth watching what that planet is doing over the next fortnight as the story plays out.`,
+
+    `In practice, expect this to arrive wearing ${event.sign.toLowerCase()}'s particular flavour: ${traits.essence}. At its best that shows up as ${traits.gift}. Under pressure the same energy tips into ${traits.shadow}, and a lunation is exactly the sort of moment that reveals which of the two you have been running. Watching which version turns up in your ${houseArea} is the most honest piece of information this whole transit gives you.`,
+  ];
+
+  const inYourChart = chartParagraphs.join(" ");
 
   const bettysTake = `${meta.bettysTakeGeneric} With this one landing in your ${event.sign.toLowerCase()} ${ordinalHouse(house)} house, that plays out through ${houseArea}: expect this to move through ${traits.essence}, not through anyone else's version of it.`;
 
@@ -145,6 +205,7 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
     emoji: meta.emoji,
     whatThisIs: meta.whatThisIs,
     inYourChart,
+    chartParagraphs,
     bettysTake,
     theMove,
     journalPrompt: `${meta.promptFraming} (Think specifically about your ${houseArea}.)`,
