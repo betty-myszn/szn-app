@@ -7,10 +7,34 @@ import {
   categoryBySlug,
   relatedPosts,
   formatPostDate,
+  parseProse,
 } from "@/lib/blog";
 import { OG_IMAGE, SITE_URL, SITE_NAME } from "@/lib/site";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
+
+// Renders a body paragraph, turning [text](/href) into a real internal link. Inline links inside
+// the prose are worth considerably more than a list of related posts at the bottom, both to a
+// reader mid-sentence and to a crawler working out how these pages relate to each other.
+function Prose({ text }: { text: string }) {
+  return (
+    <>
+      {parseProse(text).map((node, i) =>
+        "href" in node ? (
+          <Link
+            key={i}
+            href={node.href}
+            style={{ color: "var(--pink)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 3 }}
+          >
+            {node.text}
+          </Link>
+        ) : (
+          <span key={i}>{node.text}</span>
+        )
+      )}
+    </>
+  );
+}
 
 // Every post is a real URL rendered at build time. Without this the pages would still work, but
 // they would be generated on demand, which is slower for the crawler and gives up the static HTML
@@ -142,7 +166,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 marginTop: i === 0 ? 0 : 16,
               }}
             >
-              {para}
+              <Prose text={para} />
             </p>
           ))}
         </div>
@@ -151,26 +175,48 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Body */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-3xl mx-auto">
-          {post.sections.map((section) => (
-            <div key={section.heading} style={{ marginBottom: 36 }}>
-              <h2
-                style={{
-                  fontFamily: pp,
-                  fontSize: 22,
-                  fontWeight: 800,
-                  letterSpacing: "-0.5px",
-                  lineHeight: 1.25,
-                  color: "var(--dark)",
-                  marginBottom: 12,
-                }}
-              >
-                {section.heading}
-              </h2>
-              {section.body.map((para, i) => (
-                <p key={i} style={{ fontSize: 15, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>
-                  {para}
-                </p>
-              ))}
+          {post.sections.map((section, sectionIndex) => (
+            <div key={section.heading}>
+              <div style={{ marginBottom: 36 }}>
+                <h2
+                  style={{
+                    fontFamily: pp,
+                    fontSize: 22,
+                    fontWeight: 800,
+                    letterSpacing: "-0.5px",
+                    lineHeight: 1.25,
+                    color: "var(--dark)",
+                    marginBottom: 12,
+                  }}
+                >
+                  {section.heading}
+                </h2>
+                {section.body.map((para, i) => (
+                  <p key={i} style={{ fontSize: 15, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>
+                    <Prose text={para} />
+                  </p>
+                ))}
+              </div>
+
+              {/* Contextual CTA, placed after the second section rather than at the very bottom.
+                  By this point the reader has had the answer they arrived for, which is the moment
+                  the offer is genuinely relevant rather than an interruption. */}
+              {sectionIndex === 1 && (
+                <aside
+                  className="p-7 mb-9"
+                  style={{ background: "var(--pink-light)", border: "1.5px solid var(--pink)" }}
+                >
+                  <h3 style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, letterSpacing: "-0.3px", color: "var(--dark)", marginBottom: 8 }}>
+                    {post.cta.heading}
+                  </h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.8, color: "#993556", marginBottom: 16 }}>
+                    {post.cta.body}
+                  </p>
+                  <Link href={post.cta.href} className="btn-pink" style={{ display: "inline-block" }}>
+                    {post.cta.label}
+                  </Link>
+                </aside>
+              )}
             </div>
           ))}
         </div>

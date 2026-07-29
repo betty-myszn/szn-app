@@ -18,6 +18,17 @@ export interface BlogFaq {
   answer: string;
 }
 
+// A contextual call to action, rendered inside the article rather than only at the bottom. Matched
+// to what the post is actually about: a birth chart explainer sends you to calculate one, a piece
+// about working with a season sends you into the membership. A generic footer CTA converts far
+// worse than one that answers the question the reader is holding at that exact moment.
+export interface BlogCta {
+  heading: string;
+  body: string;
+  label: string;
+  href: string;
+}
+
 export interface BlogPost {
   slug: string;
   /** H1 on the page. Written for a human. */
@@ -34,6 +45,8 @@ export interface BlogPost {
   /** Answers the title's question immediately, for snippet eligibility. */
   intro: string[];
   sections: BlogSection[];
+  /** Contextual CTA, rendered part-way through the article. */
+  cta: BlogCta;
   faqs: BlogFaq[];
   /** Slugs of related posts, rendered as internal links. Internal linking is the whole game. */
   related: string[];
@@ -140,7 +153,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Why this Leo Season feels different",
         body: [
           "This isn't just another Leo Season where we all feel a little more confident for a few weeks before moving on. The astrology surrounding this particular season suggests that many of us are standing at the beginning of a completely different chapter, one that's likely to unfold over the next eighteen months as the Lunar Nodes travel through Leo and Aquarius.",
-          "The South Node moving through Aquarius asks us to release the versions of ourselves that have hidden inside groups, sought validation from communities that no longer fit, worried about what everybody else thinks or quietly dimmed our light because shining too brightly felt uncomfortable. At the very same time, the North Node in Leo begins pulling us towards a future where we're encouraged to create, lead, express ourselves more fully and stop waiting for permission from other people before deciding we're ready.",
+          "The South Node moving through Aquarius asks us to release the versions of ourselves that have hidden inside groups, sought validation from communities that no longer fit, worried about what everybody else thinks or quietly dimmed our light because shining too brightly felt uncomfortable. At the very same time, [the North Node](/blog/north-node-and-life-purpose) in Leo begins pulling us towards a future where we're encouraged to create, lead, express ourselves more fully and stop waiting for permission from other people before deciding we're ready.",
           "For many people, this will feel uncomfortable before it feels exciting because stepping into visibility almost always requires leaving behind an older identity that once kept you safe. That's exactly why so many friendships, careers, communities and long held beliefs can begin shifting around this time. You're changing, and naturally your life begins changing alongside you.",
         ],
       },
@@ -171,7 +184,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Your birth chart changes everything",
         body: [
-          "This is where personalised astrology becomes so powerful because no two people will experience Leo Season in exactly the same way. For one person, Leo may activate their career and public visibility. For somebody else, it may highlight relationships, creativity, children, home life, finances or spirituality. The collective astrology gives us the weather forecast, but your personal birth chart tells you exactly where that weather is landing in your own life.",
+          "This is where personalised astrology becomes so powerful because no two people will experience Leo Season in exactly the same way. For one person, Leo may activate their career and public visibility. For somebody else, it may highlight relationships, creativity, children, home life, finances or spirituality. The collective astrology gives us the weather forecast, but [your personal birth chart](/chart) tells you exactly where that weather is landing in your own life.",
           "Understanding your chart allows you to work with these transits instead of feeling like life is simply happening to you. Rather than wondering why somebody else seems to be having a completely different experience of Leo Season, you begin understanding that your chart has its own unique story, timeline and invitations for growth.",
           "When you understand your chart, you stop following advice that was designed for everyone else. You stop forcing yourself into business strategies, career paths and life decisions that were never aligned for you in the first place. Instead, you begin working with your own natural strengths, your own timing and your own energetic blueprint, which is where astrology becomes far more than something interesting to read. It becomes a practical tool that helps you make better decisions in every area of your life.",
         ],
@@ -201,6 +214,12 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
     ],
+    cta: {
+      heading: "See exactly where Leo Season lands in your chart",
+      body: "The collective astrology is the weather forecast. Your birth chart tells you which part of your life the weather is actually landing in, and that is the difference between reading this and using it.",
+      label: "get your free birth chart",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What does Leo Season mean in astrology?",
@@ -266,7 +285,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "The big three, and why everyone starts there",
         body: [
-          "Your sun, moon and rising are called the big three because between them they cover identity, inner life and first impressions, which is most of what people want to know at the start.",
+          "Your sun, moon and rising are called [the big three](/blog/big-three-sun-moon-rising) because between them they cover identity, inner life and first impressions, which is most of what people want to know at the start.",
           "The sun is who you are becoming and what lights you up. The moon is what you need to feel safe, and how you process feeling. The rising is the version of you that arrives in a room first, the way strangers read you before you have said anything.",
           "It is genuinely common for people to feel that their sun sign description does not fit. Usually that is because they are reading the sun on its own, when their moon and rising are doing a lot of the visible work.",
         ],
@@ -279,6 +298,12 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
     ],
+    cta: {
+      heading: "Calculate your birth chart free",
+      body: "Reading about charts only gets you so far. Put in your date, time and place of birth and see your own planets, houses and angles worked out properly, no sign-up needed.",
+      label: "get your free birth chart",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What do I need to calculate my birth chart?",
@@ -317,7 +342,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Identity, inner world and first impressions. What each of the big three governs, and why they can feel like three different people.",
     intro: [
       "Your big three are your sun sign, your moon sign and your rising sign. Together they describe who you are at your core, what you need emotionally, and how you come across before you have said a word.",
-      "They are the starting point because they cover the most ground. Everything else in the chart adds detail to a picture these three have already sketched.",
+      "They are the starting point because they cover the most ground. Everything else in [your birth chart](/blog/what-is-a-birth-chart) adds detail to a picture these three have already sketched.",
     ],
     sections: [
       {
@@ -349,6 +374,12 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
     ],
+    cta: {
+      heading: "Find your big three in under a minute",
+      body: "Your sun is easy. Your moon and rising need your birth time and place. Calculate your chart free and get all three at once, with what each one means for you.",
+      label: "find my big three",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What are the big three in astrology?",
@@ -388,7 +419,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Step one: your big three",
         body: [
-          "Find your sun, moon and rising, and read them as one sentence rather than three separate horoscopes. Sun for identity and direction, moon for emotional needs, rising for how you arrive.",
+          "Find [your sun, moon and rising](/blog/big-three-sun-moon-rising), and read them as one sentence rather than three separate horoscopes. Sun for identity and direction, moon for emotional needs, rising for how you arrive.",
           "This gives you a working shape before any detail is added, and it is enough on its own to explain a lot about how you operate.",
         ],
       },
@@ -417,10 +448,16 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Step five: check the timing",
         body: [
           "Your natal chart never changes, but the sky keeps moving over it, and that movement is called transits. This is where astrology becomes practical rather than descriptive.",
-          "Once you know your chart, you can look at what is currently being activated and get a genuine sense of which themes are loud right now. That is what makes the difference between a personality read and something you can actually plan around.",
+          "Once you know your chart, you can look at what is currently being activated, from [moon phases](/blog/new-moon-vs-full-moon) to longer transits, and get a genuine sense of which themes are loud right now. That is what makes the difference between a personality read and something you can actually plan around.",
         ],
       },
     ],
+    cta: {
+      heading: "Read along with your own chart",
+      body: "This is far easier with your chart in front of you than in the abstract. Calculate yours free, then work through the five steps above using your own placements.",
+      label: "calculate my chart",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What order should I read a birth chart in?",
@@ -454,7 +491,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Venus governs how you love, what you are drawn to, and what makes you feel valued. It is far more useful than sun sign compatibility.",
     intro: [
       "Your Venus sign describes how you love: the way you show affection, what you find attractive, what makes you feel appreciated, and what you consider valuable. It is the placement to read first for anything relationship related.",
-      "It is a far better guide than sun sign compatibility, because Venus is specifically about relating, whereas the sun is about identity. Two people whose sun signs supposedly clash can be extremely compatible if their Venus placements understand each other.",
+      "It is a far better guide than sun sign compatibility, because Venus is specifically about relating, whereas [your sun sign](/blog/big-three-sun-moon-rising) is about identity. Two people whose sun signs supposedly clash can be extremely compatible if their Venus placements understand each other.",
     ],
     sections: [
       {
@@ -488,6 +525,12 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
     ],
+    cta: {
+      heading: "Find your Venus sign and house",
+      body: "Your Venus sign tells you how you love. The house it sits in tells you where that plays out. Calculate your free chart to get both, plus what they mean together.",
+      label: "find my venus",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What does my Venus sign mean?",
@@ -548,11 +591,17 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Where the north node fits in",
         body: [
-          "Your midheaven describes what you are known for. Your north node describes the direction you are growing in, which is not always the same thing.",
+          "Your midheaven describes what you are known for. [Your north node](/blog/north-node-and-life-purpose) describes the direction you are growing in, which is not always the same thing.",
           "When they point the same way, career tends to feel like a natural expression of purpose. When they diverge, it usually shows up as a successful person who is quietly restless, because the thing they are recognised for is not the thing they are actually here to develop.",
         ],
       },
     ],
+    cta: {
+      heading: "Find your midheaven",
+      body: "Your midheaven needs an accurate birth time, which is why most free horoscopes skip it. Calculate your full chart to see yours, along with your tenth and second houses.",
+      label: "find my midheaven",
+      href: "/chart",
+    },
     faqs: [
       {
         question: "What does the midheaven mean in astrology?",
@@ -613,11 +662,17 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Reading your own nodal axis",
         body: [
-          "Find the sign and house of your north node, then read the exact opposite sign and house as your south node. The sign describes the quality you are developing, and the house describes the area of life you will be developing it in.",
+          "Find the sign and house of your north node in [your birth chart](/chart), then read the exact opposite sign and house as your south node. The sign describes the quality you are developing, and the house describes the area of life you will be developing it in.",
           "The most useful question is not what your north node means in the abstract. It is which of the two ends you reach for automatically when something is genuinely at stake, because that is where the pattern actually lives.",
         ],
       },
     ],
+    cta: {
+      heading: "Go deeper than the theory",
+      body: "Knowing what the nodes are is one thing. Seeing your own axis read in full, by sign and house, and updated every time the sky shifts, is what MY SZN is built for.",
+      label: "see the membership",
+      href: "/membership",
+    },
     faqs: [
       {
         question: "What does the north node mean in astrology?",
@@ -658,7 +713,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "What a new moon is for",
         body: [
           "At a new moon the sun and moon are in the same sign, and the sky is at its darkest. Nothing is visible yet, which is precisely the point: it is the part of the cycle where things begin before there is anything to show.",
-          "Practically, it is a good moment to name what you are actually calling in, and to start rather than to plan. The sign the new moon falls in tells you the flavour, and the house it falls in your chart tells you the area of life it is most relevant to.",
+          "Practically, it is a good moment to name what you are actually calling in, and to start rather than to plan. The sign the new moon falls in tells you the flavour, and [the house it falls in your chart](/blog/how-to-read-your-birth-chart) tells you the area of life it is most relevant to.",
         ],
       },
       {
@@ -683,6 +738,12 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
     ],
+    cta: {
+      heading: "Every moon, read for your chart",
+      body: "A new moon in Leo lands somewhere specific in your chart, and that is what decides what it is actually asking of you. Inside MY SZN, every lunation is read against your own placements.",
+      label: "see the membership",
+      href: "/membership",
+    },
     faqs: [
       {
         question: "What is the difference between a new moon and a full moon?",
@@ -735,6 +796,26 @@ export function relatedPosts(post: BlogPost): BlogPost[] {
   return post.related
     .map((slug) => postBySlug(slug))
     .filter((p): p is BlogPost => Boolean(p) && p!.slug !== post.slug);
+}
+
+// Body paragraphs may contain markdown-style links, e.g. "[your free birth chart](/chart)". Kept
+// deliberately tiny rather than pulling in a markdown renderer: the only thing the body needs
+// beyond plain text is a link, and inline links to related posts and to /chart are what turn a
+// stack of articles into a section that actually passes authority around.
+export type ProseNode = { text: string } | { text: string; href: string };
+
+export function parseProse(paragraph: string): ProseNode[] {
+  const nodes: ProseNode[] = [];
+  const pattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = pattern.exec(paragraph)) !== null) {
+    if (m.index > last) nodes.push({ text: paragraph.slice(last, m.index) });
+    nodes.push({ text: m[1], href: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (last < paragraph.length) nodes.push({ text: paragraph.slice(last) });
+  return nodes;
 }
 
 export function formatPostDate(iso: string): string {
