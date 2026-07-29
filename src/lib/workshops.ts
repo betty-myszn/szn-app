@@ -108,7 +108,7 @@ export function upcomingWorkshops(nowMs: number): Workshop[] {
   });
 }
 
-/** Local-time date/time label for a workshop, e.g. "Tue 28 July · 19:00". */
+/** Local-time date/time label for a workshop, e.g. "Mon 3 August · 19:00". */
 export function formatWorkshopWhen(startIso: string): string {
   const d = new Date(startIso);
   const date = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
