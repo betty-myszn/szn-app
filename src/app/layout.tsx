@@ -134,6 +134,10 @@ export default function RootLayout({
           </div>
           <div className="flex gap-6">
             {[
+              // The blog needs at least one site-wide internal link or it depends entirely on the
+              // sitemap to be discovered, which is a much weaker signal than being linked from
+              // every page.
+              { label: "blog", href: "/blog" },
               { label: "privacy", href: "/privacy" },
               { label: "terms", href: "/terms" },
               { label: "instagram", href: "https://instagram.com/itsmyszn" },
