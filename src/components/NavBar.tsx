@@ -11,15 +11,17 @@ import { loadNotifications, unreadCount as notifUnreadCount, markAllNotification
 
 const memberLinks = [
   { href: "/events", label: "events" },
-  { href: "/community", label: "community" },
   { href: "/journal", label: "journal" },
   // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
   // lands on a post from search should still see where she is in the site.
   { href: "/blog", label: "blog" },
 ];
 
-const sznMenu = [
-  { href: "/dashboard", label: "my szn" },
+// Challenges are a seasonal, done-together thing, so they live under community rather than under
+// the personal "my szn" section. Community is the header (links to the feed), challenges indents
+// beneath it, mirroring the "my chart" dropdown pattern.
+const communityMenu = [
+  { href: "/community", label: "community" },
   { href: "/challenges", label: "challenges", indent: true },
 ];
 
@@ -42,7 +44,7 @@ const guestLinks = [
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [sznOpen, setSznOpen] = useState(false);
+  const [communityOpen, setCommunityOpen] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
@@ -57,7 +59,8 @@ export default function NavBar() {
 
   const links = member ? memberLinks : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
-  const sznSectionActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/challenges") || pathname?.startsWith("/your-season");
+  const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
+  const communitySectionActive = pathname?.startsWith("/community") || pathname?.startsWith("/challenges");
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
 
   useEffect(() => {
@@ -142,60 +145,16 @@ export default function NavBar() {
           }}
         >
           {member && (
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setSznOpen((o) => !o)}
-                className="hover:text-[var(--pink)] transition-colors"
-                style={{
-                  background: "none",
-                  border: "none",
-                  font: "inherit",
-                  letterSpacing: "inherit",
-                  textTransform: "inherit",
-                  cursor: "pointer",
-                  padding: 0,
-                  color: sznSectionActive ? "var(--pink)" : "var(--dark)",
-                  fontWeight: sznSectionActive ? 800 : undefined,
-                }}
-              >
-                szn ▾
-              </button>
-              {sznOpen && (
-                <div
-                  className="flex flex-col"
-                  style={{
-                    position: "absolute",
-                    top: 28,
-                    left: 0,
-                    minWidth: 160,
-                    background: "#fff",
-                    border: "var(--border)",
-                    zIndex: 200,
-                  }}
-                >
-                  {sznMenu.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setSznOpen(false)}
-                      className="no-underline hover:text-[var(--pink)]"
-                      style={{
-                        fontSize: 11,
-                        fontWeight: isActive(item.href) ? 800 : 700,
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: item.indent ? "10px 14px 10px 26px" : "10px 14px",
-                        borderBottom: "1px solid #eee",
-                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link
+              href="/dashboard"
+              className="no-underline hover:text-[var(--pink)] transition-colors"
+              style={{
+                color: sznActive ? "var(--pink)" : "var(--dark)",
+                fontWeight: sznActive ? 800 : undefined,
+              }}
+            >
+              my szn
+            </Link>
           )}
           {member && (
             <div style={{ position: "relative" }}>
@@ -241,6 +200,62 @@ export default function NavBar() {
                         letterSpacing: "0.06em",
                         textTransform: "uppercase",
                         padding: "10px 14px",
+                        borderBottom: "1px solid #eee",
+                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {member && (
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setCommunityOpen((o) => !o)}
+                className="hover:text-[var(--pink)] transition-colors"
+                style={{
+                  background: "none",
+                  border: "none",
+                  font: "inherit",
+                  letterSpacing: "inherit",
+                  textTransform: "inherit",
+                  cursor: "pointer",
+                  padding: 0,
+                  color: communitySectionActive ? "var(--pink)" : "var(--dark)",
+                  fontWeight: communitySectionActive ? 800 : undefined,
+                }}
+              >
+                community ▾
+              </button>
+              {communityOpen && (
+                <div
+                  className="flex flex-col"
+                  style={{
+                    position: "absolute",
+                    top: 28,
+                    left: 0,
+                    minWidth: 160,
+                    background: "#fff",
+                    border: "var(--border)",
+                    zIndex: 200,
+                  }}
+                >
+                  {communityMenu.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setCommunityOpen(false)}
+                      className="no-underline hover:text-[var(--pink)]"
+                      style={{
+                        fontSize: 11,
+                        fontWeight: isActive(item.href) ? 800 : 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        padding: item.indent ? "10px 14px 10px 26px" : "10px 14px",
                         borderBottom: "1px solid #eee",
                         color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
                         background: isActive(item.href) ? "var(--lav-light)" : undefined,
@@ -593,21 +608,16 @@ export default function NavBar() {
             paddingTop: 16,
           }}
         >
-          {member &&
-            sznMenu.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="no-underline hover:text-[var(--pink)]"
-                style={{
-                  paddingLeft: item.indent ? 16 : undefined,
-                  color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+          {member && (
+            <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+              className="no-underline hover:text-[var(--pink)]"
+              style={{ color: sznActive ? "var(--pink)" : "var(--dark)" }}
+            >
+              my szn
+            </Link>
+          )}
           {member && (
             <>
               {/* A real toggle, not a heading. The desktop nav is `hidden md:flex`, so below 768px
@@ -648,6 +658,48 @@ export default function NavBar() {
                     className="no-underline hover:text-[var(--pink)]"
                     style={{
                       paddingLeft: 16,
+                      color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+            </>
+          )}
+          {member && (
+            <>
+              <button
+                type="button"
+                onClick={() => setCommunityOpen((o) => !o)}
+                aria-expanded={communityOpen}
+                className="hover:text-[var(--pink)] transition-colors"
+                style={{
+                  background: "none",
+                  border: "none",
+                  font: "inherit",
+                  letterSpacing: "inherit",
+                  textTransform: "inherit",
+                  cursor: "pointer",
+                  padding: 0,
+                  textAlign: "left",
+                  color: communitySectionActive ? "var(--pink)" : "var(--dark)",
+                  fontWeight: communitySectionActive ? 800 : undefined,
+                }}
+              >
+                community {communityOpen ? "▴" : "▾"}
+              </button>
+              {communityOpen &&
+                communityMenu.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => {
+                      setCommunityOpen(false);
+                      setOpen(false);
+                    }}
+                    className="no-underline hover:text-[var(--pink)]"
+                    style={{
+                      paddingLeft: item.indent ? 16 : undefined,
                       color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
                     }}
                   >
