@@ -172,9 +172,9 @@ export default function SeasonPersonalised() {
           {activatedRuler && (
             <div style={{ border: "var(--border)", borderTop: "none" }}>
               <div className="p-8">
-                <div className="tag mb-3">the chain: season → house → sign → ruler → you</div>
+                <div className="tag mb-3">how this szn reaches you</div>
                 <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>
-                  <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it, not just whichever planet feels topical. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
+                  <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
                   {activatedTenants.length > 0
                     ? ` ${activatedTenants.map((p) => p.name).join(" and ")} also ${activatedTenants.length === 1 ? "lives" : "live"} inside this house, adding to the picture, but ${activatedTenants.length === 1 ? "it isn't" : "they aren't"} the ruler.`
                     : ""}
