@@ -24,6 +24,7 @@ import DiscoPlanet from "@/components/DiscoPlanet";
 import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
+import SeasonThemes from "@/components/SeasonThemes";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SkyAlert from "@/components/SkyAlert";
 import UpcomingEvents from "@/components/UpcomingEvents";
@@ -233,6 +234,12 @@ export default function DashboardPage() {
           )}
         </div>
       </section>
+
+      {/* This szn's four themes, straight after the season hero. It's the shortest summary of what
+          the szn is about for her and every tile is a way into her personalised read, so it sits
+          with the orientation blocks. It used to open SeasonExplore at the very bottom of the page,
+          below the action rows and the what's-happening hub, where almost nobody reached it. */}
+      <SeasonThemes season={season} />
 
       {/* The actual "how this szn hits every part of your life" guide, pinned right at the top,
           this is the section she came here for, not something to bury under the daily stuff. */}

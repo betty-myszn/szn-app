@@ -15,50 +15,9 @@ export default function SeasonExplore({ season }: { season: SeasonInfo }) {
 
   return (
     <>
-      {/* Themes */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">this szn&apos;s themes · tap any one for your personalised read</div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
-            {season.themes.map((theme, i) => (
-              <Link
-                key={theme}
-                href={`/your-season/${theme.replace(/\s+/g, "-")}`}
-                className="no-underline p-6 text-center transition-opacity hover:opacity-90"
-                style={{
-                  borderRight: i < season.themes.length - 1 ? "var(--border)" : undefined,
-                  background: i === 0 ? "var(--pink)" : i === 1 ? "var(--lav-light)" : "#fff",
-                  color: i === 0 ? "#fff" : "var(--dark)",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: poppins,
-                    fontSize: 17,
-                    fontWeight: 800,
-                    letterSpacing: "-0.3px",
-                    color: i === 0 ? "#fff" : "var(--dark)",
-                    marginBottom: 6,
-                  }}
-                >
-                  {theme}
-                </div>
-                <div
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: i === 0 ? "rgba(255,255,255,0.75)" : "var(--dark)",
-                  }}
-                >
-                  read yours →
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* The themes strip used to open this component. It moved to SeasonThemes.tsx and now
+          renders near the top of the dashboard: it's the season's headline summary, so it was
+          being buried under everything else down here. */}
 
       {/* Season community */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
