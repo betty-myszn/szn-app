@@ -85,10 +85,14 @@ describe("composeAreaDesign", () => {
   });
 
   it("reads each gate through the area lens rather than a universal keynote", () => {
-    // All 64 gates must have a relationships lens, otherwise a season would silently fall back to
-    // generic copy on the love page.
-    for (let gate = 1; gate <= 64; gate++) {
-      expect(AREA_GATE_LENS.relationships[gate]).toBeTruthy();
+    // Every mapped area must cover all 64 gates. Without this, a half-written area would ship
+    // silently and simply fall back to the generic keynote for the gates nobody had written yet.
+    for (const areaId of Object.keys(AREA_DESIGN)) {
+      const lens = AREA_GATE_LENS[areaId];
+      expect(lens).toBeTruthy();
+      for (let gate = 1; gate <= 64; gate++) {
+        expect(lens[gate]).toBeTruthy();
+      }
     }
     const reading = composeAreaDesign("relationships", hd, "Leo")!;
     for (const gate of reading.gates) {

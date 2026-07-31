@@ -70,6 +70,24 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     gatesIntro:
       "These are the gates this season is switching on that sit in the centres governing love, intimacy and who you are to another person. Each one has a trap and a gift, and a season tends to hand you both.",
   },
+  "health-body": {
+    centers: ["sacral", "root", "spleen"],
+    authorityBridge:
+      "Your body is the one place your authority is not an idea, it is a physical signal. This is the area where overriding it has the most obvious consequences, because the bill arrives as exhaustion rather than as regret.",
+    strategyBridge:
+      "Human Design is fundamentally an energy mechanic, so this is the area where it has the most to say. Your type describes how your energy is actually built to work, which is usually nothing like how you have been told to work.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your body, your energy and how you actually recover. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
+  career: {
+    centers: ["throat", "heart", "sacral"],
+    authorityBridge:
+      "Career is where you will be asked to decide fastest, usually by someone with a deadline. Knowing how you are built to reach clarity is what stops you agreeing to things in meetings that you unpick for the next six months.",
+    strategyBridge:
+      "Your strategy is a rule about how work is meant to arrive for you, and it is the single thing most people override in their career, because the culture rewards the opposite of what most types are built for.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your work, your visibility and what you are building. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
 };
 
 // Which gates a zodiac season covers. The Human Design wheel is the zodiac wheel with a fixed
