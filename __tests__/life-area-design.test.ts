@@ -75,11 +75,16 @@ describe("composeAreaDesign", () => {
     }
   });
 
-  it("caps the gate list so it can never become a data dump", () => {
+  it("returns every qualifying gate rather than truncating the list", () => {
+    // The astrology is the filter, not an arbitrary cap: a season covers ~6 gates and only some
+    // sit in this area's centres. Whatever qualifies is what shows.
     for (const sign of ZODIAC_SIGNS) {
       const reading = composeAreaDesign("relationships", hd, sign);
       if (!reading) continue;
-      expect(reading.gates.length).toBeLessThanOrEqual(3);
+      const qualifying = gatesForSign(sign).filter((g) =>
+        AREA_DESIGN.relationships.centers.includes(GATE_CENTER[g])
+      );
+      expect(reading.gates.length).toBe(qualifying.length);
     }
   });
 

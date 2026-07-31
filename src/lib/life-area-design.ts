@@ -84,15 +84,16 @@ export function gatesForSign(sign: string): number[] {
 
 /**
  * The Human Design layer for one life area in one season, or null when this area has no HD
- * mapping. Gates are filtered to the area's own centres and capped deliberately: showing all of
- * her ~26 activated gates would be a data dump, and the whole point is that two or three specific
- * ones are being lit up right now.
+ * mapping. Every gate that qualifies is returned. There is deliberately no arbitrary limit: the
+ * astrology is already the filter, since a season only covers about six gates and only some of
+ * those sit in this area's centres, which lands naturally at one to three. Each gate means
+ * something different and a season genuinely presses on each one, so truncating the list would
+ * throw away real signal rather than protect anyone from a data dump.
  */
 export function composeAreaDesign(
   areaId: string,
   hd: HumanDesignData,
-  seasonSign: string,
-  maxGates = 3
+  seasonSign: string
 ): AreaDesignReading | null {
   const config = AREA_DESIGN[areaId];
   if (!config) return null;
@@ -114,7 +115,7 @@ export function composeAreaDesign(
     return an - bn || a - b;
   });
 
-  const gates: AreaGate[] = ranked.slice(0, maxGates).map((gate) => {
+  const gates: AreaGate[] = ranked.map((gate) => {
     const content = GATE_CONTENT[gate];
     return {
       gate,
