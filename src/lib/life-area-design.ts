@@ -18,6 +18,7 @@ import {
 } from "@/lib/human-design-constants";
 import { GATE_CONTENT } from "@/lib/human-design-gate-content";
 import { AUTHORITY_CONTENT, TYPE_CONTENT } from "@/lib/human-design-content";
+import { gateLensFor } from "@/lib/area-gate-lens";
 import type { HumanDesignData } from "@/types/human-design";
 import { ZODIAC_SIGNS } from "@/types/chart";
 
@@ -27,8 +28,12 @@ export interface AreaGate {
   keynote: string;
   shadow: string;
   gift: string;
+  /** What this gate means in THIS area specifically. Gate 26 in love is not gate 26 in money. */
+  lens: string;
   /** True when this is also one of her natal gates, which is the meaningful double hit. */
   natal: boolean;
+  /** True when the gate sits in one of this area's own centres, so it is core rather than context. */
+  core: boolean;
 }
 
 export interface AreaDesignReading {
@@ -104,15 +109,21 @@ export function composeAreaDesign(
   const seasonGates = gatesForSign(seasonSign);
   const natal = new Set(hd.activatedGates);
 
-  // Only gates that are both switched on by this season and topically relevant to this area.
-  const relevant = seasonGates.filter((g) => config.centers.includes(GATE_CENTER[g]));
+  // Every gate the season activates, not only the ones sitting in this area's centres. Each of the
+  // 64 gates means something different and a season genuinely presses on each one it crosses, so
+  // dropping a gate purely because of which centre it lives in threw away real signal. What makes
+  // it readable is the lens: the same gate is written differently for love than it would be for
+  // money, rather than repeating one universal keynote on every area page.
+  const isCore = (gate: number) => config.centers.includes(GATE_CENTER[gate]);
 
-  // Natal gates first: a season activating something she was actually born with is a far stronger
-  // signal than a gate she has no personal connection to, and it should never be buried below one.
-  const ranked = relevant.sort((a, b) => {
-    const an = natal.has(a) ? 0 : 1;
-    const bn = natal.has(b) ? 0 : 1;
-    return an - bn || a - b;
+  // Ordering, most personal first: gates she was born with come above ones the season merely
+  // activates, and within each group the ones native to this area's centres come first.
+  const ranked = [...seasonGates].sort((a, b) => {
+    const natalRank = (natal.has(a) ? 0 : 1) - (natal.has(b) ? 0 : 1);
+    if (natalRank !== 0) return natalRank;
+    const coreRank = (isCore(a) ? 0 : 1) - (isCore(b) ? 0 : 1);
+    if (coreRank !== 0) return coreRank;
+    return a - b;
   });
 
   const gates: AreaGate[] = ranked.map((gate) => {
@@ -123,7 +134,9 @@ export function composeAreaDesign(
       keynote: content?.keynote ?? "",
       shadow: content?.shadow ?? "",
       gift: content?.gift ?? "",
+      lens: gateLensFor(areaId, gate, content?.keynote ?? ""),
       natal: natal.has(gate),
+      core: isCore(gate),
     };
   });
 

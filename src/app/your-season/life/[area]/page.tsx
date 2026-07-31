@@ -302,9 +302,21 @@ export default function LifeAreaPage() {
                             one of yours
                           </span>
                         )}
+                        {gate.core && (
+                          <span
+                            style={{
+                              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                              border: "1.5px solid #3C2A70", color: "#3C2A70", padding: "2px 7px",
+                            }}
+                          >
+                            core to this area
+                          </span>
+                        )}
                       </div>
-                      <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", marginBottom: 10 }}>
-                        {gate.keynote}.{" "}
+                      <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", marginBottom: 10 }}>
+                        {gate.lens}
+                      </p>
+                      <p style={{ fontSize: 13, lineHeight: 1.75, color: "var(--grey)", marginBottom: 10 }}>
                         {gate.natal
                           ? "You were born with this one, so this season is turning up something already running in you."
                           : "This one is switched on by the season rather than by your chart, so treat it as the weather you're working in."}

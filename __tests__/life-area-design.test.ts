@@ -2,6 +2,7 @@ import { calculateHumanDesign } from "@/lib/human-design";
 import { composeAreaDesign, gatesForSign, AREA_DESIGN } from "@/lib/life-area-design";
 import { GATE_CENTER } from "@/lib/human-design-constants";
 import { GATE_CONTENT } from "@/lib/human-design-gate-content";
+import { AREA_GATE_LENS } from "@/lib/area-gate-lens";
 import { ZODIAC_SIGNS } from "@/types/chart";
 
 const birth = {
@@ -63,28 +64,36 @@ describe("composeAreaDesign", () => {
     }
   });
 
-  it("only surfaces gates belonging to the area's own centres", () => {
+  it("flags which gates are core to the area's own centres", () => {
     for (const [areaId, config] of Object.entries(AREA_DESIGN)) {
       for (const sign of ZODIAC_SIGNS) {
         const reading = composeAreaDesign(areaId, hd, sign);
         if (!reading) continue;
         for (const gate of reading.gates) {
-          expect(config.centers).toContain(GATE_CENTER[gate.gate]);
+          expect(gate.core).toBe(config.centers.includes(GATE_CENTER[gate.gate]));
         }
       }
     }
   });
 
-  it("returns every qualifying gate rather than truncating the list", () => {
-    // The astrology is the filter, not an arbitrary cap: a season covers ~6 gates and only some
-    // sit in this area's centres. Whatever qualifies is what shows.
+  it("returns every gate the season activates, dropping none", () => {
     for (const sign of ZODIAC_SIGNS) {
       const reading = composeAreaDesign("relationships", hd, sign);
       if (!reading) continue;
-      const qualifying = gatesForSign(sign).filter((g) =>
-        AREA_DESIGN.relationships.centers.includes(GATE_CENTER[g])
-      );
-      expect(reading.gates.length).toBe(qualifying.length);
+      expect(reading.gates.length).toBe(gatesForSign(sign).length);
+    }
+  });
+
+  it("reads each gate through the area lens rather than a universal keynote", () => {
+    // All 64 gates must have a relationships lens, otherwise a season would silently fall back to
+    // generic copy on the love page.
+    for (let gate = 1; gate <= 64; gate++) {
+      expect(AREA_GATE_LENS.relationships[gate]).toBeTruthy();
+    }
+    const reading = composeAreaDesign("relationships", hd, "Leo")!;
+    for (const gate of reading.gates) {
+      expect(gate.lens).toBe(AREA_GATE_LENS.relationships[gate.gate]);
+      expect(gate.lens).not.toBe(gate.keynote);
     }
   });
 
