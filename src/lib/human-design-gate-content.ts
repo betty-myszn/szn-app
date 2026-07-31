@@ -1,0 +1,78 @@
+// Per-gate meaning for all 64 gates: a plain-English keynote plus the Gene Keys
+// spectrum (shadow / gift / siddhi), which map one-to-one onto the gates. Used by
+// the seasonal engine to explain each gate a season activates in shadow-gift-action
+// terms. Reference data cross-checked against natalengine's gene-keys dataset (MIT).
+
+export interface GateContent {
+  keynote: string;
+  shadow: string; // the low expression / the trap
+  gift: string; // the everyday potential
+  siddhi: string; // the highest expression
+}
+
+export const GATE_CONTENT: Record<number, GateContent> = {
+  1: { keynote: "The creative expression of the Self", shadow: "Entropy", gift: "Freshness", siddhi: "Beauty" },
+  2: { keynote: "Receptive knowing of direction", shadow: "Dislocation", gift: "Orientation", siddhi: "Unity" },
+  3: { keynote: "The energy to innovate and begin new things", shadow: "Chaos", gift: "Innovation", siddhi: "Innocence" },
+  4: { keynote: "The pressure to find logical answers", shadow: "Intolerance", gift: "Understanding", siddhi: "Forgiveness" },
+  5: { keynote: "Attunement to natural rhythms and timing", shadow: "Impatience", gift: "Patience", siddhi: "Timelessness" },
+  6: { keynote: "The emotional wave that opens and closes to intimacy", shadow: "Conflict", gift: "Diplomacy", siddhi: "Peace" },
+  7: { keynote: "The role of the Self in leading others", shadow: "Division", gift: "Guidance", siddhi: "Virtue" },
+  8: { keynote: "Making a unique creative contribution", shadow: "Mediocrity", gift: "Style", siddhi: "Exquisiteness" },
+  9: { keynote: "Focused attention and determination", shadow: "Inertia", gift: "Determination", siddhi: "Invincibility" },
+  10: { keynote: "Self-love and authentic behavior", shadow: "Self-Obsession", gift: "Naturalness", siddhi: "Being" },
+  11: { keynote: "A wealth of ideas meant to be shared", shadow: "Obscurity", gift: "Idealism", siddhi: "Light" },
+  12: { keynote: "Cautious, emotional expression", shadow: "Vanity", gift: "Discrimination", siddhi: "Purity" },
+  13: { keynote: "Listening and holding others' stories", shadow: "Discord", gift: "Discernment", siddhi: "Empathy" },
+  14: { keynote: "Empowerment through material resources", shadow: "Compromise", gift: "Competence", siddhi: "Bounteousness" },
+  15: { keynote: "Love of humanity through natural rhythms", shadow: "Dullness", gift: "Magnetism", siddhi: "Florescence" },
+  16: { keynote: "Enthusiasm and experimentation toward mastery", shadow: "Indifference", gift: "Versatility", siddhi: "Mastery" },
+  17: { keynote: "Logical opinions that organize understanding", shadow: "Opinion", gift: "Far-Sightedness", siddhi: "Omniscience" },
+  18: { keynote: "The intuitive drive to correct and perfect", shadow: "Judgement", gift: "Integrity", siddhi: "Perfection" },
+  19: { keynote: "Sensitivity to the needs of others", shadow: "Co-Dependence", gift: "Sensitivity", siddhi: "Sacrifice" },
+  20: { keynote: "Existential awareness and presence", shadow: "Superficiality", gift: "Self-Assurance", siddhi: "Presence" },
+  21: { keynote: "Willpower to control resources and environment", shadow: "Control", gift: "Authority", siddhi: "Valour" },
+  22: { keynote: "Emotional grace in social interaction", shadow: "Dishonour", gift: "Graciousness", siddhi: "Grace" },
+  23: { keynote: "Translating inner knowing into simple expression", shadow: "Complexity", gift: "Simplicity", siddhi: "Quintessence" },
+  24: { keynote: "The returning mind that revisits and rationalizes", shadow: "Addiction", gift: "Invention", siddhi: "Silence" },
+  25: { keynote: "Universal love and spiritual innocence", shadow: "Constriction", gift: "Acceptance", siddhi: "Universal Love" },
+  26: { keynote: "Ego power to influence and convince", shadow: "Pride", gift: "Artfulness", siddhi: "Invisibility" },
+  27: { keynote: "The sacral energy to care for and nourish others", shadow: "Selfishness", gift: "Altruism", siddhi: "Selflessness" },
+  28: { keynote: "The struggle to find purpose and meaning", shadow: "Purposelessness", gift: "Totality", siddhi: "Immortality" },
+  29: { keynote: "The sacral power of commitment and devotion", shadow: "Half-Heartedness", gift: "Commitment", siddhi: "Devotion" },
+  30: { keynote: "Emotional desire and longing for experience", shadow: "Desire", gift: "Lightness", siddhi: "Rapture" },
+  31: { keynote: "Verbal influence and democratic leadership", shadow: "Arrogance", gift: "Leadership", siddhi: "Humility" },
+  32: { keynote: "Instinct for what will endure and succeed", shadow: "Failure", gift: "Preservation", siddhi: "Veneration" },
+  33: { keynote: "Retreat, reflection, and remembering", shadow: "Forgetting", gift: "Mindfulness", siddhi: "Revelation" },
+  34: { keynote: "Pure sacral power and existential strength", shadow: "Force", gift: "Strength", siddhi: "Majesty" },
+  35: { keynote: "The hunger for new experiences and progress", shadow: "Hunger", gift: "Adventure", siddhi: "Boundlessness" },
+  36: { keynote: "Growth through emotional crisis and exploration", shadow: "Turbulence", gift: "Humanity", siddhi: "Compassion" },
+  37: { keynote: "Emotional bonds of friendship and family", shadow: "Weakness", gift: "Equality", siddhi: "Tenderness" },
+  38: { keynote: "The individual drive to fight for purpose", shadow: "Struggle", gift: "Perseverance", siddhi: "Honour" },
+  39: { keynote: "Provocative pressure that awakens spirit", shadow: "Provocation", gift: "Dynamism", siddhi: "Liberation" },
+  40: { keynote: "Willpower balanced between community and solitude", shadow: "Exhaustion", gift: "Resolve", siddhi: "Divine Will" },
+  41: { keynote: "The pressure of imagination and future fantasy", shadow: "Fantasy", gift: "Anticipation", siddhi: "Emanation" },
+  42: { keynote: "The energy of growth through completion", shadow: "Expectation", gift: "Detachment", siddhi: "Celebration" },
+  43: { keynote: "Breakthrough inner knowing and insight", shadow: "Deafness", gift: "Insight", siddhi: "Epiphany" },
+  44: { keynote: "Instinctive alertness to successful patterns", shadow: "Interference", gift: "Teamwork", siddhi: "Synarchy" },
+  45: { keynote: "The authority to gather and distribute resources", shadow: "Dominance", gift: "Synergy", siddhi: "Communion" },
+  46: { keynote: "Serendipity through embodiment and physical presence", shadow: "Seriousness", gift: "Delight", siddhi: "Ecstasy" },
+  47: { keynote: "Making meaning from abstract experience", shadow: "Oppression", gift: "Transmutation", siddhi: "Transfiguration" },
+  48: { keynote: "The depth of intuitive knowledge", shadow: "Inadequacy", gift: "Resourcefulness", siddhi: "Wisdom" },
+  49: { keynote: "Emotional principles of acceptance and revolution", shadow: "Reaction", gift: "Revolution", siddhi: "Rebirth" },
+  50: { keynote: "Custodianship of values and tribal responsibility", shadow: "Corruption", gift: "Equilibrium", siddhi: "Harmony" },
+  51: { keynote: "The competitive spirit of initiation through shock", shadow: "Agitation", gift: "Initiative", siddhi: "Awakening" },
+  52: { keynote: "Focused stillness and concentration under pressure", shadow: "Stress", gift: "Restraint", siddhi: "Stillness" },
+  53: { keynote: "The pressure to begin new cycles", shadow: "Immaturity", gift: "Expansion", siddhi: "Superabundance" },
+  54: { keynote: "Ambition and the drive to transform and rise", shadow: "Greed", gift: "Aspiration", siddhi: "Ascension" },
+  55: { keynote: "Emotional abundance and depth of spirit", shadow: "Victimisation", gift: "Freedom", siddhi: "Freedom" },
+  56: { keynote: "Stimulating expression through stories and belief", shadow: "Distraction", gift: "Enrichment", siddhi: "Intoxication" },
+  57: { keynote: "Penetrating intuitive clarity in the present moment", shadow: "Unease", gift: "Intuition", siddhi: "Clarity" },
+  58: { keynote: "Joyful vitality and the drive to improve", shadow: "Dissatisfaction", gift: "Vitality", siddhi: "Bliss" },
+  59: { keynote: "The sacral force of intimacy and breaking barriers", shadow: "Dishonesty", gift: "Intimacy", siddhi: "Transparency" },
+  60: { keynote: "Transcendence through acceptance of limitation", shadow: "Limitation", gift: "Realism", siddhi: "Justice" },
+  61: { keynote: "The pressure to understand inner truth and mystery", shadow: "Psychosis", gift: "Inspiration", siddhi: "Sanctity" },
+  62: { keynote: "Precise expression through details and naming", shadow: "Intellect", gift: "Precision", siddhi: "Impeccability" },
+  63: { keynote: "Logical doubt that drives investigation", shadow: "Doubt", gift: "Inquiry", siddhi: "Truth" },
+  64: { keynote: "Mental processing of past experience into meaning", shadow: "Confusion", gift: "Imagination", siddhi: "Illumination" },
+};

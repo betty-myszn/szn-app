@@ -8,6 +8,8 @@ import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
 import { useYourSzn } from "@/lib/use-your-szn";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
+import { useHumanDesign } from "@/lib/use-human-design";
+import { composeAreaDesign } from "@/lib/life-area-design";
 import { ordinalHouse } from "@/lib/interpretations";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
 import ShareButtons from "@/components/ShareButtons";
@@ -20,6 +22,10 @@ export default function LifeAreaPage() {
   const { chart, loading } = useChart();
   const season = useSeason();
   const { data: szn } = useYourSzn();
+  // Human Design is loaded alongside the chart rather than on a page of its own, so the two systems
+  // can answer the same question together. It resolves independently, and the section below simply
+  // does not render until it arrives, so the astrology reading is never held up waiting for it.
+  const { hd } = useHumanDesign();
   const [primaryGoal, setPrimaryGoal] = useState<Goal | null>(null);
 
   useEffect(() => {
@@ -68,6 +74,8 @@ export default function LifeAreaPage() {
   }
 
   const reading = composeLifeArea(areaId, chart, season, primaryGoal, szn?.transits);
+  // Null for any area Human Design has nothing specific to say about, which is deliberate.
+  const design = hd ? composeAreaDesign(areaId, hd, season.sign) : null;
 
   if (!reading) {
     return (
@@ -233,6 +241,92 @@ export default function LifeAreaPage() {
                 <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--dark)" }}>{line}</p>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Human Design, deliberately sitting directly after the live transits rather than on a page
+          of its own. The transits above say what the sky is doing to this area right now; this says
+          how she is actually built to handle it. Renders nothing at all for an area with no HD
+          mapping, or before the design has loaded. */}
+      {design && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)", background: "var(--lav-light)" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="tag mb-2" style={{ color: "#3C2A70" }}>your design in this area</div>
+            <p style={{ fontSize: 13, lineHeight: 1.7, color: "#3C2A70", marginBottom: 22, maxWidth: 620 }}>
+              Your chart says what this season is asking of your {reading.label}. Your Human Design
+              says how you&apos;re built to answer it. Same question, two maps.
+            </p>
+
+            <div style={{ border: "var(--border)", background: "#fff" }}>
+              <div className="p-7">
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 6 }}>
+                  how you decide · {design.authority.label.toLowerCase()}
+                </div>
+                <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--dark)" }}>{design.authority.body}</p>
+              </div>
+
+              <div className="p-7" style={{ borderTop: "var(--border)" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 6 }}>
+                  how it starts · {design.strategy.label.toLowerCase()}
+                </div>
+                <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--dark)" }}>{design.strategy.body}</p>
+              </div>
+            </div>
+
+            {/* Gates the season is switching on in this area's centres. Capped at three on purpose:
+                listing every activated gate would be a data dump, and the point is that a small
+                number are genuinely live right now. */}
+            {design.gates.length > 0 && (
+              <div style={{ marginTop: 26 }}>
+                <div className="tag mb-3" style={{ color: "#3C2A70" }}>
+                  the gates {season.sign.toLowerCase()} szn is switching on here
+                </div>
+                <p style={{ fontSize: 13, lineHeight: 1.7, color: "#3C2A70", marginBottom: 16, maxWidth: 620 }}>
+                  {design.gatesIntro}
+                </p>
+                <div style={{ border: "var(--border)", background: "#fff" }}>
+                  {design.gates.map((gate, i) => (
+                    <div key={gate.gate} className="p-6" style={{ borderTop: i === 0 ? undefined : "var(--border)" }}>
+                      <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 6 }}>
+                        <h3 style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)" }}>
+                          gate {gate.gate}, {gate.name.toLowerCase()}
+                        </h3>
+                        {gate.natal && (
+                          <span
+                            style={{
+                              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                              background: "var(--pink)", color: "#fff", padding: "3px 8px",
+                            }}
+                          >
+                            one of yours
+                          </span>
+                        )}
+                      </div>
+                      <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", marginBottom: 10 }}>
+                        {gate.keynote}.{" "}
+                        {gate.natal
+                          ? "You were born with this one, so this season is turning up something already running in you."
+                          : "This one is switched on by the season rather than by your chart, so treat it as the weather you're working in."}
+                      </p>
+                      <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)" }}>
+                        <strong>the trap:</strong> {gate.shadow.toLowerCase()}
+                        <span style={{ color: "var(--grey-light)" }}> → </span>
+                        <strong>the move:</strong> {gate.gift.toLowerCase()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <Link
+              href="/human-design"
+              className="no-underline"
+              style={{ display: "inline-block", marginTop: 18, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}
+            >
+              see your full human design →
+            </Link>
           </div>
         </section>
       )}
