@@ -36,7 +36,15 @@ export interface AreaGate {
   core: boolean;
 }
 
+/** A plain-language read on the kind of space her energy actually works in. */
+export interface EnvironmentNote {
+  headline: string;
+  body: string;
+}
+
 export interface AreaDesignReading {
+  /** Only produced for areas where it genuinely applies, currently home & environment. */
+  environment?: EnvironmentNote;
   /** How her authority specifically plays out in this area of life. */
   authority: { label: string; body: string };
   /** How her type and strategy specifically play out in this area. */
@@ -142,6 +150,15 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     gatesIntro:
       "These are the gates this season is switching on, read for what is asking to be healed and what you are ready to put down. Each one carries a trap and a gift, and a season tends to hand you both.",
   },
+  "home-environment": {
+    centers: ["g", "spleen", "root"],
+    authorityBridge:
+      "Where you are changes how clearly you can hear yourself. This is the area where deciding in the wrong room, at someone else's pace, is most likely to produce a choice you unpick later.",
+    strategyBridge:
+      "Your space is not decoration, it is infrastructure for your energy. How you are built to engage the world decides what a room needs to give you before you can do anything else in it.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your space, your sense of belonging and where you actually feel like yourself. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
 };
 
 // Which gates a zodiac season covers. The Human Design wheel is the zodiac wheel with a fixed
@@ -157,6 +174,40 @@ export function gatesForSign(sign: string): number[] {
     gates.add((Math.floor(adjusted / GATE_ARC) % 64) + 1);
   }
   return [...gates];
+}
+
+// What kind of space actually suits her, worked out from her open centres. An open centre takes in
+// and amplifies whatever is around it, so it is the most honest predictor of which rooms leave her
+// energised and which quietly drain her. Deliberately written as the insight rather than the
+// mechanics: she does not need to know what an open centre is to use this.
+const OPEN_CENTRE_ENVIRONMENT: Record<string, string> = {
+  sacral: "spaces you can leave. Your energy is not constant, so a room you can walk out of without explaining yourself matters more than the room itself.",
+  solarplexus: "emotionally calm rooms. You pick up the mood of a space and the people in it, so who has been in there lingers for you.",
+  spleen: "places your body already trusts. If somewhere feels off on arrival, that is information rather than fussiness.",
+  heart: "spaces with nothing to prove. You feel the pressure to earn your place in a room, so choose rooms that do not ask you to.",
+  g: "spaces that feel like you, not like a look. Your sense of direction is affected by where you sit, more than most people's.",
+  throat: "somewhere you can actually speak. If a space makes you go quiet, it is costing you more than a bit of atmosphere.",
+  ajna: "low-noise environments. Other people's certainty is loud in your head, so you think best where there is less of it.",
+  head: "spaces without constant new input. Your mind takes on everyone else's questions, so a calm room is a calm head.",
+  root: "unhurried spaces. You absorb other people's urgency, so a rushed environment becomes a rushed nervous system.",
+};
+
+function environmentNote(hd: HumanDesignData): EnvironmentNote {
+  // The two or three most defining open centres, in a fixed priority so the read stays stable.
+  const priority = ["solarplexus", "sacral", "root", "spleen", "ajna", "head", "throat", "heart", "g"];
+  const open = priority.filter((c) => (hd.openCenters as string[]).includes(c)).slice(0, 3);
+
+  if (open.length === 0) {
+    return {
+      headline: "You set the tone of a room rather than taking it on",
+      body: "You have no open centres, which is rare. You are far less affected by the atmosphere of a space than most people, so the question is less where you can cope and more where you actually want to be. Your environment should be chosen for what you want to create in it.",
+    };
+  }
+
+  return {
+    headline: "Your energy thrives in " + open.map((c) => OPEN_CENTRE_ENVIRONMENT[c].split(".")[0]).join(", "),
+    body: open.map((c) => OPEN_CENTRE_ENVIRONMENT[c]).map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ") + " None of this is about having a nicer home. It is about which rooms let your energy come forward instead of quietly spending it.",
+  };
 }
 
 /**
@@ -213,6 +264,7 @@ export function composeAreaDesign(
   });
 
   return {
+    environment: areaId === "home-environment" ? environmentNote(hd) : undefined,
     authority: {
       label: hd.authorityLabel,
       body: `${config.authorityBridge} You have ${authorityContent?.title ?? `${hd.authorityLabel.toLowerCase()} authority`}. ${authorityContent?.meaning ?? ""} ${authorityContent?.apply ?? ""}`.trim(),

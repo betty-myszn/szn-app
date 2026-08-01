@@ -169,7 +169,8 @@ export const LIFE_AREA_TO_GOAL_CATEGORY: Record<string, GoalCategory> = {
   mindset: "confidence",
   confidence: "confidence",
   career: "career",
-  business: "business",
+  // business merged into career as one life area
+  business: "career",
   purpose: "purpose",
   money: "money",
   "style-fashion": "confidence",
@@ -185,7 +186,8 @@ export const LIFE_AREA_TO_GOAL_CATEGORY: Record<string, GoalCategory> = {
 // a single real, chart-based source of timing guidance instead of generic static copy.
 export const GOAL_CATEGORY_TO_LIFE_AREA: Record<GoalCategory, string> = {
   career: "career",
-  business: "business",
+  // business merged into career as one life area
+  business: "career",
   purpose: "purpose",
   money: "money",
   love: "relationships",

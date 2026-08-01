@@ -7,7 +7,7 @@ import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
 import { useYourSzn } from "@/lib/use-your-szn";
-import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
+import { composeLifeArea, LIFE_AREAS, resolveAreaId } from "@/lib/life-areas";
 import { useHumanDesign } from "@/lib/use-human-design";
 import { composeAreaDesign } from "@/lib/life-area-design";
 import { ordinalHouse } from "@/lib/interpretations";
@@ -32,7 +32,8 @@ export default function LifeAreaPage() {
     setPrimaryGoal(getPrimaryGoal());
   }, []);
 
-  const areaId = decodeURIComponent(params.area);
+  // Resolves merged areas (business now lives inside career), so an old link still lands.
+  const areaId = resolveAreaId(decodeURIComponent(params.area));
 
   if (!ready) return null;
 
@@ -257,6 +258,20 @@ export default function LifeAreaPage() {
               Your chart says what this season is asking of your {reading.label}. Your Human Design
               says how you&apos;re built to answer it. Same question, two maps.
             </p>
+
+            {/* Only on home & environment: the kind of space her energy actually works in. Written
+                as the insight rather than the mechanics, she does not need the theory to use it. */}
+            {design.environment && (
+              <div className="p-7 mb-5" style={{ border: "1.5px solid var(--pink)", background: "#fff" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 6 }}>
+                  the spaces your energy works in
+                </div>
+                <h3 style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px", color: "var(--dark)", marginBottom: 8 }}>
+                  {design.environment.headline}.
+                </h3>
+                <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--dark)" }}>{design.environment.body}</p>
+              </div>
+            )}
 
             <div style={{ border: "var(--border)", background: "#fff" }}>
               <div className="p-7">

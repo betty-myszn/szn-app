@@ -41,24 +41,17 @@ export const AREA_RECIPES: Record<string, AreaRecipe> = {
       "watch for confidence that holds up in how you present yourself but thins out the moment something asks you to actually perform, create or be chosen.",
     ],
   },
+  // Absorbs what used to be a separate "business" area. The 11th is folded in so the audience and
+  // network side is genuinely covered rather than dropped when the two areas merged.
   career: {
-    houses: [10, 6, 2],
+    houses: [10, 6, 2, 11],
     planets: ["saturn", "mercury"],
-    axisLabel: "career framework",
-    axisFraming: "the relationship between your public reputation and vocation, the daily work and service that actually sustains it, and what you earn through it",
+    axisLabel: "career & business framework",
+    axisFraming: "the relationship between your public reputation and vocation, the daily work and service that actually sustains it, what you earn through it, and the audience and network you build it with",
     axisPrompts: [
       "notice whether your ambition for how you're seen professionally is being backed by the unglamorous daily systems that would actually hold it up.",
       "watch for a gap between the reputation you're building and what you're actually paid for it, the 10th and the 2nd not always agreeing.",
-    ],
-  },
-  business: {
-    houses: [10, 11, 2, 8],
-    planets: ["mercury", "jupiter", "saturn"],
-    axisLabel: "business framework",
-    axisFraming: "the relationship between what you build and are known for, the community and audience you grow it through, what you personally earn from it, and the shared money, investment and other people's resources that scale it",
-    axisPrompts: [
-      "notice whether the business is growing its audience and reputation faster than it's actually converting that into what you keep.",
-      "watch for the gap between building in public and the less visible mechanics of receiving, investment and shared resources that actually let it scale.",
+      "check whether the audience is growing faster than what you actually convert from it, the 11th outrunning the 2nd.",
     ],
   },
   purpose: {
@@ -160,11 +153,22 @@ export interface LifeAreaMeta {
 // bodyId and houseNumbers are kept in sync with AREA_RECIPES below: bodyId is the recipe's
 // coaching body (the planet the voice-driven coaching sections read through), houseNumbers mirror
 // the recipe's houses so consumers like SeasonPersonalised still resolve the right primary house.
+// Business was a separate life area until it became clear it was reading as a near-duplicate of
+// career: same 10th house, same 2nd house, same advice in slightly different words. They are now
+// one area, "career & business", and the 11th house (audience, network, the people your work
+// reaches) is folded into the recipe so the business side is still genuinely covered.
+//
+// The alias keeps every old link, saved goal and bookmark resolving rather than 404ing.
+export const AREA_ALIASES: Record<string, string> = { business: "career" };
+
+export function resolveAreaId(areaId: string): string {
+  return AREA_ALIASES[areaId] ?? areaId;
+}
+
 export const LIFE_AREAS: LifeAreaMeta[] = [
   { id: "mindset", label: "mindset", emoji: "\u{1F9E0}", bodyId: "mercury", houseNumbers: [3, 9] },
   { id: "confidence", label: "confidence", emoji: "✨", bodyId: "sun", houseNumbers: [1, 5] },
-  { id: "career", label: "career", emoji: "\u{1F4BC}", bodyId: "saturn", houseNumbers: [10, 6, 2] },
-  { id: "business", label: "business", emoji: "\u{1F4B8}", bodyId: "mercury", houseNumbers: [10, 11, 2, 8] },
+  { id: "career", label: "career & business", emoji: "\u{1F4BC}", bodyId: "saturn", houseNumbers: [10, 6, 2, 11] },
   { id: "purpose", label: "purpose", emoji: "\u{1F9ED}", bodyId: "north_node", houseNumbers: [9, 10] },
   { id: "money", label: "money", emoji: "\u{1F4B0}", bodyId: "jupiter", houseNumbers: [2, 8] },
   { id: "style-fashion", label: "style & fashion", emoji: "♀", bodyId: "venus", houseNumbers: [1, 5] },
@@ -236,7 +240,7 @@ const AREA_CONTENT: Record<string, AreaContent> = {
     ],
   },
   career: {
-    bettysTake: "Every ambitious woman I've coached hits the same wall eventually, she's outgrown the strategy that got her here but she's still using it, because it feels safer than the version of success that would actually stretch her identity. If you feel capped right now, it's rarely the market. It's usually you, playing a smaller game than your chart actually supports.",
+    bettysTake: "Every ambitious woman I've coached hits the same wall eventually, she's outgrown the strategy that got her here but she's still using it, because it feels safer than the version of success that would actually stretch her identity. If you feel capped right now, it's rarely the market. It's usually you, playing a smaller game than your chart actually supports. And if you're building something of your own, the same thing wears a different costume: it looks like still validating the idea, and the validating never quite finishes. Nothing is de-risked before you start it, it's de-risked by starting and adjusting.",
     rootFrame: (b) => `The thing quietly capping your career growth isn't your skill, it's ${b} Strategy alone won't fix this, the block has to be worked directly.`,
     shiftBefore: "I need permission or perfect conditions before I make the move.",
     shiftAfter: "I create the conditions by moving, the permission I'm waiting for is mine to give myself.",
@@ -257,30 +261,6 @@ const AREA_CONTENT: Record<string, AreaContent> = {
       "you finish the project you named instead of starting three new ones",
       "an ask or pitch goes out that used to sit in drafts for weeks",
       "you notice yourself negotiating instead of accepting the first offer",
-    ],
-  },
-  business: {
-    bettysTake: "The women who build something that actually lasts aren't the ones with the best idea, they're the ones who stopped waiting for it to feel like a safe bet. A business is never de-risked before you start it, it's de-risked by you starting it and adjusting as you go. If you're still perfecting the plan, that's usually the fear talking, not the strategy.",
-    rootFrame: (b) => `The thing quietly capping what you're building isn't the market, it's ${b} No amount of planning fixes this, the block has to be worked directly, not researched around.`,
-    shiftBefore: "I need the plan finished and the risk removed before I start.",
-    shiftAfter: "I build the certainty by starting, the plan gets better because I'm already in motion.",
-    protocolTitle: "the 5-day builder's sprint",
-    protocolDays: [
-      "write down the one offer, product or service that would move your business most if it existed this week, nothing else",
-      "put a real price on it today, not a placeholder, an actual number you'd stand behind",
-      "tell one real person about it and ask them to buy, book or commit, not just \"what do you think\"",
-      "fix the one bottleneck you've been working around instead of fixing, even the annoying admin one",
-      "share what you're building publicly, unfinished, and let people see it before it's perfect",
-    ],
-    stretchMoves: [
-      "launch the version that exists right now instead of the version you're still perfecting",
-      "raise your price and tell the next person that price without flinching or over-explaining",
-      "ask for the partnership, investment or collaboration you've decided you're not big enough for yet",
-    ],
-    proofMarkers: [
-      "you ship the imperfect version instead of holding it back for one more round of tweaks",
-      "you quote your price once, cleanly, without a nervous laugh attached to it",
-      "someone pays, books or commits, and it feels like proof instead of luck",
     ],
   },
   purpose: {
@@ -518,17 +498,6 @@ const AREA_EXTRAS: Record<string, { affirmations: string[]; activation: AreaActi
       ritual: "Say your actual career ambition out loud, alone, in full sentences, as if it's already decided. Not the safe, hedged version, the real one. Do this once today before you tell anyone else.",
     },
   },
-  business: {
-    affirmations: [
-      "I build in public before it's perfect, because momentum is the actual strategy.",
-      "My price reflects my value, not my fear of being told no.",
-      "The business grows every time I choose action over one more round of planning.",
-    ],
-    activation: {
-      title: "the price it out loud ritual",
-      ritual: "Say your real price, out loud, to yourself, without a nervous laugh or a justification attached. Then say it again as if a client is standing in front of you. Do it until it sounds like fact, not a negotiation.",
-    },
-  },
   purpose: {
     affirmations: [
       "My purpose reveals itself through motion, not through more thinking.",
@@ -685,7 +654,6 @@ const BLIND_SPOT_TELLS: Record<string, string> = {
   mindset: "You explain your hesitation as \"being realistic\" or \"weighing it up properly\", when the research phase has quietly become a way to postpone the decision indefinitely. If you've been thinking about it for longer than it would take to just try it, you already have your answer and you're avoiding it.",
   confidence: "You wait for the nerves to go away before you act, and call that \"waiting until I'm ready\". The nerves were never going to leave first, they leave after, as a result of the action, not a precondition for it.",
   career: "You call it \"not the right time yet\", but notice how the right time keeps sliding further away every time you get close to it. That's not timing, that's the fear of being seen succeeding, or of being seen failing, wearing a scheduling costume.",
-  business: "You call it \"still validating the idea\", but notice how the validating never quite finishes and the launch date keeps moving. Research feels productive, but at some point it's just a well-dressed way of not shipping.",
   purpose: "You call it \"still figuring out what I actually want\", but notice the same unfamiliar direction keeps showing up every time you're honest with yourself. You're not missing information, you're avoiding the inconvenient answer you already have.",
   money: "You avoid checking the numbers and call it \"not obsessing over money\", when really it's easier to stay vague than to face a concrete truth. Vagueness feels safer than clarity, but it's also where every money block hides.",
   "style-fashion": "You save your best pieces for a future occasion that never quite arrives, and call it \"being practical\". The occasion isn't coming to rescue you, wearing the piece is how you signal to yourself that today already counts.",
@@ -916,12 +884,13 @@ function computePriorityLead(recipe: AreaRecipe, houseChains: HouseChain[], plan
 }
 
 export function composeLifeArea(
-  areaId: string,
+  rawAreaId: string,
   chart: ChartData,
   season: SeasonInfo,
   goal?: Goal | null,
   transits?: TransitData | null
 ): LifeAreaReading | null {
+  const areaId = resolveAreaId(rawAreaId);
   const meta = LIFE_AREAS.find((a) => a.id === areaId);
   const content = AREA_CONTENT[areaId];
   const extras = AREA_EXTRAS[areaId];
