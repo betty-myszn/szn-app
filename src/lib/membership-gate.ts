@@ -13,8 +13,10 @@ export type MembershipRow = {
   onboarded?: boolean | null;
 };
 
-// True when this profile (or pending) row should currently grant access. Two independent checks:
-// an access-granting Stripe status on a real tier, plus a paid-through safety net.
+// True when this row has ANY currently-active paid tier (social, monthly or vip). This is the
+// community-level gate: it unlocks the chat rooms and anything else every paying member gets. Two
+// independent checks: an access-granting Stripe status on a real tier, plus a paid-through safety
+// net. Deliberately tier-agnostic, the full-platform distinction lives in hasFullAccessFromRow.
 export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
   const status = row.subscription_status ?? "";
@@ -33,11 +35,25 @@ export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean
   return true;
 }
 
-// Where a freshly-authenticated member should land, decided purely from membership state. No
-// access yet means the payment-first funnel sends her to pricing; access but onboarding not
-// finished means onboarding is mandatory before anything else; otherwise the real portal.
+// True only for the tiers that unlock the FULL personalised platform, monthly and vip. The $33
+// social tier deliberately fails this: she has active paid access (hasAccessFromRow is true, so
+// she gets the community) but must upgrade for the chart-powered platform. Built on top of
+// hasAccessFromRow so the status/expiry safety nets are never duplicated or allowed to drift.
+export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boolean {
+  if (!hasAccessFromRow(row)) return false;
+  const level = row?.membership_level ?? "none";
+  return level === "monthly" || level === "vip";
+}
+
+// Where a freshly-authenticated member should land, decided purely from membership state.
+// - No active paid tier at all: the payment-first funnel sends her to pricing.
+// - Social only: she never does the chart onboarding (it powers the platform she hasn't bought),
+//   so she goes straight to the community, the thing she paid for.
+// - Full access but not onboarded: the chart onboarding is mandatory before the portal opens.
+// - Full access and onboarded: the real portal.
 export function postAuthDestination(row: MembershipRow | null | undefined): string {
   if (!hasAccessFromRow(row)) return "/membership?reason=none";
+  if (!hasFullAccessFromRow(row)) return "/community";
   if (!row?.onboarded) return "/onboarding";
   return "/dashboard";
 }

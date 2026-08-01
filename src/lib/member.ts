@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/client";
 import { getSavedBirthData, getSavedPlacements, type SavedPlacements } from "@/lib/url-params";
+import { hasFullAccessFromRow } from "@/lib/membership-gate";
 
-export type MembershipLevel = "none" | "monthly" | "vip";
+export type MembershipLevel = "none" | "social" | "monthly" | "vip";
 
 export interface Member {
   id: string;
@@ -14,6 +15,9 @@ export interface Member {
   hasRealChart: boolean;
   /** Set only by the Stripe webhook, never trust a client-side write to this */
   membershipLevel: MembershipLevel;
+  /** True for monthly/vip (the full personalised platform); false for the $33 social tier, which
+   *  only unlocks the community. Lets the UI show an upgrade prompt without re-deriving the rule. */
+  hasFullAccess: boolean;
   subscriptionStatus: string | null;
   subscriptionCurrentPeriodEnd: string | null;
   subscriptionCancelAtPeriodEnd: boolean;
@@ -65,6 +69,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     hasRealChart: !!placements?.sun,
     placements: placements || DEMO_PLACEMENTS,
     membershipLevel: (profile?.membership_level as MembershipLevel) || "none",
+    hasFullAccess: hasFullAccessFromRow(profile),
     subscriptionStatus: profile?.subscription_status ?? null,
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,

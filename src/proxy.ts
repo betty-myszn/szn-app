@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasAccessFromRow } from "@/lib/membership-gate";
+import { hasAccessFromRow, hasFullAccessFromRow } from "@/lib/membership-gate";
 
 // This project's Next.js version renamed middleware.ts to proxy.ts (the export is named
 // `proxy`, not `middleware`), see node_modules/next/dist/docs for details. It does two jobs:
@@ -9,18 +9,27 @@ import { hasAccessFromRow } from "@/lib/membership-gate";
 // a hidden button. All access logic lives in one place (membership-gate.ts) shared with the auth
 // callback, so the two can never disagree about who gets in.
 
-// Full portal: requires a logged-in member with active access who has finished onboarding.
-const MEMBER_AREA = [
+// Full personalised platform: requires monthly or vip (hasFullAccessFromRow) plus finished
+// onboarding. The $33 social tier does NOT reach these, it's redirected to upgrade.
+const FULL_PLATFORM = [
   "/dashboard",
   "/my-chart",
   "/your-season",
-  "/community",
   "/goals",
   "/journal",
   "/challenges",
   "/affirmations",
   "/style",
 ];
+
+// Community: any active paid tier gets in, including $33 social. This is the one paid area social
+// members are actually buying, so it's gated on hasAccessFromRow (tier-agnostic) rather than
+// hasFullAccessFromRow.
+const COMMUNITY_AREA = ["/community"];
+
+// Everything a logged-in member with SOME paid access can be on, used only for the anonymous
+// fast-path below to decide whether a no-session request even needs a Supabase round trip.
+const GATED_MEMBER_AREA = [...FULL_PLATFORM, ...COMMUNITY_AREA];
 
 // Requires access already granted but onboarding NOT yet finished, this is the one place she's
 // sent before the portal opens. Its own gate below stops it being reached without access, or
@@ -54,7 +63,7 @@ export async function proxy(request: NextRequest) {
   if (!hasSessionCookie(request)) {
     const { pathname: anonPath } = request.nextUrl;
     const needsAuth =
-      pathMatches(anonPath, MEMBER_AREA) ||
+      pathMatches(anonPath, GATED_MEMBER_AREA) ||
       anonPath === ONBOARDING ||
       anonPath.startsWith(ONBOARDING + "/") ||
       pathMatches(anonPath, LOGIN_ONLY);
@@ -91,12 +100,13 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const inMemberArea = pathMatches(pathname, MEMBER_AREA);
+  const inFullPlatform = pathMatches(pathname, FULL_PLATFORM);
+  const inCommunity = pathMatches(pathname, COMMUNITY_AREA);
   const inOnboarding = pathname === ONBOARDING || pathname.startsWith(ONBOARDING + "/");
   const inLoginOnly = pathMatches(pathname, LOGIN_ONLY);
 
   // Public route: nothing to gate, just carry the refreshed session forward.
-  if (!inMemberArea && !inOnboarding && !inLoginOnly) return response;
+  if (!inFullPlatform && !inCommunity && !inOnboarding && !inLoginOnly) return response;
 
   // Any gated route requires a session first.
   if (!user) {
@@ -106,29 +116,42 @@ export async function proxy(request: NextRequest) {
   // Logged in is all these need.
   if (inLoginOnly) return response;
 
-  // Member area and onboarding both hinge on the real membership row, read under her own session
-  // so RLS only ever exposes her own.
+  // The rest hinge on the real membership row, read under her own session so RLS only ever
+  // exposes her own.
   const { data: profile } = await supabase
     .from("profiles")
     .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, onboarded")
     .eq("id", user.id)
     .maybeSingle();
 
-  const access = hasAccessFromRow(profile);
+  const access = hasAccessFromRow(profile); // any active paid tier, incl. social
+  const fullAccess = hasFullAccessFromRow(profile); // monthly or vip only
 
-  if (inOnboarding) {
+  // Community: any paying member, including $33 social. No paid tier at all means she hasn't
+  // bought anything yet, so she goes to pricing.
+  if (inCommunity) {
     if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
-    // Deliberately NOT bounced when already onboarded: /onboarding is also the birth-details
-    // edit form ("chart looks wrong? edit it", and the same link in settings). It detects
-    // existing birth data, pre-fills, and returns to /my-chart on save. Redirecting an onboarded
-    // member to /dashboard here made it impossible to correct a wrong birth time or place, which
-    // silently poisons every chart-derived reading. Mandatory onboarding is still enforced by the
-    // member-area rule below (not onboarded -> /onboarding), which is what actually guarantees it.
     return response;
   }
 
-  // Member area.
+  // Onboarding (the chart-building step, and the birth-details edit form) belongs to the full
+  // platform. A social member has no chart onboarding to do, so she's steered to upgrade rather
+  // than dropped into a flow that builds a portal she hasn't bought.
+  if (inOnboarding) {
+    if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+    if (!fullAccess) return redirectPreservingSession(request, response, "/membership?reason=upgrade");
+    // Deliberately NOT bounced when already onboarded: /onboarding is also the birth-details
+    // edit form ("chart looks wrong? edit it", and the same link in settings). Redirecting an
+    // onboarded member away here made it impossible to correct a wrong birth time or place, which
+    // silently poisons every chart-derived reading. Mandatory onboarding is still enforced by the
+    // full-platform rule below (not onboarded -> /onboarding).
+    return response;
+  }
+
+  // Full platform. A social member has active access but not full access, so she lands on the
+  // upgrade prompt rather than the pricing-from-scratch page.
   if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+  if (!fullAccess) return redirectPreservingSession(request, response, "/membership?reason=upgrade");
   if (!profile?.onboarded) return redirectPreservingSession(request, response, "/onboarding");
   return response;
 }

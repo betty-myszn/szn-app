@@ -19,22 +19,13 @@ const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/3cIdRacULeUf3XA7SR7kc0g";
 const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 
-// The one line on the non-VIP cards that says what she isn't getting. Deliberately styled as a
-// struck-through exclusion rather than another pink asterisk, so it can't be skim-read as a
-// feature: 1:1 time with Betty is the single thing that separates VIP from the rest.
-function NotIncluded({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="flex gap-3 items-start p-3 mb-6"
-      style={{ background: "rgba(0,0,0,0.04)", border: "1px dashed rgba(0,0,0,0.18)" }}
-    >
-      <span style={{ color: "var(--grey-light)", fontSize: 14, marginTop: 1, flexShrink: 0 }}>&#10007;</span>
-      <span style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.5 }}>
-        <span style={{ textDecoration: "line-through" }}>{children}</span>
-      </span>
-    </div>
-  );
-}
+// $33 "MY SZN Social" community tier. The whole access chain around it is already built: the
+// 'social' tier is mapped in stripe-tiers.ts, allowed by the schema CHECK constraint, and gated
+// to community-only by hasFullAccessFromRow in membership-gate.ts. The ONE thing still missing is
+// the Stripe product itself, which can only be created in the Stripe dashboard: create the $33
+// recurring product, paste its Payment Link URL here, and add its Price ID to stripe-tiers.ts (and
+// STRIPE_PRICE_SOCIAL in Railway). Until then the card renders but its CTA can't take a payment.
+const SOCIAL_CHECKOUT_URL: string | undefined = undefined;
 
 function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }) {
   const [email, setEmail] = useState("");
@@ -164,6 +155,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
 // instead of just silently appearing. Reads ?reason= set by the proxy / auth callback.
 const REASON_COPY: Record<string, string> = {
   none: "You'll need an active membership to enter your portal. Choose your plan below to unlock it.",
+  upgrade: "That's part of the full MY SZN platform. Your Social membership covers the community, upgrade to MY SZN below to unlock your personalised portal.",
   expired: "Your membership has ended. Renew below and you're straight back into your portal.",
   canceled: "Your membership was cancelled. Rejoin whenever you're ready, your chart and history are still here.",
   billing: "There's a problem with your last payment. Rejoin or update your card below to keep your access.",
@@ -866,103 +858,124 @@ export default function MembershipPage() {
               : "Enrolment is currently closed. Join the waitlist to be first in when doors reopen."}
           </p>
 
-          {/* Two tiers, not three. The "$333 for 3 months upfront" card was removed when the
-              3-month minimum went: with no minimum to pre-satisfy and no discount on the price,
-              it asked for three months of money in exchange for nothing the monthly plan didn't
-              already give. Its Stripe price stays mapped in stripe-tiers.ts so anyone who already
-              bought it keeps her access and her welcome email. */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {/* Monthly */}
-            <div className="p-8 md:p-10" style={{ background: "var(--lav-light)", borderRight: "var(--border)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 20 }}>
-                monthly membership
+          {/* Three tiers, hierarchy engineered so the eye lands on MY SZN ($111) first: it sits
+              centre, lifts above its neighbours, carries the only Most Popular badge, the boldest
+              price and the strongest CTA. Social ($33, belonging) and VIP ($555, proximity) flank
+              it as the lighter options, deliberately not competing for the focal point. MY SZN is
+              sold as the complete experience, never as "Social plus extras". */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start mb-6">
+
+            {/* ── MY SZN Social · $33 · community entry point ── */}
+            <div className="p-8" style={{ border: "var(--border)", background: "#fff" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 16 }}>
+                my szn social
               </div>
-              <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                $111<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+              <div style={{ fontFamily: pp, fontSize: 38, fontWeight: 800, color: "var(--dark)", letterSpacing: "-1.5px", lineHeight: 1 }}>
+                $33<span style={{ fontSize: 16, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
-              <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4, marginBottom: 28 }}>
+              <div style={{ fontSize: 12, color: "var(--grey)", marginTop: 4, marginBottom: 18 }}>
                 billed monthly · cancel anytime
               </div>
-
-              <div className="space-y-3 mb-6">
+              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, marginBottom: 20 }}>
+                For connecting with like-minded women, staying inspired through the seasons and building a regular astrology practice. This one is about belonging.
+              </p>
+              <div className="space-y-2.5 mb-6">
                 {[
-                  "2 live group coaching sessions monthly",
-                  "Monthly seasonal workshops and masterclasses",
-                  "Guest expert sessions every month",
-                  "Subconscious rewiring: hypnosis, EFT, reprogramming",
-                  "Your personalised birth chart portal",
-                  "Full community of ambitious women",
-                  "The Vault: every session recorded forever",
+                  "Community chat rooms",
+                  "Astrology Book Club",
+                  "One New Moon manifestation audio each month",
+                  "One Full Moon release audio each month",
+                  "Seasonal astrology updates",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
-                    <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
-                    <span style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.5 }}>{item}</span>
+                    <span style={{ color: "var(--pink)", fontSize: 13, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
+                    <span style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.5 }}>{item}</span>
                   </div>
                 ))}
               </div>
-
-              <NotIncluded>1:1 coaching with Betty, that&apos;s VIP only</NotIncluded>
-
-              <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join · $111/mo" plan="monthly" value={111} />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? SOCIAL_CHECKOUT_URL : undefined} label="join social · $33/mo" plan="social" value={33} />
             </div>
 
-            {/* VIP */}
-            <div className="p-8 md:p-10" style={{ background: "var(--dark)" }}>
-              <div className="flex items-center gap-3 mb-5">
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  vip membership
+            {/* ── MY SZN · $111 · THE membership (hero, centre, lifted) ── */}
+            <div className="md:-mt-6" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)", boxShadow: "0 12px 44px rgba(255,45,135,0.20)" }}>
+              <div style={{ background: "var(--pink)", padding: "9px 0", textAlign: "center", fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "#fff" }}>
+                ★ most popular
+              </div>
+              <div className="p-8 md:p-9">
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
+                  my szn
                 </div>
-                <span style={{
-                  fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: "var(--dark)", background: "var(--pink)", padding: "4px 10px",
-                }}>
-                  best value
-                </span>
+                <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
+                  $111<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+                </div>
+                <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4 }}>
+                  billed monthly · cancel anytime
+                </div>
+                <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
+                  The complete MY SZN experience.
+                </p>
+                <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, marginBottom: 22 }}>
+                  This is where the platform comes to life. You don&apos;t just read about the astrology, you work with each season as it&apos;s happening and apply it to your own life. Supported, challenged and inspired, every single season.
+                </p>
+                <div className="space-y-3 mb-7">
+                  {[
+                    "Full access to the MY SZN platform",
+                    "Two live coaching workshops every astrology season",
+                    "Workshop replay library",
+                    "Exclusive member resources",
+                    "Discounts on reports and Cosmic Coaching",
+                    "Early access to new features, experiences and events",
+                    "Everything inside MY SZN Social",
+                  ].map((item) => (
+                    <div key={item} className="flex gap-3 items-start">
+                      <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
+                      <span style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.5, fontWeight: 500 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join my szn · $111/mo" plan="monthly" value={111} />
               </div>
-              <div style={{ fontFamily: pp, fontSize: 48, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>
-                $555<span style={{ fontSize: 20, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+            </div>
+
+            {/* ── MY SZN VIP · $555 · everything, plus direct 1:1 coaching ── */}
+            <div className="p-8" style={{ border: "var(--border)", background: "var(--dark)" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 16 }}>
+                my szn vip
               </div>
-              <div style={{ fontSize: 13, color: "#fff", marginTop: 4, marginBottom: 28 }}>
+              <div style={{ fontFamily: pp, fontSize: 38, fontWeight: 800, color: "#fff", letterSpacing: "-1.5px", lineHeight: 1 }}>
+                $555<span style={{ fontSize: 16, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+              </div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 4, marginBottom: 18 }}>
                 billed monthly · cancel anytime
               </div>
-
-              {/* The 1:1 is the whole reason VIP exists, so it sits above the feature list with
-                  its own treatment rather than reading as one bullet among six. */}
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.65, marginBottom: 18 }}>
+                Everything inside MY SZN, plus direct access to me. For the members who want proximity and personal coaching.
+              </p>
               <div className="p-4 mb-5" style={{ background: "var(--pink)" }}>
                 <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 6 }}>
                   only on vip
                 </div>
-                <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", lineHeight: 1.3 }}>
-                  1:1 coaching call with Betty
+                <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", lineHeight: 1.3 }}>
+                  Monthly 1:1 Cosmic Coaching with Betty
                 </div>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.9)", lineHeight: 1.6, margin: "6px 0 0" }}>
-                  Private, one to one, just you and me. Not available on any other plan.
-                </p>
               </div>
-
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2.5 mb-6">
                 {[
-                  "Everything in the monthly membership",
-                  "Priority access to all guest experts",
-                  "Direct access to Betty between sessions",
-                  "First access to new features and content",
-                  "VIP-only bonus workshops",
+                  "Everything in MY SZN",
+                  "One monthly 1:1 Cosmic Coaching session",
+                  "Priority booking",
+                  "VIP-only bonuses and experiences",
+                  "Early access to new features and events",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
-                    <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
-                    <span style={{ fontSize: 14, color: "#fff", lineHeight: 1.5 }}>{item}</span>
+                    <span style={{ color: "var(--pink)", fontSize: 13, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
+                    <span style={{ fontSize: 13, color: "#fff", lineHeight: 1.5 }}>{item}</span>
                   </div>
                 ))}
               </div>
-
-              <div className="p-4 mb-8" style={{ background: "rgba(255,45,135,0.1)", border: "1px solid rgba(255,45,135,0.3)" }}>
-                <p style={{ fontSize: 13, color: "#fff", lineHeight: 1.6, margin: 0 }}>
-                  The women who go VIP are the ones who come out unrecognisable. This is the container for the full transformation.
-                </p>
-              </div>
-
-              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join · $555/mo" dark plan="vip" value={555} />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join vip · $555/mo" dark plan="vip" value={555} />
             </div>
+
           </div>
 
           <div className="p-6 text-center" style={{ background: "var(--pink)" }}>
@@ -990,28 +1003,32 @@ export default function MembershipPage() {
           <div style={{ border: "var(--border)" }}>
             {[
               {
-                q: "What if I'm new to astrology?",
-                a: "Perfect. You don't need to know your Big 3, your houses, or your transits. We generate your full birth chart for you and teach you how to actually use it. Most astrology content stops at awareness. We start there.",
+                q: "What's the difference between the three tiers?",
+                a: "MY SZN Social ($33/mo) is the community tier: the chat rooms, the astrology book club, and a New Moon and Full Moon audio each month. It's about belonging and staying inspired through the seasons. MY SZN ($111/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, live group coaching with Betty every month, seasonal workshops, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
+              },
+              {
+                q: "Is it really personalised, or just my sun sign?",
+                a: "Your whole chart, read to the degree, not your sun sign. We read which house governs each area of your life, the sign sitting on it, the planet that rules that sign and where that ruler actually sits, then layer your Human Design on top. It reads like an astrologer sat down with your chart, because the platform genuinely works with all of it, every season.",
+              },
+              {
+                q: "Do I get coaching with Betty?",
+                a: "Yes, on MY SZN and VIP. MY SZN ($111/mo) includes live group coaching with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. MY SZN Social ($33/mo) is community only and doesn't include coaching.",
+              },
+              {
+                q: "What if I'm new to astrology or Human Design?",
+                a: "Perfect. You don't need to know your Big 3, your houses, your transits or your Human Design type. We generate your full chart and Human Design for you and teach you how to actually use them. Most astrology content stops at awareness. We start there.",
+              },
+              {
+                q: "Can I start small and upgrade later?",
+                a: "Anytime. Start on MY SZN Social for the community and upgrade to MY SZN when you're ready for the full personalised platform and the monthly group coaching. You manage it all from your settings, and your upgrade takes effect straight away.",
               },
               {
                 q: "How much time do I need to commit each week?",
-                a: "The live workshops and coaching sessions happen monthly, not weekly. Between sessions you have access to the community, The Vault, and your personalised portal. You take what you need, when you need it. No homework. No guilt.",
+                a: "The live coaching and workshops happen monthly, not weekly. Between sessions you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
               },
               {
-                q: "Do I get a 1:1 coaching call with Betty?",
-                a: "Only on VIP, $555/mo. That's the one thing the $111/mo plan doesn't include, and it's the reason VIP exists. On monthly you still get the 2 live group coaching sessions every month, the workshops, the guest experts, the portal, the community and The Vault. Private time with me is VIP only.",
-              },
-              {
-                q: "What's included in the 1:1 coaching call?",
-                a: "A private 1:1 session with Betty, VIP members only. We go deep on whatever you need: your chart, your blocks, your business, your relationships, your next move. It's personalised, it's powerful, and it's yours.",
-              },
-              {
-                q: "Are there payment plans?",
-                a: "The membership is $111/mo, billed monthly, cancel whenever you want. VIP is $555/mo and is the only plan with 1:1 coaching with Betty. Both options are shown on the pricing section above.",
-              },
-              {
-                q: "What happens after I join the waitlist?",
-                a: "You'll get a confirmation email straight away. When doors reopen, waitlist members get first access to enrol at founding member pricing before anyone else. The first live class is 3 August at 7pm LA time.",
+                q: "How much does it cost?",
+                a: "Three tiers, all billed monthly, cancel anytime: MY SZN Social is $33/mo, MY SZN is $111/mo, and MY SZN VIP is $555/mo. Everything is shown in the pricing section above.",
               },
               {
                 q: "Can I cancel or get a refund?",

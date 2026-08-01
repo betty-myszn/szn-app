@@ -3,7 +3,10 @@
 // Stripe Price IDs are the one thing that can't drift or be spoofed. The membership page sells
 // three prices but only two real tiers, "3 months upfront" is the same 'monthly' membership as
 // the $111/mo plan, just paid on a different schedule, both map to the same tier here.
-export type MembershipLevel = "none" | "monthly" | "vip";
+// 'social' is the $33 community-only tier: it unlocks the chat rooms, book club and moon audios
+// but NOT the full personalised platform (see hasFullAccessFromRow in membership-gate.ts). 'monthly'
+// and 'vip' both unlock the full platform.
+export type MembershipLevel = "none" | "social" | "monthly" | "vip";
 type PaidTier = Exclude<MembershipLevel, "none">;
 
 // The real, live Price IDs, hardcoded as the canonical mapping. These were previously read only
@@ -17,6 +20,10 @@ const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
   price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "monthly", // $333 once, 3 months upfront (same tier)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
+  // TODO: paste the $33 Social Price ID here once the Stripe product exists, so the mapping is
+  // hardcoded like the others and can't be broken by a missing/typo'd env var. Until then the
+  // env var STRIPE_PRICE_SOCIAL below is the only thing that maps a social purchase to its tier.
+  // "price_XXXXXXXXXXXXXXXXXXXXXXXX": "social", // $33 / month
 };
 
 // Trim so a trailing space or newline pasted into a Railway variable can't silently break the
@@ -32,9 +39,11 @@ function buildPriceMap(): Record<string, PaidTier> {
   const envMonthly = cleanEnvPriceId(process.env.STRIPE_PRICE_MONTHLY);
   const env3mo = cleanEnvPriceId(process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT);
   const envVip = cleanEnvPriceId(process.env.STRIPE_PRICE_VIP);
+  const envSocial = cleanEnvPriceId(process.env.STRIPE_PRICE_SOCIAL);
   if (envMonthly) map[envMonthly] = "monthly";
   if (env3mo) map[env3mo] = "monthly";
   if (envVip) map[envVip] = "vip";
+  if (envSocial) map[envSocial] = "social";
   // ...but the canonical mapping is applied last so the known live IDs always win, no matter what
   // the deployed env happens to hold.
   return { ...map, ...CANONICAL_PRICE_TO_TIER };

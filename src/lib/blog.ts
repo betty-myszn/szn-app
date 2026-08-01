@@ -129,6 +129,189 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "12-houses-in-astrology",
+    title: "The 12 Houses in Astrology and What Each One Means",
+    metaTitle: "The 12 Houses in Astrology: What Each House Means",
+    description:
+      "A plain-English guide to the 12 astrological houses, what each one rules, how to find yours, and why houses matter more than your sun sign for reading a chart.",
+    category: "birth-chart",
+    publishedAt: "2026-08-01",
+    updatedAt: "2026-08-01",
+    readingMinutes: 11,
+    excerpt:
+      "The twelve areas of life your chart divides itself into, what each house rules, and why the same planet behaves completely differently depending on which one it lands in.",
+    intro: [
+      "The twelve houses in astrology are the twelve areas of life your birth chart is divided into: identity, money, communication, home, creativity, health, partnership, intimacy, belief, career, community and the inner world. The planets describe what part of you is operating, the signs describe how that energy behaves, and the houses tell you where in your actual life it shows up.",
+      "Houses are the reason two people with the same sun sign live completely different lives. A Leo sun in the second house takes that need to be recognised and pours it into earning, worth and what she builds with her own hands. The same Leo sun in the tenth house takes it straight to career, visibility and public reputation. Same planet, same sign, two very different lives.",
+      "The houses are calculated from your birth time and birth place rather than your birth date, which is why an accurate time matters so much. The wheel rotates roughly one degree every four minutes, so being a couple of hours out can move most of your placements into different houses and change the whole reading.",
+    ],
+    sections: [
+      {
+        heading: "What the houses in a birth chart actually are",
+        body: [
+          "A birth chart is a circle representing the sky at your exact moment of birth, seen from your exact place of birth. That circle gets divided into twelve segments, and those segments are the houses. They are numbered anticlockwise from the left-hand side of the wheel, starting at your [rising sign](/blog/big-three-sun-moon-rising), which marks the beginning of the first house.",
+          "The houses are fixed frames rather than moving parts. The first house is always about identity and arrival, the seventh is always about partnership, the tenth is always about career and public life, in every chart ever cast. What changes from person to person is which zodiac sign sits on each house and which planets happen to be sitting inside it.",
+          "That distinction is the one most people miss at the start. Signs are the flavour, houses are the location. Aries is a way of doing things, the first house is a part of your life. When someone says a placement is in Aries in the fourth house, they are telling you that a fast, direct, confrontational energy is playing out specifically in your home and family life.",
+          "There is one more piece worth knowing before the list. The sign sitting on the edge of each house, called the cusp, has a ruling planet, and wherever that ruling planet sits in your chart becomes part of the story of that house. It is how an area of life with no planets in it still has plenty to say.",
+        ],
+      },
+      {
+        heading: "Houses, signs and planets: how the three fit together",
+        body: [
+          "Every interpretation you will ever read comes from combining three simple layers. The planet tells you which function of you is involved. The sign tells you the style it operates in. The house tells you the area of life it operates on.",
+          "Take Venus, which governs love, values, beauty and receiving. Venus in Capricorn describes someone who expresses affection through commitment, reliability and building something that lasts. Put that Venus in the fifth house and it shows up in romance, creativity and pleasure, with a preference for the slow burn over the whirlwind. Put the same Venus in the second house and it shows up as an eye for quality, an instinct for turning taste into income, and a very clear sense of what she is worth being paid.",
+          "This is also why an empty sign is not a gap and an empty house is not a void. You are never reading one factor alone. You are reading a planet, in a sign, in a house, making angles to other planets, and the honest interpretation is whatever survives all four layers at once.",
+          "A useful habit while you learn: say it out loud as a sentence. My Mars, which is drive and anger, in Pisces, which is soft and indirect, in the eleventh house, which is friendship and community. That already tells you something real about how you handle conflict inside a group.",
+        ],
+      },
+      {
+        heading: "The 12 astrological houses explained, one by one",
+        body: [
+          "Each house below lists the sign that naturally rules it in the classic system, which is a useful shortcut for remembering its themes rather than a statement about your own chart. The sign on your personal house cusp is almost certainly different.",
+          "Find your own houses first if you can, then read the entries that hold your planets. Reading all twelve in the abstract is interesting, reading the four that actually contain your placements is where it becomes about you.",
+        ],
+        items: [
+          {
+            name: "First house: identity and presence",
+            body: "Naturally linked to Aries and Mars, the first house begins at your rising sign and governs self-image, first impressions, appearance and how you arrive anywhere. It is the entrance to your chart, so anything placed here comes with initiating energy and wants to lead rather than follow. A planet in the first house behaves almost like a second rising sign, and its qualities become part of how people read you within seconds of meeting you. If you keep getting misread by people, this is usually the house to look at.",
+          },
+          {
+            name: "Second house: money, worth and values",
+            body: "Naturally linked to Taurus and Venus, the second house covers earned income, possessions, self-worth and what makes you feel secure enough to relax. It is specifically what you build with your own hands, as distinct from the eighth house, which covers shared and inherited resources. Planets here describe your instinctive relationship with earning, spending and pricing yourself, usually long before you have consciously worked out what that relationship is. Most money blocks turn out to be worth blocks wearing a spreadsheet as a disguise.",
+          },
+          {
+            name: "Third house: voice, mind and communication",
+            body: "Naturally linked to Gemini and Mercury, the third house runs the everyday mind: how you speak, write, post and think, plus siblings, short journeys and your immediate local world. It is the practical cousin of the ninth house, so this is the actual sentences you say rather than your grand philosophy. Planets landing here tend to make someone noticeably curious, talkative or restless in that placement's particular flavour. Energy here wants to be expressed rather than polished into silence.",
+          },
+          {
+            name: "Fourth house: home, family and roots",
+            body: "Sitting at the very bottom of the chart wheel and naturally linked to Cancer and the moon, the fourth house governs your home, your family of origin and the emotional patterns you learned before you had language for them. It is the psychological floor everything else is built on, and it is the most private house in the chart, so what happens here rarely gets performed for an audience. When this house feels solid, you can afford to risk more everywhere else. Healing that starts here tends to change everything stacked on top of it.",
+          },
+          {
+            name: "Fifth house: creativity, romance and joy",
+            body: "Naturally linked to Leo and the sun, the fifth house governs anything created purely for the pleasure of it: art, self-expression, flirtation, play, performance and, classically, children. This is the ego expressing itself for joy rather than for survival or duty, which is why it is the first thing to get cut when life gets busy and the first thing that needs restoring when someone feels flat. Planets here describe what genuinely delights you rather than what you have been told should. Neglecting this house dims the whole chart.",
+          },
+          {
+            name: "Sixth house: routines, health and work",
+            body: "Naturally linked to Virgo and Mercury, the sixth house governs the unglamorous machinery of daily life: health, habits, routines and the day-to-day experience of work, as opposed to the tenth house's career reputation. It is the house of maintenance and devotion, the small repeated acts that either quietly build a life or quietly erode one. Planets here describe your relationship with discipline, service and your own body's signals. Real change gets built in this house rather than in grand gestures.",
+          },
+          {
+            name: "Seventh house: partnership and one-to-one relationships",
+            body: "Sitting directly opposite the first house and naturally linked to Libra and Venus, the seventh house governs committed one-to-one relationships, marriage, business partnerships and open conflict with named people. Because it mirrors the first house, it is read as showing what you are drawn to complete in yourself through somebody else. Planets here describe the qualities you consistently attract into close partnership, which are not always the qualities you consciously believe you want. This is the house that teaches you through other people.",
+          },
+          {
+            name: "Eighth house: intimacy, transformation and shared resources",
+            body: "Naturally linked to Scorpio and Pluto, with Mars as traditional co-ruler, the eighth house governs everything that happens when two lives or two bank accounts genuinely merge: intimacy, inheritance, investments, debt, tax and psychological transformation. It has a reputation for intensity because it deals with what you do not fully control alone, including other people's money and your own mortality. Planets here tend to run deep, private and slow to reveal themselves. This house was never built for small talk.",
+          },
+          {
+            name: "Ninth house: belief, travel and higher learning",
+            body: "Naturally linked to Sagittarius and Jupiter, the ninth house governs the big-picture mind: long-distance travel, higher education, publishing, teaching and the belief systems that give your life meaning. Where the third house is your everyday local mind, the ninth wants to know why rather than just what. Planets here often describe what you build your worldview around and where you go looking for answers when the ordinary ones stop working. This is the house where life gets bigger.",
+          },
+          {
+            name: "Tenth house: career, reputation and legacy",
+            body: "Sitting at the very top of the chart wheel opposite the fourth house, naturally linked to Capricorn and Saturn, the tenth house governs your public reputation, career direction and long-term legacy. Its cusp is your [midheaven](/blog/midheaven-and-career), the version of you that exists in other people's minds before they have met you personally. It is the most public house in the chart, the direct opposite of the fourth house's private foundations. Planets landing here shape what you become known for, often years before you would have chosen it consciously.",
+          },
+          {
+            name: "Eleventh house: friendship, community and the future",
+            body: "Naturally linked to Aquarius and Uranus, with Saturn as traditional co-ruler, the eleventh house governs friendships, networks, audiences, causes and your hopes for the future. These are the people you choose rather than the family you were born into, which makes it a more collective house than the deeply personal seventh. Planets here describe the kind of community that genuinely energises you and the future you are quietly building towards with other people. Your network really does function as net worth in this house.",
+          },
+          {
+            name: "Twelfth house: the inner world, rest and release",
+            body: "The final house before the cycle begins again, naturally linked to Pisces and Neptune, the twelfth house governs the subconscious, spirituality, rest, endings and everything that happens behind the scenes rather than in public view. It is called the house of hidden things because whatever sits here operates below your conscious awareness until you deliberately go looking for it. Planets here often describe a gift or a sensitivity that someone spends the first half of life not fully recognising as theirs. Rest is not optional in this house, it is the method.",
+          },
+        ],
+      },
+      {
+        heading: "Angular, succedent and cadent houses",
+        body: [
+          "The twelve houses are also grouped into three sets of four, and the grouping tells you how loudly a placement tends to announce itself.",
+          "The angular houses are the first, fourth, seventh and tenth, sitting on the four angles of the chart. These are the most visible and the most action-oriented, and a planet in an angular house tends to be a headline rather than a footnote. If somebody has three planets clustered near an angle, you will usually notice within ten minutes of meeting them.",
+          "The succedent houses are the second, fifth, eighth and eleventh. These are about consolidating, holding and building on what the angular houses started, so they deal with resources, creativity, shared assets and community. Energy here is steadier and slower to shift.",
+          "The cadent houses are the third, sixth, ninth and twelfth. These are about processing, adapting, learning and letting go. Placements here work more internally, which is why a cadent-heavy chart can look quiet from the outside while a huge amount is happening underneath.",
+          "None of these groups is better than another. Angular placements are more obvious, cadent placements are more reflective, and a chart weighted heavily towards one of them tells you something real about the pace someone naturally moves at.",
+        ],
+      },
+      {
+        heading: "Empty houses do not mean an empty life",
+        body: [
+          "You have twelve houses and around ten planets, so at least two or three houses will always be empty. That is normal, and it does not mean that area of your life is doomed to be dull or difficult.",
+          "An empty house simply has no planet permanently parked in it, so you read it a different way. Start with the sign on the cusp, which tells you the style you bring to that area. Then find that sign's ruling planet elsewhere in your chart, because wherever it sits is where the story of that house is actually being written.",
+          "A worked example: if Sagittarius sits on your seventh house cusp, its ruler is Jupiter. If your Jupiter is in the second house, your partnerships are tied up with money, values and security, and a partner is likely to change your financial life in some concrete way. The seventh house is empty, and the reading is still rich.",
+          "Transits fill empty houses too. When a slower planet like Saturn or Jupiter moves through a house you have nothing in, that area of life gets its turn in the spotlight for a year or several, which is one of the ways a quiet part of your chart suddenly becomes the main plot.",
+        ],
+      },
+      {
+        heading: "House systems and why two sites can give you different houses",
+        body: [
+          "There is more than one method for slicing the wheel into twelve, and different calculators default to different ones. That is the usual explanation when one site tells you your Venus is in the ninth house and another puts it in the tenth.",
+          "Placidus is the most widely used modern system and the default in most software. It divides the chart by time rather than by equal space, which produces houses of noticeably different sizes and can make one house very large at higher latitudes. Whole sign is the older system and is enjoying a serious revival: each house is exactly one zodiac sign, so if your rising sign is Virgo then the whole of Virgo is your first house, the whole of Libra is your second, and so on. Equal house splits the circle into twelve exact thirty-degree segments measured from the ascendant.",
+          "The practical advice is to pick one, learn your chart in it, and only then experiment. Whole sign is the kinder starting point because the boundaries are clean and nothing lands awkwardly on a cusp. Placidus gives more nuance once you know what you are looking at. What matters far more than the system is that your birth time is accurate, because every one of them depends on it.",
+          "If a placement sits within a degree or two of a house boundary, hold it loosely and read both houses. Charts have edges, and a planet sitting right on one genuinely tends to behave like it belongs to both.",
+        ],
+      },
+      {
+        heading: "How to read your own houses in ten minutes",
+        body: [
+          "Pull up your chart and write down which house each of your personal planets sits in: sun, moon, Mercury, Venus and Mars. Those five describe your identity, emotional needs, mind, values and drive, and knowing where each of them operates is most of a working chart reading.",
+          "Next, look for concentration. Two or more planets in a single house, sometimes called a stellium when there are three or more, tell you that area of life carries a disproportionate amount of your energy and will keep returning as a theme whether or not you choose it. This is often the clearest thing in a whole chart.",
+          "Then check your angles. The sign and any planets on your first house cusp shape how you arrive, and the sign and any planets on your tenth house cusp shape what you become known for. Those two points carry more weight than almost anything else in the wheel.",
+          "Finally, follow one ruler. Pick the house you are most curious about, find the sign on its cusp, find that sign's ruling planet, and see where it sits. That single move is the difference between listing your houses and actually [reading your chart](/blog/how-to-read-your-birth-chart).",
+        ],
+      },
+      {
+        heading: "Read your houses inside MY SZN",
+        body: [
+          "Knowing what the twelve houses mean is the foundation. Seeing what yours are actually doing, in combination, with the signs and rulers they came with, is the part that changes decisions.",
+          "Inside [MY SZN](/membership) your whole chart is read back to you house by house, in plain English, with the sign on each cusp and the ruler's placement already worked out, plus what current transits are moving through each area of your life right now. Your chart is a complete system rather than a stack of labels, and the houses are what turn it from a personality description into a map of where things are genuinely happening.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Find out which houses your planets are in",
+      body: "Reading the twelve houses in the abstract is useful, reading your own is where it lands. Calculate your free birth chart and see the sign on every house cusp and exactly which planets sit where, then come back to the list below and read your own four or five.",
+      label: "get your free birth chart",
+      href: "/chart",
+    },
+    faqs: [
+      {
+        question: "What are the 12 houses in astrology?",
+        answer:
+          "The twelve houses are the twelve areas of life a birth chart is divided into: identity, money and worth, communication, home and family, creativity and romance, health and routines, partnership, intimacy and shared resources, belief and travel, career and reputation, community and the future, and the inner world. The planets describe what is happening, the signs describe how, and the houses describe where in your life it plays out.",
+      },
+      {
+        question: "How do I find out which houses my planets are in?",
+        answer:
+          "You need your birth date, your exact birth time and your birth place, then any accurate chart calculator will show the house position of every planet. Birth time is essential, because the houses rotate roughly one degree every four minutes and an hour of error can shift most of your placements into different houses.",
+      },
+      {
+        question: "Which house in astrology is the most important?",
+        answer:
+          "The first, fourth, seventh and tenth are known as the angular houses and tend to carry the most weight, because they sit on the four angles of the chart and describe identity, foundations, partnership and public life. Beyond that, the most important house in your own chart is usually whichever one holds the most planets, since that is where your energy concentrates.",
+      },
+      {
+        question: "What does an empty house mean in astrology?",
+        answer:
+          "An empty house means no planet is permanently placed there, which is normal because there are twelve houses and only around ten planets. You read it through the zodiac sign on the house cusp and the position of that sign's ruling planet elsewhere in your chart, plus any transits currently moving through it.",
+      },
+      {
+        question: "Why do different websites show my planets in different houses?",
+        answer:
+          "Because they are using different house systems. Placidus divides the chart by time and is the most common default, whole sign gives each house exactly one zodiac sign, and equal house splits the circle into twelve thirty-degree segments from the ascendant. Pick one system, learn your chart in it, and expect placements near a house boundary to read as both.",
+      },
+      {
+        question: "What does it mean to have several planets in one house?",
+        answer:
+          "Three or more planets in a single house is often called a stellium, and it means that area of life carries an outsized share of your attention, energy and personal development. Those themes tend to repeat throughout your life and frequently become central to your purpose, your biggest challenges or your defining decisions.",
+      },
+      {
+        question: "Can I know my houses without a birth time?",
+        answer:
+          "Not reliably. Without a birth time you can still read which signs your planets are in, but the entire house structure and your rising sign depend on the time and place of birth. If your time is unknown, a birth certificate, hospital record or a family member's memory narrowed to within an hour or two is worth chasing.",
+      },
+    ],
+    related: ["how-to-read-your-birth-chart", "what-is-a-birth-chart", "big-three-sun-moon-rising"],
+  },
+  {
     slug: "full-moon-in-aquarius-2026",
     title: "Full Moon in Aquarius 2026: What It Means for Every Sign",
     metaTitle: "Full Moon in Aquarius 2026: What It Means for Your Sign",
@@ -427,7 +610,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "Usually because your moon and rising signs are doing more of the visible work. Your sun is your core direction rather than your whole personality, and reading all three together tends to feel far more accurate.",
       },
     ],
-    related: ["big-three-sun-moon-rising", "how-to-read-your-birth-chart", "midheaven-and-career"],
+    related: ["big-three-sun-moon-rising", "how-to-read-your-birth-chart", "12-houses-in-astrology"],
   },
   {
     slug: "big-three-sun-moon-rising",
@@ -450,7 +633,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Why they are called your big three",
         body: [
-          "Your birth chart contains far more than three placements. Every planet sits in a zodiac sign, every planet falls into one of the twelve houses, and every planet forms mathematical relationships with the others through aspects, creating a detailed blueprint of your strengths, your challenges, your purpose and the themes you meet throughout your lifetime.",
+          "Your birth chart contains far more than three placements. Every planet sits in a zodiac sign, every planet falls into one of [the twelve houses](/blog/12-houses-in-astrology), and every planet forms mathematical relationships with the others through aspects, creating a detailed blueprint of your strengths, your challenges, your purpose and the themes you meet throughout your lifetime.",
           "You also have your midheaven, which speaks to your public life and career, your north node, which points towards where your soul is growing, your south node, which reveals old patterns you are here to outgrow, and Chiron, which highlights your deepest wound and greatest gift, alongside asteroids, progressions and current transits that keep shaping your experience.",
           "There is a reason almost every astrologer begins with the big three: these three placements influence nearly every experience you have. Your sun describes your identity. Your moon describes your emotional landscape. Your rising describes how you move through the world.",
           "Once you understand those three pieces, the rest of your chart begins fitting together like a puzzle that finally makes sense. Instead of a collection of disconnected placements, you start recognising how each one supports, challenges or strengthens another part of your personality.",
@@ -564,7 +747,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Step two: find which houses your planets sit in",
         body: [
-          "Once you have the broad shape, look at which house each planet sits in. The houses divide the chart into twelve areas of life, from identity, money and communication to home, relationships, career and spirituality. The planet tells you which energy is involved, the house tells you where it becomes most active.",
+          "Once you have the broad shape, look at which house each planet sits in. [The twelve houses](/blog/12-houses-in-astrology) divide the chart into twelve areas of life, from identity, money and communication to home, relationships, career and spirituality. The planet tells you which energy is involved, the house tells you where it becomes most active.",
           "Mars in the second house may drive you to earn, build independence and defend your values, while Mars in the seventh brings that same intensity into relationships and conflict. Jupiter in the tenth may expand career and visibility, while Jupiter in the fourth may bring growth through family, property and building a home that genuinely supports you.",
           "This is often where people have their first real moment of recognition, because house placements explain why some areas of life carry far more energy and drama than others. Several planets clustered in one house, sometimes called a stellium, tell you that area carries disproportionate importance and will keep returning as a theme, whether you choose it or life keeps placing it in front of you.",
           "Do not panic about empty houses. An empty house does not mean that area will never matter. It simply has no natal planets permanently emphasising it, so you read the sign on the house cusp and then find that sign's ruling planet elsewhere in the chart for the rest of the story.",
@@ -651,7 +834,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "You can start reading your own chart usefully within a few focused hours, especially when you follow a clear order instead of memorising everything at once. Reading other people's charts fluently takes longer, because interpretation needs practice, pattern recognition and the ability to read someone without leaning on what you already know about yourself.",
       },
     ],
-    related: ["what-is-a-birth-chart", "big-three-sun-moon-rising", "new-moon-vs-full-moon"],
+    related: ["what-is-a-birth-chart", "big-three-sun-moon-rising", "12-houses-in-astrology"],
   },
   {
     slug: "venus-sign-and-how-you-love",
@@ -787,7 +970,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Midheaven versus the tenth house",
         body: [
           "The midheaven is the cusp of the tenth house, so the two are closely related but not identical. The midheaven is a single point and describes the image, the reputation, the thing people associate with your name.",
-          "The tenth house is the whole area of life around it: your career path, your standing, your relationship with authority and ambition. Any planets sitting in your tenth house describe how you actually operate professionally.",
+          "[The tenth house](/blog/12-houses-in-astrology) is the whole area of life around it: your career path, your standing, your relationship with authority and ambition. Any planets sitting in your tenth house describe how you actually operate professionally.",
         ],
       },
       {

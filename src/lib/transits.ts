@@ -503,7 +503,7 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
     recs.push({
       type: "workshop",
       title: "Boundaries are Hot",
-      description: `Saturn is coming for your ${saturnActive.natalPlanet} and honestly? It's time to build real structure around ${HOUSE_THEMES[saturnActive.natalHouse].theme}. Boss moves only.`,
+      description: `Saturn is coming for your ${saturnActive.natalPlanet}, and you are ready for it. Build real structure around ${HOUSE_THEMES[saturnActive.natalHouse].theme}. Boss moves only.`,
       basedOn: `Saturn ${saturnActive.aspectType} ${saturnActive.natalPlanet}`,
       emoji: "🏗️",
     });
@@ -560,7 +560,7 @@ function generateRecommendations(transits: TransitData, natalChart: ChartData): 
     recs.push({
       type: "workshop",
       title: "Shadow Work (But Make It Chic)",
-      description: "Pluto is asking you to go deep. This workshop walks you through confronting your shadow self and honestly? She has so much to teach you.",
+      description: "Pluto is asking you to go deep. This workshop walks you through confronting your shadow self, and she has so much to teach you.",
       basedOn: `Pluto ${plutoActive.aspectType} ${plutoActive.natalPlanet}`,
       emoji: "🔮",
     });

@@ -88,7 +88,7 @@ alter table profiles add column if not exists membership_updated_at timestamptz;
 
 alter table profiles drop constraint if exists profiles_membership_level_check;
 alter table profiles add constraint profiles_membership_level_check
-  check (membership_level in ('none', 'monthly', 'vip'));
+  check (membership_level in ('none', 'social', 'monthly', 'vip'));
 
 create unique index if not exists profiles_stripe_customer_id_idx on profiles (stripe_customer_id) where stripe_customer_id is not null;
 create index if not exists profiles_stripe_subscription_id_idx on profiles (stripe_subscription_id) where stripe_subscription_id is not null;
