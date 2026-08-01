@@ -88,6 +88,24 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     gatesIntro:
       "These are the gates this season is switching on, read for your work, your visibility and what you are building. Each one carries a trap and a gift, and a season tends to hand you both.",
   },
+  money: {
+    centers: ["heart", "sacral", "root"],
+    authorityBridge:
+      "Money decisions are the ones most often made under time pressure and someone else's urgency, which is exactly when your authority gets overridden. Almost every financial regret traces back to deciding faster than you are built to.",
+    strategyBridge:
+      "Your type describes how income is actually meant to arrive for you, and it is usually not the hustle model everyone is sold. Working against it is expensive in a way that looks like bad luck.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your money, your worth and what you are willing to charge. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
+  purpose: {
+    centers: ["g", "throat", "heart"],
+    authorityBridge:
+      "Purpose is the area where everyone else has an opinion, and where borrowed certainty is most tempting. Your authority is the only thing that can tell you whether a direction is genuinely yours or simply impressive.",
+    strategyBridge:
+      "Your strategy describes how the right thing is meant to find you. Purpose rarely arrives by being chased down, it arrives by being available to it in the way your design actually works.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your direction, your purpose and what you are here to be known for. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
 };
 
 // Which gates a zodiac season covers. The Human Design wheel is the zodiac wheel with a fixed
