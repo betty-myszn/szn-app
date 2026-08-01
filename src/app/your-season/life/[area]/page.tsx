@@ -156,6 +156,163 @@ export default function LifeAreaPage() {
         </div>
       </section>
 
+      {/* Goal tie-in, only shows when the member's active goal maps to this life area */}
+      {reading.goalTieIn && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink)" }}>
+            <div className="tag mb-3" style={{ color: "#fff" }}>tied to your goal</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#fff", fontWeight: 500 }}>{reading.goalTieIn}</p>
+          </div>
+        </section>
+      )}
+
+      {/* Betty's Take */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
+          <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
+          <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.bettysTake}</p>
+        </div>
+      </section>
+
+      {/* The real block, this is the depth layer: named from an actual hard aspect where one exists */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--pink)" }}>
+          <div className="tag mb-3" style={{ color: "#fff" }}>the real block</div>
+          <p style={{ fontSize: 16, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.rootPattern}</p>
+        </div>
+      </section>
+
+      {/* Your Blind Spot */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
+          <div className="tag mb-3">your blind spot</div>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: "#854F0B", fontWeight: 500 }}>{reading.blindSpot}</p>
+        </div>
+      </section>
+
+      {/* Before / after reframe */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-5">the shift</div>
+          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+            <div className="p-8" style={{ borderRight: "var(--border)", background: "#fafafa" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 10 }}>
+                the belief running the show
+              </div>
+              <p style={{ fontSize: 17, fontStyle: "italic", lineHeight: 1.6, color: "var(--dark)" }}>
+                &ldquo;{reading.shiftBefore}&rdquo;
+              </p>
+            </div>
+            <div className="p-8" style={{ background: "var(--pink)" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 10 }}>
+                the belief you're building instead
+              </div>
+              <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: "#fff" }}>
+                &ldquo;{reading.shiftAfter}&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Affirmations */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--pink)" }}>
+          <div className="tag mb-4" style={{ color: "#fff" }}>affirmations for {reading.label}</div>
+          <div className="flex flex-col gap-5">
+            {reading.affirmations.map((aff, i) => (
+              <p key={i} style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.35, color: "#fff" }}>
+                &ldquo;{aff}&rdquo;
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Activation ritual, one thing to do right now, distinct from the 5-day protocol below */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
+          <div className="tag mb-3" style={{ color: "var(--lav)" }}>activate it right now</div>
+          <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 12 }}>
+            {reading.activation.title}.
+          </h2>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "rgba(255,255,255,0.85)" }}>{reading.activation.ritual}</p>
+        </div>
+      </section>
+
+      {/* 5-day protocol */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-2">the protocol</div>
+          <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 10 }}>
+            {reading.protocolTitle}.
+          </h2>
+          <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 24, maxWidth: 600 }}>
+            One small, specific action a day. Real change is built from repetition, not a single grand gesture. Do these in order across five days this week.
+          </p>
+          <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
+            {reading.protocolDays.map((step, i) => (
+              <div
+                key={step}
+                className="p-6 flex gap-5 items-start"
+                style={{ borderBottom: i < reading.protocolDays.length - 1 ? "var(--border)" : undefined }}
+              >
+                <div
+                  className="flex flex-col items-center justify-center shrink-0"
+                  style={{ width: 56, height: 56, border: "1.5px solid var(--pink)" }}
+                >
+                  <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>day</span>
+                  <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, color: "var(--pink)" }}>{i + 1}</span>
+                </div>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", paddingTop: 8 }}>{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stretch move */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
+          <div className="tag mb-3">the stretch move</div>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>
+            {reading.stretchMove}
+          </p>
+          <p style={{ fontSize: 12, color: "#854F0B", marginTop: 14, opacity: 0.8 }}>
+            This is the one action that creates outsized change. The protocol builds the muscle, this is where you actually use it.
+          </p>
+        </div>
+      </section>
+
+      {/* Proof it's working */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-5">how you&apos;ll know it&apos;s working</div>
+          <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
+            {reading.proofMarkers.map((marker, i) => (
+              <div
+                key={marker}
+                className="p-6"
+                style={{ borderRight: i < reading.proofMarkers.length - 1 ? "var(--border)" : undefined, background: "var(--mint)" }}
+              >
+                <p style={{ fontSize: 13, lineHeight: 1.75, color: "#0F6E56" }}>{marker}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Everything above is what to do about it. Everything below is why this is her read and
+          not a generic one: the chart mechanics that produced it. Same content as before, moved
+          under the actions rather than stacked in front of them. */}
+      <section className="px-5 md:px-8 pt-14 pb-2">
+        <div className="max-w-4xl mx-auto">
+          <div className="rule" style={{ color: "var(--dark)" }}>
+            <span>why this is your read</span>
+          </div>
+        </div>
+      </section>
+
       {/* The interpretive payoff: the 80%. Deep synthesis that connects the whole chain and
           answers why it matters, how the season shifts it, and what to do, in coaching voice. */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
@@ -206,45 +363,6 @@ export default function LifeAreaPage() {
           )}
         </div>
       </section>
-
-      {/* The 20%: the raw ingredients, compact. Three short lines, not three full textbook
-          sections, so the page teaches fast and interprets slow. */}
-      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-4">the ingredients, quickly</div>
-          <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
-            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--mint)" }}>
-              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#0F6E56", marginBottom: 6 }}>the house</div>
-              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#0F6E56" }}>{reading.quickContext.house}</p>
-            </div>
-            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
-              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#854F0B", marginBottom: 6 }}>the sign on it</div>
-              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#854F0B" }}>{reading.quickContext.cuspSign}</p>
-            </div>
-            <div className="p-5" style={{ background: "var(--lav-light)" }}>
-              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 6 }}>its ruler</div>
-              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70" }}>{reading.quickContext.ruler}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Live transits hitting this exact area, real sky right now, not static season copy.
-          Shows every current match across both houses, not just the single closest one. */}
-      {reading.transitLines.length > 0 && (
-        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "1.5px solid var(--pink)", background: "rgba(255,45,135,0.05)" }}>
-            <div className="tag mb-3" style={{ color: "var(--pink)" }}>
-              {reading.transitLines.length > 1 ? "the transits hitting this right now" : "the transit hitting this right now"}
-            </div>
-            <div className="flex flex-col gap-4">
-              {reading.transitLines.map((line, i) => (
-                <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--dark)" }}>{line}</p>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Human Design, deliberately sitting directly after the live transits rather than on a page
           of its own. The transits above say what the sky is doing to this area right now; this says
@@ -359,148 +477,41 @@ export default function LifeAreaPage() {
         </section>
       )}
 
-      {/* Goal tie-in, only shows when the member's active goal maps to this life area */}
-      {reading.goalTieIn && (
+      {/* Live transits hitting this exact area, real sky right now, not static season copy.
+          Shows every current match across both houses, not just the single closest one. */}
+      {reading.transitLines.length > 0 && (
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink)" }}>
-            <div className="tag mb-3" style={{ color: "#fff" }}>tied to your goal</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#fff", fontWeight: 500 }}>{reading.goalTieIn}</p>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "1.5px solid var(--pink)", background: "rgba(255,45,135,0.05)" }}>
+            <div className="tag mb-3" style={{ color: "var(--pink)" }}>
+              {reading.transitLines.length > 1 ? "the transits hitting this right now" : "the transit hitting this right now"}
+            </div>
+            <div className="flex flex-col gap-4">
+              {reading.transitLines.map((line, i) => (
+                <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--dark)" }}>{line}</p>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Betty's Take */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
-          <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
-          <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.bettysTake}</p>
-        </div>
-      </section>
-
-      {/* The real block, this is the depth layer: named from an actual hard aspect where one exists */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--pink)" }}>
-          <div className="tag mb-3" style={{ color: "#fff" }}>the real block</div>
-          <p style={{ fontSize: 16, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.rootPattern}</p>
-        </div>
-      </section>
-
-      {/* Your Blind Spot */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
-          <div className="tag mb-3">your blind spot</div>
-          <p style={{ fontSize: 15, lineHeight: 1.9, color: "#854F0B", fontWeight: 500 }}>{reading.blindSpot}</p>
-        </div>
-      </section>
-
-      {/* Before / after reframe */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+      {/* The 20%: the raw ingredients, compact. Three short lines, not three full textbook
+          sections, so the page teaches fast and interprets slow. */}
+      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">the shift</div>
-          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            <div className="p-8" style={{ borderRight: "var(--border)", background: "#fafafa" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 10 }}>
-                the belief running the show
-              </div>
-              <p style={{ fontSize: 17, fontStyle: "italic", lineHeight: 1.6, color: "var(--dark)" }}>
-                &ldquo;{reading.shiftBefore}&rdquo;
-              </p>
-            </div>
-            <div className="p-8" style={{ background: "var(--pink)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 10 }}>
-                the belief you're building instead
-              </div>
-              <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: "#fff" }}>
-                &ldquo;{reading.shiftAfter}&rdquo;
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Activation ritual, one thing to do right now, distinct from the 5-day protocol below */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
-          <div className="tag mb-3" style={{ color: "var(--lav)" }}>activate it right now</div>
-          <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 12 }}>
-            {reading.activation.title}.
-          </h2>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "rgba(255,255,255,0.85)" }}>{reading.activation.ritual}</p>
-        </div>
-      </section>
-
-      {/* 5-day protocol */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-2">the protocol</div>
-          <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 10 }}>
-            {reading.protocolTitle}.
-          </h2>
-          <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 24, maxWidth: 600 }}>
-            One small, specific action a day. Real change is built from repetition, not a single grand gesture. Do these in order across five days this week.
-          </p>
-          <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
-            {reading.protocolDays.map((step, i) => (
-              <div
-                key={step}
-                className="p-6 flex gap-5 items-start"
-                style={{ borderBottom: i < reading.protocolDays.length - 1 ? "var(--border)" : undefined }}
-              >
-                <div
-                  className="flex flex-col items-center justify-center shrink-0"
-                  style={{ width: 56, height: 56, border: "1.5px solid var(--pink)" }}
-                >
-                  <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>day</span>
-                  <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, color: "var(--pink)" }}>{i + 1}</span>
-                </div>
-                <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", paddingTop: 8 }}>{step}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stretch move */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
-          <div className="tag mb-3">the stretch move</div>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>
-            {reading.stretchMove}
-          </p>
-          <p style={{ fontSize: 12, color: "#854F0B", marginTop: 14, opacity: 0.8 }}>
-            This is the one action that creates outsized change. The protocol builds the muscle, this is where you actually use it.
-          </p>
-        </div>
-      </section>
-
-      {/* Proof it's working */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">how you&apos;ll know it&apos;s working</div>
+          <div className="tag mb-4">the ingredients, quickly</div>
           <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
-            {reading.proofMarkers.map((marker, i) => (
-              <div
-                key={marker}
-                className="p-6"
-                style={{ borderRight: i < reading.proofMarkers.length - 1 ? "var(--border)" : undefined, background: "var(--mint)" }}
-              >
-                <p style={{ fontSize: 13, lineHeight: 1.75, color: "#0F6E56" }}>{marker}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Affirmations */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--pink)" }}>
-          <div className="tag mb-4" style={{ color: "#fff" }}>affirmations for {reading.label}</div>
-          <div className="flex flex-col gap-5">
-            {reading.affirmations.map((aff, i) => (
-              <p key={i} style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.35, color: "#fff" }}>
-                &ldquo;{aff}&rdquo;
-              </p>
-            ))}
+            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--mint)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#0F6E56", marginBottom: 6 }}>the house</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#0F6E56" }}>{reading.quickContext.house}</p>
+            </div>
+            <div className="p-5" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#854F0B", marginBottom: 6 }}>the sign on it</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#854F0B" }}>{reading.quickContext.cuspSign}</p>
+            </div>
+            <div className="p-5" style={{ background: "var(--lav-light)" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 6 }}>its ruler</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70" }}>{reading.quickContext.ruler}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -548,6 +559,7 @@ export default function LifeAreaPage() {
           </div>
         </div>
       </section>
+
     </>
   );
 }
