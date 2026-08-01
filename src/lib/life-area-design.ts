@@ -106,6 +106,24 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     gatesIntro:
       "These are the gates this season is switching on, read for your direction, your purpose and what you are here to be known for. Each one carries a trap and a gift, and a season tends to hand you both.",
   },
+  confidence: {
+    centers: ["g", "heart", "throat"],
+    authorityBridge:
+      "Confidence collapses fastest when you make a decision you knew was wrong for you. Every time you override your authority you file away quiet evidence that you cannot trust yourself, and that is what actually erodes it.",
+    strategyBridge:
+      "Most people's confidence problem is not a mindset problem, it is a design problem. Living against your type means constant low-grade resistance, and then reading that resistance as proof you are not good enough.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for how you see yourself and how willing you are to be seen. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
+  mindset: {
+    centers: ["head", "ajna", "throat"],
+    authorityBridge:
+      "Your mind is brilliant at analysis and it is not your decision maker. This is the single most useful thing Human Design has to say about mindset: thinking harder about a decision your authority should be making is what produces the loop.",
+    strategyBridge:
+      "The head and ajna are pressure and processing centres, not answer machines. How your type is built to engage the world determines whether that mental pressure becomes insight or becomes anxiety.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for how you think, what you believe and where your mind goes under pressure. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
 };
 
 // Which gates a zodiac season covers. The Human Design wheel is the zodiac wheel with a fixed
