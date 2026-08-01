@@ -124,6 +124,24 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     gatesIntro:
       "These are the gates this season is switching on, read for how you think, what you believe and where your mind goes under pressure. Each one carries a trap and a gift, and a season tends to hand you both.",
   },
+  "spiritual-growth": {
+    centers: ["head", "g", "spleen"],
+    authorityBridge:
+      "Spiritual growth in Human Design is not about becoming someone more evolved, it is about becoming more accurately yourself. Following your authority consistently is the practice, and it is far less glamorous than most spiritual advice.",
+    strategyBridge:
+      "Your open centres are where you take in and amplify other people, and they are also where most borrowed spiritual beliefs get installed. Living your strategy is what gradually separates what is genuinely yours from what you absorbed.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for your inner life, your beliefs and what you are being asked to unlearn. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
+  healing: {
+    centers: ["spleen", "solarplexus", "root"],
+    authorityBridge:
+      "Most of what needs healing is stored as a habit of overriding yourself. Your authority is the thing that was there before the conditioning, so returning to it is not a technique, it is the actual repair.",
+    strategyBridge:
+      "The not-self theme of your type is a diagnostic, not a character flaw. Noticing when it shows up tells you precisely where you are living against your design, which is usually where the wound is being reopened.",
+    gatesIntro:
+      "These are the gates this season is switching on, read for what is asking to be healed and what you are ready to put down. Each one carries a trap and a gift, and a season tends to hand you both.",
+  },
 };
 
 // Which gates a zodiac season covers. The Human Design wheel is the zodiac wheel with a fixed
