@@ -757,7 +757,13 @@ function houseTenantsOf(chart: ChartData, houseNumber: number): PlanetPosition[]
 // when it happens to sit in its own house, otherwise the copy contradicts the signature by calling
 // the steering planet a mere occupant. A stellium (3+) is still described in full, ruler included,
 // since there the concentration itself is the point.
-function describeOccupants(tenants: { id?: string; name: string; sign: string }[], areaLabel: string, traitKey: keyof SignTraits, rulerId?: string): string {
+const EMPTY_HOUSE_CLAUSES = [
+  `no other planet sits there natally, so that house runs almost entirely on its ruler's terms, undiluted by a competing voice`,
+  `nothing else is parked there natally, so the ruler sets the tone of that house on its own`,
+  `that house sits empty natally, which isn't a gap, it just means the ruler carries it with nothing arguing back`,
+];
+
+function describeOccupants(tenants: { id?: string; name: string; sign: string }[], areaLabel: string, traitKey: keyof SignTraits, rulerId?: string, variant = 0): string {
   if (tenants.length >= 3) {
     const names = tenants.map((p) => p.name.toLowerCase());
     const loud = tenants.find((p) => p.name === "Sun") || tenants[0];
@@ -769,7 +775,10 @@ function describeOccupants(tenants: { id?: string; name: string; sign: string }[
   }
   const others = rulerId ? tenants.filter((p) => p.id !== rulerId) : tenants;
   if (others.length === 0) {
-    return `no other planet sits there natally, so that house runs almost entirely on its ruler's terms, undiluted by a competing voice`;
+    // Rotated by caller index. A recipe can read two or three empty houses, and emitting the same
+    // sentence verbatim two or three times in one page is the fastest way to make a personalised
+    // read feel machine-generated. Each variant has to survive capitalize() at the call sites.
+    return EMPTY_HOUSE_CLAUSES[variant % EMPTY_HOUSE_CLAUSES.length];
   }
   const names = others.map((p) => p.name.toLowerCase());
   if (others.length === 1) {
@@ -780,8 +789,22 @@ function describeOccupants(tenants: { id?: string; name: string; sign: string }[
 
 // season.focus is authored as a capitalised sentence ending in a full stop. This strips it back to
 // a bare clause so it can be embedded mid-sentence without butting two sentences together.
+// The full focus, lowercased, for use where a sentence STARTS with it ("the push is simple: ...").
+// Every season.focus is two sentences ("Be seen. Stop watering yourself down and let them look."),
+// which is fine here because the whole thing lands as its own statement.
 function focusPhrase(season: SeasonInfo): string {
   const f = season.focus.trim().replace(/[.\s]+$/, "");
+  return f.charAt(0).toLowerCase() + f.slice(1);
+}
+
+// Just the opening imperative ("be seen", "face the shadow"), for use MID-sentence.
+// Using focusPhrase inline was splitting sentences in half on every life area for every sign:
+// "the season's push to be seen. Stop watering yourself down and let them look doesn't land as
+// gentle encouragement". All 12 focus strings lead with a short imperative, so taking the first
+// sentence gives a clause that reads correctly inside a larger one.
+function focusLead(season: SeasonInfo): string {
+  const first = season.focus.trim().split(/(?<=\.)\s+/)[0] ?? season.focus;
+  const f = first.trim().replace(/[.\s]+$/, "");
   return f.charAt(0).toLowerCase() + f.slice(1);
 }
 
@@ -793,7 +816,7 @@ function joinList(items: string[]): string {
 
 // One paragraph giving a secondary or tertiary recipe house the same full chain the primary house
 // gets: cusp sign, ruler, ruler's sign and house, and occupants (synthesised, not listed).
-function renderHouseChainPara(chain: HouseChain, areaLabel: string, traitKey: keyof SignTraits): string {
+function renderHouseChainPara(chain: HouseChain, areaLabel: string, traitKey: keyof SignTraits, variant = 0): string {
   const rName = chain.ruler ? rulerRef(chain.ruler.rulerName) : "";
   const rulerClause = chain.ruler
     ? ` It begins in ${chain.cuspSign}, ruled by ${rName}, and ${rName} sits in ${chain.ruler.rulerSign.toLowerCase()} in your ${ordinalHouse(chain.ruler.rulerHouse)} house${
@@ -802,7 +825,7 @@ function renderHouseChainPara(chain: HouseChain, areaLabel: string, traitKey: ke
           : ` of ${HOUSE_MEANINGS[chain.ruler.rulerHouse - 1].title}`
       }.`
     : ` It begins in ${chain.cuspSign}.`;
-  return `Your ${ordinalHouse(chain.house)} house of ${chain.title}, ${chain.rules}, is another live part of your ${areaLabel}.${rulerClause} ${capitalize(describeOccupants(chain.occupants, areaLabel, traitKey, chain.ruler?.rulerId))}.`;
+  return `Your ${ordinalHouse(chain.house)} house of ${chain.title}, ${chain.rules}, is another live part of your ${areaLabel}.${rulerClause} ${capitalize(describeOccupants(chain.occupants, areaLabel, traitKey, chain.ruler?.rulerId, variant))}.`;
 }
 
 // One paragraph naming how the recipe's houses relate as a single framework, in the member's own
@@ -819,7 +842,13 @@ function renderRelationshipPara(recipe: AreaRecipe, houseChains: HouseChain[]): 
 // One paragraph for a named planet layer: its full synthesis (already complete) plus its actual
 // role in this area, whether it also rules or occupies one of the recipe's houses, so the planet
 // is connected to the framework rather than described in isolation.
-function renderPlanetPara(layer: PlanetLayer, areaLabel: string, recipeHouses: number[]): string {
+const OUTSIDE_HOUSE_CLAUSES = [
+  ` It shapes this area as a distinct current running alongside the houses, not from inside them.`,
+  ` It works on this area from outside the houses involved, feeding in rather than forming part of the structure.`,
+  ` It neither sits in nor rules the houses this area is built on, so read it as colour on the picture rather than one of its load-bearing parts.`,
+];
+
+function renderPlanetPara(layer: PlanetLayer, areaLabel: string, recipeHouses: number[], variant = 0): string {
   const rulesRecipeHouse = layer.rulesHouses.some((h) => recipeHouses.includes(h));
   const occupiesRecipeHouse = recipeHouses.includes(layer.house);
   const roleClause =
@@ -829,7 +858,7 @@ function renderPlanetPara(layer: PlanetLayer, areaLabel: string, recipeHouses: n
         ? ` Because it sits inside one of the houses this area is built on, it isn't a background influence here, it's directly in the room.`
         : rulesRecipeHouse
           ? ` Because it rules one of the houses this area is built on, it has a real say in how this plays out, even from where it sits.`
-          : ` It shapes this area as a distinct current running alongside the houses, not from inside them.`;
+          : OUTSIDE_HOUSE_CLAUSES[variant % OUTSIDE_HOUSE_CLAUSES.length];
   return `${layer.synthesis}${roleClause}`;
 }
 
@@ -1031,14 +1060,14 @@ export function composeLifeArea(
   // versions of the same information and one synthesis that keeps building.
   const deepSynthesis: string[] = rulerPlacement && rulerSignTraits && rulerHouseMeaning
     ? [
-        `That ${rulerPlacement.rulerSign.toLowerCase()} placement is the detail that changes everything about your ${meta.label}, and not in the way anyone else with ${cuspSign.toLowerCase()} on this house would experience it: it means your instinct here is ${cleanClause(rulerSignTraits.gift)}, and when you're stretched or scared, it tips into ${cleanClause(rulerSignTraits.shadow)}. The sign your ruler sits in is doing more to shape ${meta.label} than the cusp sign itself.`,
+        `That ${rulerPlacement.rulerSign.toLowerCase()} placement is the detail that changes everything about your ${meta.label}: it means your instinct here is ${cleanClause(rulerSignTraits.gift)}, and when you're stretched or scared, it tips into ${cleanClause(rulerSignTraits.shadow)}. The sign your ruler sits in is doing more to shape ${meta.label} than the cusp sign itself.`,
         `And that placement doesn't operate in a vacuum, it's physically wired into your ${ordinalHouse(rulerPlacement.rulerHouse)} house of ${rulerHouseMeaning.title}. That's why your ${meta.label} is never really separate from ${rulerHouseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you: progress in ${meta.label} tends to come through ${rulerHouseMeaning.lifeAreas[0]}, and stalls there too.`,
         `Here's what ${season.sign} season specifically does to a ${rulerPlacement.rulerSign.toLowerCase()} ${rName.replace(/^the /, "")} living in your ${ordinalHouse(rulerPlacement.rulerHouse)} house: ${
           sameElement
-            ? `it shares the same ${rulerOverview?.element.toLowerCase() || "elemental"} current your ruler already runs on, so the season doesn't introduce anything new, it turns the volume up on what you're already built for. The season's push to ${focusPhrase(season)} lands directly inside ${rulerHouseMeaning.lifeAreas[0]}, amplifying the ${cleanClause(rulerSignTraits.gift)} that already defines how you handle ${meta.label}. The risk isn't struggle, it's coasting on what's already easy instead of actually using the momentum.`
-            : `it pulls against your ruler's more ${rulerSignTraits.essence.split(",")[0]} default, so the season's push to ${focusPhrase(season)} doesn't land as gentle encouragement, it lands as real friction between what the season wants and what your ${rulerPlacement.rulerSign.toLowerCase()} ${rName.replace(/^the /, "")} was built for. That friction shows up specifically where ${rulerHouseMeaning.lifeAreas[0]} meets ${meta.label}: this season is asking your ${cuspSign.toLowerCase()}-cusp ${meta.label} instinct to move through a lens it doesn't naturally default to. That tension is the opportunity, as long as you don't just retreat to the comfortable pattern.`
+            ? `it shares the same ${rulerOverview?.element.toLowerCase() || "elemental"} current your ruler already runs on, so the season doesn't introduce anything new, it turns the volume up on what you're already built for. The season's push to ${focusLead(season)} lands directly inside ${rulerHouseMeaning.lifeAreas[0]}, amplifying the ${cleanClause(rulerSignTraits.gift)} that already defines how you handle ${meta.label}. The risk isn't struggle, it's coasting on what's already easy instead of actually using the momentum.`
+            : `it pulls against your ruler's more ${rulerSignTraits.essence.split(",")[0]} default, so the season's push to ${focusLead(season)} doesn't land as gentle encouragement, it lands as real friction between what the season wants and what your ${rulerPlacement.rulerSign.toLowerCase()} ${rName.replace(/^the /, "")} was built for. That friction shows up specifically where ${rulerHouseMeaning.lifeAreas[0]} meets ${meta.label}: this season is asking your ${cuspSign.toLowerCase()}-cusp ${meta.label} instinct to move through a lens it doesn't naturally default to. That tension is the opportunity, as long as you don't just retreat to the comfortable pattern.`
         }`,
-        `In real life over the next few weeks, expect ${meta.label} to keep surfacing through ${rulerHouseMeaning.lifeAreas[0]}, that's where the season will keep knocking. The move that works with your wiring instead of against it: lead with ${rulerSignTraits.gift.split(",")[0] || traitLine}, watch for the ${rulerSignTraits.shadow.split(".")[0].toLowerCase()} default, and let ${season.sign.toLowerCase()} szn's ${seasonTraits.gift} carry the part of this you've been avoiding. Small, specific, this week, not a someday overhaul.`,
+        `In real life over the next few weeks, expect ${meta.label} to keep surfacing through ${rulerHouseMeaning.lifeAreas[0]}, that's where the season will keep knocking. The move that works with your wiring instead of against it: lead with ${rulerSignTraits.gift.split(",")[0] || traitLine}, watch for the ${rulerSignTraits.shadow.split(".")[0].toLowerCase()} default, and let ${season.sign.toLowerCase()} szn's ${seasonTraits.gift.split(",")[0]} carry the part of this you've been avoiding. Small, specific, this week, not a someday overhaul.`,
       ]
     : [
         `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, the part of your chart that runs ${meta.label}. ${houseMeaning.coach}`,
@@ -1060,9 +1089,11 @@ export function composeLifeArea(
   // thing at once. This is the generalised replacement for the old two-house axis, it scales from
   // one house (Home) to four (Business) without changing shape.
   const frameworkSynthesis: string[] = [
-    ...recipeHouses.slice(1).map((c) => renderHouseChainPara(c, meta.label, traitKey)),
+    // Index passed through so repeated boilerplate (empty-house, out-of-house planet) varies its
+    // wording between houses and planets instead of repeating verbatim down the page.
+    ...recipeHouses.slice(1).map((c, i) => renderHouseChainPara(c, meta.label, traitKey, i + 1)),
     ...(recipeHouses.length > 1 && recipe.axisFraming ? [renderRelationshipPara(recipe, recipeHouses)] : []),
-    ...planetLayers.map((l) => renderPlanetPara(l, meta.label, recipe.houses)),
+    ...planetLayers.map((l, i) => renderPlanetPara(l, meta.label, recipe.houses, i)),
     ...(ascendantLayer ? [ascendantLayer.synthesis] : []),
     ...pointLayers.map((p) => p.synthesis),
     renderSeasonFrameworkPara(season, recipeHouses, meta.label),
@@ -1086,7 +1117,7 @@ export function composeLifeArea(
     quickSummary: `${season.sign} activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${sign.toLowerCase()} ${bodyLabel} energy pointed straight at ${houseMeaning.lifeAreas[0]}.`,
     whatThisIsAbout: `${season.sign} szn puts real weight on ${meta.label}. This szn's core focus is simple: ${season.focus.toLowerCase()} Here's exactly how that plays out in this area of your life, and what it actually takes to change it, not just think about it. It shows up primarily through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, which governs ${houseMeaning.lifeAreas.join(", ")}${
       secondaryHouseNumber && secondaryHouseMeaningRaw ? `, with your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title} adding a second layer on top of that` : ""
-    }. Between the planet running this area, the sign it's expressed through, and the house it lives in, there are three separate layers of your own chart pointing at ${meta.label} this szn, not just one generic seasonal theme.`,
+    }. Between the planet running this area, the sign it's expressed through, and the house it lives in, there are three separate layers of your own chart pointing at ${meta.label} this szn.`,
     planetMeaning: bodyMeaning?.deepDive || "",
     signMeaning: signOverview
       ? `${signOverview.archetype} That's ${sign.toLowerCase()} on its own, an element (${signOverview.element}), a modality (${signOverview.modality}) and a ruling planet, ${signOverview.ruler}, that together give it this specific texture.`
