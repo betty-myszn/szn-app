@@ -316,11 +316,12 @@ export default function LifeAreaPage() {
                       <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", marginBottom: 10 }}>
                         {gate.lens}
                       </p>
-                      <p style={{ fontSize: 13, lineHeight: 1.75, color: "var(--grey)", marginBottom: 10 }}>
-                        {gate.natal
-                          ? "You were born with this one, so this season is turning up something already running in you."
-                          : "This one is switched on by the season rather than by your chart, so treat it as the weather you're working in."}
-                      </p>
+                      {gate.natal && (
+                        <p style={{ fontSize: 13, lineHeight: 1.75, color: "var(--grey)", marginBottom: 10 }}>
+                          You were born with this one, so this season is turning up something already
+                          running in you.
+                        </p>
+                      )}
                       <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)" }}>
                         <strong>the trap:</strong> {gate.shadow.toLowerCase()}
                         <span style={{ color: "var(--grey-light)" }}> → </span>
