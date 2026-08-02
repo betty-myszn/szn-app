@@ -407,64 +407,84 @@ export default function LifeAreaPage() {
               </div>
             </div>
 
-            {/* Gates the season is switching on in this area's centres. Capped at three on purpose:
-                listing every activated gate would be a data dump, and the point is that a small
-                number are genuinely live right now. */}
-            {design.gates.length > 0 && (
-              <div style={{ marginTop: 26 }}>
-                <div className="tag mb-3" style={{ color: "#3C2A70" }}>
-                  the gates {season.sign.toLowerCase()} szn is switching on here
-                </div>
-                <p style={{ fontSize: 13, lineHeight: 1.7, color: "#3C2A70", marginBottom: 16, maxWidth: 620 }}>
-                  {design.gatesIntro}
-                </p>
-                <div style={{ border: "var(--border)", background: "#fff" }}>
-                  {design.gates.map((gate, i) => (
-                    <div key={gate.gate} className="p-6" style={{ borderTop: i === 0 ? undefined : "var(--border)" }}>
-                      <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 6 }}>
-                        <h3 style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)" }}>
-                          gate {gate.gate}, {gate.name.toLowerCase()}
-                        </h3>
-                        {gate.natal && (
-                          <span
-                            style={{
-                              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                              background: "var(--pink)", color: "#fff", padding: "3px 8px",
-                            }}
-                          >
-                            one of yours
-                          </span>
-                        )}
-                        {gate.core && (
-                          <span
-                            style={{
-                              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                              border: "1.5px solid #3C2A70", color: "#3C2A70", padding: "2px 7px",
-                            }}
-                          >
-                            core to this area
-                          </span>
-                        )}
-                      </div>
-                      <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", marginBottom: 10 }}>
-                        {gate.lens}
-                      </p>
-                      {gate.natal && (
-                        <p style={{ fontSize: 13, lineHeight: 1.75, color: "var(--grey)", marginBottom: 10 }}>
-                          You were born with this one, so this season is turning up something already
-                          running in you.
+            {/* Gates the season is switching on. The ones that sit in this area's own centres are
+                the real read and get full cards; the rest genuinely are active this season but
+                belong to other areas, so they sit below in a lighter "also stirring" group rather
+                than competing with the core ones. */}
+            {design.gates.length > 0 && (() => {
+              const coreGates = design.gates.filter((g) => g.core);
+              const contextGates = design.gates.filter((g) => !g.core);
+              // If nothing sits in this area's centres this season, show everything as the main read.
+              const mainGates = coreGates.length > 0 ? coreGates : design.gates;
+              const extraGates = coreGates.length > 0 ? contextGates : [];
+              return (
+                <div style={{ marginTop: 26 }}>
+                  <div className="tag mb-3" style={{ color: "#3C2A70" }}>
+                    the gates {season.sign.toLowerCase()} szn is switching on in your {reading.label}
+                  </div>
+                  <p style={{ fontSize: 13, lineHeight: 1.7, color: "#3C2A70", marginBottom: 16, maxWidth: 620 }}>
+                    {design.gatesIntro}
+                  </p>
+                  <div style={{ border: "var(--border)", background: "#fff" }}>
+                    {mainGates.map((gate, i) => (
+                      <div key={gate.gate} className="p-6" style={{ borderTop: i === 0 ? undefined : "var(--border)" }}>
+                        <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 6 }}>
+                          <h3 style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)" }}>
+                            gate {gate.gate}, {gate.name.toLowerCase()}
+                          </h3>
+                          {gate.natal && (
+                            <span
+                              style={{
+                                fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                                background: "var(--pink)", color: "#fff", padding: "3px 8px",
+                              }}
+                            >
+                              one of yours
+                            </span>
+                          )}
+                        </div>
+                        <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", marginBottom: 10 }}>
+                          {gate.lens}
                         </p>
-                      )}
-                      <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)" }}>
-                        <strong>the trap:</strong> {gate.shadow.toLowerCase()}
-                        <span style={{ color: "var(--grey-light)" }}> → </span>
-                        <strong>the move:</strong> {gate.gift.toLowerCase()}
+                        {gate.natal && (
+                          <p style={{ fontSize: 13, lineHeight: 1.75, color: "var(--grey)", marginBottom: 10 }}>
+                            You were born with this one, so this season is turning up something already
+                            running in you.
+                          </p>
+                        )}
+                        <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)" }}>
+                          <strong>the trap:</strong> {gate.shadow.toLowerCase()}
+                          <span style={{ color: "var(--grey-light)" }}> → </span>
+                          <strong>the move:</strong> {gate.gift.toLowerCase()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {extraGates.length > 0 && (
+                    <div style={{ marginTop: 20 }}>
+                      <div className="tag mb-2" style={{ color: "var(--grey)" }}>
+                        also stirring this season
+                      </div>
+                      <p style={{ fontSize: 12.5, lineHeight: 1.6, color: "var(--grey)", marginBottom: 12, maxWidth: 620 }}>
+                        These sit in other centres, so they colour the edges of your {reading.label} rather than its core.
                       </p>
+                      <div style={{ border: "var(--border)", background: "#fafafa" }}>
+                        {extraGates.map((gate, i) => (
+                          <div key={gate.gate} className="px-6 py-4" style={{ borderTop: i === 0 ? undefined : "var(--border)" }}>
+                            <p style={{ fontSize: 13.5, lineHeight: 1.7, color: "var(--dark)" }}>
+                              <strong>gate {gate.gate}, {gate.name.toLowerCase()}</strong>
+                              {gate.natal ? " (one of yours). " : ". "}
+                              {gate.lens}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             <Link
               href="/human-design"

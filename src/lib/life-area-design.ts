@@ -239,13 +239,16 @@ export function composeAreaDesign(
   // money, rather than repeating one universal keynote on every area page.
   const isCore = (gate: number) => config.centers.includes(GATE_CENTER[gate]);
 
-  // Ordering, most personal first: gates she was born with come above ones the season merely
-  // activates, and within each group the ones native to this area's centres come first.
+  // Ordering, most RELEVANT-to-this-area first: gates that sit in this area's own centres lead,
+  // because on a mindset page the mind gates should come before a money or love gate the season
+  // also happens to activate. Within the core group, the ones she was born with come first (the
+  // double hit), then by number. The page renders core gates as the main read and the rest as a
+  // lighter "also active this season" group, so relevance is obvious at a glance.
   const ranked = [...seasonGates].sort((a, b) => {
-    const natalRank = (natal.has(a) ? 0 : 1) - (natal.has(b) ? 0 : 1);
-    if (natalRank !== 0) return natalRank;
     const coreRank = (isCore(a) ? 0 : 1) - (isCore(b) ? 0 : 1);
     if (coreRank !== 0) return coreRank;
+    const natalRank = (natal.has(a) ? 0 : 1) - (natal.has(b) ? 0 : 1);
+    if (natalRank !== 0) return natalRank;
     return a - b;
   });
 
