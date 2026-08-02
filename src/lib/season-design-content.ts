@@ -369,6 +369,182 @@ export const LEO_SEASON: SeasonDesign = {
     Projector: "Ask to be seen once this season, put yourself forward for the recognition you want.",
     Reflector: "Spend time in three new environments and notice how differently each one makes you feel.",
   },
+
+  businessLens: {
+    Manifestor: block(
+      "Leo is your launch window.",
+      "In business you are built to initiate, to start the thing and set it in motion rather than wait for demand to appear.",
+      "Leo backs bold launches and visible moves, so this is a strong window to put something new into the world.",
+      "Launch the offer, campaign or idea you have been sitting on, inform your audience clearly, then let momentum build. Do not water it down to make it palatable."
+    ),
+    Generator: block(
+      "Respond to demand, do not chase it.",
+      "You build a business by responding to what genuinely lights you up and what the market is actually asking for, and your energy is what sells it.",
+      "Leo brings more to respond to and makes your enthusiasm magnetic, so demand and visibility rise now.",
+      "Say yes to the exciting requests and opportunities, double down on the offers that light you up, and let people watch you loving your work."
+    ),
+    "Manifesting Generator": block(
+      "Test fast, keep what has energy.",
+      "You run a business best by experimenting across several things and following the ones with real energy, pivoting quickly.",
+      "Leo rewards your speed and multi-passionate range this season.",
+      "Trial a few offers or formats, drop what goes flat without guilt, and scale the one or two that light you up. Finish those before you pile on more."
+    ),
+    Projector: block(
+      "Teach, and wait to be invited.",
+      "Your business gift is guiding, seeing what others miss and being recognised for that expertise.",
+      "Leo turns up your visibility, which grows the invitations your business runs on.",
+      "Position your expertise where the right clients can see it, teach and share your insight, and wait for the invitation rather than chasing. Sell recognition, not hours."
+    ),
+    Reflector: block(
+      "Read the market before you commit.",
+      "You sense trends and the health of a market unusually well, and you thrive in the right business environment.",
+      "Leo is loud, so let it show you what is real rather than rushing to match the noise.",
+      "Observe trends across the season, choose your business environment and collaborators carefully, and give any big commitment a full cycle before you sign."
+    ),
+  },
+
+  relationshipsLens: {
+    Manifestor: block(
+      "Keep people informed, and keep your independence.",
+      "In relationships you need freedom and you move first, which can feel intense to others when you do not explain.",
+      "Leo turns up warmth and drama both, so this season rewards being expressive and openly affectionate.",
+      "Inform the people close to you before you act, it dissolves the friction, and let yourself be seen and warm without giving up your independence."
+    ),
+    Generator: block(
+      "Follow your gut on who to give energy to.",
+      "You give the best of your energy to the people and connections that genuinely light you up.",
+      "Leo brings more social invitations and visibility, so your circle gets busier now.",
+      "Say yes to the people who light you up and let the draining ones go quiet, your gut already knows who is a real yes."
+    ),
+    "Manifesting Generator": block(
+      "Let yourself be many things to your people.",
+      "You bring fast, playful, multi-faceted energy to relationships and get restless with the flat ones.",
+      "Leo amplifies the fun and the visibility in your connections this season.",
+      "Give your people your enthusiasm, tell them when you are pivoting so they are not left behind, and choose connections with real energy."
+    ),
+    Projector: block(
+      "Be with people who truly see you.",
+      "You thrive with people who recognise and invite you, and you wilt where you feel unseen or used for output.",
+      "Leo increases how much you are seen, so the right people will recognise you this season.",
+      "Invest in relationships where you feel genuinely seen, wait for the invitation rather than pushing, and protect your energy in company that drains it."
+    ),
+    Reflector: block(
+      "Your people set your weather.",
+      "You take on the emotional climate of whoever you are around, so your relationships shape your whole experience.",
+      "Leo's intensity will be strongest through your closest company this season.",
+      "Spend time with people who feel good to be around and notice who leaves you depleted, your environment is your relationship compass."
+    ),
+  },
+
+  moneyLens: {
+    Manifestor: block(
+      "Initiate the income, then rest.",
+      "You make money by starting things and creating new streams, in bursts rather than a steady grind.",
+      "Leo supports bold money moves and visible offers now.",
+      "Start the income-generating thing and inform people, then rest between pushes. The shadow is impatience and burning out early, so pace the launches."
+    ),
+    Generator: block(
+      "Money follows your yes.",
+      "You earn most when you are doing work you genuinely love, your lit-up energy is the real asset.",
+      "Leo turns up opportunities to respond to and makes your work magnetic.",
+      "Respond to the paid opportunities that excite you and let the flat ones go. The shadow is saying yes to money that drains you, which quietly kills the golden goose."
+    ),
+    "Manifesting Generator": block(
+      "Multiple streams, kept if they have energy.",
+      "You can earn across several things at once and move fast between them.",
+      "Leo rewards experimenting with how you make money this season.",
+      "Test income streams and keep the ones with real energy. The shadow is starting many and finishing none, so bank the wins before chasing the next."
+    ),
+    Projector: block(
+      "Get paid for your insight, not your hours.",
+      "You earn best being recognised and invited for your expertise, not by grinding output.",
+      "Leo raises your visibility, which grows the invitations that pay.",
+      "Price your recognition and expertise, wait for the invitation, and stop trading time for money. The shadow is over-working to prove worth and undercharging."
+    ),
+    Reflector: block(
+      "Let timing and environment guide the money.",
+      "You read financial timing and the right opportunities well when you are not rushed.",
+      "Leo is loud, so let it reveal what is real rather than pressuring a fast money decision.",
+      "Give money decisions a full cycle and choose your financial environment carefully. The shadow is being rushed into a commitment that is not truly yours."
+    ),
+  },
+
+  shadowIntro:
+    "Leo season shines a light on where you seek approval and try to prove yourself. Your open centres are where you take in and amplify the world, so they are where this season's pressure, comparison and old patterns show up loudest. Naming them is how you stop unconsciously running on them.",
+
+  shadowByOpenCentre: {
+    head: "A flood of other people's questions and mental pressure, pulling you into overthinking things that are not yours to solve.",
+    ajna: "Pressure to appear certain and have all the answers, so you fake confidence or cling to opinions just to feel safe.",
+    throat: "The urge to speak, post or perform just to be noticed, and the sting when the attention does not come.",
+    g: "Losing your sense of who you are in the season's noise, shape-shifting to be liked and chasing love and direction from outside yourself.",
+    heart: "The big one this season, trying to prove your worth through achievement and over-committing to look impressive. Your worth is not up for proof.",
+    sacral: "Overworking and saying yes past your limit to match everyone's visible output, then burning out.",
+    solarplexus: "Absorbing the room's emotions and avoiding conflict to keep the peace, mistaking other people's feelings for your own.",
+    spleen: "Holding onto people, habits or situations out of fear of letting go, even when you know they are not healthy.",
+    root: "A contagious rush to get things done just to relieve pressure, hurrying decisions that never needed to be hurried.",
+  },
+
+  practices: {
+    emotional: {
+      tapping: "Tap the side of your hand: even though I feel the urge to decide right now, I choose to let my wave settle first.",
+      breathwork: "Box breathing, four counts in, hold four, out four, hold four, for two minutes before any big yes.",
+      journal: "What am I feeling about this at the top of the wave, and what might I feel at the bottom of it?",
+      reset: "When excitement spikes, put a hand on your chest and say out loud that there is no rush, the clarity comes tomorrow.",
+    },
+    sacral: {
+      tapping: "Tap your collarbone: my body knows the answer before my mind does, and I trust the gut yes.",
+      breathwork: "Two quick belly breaths, then ask yourself a yes or no question and feel the lift or the drop.",
+      journal: "Where did my energy rise this week, and where did it go flat? Follow the rise.",
+      reset: "Shake out your whole body for thirty seconds to discharge stuck energy, then feel what your gut actually wants.",
+    },
+    splenic: {
+      tapping: "Tap the side of your hand: I trust the first quiet signal, it does not need to explain itself.",
+      breathwork: "One long slow exhale, twice as long as the inhale, to drop below the noise and hear your instinct.",
+      journal: "When did I get a quiet knowing this week, and did I act on it or talk myself out of it?",
+      reset: "Pause, soften your belly, and notice the very first yes or no before your mind starts arguing.",
+    },
+    ego: {
+      tapping: "Tap your heart centre: I only commit to what I truly want, and my worth is not up for proof.",
+      breathwork: "Hand on heart, three slow breaths, and ask do I actually want this or am I trying to prove something.",
+      journal: "What did I hear myself say out loud this week that revealed what my heart actually wants?",
+      reset: "When you feel the pull to over-promise, pause with a hand on your chest until the urge to prove passes.",
+    },
+    self: {
+      tapping: "Tap your throat: my truth comes out when I speak it, and I trust the direction my own words take.",
+      breathwork: "Three grounding breaths, then say the decision out loud and listen to how it lands in your body.",
+      journal: "If I talk this out on paper, which direction do my own words keep pulling toward?",
+      reset: "Voice-note a trusted person and simply talk it through, listening to yourself more than to them.",
+    },
+    mental: {
+      tapping: "Tap the side of your hand: clarity comes from the right conversations, I do not have to know alone.",
+      breathwork: "Slow breathing while you change rooms, and notice how the decision feels in a different environment.",
+      journal: "Who and where helped me think most clearly this week, and what did I hear myself realise?",
+      reset: "Step into a different space, physically, and talk the decision through out loud with someone you trust.",
+    },
+    lunar: {
+      tapping: "Tap your collarbone: I give the big things a full cycle, and I do not let anyone rush me.",
+      breathwork: "Long, slow breaths in a place that feels good, and let yourself feel the decision rather than solve it.",
+      journal: "How does this choice feel today, and how did it feel last week? Track it across the month.",
+      reset: "Change your environment and notice how the decision feels there, your clarity moves with the moon and the room.",
+    },
+  },
+
+  affirmationByType: {
+    Manifestor: "I begin things. I inform, I move, and I let myself be seen doing it.",
+    Generator: "I follow what lights me up, and my energy is magnetic when I do.",
+    "Manifesting Generator": "I move at my own speed, I follow my yes, and I am allowed to want many things.",
+    Projector: "I am here to be seen and invited, and my insight is worth waiting to be asked for.",
+    Reflector: "I experience this season in my own rhythm, and I choose the rooms that let me shine.",
+  },
+
+  weeklyQuestions: [
+    "What felt expansive this week, and what quietly drained you?",
+    "Where did you follow your strategy to {strategy}, and where did you force things instead?",
+    "Did you honour your {authority} way of deciding, or did you rush a yes?",
+    "Where did you let yourself be seen this week?",
+    "What are you being tempted to do just for approval or applause?",
+    "What wants to change next week?",
+  ],
 };
 
 // Registry, keyed by lowercase sign. Future seasons drop in here.

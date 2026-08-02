@@ -118,15 +118,89 @@ export default function SeasonDesignReadingView({ r }: { r: SeasonDesignReading 
         block={r.incarnationCross.block}
       />
 
+      <SectionHead n={9} title="your business this season" />
+      <ExpandableBlock header="Business" block={r.business} />
+
+      <SectionHead n={10} title="your relationships this season" />
+      <ExpandableBlock header="Relationships" block={r.relationships} />
+
+      <SectionHead n={11} title="your money this season" />
+      <ExpandableBlock header="Money" block={r.money} />
+
+      <SectionHead n={12} title="your shadow work this season" />
+      <p style={{ fontSize: 14.5, opacity: 0.75, margin: "0 0 14px", lineHeight: 1.6 }}>{r.shadow.intro}</p>
+      {r.shadow.items.length === 0 ? (
+        <p style={{ margin: 0, opacity: 0.65, fontSize: 15, lineHeight: 1.6 }}>
+          You have no open centres, which is rare. Your conditioning shows up less through the centres
+          and more through your profile and strategy this season.
+        </p>
+      ) : (
+        <div style={{ display: "grid", gap: 10 }}>
+          {r.shadow.items.map((s) => (
+            <div key={s.centre} style={{ ...card, borderLeft: "3px solid var(--lav)" }}>
+              <div style={{ fontFamily: poppins, fontWeight: 600, marginBottom: 3 }}>{s.centre} <span style={{ fontSize: 11, opacity: 0.5 }}>(open)</span></div>
+              <p style={{ fontSize: 14, opacity: 0.82, lineHeight: 1.55, margin: 0 }}>{s.text}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <SectionHead n={13} title="eft & somatic practice" />
+      <div style={{ display: "grid", gap: 10 }}>
+        {[
+          ["tapping", r.practices.tapping],
+          ["breathwork", r.practices.breathwork],
+          ["journal prompt", r.practices.journal],
+          ["nervous system reset", r.practices.reset],
+        ].map(([label, text]) => (
+          <div key={label} style={card}>
+            <div style={{ ...eyebrow, marginBottom: 5 }}>{label}</div>
+            <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.55 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ ...card, background: "var(--lav-light)", marginTop: 10 }}>
+        <div style={{ ...eyebrow, marginBottom: 5 }}>your affirmation</div>
+        <p style={{ margin: 0, fontFamily: poppins, fontSize: 17, lineHeight: 1.4 }}>{r.affirmation}</p>
+      </div>
+
       <div style={{ ...card, background: "var(--mint)", margin: "34px 0 8px" }}>
         <div style={{ ...eyebrow, marginBottom: 6 }}>your {r.season.sign.toLowerCase()} season challenge</div>
         <p style={{ margin: 0, fontFamily: poppins, fontSize: 18, lineHeight: 1.4 }}>{r.challenge}</p>
       </div>
 
+      <SectionHead n={15} title="your weekly check-in" />
+      <p style={{ fontSize: 13.5, opacity: 0.6, margin: "0 0 12px", lineHeight: 1.55 }}>
+        Come back to these each week of {r.season.title.toLowerCase()}.
+      </p>
+      <ul style={bulletList}>
+        {r.weekly.map((q, i) => (
+          <li key={i} style={bulletItem}>{q}</li>
+        ))}
+      </ul>
+
+      <SectionHead n={16} title="today" />
+      <div style={{ ...card, background: "var(--dark)", color: "#fff" }}>
+        <div style={{ ...eyebrow, marginBottom: 10, opacity: 0.6 }}>{r.daily.date}</div>
+        <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.5 }}>{r.daily.astrology}</p>
+        {[
+          ["energy", r.daily.energy],
+          ["how to decide today", r.daily.decision],
+          ["today's prompt", r.daily.prompt],
+          ["one small move", r.daily.action],
+        ].map(([label, text]) => (
+          <div key={label} style={{ marginBottom: 12 }}>
+            <div style={{ ...eyebrow, marginBottom: 3, opacity: 0.55 }}>{label}</div>
+            <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.5 }}>{text}</p>
+          </div>
+        ))}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.15)", paddingTop: 12, marginTop: 4 }}>
+          <p style={{ margin: 0, fontFamily: poppins, fontSize: 16, lineHeight: 1.4, color: "var(--pink)" }}>{r.daily.affirmation}</p>
+        </div>
+      </div>
+
       <p style={{ fontSize: 12, opacity: 0.5, marginTop: 24, lineHeight: 1.6 }}>
         Combines your natal Human Design with the Sun's journey through {r.season.sign} this season.
-        More coming to this reading soon: business, money, relationships, shadow work and a daily
-        dashboard.
       </p>
     </>
   );

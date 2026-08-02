@@ -31,6 +31,33 @@ export interface SeasonDesign {
   centreLens: Record<CenterKey, { defined: SeasonBlock; open: SeasonBlock }>; // per centre
   crossLens: Record<HDCrossAngle, SeasonBlock>; // life purpose through this season
   challenge: Record<HDTypeName, string>; // the season challenge per type
+
+  // Pass 2: coaching + practice sections.
+  businessLens: Record<HDTypeName, SeasonBlock>; // section 9
+  relationshipsLens: Record<HDTypeName, SeasonBlock>; // section 10
+  moneyLens: Record<HDTypeName, SeasonBlock>; // section 11
+  shadowIntro: string; // section 12 framing
+  shadowByOpenCentre: Record<CenterKey, string>; // what a given OPEN centre gets triggered into this season
+  practices: Record<HDAuthorityKey, SomaticPractice>; // section 13, keyed by how she regulates decisions
+  affirmationByType: Record<HDTypeName, string>; // section 13 affirmation
+  weeklyQuestions: string[]; // section 15, may contain {strategy} and {authority} tokens
+}
+
+export interface SomaticPractice {
+  tapping: string;
+  breathwork: string;
+  journal: string;
+  reset: string; // nervous-system reset
+}
+
+export interface DailyDashboard {
+  date: string;
+  astrology: string; // what the collective sky is encouraging today
+  energy: string; // her energy reminder (from type)
+  decision: string; // her decision reminder (from authority)
+  prompt: string; // coaching / journal prompt
+  action: string; // one small challenge for today
+  affirmation: string;
 }
 
 // ── The assembled reading returned to the page ──────────────────────────────────
@@ -89,5 +116,16 @@ export interface SeasonDesignReading {
   channelsForming: ChannelForming[];
   incarnationCross: { angle: HDCrossAngle; gates: number[]; block: SeasonBlock };
   challenge: string;
+
+  // Pass 2
+  business: SeasonBlock;
+  relationships: SeasonBlock;
+  money: SeasonBlock;
+  shadow: { intro: string; items: { centre: string; text: string }[] };
+  practices: SomaticPractice;
+  affirmation: string;
+  weekly: string[];
+  daily: DailyDashboard;
+
   computedForDate: string;
 }

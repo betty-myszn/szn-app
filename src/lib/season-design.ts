@@ -111,6 +111,27 @@ export function buildSeasonDesignReading(
   const profileContent = PROFILE_CONTENT[hd.profile];
   const definedSet = new Set<CenterKey>(hd.definedCenters);
 
+  // Pass 2 assembly.
+  const shortAuthority: Record<string, string> = {
+    emotional: "emotional", sacral: "sacral", splenic: "splenic", ego: "heart-led",
+    self: "self-projected", mental: "environment-led", lunar: "lunar",
+  };
+  const weeklyFilled = def.weeklyQuestions.map((q) =>
+    q.replace("{strategy}", hd.strategy.toLowerCase()).replace("{authority}", shortAuthority[hd.authority] ?? hd.authority)
+  );
+  const shadowItems = hd.openCenters.map((c) => ({ centre: CENTER_LABELS[c], text: def.shadowByOpenCentre[c] }));
+  const dayIndex = date.getDate();
+  const bullets = def.typeStrategy[hd.type];
+  const daily = {
+    date: date.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }),
+    astrology: `Today ${seasonInfo.sign} is encouraging ${def.activates.slice(0, 3).join(", ")}.`,
+    energy: def.typeLens[hd.type].summary,
+    decision: def.authorityLens[hd.authority].summary,
+    prompt: weeklyFilled[dayIndex % weeklyFilled.length],
+    action: bullets[dayIndex % bullets.length],
+    affirmation: def.affirmationByType[hd.type],
+  };
+
   return {
     season: {
       sign: seasonInfo.sign,
@@ -162,6 +183,16 @@ export function buildSeasonDesignReading(
       block: def.crossLens[hd.incarnationCross.angle],
     },
     challenge: def.challenge[hd.type],
+
+    business: def.businessLens[hd.type],
+    relationships: def.relationshipsLens[hd.type],
+    money: def.moneyLens[hd.type],
+    shadow: { intro: def.shadowIntro, items: shadowItems },
+    practices: def.practices[hd.authority],
+    affirmation: def.affirmationByType[hd.type],
+    weekly: weeklyFilled,
+    daily,
+
     computedForDate: date.toISOString().slice(0, 10),
   };
 }
