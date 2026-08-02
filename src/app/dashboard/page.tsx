@@ -26,6 +26,7 @@ import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
 import SeasonThemes from "@/components/SeasonThemes";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
+import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
@@ -253,29 +254,10 @@ export default function DashboardPage() {
 
       <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
 
-      {/* Human Design x season: the personalised companion to the life-areas guide above.
-          Astrology says what the season is doing, this says how her unique energy works with it. */}
-      <section className="px-5 md:px-8 py-6" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <Link
-            href="/your-season/human-design"
-            className="no-underline block"
-            style={{ background: "var(--dark)", color: "#fff", borderRadius: 18, padding: "28px 24px" }}
-          >
-            <div className="tag mb-3" style={{ color: "#fff" }}>astrology + human design</div>
-            <h2 style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontWeight: 700, fontSize: 26, lineHeight: 1.1, margin: "0 0 8px" }}>
-              how your energy works with {season.sign.toLowerCase()} season
-            </h2>
-            <p style={{ opacity: 0.85, fontSize: 15, lineHeight: 1.5, margin: "0 0 14px", maxWidth: 560 }}>
-              Your type, authority, profile and centres, read through {season.sign} season, with the gates
-              it is activating for you and what to actually do with them.
-            </p>
-            <span style={{ fontWeight: 700, color: "var(--pink)" }}>
-              open my {season.sign.toLowerCase()} human design reading →
-            </span>
-          </Link>
-        </div>
-      </section>
+      {/* Human Design x season, rendered inline as part of the season scroll: the
+          personalised companion to the life-areas guide above. Astrology says what the
+          season is doing, this says how her unique energy works with it. */}
+      <SeasonDesignInline />
 
       {/* Build-your-own-dashboard control, only touches what she reads, never the action sections */}
       <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>

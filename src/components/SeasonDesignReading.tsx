@@ -9,23 +9,27 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // Presentational view for the combined season + Human Design reading. Every element
 // is an expandable card: collapsed it shows a one-line summary, opened it reveals
 // three layers, who you are here, how Leo moves it for you, and what to do.
-export default function SeasonDesignReadingView({ r }: { r: SeasonDesignReading }) {
+export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesignReading; embedded?: boolean }) {
   return (
     <>
-      <p style={eyebrow}>welcome to your</p>
-      <h1 style={{ fontFamily: poppins, fontSize: 46, lineHeight: 1.03, margin: "0 0 14px", fontWeight: 700 }}>
-        {r.season.title}
-      </h1>
-      <p style={{ fontSize: 12, opacity: 0.55, margin: "0 0 18px" }}>{r.season.dates}</p>
-      <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 14px" }}>{r.season.intro}</p>
-      <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 18px" }}>{r.season.encouraging}</p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-        {r.season.activates.map((a) => (
-          <span key={a} style={chip}>{a}</span>
-        ))}
-      </div>
+      {!embedded && (
+        <>
+          <p style={eyebrow}>welcome to your</p>
+          <h1 style={{ fontFamily: poppins, fontSize: 46, lineHeight: 1.03, margin: "0 0 14px", fontWeight: 700 }}>
+            {r.season.title}
+          </h1>
+          <p style={{ fontSize: 12, opacity: 0.55, margin: "0 0 18px" }}>{r.season.dates}</p>
+          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 14px" }}>{r.season.intro}</p>
+          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 18px" }}>{r.season.encouraging}</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+            {r.season.activates.map((a) => (
+              <span key={a} style={chip}>{a}</span>
+            ))}
+          </div>
+        </>
+      )}
 
-      <div style={{ ...card, background: "var(--dark)", color: "#fff", margin: "28px 0 8px" }}>
+      <div style={{ ...card, background: "var(--dark)", color: "#fff", margin: embedded ? "0 0 8px" : "28px 0 8px" }}>
         <p style={{ margin: 0, fontFamily: poppins, fontSize: 18, lineHeight: 1.4 }}>
           Here is how <em>your</em> Human Design experiences {r.season.title}. Tap any card to open it up.
         </p>
