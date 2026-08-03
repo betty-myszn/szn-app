@@ -10,12 +10,12 @@ import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadC
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 
 const memberLinks = [
-  { href: "/money-blueprint", label: "money blueprint" },
   { href: "/events", label: "events" },
   { href: "/journal", label: "journal" },
   // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
   // lands on a post from search should still see where she is in the site.
   { href: "/blog", label: "blog" },
+  { href: "/money-blueprint", label: "money blueprint" },
 ];
 
 // Challenges are a seasonal, done-together thing, so they live under community rather than under
@@ -36,11 +36,11 @@ const chartMenu = [
 
 const guestLinks = [
   { href: "/", label: "home" },
-  { href: "/money-blueprint", label: "money blueprint" },
   { href: "/seasons", label: "seasons" },
   { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
+  { href: "/money-blueprint", label: "money blueprint" },
 ];
 
 export default function NavBar() {
