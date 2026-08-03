@@ -200,7 +200,7 @@ function environmentNote(hd: HumanDesignData): EnvironmentNote {
   if (open.length === 0) {
     return {
       headline: "You set the tone of a room rather than taking it on",
-      body: "You've no open centres, which is rare. You're far less affected by the atmosphere of a space than most people, so the question is less where you can cope and more where you actually want to be. Your environment should be chosen for what you want to create in it.",
+      body: "You've got no open centres, which is rare. You're far less affected by the atmosphere of a space than most people, so the question is less where you can cope and more where you actually want to be. Your environment should be chosen for what you want to create in it.",
     };
   }
 

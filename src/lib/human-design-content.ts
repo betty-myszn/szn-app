@@ -26,7 +26,7 @@ export const TYPE_CONTENT: Record<HDTypeName, MeaningBlock> = {
     title: "the initiator",
     intro: "You're here to start things, not to wait for permission to begin.",
     meaning:
-      "Manifestors are the only type designed to initiate, to feel an urge and act on it without needing an external cue first. You carry a closed, fast energy that can feel intense to others, because you move before you explain. Around 9% of people are Manifestors, so most of the world isn't wired like you, which is exactly why your impact lands.",
+      "You don't need a cue. You feel the urge and you move, and that isn't impatience, it's the design. Your energy is closed and fast, which is why people find you a lot and follow you anyway. Around 9% of people work like this. The world is built for the other 91%, which is exactly why you keep being the one who starts it.",
     apply:
       "Inform the people your action affects before you act, not to ask permission, but to remove the resistance that used to blindside you. When you tell people what you're about to do, they get on board instead of pushing back. Protect your independence and let yourself rest hard between bursts.",
   },
@@ -34,15 +34,15 @@ export const TYPE_CONTENT: Record<HDTypeName, MeaningBlock> = {
     title: "the builder",
     intro: "You're the life force, built to master what genuinely lights you up.",
     meaning:
-      "Generators have a defined Sacral, a deep, renewable engine of energy that's meant to be spent on work you love. When you're doing the right thing, the energy is endless and magnetic. When you're forcing the wrong thing, you burn out and go flat. Roughly 37% of people are Generators, the backbone of how things actually get built.",
+      "You've got a Sacral, a renewable engine that only fires for work you actually want. On the right thing you're inexhaustible, and people feel it across a room. On the wrong thing you go flat and call it laziness. It isn't laziness, it's your body refusing to fund something that was never yours. About 37% of people are Generators, and you're the reason anything gets built at all.",
     apply:
-      "Stop initiating out of thin air and start responding. Wait for something to respond to, a request, an opportunity, a gut yes, then throw your whole engine at it. If the energy isn't there, that's your body telling you it's not yours to do. Frustration is the sign you're on the wrong track.",
+      "Stop conjuring things out of nowhere. Wait for something to respond to, a request, an opening, a gut yes, then throw the whole engine at it. If the energy isn't there, that's your body answering, not you being lazy. Treat frustration as information that you're on the wrong thing, not as a character flaw to push through.",
   },
   "Manifesting Generator": {
     title: "the multi-passionate powerhouse",
     intro: "You're built to move fast, skip steps, and do more than one thing at once.",
     meaning:
-      "You've the Generator's renewable Sacral engine plus a motor wired to the Throat, so you initiate faster and juggle more than a pure Generator. You're not scattered, you're efficient in a way linear people find hard to follow. Around 33% of people share this type, but few learn to trust their own speed.",
+      "You've got the Generator engine plus a motor wired straight to your Throat, so you start faster and carry more at once. You're not scattered. You're efficient in a way linear people can't follow, which is their problem and has somehow been treated as yours. About 33% of people share this design, and most of them spend years apologising for their own speed.",
     apply:
       "Respond first like a Generator, wait for the yes, then inform people before you leap so your speed doesn't leave them behind. Let yourself have several passions at once instead of forcing yourself to pick one. Skipping steps is a feature, not a flaw, as long as you circle back for anything that actually mattered.",
   },
@@ -50,17 +50,17 @@ export const TYPE_CONTENT: Record<HDTypeName, MeaningBlock> = {
     title: "the guide",
     intro: "You're here to see people and systems clearly, and to be invited to lead.",
     meaning:
-      "Projectors don't have consistent life-force energy, they have penetrating insight. You can see how other people work, where their energy is going, and how it could go better. That gift is powerful, but it lands best when it's recognised and invited rather than pushed. Around 20% of people are Projectors.",
+      "You don't have consistent life force. You have penetrating sight. You can see how someone works, where their energy is leaking and how it could go better, before they can see it themselves. Pushed at people, that gift gets resented. Invited, it's the most valuable thing in the room. About 20% of people are Projectors, and most of them exhaust themselves trying to prove their worth by output instead.",
     apply:
-      "Wait for the invitation for the big things, recognition, work, relationships, love, because invited energy is received and uninvited energy gets resented. Manage your energy fiercely, you're not built to grind full days. Study what you love deeply so your insight becomes the thing people seek out.",
+      "Wait for the invitation on the big things: work, love, recognition. Invited energy gets received, uninvited energy gets resented, and that's the entire difference. Guard your energy hard, because you were never built for full days and pretending otherwise is what flattens you. Go deep on what you love until your insight is the thing people come asking for.",
   },
   Reflector: {
     title: "the mirror",
     intro: "You're a rare barometer, reflecting the health of everything around you.",
     meaning:
-      "Reflectors have no consistently defined centres, so you take in and amplify the energy of the people and places around you. You're a living mirror of your environment, which makes you incredibly wise about people, and deeply affected by who you spend time with. Only about 1% of people are Reflectors.",
+      "You've got no consistently defined centres, so you take in the room and hand it back amplified. You're a mirror, which makes you unusually wise about people and unusually affected by them. Who you spend your time with isn't a preference for you, it's the whole design. Only about 1% of people are Reflectors, so nobody has ever handed you a rulebook that actually fits.",
     apply:
-      "Your environment is everything, choose the people and places you're around with real care, because you become them. Give big decisions a full lunar cycle, roughly 28 days, before you commit, so you can feel the choice from every angle. Don't expect to feel the same day to day, that changeability is the design working.",
+      "Your environment is the decision. Choose your people and your places with real care, because you become them. Give the big calls a full lunar cycle, about 28 days, so you feel the choice from every angle before you commit to it. And stop expecting to feel the same two days running, that changeability is the design working, not you being unreliable.",
   },
 };
 
@@ -81,7 +81,7 @@ export const AUTHORITY_CONTENT: Record<HDAuthorityKey, MeaningBlock> = {
     meaning:
       "Your Solar Plexus is defined, so you experience emotions as a wave that rises and falls over time. Your clarity isn't in the moment, it's in the pattern across the wave. A yes at the peak and a no in the trough are both distortions.",
     apply:
-      "Never decide anything important on the spot, give it time and notice how you feel about it high, low and neutral. If it's still a yes after a night or a few days, it's real. Buy yourself the space with a simple line, I need to sleep on it.",
+      "Never decide anything that matters on the spot. Give it a night, then notice how it feels high, low and flat. If it's still a yes across all three, it's real. Buy yourself the room with one line: I will let you know tomorrow. Anyone who can't wait a day for your answer was never going to respect it anyway.",
   },
   sacral: {
     title: "sacral authority",
@@ -89,7 +89,7 @@ export const AUTHORITY_CONTENT: Record<HDAuthorityKey, MeaningBlock> = {
     meaning:
       "Your Sacral responds instantly to what's in front of you, a rise of energy for yes and a contraction for no. It speaks in gut sounds and body pull, not in reasoned arguments. The mind will try to talk you out of it, the body already knew.",
     apply:
-      "Get people to ask you yes or no questions and listen for the immediate gut response before your head jumps in. A true yes has energy behind it, a true no goes flat. Trust the sound your body makes over the story your mind tells.",
+      "Ask people to put it to you as a yes or no, then listen for the response your body makes before your head arrives. A real yes has lift behind it. A real no goes flat. Trust the sound your body made over the paragraph your mind is about to write to justify the opposite.",
   },
   splenic: {
     title: "splenic authority",
@@ -97,7 +97,7 @@ export const AUTHORITY_CONTENT: Record<HDAuthorityKey, MeaningBlock> = {
     meaning:
       "Your Spleen gives you in-the-moment intuition, a subtle, immediate sense of what's right for your health, safety and timing. It's quiet and it doesn't repeat itself, so it's easy to override with logic and then regret it.",
     apply:
-      "Act on the first quiet hit, don't wait for it to argue its case, because it'll not. Practise catching that soft initial signal in low-stakes moments so you trust it under pressure. When something feels off, honour it even if you can't explain why.",
+      "Act on the first quiet hit. It won't argue its case and it won't say it twice, so waiting for proof means losing it. Practise catching it on small things so you already trust it when the stakes are high. When something feels off, honour it, and stop making yourself produce a reason first.",
   },
   ego: {
     title: "ego authority",
@@ -105,23 +105,23 @@ export const AUTHORITY_CONTENT: Record<HDAuthorityKey, MeaningBlock> = {
     meaning:
       "Your decisions run through your Heart, the centre of willpower, worth and desire. The real question underneath every choice is whether you actually want it and have the heart to see it through, not whether you should.",
     apply:
-      "Listen to what you spontaneously say out loud, your voice reveals what your heart truly wants before your mind edits it. Only commit to what you've genuine desire and energy for, and let yourself walk away from what you do not.",
+      "Listen to what you blurt out before you tidy it up, because your voice gives away what your heart wants faster than your reasoning does. Commit only to what you actually want and have the will to finish. Walk away from the rest without building a case for it first.",
   },
   self: {
     title: "self-projected authority",
     intro: "You hear your truth when you talk it out loud.",
     meaning:
-      "Your authority runs through the G centre, your identity and direction, and it comes out through your voice. You don't think your way to clarity, you speak your way there. What you say reveals whether a choice is aligned with who you are.",
+      "Your authority runs through the G centre, your identity and direction, and it comes out through your voice. You don't think your way to clarity, you speak your way there. What you say reveals whether a choice fits who you actually are.",
     apply:
-      "Talk decisions through with trusted people who let you speak without steering you. You're not asking their advice, you're listening to your own voice for what rings true. Pay attention to the direction your words naturally pull toward.",
+      "Talk it through with people who let you speak without steering you. You're not after their advice, you're listening to your own voice for the thing that rings true. Notice which direction your words keep pulling toward, and go that way.",
   },
   mental: {
     title: "mental / environmental authority",
     intro: "You find clarity by talking it out in the right rooms.",
     meaning:
-      "You've no single inner authority, so you're designed to reach clarity through open conversation in the right environment. You're a sounding board by design, your wisdom emerges out loud, over time, with people you trust.",
+      "You've got no single inner authority, so you're designed to reach clarity through open conversation in the right environment. You're a sounding board by design, your wisdom emerges out loud, over time, with people you trust.",
     apply:
-      "Talk your decisions through with a few trusted people, and notice how you sound and feel in different places, because environment shapes your clarity. Don't rush, let the right answer surface across several conversations rather than one.",
+      "Talk it through with a few people you trust, and notice how you sound in different rooms, because the room is doing more work than you think. Don't rush it. Let the answer surface across several conversations instead of forcing one to produce it.",
   },
   lunar: {
     title: "lunar authority",
@@ -139,7 +139,7 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     title: "the investigator / martyr",
     intro: "You need solid foundations, and you learn everything by trying it.",
     meaning:
-      "Line 1 needs to feel secure through knowing, you dig until you've a foundation under your feet. Line 3 learns through trial and error, bumping into what doesn't work until you find what does. Together you're a researcher who tests everything in real life.",
+      "Line 1 needs to feel secure through knowing, you dig until you've got a foundation under your feet. Line 3 learns through trial and error, bumping into what doesn't work until you find what does. Together you're a researcher who tests everything in real life.",
     apply:
       "Give yourself full permission to study deeply before you feel ready, that isn't procrastination, it's your foundation. Treat every misstep as data, not failure, because your wisdom is built from what didn't work.",
   },
@@ -149,11 +149,11 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     meaning:
       "Line 1 needs to know its subject inside out to feel secure. Line 4 lives through relationships, your opportunities come through the people you already know. You're the expert whose next door opens through a warm connection, not a cold pitch.",
     apply:
-      "Do the deep study first so you've real authority, then nurture your friendships and network, because that's how your work travels. Your next opportunity is almost always one relationship away, so tend those bonds.",
+      "Do the deep study first so you've got real authority, then nurture your friendships and network, because that's how your work travels. Your next opportunity is almost always one relationship away, so tend those bonds.",
   },
   "2/4": {
     title: "the hermit / opportunist",
-    intro: "You've natural gifts, and you need both alone time and your people.",
+    intro: "You've got natural gifts, and you need both alone time and your people.",
     meaning:
       "Line 2 carries talents you didn't have to work for, and it needs regular time alone to recharge and to let those gifts develop. Line 4 thrives through your network. You get called out of your cave by the people who see what you've got.",
     apply:
@@ -165,7 +165,7 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     meaning:
       "Line 2 needs solitude and holds gifts that feel effortless to you. Line 5 gets projected onto, people expect you to have practical solutions and to save the day. You're the reluctant, gifted problem-solver others keep reaching for.",
     apply:
-      "Guard your alone time, and be intentional about what you say yes to, because people will pile expectations on you. Deliver when you genuinely can, and be honest when you cannot, so the projection doesn't run your life.",
+      "Guard your alone time, and be intentional about what you say yes to, because people will pile expectations on you. Deliver when you genuinely can, and be honest when you can't, so the projection doesn't run your life.",
   },
   "3/5": {
     title: "the martyr / heretic",
@@ -195,13 +195,13 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     title: "the opportunist / investigator",
     intro: "You're a fixed point, deeply grounded and here to influence your network.",
     meaning:
-      "This is the one Juxtaposition profile, unusually fixed in how it operates. Line 4 lives through relationships, line 1 needs a deep foundation of knowledge. You've a stable, almost non-negotiable way of being that influences the people around you.",
+      "This is the one Juxtaposition profile, unusually fixed in how it operates. Line 4 lives through relationships, line 1 needs a deep foundation of knowledge. You've got a stable, almost non-negotiable way of being that influences the people around you.",
     apply:
-      "Build your expertise deeply, then let it move through your close network. You're not built to be endlessly flexible, so honour your fixed nature and surround yourself with people who value exactly how you are.",
+      "Build your expertise deeply, then let it move through your close network. You're not built to be endlessly flexible, so honour your fixed nature and surround yourself with people who value exactly how you're built.",
   },
   "5/1": {
     title: "the heretic / investigator",
-    intro: "People look to you for solutions, and you make sure you've them.",
+    intro: "People look to you for solutions, and you make sure you've got them.",
     meaning:
       "Line 5 is projected onto as a practical rescuer, people expect you to fix things. Line 1 needs a solid foundation of knowledge to feel secure. You're the trusted expert people call in a crisis, precisely because you've done the work underneath.",
     apply:
@@ -211,7 +211,7 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     title: "the heretic / hermit",
     intro: "A natural talent the world keeps calling on to save the day.",
     meaning:
-      "Line 5 gets projected onto as a universal problem-solver. Line 2 holds effortless gifts and needs solitude. You've real talent that people keep pulling you out of your cave to use, whether or not you asked to be the one.",
+      "Line 5 gets projected onto as a universal problem-solver. Line 2 holds effortless gifts and needs solitude. You've got real talent that people keep pulling you out of your cave to use, whether or not you asked to be the one.",
     apply:
       "Protect your alone time, it's non-negotiable for you, and choose your rescues carefully. Let the right people call you out for the right things, and give yourself full permission to say no to the rest.",
   },
@@ -245,7 +245,7 @@ export const DEFINITION_CONTENT: Record<HDDefinition, MeaningBlock> = {
   },
   "Split Definition": {
     title: "split definition",
-    intro: "You've two energy islands, and you seek the people who bridge them.",
+    intro: "You've got two energy islands, and you seek the people who bridge them.",
     meaning:
       "Your defined centres form two separate groups. You can feel a slight internal gap, and you're naturally drawn to people whose energy connects your two sides, which is part of why relationships feel so significant to you.",
     apply:
@@ -290,7 +290,7 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Head",
     theme: "inspiration and mental pressure",
     defined:
-      "You've a consistent source of inspiration and ideas, and a steady mental pressure to make sense of things. You can inspire others with the questions you ask. Follow the ideas that genuinely excite you and let the rest go.",
+      "You've got a consistent source of inspiration and ideas, and a steady mental pressure to make sense of things. You can inspire others with the questions you ask. Follow the ideas that genuinely excite you and let the rest go.",
     open:
       "You take in and amplify other people's questions and mental pressure, which can lead to overthinking things that aren't even yours to solve. Learn to tell your questions from everyone else's, and only chase the ones that actually matter to you.",
   },
@@ -298,7 +298,7 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Ajna",
     theme: "how you think and conceptualise",
     defined:
-      "You've a fixed, reliable way of processing information and forming views, which makes you mentally consistent and dependable. Trust your framework, and stay willing to update it so certainty doesn't harden into rigidity.",
+      "You've got a fixed, reliable way of processing information and forming views, which makes you mentally consistent and dependable. Trust your framework, and stay willing to update it so certainty doesn't harden into rigidity.",
     open:
       "You think flexibly and can hold many perspectives, but the pressure to seem certain is constant. You don't have to have fixed opinions, your gift is open-mindedness. Get comfortable saying I am still thinking about it.",
   },
@@ -306,7 +306,7 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Throat",
     theme: "communication and manifestation",
     defined:
-      "You've a reliable voice and a consistent way of expressing and getting things done. Use it with your strategy and authority so you speak and act at the right time, rather than just because you can.",
+      "You've got a reliable voice and a consistent way of expressing and getting things done. Use it with your strategy and authority so you speak and act at the right time, rather than just because you can.",
     open:
       "You can channel many ways of expressing yourself, but the pull to speak just to get noticed is strong. Let yourself be invited or wait for the right moment, the words land far better when you're not forcing them.",
   },
@@ -314,7 +314,7 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "G (Identity)",
     theme: "identity, direction and love",
     defined:
-      "You've a fixed sense of who you're and where you're going, a steady inner compass. Trust your own direction, it doesn't tend to waver, and let others feel stabilised by it.",
+      "You've got a fixed sense of who you're and where you're going, a steady inner compass. Trust your own direction, it doesn't tend to waver, and let others feel stabilised by it.",
     open:
       "Your sense of identity and direction is fluid and shaped by where and who you're around, which makes you adaptable and a beautiful mirror for others. Choose your environments with care, and stop pressuring yourself to have it all figured out.",
   },
@@ -322,15 +322,15 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Heart (Ego / Will)",
     theme: "willpower, worth and desire",
     defined:
-      "You've reliable willpower and can make and keep promises when you genuinely want to. Use it on what you truly desire, and let yourself rest, even a strong heart isn't meant to prove itself endlessly.",
+      "You've got reliable willpower and can make and keep promises when you genuinely want to. Use it on what you truly desire, and let yourself rest, even a strong heart isn't meant to prove itself endlessly.",
     open:
-      "You don't have consistent willpower on tap, so stop trying to prove your worth through what you can push through. Your value isn't something you've to earn. Make fewer hard promises, and drop the need to prove anything.",
+      "You don't have consistent willpower on tap, so stop trying to prove your worth through what you can push through. Your value isn't something you have to earn. Make fewer hard promises, and drop the need to prove anything.",
   },
   sacral: {
     name: "Sacral",
     theme: "life force, work and energy",
     defined:
-      "You've a deep, renewable engine of energy for the work and life you love, and it's meant to be used until it's genuinely spent each day. Spend it on what lights you up, and honour the gut yes and no it gives you.",
+      "You've got a deep, renewable engine of energy for the work and life you love, and it's meant to be used until it's genuinely spent each day. Spend it on what lights you up, and honour the gut yes and no it gives you.",
     open:
       "You don't have consistent life-force energy, so you're not built to grind full days like a Generator. You can amplify others' energy and overwork without noticing. Learn when enough is enough, and rest before you're empty.",
   },
@@ -346,7 +346,7 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Spleen",
     theme: "intuition, health and survival",
     defined:
-      "You've a consistent, quiet intuition and a steady instinct for health and safety. Trust the first soft signal, it's right, and it won't repeat itself, so act on it.",
+      "You've got a consistent, quiet intuition and a steady instinct for health and safety. Trust the first soft signal, it's right, and it won't repeat itself, so act on it.",
     open:
       "You can become wise about health and survival, but you'll hold on to people, habits or situations that aren't good for you out of fear of letting go. Notice what you're gripping from fear, and practise releasing what's no longer healthy.",
   },
@@ -382,7 +382,7 @@ export const CROSS_ANGLE_CONTENT: Record<HDCrossAngle, MeaningBlock> = {
     title: "juxtaposition, fixed fate",
     intro: "You carry one focused, fixed purpose that's uniquely yours.",
     meaning:
-      "A Juxtaposition cross is a fixed fate, a single, concentrated theme you're here to embody. You've an unusually stable way of being and a specific role that doesn't bend much to circumstance.",
+      "A Juxtaposition cross is a fixed fate, a single, concentrated theme you're here to embody. You've got an unusually stable way of being and a specific role that doesn't bend much to circumstance.",
     apply:
       "Lean into your fixed nature rather than fighting it, consistency is your gift. Find the one lane that's truly yours and let yourself go deep rather than wide.",
   },
