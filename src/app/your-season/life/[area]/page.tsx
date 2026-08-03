@@ -10,6 +10,7 @@ import { useYourSzn } from "@/lib/use-your-szn";
 import { composeLifeArea, LIFE_AREAS, resolveAreaId } from "@/lib/life-areas";
 import { useHumanDesign } from "@/lib/use-human-design";
 import { composeAreaDesign } from "@/lib/life-area-design";
+import WovenAreaRead from "@/components/WovenAreaRead";
 import { ordinalHouse } from "@/lib/interpretations";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
 import ShareButtons from "@/components/ShareButtons";
@@ -107,6 +108,56 @@ export default function LifeAreaPage() {
   reading.planetLayers.forEach((p) => addLink(p.id, p.name));
   reading.pointLayers.forEach((p) => addLink(p.id, p.name));
   addLink(reading.ascendantLayer?.ruler?.rulerId, reading.ascendantLayer?.ruler?.rulerName);
+
+  // Mindset uses the woven astrology + Human Design read (one voice), the first area on the new
+  // format. Other areas keep the current layout until the format is rolled out.
+  if (areaId === "mindset") {
+    return (
+      <>
+        <section className="px-5 md:px-8 py-4" style={{ background: "var(--dark)" }}>
+          <div className="max-w-4xl mx-auto">
+            <Link
+              href="/your-season"
+              className="no-underline"
+              style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--lav)" }}
+            >
+              back to {season.sign.toLowerCase()} szn
+            </Link>
+          </div>
+        </section>
+        <section className="px-5 md:px-8 py-10">
+          <WovenAreaRead reading={reading} design={design} seasonSign={season.sign} />
+        </section>
+        <section className="px-5 md:px-8 pb-12">
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <Link href="/journal" className="btn-pink" style={{ display: "inline-block" }}>journal on this area</Link>
+          </div>
+        </section>
+        <section className="px-5 md:px-8 py-12" style={{ borderTop: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="tag mb-5">explore another area of your szn</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
+              {otherAreas.map((area, i) => (
+                <Link
+                  key={area.id}
+                  href={`/your-season/life/${area.id}`}
+                  className="no-underline p-5 text-center hover:bg-[#fafafa] transition-colors"
+                  style={{
+                    borderRight: (i + 1) % 4 !== 0 ? "var(--border)" : undefined,
+                    borderBottom: Math.floor(i / 4) < Math.floor((otherAreas.length - 1) / 4) ? "var(--border)" : undefined,
+                    color: "var(--dark)",
+                  }}
+                >
+                  <div style={{ fontSize: 20, marginBottom: 6 }}>{area.emoji}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700 }}>{area.label}</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>

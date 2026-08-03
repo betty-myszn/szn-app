@@ -1028,21 +1028,18 @@ export function composeLifeArea(
   const seasonOverview = SIGN_OVERVIEWS[season.sign];
   const rulerOverview = rulerPlacement ? SIGN_OVERVIEWS[rulerPlacement.rulerSign] : undefined;
 
-  // Every life area has a fixed archetypal planet (Jupiter for money, Venus for relationships,
-  // etc.) as well as a chart-specific house ruler, and those are frequently two different
-  // planets. Naming both without saying which one actually governs the house creates a real
-  // contradiction, the page ends up implying two different planets each "run" the same area.
-  // This states the hierarchy explicitly: the ruler runs the house, the archetypal planet is
-  // texture riding on top of it, only said when they actually differ.
+  // Every life area has a natural significator planet (Mercury for mindset, Venus for love, etc.)
+  // AND a chart-specific house-cusp ruler, often two different planets. Both genuinely drive the
+  // area: the ruler runs the house, and the significator is the planet the area is fundamentally
+  // about. So the reading names both as real drivers, giving the significator its own placement,
+  // rather than crowning the ruler and calling the significator background texture.
   const bodyHouse = bodyHouseFor(chart, meta.bodyId);
   const bodyIsRuler = !!rulerPlacement && rulerPlacement.rulerId === meta.bodyId;
-  // The archetypal aside only makes sense for an actual planet that isn't the house ruler. It's
-  // suppressed when the coaching body is a node/point (calling the North Node "the planet
-  // traditionally hands purpose to" and demoting it to "texture" is both wrong and, for purpose,
-  // sidelines the very placement the area is about, the node gets its full point layer instead).
+  // The significator aside only fires for an actual planet that is not already the house ruler.
+  // It is skipped for a node/point, which gets its own full point layer instead.
   const bodyIsPoint = meta.bodyId === "north_node" || meta.bodyId === "south_node";
   const archetypalAside = rulerPlacement && !bodyIsRuler && !bodyIsPoint
-    ? ` One honest distinction worth naming: your ${sign.toLowerCase()} ${bodyLabel}, sitting in your ${ordinalHouse(bodyHouse)} house, is the planet astrology traditionally hands this area to, and it still colours how you handle it. But it doesn't rule this house, ${rName} does, so treat ${bodyLabel} as texture riding on the engine, not a second driver competing with it.`
+    ? ` And your ${bodyLabel} drives this every bit as much as ${rName}: ${bodyLabel} is ${bodyMeaning?.domainShort || "the placement this area is fundamentally about"}, so your ${sign.toLowerCase()} ${bodyLabel} in your ${ordinalHouse(bodyHouse)} house is the other engine here, ${cleanClause(traits.gift)} at its best and ${cleanClause(traits.shadow)} under pressure. Two real drivers, read them together.`
     : "";
 
   const signature = rulerPlacement
@@ -1139,7 +1136,7 @@ export function composeLifeArea(
     // the only fragment of the reading shown, so it states the ruler correctly rather than
     // repeating the fuller signature/axis synthesis shown above it on this page.
     inYourChart: rulerPlacement
-      ? `${rName} rules your ${meta.label} story from ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${bodyIsRuler || bodyIsPoint ? "" : `, with your ${sign.toLowerCase()} ${bodyLabel} adding its own texture rather than steering`}. It lives through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}, where ${describeOccupants(houseTenants, meta.label, traitKey, rulerPlacement.rulerId)}.${
+      ? `${rName} rules your ${meta.label} story from ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${bodyIsRuler || bodyIsPoint ? "" : `, and your ${sign.toLowerCase()} ${bodyLabel} drives it right alongside`}. It lives through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}, where ${describeOccupants(houseTenants, meta.label, traitKey, rulerPlacement.rulerId)}.${
           secondaryHouseNumber && secondaryHouseMeaningRaw ? ` Your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title} is the other half of this story, not a footnote.` : ""
         }${aspectSummaryLine}`
       : `Your ${sign.toLowerCase()} ${bodyLabel} lives in your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${houseMeaning.rules}.${aspectSummaryLine}`,
