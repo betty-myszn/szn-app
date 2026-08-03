@@ -14,6 +14,13 @@ export interface AreaRecipe {
   planets: string[]; // planet ids interpreted as full layers, first is the coaching body
   points?: string[]; // node ids, interpreted via composePointLayer
   useAscendant?: boolean; // whether the rising sign + its ruler are part of this area's story
+  // What the season's energy is pointed at, for the one-line teaser on the dashboard grid.
+  // Defaults to the primary house's first keyword, which is right for most areas (2nd -> money,
+  // 7th -> love, 6th -> habits). Set it only where the area and its house diverge: purpose reads
+  // the 9th, whose first keyword is "travel"; style & fashion reads the 1st, whose keyword is
+  // "identity"; healing reads the 8th, whose keyword is "intimacy". All three were describing the
+  // house rather than the thing the card is actually about.
+  focusNoun?: string;
   axisLabel: string; // e.g. "money axis", "career framework"
   axisFraming: string; // the polarity/relationship the primary houses jointly represent
   axisPrompts: string[]; // reflective observations, stated not asked, in the member's own terms
@@ -58,6 +65,7 @@ export const AREA_RECIPES: Record<string, AreaRecipe> = {
     houses: [9, 10],
     planets: ["jupiter", "sun"],
     points: ["north_node"],
+    focusNoun: "meaning",
     axisLabel: "purpose framework",
     axisFraming: "the relationship between the meaning and worldview you're expanding into, the public contribution you're building toward, and the growth direction your North Node is pulling you along",
     axisPrompts: [
@@ -80,6 +88,7 @@ export const AREA_RECIPES: Record<string, AreaRecipe> = {
     houses: [1, 5],
     planets: ["venus"],
     useAscendant: true,
+    focusNoun: "how you present",
     axisLabel: "style axis",
     axisFraming: "the relationship between the visual identity you arrive in, your rising sign and default presentation, and the more expressive, playful, creative edge you reach for when you let yourself",
     axisPrompts: [
@@ -133,6 +142,7 @@ export const AREA_RECIPES: Record<string, AreaRecipe> = {
     houses: [8, 12],
     planets: ["chiron", "pluto"],
     points: ["south_node"],
+    focusNoun: "what you are still healing",
     axisLabel: "healing axis",
     axisFraming: "the relationship between the deep, intimate, power-and-transformation territory of the 8th and the hidden, inherited, unconscious material of the 12th, where the wound lives and what actually happens to it once real intimacy or real stakes bring it up",
     axisPrompts: [
@@ -1111,7 +1121,7 @@ export function composeLifeArea(
     house: primaryHouse,
     bodyLabel,
     sign,
-    quickSummary: `${season.sign} activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${sign.toLowerCase()} ${bodyLabel} energy pointed straight at ${houseMeaning.lifeAreas[0]}.`,
+    quickSummary: `${season.sign} activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, ${sign.toLowerCase()} ${bodyLabel} energy pointed straight at ${recipe.focusNoun ?? houseMeaning.lifeAreas[0]}.`,
     whatThisIsAbout: `${season.sign} szn puts real weight on ${meta.label}. This szn's core focus is simple: ${season.focus.toLowerCase()} Here's exactly how that plays out in this area of your life, and what it actually takes to change it, not just think about it. It shows up primarily through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, which governs ${houseMeaning.lifeAreas.join(", ")}${
       secondaryHouseNumber && secondaryHouseMeaningRaw ? `, with your ${ordinalHouse(secondaryHouseNumber)} house of ${secondaryHouseMeaningRaw.title} adding a second layer on top of that` : ""
     }. Between the planet running this area, the sign it's expressed through, and the house it lives in, there are three separate layers of your own chart pointing at ${meta.label} this szn.`,
