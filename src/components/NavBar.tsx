@@ -10,6 +10,7 @@ import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadC
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 
 const memberLinks = [
+  { href: "/money-blueprint", label: "money blueprint" },
   { href: "/events", label: "events" },
   { href: "/journal", label: "journal" },
   // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
@@ -35,6 +36,7 @@ const chartMenu = [
 
 const guestLinks = [
   { href: "/", label: "home" },
+  { href: "/money-blueprint", label: "money blueprint" },
   { href: "/seasons", label: "seasons" },
   { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },
