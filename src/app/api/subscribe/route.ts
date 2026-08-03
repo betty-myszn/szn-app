@@ -13,6 +13,7 @@ const N8N_WEBHOOK = "https://n8n-production-999ab.up.railway.app/webhook/myszn-w
 // canonical-with-env-override shape as the Stripe price map in stripe-tiers.ts, for the same reason.
 const CANONICAL_LIST_WAITLIST = 9; // "MY SZN waitlist"
 const CANONICAL_LIST_CHART = 10; // "Free birthchart generator"
+const CANONICAL_LIST_MONEY_BLUEPRINT = 14; // "Money Blueprint"
 
 function listIdFromEnv(v: string | undefined): number | null {
   const t = v?.trim();
@@ -20,9 +21,11 @@ function listIdFromEnv(v: string | undefined): number | null {
 }
 
 function listIdFor(source: string | undefined): number {
-  return source === "free-chart"
-    ? listIdFromEnv(process.env.BREVO_LIST_FREE_CHART) ?? CANONICAL_LIST_CHART
-    : listIdFromEnv(process.env.BREVO_LIST_WAITLIST) ?? CANONICAL_LIST_WAITLIST;
+  if (source === "free-chart") return listIdFromEnv(process.env.BREVO_LIST_FREE_CHART) ?? CANONICAL_LIST_CHART;
+  // Money Blueprint buyers are their own audience, not the waitlist. Their list is "Money Blueprint"
+  // (id 14), overridable via BREVO_LIST_MONEY_BLUEPRINT the same way the others are.
+  if (source === "money-blueprint") return listIdFromEnv(process.env.BREVO_LIST_MONEY_BLUEPRINT) ?? CANONICAL_LIST_MONEY_BLUEPRINT;
+  return listIdFromEnv(process.env.BREVO_LIST_WAITLIST) ?? CANONICAL_LIST_WAITLIST;
 }
 
 // Brevo only stores a custom attribute that already exists on the account, so each one has to be
@@ -82,7 +85,7 @@ export async function POST(req: NextRequest) {
     // what put every chart contact on the waitlist list as well as their own: the overlap was exact,
     // 3 of 3. Getting a free birth chart is not asking to join the waitlist. Someone who wants both
     // posts the waitlist form too, which arrives here as its own request with its own source.
-    const n8nPromise = source === "free-chart"
+    const n8nPromise = source === "free-chart" || source === "money-blueprint"
       ? null
       : fetch(N8N_WEBHOOK, {
           method: "POST",
