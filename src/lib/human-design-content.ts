@@ -139,97 +139,97 @@ export const PROFILE_CONTENT: Record<string, MeaningBlock> = {
     title: "the investigator / martyr",
     intro: "You need solid foundations, and you learn everything by trying it.",
     meaning:
-      "Line 1 needs to feel secure through knowing, you dig until you've got a foundation under your feet. Line 3 learns through trial and error, bumping into what doesn't work until you find what does. Together you're a researcher who tests everything in real life.",
+      "You can't move on something you haven't got solid under your feet, so you read everything, and then you learn it properly by getting it wrong anyway. Line 1 wants the foundation. Line 3 finds the truth by bumping into what doesn't work. You're a researcher who tests it in real life instead of taking anyone's word for it.",
     apply:
-      "Give yourself full permission to study deeply before you feel ready, that isn't procrastination, it's your foundation. Treat every misstep as data, not failure, because your wisdom is built from what didn't work.",
+      "Study as deeply as you want before you move. That isn't procrastination, it's how your confidence gets built, and skipping it is what makes you wobble. And stop counting the things that didn't work as failures. They're the research, and they're the reason your eventual answer holds.",
   },
   "1/4": {
     title: "the investigator / opportunist",
     intro: "You build deep foundations, then share them through your network.",
     meaning:
-      "Line 1 needs to know its subject inside out to feel secure. Line 4 lives through relationships, your opportunities come through the people you already know. You're the expert whose next door opens through a warm connection, not a cold pitch.",
+      "You need to know your subject inside out before you feel safe speaking on it, and then it travels through the people who already know you. Line 1 builds the foundation, line 4 opens the doors. Your next thing arrives through a warm connection, not a cold pitch.",
     apply:
-      "Do the deep study first so you've got real authority, then nurture your friendships and network, because that's how your work travels. Your next opportunity is almost always one relationship away, so tend those bonds.",
+      "Do the deep study first so the authority is real rather than performed. Then tend your people like it's the work, because it is. The opportunity you want is almost always one relationship away, and it won't come from a stranger.",
   },
   "2/4": {
     title: "the hermit / opportunist",
     intro: "You've got natural gifts, and you need both alone time and your people.",
     meaning:
-      "Line 2 carries talents you didn't have to work for, and it needs regular time alone to recharge and to let those gifts develop. Line 4 thrives through your network. You get called out of your cave by the people who see what you've got.",
+      "You've got talent you never had to work for, and a need for solitude that other people read as antisocial. Line 2 needs the cave, that's where the gift actually develops. Line 4 means you get called out of it by the people who can already see what you've got.",
     apply:
-      "Protect your alone time without guilt, it's where your gift lives. Trust the people who name your talents and pull you into opportunities, your best chances come through being recognised, not through chasing.",
+      "Protect the alone time without apologising for it, because that's where the gift lives. Then trust the people who name your talent out loud and pull you into things. You get found. You don't get there by chasing.",
   },
   "2/5": {
     title: "the hermit / heretic",
     intro: "You're a natural talent that people project their hopes onto.",
     meaning:
-      "Line 2 needs solitude and holds gifts that feel effortless to you. Line 5 gets projected onto, people expect you to have practical solutions and to save the day. You're the reluctant, gifted problem-solver others keep reaching for.",
+      "You've got gifts that feel effortless to you and a solitude you genuinely need, and the world keeps knocking anyway. Line 5 gets projected onto: people decide you have the answer before you've said a word. Deliver and you're a saviour, don't and you're a disappointment, and neither one is really about you.",
     apply:
-      "Guard your alone time, and be intentional about what you say yes to, because people will pile expectations on you. Deliver when you genuinely can, and be honest when you can't, so the projection doesn't run your life.",
+      "Guard the alone time and get deliberate about what you agree to, because the expectations keep coming. Deliver when you actually can, say so plainly when you can't, and let the projection be their business instead of the thing running your calendar.",
   },
   "3/5": {
     title: "the martyr / heretic",
     intro: "You learn by doing, then teach the world what actually works.",
     meaning:
-      "Line 3 experiments relentlessly, finding truth by discovering what fails. Line 5 is projected onto as a practical saviour and a universal fixer. You turn hard-won, real-life lessons into solutions other people can use.",
+      "You find out what's true by getting it wrong first, and then people decide you're the one with the answer. Line 3 experiments relentlessly, line 5 gets projected onto as the practical fixer. You turn hard-won lessons into something other people can actually use.",
     apply:
-      "Reframe trial and error as your method, not your shortcoming, your credibility comes from having actually lived it. Manage what people expect of you, promise only what you can deliver, and let your practical wisdom do the talking.",
+      "Let the failed attempts count as method rather than proof you're bad at this. Then be careful what you promise, because line 5 makes people expect a rescue. Offer what you know works and drop the expectation you never signed up for.",
   },
   "3/6": {
     title: "the martyr / role model",
     intro: "You experiment hard early, then become the example.",
     meaning:
-      "Line 3 learns through trial and error. Line 6 lives in three phases, a trial-heavy first act, a period on the roof observing, and a mature act as a role model. Early life is messy on purpose, it's building the wisdom you'll later embody.",
+      "Your first three decades are a contact sport. Line 3 learns by trying it and getting burned, and you've had more of that than most. Line 6 climbs onto the roof around thirty, watches for a while, then comes back down to live as the proof. The mess wasn't wasted time, it was the curriculum.",
     apply:
-      "Be gentle with yourself through the trial-and-error years, you're gathering the material for who you become. As you mature, notice that people learn from watching you, so living your truth openly is the work.",
+      "Stop apologising for the trial and error, it's how you know anything worth knowing. If you're in the watching phase, let yourself watch instead of forcing action you're not built for right now. What you lived through becomes the exact thing people trust you for later.",
   },
   "4/6": {
     title: "the opportunist / role model",
     intro: "You lead through relationships, and you become the example over time.",
     meaning:
-      "Line 4 moves through networks, your life unfolds through the people you're bonded to. Line 6 grows into a role model across three life phases. You're here to build genuine relationships and, in time, to embody what you've learned for others.",
+      "Your life moves through your people. Line 4 means the network isn't a nice-to-have, it's the whole route, so a burned bridge costs you more than it costs most. Line 6 means you're becoming the example on a slow timeline, so the authority arrives later and lasts longer.",
     apply:
-      "Invest in real, loyal relationships, they're your platform and your path. Live in a way you would be proud for others to copy, because with a 6 line, people are watching and learning from how you do it.",
+      "Tend your relationships deliberately, and leave well when you leave, because your next chapter comes through someone you already know. And stop rushing the authority. You're on a longer clock, and that's the design rather than a delay.",
   },
   "4/1": {
     title: "the opportunist / investigator",
     intro: "You're a fixed point, deeply grounded and here to influence your network.",
     meaning:
-      "This is the one Juxtaposition profile, unusually fixed in how it operates. Line 4 lives through relationships, line 1 needs a deep foundation of knowledge. You've got a stable, almost non-negotiable way of being that influences the people around you.",
+      "You're fixed. Lines 4 and 1 don't bend to circumstances the way other profiles do, so you get one way of being and it works beautifully once you stop fighting it. Your influence runs through the people close to you, built on a foundation you actually did the work for.",
     apply:
-      "Build your expertise deeply, then let it move through your close network. You're not built to be endlessly flexible, so honour your fixed nature and surround yourself with people who value exactly how you're built.",
+      "Build the expertise deep, then let it move through your close network rather than broadcasting at strangers. You're not built to be endlessly flexible, so surround yourself with people who value exactly how you're built instead of the ones asking you to adapt.",
   },
   "5/1": {
     title: "the heretic / investigator",
     intro: "People look to you for solutions, and you make sure you've got them.",
     meaning:
-      "Line 5 is projected onto as a practical rescuer, people expect you to fix things. Line 1 needs a solid foundation of knowledge to feel secure. You're the trusted expert people call in a crisis, precisely because you've done the work underneath.",
+      "People project solutions onto you before they properly know you, and line 1 means you make sure you've actually got them. That combination makes you genuinely useful and permanently slightly misread: they see the fixer, not the person who did the reading first.",
     apply:
-      "Do the deep study so your solutions are real, then be deliberate about which problems you take on. Watch the projections, people will make you their hero or their scapegoat, so protect your reputation by delivering only what you truly can.",
+      "Do the work so the reputation is earned, then be exact about what you're promising, because the projection inflates on its own. When it stops fitting, move on without taking it personally. It was never a description of you in the first place.",
   },
   "5/2": {
     title: "the heretic / hermit",
     intro: "A natural talent the world keeps calling on to save the day.",
     meaning:
-      "Line 5 gets projected onto as a universal problem-solver. Line 2 holds effortless gifts and needs solitude. You've got real talent that people keep pulling you out of your cave to use, whether or not you asked to be the one.",
+      "You'd rather be left alone, and the world keeps calling. Line 2's gift is effortless to you, line 5 makes people certain you can save the day. You get pulled out again and again for something you never advertised.",
     apply:
-      "Protect your alone time, it's non-negotiable for you, and choose your rescues carefully. Let the right people call you out for the right things, and give yourself full permission to say no to the rest.",
+      "Say yes to the calls that genuinely suit you and let the rest go without the guilt. Be clear about what you're actually offering so the expectation stays the right size, then go back to your own space instead of staying available by default.",
   },
   "6/2": {
     title: "the role model / hermit",
     intro: "You're here to become the example, in your own time.",
     meaning:
-      "Line 6 matures through three life phases into a role model. Line 2 carries natural gifts and needs solitude. You're building, quietly, toward embodying a way of living that others will learn from simply by watching you.",
+      "You're on the long timeline. Line 6 lives in three phases: a messy first act, a long stretch on the roof watching, then coming down as the example. Line 2 needs solitude the whole way through. If you feel behind, you're not behind, you're mid-build.",
     apply:
-      "Honour your need for alone time as you grow into yourself. Trust that you don't have to force your impact, in time people will look to how you live, so keep living toward your own truth.",
+      "Let the watching phase be a phase instead of evidence you've stalled. Protect the alone time, it's where the gift matures. What you're becoming can't be forced onto an earlier deadline, and everyone rushing you is running a different clock.",
   },
   "6/3": {
     title: "the role model / martyr",
     intro: "You live it all the way through, then become the proof it can be done.",
     meaning:
-      "Line 6 grows into a role model across three phases. Line 3 learns by trial and error. You go through more than most, and that lived experience is exactly what makes you a believable, grounded example later on.",
+      "You live everything all the way through. Line 3 collides with what doesn't work, line 6 turns it into the example. That means a loud first act, a lot of people telling you to be more careful, and then a second half where the thing you lived through is the whole reason anyone listens.",
     apply:
-      "Let the early experimentation happen without shame, it's building your authority. As you mature, share what you've learned openly, because your real-life story is what makes you someone others trust and follow.",
+      "Stop treating the wreckage as a track record against you. It's the proof. Live it fully, then say it out loud, because the version of you people trust later is built from exactly what you're going through now.",
   },
 };
 
@@ -290,41 +290,41 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Head",
     theme: "inspiration and mental pressure",
     defined:
-      "You've got a consistent source of inspiration and ideas, and a steady mental pressure to make sense of things. You can inspire others with the questions you ask. Follow the ideas that genuinely excite you and let the rest go.",
+      "You've got a renewable engine that fires for the right work and flatly refuses the wrong work. That refusal is information, not laziness. Spend the energy on what pulls you and go to bed properly tired, that's the design running correctly.",
     open:
-      "You take in and amplify other people's questions and mental pressure, which can lead to overthinking things that aren't even yours to solve. Learn to tell your questions from everyone else's, and only chase the ones that actually matter to you.",
+      "You don't have consistent life force, so you take in other people's and mistake it for your own, then wonder why you crash. You're not built for the grind everyone else runs. Learn what enough looks like for you and stop measuring it against people wired differently.",
   },
   ajna: {
     name: "Ajna",
     theme: "how you think and conceptualise",
     defined:
-      "You've got a fixed, reliable way of processing information and forming views, which makes you mentally consistent and dependable. Trust your framework, and stay willing to update it so certainty doesn't harden into rigidity.",
+      "You've got a fixed way of processing and forming views, which makes you consistent and makes people trust your read. Trust the framework, and keep it open enough to update, because the failure mode here isn't doubt, it's certainty hardening into something you can't move.",
     open:
-      "You think flexibly and can hold many perspectives, but the pressure to seem certain is constant. You don't have to have fixed opinions, your gift is open-mindedness. Get comfortable saying I am still thinking about it.",
+      "You think flexibly and can hold several truths at once, and the pressure to sound certain is relentless. You don't owe anyone a fixed opinion. Get comfortable saying I'm still thinking about it, because that's the honest answer and it's also your actual gift.",
   },
   throat: {
     name: "Throat",
     theme: "communication and manifestation",
     defined:
-      "You've got a reliable voice and a consistent way of expressing and getting things done. Use it with your strategy and authority so you speak and act at the right time, rather than just because you can.",
+      "You've got a reliable voice and a consistent way of getting things out into the world. Use it on your own timing rather than just because you can. Speaking because the words are available isn't the same as speaking because it's the moment.",
     open:
-      "You can channel many ways of expressing yourself, but the pull to speak just to get noticed is strong. Let yourself be invited or wait for the right moment, the words land far better when you're not forcing them.",
+      "You can express yourself a dozen ways, and the pull to talk just to be noticed is strong. Let yourself be invited, or wait for the moment that's actually yours. The same words land completely differently when you're not pushing them.",
   },
   g: {
     name: "G (Identity)",
     theme: "identity, direction and love",
     defined:
-      "You've got a fixed sense of who you're and where you're going, a steady inner compass. Trust your own direction, it doesn't tend to waver, and let others feel stabilised by it.",
+      "You've got a fixed sense of who you are and where you're going, a compass that holds even when everything around it moves. Trust your own direction, it doesn't waver the way other people's does, and let the people around you steady themselves on it.",
     open:
-      "Your sense of identity and direction is fluid and shaped by where and who you're around, which makes you adaptable and a beautiful mirror for others. Choose your environments with care, and stop pressuring yourself to have it all figured out.",
+      "Your identity and direction shift with where you are and who you're with, which makes you adaptable and an extraordinary mirror for other people. Choose your rooms carefully, they shape you more than they shape most. And stop demanding that you have it all figured out, that was never how you were built to work.",
   },
   heart: {
     name: "Heart (Ego / Will)",
     theme: "willpower, worth and desire",
     defined:
-      "You've got reliable willpower and can make and keep promises when you genuinely want to. Use it on what you truly desire, and let yourself rest, even a strong heart isn't meant to prove itself endlessly.",
+      "You've got consistent willpower and a real sense of your own worth, and you can make promises you'll actually keep. Use it on things you genuinely want. Proving your value on demand is the fastest way to spend this on someone else's agenda.",
     open:
-      "You don't have consistent willpower on tap, so stop trying to prove your worth through what you can push through. Your value isn't something you have to earn. Make fewer hard promises, and drop the need to prove anything.",
+      "Your willpower comes and goes, so pushing through on command doesn't work, and you've probably been told that's a discipline problem. It isn't. Stop making promises to prove something, and stop measuring your worth by what you can force yourself to finish.",
   },
   sacral: {
     name: "Sacral",
@@ -338,25 +338,25 @@ export const CENTER_CONTENT: Record<CenterKey, CenterContent> = {
     name: "Solar Plexus",
     theme: "emotions and feeling",
     defined:
-      "You experience life as an emotional wave that moves through highs and lows over time, and this is your decision-making authority. There's no truth in the now, wait for the wave to settle before you commit to anything big.",
+      "You run on an emotional wave, and there's no truth at either end of it. The high isn't clarity and the low isn't the real answer. Give anything that matters a night, and read the pattern across the whole wave instead of the feeling in front of you.",
     open:
-      "You absorb and amplify the emotions in the room, which can make you avoid conflict to keep the peace. Remember that much of what you feel isn't yours. Don't make decisions to escape emotional tension, and give the feeling time to pass through.",
+      "You take in everyone else's emotional weather and amplify it, so you avoid conflict to keep the room calm, then call it being easy-going. Learn which feelings are actually yours. Most of what you're managing walked in with someone else.",
   },
   spleen: {
     name: "Spleen",
     theme: "intuition, health and survival",
     defined:
-      "You've got a consistent, quiet intuition and a steady instinct for health and safety. Trust the first soft signal, it's right, and it won't repeat itself, so act on it.",
+      "You've got a quiet, immediate instinct for what's safe and what's off, and it speaks once. It won't repeat itself and it won't argue, which is exactly why you talk yourself out of it and regret it later. Move on the first hit.",
     open:
-      "You can become wise about health and survival, but you'll hold on to people, habits or situations that aren't good for you out of fear of letting go. Notice what you're gripping from fear, and practise releasing what's no longer healthy.",
+      "You feel other people's fear as though it's yours, and you hold on to people and habits past the point they're good for you because letting go feels like the bigger risk. Notice whose fear you're actually carrying before you let it make the decision.",
   },
   root: {
     name: "Root",
     theme: "pressure, drive and adrenaline",
     defined:
-      "You handle pressure and stress in a steady, reliable way, with a consistent drive that helps you get going. Use it to fuel what matters, and remember that not everyone can move at your pace.",
+      "You've got your own supply of pressure and drive, a steady adrenaline that lets you set your own pace. Use it to finish things rather than to keep starting them, and don't let anyone else's urgency reset a rhythm that's working.",
     open:
-      "You take in and amplify pressure, which can make you rush to get things done just to feel free of it. That hurry isn't really yours. Slow down on purpose, and remember there's never as much rush as your body is telling you.",
+      "You amplify pressure from everywhere and turn it into a permanent rush to be free of it, which is how you end up saying yes to things purely to get them off your list. The hurry isn't yours. Almost nothing needs answering as fast as it feels.",
   },
 };
 
