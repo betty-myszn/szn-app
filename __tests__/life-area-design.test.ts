@@ -101,12 +101,29 @@ describe("composeAreaDesign", () => {
     }
   });
 
-  it("ranks her own natal gates above ones the season merely activates", () => {
+  // The ordering rule changed deliberately: gates in this area's own centres now lead, because on
+  // a mindset page a mind gate should outrank a money gate the season happens to also switch on.
+  // Natal-first still holds, but WITHIN each relevance group rather than across the whole list.
+  // This asserts both halves, so neither can be lost without failing.
+  it("ranks core gates above context gates", () => {
     for (const sign of ZODIAC_SIGNS) {
       const reading = composeAreaDesign("relationships", hd, sign);
       if (!reading || reading.gates.length < 2) continue;
-      const flags = reading.gates.map((g) => (g.natal ? 0 : 1));
+      const flags = reading.gates.map((g) => (g.core ? 0 : 1));
       expect([...flags].sort()).toEqual(flags);
+    }
+  });
+
+  it("ranks her own natal gates above season-only ones inside each relevance group", () => {
+    for (const sign of ZODIAC_SIGNS) {
+      const reading = composeAreaDesign("relationships", hd, sign);
+      if (!reading || reading.gates.length < 2) continue;
+      for (const core of [true, false]) {
+        const group = reading.gates.filter((g) => g.core === core);
+        if (group.length < 2) continue;
+        const flags = group.map((g) => (g.natal ? 0 : 1));
+        expect([...flags].sort()).toEqual(flags);
+      }
     }
   });
 

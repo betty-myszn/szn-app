@@ -29,7 +29,12 @@ export default function WovenAreaRead({
     <div style={{ maxWidth: 700, margin: "0 auto" }}>
       {/* HERO */}
       <div style={{ background: "var(--dark)", color: "#fff", borderRadius: 20, padding: "34px 28px", marginBottom: 18 }}>
-        <p style={{ ...eyebrow, color: "var(--lav)", opacity: 1 }}>astrology + human design, one read</p>
+        {/* Only claim both systems when there actually is a design layer for this area. style &
+            fashion has no HD config yet, so it gets the honest label rather than a promise the
+            page doesn't keep. */}
+        <p style={{ ...eyebrow, color: "var(--lav)", opacity: 1 }}>
+          {design ? "astrology + human design, one read" : "your personalised read"}
+        </p>
         <h1 style={{ fontFamily: poppins, fontSize: 38, fontWeight: 800, lineHeight: 1.04, margin: "8px 0 14px" }}>
           your {reading.label} this{" "}
           <span style={{ color: "var(--pink)" }}>{season} season</span>
