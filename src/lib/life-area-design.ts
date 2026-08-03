@@ -2,10 +2,10 @@
 // own. The two reference charts (/my-chart and /human-design) stay separate, because they are
 // genuinely two different maps. But in "your season" nobody cares which system an answer came
 // from, they care what this season is asking of them, so here the two speak with one voice:
-// astrology says what is happening now, Human Design says how she is built to handle it.
+// astrology says what's happening now, Human Design says how she is built to handle it.
 //
 // Client-safe on purpose. human-design.ts imports swisseph and is server-only, so the gate maths
-// is redone here from the pure reference constants. It is three lines of arithmetic and no
+// is redone here from the pure reference constants. It's three lines of arithmetic and no
 // ephemeris is involved: gates map onto fixed slices of the zodiac wheel, so which gates a season
 // covers is determined by the sign alone.
 
@@ -28,11 +28,11 @@ export interface AreaGate {
   keynote: string;
   shadow: string;
   gift: string;
-  /** What this gate means in THIS area specifically. Gate 26 in love is not gate 26 in money. */
+  /** What this gate means in THIS area specifically. Gate 26 in love isn't gate 26 in money. */
   lens: string;
   /** True when this is also one of her natal gates, which is the meaningful double hit. */
   natal: boolean;
-  /** True when the gate sits in one of this area's own centres, so it is core rather than context. */
+  /** True when the gate sits in one of this area's own centres, so it's core rather than context. */
   core: boolean;
 }
 
@@ -76,34 +76,34 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     strategyBridge:
       "Your strategy is really a rule about how connection is supposed to start for you, and love is where most people break their own rule first.",
     gatesIntro:
-      "These are the gates this season is switching on that sit in the centres governing love, intimacy and who you are to another person. Each one has a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on that sit in the centres governing love, intimacy and who you're to another person. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   "health-body": {
     centers: ["sacral", "root", "spleen"],
     authorityBridge:
-      "Your body is the one place your authority is not an idea, it is a physical signal. This is the area where overriding it has the most obvious consequences, because the bill arrives as exhaustion rather than as regret.",
+      "Your body is the one place your authority isn't an idea, it's a physical signal. This is the area where overriding it has the most obvious consequences, because the bill arrives as exhaustion rather than as regret.",
     strategyBridge:
-      "Human Design is fundamentally an energy mechanic, so this is the area where it has the most to say. Your type describes how your energy is actually built to work, which is usually nothing like how you have been told to work.",
+      "Human Design is fundamentally an energy mechanic, so this is the area where it has the most to say. Your type describes how your energy is actually built to work, which is usually nothing like how you've been told to work.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your body, your energy and how you actually recover. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your body, your energy and how you actually recover. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   career: {
     centers: ["throat", "heart", "sacral"],
     authorityBridge:
-      "Career is where you will be asked to decide fastest, usually by someone with a deadline. Knowing how you are built to reach clarity is what stops you agreeing to things in meetings that you unpick for the next six months.",
+      "Career is where you'll be asked to decide fastest, and it'll be someone else holding the deadline. Knowing how you're built to reach clarity is what stops you agreeing to things in meetings that you unpick for the next six months.",
     strategyBridge:
-      "Your strategy is a rule about how work is meant to arrive for you, and it is the single thing most people override in their career, because the culture rewards the opposite of what most types are built for.",
+      "Your strategy is a rule about how work is meant to arrive for you, and it's the single thing most people override in their career, because the culture rewards the opposite of what most types are built for.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your work, your visibility and what you are building. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your work, your visibility and what you're building. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   money: {
     centers: ["heart", "sacral", "root"],
     authorityBridge:
-      "Money decisions are the ones most often made under time pressure and someone else's urgency, which is exactly when your authority gets overridden. Almost every financial regret traces back to deciding faster than you are built to.",
+      "Money decisions get made under time pressure and someone else's urgency, which is exactly when your authority gets overridden. Almost every financial regret traces back to deciding faster than you're built to.",
     strategyBridge:
-      "Your type describes how income is actually meant to arrive for you, and it is usually not the hustle model everyone is sold. Working against it is expensive in a way that looks like bad luck.",
+      "Your type describes how income is actually meant to arrive for you, and it's not the hustle model everyone is sold. Working against it's expensive in a way that looks like bad luck.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your money, your worth and what you are willing to charge. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your money, your worth and what you're willing to charge. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   purpose: {
     centers: ["g", "throat", "heart"],
@@ -112,52 +112,52 @@ export const AREA_DESIGN: Record<string, AreaDesignConfig> = {
     strategyBridge:
       "Your strategy describes how the right thing is meant to find you. Purpose rarely arrives by being chased down, it arrives by being available to it in the way your design actually works.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your direction, your purpose and what you are here to be known for. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your direction, your purpose and what you're here to be known for. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   confidence: {
     centers: ["g", "heart", "throat"],
     authorityBridge:
-      "Confidence collapses fastest when you make a decision you knew was wrong for you. Every time you override your authority you file away quiet evidence that you cannot trust yourself, and that is what actually erodes it.",
+      "Confidence collapses fastest when you make a decision you knew was wrong for you. Every time you override your authority you file away quiet evidence that you can't trust yourself, and that's what actually erodes it.",
     strategyBridge:
-      "Most people's confidence problem is not a mindset problem, it is a design problem. Living against your type means constant low-grade resistance, and then reading that resistance as proof you are not good enough.",
+      "Most people's confidence problem isn't a mindset problem, it's a design problem. Living against your type means constant low-grade resistance, and then reading that resistance as proof you're not good enough.",
     gatesIntro:
-      "These are the gates this season is switching on, read for how you see yourself and how willing you are to be seen. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for how you see yourself and how willing you're to be seen. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   mindset: {
     centers: ["head", "ajna", "throat"],
     authorityBridge:
-      "Your mind is brilliant at analysis and it is not your decision maker. This is the single most useful thing Human Design has to say about mindset: thinking harder about a decision your authority should be making is what produces the loop.",
+      "Your mind is brilliant at analysis and it's not your decision maker. This is the single most useful thing Human Design has to say about mindset: thinking harder about a decision your authority should be making is what produces the loop.",
     strategyBridge:
       "The head and ajna are pressure and processing centres, not answer machines. How your type is built to engage the world determines whether that mental pressure becomes insight or becomes anxiety.",
     gatesIntro:
-      "These are the gates this season is switching on, read for how you think, what you believe and where your mind goes under pressure. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for how you think, what you believe and where your mind goes under pressure. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   "spiritual-growth": {
     centers: ["head", "g", "spleen"],
     authorityBridge:
-      "Spiritual growth in Human Design is not about becoming someone more evolved, it is about becoming more accurately yourself. Following your authority consistently is the practice, and it is far less glamorous than most spiritual advice.",
+      "Spiritual growth in Human Design isn't about becoming someone more evolved, it's about becoming more accurately yourself. Following your authority consistently is the practice, and it's far less glamorous than most spiritual advice.",
     strategyBridge:
-      "Your open centres are where you take in and amplify other people, and they are also where most borrowed spiritual beliefs get installed. Living your strategy is what gradually separates what is genuinely yours from what you absorbed.",
+      "Your open centres are where you take in and amplify other people, and they're also where most borrowed spiritual beliefs get installed. Living your strategy is what gradually separates what's genuinely yours from what you absorbed.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your inner life, your beliefs and what you are being asked to unlearn. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your inner life, your beliefs and what you're being asked to unlearn. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   healing: {
     centers: ["spleen", "solarplexus", "root"],
     authorityBridge:
-      "Most of what needs healing is stored as a habit of overriding yourself. Your authority is the thing that was there before the conditioning, so returning to it is not a technique, it is the actual repair.",
+      "Most of what needs healing is stored as a habit of overriding yourself. Your authority is the thing that was there before the conditioning, so returning to it's not a technique, it's the actual repair.",
     strategyBridge:
-      "The not-self theme of your type is a diagnostic, not a character flaw. Noticing when it shows up tells you precisely where you are living against your design, which is usually where the wound is being reopened.",
+      "The not-self theme of your type is a diagnostic, not a character flaw. Noticing when it shows up tells you precisely where you're living against your design, which is usually where the wound is being reopened.",
     gatesIntro:
-      "These are the gates this season is switching on, read for what is asking to be healed and what you are ready to put down. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for what's asking to be healed and what you're ready to put down. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
   "home-environment": {
     centers: ["g", "spleen", "root"],
     authorityBridge:
-      "Where you are changes how clearly you can hear yourself. This is the area where deciding in the wrong room, at someone else's pace, is most likely to produce a choice you unpick later.",
+      "Where you're changes how clearly you can hear yourself. This is the area where deciding in the wrong room, at someone else's pace, is most likely to produce a choice you unpick later.",
     strategyBridge:
-      "Your space is not decoration, it is infrastructure for your energy. How you are built to engage the world decides what a room needs to give you before you can do anything else in it.",
+      "Your space isn't decoration, it's infrastructure for your energy. How you're built to engage the world decides what a room needs to give you before you can do anything else in it.",
     gatesIntro:
-      "These are the gates this season is switching on, read for your space, your sense of belonging and where you actually feel like yourself. Each one carries a trap and a gift, and a season tends to hand you both.",
+      "These are the gates this season is switching on, read for your space, your sense of belonging and where you actually feel like yourself. Each one has a trap and a gift. A season hands you both, so you get to choose which one you run with.",
   },
 };
 
@@ -177,17 +177,17 @@ export function gatesForSign(sign: string): number[] {
 }
 
 // What kind of space actually suits her, worked out from her open centres. An open centre takes in
-// and amplifies whatever is around it, so it is the most honest predictor of which rooms leave her
+// and amplifies whatever is around it, so it's the most honest predictor of which rooms leave her
 // energised and which quietly drain her. Deliberately written as the insight rather than the
-// mechanics: she does not need to know what an open centre is to use this.
+// mechanics: she doesn't need to know what an open centre is to use this.
 const OPEN_CENTRE_ENVIRONMENT: Record<string, string> = {
-  sacral: "spaces you can leave. Your energy is not constant, so a room you can walk out of without explaining yourself matters more than the room itself.",
+  sacral: "spaces you can leave. Your energy isn't constant, so a room you can walk out of without explaining yourself matters more than the room itself.",
   solarplexus: "emotionally calm rooms. You pick up the mood of a space and the people in it, so who has been in there lingers for you.",
-  spleen: "places your body already trusts. If somewhere feels off on arrival, that is information rather than fussiness.",
-  heart: "spaces with nothing to prove. You feel the pressure to earn your place in a room, so choose rooms that do not ask you to.",
+  spleen: "places your body already trusts. If somewhere feels off on arrival, that's information rather than fussiness.",
+  heart: "spaces with nothing to prove. You feel the pressure to earn your place in a room, so choose rooms that don't ask you to.",
   g: "spaces that feel like you, not like a look. Your sense of direction is affected by where you sit, more than most people's.",
-  throat: "somewhere you can actually speak. If a space makes you go quiet, it is costing you more than a bit of atmosphere.",
-  ajna: "low-noise environments. Other people's certainty is loud in your head, so you think best where there is less of it.",
+  throat: "somewhere you can actually speak. If a space makes you go quiet, it's costing you more than a bit of atmosphere.",
+  ajna: "low-noise environments. Other people's certainty is loud in your head, so you think best where there's less of it.",
   head: "spaces without constant new input. Your mind takes on everyone else's questions, so a calm room is a calm head.",
   root: "unhurried spaces. You absorb other people's urgency, so a rushed environment becomes a rushed nervous system.",
 };
@@ -200,19 +200,19 @@ function environmentNote(hd: HumanDesignData): EnvironmentNote {
   if (open.length === 0) {
     return {
       headline: "You set the tone of a room rather than taking it on",
-      body: "You have no open centres, which is rare. You are far less affected by the atmosphere of a space than most people, so the question is less where you can cope and more where you actually want to be. Your environment should be chosen for what you want to create in it.",
+      body: "You've no open centres, which is rare. You're far less affected by the atmosphere of a space than most people, so the question is less where you can cope and more where you actually want to be. Your environment should be chosen for what you want to create in it.",
     };
   }
 
   return {
     headline: "Your energy thrives in " + open.map((c) => OPEN_CENTRE_ENVIRONMENT[c].split(".")[0]).join(", "),
-    body: open.map((c) => OPEN_CENTRE_ENVIRONMENT[c]).map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ") + " None of this is about having a nicer home. It is about which rooms let your energy come forward instead of quietly spending it.",
+    body: open.map((c) => OPEN_CENTRE_ENVIRONMENT[c]).map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ") + " None of this is about having a nicer home. It's about which rooms let your energy come forward instead of quietly spending it.",
   };
 }
 
 /**
  * The Human Design layer for one life area in one season, or null when this area has no HD
- * mapping. Every gate that qualifies is returned. There is deliberately no arbitrary limit: the
+ * mapping. Every gate that qualifies is returned. There's deliberately no arbitrary limit: the
  * astrology is already the filter, since a season only covers about six gates and only some of
  * those sit in this area's centres, which lands naturally at one to three. Each gate means
  * something different and a season genuinely presses on each one, so truncating the list would
@@ -270,11 +270,11 @@ export function composeAreaDesign(
     environment: areaId === "home-environment" ? environmentNote(hd) : undefined,
     authority: {
       label: hd.authorityLabel,
-      body: `${config.authorityBridge} You have ${authorityContent?.title ?? `${hd.authorityLabel.toLowerCase()} authority`}. ${authorityContent?.meaning ?? ""} ${authorityContent?.apply ?? ""}`.trim(),
+      body: `${config.authorityBridge} You've ${authorityContent?.title ?? `${hd.authorityLabel.toLowerCase()} authority`}. ${authorityContent?.meaning ?? ""} ${authorityContent?.apply ?? ""}`.trim(),
     },
     strategy: {
       label: `${hd.type}, ${hd.strategy.toLowerCase()}`,
-      body: `${config.strategyBridge} You are a ${hd.type}, so your strategy is to ${hd.strategy.toLowerCase()}. ${typeContent?.apply ?? typeContent?.meaning ?? ""} When this goes wrong you will feel it as ${hd.notSelfTheme.toLowerCase()}, and in this area that is the signal to check whether you initiated something you were meant to wait for.`.trim(),
+      body: `${config.strategyBridge} You're a ${hd.type}, so your strategy is to ${hd.strategy.toLowerCase()}. ${typeContent?.apply ?? typeContent?.meaning ?? ""} When this goes wrong you'll feel it as ${hd.notSelfTheme.toLowerCase()}, and in this area that's the signal to check whether you initiated something you were meant to wait for.`.trim(),
     },
     gatesIntro: config.gatesIntro,
     gates,
