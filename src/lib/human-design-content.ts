@@ -239,41 +239,41 @@ export const DEFINITION_CONTENT: Record<HDDefinition, MeaningBlock> = {
     title: "single definition",
     intro: "Your energy is self-contained, you don't need anyone to feel whole.",
     meaning:
-      "All of your defined centres are wired together in one connected piece. Your inner processing is consistent and independent, you come to your own conclusions without needing another person to complete the circuit.",
+      "All your defined centres are wired into one piece, so you process on your own and reach your own conclusions without needing anyone to complete the circuit. That's real independence, and it also means you can go a long time without noticing you've stopped letting anyone in.",
     apply:
-      "Trust your own counsel, you're built to process alone and land steadily. Just make sure you stay open to others, self-sufficiency can tip into isolation if you let it.",
+      "Trust your own processing, it's genuinely yours and it holds. Just don't let self-contained slide into isolated. You don't need people in order to get clear, which is exactly why you have to choose them on purpose rather than by default.",
   },
   "Split Definition": {
     title: "split definition",
     intro: "You've got two energy islands, and you seek the people who bridge them.",
     meaning:
-      "Your defined centres form two separate groups. You can feel a slight internal gap, and you're naturally drawn to people whose energy connects your two sides, which is part of why relationships feel so significant to you.",
+      "Your defined centres sit in two separate groups, so there's a gap in the middle and you can feel it. You're drawn to the people whose energy bridges it, which is why certain relationships land as significant in a way you can't quite explain to anyone.",
     apply:
-      "Notice who makes you feel more whole and integrated, those people bridge your split. Give yourself time to connect your own two sides before deciding, and don't mistake the pull toward bridgers for needing anyone to be complete.",
+      "Notice who closes the gap for you, and notice that needing them isn't weakness, it's wiring. Give yourself room to reach your own answer first though, or you'll hand the decision to whoever happens to be standing closest.",
   },
   "Triple Split Definition": {
     title: "triple split definition",
     intro: "You think in three streams, and you process best while busy.",
     meaning:
-      "Your defined centres form three separate groups, so your inner world has more moving parts. You need variety and activity to feel settled, and clarity comes through a range of people and inputs, never just one.",
+      "Your defined centres form three separate groups, so your inner world has more moving parts than most. You need variety and activity to feel settled, and clarity arrives through a range of people and inputs, never just one.",
     apply:
-      "Let yourself stay busy and take your time with decisions, your clarity arrives through movement and many angles. A wide circle of people serves you more than leaning on any single person.",
+      "Stop trying to think it through alone in a quiet room, that was never your method. Stay busy, talk to several different people, and let the answer assemble across them. Give it longer than feels reasonable, because three streams take time to line up.",
   },
   "Quadruple Split Definition": {
     title: "quadruple split definition",
     intro: "You're a mosaic, wired for lots of people and lots of stimulation.",
     meaning:
-      "Your defined centres form four separate groups, the most independent wiring there is. You process life through a great deal of input and are highly self-reliant, though it can take longer for everything to line up inside.",
+      "Your defined centres form four separate groups, which is rare. You take a long time to settle into clarity, and the people around you affect you deeply, because they're what connects your parts.",
     apply:
-      "Surround yourself with variety and plenty of people, that's genuinely how you integrate. Be patient with your own process, and resist the urge to force a decision before all your parts agree.",
+      "Give every real decision more time than anyone else seems to need, and stop apologising for that. Surround yourself with people who feel steady, because they're doing more for your clarity than any amount of thinking will.",
   },
   "No Definition": {
     title: "no definition",
     intro: "You're open all the way through, sampling the energy around you.",
     meaning:
-      "With no consistently defined centres, you take in and reflect the energy of your environment. This is the Reflector's wiring, wise, sensitive and highly responsive to where and who you're around.",
+      "You've got no defined centres, so nothing in you is fixed. You take your definition from wherever and whoever you're around, which makes you an extraordinary read on other people and leaves very little that's consistently your own.",
     apply:
-      "Choose your environments and people deliberately, they shape your entire experience. Give decisions time and space, and let your changeability be information rather than something to fix.",
+      "Your environment isn't a preference, it's the whole thing. Choose your rooms and your people deliberately, and give the big decisions a full lunar cycle so you feel them from every angle before you commit.",
   },
 };
 
