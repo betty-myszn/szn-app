@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { logout, isAdminMember } from "@/lib/member";
 import { useMember } from "@/lib/use-member";
+import { isFreeMember, memberHomeHref } from "@/lib/membership-access";
 import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadCount, type Broadcast } from "@/lib/broadcasts";
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 
@@ -15,7 +16,6 @@ const memberLinks = [
   // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
   // lands on a post from search should still see where she is in the site.
   { href: "/blog", label: "blog" },
-  { href: "/money-blueprint", label: "money blueprint" },
 ];
 
 // Challenges are a seasonal, done-together thing, so they live under community rather than under
@@ -34,13 +34,24 @@ const chartMenu = [
   { href: "/human-design", label: "human design chart" },
 ];
 
+// The free tier is a different platform, not a dimmed version of the paid one, so it gets its own
+// nav rather than memberLinks with things greyed out. Three doors only: her home, the blog and the
+// chat rooms. Journal, goals, challenges and the chart pages are all absent by
+// design, because showing a free member a link that bounces her to /membership reads as being
+// locked out. My Season and the workshops are teased ON /home as things to want, so they're
+// deliberately not nav items either.
+const freeLinks = [
+  { href: "/home", label: "home" },
+  { href: "/community", label: "chat rooms" },
+  { href: "/blog", label: "blog" },
+];
+
 const guestLinks = [
   { href: "/", label: "home" },
   { href: "/seasons", label: "seasons" },
   { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
-  { href: "/money-blueprint", label: "money blueprint" },
 ];
 
 export default function NavBar() {
@@ -59,7 +70,12 @@ export default function NavBar() {
   const { member } = useMember();
   const admin = member ? isAdminMember(member) : false;
 
-  const links = member ? memberLinks : guestLinks;
+  // Three platforms, three navs. `paidMember` is what the paid-platform chrome (the my szn link,
+  // the chart dropdown, the community/challenges menu) keys off, so a free member never sees a door
+  // she can't open.
+  const freeMember = isFreeMember(member);
+  const paidMember = !!member && !freeMember;
+  const links = member ? (freeMember ? freeLinks : memberLinks) : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
   const communitySectionActive = pathname?.startsWith("/community") || pathname?.startsWith("/challenges");
@@ -114,7 +130,7 @@ export default function NavBar() {
     >
       <div className="flex items-center justify-between px-5 md:px-8 py-[14px] md:py-[18px]">
         <Link
-          href={member ? "/dashboard" : "/"}
+          href={memberHomeHref(member)}
           className="no-underline flex items-center gap-1"
           style={{
             fontFamily: "var(--font-poppins), Poppins, sans-serif",
@@ -146,7 +162,7 @@ export default function NavBar() {
             textTransform: "uppercase",
           }}
         >
-          {member && (
+          {paidMember && (
             <Link
               href="/dashboard"
               className="no-underline hover:text-[var(--pink)] transition-colors"
@@ -158,7 +174,7 @@ export default function NavBar() {
               my szn
             </Link>
           )}
-          {member && (
+          {paidMember && (
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setChartOpen((o) => !o)}
@@ -214,7 +230,7 @@ export default function NavBar() {
               )}
             </div>
           )}
-          {member && (
+          {paidMember && (
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setCommunityOpen((o) => !o)}
@@ -489,7 +505,9 @@ export default function NavBar() {
                 >
                   {/* Events used to live here, it's a top-level member link now. */}
                   {[
-                    { href: "/goals", label: "my goals" },
+                    // Goals are part of the paid platform, so the free tier's account menu is just
+                    // settings (and admin, for Betty's own account).
+                    ...(paidMember ? [{ href: "/goals", label: "my goals" }] : []),
                     { href: "/settings", label: "settings" },
                     ...(admin ? [{ href: "/admin", label: "admin" }] : []),
                   ].map((item) => (
@@ -610,7 +628,7 @@ export default function NavBar() {
             paddingTop: 16,
           }}
         >
-          {member && (
+          {paidMember && (
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}
@@ -620,7 +638,7 @@ export default function NavBar() {
               my szn
             </Link>
           )}
-          {member && (
+          {paidMember && (
             <>
               {/* A real toggle, not a heading. The desktop nav is `hidden md:flex`, so below 768px
                   this panel is the only menu there is, and leaving the two charts permanently
@@ -668,7 +686,7 @@ export default function NavBar() {
                 ))}
             </>
           )}
-          {member && (
+          {paidMember && (
             <>
               <button
                 type="button"

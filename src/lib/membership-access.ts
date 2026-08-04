@@ -23,6 +23,42 @@ export function hasActiveAccess(member: Member | null): boolean {
   return !!member.subscriptionStatus && ACCESS_GRANTING_STATUSES.has(member.subscriptionStatus);
 }
 
+// Client mirror of hasAccessFromRow: any active PAID tier, including $33 social. This is the gate
+// for the rituals inside the community (book club, moon audios, seasonal updates), the things a
+// paying member gets that a free member does not. Distinct from hasActiveAccess, which is the
+// stricter monthly/vip full-platform gate, social passes here but not there.
+export function hasPaidCommunityAccess(member: Member | null): boolean {
+  if (!member) return false;
+  const level = member.membershipLevel;
+  if (level !== "social" && level !== "monthly" && level !== "vip") return false;
+  return !!member.subscriptionStatus && ACCESS_GRANTING_STATUSES.has(member.subscriptionStatus);
+}
+
+// Client mirror of hasRoomAccessFromRow: the lowest gate, the live chat rooms. The free front-door
+// tier gets in, and so does every paying tier. Rituals sit above this on hasPaidCommunityAccess.
+export function hasRoomAccess(member: Member | null): boolean {
+  if (!member) return false;
+  if (member.membershipLevel === "free") return true;
+  return hasPaidCommunityAccess(member);
+}
+
+// True only for the free front-door tier. The nav and the member home fork on this, because a free
+// member must never be shown the paid platform's doors: every one of them would just bounce her to
+// the upgrade page, which reads as being locked out rather than being given something.
+export function isFreeMember(member: Member | null): boolean {
+  return !!member && member.membershipLevel === "free";
+}
+
+// Client mirror of postAuthDestination: where "home" points for this member. Three platforms, so
+// three homes. Kept next to the gates so the nav logo, the home button and the server-side redirect
+// can never drift into disagreeing about where a given tier belongs.
+export function memberHomeHref(member: Member | null): string {
+  if (!member) return "/";
+  if (isFreeMember(member)) return "/home";
+  if (!isMember(member)) return "/community"; // $33 social: the rooms and rituals she paid for
+  return "/dashboard";
+}
+
 // True specifically for the "still has access but Stripe is struggling to charge her" state,
 // distinct from isMember/hasActiveAccess so the UI can show a billing warning without implying
 // she's lost anything yet.

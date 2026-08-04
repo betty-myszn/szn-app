@@ -86,9 +86,12 @@ alter table profiles add column if not exists subscription_cancel_at_period_end 
 alter table profiles add column if not exists membership_started_at timestamptz;
 alter table profiles add column if not exists membership_updated_at timestamptz;
 
+-- 'free' is the no-charge front-door tier created by the free-signup route (never by Stripe). It
+-- unlocks the live chat rooms only, not the rituals or the platform (see hasRoomAccessFromRow in
+-- membership-gate.ts). Keeping it in this constraint is what lets the admin client write the row.
 alter table profiles drop constraint if exists profiles_membership_level_check;
 alter table profiles add constraint profiles_membership_level_check
-  check (membership_level in ('none', 'social', 'monthly', 'vip'));
+  check (membership_level in ('none', 'free', 'social', 'monthly', 'vip'));
 
 create unique index if not exists profiles_stripe_customer_id_idx on profiles (stripe_customer_id) where stripe_customer_id is not null;
 create index if not exists profiles_stripe_subscription_id_idx on profiles (stripe_subscription_id) where stripe_subscription_id is not null;

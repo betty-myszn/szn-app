@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
-import { hasActiveAccess } from "@/lib/membership-access";
-import { SPACES, SIGN_ROOMS, findRoom } from "@/lib/community-store";
+import { hasRoomAccess, hasPaidCommunityAccess } from "@/lib/membership-access";
+import { SPACES, SIGN_ROOMS, findRoom, isRitualSpace } from "@/lib/community-store";
 import {
   loadRoomMessages,
   addRoomMessage,
@@ -92,7 +92,7 @@ export default function ChatRoomPage() {
     );
   }
 
-  if (!hasActiveAccess(member)) {
+  if (!hasRoomAccess(member)) {
     return (
       <section className="min-h-[60vh] flex items-center justify-center px-5">
         <div className="text-center" style={{ maxWidth: 420 }}>
@@ -100,6 +100,32 @@ export default function ChatRoomPage() {
             this room is members only.
           </h1>
           <Link href="/membership" className="btn-pink">see membership options</Link>
+        </div>
+      </section>
+    );
+  }
+
+  const paidCommunity = hasPaidCommunityAccess(member);
+
+  // A free member reaches the open rooms but not the ritual rooms (book club, seasonal challenges,
+  // events). Those are the $33 programming, so she's shown an upgrade prompt instead of the chat.
+  if (space && isRitualSpace(space.id) && !paidCommunity) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center" style={{ maxWidth: 440 }}>
+          <div style={{ fontSize: 30, marginBottom: 12 }}>🔒</div>
+          <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>
+            {space.label} is a members&apos; ritual.
+          </h1>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
+            The open chat rooms are yours to keep. Book club, seasonal challenges and events come with MY SZN social, $33 a month.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Link href="/membership" className="btn-pink">unlock the rituals</Link>
+            <Link href="/community" className="no-underline" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
+              back to the rooms →
+            </Link>
+          </div>
         </div>
       </section>
     );
@@ -143,7 +169,8 @@ export default function ChatRoomPage() {
     setReactionPickerFor(null);
   };
 
-  const otherSpaces = SPACES.filter((s) => s.id !== space.id);
+  // Free members don't see the ritual rooms in the "other rooms" grid, matching what they can enter.
+  const otherSpaces = SPACES.filter((s) => s.id !== space.id && (paidCommunity || !isRitualSpace(s.id)));
   const otherSignRooms = SIGN_ROOMS.filter((s) => s.id !== space.id);
 
   return (
@@ -373,6 +400,21 @@ export default function ChatRoomPage() {
               </button>
             ))}
           </div>
+
+          {/* Free members: the rooms are open, everything else is an upgrade away. */}
+          {!paidCommunity && (
+            <div
+              className="mt-8 p-5 flex items-center justify-between gap-4 flex-wrap"
+              style={{ background: "var(--dark)", border: "var(--border)" }}
+            >
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, maxWidth: 460 }}>
+                Loving the rooms? MY SZN social ($33/mo) adds the book club, seasonal challenges, events and the new &amp; full moon audios.
+              </p>
+              <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
+                unlock the rituals
+              </Link>
+            </div>
+          )}
         </div>
       </section>
     </>

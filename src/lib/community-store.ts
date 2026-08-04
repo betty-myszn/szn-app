@@ -19,6 +19,16 @@ export const SPACES: SpaceMeta[] = [
   { id: "events", label: "events & workshops", emoji: "🎟️", desc: "live class chat, questions and replays" },
 ];
 
+// The paid "rituals": the seasonal programming a $33 social membership buys, as opposed to the
+// open chat rooms. These three spaces (plus the moon audios, which live elsewhere) are locked for
+// the free front-door tier, who gets the open topic rooms and sign rooms but not the programming.
+// A single source of truth so the community hub and the individual room page gate identically.
+export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events"]);
+
+export function isRitualSpace(id: string): boolean {
+  return RITUAL_SPACE_IDS.has(id);
+}
+
 // One room per sign, ids are lowercase sign names ("aries", "taurus"...) so they never collide
 // with the topic space ids above.
 export const SIGN_ROOMS: SpaceMeta[] = ZODIAC_SIGNS.map((sign, i) => ({

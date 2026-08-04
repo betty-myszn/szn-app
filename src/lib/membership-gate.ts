@@ -13,10 +13,30 @@ export type MembershipRow = {
   onboarded?: boolean | null;
 };
 
-// True when this row has ANY currently-active paid tier (social, monthly or vip). This is the
-// community-level gate: it unlocks the chat rooms and anything else every paying member gets. Two
-// independent checks: an access-granting Stripe status on a real tier, plus a paid-through safety
-// net. Deliberately tier-agnostic, the full-platform distinction lives in hasFullAccessFromRow.
+// True when this row may enter the live chat ROOMS: the free front-door tier plus every paying
+// tier (social, monthly, vip). This is the lowest gate in the funnel. 'free' is unlocked by simply
+// being a real free member row, it has no Stripe subscription so none of the status/expiry logic
+// applies to it; every paying tier reaches the rooms too, so it defers to hasAccessFromRow for
+// those. The rituals (book club, moon audios, seasonal updates) sit ABOVE this, on hasAccessFromRow.
+export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boolean {
+  if (!row) return false;
+  if ((row.membership_level ?? "none") === "free") return true;
+  return hasAccessFromRow(row);
+}
+
+// True when this row has ANY currently-active PAID tier (social, monthly or vip). This gates the
+// rituals (book club, moon audios, seasonal updates) and, historically, the whole community.
+// 'free' is deliberately NOT enough here: a free member reaches the rooms via hasRoomAccessFromRow
+// and upgrades for the rituals.
+//
+// The $33 social tier is RETIRED FROM SALE, not deleted: no new checkout can produce it, so for
+// everyone signing up now this check effectively means $111/$555, and the rituals belong to those
+// tiers. Members already paying $33 keep passing here, which is the point, they keep the book club
+// and moon audios they're still being charged for until they cancel or upgrade. That's why the
+// ritual gate did NOT move up to hasFullAccessFromRow when the rituals moved into $111: doing so
+// would have revoked a live paying customer's access. Two independent checks: an
+// access-granting Stripe status on a real paid tier, plus a paid-through safety net. The
+// full-platform distinction lives one level up in hasFullAccessFromRow.
 export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
   const status = row.subscription_status ?? "";
@@ -46,12 +66,15 @@ export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boo
 }
 
 // Where a freshly-authenticated member should land, decided purely from membership state.
-// - No active paid tier at all: the payment-first funnel sends her to pricing.
+// - Free front-door tier: her own home at /home, which is a different page from the paid dashboard
+//   rather than a dimmed copy of it. The rooms are one click from there.
+// - No access at all (not even free): the payment-first funnel sends her to pricing.
 // - Social only: she never does the chart onboarding (it powers the platform she hasn't bought),
 //   so she goes straight to the community, the thing she paid for.
 // - Full access but not onboarded: the chart onboarding is mandatory before the portal opens.
 // - Full access and onboarded: the real portal.
 export function postAuthDestination(row: MembershipRow | null | undefined): string {
+  if (hasRoomAccessFromRow(row) && !hasAccessFromRow(row)) return "/home"; // free tier
   if (!hasAccessFromRow(row)) return "/membership?reason=none";
   if (!hasFullAccessFromRow(row)) return "/community";
   if (!row?.onboarded) return "/onboarding";

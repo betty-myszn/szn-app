@@ -133,9 +133,14 @@ function LoginPageContent() {
 
             <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 20, lineHeight: 1.6 }}>
               Not a member yet?{" "}
-              <Link href="/events" style={{ color: "var(--pink)", fontWeight: 700 }}>
-                see what&apos;s waiting for you
+              <Link href="/signup" style={{ color: "var(--pink)", fontWeight: 700 }}>
+                join the free chat rooms
               </Link>
+              {" "}or{" "}
+              <Link href="/membership" style={{ color: "var(--pink)", fontWeight: 700 }}>
+                see membership
+              </Link>
+              .
             </p>
         </>
       </div>

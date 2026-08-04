@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/client";
 import { getSavedBirthData, getSavedPlacements, type SavedPlacements } from "@/lib/url-params";
 import { hasFullAccessFromRow } from "@/lib/membership-gate";
 
-export type MembershipLevel = "none" | "social" | "monthly" | "vip";
+export type MembershipLevel = "none" | "free" | "social" | "monthly" | "vip";
 
 export interface Member {
   id: string;

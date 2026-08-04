@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasAccessFromRow, hasFullAccessFromRow } from "@/lib/membership-gate";
+import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow } from "@/lib/membership-gate";
 
 // This project's Next.js version renamed middleware.ts to proxy.ts (the export is named
 // `proxy`, not `middleware`), see node_modules/next/dist/docs for details. It does two jobs:
@@ -22,14 +22,20 @@ const FULL_PLATFORM = [
   "/style",
 ];
 
-// Community: any active paid tier gets in, including $33 social. This is the one paid area social
-// members are actually buying, so it's gated on hasAccessFromRow (tier-agnostic) rather than
-// hasFullAccessFromRow.
+// Community: the live chat rooms are the front door, open to the free tier and every paying tier,
+// so the /community route is gated on hasRoomAccessFromRow (free+). The rituals inside the hub
+// (book club, moon audios, seasonal updates) are gated per-feature IN the page on hasAccessFromRow
+// (social+), not by route, since they live on the same /community path as the free rooms.
 const COMMUNITY_AREA = ["/community"];
+
+// The free tier's home. Same room-access gate as the community (free+), so it needs a session but
+// no payment. Paid members aren't blocked here by the proxy, the page itself forwards them to their
+// own home, keeping "one home per tier" in one place rather than split across a redirect table.
+const FREE_HOME = ["/home"];
 
 // Everything a logged-in member with SOME paid access can be on, used only for the anonymous
 // fast-path below to decide whether a no-session request even needs a Supabase round trip.
-const GATED_MEMBER_AREA = [...FULL_PLATFORM, ...COMMUNITY_AREA];
+const GATED_MEMBER_AREA = [...FULL_PLATFORM, ...COMMUNITY_AREA, ...FREE_HOME];
 
 // Requires access already granted but onboarding NOT yet finished, this is the one place she's
 // sent before the portal opens. Its own gate below stops it being reached without access, or
@@ -102,11 +108,12 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const inFullPlatform = pathMatches(pathname, FULL_PLATFORM);
   const inCommunity = pathMatches(pathname, COMMUNITY_AREA);
+  const inFreeHome = pathMatches(pathname, FREE_HOME);
   const inOnboarding = pathname === ONBOARDING || pathname.startsWith(ONBOARDING + "/");
   const inLoginOnly = pathMatches(pathname, LOGIN_ONLY);
 
   // Public route: nothing to gate, just carry the refreshed session forward.
-  if (!inFullPlatform && !inCommunity && !inOnboarding && !inLoginOnly) return response;
+  if (!inFullPlatform && !inCommunity && !inOnboarding && !inLoginOnly && !inFreeHome) return response;
 
   // Any gated route requires a session first.
   if (!user) {
@@ -124,13 +131,14 @@ export async function proxy(request: NextRequest) {
     .eq("id", user.id)
     .maybeSingle();
 
+  const roomAccess = hasRoomAccessFromRow(profile); // free tier + any paid tier
   const access = hasAccessFromRow(profile); // any active paid tier, incl. social
   const fullAccess = hasFullAccessFromRow(profile); // monthly or vip only
 
-  // Community: any paying member, including $33 social. No paid tier at all means she hasn't
-  // bought anything yet, so she goes to pricing.
-  if (inCommunity) {
-    if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+  // Community rooms: the free front-door tier and every paying member get in. Someone with no
+  // access at all (not even free) hasn't got an account reason to be here, so she goes to pricing.
+  if (inCommunity || inFreeHome) {
+    if (!roomAccess) return redirectPreservingSession(request, response, "/membership?reason=none");
     return response;
   }
 

@@ -1,0 +1,162 @@
+import { NextResponse, type NextRequest } from "next/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import { getPublicOrigin } from "@/lib/request-origin";
+import { checkAndRecordRate, clientIp } from "@/lib/rate-limit";
+import { validatePassword } from "@/lib/password";
+
+export const runtime = "nodejs";
+
+// Free front-door signup. This is the ONE place the payment-first lockdown is deliberately opened:
+// it mints a real account with no Stripe checkout and no claim token, on the 'free' tier, which
+// unlocks the live chat rooms only (never the rituals or the platform). Everything paid still flows
+// exclusively through the webhook + claim-token path in account/create, this route can never grant
+// anything above 'free'.
+//
+// Because there is no payment to prove the email is real or to deter bots, two things guard it:
+//  1. A rate limit by email + IP (payment used to be the natural throttle).
+//  2. Email ownership is proved by a one-time magic link, not accepted on trust. The account is
+//     created with email_confirm:false and no session is returned here, so with Supabase's "confirm
+//     email" on, the password can't be used to log in until she clicks the link once. After that
+//     one verification she logs in with the password she chose here, every time.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export async function POST(request: NextRequest) {
+  const origin = getPublicOrigin(request);
+
+  let payload: {
+    first_name?: string;
+    email?: string;
+    password?: string;
+    birth_data?: {
+      name?: string;
+      dateOfBirth?: string;
+      birthTime?: string;
+      birthTimeApproximate?: boolean;
+      location?: {
+        placeName?: string;
+        city?: string;
+        country?: string;
+        latitude?: number;
+        longitude?: number;
+        timezone?: string;
+      };
+    } | null;
+  };
+  try {
+    payload = await request.json();
+  } catch {
+    return NextResponse.json({ error: "invalid request" }, { status: 400 });
+  }
+
+  const firstName = (payload.first_name ?? "").trim();
+  const email = payload.email?.toLowerCase().trim();
+  const password = payload.password ?? "";
+
+  if (!firstName) return NextResponse.json({ error: "first_name_required" }, { status: 400 });
+  if (!email || !EMAIL_RE.test(email)) return NextResponse.json({ error: "email_required" }, { status: 400 });
+  if (!validatePassword(password).ok) return NextResponse.json({ error: "weak_password" }, { status: 400 });
+
+  const admin = createAdminClient();
+
+  // Throttle first, by email and IP, so the open door can't be turned into an account/email spam
+  // engine now that payment no longer gates signups.
+  const { allowed } = await checkAndRecordRate(admin, {
+    bucket: "create_free",
+    email,
+    ip: clientIp(request),
+    emailLimit: 3,
+    ipLimit: 10,
+    windowMinutes: 60,
+  });
+  if (!allowed) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+
+  // Already have an account for this email: don't overwrite it or leak its tier, just point her at
+  // login. Mirrors account/create's already_exists behaviour.
+  const { data: existing } = await admin.from("profiles").select("id").eq("email", email).maybeSingle();
+  if (existing) return NextResponse.json({ error: "already_exists" }, { status: 409 });
+
+  // Create the account server-side (public sign-up stays disabled, so the admin client is the only
+  // way in). email_confirm:false is deliberate: the email is unproven until the magic link is
+  // clicked, and no session is handed back here.
+  const { data: created, error: createError } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: false,
+    user_metadata: { first_name: firstName, password_set: true },
+  });
+  if (createError || !created?.user) {
+    if (createError && /already|exists|registered|duplicate/i.test(createError.message)) {
+      return NextResponse.json({ error: "already_exists" }, { status: 409 });
+    }
+    console.error("account/create-free: admin.createUser failed", createError?.message);
+    return NextResponse.json({ error: "create_failed" }, { status: 500 });
+  }
+
+  // The signup trigger created her profile at 'none'; promote it to 'free'. Uses the admin client
+  // because membership_level is REVOKED from authenticated (only the service role may write it).
+  // If this fails it's almost certainly the check constraint missing 'free', run the migration in
+  // supabase/migrations/2026-08-04-free-tier.sql. Roll the auth user back so she isn't stranded in
+  // a half-created state and can retry cleanly.
+  const now = new Date().toISOString();
+  const { error: promoteError } = await admin
+    .from("profiles")
+    .update({ membership_level: "free", membership_started_at: now, membership_updated_at: now })
+    .eq("id", created.user.id);
+  if (promoteError) {
+    console.error("account/create-free: could not set free tier", promoteError.message);
+    await admin.auth.admin.deleteUser(created.user.id);
+    return NextResponse.json({ error: "create_failed" }, { status: 500 });
+  }
+
+  // Birth details are optional at signup, and when she gives them we store them now so her free
+  // birth chart and free human design chart are already waiting the moment she verifies. Written
+  // with the admin client because birth_data's RLS policy is owner-only and she has no session yet.
+  // Deliberately non-fatal: a bad row here must not cost her the account or the chat rooms, she can
+  // always enter her details again from the chart page.
+  const birth = payload.birth_data;
+  const place = birth?.location;
+  if (
+    birth?.dateOfBirth &&
+    birth.birthTime &&
+    place?.placeName &&
+    typeof place.latitude === "number" &&
+    typeof place.longitude === "number" &&
+    place.timezone
+  ) {
+    const { error: birthError } = await admin.from("birth_data").insert({
+      user_id: created.user.id,
+      name: (birth.name ?? firstName).trim() || firstName,
+      date_of_birth: birth.dateOfBirth,
+      birth_time: birth.birthTime,
+      birth_time_approximate: birth.birthTimeApproximate === true,
+      place_name: place.placeName,
+      city: place.city ?? place.placeName,
+      country: place.country ?? "",
+      latitude: place.latitude,
+      longitude: place.longitude,
+      timezone: place.timezone,
+    });
+    if (birthError) console.error("account/create-free: birth_data insert failed", birthError.message);
+  }
+
+  // Send the single verification link through Supabase's own mailer. shouldCreateUser:false because
+  // the account already exists. Clicking it lands on /auth/callback, which exchanges the code for a
+  // real session and routes a free member to /community.
+  const supabase = await createClient();
+  const { error: otpError } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo: `${origin}/auth/callback?next=/home`,
+    },
+  });
+  if (otpError) {
+    // The account exists on the free tier; she just needs a verification link. Surface it so the UI
+    // can offer a resend rather than silently leaving her unable to get in.
+    console.error("account/create-free: failed to send verification link", otpError.message);
+    return NextResponse.json({ error: "verify_email_send_failed" }, { status: 502 });
+  }
+
+  return NextResponse.json({ ok: true });
+}

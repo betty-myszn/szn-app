@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
-import { hasActiveAccess, hasBillingIssue } from "@/lib/membership-access";
+import { hasRoomAccess, hasPaidCommunityAccess, hasBillingIssue } from "@/lib/membership-access";
 import { useSeason } from "@/lib/use-season";
 import { useYourSzn } from "@/lib/use-your-szn";
-import { loadPosts, addPost, toggleLike as toggleLikeStore, addComment, SPACES, SIGN_ROOMS, type Post } from "@/lib/community-store";
+import { loadPosts, addPost, toggleLike as toggleLikeStore, addComment, SPACES, SIGN_ROOMS, isRitualSpace, type Post } from "@/lib/community-store";
 import { hasUnread } from "@/lib/chat-rooms";
 import { getPersonalisedChallenges } from "@/lib/challenges";
 import { loadChallengeProgress, isChallengeCompleted } from "@/lib/challenge-progress";
@@ -83,7 +83,9 @@ export default function CommunityPage() {
     );
   }
 
-  if (!hasActiveAccess(member)) {
+  // Room access is the front-door gate: the free tier and every paying tier get past here. Only a
+  // member with no access at all (a lapsed or never-paid 'none' row) is stopped.
+  if (!hasRoomAccess(member)) {
     return (
       <section className="min-h-[60vh] flex items-center justify-center px-5">
         <div className="text-center" style={{ maxWidth: 420 }}>
@@ -102,6 +104,12 @@ export default function CommunityPage() {
       </section>
     );
   }
+
+  // A free member is past the gate but only for the open rooms. The rituals (book club, seasonal
+  // challenges, events) are the $33 programming, so they're hidden from her spaces and feed and
+  // replaced with an upgrade nudge below. Every paying tier keeps the full set.
+  const paidCommunity = hasPaidCommunityAccess(member);
+  const availableSpaces = paidCommunity ? SPACES : SPACES.filter((s) => !isRitualSpace(s.id));
 
   const toggleLike = async (id: string) => {
     const post = posts.find((p) => p.id === id);
@@ -129,6 +137,8 @@ export default function CommunityPage() {
   };
 
   const visible = posts.filter((p) => {
+    // Free members never see posts from the locked ritual spaces, even under "all spaces".
+    if (!paidCommunity && isRitualSpace(p.space)) return false;
     const inSpace = activeSpace === "all" || p.space === activeSpace;
     const matches =
       !search ||
@@ -147,7 +157,7 @@ export default function CommunityPage() {
     .sort((a, b) => Number(b.youDone) - Number(a.youDone));
 
   const roomsWithUnread = new Set(
-    [...SPACES, ...SIGN_ROOMS].filter((r) => hasUnread(r.id)).map((r) => r.id)
+    [...availableSpaces, ...SIGN_ROOMS].filter((r) => hasUnread(r.id)).map((r) => r.id)
   );
 
   return (
@@ -184,9 +194,15 @@ export default function CommunityPage() {
           <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: "#fff" }}>
             {szn ? `today's sky: ${szn.transits.moonPhase.phase.toLowerCase()}` : "reading the sky..."}
           </span>
-          <Link href="/your-season/community" className="no-underline" style={{ fontSize: 12, color: "rgba(255,255,255,0.8)" }}>
-            &bull; the whole community is moving through {season.sign.toLowerCase()} szn together, see the szn hub →
-          </Link>
+          {paidCommunity ? (
+            <Link href="/your-season/community" className="no-underline" style={{ fontSize: 12, color: "rgba(255,255,255,0.8)" }}>
+              &bull; the whole community is moving through {season.sign.toLowerCase()} szn together, see the szn hub →
+            </Link>
+          ) : (
+            <Link href="/membership" className="no-underline" style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 700 }}>
+              &bull; unlock the {season.sign.toLowerCase()} szn hub, moon audios and seasonal readings with MY SZN →
+            </Link>
+          )}
         </div>
       </section>
 
@@ -230,12 +246,12 @@ export default function CommunityPage() {
               >
                 ✧ all spaces
               </button>
-              {SPACES.map((space, i) => (
+              {availableSpaces.map((space, i) => (
                 <div
                   key={space.id}
                   className="flex items-stretch"
                   style={{
-                    borderBottom: i < SPACES.length - 1 ? "1px solid #eee" : undefined,
+                    borderBottom: i < availableSpaces.length - 1 ? "1px solid #eee" : undefined,
                     flex: "1 1 auto",
                     background: activeSpace === space.id ? "var(--pink)" : "#fff",
                   }}
@@ -274,6 +290,25 @@ export default function CommunityPage() {
                 </div>
               ))}
             </div>
+
+            {/* Free-tier upgrade nudge: the rituals a $33 membership unlocks, shown locked. */}
+            {!paidCommunity && (
+              <div className="mt-6 p-4" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
+                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 6 }}>
+                  🔒 members&apos; rituals
+                </div>
+                <p style={{ fontSize: 12, lineHeight: 1.6, color: "var(--grey)", marginBottom: 10 }}>
+                  Book club, seasonal challenges and the new &amp; full moon audios come with MY SZN social, $33 a month.
+                </p>
+                <Link
+                  href="/membership"
+                  className="no-underline"
+                  style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}
+                >
+                  unlock the rituals →
+                </Link>
+              </div>
+            )}
 
             {/* Sign rooms */}
             <div className="mt-8">
@@ -324,7 +359,9 @@ export default function CommunityPage() {
               </div>
             )}
 
-            {/* Challenge leaderboard */}
+            {/* Challenge leaderboard: seasonal-challenge programming, part of the paid rituals, so
+                it's hidden from the free tier (the /challenges page it links to is full-platform). */}
+            {paidCommunity && (
             <div className="mt-8">
               <div className="tag mb-3">this szn&apos;s challenges</div>
               <div style={{ border: "var(--border)" }}>
@@ -351,10 +388,31 @@ export default function CommunityPage() {
                 do this szn&apos;s challenges →
               </Link>
             </div>
+            )}
           </aside>
 
           {/* Feed */}
           <div>
+            {/* Free-tier upgrade banner: the rooms are open, everything else is an invitation. */}
+            {!paidCommunity && (
+              <div
+                className="p-5 mb-6 flex items-center justify-between gap-4 flex-wrap"
+                style={{ background: "var(--dark)", border: "var(--border)" }}
+              >
+                <div>
+                  <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 4 }}>
+                    you&apos;re in the rooms. want the rest?
+                  </div>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, maxWidth: 460 }}>
+                    MY SZN social ($33/mo) adds the book club, seasonal challenges, events and the new &amp; full moon audios. MY SZN ($111/mo) unlocks your full personalised platform.
+                  </p>
+                </div>
+                <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
+                  see the tiers
+                </Link>
+              </div>
+            )}
+
             {/* Space header */}
             {activeSpaceMeta && (
               <div className="p-5 mb-6" style={{ background: activeSpaceMeta.id === "bookclub" ? "var(--lav-light)" : "var(--pink-light)", border: "var(--border)" }}>
@@ -404,7 +462,7 @@ export default function CommunityPage() {
                     outline: "none",
                   }}
                 >
-                  {SPACES.map((s) => (
+                  {availableSpaces.map((s) => (
                     <option key={s.id} value={s.id}>{s.label}</option>
                   ))}
                 </select>

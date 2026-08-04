@@ -5,9 +5,13 @@
 // the $111/mo plan, just paid on a different schedule, both map to the same tier here.
 // 'social' is the $33 community-only tier: it unlocks the chat rooms, book club and moon audios
 // but NOT the full personalised platform (see hasFullAccessFromRow in membership-gate.ts). 'monthly'
-// and 'vip' both unlock the full platform.
-export type MembershipLevel = "none" | "social" | "monthly" | "vip";
-type PaidTier = Exclude<MembershipLevel, "none">;
+// and 'vip' both unlock the full platform. 'free' is the no-charge front-door tier: it unlocks the
+// live chat rooms ONLY, never the rituals (book club / moon audios) or the platform. It is created
+// exclusively by the free-signup route, never by a Stripe checkout, so it is deliberately absent
+// from CANONICAL_PRICE_TO_TIER below and can never be resolved from a price id.
+export type MembershipLevel = "none" | "free" | "social" | "monthly" | "vip";
+// A tier that a Stripe price can map to. 'free' is excluded on purpose: no price ever grants it.
+type PaidTier = Exclude<MembershipLevel, "none" | "free">;
 
 // The real, live Price IDs, hardcoded as the canonical mapping. These were previously read only
 // from env vars, but a live incident proved that fragile: when the deployed STRIPE_PRICE_* values
