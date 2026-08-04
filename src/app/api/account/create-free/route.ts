@@ -14,10 +14,14 @@ export const runtime = "nodejs";
 //
 // Because there is no payment to prove the email is real or to deter bots, two things guard it:
 //  1. A rate limit by email + IP (payment used to be the natural throttle).
-//  2. Email ownership is proved by a one-time magic link, not accepted on trust. The account is
-//     created with email_confirm:false and no session is returned here, so with Supabase's "confirm
-//     email" on, the password can't be used to log in until she clicks the link once. After that
-//     one verification she logs in with the password she chose here, every time.
+//  2. A honeypot field, rejected below before anything touches the database.
+//
+// Email ownership is NOT verified. It used to be, via a one-time magic link, and that was removed
+// deliberately: email providers prefetch links, and a single-use link is consumed by the scanner
+// before the member ever clicks it, so accounts arrived already "verified"-then-expired and she
+// could not get in. On a free tier that already requires a password, a dead front door costs more
+// than unproven email addresses do. Accounts are created confirmed and signed straight in.
+// Anything that must assume a real, proven email address cannot rely on this route.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
@@ -87,8 +91,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Create the account server-side (public sign-up stays disabled, so the admin client is the only
-  // way in). email_confirm:false is deliberate: the email is unproven until the magic link is
-  // clicked, and no session is handed back here.
+  // way in).
   const { data: created, error: createError } = await admin.auth.admin.createUser({
     email,
     password,
