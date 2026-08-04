@@ -19,9 +19,11 @@ export const SPACES: SpaceMeta[] = [
   { id: "events", label: "events & workshops", emoji: "🎟️", desc: "live class chat, questions and replays" },
 ];
 
-// The paid "rituals": the seasonal programming a $33 social membership buys, as opposed to the
-// open chat rooms. These three spaces (plus the moon audios, which live elsewhere) are locked for
-// the free front-door tier, who gets the open topic rooms and sign rooms but not the programming.
+// The paid "rituals": the seasonal programming a paid membership buys, as opposed to the open chat
+// rooms. These three spaces (plus the moon audios, which live elsewhere) are locked for the free
+// front-door tier, who gets the open topic rooms and sign rooms but not the programming. They
+// belong to MY SZN ($111) now that the $33 social tier is retired from sale, though grandfathered
+// social members still reach them via hasAccessFromRow.
 // A single source of truth so the community hub and the individual room page gate identically.
 export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events"]);
 
