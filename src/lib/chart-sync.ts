@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { saveBirthData, savePlacements, type SavedPlacements } from "@/lib/url-params";
+import { saveBirthData, getSavedBirthData, savePlacements, type SavedPlacements } from "@/lib/url-params";
 import type { BirthData, ChartData } from "@/types/chart";
 
 const SESSION_CHART_KEY = "myszn_chart_cache";
@@ -76,7 +76,10 @@ export async function syncBirthDataToSupabase(data: BirthData): Promise<boolean>
   // profiles.name starts empty (the signup trigger only ever sets email), birth data is the
   // first place a real display name shows up, so keep it in sync here too. Non-critical: a
   // failure here shouldn't fail the whole save, the birth data (what actually matters) is stored.
-  await supabase.from("profiles").update({ name: data.name }).eq("id", user.id);
+  // Logged rather than swallowed: a persistent failure here often means the same RLS/permission
+  // issue that would also block markOnboarded, so it's worth seeing in the console.
+  const { error: nameError } = await supabase.from("profiles").update({ name: data.name }).eq("id", user.id);
+  if (nameError) console.error("profiles.name sync failed (non-critical, birth data saved)", nameError);
   return true;
 }
 
@@ -150,6 +153,19 @@ export async function hydrateMemberDataFromSupabase(): Promise<boolean> {
   }
 
   return true;
+}
+
+// The single source of truth for "what birth data should this visitor's free chart pages use",
+// shared by /chart (BirthDataForm) and /human-design (useHumanDesign) so the two never disagree.
+//
+// Precedence, deliberately Supabase-first for a logged-in member: her stored row is the real
+// cross-device record, so hydrate runs first and, when a row exists, refreshes local storage from
+// it and that value is returned. Local storage is used only as a fallback, for a logged-out
+// visitor or a member who has not saved a row yet. It never overwrites a real DB row with empty
+// local values: hydrate only writes to local when a row is actually found.
+export async function loadBirthDataPreferringSupabase(): Promise<BirthData | null> {
+  await hydrateMemberDataFromSupabase();
+  return getSavedBirthData();
 }
 
 // Checks Supabase for a chart matching this exact birth data before falling back to a fresh

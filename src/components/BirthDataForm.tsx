@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { encodeBirthData, saveBirthData, getSavedBirthData } from "@/lib/url-params";
-import { hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
+import { loadBirthDataPreferringSupabase, syncBirthDataToSupabase } from "@/lib/chart-sync";
 import { track, EVENTS } from "@/lib/analytics";
 
 interface BirthDataFormProps {
@@ -33,23 +33,21 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
   const [error, setError] = useState<string | null>(null);
 
   // A logged-in member already gave her birth details (at signup, or a previous visit), so she
-  // must never be asked to type them again here. Her data lives in Supabase; the localStorage read
-  // above misses it only because hydration is async and hasn't landed by first render. So on mount
-  // we pull it from Supabase and fill any field she hasn't already started editing. Fields are only
-  // set when still empty, so this never clobbers something she's in the middle of typing.
+  // must never be asked to type them again here. On mount we load through the shared, Supabase-first
+  // resolver: her stored row wins over local storage (which is only a cache/fallback), and it
+  // refreshes local from the DB in passing so the two stay consistent. Fields are filled only when
+  // still empty, so this never clobbers a value she's in the middle of typing, and the form stays
+  // fully editable.
   useEffect(() => {
     let active = true;
     (async () => {
-      if (getSavedBirthData()) return; // already have it locally, nothing to fetch
-      const ok = await hydrateMemberDataFromSupabase();
-      if (!active || !ok) return;
-      const hydrated = getSavedBirthData();
-      if (!hydrated) return;
-      setName((v) => v || hydrated.name || "");
-      setDateOfBirth((v) => v || hydrated.dateOfBirth || "");
-      setBirthTime((v) => v || hydrated.birthTime || "");
-      setBirthTimeApproximate((v) => v || hydrated.birthTimeApproximate || false);
-      setLocation((v) => v || hydrated.location || null);
+      const saved = await loadBirthDataPreferringSupabase();
+      if (!active || !saved) return;
+      setName((v) => v || saved.name || "");
+      setDateOfBirth((v) => v || saved.dateOfBirth || "");
+      setBirthTime((v) => v || saved.birthTime || "");
+      setBirthTimeApproximate((v) => v || saved.birthTimeApproximate || false);
+      setLocation((v) => v || saved.location || null);
     })();
     return () => {
       active = false;
@@ -116,6 +114,12 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
       }
 
       saveBirthData(birthData);
+      // Keep the two stores in step for a logged-in member: local is updated above, and her edits
+      // are pushed back to Supabase (the cross-device source of truth) so the next visit, on any
+      // device, hydrates the corrected details rather than the old ones. No-ops for a logged-out
+      // visitor (syncBirthDataToSupabase returns early with no user), and fire-and-forget so it
+      // never blocks her seeing the chart.
+      void syncBirthDataToSupabase(birthData);
 
       const chartData = await res.json();
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSavedBirthData } from "@/lib/url-params";
-import { hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
+import { loadBirthDataPreferringSupabase } from "@/lib/chart-sync";
 import type { HumanDesignData } from "@/types/human-design";
 
 const CACHE_KEY = "myszn_hd_cache";
@@ -18,12 +17,10 @@ export function useHumanDesign(): { hd: HumanDesignData | null; loading: boolean
     let cancelled = false;
 
     async function run() {
-      let birthData = getSavedBirthData();
-      if (!birthData) {
-        const hydrated = await hydrateMemberDataFromSupabase();
-        if (cancelled) return;
-        if (hydrated) birthData = getSavedBirthData();
-      }
+      // Supabase-first for a logged-in member, local fallback otherwise. Shared with /chart so both
+      // free charts always read the same saved details.
+      const birthData = await loadBirthDataPreferringSupabase();
+      if (cancelled) return;
       if (!birthData) {
         setLoading(false);
         return;
