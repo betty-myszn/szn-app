@@ -28,6 +28,7 @@ import SeasonThemes from "@/components/SeasonThemes";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
+import SeasonMeditation from "@/components/SeasonMeditation";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 
@@ -258,6 +259,10 @@ export default function DashboardPage() {
           personalised companion to the life-areas guide above. Astrology says what the
           season is doing, this says how her unique energy works with it. */}
       <SeasonDesignInline />
+
+      {/* This season's meditation, for every member. Sits after the season reading so she has the
+          context before the practice, and renders nothing at all for a season with no audio yet. */}
+      <SeasonMeditation sign={season.sign} />
 
       {/* Build-your-own-dashboard control, only touches what she reads, never the action sections */}
       <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
