@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
+import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -476,6 +477,12 @@ export default function MembershipPage() {
           {ctaLabel}
         </Link>
       </section>
+
+      {/* Human Design, explained, immediately after the gap section. She has just been told why
+          generic advice keeps failing her, and this is the answer to it, so it earns the place.
+          CTAs off: she is already on the page they would send her to. Shared component so this
+          and the homepage can't drift into two different explanations. */}
+      <HumanDesignExplainer showCtas={false} headingSize="clamp(34px, 6vw, 72px)" />
 
       {/* ═══════════════ A PLATFORM THAT GROWS WITH YOU ═══════════════ */}
       <section className="px-8 py-20 md:py-32">

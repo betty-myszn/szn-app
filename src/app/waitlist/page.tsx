@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -321,6 +322,8 @@ export default function WaitlistPage() {
       {/* ═══════════════ A PLATFORM THAT GROWS WITH YOU ═══════════════ */}
       <section className="px-8 py-20 md:py-32">
         <div className="max-w-5xl mx-auto">
+      <HumanDesignExplainer showCtas={false} headingSize="clamp(34px, 6vw, 72px)" />
+
           <div className="tag mb-6 text-center">the platform</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(30px, 5.5vw, 48px)", fontWeight: 800,
