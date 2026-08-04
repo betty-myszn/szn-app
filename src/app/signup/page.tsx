@@ -33,6 +33,9 @@ export default function SignupPage() {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // Honeypot. Hidden from real users; only a bot that fills every field will set it, and the API
+  // rejects any request where it's non-empty. No friction for humans, no captcha service needed.
+  const [company, setCompany] = useState("");
 
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [birthTime, setBirthTime] = useState("");
@@ -41,7 +44,6 @@ export default function SignupPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [sent, setSent] = useState(false);
 
   const goToBirthStep = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,11 +80,14 @@ export default function SignupPage() {
       const res = await fetch("/api/account/create-free", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ first_name: firstName, email, password, birth_data: birthData }),
+        body: JSON.stringify({ first_name: firstName, email, password, company, birth_data: birthData }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
-        setSent(true);
+        // The route confirms the account and logs her in server-side, so on success we go straight
+        // to her home. Full-page navigation (not router.push) so the fresh session cookies the
+        // route set are picked up. If the auto sign-in didn't take, fall back to the login page.
+        window.location.href = data.signedIn ? "/home" : "/login?new=1";
         return;
       }
       if (res.status === 409 || data.error === "already_exists") {
@@ -117,21 +122,7 @@ export default function SignupPage() {
   return (
     <section className="min-h-[80vh] flex items-center justify-center px-5 py-16" style={{ background: "var(--dark)" }}>
       <div className="w-full max-w-md bg-white p-8 md:p-12" style={{ border: "var(--border)" }}>
-        {sent ? (
-          <>
-            <div className="tag mb-3">one more step</div>
-            <h1 style={{ fontFamily: poppins, fontSize: 30, fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, marginBottom: 12 }}>
-              check your inbox,<br />
-              <span className="pk">{firstName.toLowerCase() || "babe"}.</span>
-            </h1>
-            <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 24 }}>
-              We sent a verification link to <strong style={{ color: "var(--dark)" }}>{email}</strong>. Click it once to confirm your email and you&apos;re in the rooms. After that you log in with the password you just chose.
-            </p>
-            <Link href="/login" className="btn-pink w-full" style={{ textAlign: "center", display: "block" }}>
-              go to log in
-            </Link>
-          </>
-        ) : step === 1 ? (
+        {step === 1 ? (
           <>
             <div className="tag mb-3">free chat rooms</div>
             <h1 style={{ fontFamily: poppins, fontSize: 32, fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, marginBottom: 12 }}>
@@ -146,6 +137,18 @@ export default function SignupPage() {
             </p>
 
             <form onSubmit={goToBirthStep}>
+              {/* Honeypot: off-screen, not tabbable, hidden from assistive tech. Real users never
+                  see or fill it; bots do, and the API rejects the request when it's set. */}
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              />
               <label htmlFor="signup-name" style={labelStyle}>first name</label>
               <input
                 id="signup-name"

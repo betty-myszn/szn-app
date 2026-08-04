@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { encodeBirthData, saveBirthData, getSavedBirthData } from "@/lib/url-params";
+import { hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
 import { track, EVENTS } from "@/lib/analytics";
 
 interface BirthDataFormProps {
@@ -30,6 +31,30 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // A logged-in member already gave her birth details (at signup, or a previous visit), so she
+  // must never be asked to type them again here. Her data lives in Supabase; the localStorage read
+  // above misses it only because hydration is async and hasn't landed by first render. So on mount
+  // we pull it from Supabase and fill any field she hasn't already started editing. Fields are only
+  // set when still empty, so this never clobbers something she's in the middle of typing.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      if (getSavedBirthData()) return; // already have it locally, nothing to fetch
+      const ok = await hydrateMemberDataFromSupabase();
+      if (!active || !ok) return;
+      const hydrated = getSavedBirthData();
+      if (!hydrated) return;
+      setName((v) => v || hydrated.name || "");
+      setDateOfBirth((v) => v || hydrated.dateOfBirth || "");
+      setBirthTime((v) => v || hydrated.birthTime || "");
+      setBirthTimeApproximate((v) => v || hydrated.birthTimeApproximate || false);
+      setLocation((v) => v || hydrated.location || null);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Manual location fields (fallback)
   const [manualCity, setManualCity] = useState("");

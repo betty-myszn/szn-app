@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { getPublicOrigin } from "@/lib/request-origin";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 
@@ -22,12 +21,14 @@ export const runtime = "nodejs";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
-  const origin = getPublicOrigin(request);
-
   let payload: {
     first_name?: string;
     email?: string;
     password?: string;
+    // Honeypot. A hidden field no human ever sees or fills; bots that auto-complete every input
+    // will. If it arrives with anything in it, the request is a bot and we reject before touching
+    // the database. Zero friction for real people, no external service, no key to configure.
+    company?: string;
     birth_data?: {
       name?: string;
       dateOfBirth?: string;
@@ -47,6 +48,12 @@ export async function POST(request: NextRequest) {
     payload = await request.json();
   } catch {
     return NextResponse.json({ error: "invalid request" }, { status: 400 });
+  }
+
+  // Honeypot trip: return a plausible-looking success so the bot moves on and doesn't learn it was
+  // caught, but create nothing.
+  if (typeof payload.company === "string" && payload.company.trim() !== "") {
+    return NextResponse.json({ ok: true, signedIn: false });
   }
 
   const firstName = (payload.first_name ?? "").trim();
@@ -85,7 +92,12 @@ export async function POST(request: NextRequest) {
   const { data: created, error: createError } = await admin.auth.admin.createUser({
     email,
     password,
-    email_confirm: false,
+    // Confirmed at creation. The one-time magic-link verification we tried first was consumed by
+    // email-provider link scanners (Gmail prefetches the link, which is single-use, so the account
+    // was already "verified"-then-expired before she ever clicked). Email ownership isn't worth a
+    // dead front door on a free chat tier, especially when a password is already required, so we
+    // confirm here and log her straight in with that password below instead of emailing a link.
+    email_confirm: true,
     user_metadata: { first_name: firstName, password_set: true },
   });
   if (createError || !created?.user) {
@@ -153,23 +165,18 @@ export async function POST(request: NextRequest) {
     if (birthError) console.error("account/create-free: birth_data insert failed", birthError.message);
   }
 
-  // Send the single verification link through Supabase's own mailer. shouldCreateUser:false because
-  // the account already exists. Clicking it lands on /auth/callback, which exchanges the code for a
-  // real session and routes a free member to /community.
+  // Log her straight in with the password she just set, on the server client so the session cookies
+  // land on this response. This is what replaces the emailed magic link: the account is already
+  // confirmed above, so a password sign-in succeeds immediately and she arrives on /home logged in,
+  // with nothing to click and nothing a link scanner can break. If for any reason the sign-in
+  // fails, the account still exists and works, so fall back to sending her to /login rather than
+  // failing the whole signup.
   const supabase = await createClient();
-  const { error: otpError } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: false,
-      emailRedirectTo: `${origin}/auth/callback?next=/home`,
-    },
-  });
-  if (otpError) {
-    // The account exists on the free tier; she just needs a verification link. Surface it so the UI
-    // can offer a resend rather than silently leaving her unable to get in.
-    console.error("account/create-free: failed to send verification link", otpError.message);
-    return NextResponse.json({ error: "verify_email_send_failed" }, { status: 502 });
+  const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+  if (signInError) {
+    console.error("account/create-free: auto sign-in failed", signInError.message);
+    return NextResponse.json({ ok: true, signedIn: false });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, signedIn: true });
 }
