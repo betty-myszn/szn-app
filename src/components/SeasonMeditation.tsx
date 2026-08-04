@@ -23,6 +23,10 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(NaN);
+  // Betty's read is slightly quick for a meditation, so this opens a touch slower than recorded.
+  // preservesPitch keeps her voice at its natural pitch rather than dropping it, which is what
+  // makes slowed speech sound wrong. Adjustable, because the right pace is personal.
+  const [rate, setRate] = useState(0.9);
 
   // Reset if the season changes underneath the component, so a stale player can't keep playing
   // last season's audio behind a new heading.
@@ -31,6 +35,16 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
     setCurrent(0);
     setDuration(NaN);
   }, [meditation?.slug]);
+
+  // Applied on every change and after the source loads, since setting playbackRate before the
+  // element has metadata is silently ignored in some browsers.
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.playbackRate = rate;
+    // Non-standard on older Safari, hence the cast rather than a hard dependency on it.
+    (el as HTMLAudioElement & { preservesPitch?: boolean }).preservesPitch = true;
+  }, [rate, meditation?.slug]);
 
   if (!meditation) return null;
 
@@ -96,7 +110,11 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
             ref={audioRef}
             src={meditation.src}
             preload="metadata"
-            onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+            onLoadedMetadata={(e) => {
+              setDuration(e.currentTarget.duration);
+              e.currentTarget.playbackRate = rate;
+              (e.currentTarget as HTMLAudioElement & { preservesPitch?: boolean }).preservesPitch = true;
+            }}
             onTimeUpdate={(e) => setCurrent(e.currentTarget.currentTime)}
             onEnded={() => setPlaying(false)}
           />
@@ -142,6 +160,31 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
                 <span>{formatTime(duration)}</span>
               </div>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap" style={{ marginTop: 16 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
+              pace
+            </span>
+            {[0.8, 0.9, 1].map((r) => (
+              <button
+                key={r}
+                onClick={() => setRate(r)}
+                aria-pressed={rate === r}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  padding: "5px 12px",
+                  cursor: "pointer",
+                  background: rate === r ? "var(--pink)" : "transparent",
+                  color: rate === r ? "#fff" : "rgba(255,255,255,0.7)",
+                  border: rate === r ? "1px solid var(--pink)" : "1px solid rgba(255,255,255,0.25)",
+                }}
+              >
+                {r === 1 ? "normal" : `${r}×`}
+              </button>
+            ))}
           </div>
         </div>
 
