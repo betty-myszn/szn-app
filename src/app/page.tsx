@@ -449,6 +449,23 @@ export default function Home() {
             rest all read both systems at once, so you get one answer instead of two half-answers
             that don&apos;t quite agree.
           </p>
+          {/* The differentiator, stated as what we do rather than as a claim about the market.
+              "Nothing else exists like this" is not something we can stand behind if a competitor
+              turns up, and it isn't needed: the specific thing (both systems answered together,
+              per life area, on her own chart) is unusual enough on its own. */}
+          <p
+            style={{
+              fontSize: 15,
+              lineHeight: 1.75,
+              color: "#fff",
+              maxWidth: 620,
+              marginTop: 18,
+              fontWeight: 600,
+            }}
+          >
+            Most places hand you astrology or Human Design and leave you to work out where they
+            meet. This one answers that for you, on your chart, every szn.
+          </p>
 
           <div className="flex items-center gap-4 flex-wrap" style={{ marginTop: 32 }}>
             <Link href="/human-design" className="btn-pink no-underline">

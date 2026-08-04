@@ -25,11 +25,11 @@ export const metadata: Metadata = {
   // or resolves against the deploy preview host instead of the real domain.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "MY SZN, Astrology Membership for Women | Birth Chart, Coaching & Community",
+    default: "MY SZN, Astrology & Human Design Membership for Women",
     template: "%s | MY SZN",
   },
   description:
-    "The astrology-led membership for ambitious women. Free birth chart calculator, live coaching, subconscious rewiring, and a community that helps you become her. Launches July 2026.",
+    "Your birth chart and your Human Design, read together as one thing instead of two. Free birth chart calculator, live coaching, subconscious rewiring, and a community of ambitious women. Most places give you astrology or Human Design. This gives you both, per life area, every szn.",
   // Default canonical for the home page. Every other route overrides it with its own, which is what
   // stops query-string and trailing-slash variants being indexed as separate pages.
   alternates: { canonical: "/" },
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: SITE_NAME,
-    title: "MY SZN, Astrology Membership for Women",
-    description: "Stop guessing. Start becoming her. The astrology-led membership with free birth charts, live coaching, and a community of women who are done playing small.",
+    title: "MY SZN, Astrology + Human Design for Women",
+    description: "Stop guessing. Start becoming her. Your birth chart tells you who you are here to become, your Human Design tells you how you are built to get there. Both, in one read.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MY SZN, Astrology Membership for Women",
-    description: "Stop guessing. Start becoming her. Free birth chart calculator and astrology-led membership launching July 2026.",
+    title: "MY SZN, Astrology + Human Design for Women",
+    description: "Your birth chart and your Human Design, read together as one thing. Free chart calculator, live coaching, and a membership built around both."
   },
   robots: {
     index: true,
@@ -73,7 +73,7 @@ const siteJsonLd = {
       legalName: "The Cosmic Co.",
       url: SITE_URL,
       description:
-        "An astrology-led membership for ambitious women, combining birth chart work, live coaching and subconscious rewiring.",
+        "A membership for ambitious women that reads astrology and Human Design together as one system, combining birth chart work, Human Design, live coaching and subconscious rewiring.",
       sameAs: ["https://instagram.com/itsmyszn"],
     },
     {
