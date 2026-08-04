@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicOrigin } from "@/lib/request-origin";
-import { checkAndRecordRate, clientIp } from "@/lib/rate-limit";
+import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 
 export const runtime = "nodejs";
@@ -61,10 +61,9 @@ export async function POST(request: NextRequest) {
 
   // Throttle first, by email and IP, so the open door can't be turned into an account/email spam
   // engine now that payment no longer gates signups.
+  const rateKey = { bucket: "create_free", email, ip: clientIp(request) };
   const { allowed } = await checkAndRecordRate(admin, {
-    bucket: "create_free",
-    email,
-    ip: clientIp(request),
+    ...rateKey,
     emailLimit: 3,
     ipLimit: 10,
     windowMinutes: 60,
@@ -72,9 +71,13 @@ export async function POST(request: NextRequest) {
   if (!allowed) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
   // Already have an account for this email: don't overwrite it or leak its tier, just point her at
-  // login. Mirrors account/create's already_exists behaviour.
+  // login. Mirrors account/create's already_exists behaviour. Refund the attempt, since finding out
+  // you already have an account is a dead end, not a signup she should be charged quota for.
   const { data: existing } = await admin.from("profiles").select("id").eq("email", email).maybeSingle();
-  if (existing) return NextResponse.json({ error: "already_exists" }, { status: 409 });
+  if (existing) {
+    await releaseRate(admin, rateKey);
+    return NextResponse.json({ error: "already_exists" }, { status: 409 });
+  }
 
   // Create the account server-side (public sign-up stays disabled, so the admin client is the only
   // way in). email_confirm:false is deliberate: the email is unproven until the magic link is
@@ -86,11 +89,12 @@ export async function POST(request: NextRequest) {
     user_metadata: { first_name: firstName, password_set: true },
   });
   if (createError || !created?.user) {
+    await releaseRate(admin, rateKey);
     if (createError && /already|exists|registered|duplicate/i.test(createError.message)) {
       return NextResponse.json({ error: "already_exists" }, { status: 409 });
     }
     console.error("account/create-free: admin.createUser failed", createError?.message);
-    return NextResponse.json({ error: "create_failed" }, { status: 500 });
+    return NextResponse.json({ error: "create_failed", detail: createError?.message }, { status: 500 });
   }
 
   // The signup trigger created her profile at 'none'; promote it to 'free'. Uses the admin client
@@ -106,7 +110,16 @@ export async function POST(request: NextRequest) {
   if (promoteError) {
     console.error("account/create-free: could not set free tier", promoteError.message);
     await admin.auth.admin.deleteUser(created.user.id);
-    return NextResponse.json({ error: "create_failed" }, { status: 500 });
+    // Nothing survived this request, so it must not count against her: the rollback means retrying
+    // is the correct next move, and the usual cause (the 'free' migration not having run yet) is
+    // ours to fix, not hers to be throttled for.
+    await releaseRate(admin, rateKey);
+    // `detail` carries the real Postgres message through to the UI. The generic "something went
+    // wrong" that shipped first made a one-line schema fix look like an unknowable bug.
+    return NextResponse.json(
+      { error: "tier_write_failed", detail: promoteError.message },
+      { status: 500 }
+    );
   }
 
   // Birth details are optional at signup, and when she gives them we store them now so her free

@@ -53,26 +53,25 @@ export default function SignupPage() {
     setStep(2);
   };
 
-  // Birth details are optional, so `skipBirth` submits the same payload without them.
-  const createAccount = async (withBirth: boolean) => {
+  // Birth details are required: there's no skip, so every free account arrives with a chart. The
+  // API still treats birth_data as optional (a bad row must never cost her the account), this is
+  // just the front door insisting.
+  const createAccount = async () => {
     if (submitting) return;
     setError("");
 
-    const birthData =
-      withBirth && dateOfBirth && birthTime && location
-        ? {
-            name: firstName,
-            dateOfBirth,
-            birthTime,
-            birthTimeApproximate,
-            location,
-          }
-        : null;
-
-    if (withBirth && !birthData) {
-      setError("Add your birth date, time and place, or skip this for now.");
+    if (!dateOfBirth || !birthTime || !location) {
+      setError("Add your birth date, time and place so we can build your charts.");
       return;
     }
+
+    const birthData = {
+      name: firstName,
+      dateOfBirth,
+      birthTime,
+      birthTimeApproximate,
+      location,
+    };
 
     setSubmitting(true);
     try {
@@ -97,8 +96,16 @@ export default function SignupPage() {
       } else if (data.error === "email_required") {
         setError("That email doesn't look right. Check it and try again.");
         setStep(1);
+      } else if (data.error === "tier_write_failed") {
+        // Almost always the 'free' migration not having run against the database yet. Say so
+        // plainly rather than hiding a one-line schema fix behind "something went wrong".
+        setError(
+          `Your account couldn't be set to the free tier, so nothing was created and you can retry. ${data.detail ?? ""}`.trim()
+        );
       } else {
-        setError("Something went wrong creating your account. Try again in a moment.");
+        setError(
+          `Something went wrong creating your account. Try again in a moment.${data.detail ? ` (${data.detail})` : ""}`
+        );
       }
     } catch {
       setError("Something went wrong creating your account. Try again in a moment.");
@@ -203,13 +210,14 @@ export default function SignupPage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                createAccount(true);
+                createAccount();
               }}
             >
               <label htmlFor="signup-dob" style={labelStyle}>date of birth</label>
               <input
                 id="signup-dob"
                 type="date"
+                required
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 className="w-full mb-5"
@@ -220,6 +228,7 @@ export default function SignupPage() {
               <input
                 id="signup-time"
                 type="time"
+                required
                 value={birthTime}
                 onChange={(e) => setBirthTime(e.target.value)}
                 className="w-full mb-2"
@@ -247,15 +256,6 @@ export default function SignupPage() {
                 {submitting ? "creating your account..." : "get me in, free"}
               </button>
             </form>
-
-            <button
-              type="button"
-              onClick={() => createAccount(false)}
-              disabled={submitting}
-              style={{ background: "none", border: "none", padding: 0, marginTop: 16, fontSize: 12, color: "var(--grey-light)", textDecoration: "underline", cursor: "pointer" }}
-            >
-              skip for now, just take me to the rooms
-            </button>
           </>
         )}
       </div>
