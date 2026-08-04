@@ -876,7 +876,7 @@ export default function MembershipPage() {
                 <span style={{ fontSize: 13, color: "var(--grey)" }}>you won&apos;t need a card</span>
               </div>
               <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, maxWidth: 520 }}>
-                Make a free account and get chatting in the astrology rooms with the girls, which is where most of the day to day actually happens. The personalised astrology and Human Design platform, the live group astrology coaching, the book club and the moon audios all sit in the membership tiers below, and you can come up whenever you feel like it.
+                Make a free account and get chatting in the astrology rooms with the girls, which is where most of the day to day actually happens. The personalised astrology and Human Design platform, the live group astrology coaching, the book club and the moon audios all sit in the membership tiers below, and they&apos;ll be waiting there for whenever you want them.
               </p>
             </div>
             <Link
