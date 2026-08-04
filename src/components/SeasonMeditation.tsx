@@ -27,6 +27,9 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
   // preservesPitch keeps her voice at its natural pitch rather than dropping it, which is what
   // makes slowed speech sound wrong. Adjustable, because the right pace is personal.
   const [rate, setRate] = useState(0.9);
+  // Surfaced in the UI. A meditation that silently refuses to play is the worst possible failure,
+  // so anything that goes wrong says so rather than leaving a dead button.
+  const [error, setError] = useState<string | null>(null);
 
   // Reset if the season changes underneath the component, so a stale player can't keep playing
   // last season's audio behind a new heading.
@@ -48,15 +51,26 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
 
   if (!meditation) return null;
 
-  const toggle = () => {
+  const toggle = async () => {
     const el = audioRef.current;
     if (!el) return;
-    if (el.paused) {
-      el.play();
-      setPlaying(true);
-    } else {
+    if (!el.paused) {
       el.pause();
-      setPlaying(false);
+      return;
+    }
+    setError(null);
+    try {
+      // Must stay inside the user gesture, so nothing is awaited before this call.
+      await el.play();
+      // Reapplied here because several browsers reset playbackRate when playback starts.
+      el.playbackRate = rate;
+    } catch (err) {
+      const name = err instanceof Error ? err.name : "";
+      setError(
+        name === "NotAllowedError"
+          ? "Your browser blocked playback. Tap play once more, or check that this site is allowed to play sound."
+          : "That did not start. Try reloading the page, and if it keeps happening tell Betty which browser you are on."
+      );
     }
   };
 
@@ -116,7 +130,17 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
               (e.currentTarget as HTMLAudioElement & { preservesPitch?: boolean }).preservesPitch = true;
             }}
             onTimeUpdate={(e) => setCurrent(e.currentTarget.currentTime)}
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
             onEnded={() => setPlaying(false)}
+            onError={(e) => {
+              const code = e.currentTarget.error?.code;
+              setError(
+                code === 4
+                  ? "This browser could not play that audio file."
+                  : "The meditation could not load. Check your connection and reload."
+              );
+            }}
           />
 
           <div className="flex items-center gap-4">
@@ -161,6 +185,12 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
               </div>
             </div>
           </div>
+
+          {error && (
+            <p role="alert" style={{ fontSize: 13, lineHeight: 1.7, color: "#FFD5E4", marginTop: 14 }}>
+              {error}
+            </p>
+          )}
 
           <div className="flex items-center gap-2 flex-wrap" style={{ marginTop: 16 }}>
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
