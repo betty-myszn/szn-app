@@ -214,13 +214,6 @@ export default function MembershipPage() {
             <span style={{ fontWeight: 500 }}>MY SZN helps you become her.</span>
           </p>
           <p style={{
-            fontSize: 13, letterSpacing: "0.06em", color: "var(--pink)",
-            fontWeight: 700, textTransform: "uppercase", margin: "0 auto 8px",
-          }}>
-            1:1 coaching with Betty · VIP only, $555/mo
-          </p>
-
-          <p style={{
             fontSize: 14, lineHeight: 1.8, color: "#fff",
             maxWidth: 540, margin: "0 auto 36px",
           }}>
