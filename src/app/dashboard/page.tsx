@@ -30,6 +30,7 @@ import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
 import UpcomingEvents from "@/components/UpcomingEvents";
+import ReplayHighlight from "@/components/ReplayHighlight";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -242,6 +243,10 @@ export default function DashboardPage() {
           with the orientation blocks. It used to open SeasonExplore at the very bottom of the page,
           below the action rows and the what's-happening hub, where almost nobody reached it. */}
       <SeasonThemes season={season} />
+
+      {/* The newest workshop replay, showcased right up top for its first few days, then softened
+          into a standing banner into the vault. Renders nothing until a replay exists. */}
+      <ReplayHighlight />
 
       {/* The actual "how this szn hits every part of your life" guide, pinned right at the top,
           this is the section she came here for, not something to bury under the daily stuff. */}

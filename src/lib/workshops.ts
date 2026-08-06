@@ -18,6 +18,10 @@ export interface Workshop {
   /** YouTube video id for the replay, set once the class is over and uploaded, null until then.
    *  Just the id (e.g. "dQw4w9WgXcQ"), not the full watch url. */
   replayYoutubeId: string | null;
+  /** The day the replay went up (ISO date, e.g. "2026-08-06"), not the class date, since a
+   *  recording is edited and uploaded after the fact. Drives the "new replay" feature window on
+   *  the season home. null until a replay exists. */
+  replayPublishedAt: string | null;
   paragraphs: string[];
   callout: { plain: string; pink: string } | null;
 }
@@ -36,6 +40,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomMeetingId: "873 4849 5713",
     zoomPasscode: "391862",
     replayYoutubeId: "0M03CqjaUnY",
+    replayPublishedAt: "2026-08-06",
     paragraphs: [
       "Leo season is your cosmic reminder that you didn't come here to watch everyone else live the life you want.",
       "If you've been overthinking every move, watering yourself down, waiting until you feel “ready”, or hiding the parts of you that were always meant to be seen… this is your invitation to leave that version of yourself behind.",
@@ -60,6 +65,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomMeetingId: null,
     zoomPasscode: null,
     replayYoutubeId: null,
+    replayPublishedAt: null,
     paragraphs: [
       "You weren't born to be the internet's best kept secret.",
       "If you've been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines… we're changing that.",
@@ -81,6 +87,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomMeetingId: null,
     zoomPasscode: null,
     replayYoutubeId: null,
+    replayPublishedAt: null,
     paragraphs: [
       "We're opening Virgo season the way it's meant to be opened, by sitting down together and deciding exactly where the rest of your year is going before the season carries you into it.",
       "Virgo carries the most practical, get-it-done energy of the whole zodiac, which makes this the perfect moment to turn the vague wishes in your head into a plan you'll actually follow.",
@@ -102,6 +109,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomMeetingId: null,
     zoomPasscode: null,
     replayYoutubeId: null,
+    replayPublishedAt: null,
     paragraphs: [
       "With your goals set, this is the session where we do the deeper work of actually becoming the woman who follows through on them.",
       "If your life has been running on half-finished to-do lists, good intentions you keep pushing to next week, and a version of you that only shows up once everything finally feels organised enough, this is where that pattern ends.",
@@ -167,6 +175,26 @@ export function pastWorkshops(nowMs: number): Workshop[] {
   return WORKSHOPS.filter((w) => workshopStatus(w, nowMs) === "past").sort(
     (a, b) => new Date(b.startIso!).getTime() - new Date(a.startIso!).getTime()
   );
+}
+
+// How long a freshly uploaded replay is showcased as "new" on the season home before it settles
+// into the standing "catch up on replays" banner.
+export const REPLAY_FRESH_DAYS = 3;
+
+/** The most recently uploaded replay across all workshops, or null if none has one yet. Drives
+ *  the single "new replay" spotlight on the home page (we only ever headline one at a time). */
+export function latestReplay(): Workshop | null {
+  const withReplay = WORKSHOPS.filter((w) => w.replayYoutubeId && w.replayPublishedAt);
+  if (withReplay.length === 0) return null;
+  return withReplay.sort((a, b) => (b.replayPublishedAt! < a.replayPublishedAt! ? -1 : 1))[0];
+}
+
+/** Whether a replay is still inside its "new" window, i.e. uploaded within the last few days.
+ *  After that the home page swaps the spotlight for the standing replay-vault banner. */
+export function isReplayFresh(workshop: Workshop, nowMs: number): boolean {
+  if (!workshop.replayPublishedAt) return false;
+  const publishedMs = new Date(`${workshop.replayPublishedAt}T00:00:00Z`).getTime();
+  return nowMs - publishedMs < REPLAY_FRESH_DAYS * 86400000;
 }
 
 /** Local-time date/time label for a workshop, e.g. "Mon 3 August · 19:00". Renders in the viewer's
