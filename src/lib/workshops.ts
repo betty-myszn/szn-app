@@ -15,6 +15,9 @@ export interface Workshop {
   zoomUrl: string | null;
   zoomMeetingId: string | null;
   zoomPasscode: string | null;
+  /** YouTube video id for the replay, set once the class is over and uploaded, null until then.
+   *  Just the id (e.g. "dQw4w9WgXcQ"), not the full watch url. */
+  replayYoutubeId: string | null;
   paragraphs: string[];
   callout: { plain: string; pink: string } | null;
 }
@@ -32,6 +35,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: "https://us06web.zoom.us/j/87348495713?pwd=eVykh1qIwFdS5xYVsT6dbUmklWRbCa.1",
     zoomMeetingId: "873 4849 5713",
     zoomPasscode: "391862",
+    replayYoutubeId: "0M03CqjaUnY",
     paragraphs: [
       "Leo season is your cosmic reminder that you didn't come here to watch everyone else live the life you want.",
       "If you've been overthinking every move, watering yourself down, waiting until you feel “ready”, or hiding the parts of you that were always meant to be seen… this is your invitation to leave that version of yourself behind.",
@@ -55,6 +59,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: null,
     zoomMeetingId: null,
     zoomPasscode: null,
+    replayYoutubeId: null,
     paragraphs: [
       "You weren't born to be the internet's best kept secret.",
       "If you've been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines… we're changing that.",
@@ -75,6 +80,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: null,
     zoomMeetingId: null,
     zoomPasscode: null,
+    replayYoutubeId: null,
     paragraphs: [
       "We're opening Virgo season the way it's meant to be opened, by sitting down together and deciding exactly where the rest of your year is going before the season carries you into it.",
       "Virgo carries the most practical, get-it-done energy of the whole zodiac, which makes this the perfect moment to turn the vague wishes in your head into a plan you'll actually follow.",
@@ -95,6 +101,7 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: null,
     zoomMeetingId: null,
     zoomPasscode: null,
+    replayYoutubeId: null,
     paragraphs: [
       "With your goals set, this is the session where we do the deeper work of actually becoming the woman who follows through on them.",
       "If your life has been running on half-finished to-do lists, good intentions you keep pushing to next week, and a version of you that only shows up once everything finally feels organised enough, this is where that pattern ends.",
@@ -149,6 +156,17 @@ export function upcomingWorkshops(nowMs: number): Workshop[] {
     if (!b.startIso) return -1;
     return new Date(a.startIso).getTime() - new Date(b.startIso).getTime();
   });
+}
+
+/**
+ * Finished workshops, most recent first, for the replay vault. The mirror image of
+ * upcomingWorkshops: only classes whose start time (plus their run length) is already behind us,
+ * which are exactly the ones with a real startIso, so the sort never sees a null.
+ */
+export function pastWorkshops(nowMs: number): Workshop[] {
+  return WORKSHOPS.filter((w) => workshopStatus(w, nowMs) === "past").sort(
+    (a, b) => new Date(b.startIso!).getTime() - new Date(a.startIso!).getTime()
+  );
 }
 
 /** Local-time date/time label for a workshop, e.g. "Mon 3 August · 19:00". Renders in the viewer's

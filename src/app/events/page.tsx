@@ -16,7 +16,7 @@ import {
   setNotifyMe,
   type RsvpRecord,
 } from "@/lib/rsvp";
-import { WORKSHOPS, type Workshop } from "@/lib/workshops";
+import { WORKSHOPS, workshopStatus, pastWorkshops, formatWorkshopWhenLA, type Workshop } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -84,6 +84,12 @@ export default function EventsPage() {
 
   if (!ready) return null;
 
+  // Once a class is over it leaves the RSVP grid and moves to the replay vault below, so the same
+  // workshop is never both "upcoming, rsvp now" and "past, watch the replay" at the same time.
+  const now = Date.now();
+  const upcoming = WORKSHOPS.filter((w) => workshopStatus(w, now) !== "past");
+  const past = pastWorkshops(now);
+
   return (
     <>
       <Ticker
@@ -118,7 +124,7 @@ export default function EventsPage() {
       {/* Workshop cards */}
       <section style={{ borderBottom: "var(--border)" }}>
         <div className="grid md:grid-cols-2 gap-0">
-          {WORKSHOPS.map((workshop, i) => (
+          {upcoming.map((workshop, i) => (
             <div
               key={workshop.title}
               className="p-8 md:p-12"
@@ -370,20 +376,93 @@ export default function EventsPage() {
       </section>
 
       {member ? (
-        /* Members: replay vault teaser */
-        <section className="px-5 md:px-8 py-12">
-          <div className="max-w-5xl mx-auto">
-            <div className="tag mb-5">the replay vault</div>
-            <div className="p-8 text-center" style={{ border: "var(--border)", background: "var(--cream)" }}>
-              <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 10 }}>
-                every workshop, saved for you.
-              </h2>
-              <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 480, margin: "0 auto" }}>
-                Replays land here within 24 hours of each live class. Your first one arrives after the 3 august workshop, the vault starts filling this szn.
+        past.length > 0 ? (
+          /* Members: the replay vault, one card per finished workshop */
+          <section className="px-5 md:px-8 py-12">
+            <div className="max-w-3xl mx-auto">
+              <div className="tag mb-5">the replay vault</div>
+              <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 520, marginBottom: 28 }}>
+                Every class you&apos;ve missed or want to sit with again, saved right here. Watch in your own time, as many times as you like.
               </p>
+              <div className="flex flex-col gap-8">
+                {past.map((workshop) => (
+                  <div key={workshop.id} className="p-6 md:p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: "0.14em",
+                        textTransform: "uppercase",
+                        color: "#3C2A70",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {workshop.label}
+                    </div>
+                    {workshop.startIso && (
+                      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
+                        {formatWorkshopWhenLA(workshop.startIso)}
+                      </div>
+                    )}
+                    <h2
+                      style={{
+                        fontFamily: poppins,
+                        fontSize: 22,
+                        fontWeight: 800,
+                        letterSpacing: "-0.6px",
+                        lineHeight: 1.2,
+                        color: "#2E1C63",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {workshop.title}
+                    </h2>
+
+                    {workshop.replayYoutubeId ? (
+                      hasActiveAccess(member) ? (
+                        <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", marginTop: 18, background: "#000" }}>
+                          <iframe
+                            src={`https://www.youtube-nocookie.com/embed/${workshop.replayYoutubeId}?rel=0`}
+                            title={workshop.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
+                          />
+                        </div>
+                      ) : (
+                        <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8, marginTop: 12 }}>
+                          The replay unlocks with an active membership.{" "}
+                          <a href="/membership" style={{ color: "var(--pink)", fontWeight: 700 }}>
+                            join to watch
+                          </a>
+                        </p>
+                      )
+                    ) : (
+                      <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8, marginTop: 12 }}>
+                        The replay is being edited and lands here within 24 hours of the class. ✦
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          /* Members, nothing finished yet: replay vault teaser */
+          <section className="px-5 md:px-8 py-12">
+            <div className="max-w-5xl mx-auto">
+              <div className="tag mb-5">the replay vault</div>
+              <div className="p-8 text-center" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
+                <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", color: "#2E1C63", marginBottom: 10 }}>
+                  every workshop, saved for you.
+                </h2>
+                <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 480, margin: "0 auto" }}>
+                  Replays land here within 24 hours of each live class. Your first one arrives after the 3 august workshop, the vault starts filling this szn.
+                </p>
+              </div>
+            </div>
+          </section>
+        )
       ) : (
         /* Guests: what else is inside */
         <section className="px-5 md:px-8 py-12">
