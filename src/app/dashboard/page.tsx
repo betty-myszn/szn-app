@@ -32,6 +32,7 @@ import SeasonMeditation from "@/components/SeasonMeditation";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
+import { isEightEightLive } from "@/lib/eight-eight-gate";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -193,6 +194,30 @@ export default function DashboardPage() {
           </p>
         </div>
       </section>
+
+      {/* 8/8 Lion's Gate money portal: a timed drop that self-hides after the 11th (LA time) via
+          isEightEightLive(). Sits directly under the header so it's the first thing every member
+          sees during the portal window. */}
+      {isEightEightLive() && (
+        <section className="px-5 md:px-8 py-8" style={{ background: "var(--gold)", borderBottom: "var(--border)" }}>
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6 justify-between">
+            <div className="flex items-center gap-5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/lion-gate-888.png" alt="" width={92} height={92} style={{ flex: "none", filter: "drop-shadow(0 6px 16px rgba(0,0,0,.25))" }} />
+              <div>
+                <div className="tag mb-2">new · 8/8 lion&apos;s gate</div>
+                <h2 style={{ fontFamily: poppins, fontSize: "clamp(20px,3vw,26px)", fontWeight: 800, letterSpacing: "-0.6px", lineHeight: 1.15 }}>
+                  your 8/8 money portal is open.
+                </h2>
+                <p style={{ fontSize: 13.5, color: "#1a1a1a", opacity: 0.8, marginTop: 6, maxWidth: 520, lineHeight: 1.6 }}>
+                  your venus, jupiter and money houses, read for the lion&apos;s gate, with two exercises and your money mantras. here until the 11th.
+                </p>
+              </div>
+            </div>
+            <Link href="/your-season/8-8-money" className="btn-pink" style={{ whiteSpace: "nowrap" }}>open my 8/8 guide →</Link>
+          </div>
+        </section>
+      )}
 
       {/* Unmissable: what this season actually is, the sign itself, not just the label */}
       <section className="px-5 md:px-8 py-14" style={{ background: "var(--pink)", borderBottom: "var(--border)" }}>
