@@ -291,7 +291,7 @@ export default function Home() {
       {isEightEightLive() && (
         <section
           className="px-5 md:px-8"
-          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40, overflow: "hidden" }}
+          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
         >
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
             {/* writing + CTA on the left */}
@@ -302,11 +302,11 @@ export default function Home() {
               <h2
                 style={{
                   fontFamily: poppins,
-                  fontSize: "clamp(26px, 4vw, 46px)",
+                  fontSize: "clamp(30px, 5vw, 60px)",
                   fontWeight: 800,
-                  letterSpacing: "-0.5px",
+                  letterSpacing: "-1px",
                   color: "var(--dark)",
-                  margin: "14px 0 10px",
+                  margin: "16px 0 12px",
                 }}
               >
                 the 8/8 money portal is <span style={{ color: "#fff" }}>open.</span>
@@ -342,7 +342,7 @@ export default function Home() {
               width={1080}
               height={1080}
               className="hidden md:block"
-              style={{ width: 240, height: "auto", flexShrink: 0 }}
+              style={{ width: "clamp(320px, 34vw, 480px)", height: "auto", flexShrink: 0 }}
             />
           </div>
         </section>
