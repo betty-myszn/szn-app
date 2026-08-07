@@ -3,10 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import PlacesAutocomplete from "@/components/PlacesAutocomplete";
+import CheckoutButton from "@/components/CheckoutButton";
+import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
+import { useEnrolmentOpen } from "@/lib/enrolment";
 import { PASSWORD_HINT, MIN_PASSWORD_LENGTH } from "@/lib/password";
 import type { BirthLocation } from "@/types/chart";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+
+type PlanId = "free" | "monthly" | "vip";
+
+// All three sign-ups, shown together so nobody has to leave the page to find the paid tiers. Free
+// runs the two-step account flow on this page; the paid tiers hand off to Stripe checkout (the same
+// links the membership page uses) and the webhook parks the membership by email, claimed when she
+// sets her password afterwards.
+const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
+  { id: "free", name: "Free", tagline: "the chat rooms, plus your birth and human design charts", price: "$0" },
+  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, live coaching, book club and moon audios", price: "$111/mo" },
+  { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
+];
 
 const labelStyle: React.CSSProperties = {
   display: "block",
@@ -29,6 +44,8 @@ const inputStyle: React.CSSProperties = {
 // for her the moment she verifies. The account isn't usable until she clicks the one-time link we
 // email, so on success this switches to a "check your inbox" state rather than logging her in.
 export default function SignupPage() {
+  const [plan, setPlan] = useState<PlanId>("free");
+  const enrolmentOpen = useEnrolmentOpen();
   const [step, setStep] = useState<1 | 2>(1);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -124,73 +141,127 @@ export default function SignupPage() {
       <div className="w-full max-w-md bg-white p-8 md:p-12" style={{ border: "var(--border)" }}>
         {step === 1 ? (
           <>
-            <div className="tag mb-3">free chat rooms</div>
-            <h1 style={{ fontFamily: poppins, fontSize: 32, fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, marginBottom: 12 }}>
-              join the astro group chat,<br />
-              <span className="pk">come make new besties.</span>
+            <div className="tag mb-3">choose your szn</div>
+            <h1 style={{ fontFamily: poppins, fontSize: 30, fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, marginBottom: 12 }}>
+              join <span className="pk">MY SZN.</span>
             </h1>
-            <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
-              The rooms are where the girls actually hang out, talking through transits and placements and whatever is going on that week, and a free account gets you in without putting a card in. We&apos;ll also run your birth chart and your human design chart on the way through, both free, so you&apos;ve got something to talk about.
-            </p>
-            <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 28 }}>
-              When you want the rest of it, the paid tiers open up the book club, the new moon and full moon audios, live group astrology coaching every season, and the full personalised platform built around your own chart.
+            <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
+              Start free in the rooms, or go all in on the full platform. Pick what fits you now, you can always upgrade later.
             </p>
 
-            <form onSubmit={goToBirthStep}>
-              {/* Honeypot: off-screen, not tabbable, hidden from assistive tech. Real users never
-                  see or fill it; bots do, and the API rejects the request when it's set. */}
-              <input
-                type="text"
-                name="company"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
-              />
-              <label htmlFor="signup-name" style={labelStyle}>first name</label>
-              <input
-                id="signup-name"
-                type="text"
-                required
-                autoComplete="given-name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="what do we call you?"
-                className="w-full mb-5"
-                style={inputStyle}
-              />
-              <label htmlFor="signup-email" style={labelStyle}>email address</label>
-              <input
-                id="signup-email"
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full mb-5"
-                style={inputStyle}
-              />
-              <label htmlFor="signup-password" style={labelStyle}>password</label>
-              <input
-                id="signup-password"
-                type="password"
-                required
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="pick a password"
-                className="w-full mb-2"
-                style={inputStyle}
-              />
-              <p style={{ fontSize: 11, color: "var(--grey-light)", marginBottom: 20 }}>{PASSWORD_HINT}</p>
-              {error && <p style={{ fontSize: 12, color: "var(--pink)", marginBottom: 16 }}>{error}</p>}
-              <button type="submit" className="btn-pink w-full" style={{ cursor: "pointer" }}>
-                next, your birth details
-              </button>
-            </form>
+            {/* All three sign-ups together, so nobody has to leave to find the paid tiers */}
+            <div className="flex flex-col gap-2 mb-7">
+              {PLAN_OPTIONS.map((opt) => {
+                const selected = plan === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => {
+                      setPlan(opt.id);
+                      setError("");
+                    }}
+                    aria-pressed={selected}
+                    className="w-full"
+                    style={{
+                      textAlign: "left",
+                      padding: "14px 16px",
+                      background: selected ? "var(--pink-light)" : "#fff",
+                      border: selected ? "1.5px solid var(--pink)" : "var(--border)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, letterSpacing: "-0.4px", color: "var(--dark)" }}>{opt.name}</span>
+                      <span style={{ fontSize: 13, fontWeight: 800, color: "var(--pink)" }}>{opt.price}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--grey)", lineHeight: 1.5, marginTop: 4 }}>{opt.tagline}</div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {plan === "free" ? (
+              <>
+                <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 20 }}>
+                  A free account gets you into the rooms with the girls, no card needed, and we&apos;ll run your birth chart and your human design chart on the way through so you&apos;ve got something to talk about.
+                </p>
+
+                <form onSubmit={goToBirthStep}>
+                  {/* Honeypot: off-screen, not tabbable, hidden from assistive tech. Real users never
+                      see or fill it; bots do, and the API rejects the request when it's set. */}
+                  <input
+                    type="text"
+                    name="company"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                  />
+                  <label htmlFor="signup-name" style={labelStyle}>first name</label>
+                  <input
+                    id="signup-name"
+                    type="text"
+                    required
+                    autoComplete="given-name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="what do we call you?"
+                    className="w-full mb-5"
+                    style={inputStyle}
+                  />
+                  <label htmlFor="signup-email" style={labelStyle}>email address</label>
+                  <input
+                    id="signup-email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full mb-5"
+                    style={inputStyle}
+                  />
+                  <label htmlFor="signup-password" style={labelStyle}>password</label>
+                  <input
+                    id="signup-password"
+                    type="password"
+                    required
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="pick a password"
+                    className="w-full mb-2"
+                    style={inputStyle}
+                  />
+                  <p style={{ fontSize: 11, color: "var(--grey-light)", marginBottom: 20 }}>{PASSWORD_HINT}</p>
+                  {error && <p style={{ fontSize: 12, color: "var(--pink)", marginBottom: 16 }}>{error}</p>}
+                  <button type="submit" className="btn-pink w-full" style={{ cursor: "pointer" }}>
+                    next, your birth details
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div>
+                <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
+                  {plan === "vip"
+                    ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
+                    : "MY SZN is the full personalised platform built around your own chart, with live group coaching every season, the book club, and the new and full moon audios."}
+                </p>
+                <CheckoutButton
+                  checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
+                  label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $111/mo"}
+                  waitlistHref="/membership#pricing"
+                  plan={plan}
+                  value={plan === "vip" ? 555 : 111}
+                />
+                <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
+                  You&apos;ll set your password and add your birth details right after checkout.
+                </p>
+              </div>
+            )}
 
             <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 20, lineHeight: 1.6 }}>
               Already have an account?{" "}

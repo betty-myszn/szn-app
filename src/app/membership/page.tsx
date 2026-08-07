@@ -6,19 +6,15 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
+import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 
-// Real Stripe payment links. The "$333, 3 months upfront" link
-// (buy.stripe.com/7sYfZi7AreUf51E3CB7kc0h) was deliberately dropped when that plan was retired,
-// not lost. Its Stripe price is still mapped to the 'monthly' tier in stripe-tiers.ts so existing
-// upfront members keep access; only the way to newly buy it is gone. Deactivate the payment link
-// in the Stripe dashboard too, otherwise anyone holding the old URL can still check out on it.
-const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/3cIdRacULeUf3XA7SR7kc0g";
-const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
+// Stripe payment links now live in @/lib/checkout (imported above) so the signup page and this page
+// can never drift onto different URLs.
 
 // The $33 "MY SZN Social" tier is RETIRED FROM SALE, which is why there's no social checkout URL
 // and no social card below. Free now owns the chat rooms, so social had nothing uniquely its own,
