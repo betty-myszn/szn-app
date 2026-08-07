@@ -334,22 +334,16 @@ export default function Home() {
                 join my szn to unlock it
               </Link>
             </div>
-            {/* big dollar signs on the right */}
-            <div
+            {/* the crowned money lion on the right, its own gold dollar signs built in */}
+            <Image
+              src="/lion-gate-888.png"
+              alt=""
               aria-hidden
+              width={1080}
+              height={1080}
               className="hidden md:block"
-              style={{
-                fontFamily: poppins,
-                fontWeight: 800,
-                color: "var(--dark)",
-                fontSize: "clamp(70px, 11vw, 150px)",
-                lineHeight: 0.8,
-                letterSpacing: "-6px",
-                flexShrink: 0,
-              }}
-            >
-              $$$
-            </div>
+              style={{ width: 240, height: "auto", flexShrink: 0 }}
+            />
           </div>
         </section>
       )}
