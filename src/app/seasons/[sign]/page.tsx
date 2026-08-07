@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import SeasonWaitlistForm from "@/components/SeasonWaitlistForm";
 import { SEASON_PAGES, SEASON_SLUGS } from "@/lib/season-pages";
+import { replayForSign } from "@/lib/workshops";
 import { OG_IMAGE } from "@/lib/site";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -62,6 +63,14 @@ export default async function SeasonPage({
   if (!season) notFound();
 
   const allSeasons = Object.entries(SEASON_PAGES);
+
+  // This season's own workshop replay, if one has been uploaded. Shown as a locked thumbnail that
+  // clicks through to the members-only vault, so the class is showcased here without giving the
+  // full recording away on a public page.
+  const replay = replayForSign(slug);
+  const replayThumb = replay?.replayYoutubeId
+    ? `https://img.youtube.com/vi/${replay.replayYoutubeId}/maxresdefault.jpg`
+    : null;
 
   // Breadcrumbs give Google the hierarchy for the SERP trail; the Article block tells it this page
   // is writing about a topic rather than another sales page.
@@ -142,6 +151,55 @@ export default async function SeasonPage({
           <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)", marginBottom: 28 }}>
             {season.workshop}
           </p>
+
+          {replayThumb && (
+            <div style={{ marginBottom: 28 }}>
+              <Link
+                href="/events/replays"
+                aria-label={`Watch the ${season.name} season workshop replay inside the membership`}
+                style={{
+                  display: "block",
+                  position: "relative",
+                  width: "100%",
+                  aspectRatio: "16 / 9",
+                  border: "var(--border)",
+                  background: `#000 url("${replayThumb}") center / cover no-repeat`,
+                  overflow: "hidden",
+                }}
+              >
+                {/* darkening layer so the play button and lock label stay legible over any frame */}
+                <span style={{ position: "absolute", inset: 0, background: "rgba(20,10,40,0.35)" }} aria-hidden="true" />
+                {/* play button */}
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+                    width: 74, height: 74, borderRadius: "50%", background: "var(--pink)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    boxShadow: "0 6px 24px rgba(0,0,0,0.4)",
+                  }}
+                >
+                  <span style={{ borderStyle: "solid", borderWidth: "13px 0 13px 22px", borderColor: "transparent transparent transparent #fff", marginLeft: 5 }} />
+                </span>
+                {/* members badge */}
+                <span
+                  style={{
+                    position: "absolute", top: 14, left: 14,
+                    fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase",
+                    color: "#2E1C63", background: "#fff", padding: "5px 11px",
+                  }}
+                >
+                  ✦ members only
+                </span>
+              </Link>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginTop: 12 }}>
+                The full replay of this class is saved inside the membership.{" "}
+                <Link href="/events/replays" className="pk" style={{ fontWeight: 700 }}>
+                  Join to watch it back any time.
+                </Link>
+              </p>
+            </div>
+          )}
 
           <div className="p-6 md:p-8" style={{ background: "#fff", border: "var(--border)" }}>
             <ul style={{ margin: 0, paddingLeft: 20 }}>

@@ -189,6 +189,18 @@ export function latestReplay(): Workshop | null {
   return withReplay.sort((a, b) => (b.replayPublishedAt! < a.replayPublishedAt! ? -1 : 1))[0];
 }
 
+/** The newest uploaded replay for a given zodiac sign, or null if that season has none yet. Used
+ *  to surface a season's own workshop on its public /seasons/[sign] page. Workshop ids are named
+ *  "<sign>-szn-workshop-N", so the sign slug is just the id prefix. */
+export function replayForSign(sign: string): Workshop | null {
+  const prefix = `${sign.toLowerCase()}-`;
+  const matches = WORKSHOPS.filter(
+    (w) => w.replayYoutubeId && w.replayPublishedAt && w.id.toLowerCase().startsWith(prefix)
+  );
+  if (matches.length === 0) return null;
+  return matches.sort((a, b) => (b.replayPublishedAt! < a.replayPublishedAt! ? -1 : 1))[0];
+}
+
 /** Whether a replay is still inside its "new" window, i.e. uploaded within the last few days.
  *  After that the home page swaps the spotlight for the standing replay-vault banner. */
 export function isReplayFresh(workshop: Workshop, nowMs: number): boolean {
