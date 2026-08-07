@@ -8,6 +8,7 @@ import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 import { WORKSHOPS, formatWorkshopWhenLA } from "@/lib/workshops";
+import { isEightEightLive } from "@/lib/eight-eight-gate";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -281,6 +282,77 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* ── 8/8 LION'S GATE MONEY PORTAL: timed acquisition banner, shown only while the portal is
+           live (LA date 7-11 Aug) via isEightEightLive(), so it takes itself down after the 11th
+           with no manual unpublish. Only logged-out visitors ever see this page (members are
+           redirected to /dashboard above), which is exactly the audience the launch email targets.
+           The guide is paid, so the CTA is join MY SZN, not a free signup. ── */}
+      {isEightEightLive() && (
+        <section
+          className="px-5 md:px-8"
+          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40, overflow: "hidden" }}
+        >
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            {/* writing + CTA on the left */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span className="sticker" style={{ background: "var(--dark)", color: "#fff" }}>
+                open now · until 11 august
+              </span>
+              <h2
+                style={{
+                  fontFamily: poppins,
+                  fontSize: "clamp(26px, 4vw, 46px)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.5px",
+                  color: "var(--dark)",
+                  margin: "14px 0 10px",
+                }}
+              >
+                the 8/8 money portal is <span style={{ color: "#fff" }}>open.</span>
+              </h2>
+              <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--dark)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
+                Your personalised 8/8 money guide reads your own chart to show you exactly how
+                you&apos;re built to make money, where your abundance blocks are, and how to work this
+                portal with your own placements instead of generic manifestation advice.
+              </p>
+              <Link
+                href="/membership"
+                className="no-underline"
+                style={{
+                  display: "inline-block",
+                  background: "var(--dark)",
+                  color: "#fff",
+                  fontFamily: poppins,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "15px 30px",
+                }}
+              >
+                join my szn to unlock it
+              </Link>
+            </div>
+            {/* big dollar signs on the right */}
+            <div
+              aria-hidden
+              className="hidden md:block"
+              style={{
+                fontFamily: poppins,
+                fontWeight: 800,
+                color: "var(--dark)",
+                fontSize: "clamp(70px, 11vw, 150px)",
+                lineHeight: 0.8,
+                letterSpacing: "-6px",
+                flexShrink: 0,
+              }}
+            >
+              $$$
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── 3. COSMIC HOME: copy only. This was a two-column split with a flat colour placeholder
            panel standing in for a product screenshot. The placeholder was cut, and rather than
