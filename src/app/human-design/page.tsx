@@ -7,6 +7,7 @@ import { hasActiveAccess } from "@/lib/membership-access";
 import Bodygraph from "@/components/Bodygraph";
 import HumanDesignAreas from "@/components/HumanDesignAreas";
 import HumanDesignGates from "@/components/HumanDesignGates";
+import HumanDesignProfileLines from "@/components/HumanDesignProfileLines";
 import { CENTER_LABELS, GATE_NAME, channelKey } from "@/lib/human-design-constants";
 import {
   TYPE_CONTENT,
@@ -17,7 +18,6 @@ import {
   CROSS_ANGLE_CONTENT,
   CHANNEL_GIFT,
 } from "@/lib/human-design-content";
-import type { HumanDesignData } from "@/types/human-design";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -43,12 +43,18 @@ export default function HumanDesignPage() {
         <p style={{ marginBottom: 16 }}>
           We need your birth date, exact time and place to build your Human Design chart.
         </p>
-        <Link href="/settings" style={linkBtn}>
-          add your birth details
+        <Link href="/human-design-chart" style={linkBtn}>
+          build your free human design chart
         </Link>
       </Shell>
     );
   }
+
+  // The identity essentials (type, strategy, authority, profile, bodygraph) are free for everyone,
+  // the front-door taster. The deeper read (definition, area-by-area, centres, channels, every
+  // gate, incarnation cross, technical) is the paid layer, so free members and logged-out visitors
+  // see a go-deeper CTA in its place.
+  const unlocked = hasActiveAccess(member);
 
   const type = TYPE_CONTENT[hd.type];
   const authority = AUTHORITY_CONTENT[hd.authority];
@@ -109,88 +115,96 @@ export default function HumanDesignPage() {
 
       {profile && <Reading title="your profile" block={profile} />}
 
-      <Reading title="how your energy is wired" block={definition} />
+      {/* the two profile lines, each explained on its own */}
+      <HumanDesignProfileLines profile={hd.profile} />
 
-      {/* how you operate, per life area: the design equivalent of the astrology life-area guide.
-          Paid (full access), matching that guide; free members see the locked list and upgrade. */}
-      <SectionHead title="how you operate, area by area" />
-      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
-        Who you are is above. This is how that design actually plays out in each part of your life,
-        tap any area to open it.
-      </p>
-      <HumanDesignAreas hd={hd} unlocked={hasActiveAccess(member)} />
-
-      {/* centres */}
-      <SectionHead title="your centres" />
-      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
-        Defined centres are your consistent, reliable energy, the parts of you that do not change.
-        Open centres are where you take in and amplify the world, your places of sensitivity and,
-        in time, wisdom.
-      </p>
-      <div style={{ display: "grid", gap: 10 }}>
-        {hd.definedCenters.map((c) => (
-          <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].defined} defined />
-        ))}
-        {hd.openCenters.map((c) => (
-          <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].open} defined={false} />
-        ))}
-      </div>
-
-      {/* channels */}
-      <SectionHead title={`your channels (${hd.definedChannels.length})`} />
-      {hd.definedChannels.length === 0 ? (
-        <p style={{ margin: 0, opacity: 0.6 }}>
-          You have no fully defined channels, which is the open, reflective wiring of your type.
-        </p>
-      ) : (
+      {unlocked ? (
         <>
+          <Reading title="how your energy is wired" block={definition} />
+
+          {/* how you operate, per life area: the design equivalent of the astrology life-area guide. */}
+          <SectionHead title="how you operate, area by area" />
           <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
-            Channels are your fixed gifts, the talents that are always switched on, no matter what.
+            Who you are is above. This is how that design actually plays out in each part of your life,
+            tap any area to open it.
+          </p>
+          <HumanDesignAreas hd={hd} unlocked />
+
+          {/* centres */}
+          <SectionHead title="your centres" />
+          <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+            Defined centres are your consistent, reliable energy, the parts of you that do not change.
+            Open centres are where you take in and amplify the world, your places of sensitivity and,
+            in time, wisdom.
           </p>
           <div style={{ display: "grid", gap: 10 }}>
-            {hd.definedChannels.map((ch) => (
-              <div key={ch.key} style={card}>
-                <div style={{ fontFamily: poppins, fontWeight: 600, marginBottom: 3 }}>
-                  {ch.gates[0]}–{ch.gates[1]} · {ch.name || "Channel"}
-                </div>
-                <div style={{ fontSize: 14, opacity: 0.75, lineHeight: 1.5 }}>
-                  {CHANNEL_GIFT[channelKey(ch.gates[0], ch.gates[1])] ?? ""}
-                </div>
-              </div>
+            {hd.definedCenters.map((c) => (
+              <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].defined} defined />
+            ))}
+            {hd.openCenters.map((c) => (
+              <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].open} defined={false} />
             ))}
           </div>
+
+          {/* channels */}
+          <SectionHead title={`your channels (${hd.definedChannels.length})`} />
+          {hd.definedChannels.length === 0 ? (
+            <p style={{ margin: 0, opacity: 0.6 }}>
+              You have no fully defined channels, which is the open, reflective wiring of your type.
+            </p>
+          ) : (
+            <>
+              <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+                Channels are your fixed gifts, the talents that are always switched on, no matter what.
+              </p>
+              <div style={{ display: "grid", gap: 10 }}>
+                {hd.definedChannels.map((ch) => (
+                  <div key={ch.key} style={card}>
+                    <div style={{ fontFamily: poppins, fontWeight: 600, marginBottom: 3 }}>
+                      {ch.gates[0]}–{ch.gates[1]} · {ch.name || "Channel"}
+                    </div>
+                    <div style={{ fontSize: 14, opacity: 0.75, lineHeight: 1.5 }}>
+                      {CHANNEL_GIFT[channelKey(ch.gates[0], ch.gates[1])] ?? ""}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* every gate she carries, explained in full */}
+          <HumanDesignGates hd={hd} />
+
+          {/* incarnation cross */}
+          <Reading
+            title="your life theme"
+            block={{
+              ...cross,
+              meaning: `${cross.meaning} Your cross runs on gates ${hd.incarnationCross.gates.join(", ")}, the two Sun and Earth gates of your Personality and Design.`,
+            }}
+          />
+
+          {/* technical detail */}
+          <SectionHead title="the technical detail" />
+          <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+            The raw activations behind your chart. Personality is your conscious side, the person you
+            know yourself to be. Design is your unconscious body, set roughly 88 days before you were
+            born.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <ActivationTable title="Personality (conscious)" rows={hd.personality} />
+            <ActivationTable title="Design (unconscious)" rows={hd.design} />
+          </div>
+
+          <p style={{ fontSize: 12, opacity: 0.5, marginTop: 28, lineHeight: 1.6 }}>
+            Design chart taken {hd.designUtcTime}, when the Sun was 88° of arc before your birth
+            position. Human Design is sensitive to your exact birth time, a few minutes can shift a line
+            or a centre. Computed on the same Swiss Ephemeris as your astrology chart.
+          </p>
         </>
+      ) : (
+        <GoDeeperCTA name={hd.birthData.name} />
       )}
-
-      {/* every gate she carries, explained in full */}
-      <HumanDesignGates hd={hd} />
-
-      {/* incarnation cross */}
-      <Reading
-        title="your life theme"
-        block={{
-          ...cross,
-          meaning: `${cross.meaning} Your cross runs on gates ${hd.incarnationCross.gates.join(", ")}, the two Sun and Earth gates of your Personality and Design.`,
-        }}
-      />
-
-      {/* technical detail */}
-      <SectionHead title="the technical detail" />
-      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
-        The raw activations behind your chart. Personality is your conscious side, the person you
-        know yourself to be. Design is your unconscious body, set roughly 88 days before you were
-        born.
-      </p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-        <ActivationTable title="Personality (conscious)" rows={hd.personality} />
-        <ActivationTable title="Design (unconscious)" rows={hd.design} />
-      </div>
-
-      <p style={{ fontSize: 12, opacity: 0.5, marginTop: 28, lineHeight: 1.6 }}>
-        Design chart taken {hd.designUtcTime}, when the Sun was 88° of arc before your birth
-        position. Human Design is sensitive to your exact birth time, a few minutes can shift a line
-        or a centre. Computed on the same Swiss Ephemeris as your astrology chart.
-      </p>
 
       <div style={{ marginTop: 32 }}>
         <Link href="/my-chart" style={linkBtnOutline}>
@@ -202,6 +216,62 @@ export default function HumanDesignPage() {
 }
 
 // ── pieces ──────────────────────────────────────────────────────────────────────
+
+// Shown in place of the deep reading for free members and logged-out visitors. Names what sits
+// behind the paid gate and sends her to the plans, mirroring the "go deeper" CTA on the free
+// astrology chart.
+function GoDeeperCTA({ name }: { name?: string }) {
+  const inside = [
+    "How your design plays out in money, love, business and confidence, area by area",
+    "Every one of your centres, defined and open, read in full",
+    "Your channels and all your gates, the fixed gifts you carry",
+    "Your incarnation cross, the life theme running underneath it all",
+    "Your Human Design and your astrology, woven together across every part of your life",
+  ];
+  return (
+    <div
+      style={{
+        margin: "40px 0 8px",
+        padding: "28px 24px",
+        background: "var(--lav-light)",
+        border: "var(--border)",
+      }}
+    >
+      <p style={{ ...eyebrow, marginBottom: 8, color: "var(--pink)", opacity: 1 }}>this is the surface</p>
+      <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", lineHeight: 1.2, color: "#2E1C63", margin: "0 0 10px" }}>
+        {name ? `${name}, go deeper into your design.` : "Go deeper into your design."}
+      </h2>
+      <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--dark)", margin: "0 0 16px" }}>
+        Your Type, Strategy and Authority above are the front door. The full read is inside MY SZN:
+      </p>
+      <ul style={{ margin: "0 0 22px", padding: 0, listStyle: "none", display: "grid", gap: 8 }}>
+        {inside.map((line) => (
+          <li key={line} style={{ fontSize: 14, lineHeight: 1.55, color: "var(--dark)", paddingLeft: 22, position: "relative" }}>
+            <span style={{ position: "absolute", left: 0, color: "var(--pink)", fontWeight: 800 }}>✦</span>
+            {line}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href="/membership"
+        className="no-underline"
+        style={{
+          display: "inline-block",
+          background: "var(--pink)",
+          color: "var(--dark)",
+          fontFamily: poppins,
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          padding: "14px 28px",
+        }}
+      >
+        see the plans
+      </Link>
+    </div>
+  );
+}
 
 function Reading({
   title,

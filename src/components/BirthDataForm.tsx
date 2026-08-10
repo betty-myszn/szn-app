@@ -10,9 +10,28 @@ import { track, EVENTS } from "@/lib/analytics";
 
 interface BirthDataFormProps {
   initialData?: Partial<BirthData>;
+  /** Where to send her once the details are saved. Defaults to the astrology results page. The
+   *  human design generator points this at /human-design instead. */
+  destination?: string;
+  /** Lead source tag for the email capture, so free-chart and free-human-design leads are
+   *  distinguishable in the list. */
+  leadSource?: string;
+  /** When false, skip the astrology /api/calculate call and just save the details and redirect.
+   *  Human Design is computed on its own page from the same saved birth data, so it doesn't need
+   *  the natal calculation here. Defaults to true, keeping the astrology flow unchanged. */
+  computeAstrology?: boolean;
+  submitLabel?: string;
+  loadingLabel?: string;
 }
 
-export default function BirthDataForm({ initialData }: BirthDataFormProps) {
+export default function BirthDataForm({
+  initialData,
+  destination = "/results",
+  leadSource = "free-chart",
+  computeAstrology = true,
+  submitLabel = "get my free chart",
+  loadingLabel = "calculating your chart...",
+}: BirthDataFormProps) {
   const router = useRouter();
 
   // Try to pre-fill from localStorage if no initialData
@@ -102,6 +121,31 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
     });
 
     try {
+      // Human design mode: no natal calculation needed here, the /human-design page computes the
+      // design chart from these same saved details. Save, capture the lead, redirect.
+      if (!computeAstrology) {
+        saveBirthData(birthData);
+        void syncBirthDataToSupabase(birthData);
+        if (email) {
+          fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              name,
+              source: leadSource,
+              dateOfBirth,
+              birthTime,
+              birthTimeApproximate,
+              placeOfBirth: finalLocation.placeName,
+            }),
+          }).catch(() => {});
+          track(EVENTS.LEAD, { source: leadSource });
+        }
+        router.push(destination);
+        return;
+      }
+
       const res = await fetch("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -313,7 +357,7 @@ export default function BirthDataForm({ initialData }: BirthDataFormProps) {
           marginTop: 8,
         }}
       >
-        {loading ? "calculating your chart..." : "get my free chart"}
+        {loading ? loadingLabel : submitLabel}
       </button>
     </form>
   );
