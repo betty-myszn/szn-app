@@ -1,0 +1,287 @@
+/**
+ * Money Blueprint — stage ④, the writer.
+ *
+ * The only stage that calls a model, and it is never allowed to decide what is true about the
+ * chart. It is handed verified facts and asked to explain them well. Everything that makes the
+ * report feel handcrafted was decided deterministically in stages ② and ③.
+ *
+ * Structure of every call:
+ *
+ *   ┌─ cached prefix, byte-identical on every call and every buyer ──┐
+ *   │ 1. VOICE CONTRACT    Betty's rules, exemplars, braiding rule   │
+ *   │ 2. KNOWLEDGE LAYER   what the factors mean                     │
+ *   ├─ per call ─────────────────────────────────────────────────────┤
+ *   │ 3. ENGINE BRIEF      purpose, shape, word budget               │
+ *   │ 4. PAYLOAD           entitled facts, convergences, ledger      │
+ *   └────────────────────────────────────────────────────────────────┘
+ *
+ * Sections are independent by design and generate in parallel batches. The two exceptions run
+ * last: the protocols need the shadows named in the buyer's own language, and the Thread reads the
+ * whole report.
+ */
+
+import fs from "fs";
+import path from "path";
+import Anthropic from "@anthropic-ai/sdk";
+import type { ReportPlan, PlannedSection } from "./plan";
+import { VOICE_CONTRACT } from "./voice";
+import { KNOWLEDGE_LAYER } from "./knowledge";
+import { buildSectionPrompt, SECTION_SCHEMA, type Claim, type SectionDraft } from "./prompt";
+import { runGates, runReportGates, type GateFailure, type GateResult } from "./gates";
+import { DERIVED_FROM_SHADOWS } from "./sections";
+
+const MODEL = "claude-opus-5";
+const MAX_TOKENS = 16000;
+
+/** One section, written and gated. */
+export interface WrittenSection {
+  id: string;
+  number: number | null;
+  title: string;
+  part: number;
+  pages: number;
+  headline: string;
+  html: string;
+  readFrom: string[];
+  claims: string[];
+  gates: GateResult;
+  attempts: number;
+  costUsd: number;
+}
+
+export interface WrittenReport {
+  name: string;
+  generatedAt: string;
+  sections: WrittenSection[];
+  reportGates: GateFailure[];
+  costUsd: number;
+  seconds: number;
+  /** Sections that never passed their gates. Any entry here means the report needs a human. */
+  needsReview: Array<{ id: string; failures: GateFailure[] }>;
+}
+
+export interface WriteOptions {
+  /** Hard ceiling. Generation stops rather than silently spending past it. */
+  maxCostUsd?: number;
+  /** Sections per parallel batch. */
+  concurrency?: number;
+  /** Directory for per-section checkpoints, so a failed run resumes instead of paying twice. */
+  checkpointDir?: string;
+  client?: Anthropic;
+  onProgress?: (event: { id: string; status: "written" | "retrying" | "failed"; detail?: string }) => void;
+}
+
+/** claude-opus-5, dollars per million tokens. */
+const PRICE_IN = 5 / 1_000_000;
+const PRICE_OUT = 25 / 1_000_000;
+const PRICE_CACHE_WRITE = 6.25 / 1_000_000;
+const PRICE_CACHE_READ = 0.5 / 1_000_000;
+
+function costOf(usage: Anthropic.Usage): number {
+  return (
+    usage.input_tokens * PRICE_IN +
+    usage.output_tokens * PRICE_OUT +
+    (usage.cache_creation_input_tokens ?? 0) * PRICE_CACHE_WRITE +
+    (usage.cache_read_input_tokens ?? 0) * PRICE_CACHE_READ
+  );
+}
+
+/**
+ * The cached prefix. Two blocks, the second carrying the breakpoint so tools, voice and knowledge
+ * all cache together. Nothing buyer-specific may be interpolated: a name or a timestamp in here
+ * invalidates the cache for every section of every report.
+ */
+const SYSTEM: Anthropic.TextBlockParam[] = [
+  { type: "text", text: VOICE_CONTRACT },
+  { type: "text", text: KNOWLEDGE_LAYER, cache_control: { type: "ephemeral", ttl: "1h" } },
+];
+
+// ---------------------------------------------------------------------------- one section
+
+async function writeOnce(
+  client: Anthropic,
+  plan: ReportPlan,
+  section: PlannedSection,
+  ledger: Claim[],
+  retryReason?: string
+): Promise<{ draft: SectionDraft; cost: number }> {
+  const stream = client.messages.stream({
+    model: MODEL,
+    max_tokens: MAX_TOKENS,
+    system: SYSTEM,
+    thinking: { type: "adaptive" },
+    output_config: {
+      effort: "high",
+      format: { type: "json_schema", schema: SECTION_SCHEMA as unknown as Record<string, unknown> },
+    },
+    messages: [{ role: "user", content: buildSectionPrompt(plan, section, ledger, retryReason) }],
+  });
+
+  const message = await stream.finalMessage();
+  const text = message.content.find((b): b is Anthropic.TextBlock => b.type === "text")?.text ?? "";
+
+  let draft: SectionDraft;
+  try {
+    draft = JSON.parse(text) as SectionDraft;
+  } catch {
+    throw new Error(`section ${section.section.id}: model returned unparseable JSON`);
+  }
+  return { draft, cost: costOf(message.usage) };
+}
+
+/**
+ * Write one section, gate it, and regenerate once with the failure named if a blocking gate fires.
+ * A second failure does not block the report: the section is kept, flagged, and the report goes to
+ * a human rather than to the buyer.
+ */
+async function writeSection(
+  client: Anthropic,
+  plan: ReportPlan,
+  section: PlannedSection,
+  ledger: Claim[],
+  previous: Array<{ id: string; html: string }>,
+  opts: WriteOptions
+): Promise<WrittenSection> {
+  const id = section.shadow ? `${section.section.id}-${section.shadow.theme}` : section.section.id;
+  const checkpoint = opts.checkpointDir ? path.join(opts.checkpointDir, `${id}.json`) : null;
+
+  if (checkpoint && fs.existsSync(checkpoint)) {
+    return JSON.parse(fs.readFileSync(checkpoint, "utf8")) as WrittenSection;
+  }
+
+  let cost = 0;
+  let attempts = 0;
+  let draft: SectionDraft | null = null;
+  let gates: GateResult | null = null;
+  let reason: string | undefined;
+
+  for (attempts = 1; attempts <= 2; attempts++) {
+    const result = await writeOnce(client, plan, section, ledger, reason);
+    cost += result.cost;
+    draft = result.draft;
+    gates = runGates(draft, section, previous);
+    if (gates.passed) break;
+    reason = gates.failures.filter((f) => f.blocking).map((f) => f.detail).join("; ");
+    opts.onProgress?.({ id, status: attempts === 1 ? "retrying" : "failed", detail: reason });
+  }
+
+  const written: WrittenSection = {
+    id,
+    number: section.number,
+    title: section.section.title,
+    part: section.part,
+    pages: section.pages,
+    headline: draft!.headline,
+    html: draft!.html,
+    readFrom: section.readFrom,
+    claims: draft!.claims,
+    gates: gates!,
+    attempts: Math.min(attempts, 2),
+    costUsd: cost,
+  };
+
+  if (checkpoint) {
+    fs.mkdirSync(path.dirname(checkpoint), { recursive: true });
+    fs.writeFileSync(checkpoint, JSON.stringify(written, null, 2));
+  }
+  opts.onProgress?.({ id, status: gates!.passed ? "written" : "failed" });
+  return written;
+}
+
+// ---------------------------------------------------------------------------- batching
+
+/**
+ * Generation order. Sections inside a batch are independent and run in parallel; the batches
+ * themselves are sequential because each one hands its claims to the next.
+ *
+ * The protocols come after the shadows so they can name them in the buyer's own language, and the
+ * Thread runs last because it is the one section that reads the whole report.
+ */
+function batches(plan: ReportPlan): PlannedSection[][] {
+  const by = (fn: (s: PlannedSection) => boolean) => plan.sections.filter(fn);
+  const derived = new Set(DERIVED_FROM_SHADOWS);
+
+  const partOne = by((s) => s.part === 1);
+  const shadows = by((s) => !!s.shadow);
+  const middle = by((s) => s.part >= 3 && s.part <= 6);
+  const closing = by((s) => s.part === 7 && !derived.has(s.section.id) && s.section.id !== "the-thread");
+  const protocols = by((s) => derived.has(s.section.id));
+  const thread = by((s) => s.section.id === "the-thread");
+
+  return [partOne, shadows, middle, closing, protocols, thread].filter((b) => b.length);
+}
+
+// ---------------------------------------------------------------------------- the writer
+
+export async function writeReport(plan: ReportPlan, opts: WriteOptions = {}): Promise<WrittenReport> {
+  const started = Date.now();
+  const client = opts.client ?? new Anthropic();
+  const concurrency = opts.concurrency ?? 6;
+  const ceiling = opts.maxCostUsd ?? 8;
+
+  const ledger: Claim[] = [];
+  const written: WrittenSection[] = [];
+  const previous: Array<{ id: string; html: string }> = [];
+  let cost = 0;
+
+  const run = async (section: PlannedSection) => {
+    const s = await writeSection(client, plan, section, [...ledger], [...previous], opts);
+    written.push(s);
+    previous.push({ id: s.id, html: s.html });
+    for (const c of s.claims) ledger.push({ sectionId: s.id, claim: c });
+    cost += s.costUsd;
+  };
+
+  const all = batches(plan);
+
+  // The first section runs alone so the cached prefix is written before the parallel batches read
+  // it. Fired together, every request in the first batch pays full price for the same prefix.
+  const [first, ...restOfFirstBatch] = all[0];
+  await run(first);
+
+  for (const [i, batch] of all.entries()) {
+    const queue = i === 0 ? restOfFirstBatch : batch;
+    for (let j = 0; j < queue.length; j += concurrency) {
+      if (cost > ceiling) {
+        throw new Error(
+          `Money Blueprint generation stopped at $${cost.toFixed(2)}, over the $${ceiling} ceiling, with ${written.length} of ${plan.sections.length} sections written. Checkpoints are on disk, so a rerun resumes rather than repeating.`
+        );
+      }
+      await Promise.all(queue.slice(j, j + concurrency).map(run));
+    }
+  }
+
+  // Restore report order; the batches deliberately do not run in it.
+  const order = new Map(plan.sections.map((s, i) => [s.shadow ? `${s.section.id}-${s.shadow.theme}` : s.section.id, i]));
+  written.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+
+  const reportGates = runReportGates(
+    written.map((w) => ({
+      id: w.id,
+      draft: { headline: w.headline, html: w.html, claims: w.claims },
+      section: plan.sections.find((s) => (s.shadow ? `${s.section.id}-${s.shadow.theme}` : s.section.id) === w.id)!,
+    })),
+    plan.spine?.theme ?? null
+  );
+
+  return {
+    name: plan.name,
+    generatedAt: new Date().toISOString(),
+    sections: written,
+    reportGates,
+    costUsd: cost,
+    seconds: (Date.now() - started) / 1000,
+    needsReview: written.filter((w) => !w.gates.passed).map((w) => ({ id: w.id, failures: w.gates.failures })),
+  };
+}
+
+/** Write a single section. The instrument for iterating on voice without paying for a full report. */
+export async function writeOneSection(
+  plan: ReportPlan,
+  sectionId: string,
+  opts: WriteOptions = {}
+): Promise<WrittenSection> {
+  const section = plan.sections.find((s) => s.section.id === sectionId);
+  if (!section) throw new Error(`no section "${sectionId}" in this plan`);
+  return writeSection(opts.client ?? new Anthropic(), plan, section, [], [], opts);
+}
