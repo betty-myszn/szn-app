@@ -226,9 +226,6 @@ export function composeAreaDesign(
   const config = AREA_DESIGN[areaId];
   if (!config) return null;
 
-  const authorityContent = AUTHORITY_CONTENT[hd.authority];
-  const typeContent = TYPE_CONTENT[hd.type];
-
   const seasonGates = gatesForSign(seasonSign);
   const natal = new Set(hd.activatedGates);
 
@@ -268,15 +265,60 @@ export function composeAreaDesign(
 
   return {
     environment: areaId === "home-environment" ? environmentNote(hd) : undefined,
-    authority: {
-      label: hd.authorityLabel,
-      body: `${config.authorityBridge} You've ${authorityContent?.title ?? `${hd.authorityLabel.toLowerCase()} authority`}. ${authorityContent?.meaning ?? ""} ${authorityContent?.apply ?? ""}`.trim(),
-    },
-    strategy: {
-      label: `${hd.type}, ${hd.strategy.toLowerCase()}`,
-      body: `${config.strategyBridge} You're a ${hd.type}, so your strategy is to ${hd.strategy.toLowerCase()}. ${typeContent?.apply ?? typeContent?.meaning ?? ""} When this goes wrong you'll feel it as ${hd.notSelfTheme.toLowerCase()}, and in this area that's the signal to check whether you initiated something you were meant to wait for.`.trim(),
-    },
+    authority: { label: hd.authorityLabel, body: authorityBodyFor(config, hd) },
+    strategy: { label: `${hd.type}, ${hd.strategy.toLowerCase()}`, body: strategyBodyFor(config, hd) },
     gatesIntro: config.gatesIntro,
+    gates,
+  };
+}
+
+// How her authority and type play out in this area, assembled once so the seasonal composer above
+// and the permanent (natal) one below word them identically. "You have splenic authority", not
+// "You've splenic authority": a be-verb doesn't contract before a bare noun.
+function authorityBodyFor(config: AreaDesignConfig, hd: HumanDesignData): string {
+  const a = AUTHORITY_CONTENT[hd.authority];
+  return `${config.authorityBridge} You have ${a?.title ?? `${hd.authorityLabel.toLowerCase()} authority`}. ${a?.meaning ?? ""} ${a?.apply ?? ""}`.trim();
+}
+
+function strategyBodyFor(config: AreaDesignConfig, hd: HumanDesignData): string {
+  const t = TYPE_CONTENT[hd.type];
+  return `${config.strategyBridge} You're a ${hd.type}, so your strategy is to ${hd.strategy.toLowerCase()}. ${t?.apply ?? t?.meaning ?? ""} When this goes wrong you'll feel it as ${hd.notSelfTheme.toLowerCase()}, and in this area that's the signal to check whether you initiated something you were meant to wait for.`.trim();
+}
+
+// The permanent per-area Human Design read for the standalone chart page: "how you operate in this
+// part of life", built from her type, authority and the gates she was BORN with in this area's
+// centres. The seasonal composeAreaDesign above answers "what is this season doing to the area";
+// this answers "how are you wired for it", which is what belongs on the chart itself. Same authority
+// and strategy bodies; the difference is the gates, her own activations here rather than the
+// season's, and a static intro.
+export function composeAreaDesignNatal(areaId: string, hd: HumanDesignData): AreaDesignReading | null {
+  const config = AREA_DESIGN[areaId];
+  if (!config) return null;
+
+  const areaGates = [...hd.activatedGates]
+    .filter((g) => config.centers.includes(GATE_CENTER[g]))
+    .sort((a, b) => a - b);
+
+  const gates: AreaGate[] = areaGates.map((gate) => {
+    const content = GATE_CONTENT[gate];
+    return {
+      gate,
+      name: GATE_NAME[gate] ?? `Gate ${gate}`,
+      keynote: content?.keynote ?? "",
+      shadow: content?.shadow ?? "",
+      gift: content?.gift ?? "",
+      lens: gateLensFor(areaId, gate, content?.keynote ?? ""),
+      natal: true,
+      core: true,
+    };
+  });
+
+  return {
+    environment: areaId === "home-environment" ? environmentNote(hd) : undefined,
+    authority: { label: hd.authorityLabel, body: authorityBodyFor(config, hd) },
+    strategy: { label: `${hd.type}, ${hd.strategy.toLowerCase()}`, body: strategyBodyFor(config, hd) },
+    gatesIntro:
+      "The gates you were born with in the centres that run this area. Each one carries a trap and a gift, the low expression and the high.",
     gates,
   };
 }

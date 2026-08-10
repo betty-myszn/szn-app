@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useHumanDesign } from "@/lib/use-human-design";
+import { useMember } from "@/lib/use-member";
+import { hasActiveAccess } from "@/lib/membership-access";
 import Bodygraph from "@/components/Bodygraph";
+import HumanDesignAreas from "@/components/HumanDesignAreas";
 import { CENTER_LABELS, GATE_NAME, channelKey } from "@/lib/human-design-constants";
 import {
   TYPE_CONTENT,
@@ -23,6 +26,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 export default function HumanDesignPage() {
   const { hd, loading } = useHumanDesign();
+  const { member } = useMember();
 
   if (loading) {
     return (
@@ -105,6 +109,15 @@ export default function HumanDesignPage() {
       {profile && <Reading title="your profile" block={profile} />}
 
       <Reading title="how your energy is wired" block={definition} />
+
+      {/* how you operate, per life area: the design equivalent of the astrology life-area guide.
+          Paid (full access), matching that guide; free members see the locked list and upgrade. */}
+      <SectionHead title="how you operate, area by area" />
+      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+        Who you are is above. This is how that design actually plays out in each part of your life,
+        tap any area to open it.
+      </p>
+      <HumanDesignAreas hd={hd} unlocked={hasActiveAccess(member)} />
 
       {/* centres */}
       <SectionHead title="your centres" />
