@@ -6,6 +6,7 @@ import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import Bodygraph from "@/components/Bodygraph";
 import HumanDesignAreas from "@/components/HumanDesignAreas";
+import HumanDesignGates from "@/components/HumanDesignGates";
 import { CENTER_LABELS, GATE_NAME, channelKey } from "@/lib/human-design-constants";
 import {
   TYPE_CONTENT,
@@ -160,6 +161,9 @@ export default function HumanDesignPage() {
           </div>
         </>
       )}
+
+      {/* every gate she carries, explained in full */}
+      <HumanDesignGates hd={hd} />
 
       {/* incarnation cross */}
       <Reading
