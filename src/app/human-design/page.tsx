@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useHumanDesign } from "@/lib/use-human-design";
+import Bodygraph from "@/components/Bodygraph";
 import { CENTER_LABELS, GATE_NAME, channelKey } from "@/lib/human-design-constants";
 import {
   TYPE_CONTENT,
@@ -79,6 +80,21 @@ export default function HumanDesignPage() {
         <Stat label="Profile" value={`${hd.profile}  ${profile ? profile.title : ""}`} />
         <Stat label="Definition" value={hd.definition} />
         <Stat label="Cross" value={`${hd.incarnationCross.angle} (${hd.incarnationCross.gates.join("/")})`} />
+      </div>
+
+      {/* the bodygraph: the visual chart, defined centres filled, defined channels lit */}
+      <div style={{ margin: "8px 0 24px" }}>
+        <Bodygraph hd={hd} />
+        <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 14, fontSize: 11, opacity: 0.7 }}>
+          <span>
+            <span style={{ display: "inline-block", width: 11, height: 11, background: "var(--pink)", marginRight: 6, verticalAlign: "middle" }} />
+            defined
+          </span>
+          <span>
+            <span style={{ display: "inline-block", width: 11, height: 11, background: "#fff", border: "1.5px solid var(--dark)", marginRight: 6, verticalAlign: "middle" }} />
+            open
+          </span>
+        </div>
       </div>
 
       {/* the guided reading */}
