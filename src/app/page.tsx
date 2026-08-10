@@ -155,7 +155,7 @@ export default function Home() {
       <Ticker
         items={[
           `✦ ${szn} szn`,
-          enrolmentOpen ? "✦ doors close in 72 hours" : "✦ doors open soon",
+          enrolmentOpen ? "✦ enrolment open now" : "✦ doors open soon",
           nextWorkshop?.startIso
             ? `✦ live workshop ${formatWorkshopWhenLA(nextWorkshop.startIso)}`
             : "✦ live workshops every szn",

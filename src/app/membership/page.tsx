@@ -192,7 +192,7 @@ export default function MembershipPage() {
       >
         <div className="max-w-3xl mx-auto">
           <div className="tag mb-4">
-            {enrolmentOpen ? "enrolment open now · doors close soon" : "enrolment opens soon · limited spots"}
+            {enrolmentOpen ? "enrolment open now" : "enrolment opens soon · limited spots"}
           </div>
 
           <h1 style={{
