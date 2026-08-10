@@ -191,7 +191,7 @@ export default function HumanDesignPage() {
             know yourself to be. Design is your unconscious body, set roughly 88 days before you were
             born.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <ActivationTable title="Personality (conscious)" rows={hd.personality} />
             <ActivationTable title="Design (unconscious)" rows={hd.design} />
           </div>
