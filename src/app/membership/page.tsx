@@ -459,7 +459,7 @@ export default function MembershipPage() {
             : <>Doors open for a limited time only. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
-          Membership from $111/mo. 1:1 coaching with Betty is on VIP, $555/mo.
+          Membership from $88/mo. 1:1 coaching with Betty is on VIP, $555/mo.
         </p>
         <Link href={ctaHref} className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           {ctaLabel}
@@ -732,7 +732,7 @@ export default function MembershipPage() {
                   Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move.
                 </p>
                 <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", fontWeight: 700, marginTop: 14, marginBottom: 0 }}>
-                  This is the one thing the $111 plan doesn&apos;t include. Working with me privately only happens on VIP.
+                  This is the one thing the $88 plan doesn&apos;t include. Working with me privately only happens on VIP.
                 </p>
               </div>
               <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
@@ -855,7 +855,7 @@ export default function MembershipPage() {
 
           {/* Free front-door tier: the entry ramp, deliberately a full-width band ABOVE the three
               paid cards rather than a fourth column, so it doesn't compete with the engineered
-              $111-centred hierarchy below. Free unlocks the live chat rooms only, and its CTA goes
+              $88-centred hierarchy below. Free unlocks the live chat rooms only, and its CTA goes
               straight to /signup (no Stripe, never gated by enrolment, the door is always open). */}
           <div
             className="p-6 md:p-7 mb-5 flex items-center justify-between gap-6 flex-wrap"
@@ -888,11 +888,11 @@ export default function MembershipPage() {
               social had nothing left that was uniquely its own, and its rituals (book club, moon
               audios, seasonal updates) moved up into MY SZN. Retired from SALE only, the tier still
               exists in stripe-tiers.ts and still passes the gates so existing $33 members keep what
-              they're paying for. MY SZN ($111) stays the focal point: lifted, the only Most Popular
+              they're paying for. MY SZN ($88) stays the focal point: lifted, the only Most Popular
               badge, the boldest price and the strongest CTA, with VIP ($555, proximity) beside it. */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start mb-6">
 
-            {/* ── MY SZN · $111 · THE membership (hero, lifted) ── */}
+            {/* ── MY SZN · $88 · THE membership (hero, lifted) ── */}
             <div className="md:-mt-6" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)", boxShadow: "0 12px 44px rgba(255,45,135,0.20)" }}>
               <div style={{ background: "var(--pink)", padding: "9px 0", textAlign: "center", fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "#fff" }}>
                 ★ most popular
@@ -902,7 +902,7 @@ export default function MembershipPage() {
                   my szn
                 </div>
                 <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
-                  $111<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+                  $88<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
                 </div>
                 <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4 }}>
                   billed monthly · cancel anytime
@@ -933,7 +933,7 @@ export default function MembershipPage() {
                     </div>
                   ))}
                 </div>
-                <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join my szn · $111/mo" plan="monthly" value={111} />
+                <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join my szn · $88/mo" plan="monthly" value={88} />
               </div>
             </div>
 
@@ -1004,7 +1004,7 @@ export default function MembershipPage() {
             {[
               {
                 q: "What's the difference between the three tiers?",
-                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($111/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, live group coaching with Betty every month, seasonal workshops, the astrology book club, a New Moon and a Full Moon audio each month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
+                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, live group coaching with Betty every month, seasonal workshops, the astrology book club, a New Moon and a Full Moon audio each month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
               },
               {
                 q: "Is it really personalised, or just my sun sign?",
@@ -1012,7 +1012,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes, on MY SZN and VIP. MY SZN ($111/mo) includes live group coaching with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
+                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes live group coaching with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
@@ -1028,7 +1028,7 @@ export default function MembershipPage() {
               },
               {
                 q: "How much does it cost?",
-                a: "A free tier that costs nothing and gets you into the community chat rooms, then two paid tiers billed monthly and cancellable anytime: MY SZN is $111/mo and MY SZN VIP is $555/mo. Everything is shown in the pricing section above.",
+                a: "A free tier that costs nothing and gets you into the community chat rooms, then two paid tiers billed monthly and cancellable anytime: MY SZN is $88/mo and MY SZN VIP is $555/mo. Everything is shown in the pricing section above.",
               },
               {
                 q: "Can I cancel or get a refund?",

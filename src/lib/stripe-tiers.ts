@@ -21,7 +21,8 @@ type PaidTier = Exclude<MembershipLevel, "none" | "free">;
 // backstop. Env vars still work and take precedence for anything NEW (see below), they just can't
 // break these known ones any more.
 const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
-  price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month
+  price_1U3FDpJ6s9fRhiJor7ofzAzT: "monthly", // $88 / month (current price)
+  price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month (retired price, kept for grandfathered members)
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "monthly", // $333 once, 3 months upfront (same tier)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
   price_1TzVeaJ6s9fRhiJojBgk1aTJ: "social", // $33 / month, Stripe product "MY SZN social"
