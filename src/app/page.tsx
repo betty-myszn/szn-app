@@ -8,7 +8,7 @@ import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 import { WORKSHOPS, formatWorkshopWhenLA } from "@/lib/workshops";
-import { isEightEightLive } from "@/lib/eight-eight-gate";
+import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -253,6 +253,76 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── ECLIPSE SEASON: timed acquisition banner, high up for logged-out visitors (members are
+           redirected to /dashboard). Self-hides after the season via isEclipseSeasonLive(). The
+           eclipse readings are personalised to the chart, and free members get a chart, so the CTA
+           is a free signup rather than a paid join. The glittery eclipse moon sits where the 8/8
+           lion did, on a transparent PNG so it reads cleanly on the pink. ── */}
+      {isEclipseSeasonLive() && (
+        <section
+          className="px-5 md:px-8"
+          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
+        >
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            {/* writing + CTA on the left */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span className="sticker" style={{ background: "var(--dark)", color: "#fff" }}>
+                eclipse season · now
+              </span>
+              <h2
+                style={{
+                  fontFamily: poppins,
+                  fontSize: "clamp(30px, 5vw, 60px)",
+                  fontWeight: 800,
+                  letterSpacing: "-1px",
+                  color: "var(--dark)",
+                  margin: "16px 0 10px",
+                }}
+              >
+                eclipse season is here, <span style={{ color: "#fff" }}>baby.</span>
+              </h2>
+              <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2.4vw, 22px)", fontWeight: 700, letterSpacing: "-0.3px", color: "var(--dark)", marginBottom: 14 }}>
+                Here&apos;s everything you need to know.
+              </p>
+              <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--dark)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
+                Two eclipses are shaking things loose this month, a Leo solar eclipse on the 12th and a
+                Pisces lunar eclipse on the 28th. Eclipses are the year&apos;s big turning points, the
+                moments things start and end on their own timeline. MY SZN reads exactly what each one
+                is touching in your own chart: what it lights up, what to look out for, the shadow, and
+                the work to actually do with it.
+              </p>
+              <Link
+                href="/signup"
+                className="no-underline"
+                style={{
+                  display: "inline-block",
+                  background: "var(--dark)",
+                  color: "#fff",
+                  fontFamily: poppins,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "15px 30px",
+                }}
+              >
+                get your free chart →
+              </Link>
+            </div>
+            {/* the glittery eclipse moon on the right, where the 8/8 lion used to be */}
+            <Image
+              src="/eclipse-moon.png"
+              alt=""
+              aria-hidden
+              width={1080}
+              height={1080}
+              className="hidden md:block"
+              style={{ width: "clamp(320px, 34vw, 480px)", height: "auto", flexShrink: 0 }}
+            />
+          </div>
+        </section>
+      )}
+
       {/* ── 2. STATS: black, huge numerals, tiny copy ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 64, paddingBottom: 64 }}>
         <div className="max-w-6xl mx-auto stats">
@@ -282,71 +352,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* ── 8/8 LION'S GATE MONEY PORTAL: timed acquisition banner, shown only while the portal is
-           live (LA date 7-11 Aug) via isEightEightLive(), so it takes itself down after the 11th
-           with no manual unpublish. Only logged-out visitors ever see this page (members are
-           redirected to /dashboard above), which is exactly the audience the launch email targets.
-           The guide is paid, so the CTA is join MY SZN, not a free signup. ── */}
-      {isEightEightLive() && (
-        <section
-          className="px-5 md:px-8"
-          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
-        >
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-            {/* writing + CTA on the left */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <span className="sticker" style={{ background: "var(--dark)", color: "#fff" }}>
-                open now · until 11 august
-              </span>
-              <h2
-                style={{
-                  fontFamily: poppins,
-                  fontSize: "clamp(30px, 5vw, 60px)",
-                  fontWeight: 800,
-                  letterSpacing: "-1px",
-                  color: "var(--dark)",
-                  margin: "16px 0 12px",
-                }}
-              >
-                the 8/8 money portal is <span style={{ color: "#fff" }}>open.</span>
-              </h2>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--dark)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
-                Your personalised 8/8 money guide reads your own chart to show you exactly how
-                you&apos;re built to make money, where your abundance blocks are, and how to work this
-                portal with your own placements instead of generic manifestation advice.
-              </p>
-              <Link
-                href="/membership"
-                className="no-underline"
-                style={{
-                  display: "inline-block",
-                  background: "var(--dark)",
-                  color: "#fff",
-                  fontFamily: poppins,
-                  fontSize: 13,
-                  fontWeight: 800,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "15px 30px",
-                }}
-              >
-                join my szn to unlock it
-              </Link>
-            </div>
-            {/* the crowned money lion on the right, its own gold dollar signs built in */}
-            <Image
-              src="/lion-gate-888.png"
-              alt=""
-              aria-hidden
-              width={1080}
-              height={1080}
-              className="hidden md:block"
-              style={{ width: "clamp(320px, 34vw, 480px)", height: "auto", flexShrink: 0 }}
-            />
-          </div>
-        </section>
-      )}
 
       {/* ── 3. COSMIC HOME: copy only. This was a two-column split with a flat colour placeholder
            panel standing in for a product screenshot. The placeholder was cut, and rather than

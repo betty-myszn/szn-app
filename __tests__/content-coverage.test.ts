@@ -19,7 +19,7 @@ import {
   ordinalHouse,
   houseForSign,
 } from "@/lib/interpretations";
-import { composeLunation } from "@/lib/moon-content";
+import { composeLunation, type CalendarEventInput } from "@/lib/moon-content";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { SEASONS } from "@/lib/seasons";
@@ -526,13 +526,13 @@ describe("eclipse readings add the nodal-axis depth", () => {
   });
 
   it("holds the house style rules across lunations and eclipses: no em dashes, no rhetorical questions in prose", () => {
-    const cases = [
-      { type: "new_moon" as const, extra: {} as Record<string, unknown> },
-      { type: "full_moon" as const, extra: {} as Record<string, unknown> },
-      { type: "solar_eclipse" as const, extra: { nodeEnd: "north" } },
-      { type: "solar_eclipse" as const, extra: { nodeEnd: "south" } },
-      { type: "lunar_eclipse" as const, extra: { nodeEnd: "north" } },
-      { type: "lunar_eclipse" as const, extra: { nodeEnd: "south" } },
+    const cases: { type: CalendarEventInput["type"]; extra: Partial<CalendarEventInput> }[] = [
+      { type: "new_moon", extra: {} },
+      { type: "full_moon", extra: {} },
+      { type: "solar_eclipse", extra: { nodeEnd: "north" } },
+      { type: "solar_eclipse", extra: { nodeEnd: "south" } },
+      { type: "lunar_eclipse", extra: { nodeEnd: "north" } },
+      { type: "lunar_eclipse", extra: { nodeEnd: "south" } },
     ];
     for (const { type, extra } of cases) {
       for (const sign of SIGNS) {
