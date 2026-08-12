@@ -3,86 +3,93 @@
 import Link from "next/link";
 import type { ChartData } from "@/types/chart";
 import { ZODIAC_SYMBOLS, ZODIAC_SIGNS } from "@/types/chart";
-import ChartResults from "@/components/ChartResults";
 import { useHumanDesign } from "@/lib/use-human-design";
 import { track, EVENTS } from "@/lib/analytics";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-// Both free charts come from one form, so the results page has to make it obvious there are two of
-// them. Stacked, the Human Design reading sat a very long scroll below the astrology and most
-// people would never reach it, so it read as though only the birth chart existed.
+// One form, two charts, so this page is the choice between them and nothing else. The readings
+// each live on their own page and are opened from here, rather than one of them being dumped
+// underneath: stacked, the Human Design half sat a very long scroll down and most people never
+// reached it, so the page read as though only the astrology existed.
 //
-// Two squares at the top instead, each a real link with a preview of what is behind it: the birth
-// chart reads on this page, Human Design opens its own full reading at /human-design.
+// Escape sequences are written as real characters on purpose. A JSX attribute does not process
+// \u escapes, so passing them through a prop printed the literal text on the page.
 
 function symbolFor(sign: string): string {
   const i = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
-  return i >= 0 ? ZODIAC_SYMBOLS[i] : "\u2726";
+  return i >= 0 ? ZODIAC_SYMBOLS[i] : "✦";
 }
 
-const CARD_BASE: React.CSSProperties = {
-  display: "block",
-  textDecoration: "none",
-  padding: 24,
-  background: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.2)",
-};
-
-function CardInner({
-  kicker,
-  glyph,
-  title,
-  preview,
-  action,
-}: {
+interface CardProps {
+  href: string;
   kicker: string;
   glyph: string;
   title: string;
   preview: string;
   action: string;
-}) {
+  bg: string;
+  fg: string;
+  sub: string;
+  onClick: () => void;
+}
+
+function ChartCard({ href, kicker, glyph, title, preview, action, bg, fg, sub, onClick }: CardProps) {
   return (
-    <>
+    <Link
+      href={href}
+      onClick={onClick}
+      className="block no-underline"
+      style={{ background: bg, border: "var(--border)", padding: "34px 30px 30px" }}
+    >
       <div
         style={{
-          fontSize: 9,
-          fontWeight: 700,
-          letterSpacing: "0.14em",
+          fontSize: 10,
+          fontWeight: 800,
+          letterSpacing: "0.16em",
           textTransform: "uppercase",
-          color: "var(--lav)",
-          marginBottom: 10,
+          color: sub,
+          marginBottom: 18,
         }}
       >
         {kicker}
       </div>
-      <div style={{ fontSize: 30, lineHeight: 1, marginBottom: 10, color: "#fff" }}>{glyph}</div>
+
+      <div style={{ fontSize: 54, lineHeight: 1, marginBottom: 16, color: fg }}>{glyph}</div>
+
       <div
         style={{
           fontFamily: poppins,
-          fontSize: 20,
+          fontSize: "clamp(28px, 4vw, 40px)",
           fontWeight: 800,
-          letterSpacing: "-0.5px",
-          color: "#fff",
-          marginBottom: 6,
+          letterSpacing: "-1.4px",
+          lineHeight: 1.02,
+          color: fg,
+          marginBottom: 12,
         }}
       >
         {title}
       </div>
-      <div style={{ fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{preview}</div>
+
+      <div style={{ fontSize: 15, lineHeight: 1.6, color: sub, fontWeight: 500, marginBottom: 22 }}>
+        {preview}
+      </div>
+
       <div
         style={{
-          fontSize: 10,
-          fontWeight: 700,
-          letterSpacing: "0.1em",
+          display: "inline-block",
+          fontSize: 11,
+          fontWeight: 800,
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "var(--pink)",
-          marginTop: 14,
+          color: bg,
+          background: fg,
+          padding: "13px 22px",
         }}
       >
         {action}
       </div>
-    </>
+    </Link>
   );
 }
 
@@ -92,56 +99,63 @@ export default function ChartSwitcher({ chart }: { chart: ChartData }) {
   const sun = chart.planets.find((p) => p.name === "Sun")?.sign ?? "";
   const moon = chart.planets.find((p) => p.name === "Moon")?.sign ?? "";
   const rising = chart.houses[0]?.sign ?? "";
+  const name = chart.birthData?.name?.trim();
 
   return (
-    <>
-      <section className="px-5 md:px-8 py-10" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-4" style={{ color: "var(--pink)" }}>
-            two charts, one set of birth details
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            {/* Birth chart: the reading is on this page, so this jumps down to it. */}
-            <a
-              href="#your-birth-chart"
-              style={CARD_BASE}
-              onClick={() =>
-                track(EVENTS.CTA_CLICK, { label: "view_birth_chart", location: "results_switcher" })
-              }
-            >
-              <CardInner
-                kicker="chart one"
-                glyph={sun ? symbolFor(sun) : "\u2609"}
-                title="your birth chart"
-                preview={sun ? `${sun} sun \u00b7 ${moon} moon \u00b7 ${rising} rising` : "every placement, decoded"}
-                action="read it \u2192"
-              />
-            </a>
-
-            {/* Human Design: its own full reading, calculated from the same birth details. */}
-            <Link
-              href="/human-design"
-              style={CARD_BASE}
-              onClick={() =>
-                track(EVENTS.CTA_CLICK, { label: "view_human_design", location: "results_switcher" })
-              }
-            >
-              <CardInner
-                kicker="chart two"
-                glyph="\u25c8"
-                title="your human design"
-                preview={hd ? `${hd.type} \u00b7 ${hd.authorityLabel} \u00b7 ${hd.profile}` : "type, strategy and authority"}
-                action="open my design \u2192"
-              />
-            </Link>
-          </div>
+    <section className="px-5 md:px-8 py-16" style={{ background: "var(--dark)" }}>
+      <div className="max-w-5xl mx-auto">
+        <div className="tag mb-4" style={{ color: "var(--pink)" }}>
+          both of your charts are ready
         </div>
-      </section>
 
-      <div id="your-birth-chart">
-        <ChartResults chart={chart} />
+        <h1
+          style={{
+            fontFamily: poppins,
+            fontSize: "clamp(34px, 6vw, 60px)",
+            fontWeight: 800,
+            letterSpacing: "-2px",
+            lineHeight: 1.02,
+            color: "#fff",
+            marginBottom: 16,
+          }}
+        >
+          {name ? `${name.toLowerCase()}, you get ` : "you get "}
+          <span className="pk">two charts.</span>
+        </h1>
+
+        <p style={{ fontSize: 16, lineHeight: 1.75, color: "rgba(255,255,255,0.6)", maxWidth: 560, marginBottom: 40 }}>
+          One set of birth details, two completely different maps. Your astrology says who you are
+          here to become. Your Human Design says how you are actually built to get there.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-5">
+          <ChartCard
+            href="/results/chart"
+            kicker="chart one · astrology"
+            glyph={sun ? symbolFor(sun) : "☉"}
+            title="your birth chart"
+            preview={sun ? `${sun} sun · ${moon} moon · ${rising} rising` : "every placement, decoded"}
+            action="read my chart →"
+            bg="var(--pink)"
+            fg="#fff"
+            sub="rgba(255,255,255,0.85)"
+            onClick={() => track(EVENTS.CTA_CLICK, { label: "view_birth_chart", location: "results_chooser" })}
+          />
+
+          <ChartCard
+            href="/human-design"
+            kicker="chart two · human design"
+            glyph="◈"
+            title="your human design"
+            preview={hd ? `${hd.type} · ${hd.authorityLabel} · ${hd.profile}` : "type, strategy and authority"}
+            action="read my design →"
+            bg="var(--lav)"
+            fg="var(--dark)"
+            sub="#3C2A70"
+            onClick={() => track(EVENTS.CTA_CLICK, { label: "view_human_design", location: "results_chooser" })}
+          />
+        </div>
       </div>
-    </>
+    </section>
   );
 }
