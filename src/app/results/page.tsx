@@ -5,6 +5,7 @@ import { useEffect, useState, Suspense } from "react";
 import { decodeBirthData, saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
 import { syncBirthDataToSupabase, syncChartToSupabase } from "@/lib/chart-sync";
 import ChartResults from "@/components/ChartResults";
+import FreeHumanDesign from "@/components/FreeHumanDesign";
 import type { ChartData } from "@/types/chart";
 
 function ResultsContent() {
@@ -100,7 +101,14 @@ function ResultsContent() {
 
   if (!chart) return null;
 
-  return <ChartResults chart={chart} />;
+  // Both charts from one form. The birth details already collected are exactly what Human Design
+  // needs, so making someone retype them into a second calculator to get it would be daft.
+  return (
+    <>
+      <ChartResults chart={chart} />
+      <FreeHumanDesign />
+    </>
+  );
 }
 
 export default function ResultsPage() {

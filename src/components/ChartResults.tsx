@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track, EVENTS } from "@/lib/analytics";
 import type { ChartData } from "@/types/chart";
 import {
   ZODIAC_SYMBOLS,
@@ -249,6 +250,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               {copiedUrl ? "copied!" : "share link"}
             </button>
             <a
+              onClick={() => track(EVENTS.CTA_CLICK, { label: "join_the_membership", location: "results_hero" })}
               href="/membership"
               style={{
                 background: "var(--pink)",
@@ -359,6 +361,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <a
+              onClick={() => track(EVENTS.CTA_CLICK, { label: "join_the_membership", location: "results_footer" })}
               href="/membership"
               style={{
                 background: "var(--pink)",
