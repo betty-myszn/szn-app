@@ -195,17 +195,17 @@ export default function DashboardPage() {
           isEclipseSeasonLive(). Sits directly under the header so it's the first thing every member
           sees during eclipse season, linking straight to the personalised eclipse reading. */}
       {isEclipseSeasonLive() && (
-        <section className="px-5 md:px-8 py-8" style={{ background: "var(--pink)", borderBottom: "var(--border)" }}>
+        <section className="px-5 md:px-8 py-8" style={{ background: "var(--dark)", borderTop: "2px solid var(--pink)", borderBottom: "var(--border)" }}>
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6 justify-between">
             <div className="flex items-center gap-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/eclipse-moon.png" alt="" width={92} height={92} style={{ flex: "none", filter: "drop-shadow(0 6px 16px rgba(0,0,0,.2))" }} />
+              <img src="/eclipse-moon.png" alt="" width={92} height={92} style={{ flex: "none", filter: "drop-shadow(0 6px 16px rgba(0,0,0,.35))" }} />
               <div>
-                <div className="tag mb-2" style={{ color: "var(--dark)" }}>eclipse season · now</div>
-                <h2 style={{ fontFamily: poppins, fontSize: "clamp(20px,3vw,26px)", fontWeight: 800, letterSpacing: "-0.6px", lineHeight: 1.15, color: "var(--dark)" }}>
+                <div className="tag mb-2" style={{ color: "var(--pink)" }}>eclipse season · now</div>
+                <h2 style={{ fontFamily: poppins, fontSize: "clamp(20px,3vw,26px)", fontWeight: 800, letterSpacing: "-0.6px", lineHeight: 1.15, color: "#fff" }}>
                   eclipse season is here, baby.
                 </h2>
-                <p style={{ fontSize: 13.5, color: "#1a1a1a", opacity: 0.85, marginTop: 6, maxWidth: 520, lineHeight: 1.6 }}>
+                <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.7)", marginTop: 6, maxWidth: 520, lineHeight: 1.6 }}>
                   your Leo solar eclipse on the 12th, read straight from your chart: what it lights up, what it brings up, the shadow and your exercise. the Pisces lunar eclipse lands on the 28th.
                 </p>
               </div>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
             <Link
               href="/your-season/moon?type=solar_eclipse&date=2026-08-12&sign=Leo&degree=20&nodeEnd=south"
               className="no-underline"
-              style={{ whiteSpace: "nowrap", background: "var(--dark)", color: "#fff", fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 26px" }}
+              style={{ whiteSpace: "nowrap", background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 26px" }}
             >
               read your eclipse guide →
             </Link>

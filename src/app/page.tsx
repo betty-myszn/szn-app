@@ -254,19 +254,20 @@ export default function Home() {
       </section>
 
       {/* ── ECLIPSE SEASON: timed acquisition banner, high up for logged-out visitors (members are
-           redirected to /dashboard). Self-hides after the season via isEclipseSeasonLive(). The
-           eclipse readings are personalised to the chart, and free members get a chart, so the CTA
-           is a free signup rather than a paid join. The glittery eclipse moon sits where the 8/8
-           lion did, on a transparent PNG so it reads cleanly on the pink. ── */}
+           redirected to /dashboard). Self-hides after the season via isEclipseSeasonLive(). Black so
+           it stands out from the pink hero directly above it instead of blending into it. The
+           personalised eclipse guide lives inside the paid platform, so the CTA drives the join, not
+           a free signup. The glittery eclipse moon sits where the 8/8 lion did (transparent PNG,
+           reads cleanly on black). ── */}
       {isEclipseSeasonLive() && (
         <section
           className="px-5 md:px-8"
-          style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
+          style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
         >
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
             {/* writing + CTA on the left */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <span className="sticker" style={{ background: "var(--dark)", color: "#fff" }}>
+              <span className="sticker" style={{ background: "var(--pink)", color: "#fff" }}>
                 eclipse season · now
               </span>
               <h2
@@ -275,28 +276,28 @@ export default function Home() {
                   fontSize: "clamp(30px, 5vw, 60px)",
                   fontWeight: 800,
                   letterSpacing: "-1px",
-                  color: "var(--dark)",
+                  color: "#fff",
                   margin: "16px 0 10px",
                 }}
               >
-                eclipse season is here, <span style={{ color: "#fff" }}>baby.</span>
+                eclipse season is here, <span className="pk">baby.</span>
               </h2>
-              <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2.4vw, 22px)", fontWeight: 700, letterSpacing: "-0.3px", color: "var(--dark)", marginBottom: 14 }}>
+              <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2.4vw, 22px)", fontWeight: 700, letterSpacing: "-0.3px", color: "#fff", marginBottom: 14 }}>
                 Here&apos;s everything you need to know.
               </p>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--dark)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
+              <p style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(255,255,255,0.72)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
                 Two eclipses are shaking things loose this month, a Leo solar eclipse on the 12th and a
                 Pisces lunar eclipse on the 28th. Eclipses are the year&apos;s big turning points, the
-                moments things start and end on their own timeline. MY SZN reads exactly what each one
-                is touching in your own chart: what it lights up, what to look out for, the shadow, and
-                the work to actually do with it.
+                moments things start and end on their own timeline. Inside MY SZN your personalised
+                eclipse guide reads exactly what each one is touching in your own chart: what it lights
+                up, what to look out for, the shadow, and the work to actually do with it.
               </p>
               <Link
-                href="/signup"
+                href="/membership"
                 className="no-underline"
                 style={{
                   display: "inline-block",
-                  background: "var(--dark)",
+                  background: "var(--pink)",
                   color: "#fff",
                   fontFamily: poppins,
                   fontSize: 13,
@@ -306,18 +307,18 @@ export default function Home() {
                   padding: "15px 30px",
                 }}
               >
-                get your free chart →
+                unlock your eclipse guide →
               </Link>
             </div>
-            {/* the glittery eclipse moon on the right, where the 8/8 lion used to be */}
+            {/* the glittery eclipse moon: on the right on desktop, centred under the copy on mobile
+                (shown on both, not desktop-only). */}
             <Image
               src="/eclipse-moon.png"
               alt=""
               aria-hidden
               width={1080}
               height={1080}
-              className="hidden md:block"
-              style={{ width: "clamp(320px, 34vw, 480px)", height: "auto", flexShrink: 0 }}
+              style={{ width: "clamp(240px, 40vw, 460px)", height: "auto", flexShrink: 0, alignSelf: "center" }}
             />
           </div>
         </section>
