@@ -7,8 +7,11 @@ import {
   ordinalHouse,
   houseForSign,
   degreeMeaning,
+  type SignTraits,
+  type HouseMeaning,
 } from "@/lib/interpretations";
 import { composeNodeIngress } from "@/lib/nodal-content";
+import { composeEclipse } from "@/lib/eclipse-content";
 
 export type LunationType =
   | "new_moon"
@@ -25,6 +28,27 @@ export interface CalendarEventInput {
   sign: string;
   degree: number;
   planet?: string;
+  /** For eclipses only: which end of the nodal axis it sits on, computed at eclipse time from the
+   * true node. Present, it routes the reading to the richer eclipse composer; absent, the eclipse
+   * gracefully falls back to the generic lunation reading. */
+  nodeEnd?: "north" | "south";
+}
+
+// The personalised context each section builder receives, so the per-event copy can pull on her
+// actual house area, the sign the event lands in and that sign's traits rather than re-deriving them.
+interface SectionCtx {
+  area: string;
+  sign: string; // lowercased, for prose
+  traits: SignTraits;
+  houseMeaning: HouseMeaning;
+}
+
+// A distinct, do-it-this-week practice built from the reading, not a reused prompt. Each event type
+// supplies its own, personalised to the house the event lands in.
+export interface Exercise {
+  title: string;
+  intro: string;
+  steps: string[];
 }
 
 interface EventTypeMeta {
@@ -35,6 +59,12 @@ interface EventTypeMeta {
   actionFraming: string;
   promptFraming: string;
   affirmationFrame: (houseArea: string) => string;
+  // The four sections Betty asked every reading to carry, on top of the chart breakdown: what the
+  // event brings up, what to watch for, the shadow it exposes, and the exercise that works it.
+  bringsUp: (c: SectionCtx) => string;
+  lookOutFor: (c: SectionCtx) => string;
+  shadowLine: (c: SectionCtx) => string;
+  exercise: (c: SectionCtx) => Exercise;
 }
 
 // A nodal ingress is the one event on the calendar that needs to teach the astrology from scratch
@@ -49,6 +79,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "set one specific, written intention today",
     promptFraming: "What am I actually ready to call in here, specifically enough that I'd know if it arrived?",
     affirmationFrame: (area) => `I plant this intention around my ${area} and trust the cycle to grow it.`,
+    bringsUp: (c) =>
+      `A new moon rarely lands as an event. It tends to show up as a quiet restlessness around your ${c.area}, a fresh idea you cannot quite put down, a sense that a chapter could begin here if you let it. What surfaces now is possibility with nowhere to go yet, so the thing worth watching is whatever you keep almost letting yourself want.`,
+    lookOutFor: (c) =>
+      `The classic misfire here is treating a new moon as a wish instead of a decision. A woolly intention gives you a woolly result, and nothing you plant tonight shows a harvest by the weekend, so notice the impatience that wants proof immediately. When this energy tips, your ${c.sign} side reaches for ${c.traits.shadow}, and around your ${c.area} that is usually the exact voice that talks you out of beginning.`,
+    shadowLine: (c) =>
+      `The shadow a new moon tends to expose is ${c.traits.shadow}. It shows up here as the reason not to start: the plan quietly shelved, the intention softened until it asks nothing of you, the fresh page left blank because a blank page cannot fail. Around your ${c.area}, catching that reflex as it happens is most of the work.`,
+    exercise: (c) => ({
+      title: "the new moon intention",
+      intro: `Give the next cycle something specific to grow. Ten quiet minutes, tonight or tomorrow.`,
+      steps: [
+        `Write one intention for your ${c.area}, in a single sentence specific enough that you would know for certain if it came true.`,
+        `Underneath it, name the one first action that would make it real, small enough to actually do this week.`,
+        `Write down the excuse most likely to stop you, so you recognise it as a reflex and not a reason when it turns up.`,
+      ],
+    }),
   },
   full_moon: {
     label: "full moon",
@@ -58,6 +103,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "name one thing this illuminated that you can no longer pretend not to see",
     promptFraming: "What has this brought to light that I've been quietly avoiding looking at directly?",
     affirmationFrame: (area) => `I release what no longer serves my ${area}, and I trust what this has shown me.`,
+    bringsUp: (c) =>
+      `A full moon brings things to a head. Something that has been building quietly for the last fortnight around your ${c.area} tends to become impossible to ignore now, emotionally, practically, or both at once. Feelings run higher and clarity arrives whether or not you asked for it, and what you have been half-avoiding usually chooses this week to make itself plain.`,
+    lookOutFor: (c) =>
+      `The danger of a full moon is mistaking a strong feeling for a mandate to burn something down. The information surfacing now is real, but the middle of a culmination is the worst possible moment to make an irreversible decision about it. When the pressure peaks your ${c.sign} wiring can tip into ${c.traits.shadow}, and around your ${c.area} that is what turns a moment of clarity into a mess you spend a month clearing up.`,
+    shadowLine: (c) =>
+      `The shadow a full moon lights up is ${c.traits.shadow}. Under a bright sky it stops being subtle: it is the thing you do around your ${c.area} when you feel exposed and want the discomfort to stop. Seeing it clearly, without acting on it in the same breath, is the whole point of the light.`,
+    exercise: (c) => ({
+      title: "the full moon release",
+      intro: `Work with what this has surfaced instead of reacting to it. Fifteen minutes, ideally once the feeling has peaked rather than during it.`,
+      steps: [
+        `Write down the one thing this full moon has made impossible to keep pretending you cannot see about your ${c.area}.`,
+        `Name what you are ready to put down: a story, a resentment, a habit, a version of this you have outgrown.`,
+        `Decide the one reactive move you will not make while the feeling is this loud, and give it seventy-two hours before you touch it.`,
+      ],
+    }),
   },
   solar_eclipse: {
     label: "solar eclipse",
@@ -67,6 +127,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "notice what's shifting on its own right now rather than trying to force a decision to match the intensity",
     promptFraming: "What door is actually opening or closing here, on its own, whether or not I was ready for it?",
     affirmationFrame: (area) => `I don't force this, I notice what's already shifting in my ${area} and I let it move at its own pace.`,
+    bringsUp: (c) =>
+      `A solar eclipse works like a new moon with a door behind it. Rather than a gentle seed around your ${c.area}, expect something to actually move: an opening, an offer, a beginning that arrives on its own timeline rather than the one you planned. Eclipse energy fast-forwards, so what would normally take a season can land in a fortnight.`,
+    lookOutFor: (c) =>
+      `The trap is forcing a decision to match the intensity. Eclipses reveal the choice already being made underneath the surface, so manufacturing a dramatic move to feel in control usually backfires. When the pressure spikes your ${c.sign} wiring can tip into ${c.traits.shadow}, and around your ${c.area} that is what pushes you to grab at something before it is ready.`,
+    shadowLine: (c) =>
+      `The shadow an eclipse exposes is ${c.traits.shadow}, and an eclipse does not do subtle. Around your ${c.area} it surfaces fast and often in public, which is uncomfortable and also the most honest information this window gives you.`,
+    exercise: (c) => ({
+      title: "the eclipse watch",
+      intro: `Eclipses are for noticing, not forcing. Keep this light and observational across the fortnight after it.`,
+      steps: [
+        `Write down what is already shifting around your ${c.area} on its own, without your input, the door that seems to be opening or closing by itself.`,
+        `Resist making one big decision this week purely to match the intensity. Let the situation show you its hand first.`,
+        `Name the opening around your ${c.area} you would take if you trusted it was meant for you, then watch what the next two weeks do with it.`,
+      ],
+    }),
   },
   lunar_eclipse: {
     label: "lunar eclipse",
@@ -76,6 +151,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "let the ending complete instead of trying to extend something past its natural close",
     promptFraming: "What's actually ending here, and what have I been doing to try to keep it alive past its time?",
     affirmationFrame: (area) => `I let what's ending in my ${area} actually end, the closure is the point, not the problem.`,
+    bringsUp: (c) =>
+      `A lunar eclipse is a full moon with a deadline. Something around your ${c.area} that has been building comes to a head and tends to be forced rather than merely felt: an ending arrives, a truth becomes undeniable, a chapter closes on a timeline that is not yours to negotiate.`,
+    lookOutFor: (c) =>
+      `The trap is trying to keep alive something that is genuinely ending. Eclipses complete things you have been extending past their expiry, and clutching harder now usually just makes the closure louder. If your ${c.sign} side tips into ${c.traits.shadow}, around your ${c.area} it will dress avoidance up as loyalty.`,
+    shadowLine: (c) =>
+      `The shadow a lunar eclipse reveals is ${c.traits.shadow}, and it tends to be whatever you have been doing to avoid an ending around your ${c.area}. The eclipse takes the choice out of your hands, which is the hard mercy of it.`,
+    exercise: (c) => ({
+      title: "the eclipse release",
+      intro: `Work with the ending instead of against it. Twenty minutes, gently.`,
+      steps: [
+        `Name the thing around your ${c.area} that is actually ending, the one you have been trying to keep alive past its time.`,
+        `Write what it gave you and what it cost you, so you can grieve it honestly rather than pretend it was nothing.`,
+        `Choose one way you will let the ending complete this week rather than reopen it, and one kind thing you will do for yourself while it lands.`,
+      ],
+    }),
   },
   retrograde_start: {
     label: "retrograde begins",
@@ -85,6 +175,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "revisit, reread or reconnect with something instead of launching something new",
     promptFraming: "What's asking to be revisited right now instead of pushed forward?",
     affirmationFrame: (area) => `I use this window to review and refine my ${area}, not to force it forward.`,
+    bringsUp: (c) =>
+      `A retrograde turns the volume down on new launches and up on everything left unfinished. Expect the past to come back around your ${c.area}: old messages, old faces, old decisions asking to be looked at again. Things feel slower and slightly tangled, and the work that wants doing now is review rather than launch.`,
+    lookOutFor: (c) =>
+      `The trap is forcing forward motion through a window built for going back. Signing, launching and committing during a retrograde tends to need redoing once it clears, so read the fine print twice and say less than you want to. When the delays bite, your ${c.sign} side can tip into ${c.traits.shadow}, and around your ${c.area} that impatience is what turns a pause into a genuine mistake.`,
+    shadowLine: (c) =>
+      `The shadow a retrograde draws out is ${c.traits.shadow}. Slowed down and sent backwards, the reflex you usually outrun has time to catch up with you, and around your ${c.area} it shows up as the frustration that wants to force something rather than let it be revisited properly.`,
+    exercise: (c) => ({
+      title: "the retrograde review",
+      intro: `Use the backward window on purpose instead of white-knuckling through it. Twenty minutes with a notebook.`,
+      steps: [
+        `List what you abandoned or left half-finished around your ${c.area}, the things you told yourself you would come back to.`,
+        `Pick the one genuinely worth reviving, and do the first small piece of it now while the sky is on your side.`,
+        `Choose one thing you will not sign, send or decide until the retrograde ends, and diarise the date so the waiting has an end.`,
+      ],
+    }),
   },
   retrograde_end: {
     label: "retrograde ends",
@@ -94,6 +199,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "send, launch or sign the thing you paused during the retrograde",
     promptFraming: "What did I pause during this retrograde that's actually ready to move now?",
     affirmationFrame: (area) => `I'm clear to move forward on my ${area} now, the review period did its job.`,
+    bringsUp: (c) =>
+      `When a retrograde ends the fog clears and forward motion becomes reliable again around your ${c.area}. The delays, the crossed wires and the false starts from the last few weeks start to resolve, and the thing you paused finally has a clear road in front of it.`,
+    lookOutFor: (c) =>
+      `The trap now is calling more waiting caution. The review period is over, and past this point holding back is usually avoidance in a convincing disguise. If your ${c.sign} side leans into ${c.traits.shadow}, around your ${c.area} it will keep finding one more reason to delay the thing that is actually ready.`,
+    shadowLine: (c) =>
+      `The shadow at a station direct is ${c.traits.shadow}, showing up as the hesitation that outlives its usefulness. Around your ${c.area}, the work is noticing when careful has quietly become scared.`,
+    exercise: (c) => ({
+      title: "the green light",
+      intro: `Move the thing you have been sitting on since the retrograde began. Fifteen minutes, today if you can.`,
+      steps: [
+        `Name the one thing around your ${c.area} you paused during the retrograde that is genuinely ready to move now.`,
+        `Do the first concrete step on it today, the send, the booking, the message, before the hesitation reorganises itself.`,
+        `Write one line on what the review period actually taught you, so the pause counts for something rather than just costing you time.`,
+      ],
+    }),
   },
 };
 
@@ -117,12 +237,21 @@ export interface LunationReading {
   chartParagraphs?: string[];
   /** Optional explainer for a notable degree, e.g. the anaretic 29th. */
   degreeNote?: ReadingSection;
+  /** What the event surfaces for her, in this house and sign. */
+  bringsUp?: string;
+  /** The specific trap of this event in this placement. */
+  lookOutFor?: string;
+  /** Her sign's shadow, in this house area, as this event tends to expose it. */
+  shadow?: string;
   bettysTake: string;
-  theMove: string;
+  /** The move line. Optional now: lunations render an Exercise instead, node ingress still uses this. */
+  theMove?: string;
   /** Optional concrete actions to pick from, rendered as a list under the move. */
   moveOptions?: string[];
   /** Optional reflective questions rendered underneath the move. */
   moveQuestions?: string[];
+  /** A distinct, do-it-this-week practice. Preferred by the page over theMove when present. */
+  exercise?: Exercise;
   journalPrompt: string;
   affirmation: string;
 }
@@ -133,6 +262,12 @@ function capitaliseFirst(s: string): string {
 
 export function composeLunation(event: CalendarEventInput, chart: ChartData): LunationReading {
   if (event.type === "node_ingress") return composeNodeIngress(event, chart);
+  // Eclipses get the far deeper nodal-axis composer, but only when the calendar has told us which
+  // end of the axis this one sits on. Without that (e.g. a hand-edited or stale link) they fall back
+  // to the generic lunation reading below, which is still complete, just without the nodal layer.
+  if ((event.type === "solar_eclipse" || event.type === "lunar_eclipse") && event.nodeEnd) {
+    return composeEclipse(event, chart);
+  }
 
   const meta = EVENT_TYPE_META[event.type];
   const cusps = chart.houses.map((h) => h.longitude);
@@ -224,7 +359,9 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
 
   const bettysTake = `${meta.bettysTakeGeneric} With this one landing in your ${event.sign.toLowerCase()} ${ordinalHouse(house)} house, that plays out through ${houseArea}: expect this to move through ${traits.essence}, not through anyone else's version of it.`;
 
-  const theMove = `${meta.actionFraming.charAt(0).toUpperCase() + meta.actionFraming.slice(1)}, specifically around your ${houseArea}. ${houseMeaning.coach}`;
+  // The four personalised sections Betty asked every reading to carry, plus the exercise that
+  // replaces the old one-line "move". The chart breakdown above is section one (what it lights up).
+  const ctx: SectionCtx = { area: houseArea, sign: event.sign.toLowerCase(), traits, houseMeaning };
 
   return {
     title: `${meta.label} in ${event.sign.toLowerCase()}`,
@@ -233,8 +370,11 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
     whatThisIs: meta.whatThisIs,
     inYourChart,
     chartParagraphs,
+    bringsUp: meta.bringsUp(ctx),
+    lookOutFor: meta.lookOutFor(ctx),
+    shadow: meta.shadowLine(ctx),
     bettysTake,
-    theMove,
+    exercise: meta.exercise(ctx),
     journalPrompt: `${meta.promptFraming} (Think specifically about your ${houseArea}.)`,
     affirmation: meta.affirmationFrame(houseArea),
   };

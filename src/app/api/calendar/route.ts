@@ -23,6 +23,7 @@ interface CalendarEvent {
   sign: string;
   degree: number;
   planet?: string;
+  nodeEnd?: "north" | "south"; // eclipses only: which end of the nodal axis the eclipse sits on
 }
 
 // The slower, further-out stuff: outer planet sign changes, outer planet retrograde stations,
@@ -103,6 +104,19 @@ function distanceToNode(jd: number, moonLongitude: number): number {
   return Math.min(diff, 180 - diff);
 }
 
+// Which end of the nodal axis a lunation sits on: nearer the true (north) node, or nearer the point
+// opposite it, the south node. This is what tells the eclipse reading whether it is a north-node
+// (growth) or south-node (release) eclipse, computed at eclipse time so it stays correct even in the
+// days around a node ingress when "the north node now" would give the wrong sign.
+function angDist(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+function nodeEndFor(jd: number, moonLongitude: number): "north" | "south" {
+  const node = calcAt(jd, swisseph.SE_TRUE_NODE).longitude;
+  return angDist(moonLongitude, node) <= angDist(moonLongitude, node + 180) ? "north" : "south";
+}
+
 // 0–180° separation between two bodies, direction-agnostic, for detecting aspect crossings.
 function angularSeparation(jd: number, idA: number, idB: number): number {
   const a = calcAt(jd, idA).longitude;
@@ -113,7 +127,7 @@ function angularSeparation(jd: number, idA: number, idB: number): number {
 
 function refineSeparation(idA: number, idB: number, lo: number, hi: number, target: number): number {
   const f = (jd: number) => angularSeparation(jd, idA, idB) - target;
-  let signLo = f(lo) < 0;
+  const signLo = f(lo) < 0;
   for (let i = 0; i < 24; i++) {
     const mid = (lo + hi) / 2;
     if ((f(mid) < 0) === signLo) lo = mid;
@@ -247,7 +261,13 @@ export async function GET() {
       const moon = calcAt(exact, swisseph.SE_MOON);
       const { sign, degree } = signAt(moon.longitude);
       const isEclipse = distanceToNode(exact, moon.longitude) <= 17;
-      events.push({ type: isEclipse ? "solar_eclipse" : "new_moon", date: jdToIso(exact), sign, degree });
+      events.push({
+        type: isEclipse ? "solar_eclipse" : "new_moon",
+        date: jdToIso(exact),
+        sign,
+        degree,
+        ...(isEclipse ? { nodeEnd: nodeEndFor(exact, moon.longitude) } : {}),
+      });
     }
     // Full moon: angle crosses 180. Within node orb it's a lunar eclipse.
     if (prevAngle < 180 && angle >= 180) {
@@ -255,7 +275,13 @@ export async function GET() {
       const moon = calcAt(exact, swisseph.SE_MOON);
       const { sign, degree } = signAt(moon.longitude);
       const isEclipse = distanceToNode(exact, moon.longitude) <= 12;
-      events.push({ type: isEclipse ? "lunar_eclipse" : "full_moon", date: jdToIso(exact), sign, degree });
+      events.push({
+        type: isEclipse ? "lunar_eclipse" : "full_moon",
+        date: jdToIso(exact),
+        sign,
+        degree,
+        ...(isEclipse ? { nodeEnd: nodeEndFor(exact, moon.longitude) } : {}),
+      });
     }
 
     // Mercury stations

@@ -12,6 +12,7 @@ interface CalendarEvent {
   sign: string;
   degree: number;
   planet?: string;
+  nodeEnd?: "north" | "south";
 }
 
 interface MajorTransit {
@@ -117,7 +118,7 @@ export default function SkyAlert() {
             const until = daysUntil(event.date);
             const isNow = until <= 0;
             const timing = isNow ? "happening now" : until === 1 ? "tomorrow" : `in ${until} days`;
-            const href = `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}`;
+            const href = `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}${event.nodeEnd ? `&nodeEnd=${event.nodeEnd}` : ""}`;
 
             const copy = {
               solar_eclipse: {

@@ -27,7 +27,7 @@ interface SouthHouseNote {
 // Short noun phrases for each house that survive being written after "your". HOUSE_MEANINGS
 // lifeAreas are single words chosen for lists ("love", "identity"), which read badly in possessive
 // prose, and the titles carry ampersands. These are written for sentences.
-const HOUSE_AREA = [
+export const HOUSE_AREA = [
   "sense of self",
   "money and self-worth",
   "voice and everyday learning",
@@ -42,7 +42,7 @@ const HOUSE_AREA = [
   "inner world and rest",
 ];
 
-const NORTH_HOUSE: NorthHouseNote[] = [
+export const NORTH_HOUSE: NorthHouseNote[] = [
   {
     growingToward:
       "an identity you author yourself, built from the inside out rather than assembled from other people's reactions to you",
@@ -177,7 +177,7 @@ const NORTH_HOUSE: NorthHouseNote[] = [
   },
 ];
 
-const SOUTH_HOUSE: SouthHouseNote[] = [
+export const SOUTH_HOUSE: SouthHouseNote[] = [
   {
     comfort: "doing it all yourself, deciding fast, and moving before anyone can complicate the plan",
     gift: "courage, decisiveness and a strong instinct for who you are, you have never needed a committee in order to act",
@@ -343,7 +343,7 @@ interface SignNodeNote {
   southReflex: string;
 }
 
-const SIGN_NODE: Record<string, SignNodeNote> = {
+export const SIGN_NODE: Record<string, SignNodeNote> = {
   Aries: {
     essence:
       "the raw start of the zodiac, self as a starting point rather than a conclusion, all instinct, courage and appetite for going first",
@@ -490,7 +490,7 @@ const SIGN_NODE: Record<string, SignNodeNote> = {
   },
 };
 
-function signNode(sign: string): SignNodeNote {
+export function signNode(sign: string): SignNodeNote {
   return SIGN_NODE[sign] ?? SIGN_NODE.Aries;
 }
 
@@ -643,7 +643,7 @@ function capitalise(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function oppositeSign(sign: string): string {
+export function oppositeSign(sign: string): string {
   const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
   if (idx < 0) return sign;
   return ZODIAC_SIGNS[(idx + 6) % 12];
@@ -652,7 +652,7 @@ function oppositeSign(sign: string): string {
 // Quadrant house systems place cusps in exact opposition, so the south node house is always the
 // north node house plus six. Deriving it rather than recalculating guarantees the axis reads as
 // an axis, which is the entire point of this page.
-function oppositeHouse(house: number): number {
+export function oppositeHouse(house: number): number {
   return ((house + 5) % 12) + 1;
 }
 

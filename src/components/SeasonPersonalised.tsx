@@ -25,6 +25,7 @@ interface CalendarEvent {
   sign: string;
   degree: number;
   planet?: string;
+  nodeEnd?: "north" | "south";
 }
 
 // One personalised mission per activated house
@@ -468,7 +469,7 @@ export default function SeasonPersonalised() {
                 const house = lunationHouse(event.sign);
                 const houseInfo = HOUSE_MEANINGS[house - 1];
                 const date = new Date(event.date + "T12:00:00Z");
-                const href = `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}`;
+                const href = `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}${event.nodeEnd ? `&nodeEnd=${event.nodeEnd}` : ""}`;
                 return (
                   <Link
                     key={`${event.type}-${event.date}`}

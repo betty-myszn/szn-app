@@ -31,6 +31,8 @@ function MoonPageContent() {
   const sign = params.get("sign");
   const degree = params.get("degree");
   const planet = params.get("planet") || undefined;
+  const nodeEndParam = params.get("nodeEnd");
+  const nodeEnd = nodeEndParam === "north" || nodeEndParam === "south" ? nodeEndParam : undefined;
 
   if (!ready) return null;
 
@@ -84,7 +86,7 @@ function MoonPageContent() {
     );
   }
 
-  const reading = composeLunation({ type, date, sign, degree: Number(degree), planet }, chart);
+  const reading = composeLunation({ type, date, sign, degree: Number(degree), planet, nodeEnd }, chart);
 
   return (
     <>
@@ -179,6 +181,36 @@ function MoonPageContent() {
         </section>
       )}
 
+      {/* What it brings up */}
+      {reading.bringsUp && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">what it brings up</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.bringsUp}</p>
+          </div>
+        </section>
+      )}
+
+      {/* What to look out for */}
+      {reading.lookOutFor && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">what to look out for</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.lookOutFor}</p>
+          </div>
+        </section>
+      )}
+
+      {/* The shadow */}
+      {reading.shadow && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink-light)" }}>
+            <div className="tag mb-3" style={{ color: "var(--pink)" }}>the shadow</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.shadow}</p>
+          </div>
+        </section>
+      )}
+
       {/* Betty's Take */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
@@ -187,7 +219,44 @@ function MoonPageContent() {
         </div>
       </section>
 
-      {/* The Move */}
+      {/* Your exercise: the distinct, do-it-this-week practice for lunations and eclipses */}
+      {reading.exercise && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
+            <div className="tag mb-3">your exercise</div>
+            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.4px", color: "#854F0B", marginBottom: 8 }}>
+              {reading.exercise.title}
+            </p>
+            <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600, marginBottom: 20 }}>
+              {reading.exercise.intro}
+            </p>
+            <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {reading.exercise.steps.map((step, i) => (
+                <li
+                  key={i}
+                  className="flex gap-3 items-start"
+                  style={{
+                    paddingTop: i === 0 ? 0 : 14,
+                    marginTop: i === 0 ? 0 : 14,
+                    borderTop: i === 0 ? undefined : "1px solid rgba(133,79,11,0.22)",
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    style={{ fontFamily: poppins, fontWeight: 800, fontSize: 15, color: "#854F0B", flexShrink: 0, width: 18 }}
+                  >
+                    {i + 1}
+                  </span>
+                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#854F0B", fontWeight: 600 }}>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      {/* The Move (node ingress keeps this; lunations render the exercise above instead) */}
+      {reading.theMove && (
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
           <div className="tag mb-3">the move</div>
@@ -247,6 +316,7 @@ function MoonPageContent() {
           )}
         </div>
       </section>
+      )}
 
       {/* Prompt + affirmation */}
       <section className="px-5 md:px-8 py-12">

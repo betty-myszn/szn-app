@@ -461,3 +461,98 @@ describe("nodal ingress readings cover both ends of the axis", () => {
     }
   });
 });
+
+// ── Lunation and eclipse readings: the five personalised sections ────────────
+
+describe("every lunation carries the personalised sections and exercise", () => {
+  const MOON_TYPES = ["new_moon", "full_moon", "retrograde_start", "retrograde_end"] as const;
+
+  it("new moons, full moons and retrogrades compose brings-up, look-out-for, shadow and an exercise", () => {
+    for (const type of MOON_TYPES) {
+      for (const sign of SIGNS) {
+        for (let rotation = 0; rotation < 12; rotation++) {
+          const cuspSigns = HOUSES.map((h) => SIGNS[(h - 1 + rotation) % 12]);
+          const chart = makeChart({ cuspSigns });
+          const reading = composeLunation(
+            { type, date: "2026-08-01", sign, degree: 12, planet: type.startsWith("retrograde") ? "Mercury" : undefined },
+            chart,
+          );
+          const where = `${type} in ${sign}, rotation ${rotation}`;
+          assertRealText(reading.bringsUp, `${where} bringsUp`, 120);
+          assertRealText(reading.lookOutFor, `${where} lookOutFor`, 120);
+          assertRealText(reading.shadow, `${where} shadow`, 100);
+          assertRealText(reading.exercise?.title, `${where} exercise title`, 8);
+          assertRealText(reading.exercise?.intro, `${where} exercise intro`, 40);
+          expect(reading.exercise?.steps.length).toBe(3);
+          for (const step of reading.exercise!.steps) assertRealText(step, `${where} exercise step`, 40);
+        }
+      }
+    }
+  });
+});
+
+describe("eclipse readings add the nodal-axis depth", () => {
+  it("solar and lunar eclipses on either node end compose fully", () => {
+    for (const type of ["solar_eclipse", "lunar_eclipse"] as const) {
+      for (const nodeEnd of ["north", "south"] as const) {
+        for (const sign of SIGNS) {
+          for (let rotation = 0; rotation < 12; rotation++) {
+            const cuspSigns = HOUSES.map((h) => SIGNS[(h - 1 + rotation) % 12]);
+            const chart = makeChart({ cuspSigns });
+            const reading = composeLunation({ type, date: "2026-08-12", sign, degree: 20, nodeEnd }, chart);
+            const where = `${type} in ${sign} on ${nodeEnd} node, rotation ${rotation}`;
+            // routed to the dedicated eclipse composer, not the generic lunation one
+            expect(reading.title).toContain("eclipse");
+            expect(reading.primerTitle).toBe("the eclipse, explained");
+            expect(reading.primer?.length).toBe(4);
+            for (const s of reading.primer!) {
+              assertRealText(s.heading, `${where} primer heading`, 10);
+              assertRealText(s.body, `${where} primer "${s.heading}"`, 150);
+            }
+            expect(reading.chartParagraphs?.length).toBe(4);
+            for (const p of reading.chartParagraphs!) assertRealText(p, `${where} chart paragraph`, 150);
+            assertRealText(reading.bringsUp, `${where} bringsUp`, 120);
+            assertRealText(reading.lookOutFor, `${where} lookOutFor`, 120);
+            assertRealText(reading.shadow, `${where} shadow`, 100);
+            assertRealText(reading.bettysTake, `${where} bettysTake`, 200);
+            expect(reading.exercise?.steps.length).toBe(3);
+            for (const step of reading.exercise!.steps) assertRealText(step, `${where} exercise step`, 40);
+            assertRealText(reading.journalPrompt, `${where} journalPrompt`, 40);
+            expect(reading.journalPrompt.endsWith("?")).toBe(true);
+          }
+        }
+      }
+    }
+  });
+
+  it("holds the house style rules across lunations and eclipses: no em dashes, no rhetorical questions in prose", () => {
+    const cases = [
+      { type: "new_moon" as const, extra: {} as Record<string, unknown> },
+      { type: "full_moon" as const, extra: {} as Record<string, unknown> },
+      { type: "solar_eclipse" as const, extra: { nodeEnd: "north" } },
+      { type: "solar_eclipse" as const, extra: { nodeEnd: "south" } },
+      { type: "lunar_eclipse" as const, extra: { nodeEnd: "north" } },
+      { type: "lunar_eclipse" as const, extra: { nodeEnd: "south" } },
+    ];
+    for (const { type, extra } of cases) {
+      for (const sign of SIGNS) {
+        const reading = composeLunation({ type, date: "2026-08-12", sign, degree: 20, ...extra }, makeChart());
+        const prose = [
+          reading.whatThisIs,
+          ...(reading.primer?.map((s) => s.body) ?? []),
+          ...(reading.chartParagraphs ?? []),
+          reading.bringsUp,
+          reading.lookOutFor,
+          reading.shadow,
+          reading.bettysTake,
+          reading.exercise?.intro,
+          ...(reading.exercise?.steps ?? []),
+        ]
+          .filter(Boolean)
+          .join(" ");
+        expect(prose).not.toMatch(/[—–]/);
+        expect(prose).not.toMatch(/\?/);
+      }
+    }
+  });
+});
