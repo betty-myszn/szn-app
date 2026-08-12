@@ -20,7 +20,6 @@ import { loadChallengeProgress, computeChallengeStreak } from "@/lib/challenge-p
 import { loadSignals, detectAvoidance, type AvoidancePattern } from "@/lib/signals";
 import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type DashboardPrefs } from "@/lib/dashboard-preferences";
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
-import DiscoPlanet from "@/components/DiscoPlanet";
 import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
 import SeasonExplore from "@/components/SeasonExplore";
@@ -156,9 +155,6 @@ export default function DashboardPage() {
       />
       {/* Header */}
       <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)", position: "relative", overflow: "hidden" }}>
-        <div className="hidden md:block" style={{ position: "absolute", top: 18, right: 32 }}>
-          <DiscoPlanet size={110} />
-        </div>
         <div className="max-w-6xl mx-auto" style={{ position: "relative" }}>
           <div className="flex items-center justify-between gap-4 flex-wrap mb-3">
             <div className="tag" style={{ marginBottom: 0 }}>{season.sign.toLowerCase()} szn · {formatSeasonDates(season)}</div>

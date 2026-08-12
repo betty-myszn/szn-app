@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useHumanDesign } from "@/lib/use-human-design";
 import { useMember } from "@/lib/use-member";
@@ -18,6 +19,7 @@ import {
   CROSS_ANGLE_CONTENT,
   CHANNEL_GIFT,
 } from "@/lib/human-design-content";
+import { typeDeep, type HdDeepDive } from "@/lib/human-design-deep-content";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -108,8 +110,9 @@ export default function HumanDesignPage() {
         </div>
       </div>
 
-      {/* the guided reading */}
-      <Reading title="your type" block={type} />
+      {/* the guided reading. Type opens into the paid deep dive (600 words: for you, in your
+          business, the shadow, how to heal). Free members see the unlock prompt instead. */}
+      <ExpandableReading title="your type" block={type} deep={typeDeep(hd.type)} unlocked={unlocked} />
 
       <Reading title="how you make decisions" block={authority} accent="var(--pink)" />
 
@@ -296,6 +299,100 @@ function Reading({
         <div style={{ ...eyebrow, marginBottom: 6 }}>how to work with it</div>
         <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>{block.apply}</p>
       </div>
+    </div>
+  );
+}
+
+function DeepSection({ label, text }: { label: string; text: string }) {
+  return (
+    <div style={{ marginTop: 18 }}>
+      <div style={{ ...eyebrow, marginBottom: 6, color: "var(--pink)", opacity: 1 }}>{label}</div>
+      <p style={{ fontSize: 15, lineHeight: 1.7, margin: 0 }}>{text}</p>
+    </div>
+  );
+}
+
+// A guided reading that opens into the paid 600-word deep dive. The short read shows for everyone;
+// the deep dive expands for paid members and shows an unlock prompt to everyone else. Falls back to
+// a plain reading when no deep content exists for this element yet.
+function ExpandableReading({
+  title,
+  block,
+  accent,
+  deep,
+  unlocked,
+}: {
+  title: string;
+  block: { title: string; intro: string; meaning: string; apply: string };
+  accent?: string;
+  deep: HdDeepDive | null;
+  unlocked: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ margin: "34px 0" }}>
+      <SectionHead title={title} />
+      <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 600, margin: "0 0 6px", color: accent ?? "var(--dark)" }}>
+        {block.title}
+      </p>
+      <p style={{ fontSize: 16, fontStyle: "italic", opacity: 0.75, margin: "0 0 14px", lineHeight: 1.5 }}>{block.intro}</p>
+      <p style={{ fontSize: 15.5, lineHeight: 1.65, margin: "0 0 14px" }}>{block.meaning}</p>
+      <div style={{ ...card, background: "var(--cream)" }}>
+        <div style={{ ...eyebrow, marginBottom: 6 }}>how to work with it</div>
+        <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>{block.apply}</p>
+      </div>
+
+      {deep && (
+        <div style={{ marginTop: 14 }}>
+          {unlocked ? (
+            <>
+              <button
+                onClick={() => setOpen((v) => !v)}
+                style={{
+                  background: open ? "var(--pink)" : "none",
+                  border: "1.5px solid var(--pink)",
+                  color: open ? "#fff" : "var(--pink)",
+                  fontFamily: poppins,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  padding: "10px 18px",
+                  cursor: "pointer",
+                }}
+              >
+                {open ? "close the deep dive ▲" : "go deeper into this ▼"}
+              </button>
+              {open && (
+                <div style={{ marginTop: 16, padding: "22px 20px", background: "var(--lav-light)", border: "var(--border)" }}>
+                  <DeepSection label="for you" text={deep.forYou} />
+                  <DeepSection label="in your business" text={deep.inBusiness} />
+                  <DeepSection label="the shadow" text={deep.shadow} />
+                  <DeepSection label="how to heal" text={deep.heal} />
+                </div>
+              )}
+            </>
+          ) : (
+            <Link
+              href="/membership"
+              className="no-underline"
+              style={{
+                display: "inline-block",
+                border: "1.5px solid var(--pink)",
+                color: "var(--pink)",
+                fontFamily: poppins,
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                padding: "10px 18px",
+              }}
+            >
+              ✦ unlock the full breakdown
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 }
