@@ -4,8 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { decodeBirthData, saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
 import { syncBirthDataToSupabase, syncChartToSupabase } from "@/lib/chart-sync";
-import ChartResults from "@/components/ChartResults";
-import FreeHumanDesign from "@/components/FreeHumanDesign";
+import ChartSwitcher from "@/components/ChartSwitcher";
 import type { ChartData } from "@/types/chart";
 
 function ResultsContent() {
@@ -101,14 +100,10 @@ function ResultsContent() {
 
   if (!chart) return null;
 
-  // Both charts from one form. The birth details already collected are exactly what Human Design
-  // needs, so making someone retype them into a second calculator to get it would be daft.
-  return (
-    <>
-      <ChartResults chart={chart} />
-      <FreeHumanDesign />
-    </>
-  );
+  // Both charts from one form. Presented as two squares rather than stacked, because stacked put
+  // the Human Design reading a very long scroll below the astrology and most people never got
+  // there, so it read as though only the birth chart existed.
+  return <ChartSwitcher chart={chart} />;
 }
 
 export default function ResultsPage() {
