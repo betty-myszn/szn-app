@@ -170,7 +170,7 @@ export default function PodcastPage() {
           Everything from the podcast, taken to the next level. Live workshops, group coaching, subconscious rewiring and community. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
+          From $88/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

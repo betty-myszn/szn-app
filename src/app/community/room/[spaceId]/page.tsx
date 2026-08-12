@@ -118,7 +118,7 @@ export default function ChatRoomPage() {
             {space.label} is a members&apos; ritual.
           </h1>
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-            The open chat rooms are yours to keep. Book club, seasonal challenges and events come with MY SZN, $111 a month.
+            The open chat rooms are yours to keep. Book club, seasonal challenges and events come with MY SZN, $88 a month.
           </p>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link href="/membership" className="btn-pink">unlock the rituals</Link>
@@ -408,7 +408,7 @@ export default function ChatRoomPage() {
               style={{ background: "var(--dark)", border: "var(--border)" }}
             >
               <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, maxWidth: 460 }}>
-                The book club, the seasonal challenges, events and the new and full moon audios all open up in MY SZN ($111/mo), alongside your full personalised platform.
+                The book club, the seasonal challenges, events and the new and full moon audios all open up in MY SZN ($88/mo), alongside your full personalised platform.
               </p>
               <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
                 unlock the rituals

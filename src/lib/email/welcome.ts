@@ -32,7 +32,8 @@ function numericEnv(v: string | undefined): number | null {
 // vars, so a drifted, missing, or whitespace-corrupted variable silently sent no welcome email at
 // all. Env still overrides (trimmed) for anything new; it just can't break the known live plans.
 const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
-  price_1TwER7J6s9fRhiJooQRyfcwQ: "welcome_monthly",
+  price_1U3FDpJ6s9fRhiJor7ofzAzT: "welcome_monthly", // $88 / month (current price)
+  price_1TwER7J6s9fRhiJooQRyfcwQ: "welcome_monthly", // $111 / month (retired price, grandfathered)
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "welcome_3mo",
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
 };

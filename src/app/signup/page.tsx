@@ -19,7 +19,7 @@ type PlanId = "free" | "monthly" | "vip";
 // sets her password afterwards.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
   { id: "free", name: "Free", tagline: "the chat rooms, plus your birth and human design charts", price: "$0" },
-  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, live coaching, book club and moon audios", price: "$111/mo" },
+  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, live coaching, book club and moon audios", price: "$88/mo" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 
@@ -252,10 +252,10 @@ export default function SignupPage() {
                 </p>
                 <CheckoutButton
                   checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
-                  label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $111/mo"}
+                  label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $88/mo"}
                   waitlistHref="/membership#pricing"
                   plan={plan}
-                  value={plan === "vip" ? 555 : 111}
+                  value={plan === "vip" ? 555 : 88}
                 />
                 <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
                   You&apos;ll set your password and add your birth details right after checkout.

@@ -30,10 +30,10 @@ export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boo
 // and upgrades for the rituals.
 //
 // The $33 social tier is RETIRED FROM SALE, not deleted: no new checkout can produce it, so for
-// everyone signing up now this check effectively means $111/$555, and the rituals belong to those
+// everyone signing up now this check effectively means $88/$555, and the rituals belong to those
 // tiers. Members already paying $33 keep passing here, which is the point, they keep the book club
 // and moon audios they're still being charged for until they cancel or upgrade. That's why the
-// ritual gate did NOT move up to hasFullAccessFromRow when the rituals moved into $111: doing so
+// ritual gate did NOT move up to hasFullAccessFromRow when the rituals moved into $88: doing so
 // would have revoked a live paying customer's access. Two independent checks: an
 // access-granting Stripe status on a real paid tier, plus a paid-through safety net. The
 // full-platform distinction lives one level up in hasFullAccessFromRow.
