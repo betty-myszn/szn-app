@@ -3,13 +3,13 @@ import BirthDataForm from "@/components/BirthDataForm";
 import { OG_IMAGE } from "@/lib/site";
 
 export const metadata = {
-  title: "Free Birth Chart Calculator | Sun, Moon & Rising Sign",
+  title: "Free Birth Chart & Human Design Calculator | Sun, Moon, Rising & Type",
   description:
-    "Get your free birth chart instantly. Discover your sun sign, moon sign, rising sign, Venus, Mars, Jupiter, and every placement in your natal chart. Swiss Ephemeris precision. No signup required.",
+    "Get your free birth chart and your Human Design chart from one set of birth details. Sun, moon, rising, Venus, Mars and every placement, plus your Human Design type, strategy, authority and profile. Swiss Ephemeris precision. No signup required.",
   alternates: { canonical: "/chart" },
   openGraph: {
-    title: "Free Birth Chart Calculator, MY SZN",
-    description: "Calculate your full natal chart for free. Sun, moon, rising, Venus, Mars, Jupiter, Chiron and all 12 houses. Enter your birth details and discover your cosmic blueprint.",
+    title: "Free Birth Chart + Human Design Calculator, MY SZN",
+    description: "Calculate your full natal chart and your Human Design bodygraph for free, from one form. Sun, moon, rising, all 12 houses, plus your type, strategy, authority and profile.",
     url: "/chart",
     type: "website",
     images: [OG_IMAGE],
@@ -26,6 +26,10 @@ const FAQS = [
   {
     q: "Do I need my exact birth time for a birth chart?",
     a: "For your sun sign, no. For your rising sign and house placements, yes, and it matters more than people expect. The rising sign changes roughly every two hours, so being an hour out can hand you the wrong chart entirely. Your birth time is usually on your birth certificate. If you genuinely cannot find it, enter 12:00 and treat the rising sign and houses as unreliable while the planets stay accurate.",
+  },
+  {
+    q: "Do I get my Human Design chart too?",
+    a: "Yes, from the same form. Human Design is calculated from the same date, time and place as your birth chart, so you get both at once: your type, strategy, authority, profile and which of your centres are defined, alongside your full natal chart.",
   },
   {
     q: "Is this birth chart calculator really free?",
@@ -94,7 +98,8 @@ export default function ChartPage() {
               marginBottom: 14,
             }}
           >
-            your free <span className="pk">birth chart.</span>
+            your free birth chart<br />
+            <span className="pk">and human design.</span>
           </h1>
           <p
             style={{
@@ -105,9 +110,10 @@ export default function ChartPage() {
               margin: "0 auto",
             }}
           >
-            Discover your Sun, Moon, Rising, Venus, Mars and every placement in your chart.
-            We&apos;ll show you who you are, what makes you magnetic, and how to work
-            with your cosmic blueprint. Completely free. No catch.
+            One set of birth details, two complete charts. Your Sun, Moon, Rising, Venus, Mars
+            and every placement, plus your Human Design type, strategy, authority and profile.
+            Your chart says who you are here to become, your design says how you are built to get
+            there. Both free. No catch.
           </p>
         </div>
       </div>
@@ -185,7 +191,7 @@ export default function ChartPage() {
           Your chart is just the beginning. Get live workshops, group coaching, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          From $111/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
+          From $88/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
