@@ -1,32 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { listIdFor, isWaitlistSource } from "@/lib/subscribe-lists";
 
 export const runtime = "nodejs";
 
 const BREVO_API = "https://api.brevo.com/v3";
 const N8N_WEBHOOK = "https://n8n-production-999ab.up.railway.app/webhook/myszn-waitlist";
-
-// Brevo list IDs, not names. This used to look the list up by an exact name match and create it if
-// nothing matched, which silently sent every free-chart signup nowhere: the code asked for
-// "Free Birth Chart Generator" while the real list is called "Free birthchart generator", so the
-// match never hit, and whatever happened to the create attempt, list 10 sat on zero contacts while
-// the form happily reported success. Ids can't drift on a rename or a capital letter. Same
-// canonical-with-env-override shape as the Stripe price map in stripe-tiers.ts, for the same reason.
-const CANONICAL_LIST_WAITLIST = 9; // "MY SZN waitlist"
-const CANONICAL_LIST_CHART = 10; // "Free birthchart generator"
-const CANONICAL_LIST_MONEY_BLUEPRINT = 14; // "Money Blueprint"
-
-function listIdFromEnv(v: string | undefined): number | null {
-  const t = v?.trim();
-  return t && /^\d+$/.test(t) ? parseInt(t, 10) : null;
-}
-
-function listIdFor(source: string | undefined): number {
-  if (source === "free-chart") return listIdFromEnv(process.env.BREVO_LIST_FREE_CHART) ?? CANONICAL_LIST_CHART;
-  // Money Blueprint buyers are their own audience, not the waitlist. Their list is "Money Blueprint"
-  // (id 14), overridable via BREVO_LIST_MONEY_BLUEPRINT the same way the others are.
-  if (source === "money-blueprint") return listIdFromEnv(process.env.BREVO_LIST_MONEY_BLUEPRINT) ?? CANONICAL_LIST_MONEY_BLUEPRINT;
-  return listIdFromEnv(process.env.BREVO_LIST_WAITLIST) ?? CANONICAL_LIST_WAITLIST;
-}
 
 // Brevo only stores a custom attribute that already exists on the account, so each one has to be
 // ensured before the upsert. Creating an existing attribute returns 400, which is the steady state.
@@ -80,18 +58,18 @@ export async function POST(req: NextRequest) {
       dateOfBirth, birthTime, birthTimeApproximate, placeOfBirth,
       sunSign, moonSign, risingSign,
     });
-    // The n8n workflow behind this URL is the waitlist one, and it files everyone it receives onto
-    // the waitlist regardless of the source in the payload. Firing it for a free-chart signup is
-    // what put every chart contact on the waitlist list as well as their own: the overlap was exact,
-    // 3 of 3. Getting a free birth chart is not asking to join the waitlist. Someone who wants both
-    // posts the waitlist form too, which arrives here as its own request with its own source.
-    const n8nPromise = source === "free-chart" || source === "money-blueprint"
-      ? null
-      : fetch(N8N_WEBHOOK, {
+    // The n8n workflow behind this URL is the waitlist one: it files EVERYONE it receives onto the
+    // waitlist regardless of the payload's source. So it must fire ONLY for a genuine waitlist
+    // submission, never for a free tool lead. It previously fired for every source except two, which
+    // (together with the list default) is how free-chart and free Human Design leads landed on the
+    // waitlist. Gated on the same allowlist as the list choice so the two can never disagree.
+    const n8nPromise = isWaitlistSource(source)
+      ? fetch(N8N_WEBHOOK, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: payload,
-        }).catch((err) => console.error("n8n webhook error:", err));
+        }).catch((err) => console.error("n8n webhook error:", err))
+      : null;
 
     let brevoOk = false;
     if (!process.env.BREVO_API_KEY) {
