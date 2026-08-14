@@ -120,12 +120,12 @@ export default function HumanDesignChartPage() {
       </div>
 
       <div className="px-8 py-12 max-w-xl mx-auto">
+        {/* One set of birth details builds both charts and lands on the combined results, where the
+            birth chart and Human Design read side by side under a toggle. Same flow as /chart, so
+            there is one front door and everyone gets both. */}
         <BirthDataForm
-          destination="/human-design"
-          leadSource="free-human-design"
-          computeAstrology={false}
-          submitLabel="get my free human design chart"
-          loadingLabel="building your design..."
+          submitLabel="get my free charts"
+          loadingLabel="building your charts..."
         />
       </div>
 

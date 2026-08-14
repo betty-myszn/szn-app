@@ -1,161 +1,109 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import type { ChartData } from "@/types/chart";
-import { ZODIAC_SYMBOLS, ZODIAC_SIGNS } from "@/types/chart";
-import { useHumanDesign } from "@/lib/use-human-design";
+import ChartResults from "@/components/ChartResults";
+import HumanDesignReading from "@/components/HumanDesignReading";
 import { track, EVENTS } from "@/lib/analytics";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-// One form, two charts, so this page is the choice between them and nothing else. The readings
-// each live on their own page and are opened from here, rather than one of them being dumped
-// underneath: stacked, the Human Design half sat a very long scroll down and most people never
-// reached it, so the page read as though only the astrology existed.
-//
-// Escape sequences are written as real characters on purpose. A JSX attribute does not process
-// \u escapes, so passing them through a prop printed the literal text on the page.
+// One set of birth details, both charts, both actually shown. This used to be a two-card chooser
+// that sent people off to a separate page for each, so neither reading appeared here; now the two
+// readings render inline behind a sticky toggle. The toggle (rather than one long stacked scroll) is
+// deliberate: stacked, the Human Design half sat a very long way down and most people never reached
+// it, so it read as though only the birth chart existed. With tabs both are present and one tap apart,
+// and neither is buried.
 
-function symbolFor(sign: string): string {
-  const i = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
-  return i >= 0 ? ZODIAC_SYMBOLS[i] : "✦";
-}
+type Tab = "astro" | "hd";
 
-interface CardProps {
-  href: string;
-  kicker: string;
-  glyph: string;
-  title: string;
-  preview: string;
-  action: string;
-  bg: string;
-  fg: string;
-  sub: string;
-  onClick: () => void;
-}
-
-function ChartCard({ href, kicker, glyph, title, preview, action, bg, fg, sub, onClick }: CardProps) {
+function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <Link
-      href={href}
+    <button
       onClick={onClick}
-      className="block no-underline"
-      style={{ background: bg, border: "var(--border)", padding: "34px 30px 30px" }}
+      aria-pressed={active}
+      style={{
+        fontFamily: poppins,
+        fontSize: 13,
+        fontWeight: 800,
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+        padding: "12px 22px",
+        cursor: "pointer",
+        border: active ? "1.5px solid var(--pink)" : "1.5px solid rgba(255,255,255,0.25)",
+        background: active ? "var(--pink)" : "transparent",
+        color: "#fff",
+        whiteSpace: "nowrap",
+      }}
     >
-      <div
-        style={{
-          fontSize: 10,
-          fontWeight: 800,
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
-          color: sub,
-          marginBottom: 18,
-        }}
-      >
-        {kicker}
-      </div>
-
-      <div style={{ fontSize: 54, lineHeight: 1, marginBottom: 16, color: fg }}>{glyph}</div>
-
-      <div
-        style={{
-          fontFamily: poppins,
-          fontSize: "clamp(28px, 4vw, 40px)",
-          fontWeight: 800,
-          letterSpacing: "-1.4px",
-          lineHeight: 1.02,
-          color: fg,
-          marginBottom: 12,
-        }}
-      >
-        {title}
-      </div>
-
-      <div style={{ fontSize: 15, lineHeight: 1.6, color: sub, fontWeight: 500, marginBottom: 22 }}>
-        {preview}
-      </div>
-
-      <div
-        style={{
-          display: "inline-block",
-          fontSize: 11,
-          fontWeight: 800,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: bg,
-          background: fg,
-          padding: "13px 22px",
-        }}
-      >
-        {action}
-      </div>
-    </Link>
+      {children}
+    </button>
   );
 }
 
 export default function ChartSwitcher({ chart }: { chart: ChartData }) {
-  const { hd } = useHumanDesign();
-
-  const sun = chart.planets.find((p) => p.name === "Sun")?.sign ?? "";
-  const moon = chart.planets.find((p) => p.name === "Moon")?.sign ?? "";
-  const rising = chart.houses[0]?.sign ?? "";
+  const [tab, setTab] = useState<Tab>("astro");
   const name = chart.birthData?.name?.trim();
 
+  const select = (next: Tab) => {
+    setTab(next);
+    track(EVENTS.CTA_CLICK, {
+      label: next === "astro" ? "view_birth_chart" : "view_human_design",
+      location: "results_tabs",
+    });
+  };
+
   return (
-    <section className="px-5 md:px-8 py-16" style={{ background: "var(--dark)" }}>
-      <div className="max-w-5xl mx-auto">
-        <div className="tag mb-4" style={{ color: "var(--pink)" }}>
-          both of your charts are ready
+    <>
+      {/* Intro + sticky toggle. Sticky so the other chart is always one tap away, never a scroll hunt. */}
+      <section className="px-5 md:px-8 pt-14 pb-6" style={{ background: "var(--dark)" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="tag mb-3" style={{ color: "var(--pink)" }}>
+            both of your charts are ready
+          </div>
+          <h1
+            style={{
+              fontFamily: poppins,
+              fontSize: "clamp(30px, 5.5vw, 52px)",
+              fontWeight: 800,
+              letterSpacing: "-1.6px",
+              lineHeight: 1.03,
+              color: "#fff",
+              marginBottom: 12,
+            }}
+          >
+            {name ? `${name.toLowerCase()}, you get ` : "you get "}
+            <span className="pk">two charts.</span>
+          </h1>
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.6)", maxWidth: 520, margin: "0 auto" }}>
+            One set of birth details, two completely different maps. Your astrology says who you are
+            here to become. Your Human Design says how you are actually built to get there. Switch
+            between them any time.
+          </p>
         </div>
+      </section>
 
-        <h1
-          style={{
-            fontFamily: poppins,
-            fontSize: "clamp(34px, 6vw, 60px)",
-            fontWeight: 800,
-            letterSpacing: "-2px",
-            lineHeight: 1.02,
-            color: "#fff",
-            marginBottom: 16,
-          }}
-        >
-          {name ? `${name.toLowerCase()}, you get ` : "you get "}
-          <span className="pk">two charts.</span>
-        </h1>
-
-        <p style={{ fontSize: 16, lineHeight: 1.75, color: "rgba(255,255,255,0.6)", maxWidth: 560, marginBottom: 40 }}>
-          One set of birth details, two completely different maps. Your astrology says who you are
-          here to become. Your Human Design says how you are actually built to get there.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-5">
-          <ChartCard
-            href="/results/chart"
-            kicker="chart one · astrology"
-            glyph={sun ? symbolFor(sun) : "☉"}
-            title="your birth chart"
-            preview={sun ? `${sun} sun · ${moon} moon · ${rising} rising` : "every placement, decoded"}
-            action="read my chart →"
-            bg="var(--pink)"
-            fg="#fff"
-            sub="rgba(255,255,255,0.85)"
-            onClick={() => track(EVENTS.CTA_CLICK, { label: "view_birth_chart", location: "results_chooser" })}
-          />
-
-          <ChartCard
-            href="/human-design"
-            kicker="chart two · human design"
-            glyph="◈"
-            title="your human design"
-            preview={hd ? `${hd.type} · ${hd.authorityLabel} · ${hd.profile}` : "type, strategy and authority"}
-            action="read my design →"
-            bg="var(--lav)"
-            fg="var(--dark)"
-            sub="#3C2A70"
-            onClick={() => track(EVENTS.CTA_CLICK, { label: "view_human_design", location: "results_chooser" })}
-          />
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 20,
+          background: "var(--dark)",
+          borderBottom: "var(--border)",
+        }}
+      >
+        <div className="max-w-4xl mx-auto px-5 md:px-8 py-4 flex items-center justify-center gap-3 flex-wrap">
+          <TabButton active={tab === "astro"} onClick={() => select("astro")}>
+            ☉ your birth chart
+          </TabButton>
+          <TabButton active={tab === "hd"} onClick={() => select("hd")}>
+            ◈ your human design
+          </TabButton>
         </div>
       </div>
-    </section>
+
+      {/* The active reading, rendered inline. Only the selected one mounts, so the page stays light. */}
+      {tab === "astro" ? <ChartResults chart={chart} /> : <HumanDesignReading />}
+    </>
   );
 }
