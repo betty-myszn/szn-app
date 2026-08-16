@@ -29,19 +29,52 @@ export default function SeasonDesignInline() {
     <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
       <div style={{ maxWidth: 820, margin: "0 auto" }}>
         <div className="tag mb-2">astrology + human design</div>
-        <h2
+        <div
           style={{
-            fontFamily: pp,
-            fontWeight: 800,
-            fontSize: 30,
-            lineHeight: 1.06,
-            letterSpacing: "-0.02em",
-            textTransform: "lowercase",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 16,
             margin: "0 0 18px",
           }}
         >
-          how your energy works with {sign} season
-        </h2>
+          <h2
+            style={{
+              fontFamily: pp,
+              fontWeight: 800,
+              fontSize: 30,
+              lineHeight: 1.06,
+              letterSpacing: "-0.02em",
+              textTransform: "lowercase",
+              margin: 0,
+            }}
+          >
+            how {sign} szn works with your human design
+          </h2>
+          {/* rotated sticker, so the block reads as Human Design at a glance and not as more astrology */}
+          <span
+            aria-hidden
+            style={{
+              flexShrink: 0,
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              fontFamily: pp,
+              fontWeight: 800,
+              fontSize: 11,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              background: "var(--pink)",
+              color: "#fff",
+              border: "2px solid var(--dark)",
+              borderRadius: 40,
+              padding: "7px 15px",
+              transform: "rotate(4deg)",
+              marginTop: 6,
+            }}
+          >
+            &#10038; human design
+          </span>
+        </div>
 
         <div
           style={{

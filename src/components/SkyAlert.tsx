@@ -3,6 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { daysUntilSkyDate } from "@/lib/sky-zone";
+import { HOUSE_MEANINGS, ordinalHouse, houseForSign } from "@/lib/interpretations";
+import type { ChartData } from "@/types/chart";
+
+// What each lunation asks of her, once it has been placed in one of her houses. This used to live
+// in the separate "your cosmic calendar" block further down the dashboard, which listed the same
+// events a second time purely to add this personal line. The line now rides along on the weather
+// card instead, so the sky is described once.
+const COACH: Record<string, string> = {
+  new_moon: "set intentions, plant what you want to grow",
+  full_moon: "release and celebrate, see what's come to light",
+  solar_eclipse: "expect the unplanned, this door opens or closes fast",
+  lunar_eclipse: "a sudden, undeniable ending or reveal, let it happen",
+  node_ingress: "the collective's whole growth direction resets, this one's rare",
+};
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -61,7 +75,7 @@ function formatDate(dateIso: string): string {
 
 // Cosmic weather: pulls fresh from /api/calendar on every load (no cache, always today-accurate) and
 // renders a compact, light horizontal RAIL of the soonest sky events rather than a long dark list.
-export default function SkyAlert() {
+export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
   const [data, setData] = useState<CalendarResponse | null>(null);
 
   useEffect(() => {
@@ -93,8 +107,18 @@ export default function SkyAlert() {
 
   // One flattened, uniform card model so the big events, transits and mercury notes all render the
   // same compact card in the rail.
-  type Card = { key: string; date: string | null; timing: string; hot: boolean; label: string; body: string; href: string | null; gold?: boolean };
+  type Card = { key: string; date: string | null; timing: string; hot: boolean; label: string; body: string; href: string | null; gold?: boolean; mine?: string };
   const cards: Card[] = [];
+
+  // Only lunations and eclipses land in a specific house, and only if we have her chart.
+  const cusps = chart ? chart.houses.map((h) => h.longitude) : null;
+  const personalise = (type: string, sign: string): string | undefined => {
+    if (!cusps || !COACH[type]) return undefined;
+    const house = houseForSign(sign, cusps);
+    const meaning = HOUSE_MEANINGS[house - 1];
+    if (!meaning) return undefined;
+    return `Lands in your ${ordinalHouse(house)} house of ${meaning.title}, so ${COACH[type]} around your ${meaning.lifeAreas[0]}.`;
+  };
 
   for (const item of items) {
     const until = daysUntil(item.date);
@@ -116,6 +140,7 @@ export default function SkyAlert() {
         hot: isNow || event.type === "solar_eclipse" || event.type === "lunar_eclipse",
         label: copy.label,
         body: copy.body,
+        mine: personalise(event.type, event.sign),
         href: `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}${event.nodeEnd ? `&nodeEnd=${event.nodeEnd}` : ""}`,
       });
     } else {
@@ -177,7 +202,7 @@ export default function SkyAlert() {
     <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
       <div className="max-w-6xl mx-auto">
         <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
-          your cosmic weather
+          your cosmic weather{chart ? " · personalised to your chart" : ""}
         </div>
         <h2 style={{ fontFamily: poppins, fontSize: "clamp(26px, 4vw, 46px)", fontWeight: 800, letterSpacing: "-1px", textTransform: "lowercase", color: "var(--dark)", lineHeight: 1.05, marginBottom: data.eclipseSeason ? 12 : 22 }}>
           what the sky is <span style={{ color: "var(--pink)" }}>doing.</span>
@@ -196,7 +221,17 @@ export default function SkyAlert() {
                   <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)", whiteSpace: "nowrap" }}>{c.timing}</span>
                 </div>
                 <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: c.gold ? "#854F0B" : c.hot ? "var(--pink)" : "#3C2A70", marginBottom: 8 }}>{c.label}</div>
-                <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: c.gold ? "#854F0B" : "var(--grey)", display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.body}</p>
+                <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: c.gold ? "#854F0B" : "var(--grey)", display: "-webkit-box", WebkitLineClamp: c.mine ? 3 : 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.body}</p>
+                {c.mine && (
+                  <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1.5px solid rgba(26,26,26,0.12)" }}>
+                    <div style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 4 }}>
+                      for you
+                    </div>
+                    <p style={{ margin: 0, fontSize: 12, lineHeight: 1.45, color: "var(--dark)", display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                      {c.mine}
+                    </p>
+                  </div>
+                )}
                 {c.href && (
                   <span style={{ marginTop: "auto", paddingTop: 14, fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>read more →</span>
                 )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
@@ -19,15 +19,6 @@ import { addJournalEntry } from "@/lib/journal-store";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-interface CalendarEvent {
-  type: "new_moon" | "full_moon" | "solar_eclipse" | "lunar_eclipse" | "retrograde_start" | "retrograde_end" | "node_ingress";
-  date: string;
-  sign: string;
-  degree: number;
-  planet?: string;
-  nodeEnd?: "north" | "south";
-}
-
 // One personalised mission per activated house
 const HOUSE_MISSIONS: Record<number, string> = {
   1: "Debut the new you, change the profile photo, wear the look, introduce yourself the way the next version of you would.",
@@ -44,16 +35,6 @@ const HOUSE_MISSIONS: Record<number, string> = {
   12: "Protect one sacred hour a day for rest and intuition. Your breakthrough this szn comes from stillness, not hustle.",
 };
 
-const EVENT_LABELS: Record<CalendarEvent["type"], { label: string; emoji: string; coach: string }> = {
-  new_moon: { label: "new moon", emoji: "🌑", coach: "set intentions, plant what you want to grow" },
-  full_moon: { label: "full moon", emoji: "🌕", coach: "release and celebrate, see what's come to light" },
-  solar_eclipse: { label: "solar eclipse", emoji: "🌚", coach: "expect the unplanned, this door opens or closes fast" },
-  lunar_eclipse: { label: "lunar eclipse", emoji: "🌝", coach: "a sudden, undeniable ending or reveal, let it happen" },
-  retrograde_start: { label: "retrograde begins", emoji: "℞", coach: "slow down, review, double-check the details" },
-  retrograde_end: { label: "retrograde ends", emoji: "✓", coach: "green light, clear to launch and sign" },
-  node_ingress: { label: "nodal axis shifts", emoji: "☊", coach: "the collective's whole growth direction resets, this one's rare" },
-};
-
 // Finds the life-area page that best matches an activated house, primary house match first,
 // then any match, so "your theme this szn" always lands somewhere genuinely relevant.
 function findLifeAreaForHouse(house: number): string | null {
@@ -66,17 +47,9 @@ function findLifeAreaForHouse(house: number): string | null {
 export default function SeasonPersonalised() {
   const { chart, loading } = useChart();
   const season = useSeason();
-  const [calendar, setCalendar] = useState<CalendarEvent[]>([]);
   const [activeExperiment, setActiveExperiment] = useState<string | null>(null);
   const [experimentReflection, setExperimentReflection] = useState("");
   const [experimentSaved, setExperimentSaved] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/calendar")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((d) => d?.events && setCalendar(d.events))
-      .catch(() => {});
-  }, []);
 
   if (loading) return null;
 
@@ -109,8 +82,6 @@ export default function SeasonPersonalised() {
   const name = chart.birthData.name || "babe";
   const risingSign = chart.houses[0]?.sign || "";
   const sunSign = chart.planets.find((p) => p.id === "sun")?.sign || "";
-
-  const lunationHouse = (sign: string) => houseForSign(sign, cusps);
 
   const pattern = getPatternBreaking(season.sign);
   const patternWhy = whyPatternFormed(season.sign, name);
@@ -456,62 +427,11 @@ export default function SeasonPersonalised() {
         </div>
       </section>
 
-      {/* Cosmic calendar */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="tag mb-5">your cosmic calendar · personalised to your chart · tap any date for your full reading</div>
-          {calendar.length === 0 ? (
-            <p style={{ fontSize: 14, color: "var(--grey-light)" }}>Reading the sky…</p>
-          ) : (
-            <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
-              {calendar.map((event, i) => {
-                const meta = EVENT_LABELS[event.type];
-                const house = lunationHouse(event.sign);
-                const houseInfo = HOUSE_MEANINGS[house - 1];
-                const date = new Date(event.date + "T12:00:00Z");
-                const href = `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}${event.nodeEnd ? `&nodeEnd=${event.nodeEnd}` : ""}`;
-                return (
-                  <Link
-                    key={`${event.type}-${event.date}`}
-                    href={href}
-                    className="no-underline p-6 flex flex-col md:flex-row md:items-center gap-3 hover:bg-[#fafafa] transition-colors"
-                    style={{ borderBottom: i < calendar.length - 1 ? "1px solid #eee" : undefined, color: "inherit" }}
-                  >
-                    <div style={{ minWidth: 120 }}>
-                      <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800 }}>
-                        {date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                      </div>
-                      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
-                        {meta.emoji} {meta.label}
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7 }}>
-                        <strong>
-                          {event.planet ? `${event.planet.toLowerCase()} ` : ""}in {event.sign.toLowerCase()} ({event.degree}°)
-                        </strong>
-                        {`, this one lands in your ${ordinalHouse(house)} house of ${houseInfo.title}, so ${meta.coach} around your ${houseInfo.lifeAreas[0]}.`}
-                      </p>
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 9,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "var(--dark)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      read yours →
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* The "your cosmic calendar" section was removed on 16 Aug 2026. It listed the same
+          lunations and eclipses the cosmic weather rail already shows at the top of the dashboard,
+          purely to add the "lands in your Nth house" line. That line now rides along on the
+          weather card itself (SkyAlert's `mine` field), so the sky is described once instead of
+          twice. The full per-event reads still live at /your-season/moon, linked from the cards. */}
 
       {/* Seasonal prompts + affirmations, personalised */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>

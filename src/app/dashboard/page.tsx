@@ -343,7 +343,7 @@ export default function DashboardPage() {
       </section>
 
       {/* ── COSMIC WEATHER: high up, live transits ── */}
-      <SkyAlert />
+      <SkyAlert chart={chart} />
 
       {/* ── WHAT DO YOU NEED RIGHT NOW: the router ── */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
