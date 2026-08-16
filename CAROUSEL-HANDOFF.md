@@ -32,10 +32,10 @@ so there is ~8px of slack. Anything added needs re-checking against 1350.
 | 04 | your chart, fully decoded. | mint | Features pt 1: birth chart across 11 life areas, Human Design, life-area readings |
 | 05 | new season. new era. new you. | pink-light | Features pt 2: your szn, goals, shadow journal, style codes, moon audios/challenges/affirmations |
 | 06 | this is what it looks like. | cream | Three phone mockups of real product screens |
-| 07 | two live workshops. every szn. | dark | Live coaching, The Vault, the 24/7 community |
+| 07 | a masterclass. a tapping. every month. | dark | Live coaching, The Vault, the 24/7 community |
 | 08 | this szn's workshops. | gold | The two real Leo szn workshops with the real date |
 | 09 | everyone else stops at the reading. | pink-bg | Differentiation table, the rest of the internet vs MY SZN |
-| 10 | three ways in. | lav-light | The three membership tiers |
+| 10 | three ways in. | lav-light | Free, MY SZN $88, VIP $555 |
 | 11 | three seasons from now. | mint | The transformation, five concrete beats + Sarah's testimonial |
 | 12 | this is your szn. | hot pink | CTA, prices, itsmyszn.com |
 
@@ -232,19 +232,32 @@ When the pane and the file disagree, `grep` the file, it is the truth.
 > starts being something you live. Your whole chart read to the degree, your Human Design layered
 > on top, and a portal that rewrites itself every time the season turns.
 >
-> Two live coaching workshops every szn. A community that actually knows your chart. Three ways
-> in, from $33.
+> A live masterclass and a live astro tapping every month. A community that actually knows your
+> chart. Free to join, and the full thing is $88.
 >
-> Founding member pricing is open now. Link in bio.
+> Doors are open now. Link in bio.
+
+## Pricing has already changed once. Check it before every post.
+
+As of **16 Aug 2026** the membership sells as **Free / MY SZN $88 / VIP $555**. It previously sold
+as **Social $33 / MY SZN $111 / VIP $555**, and the carousel shipped with those old numbers before
+being corrected. The `$33` Social tier is **retired from sale**: free now owns the chat rooms, so
+Social had nothing uniquely its own. The tier still exists in `stripe-tiers.ts` and still passes
+the access gates so existing $33 members keep what they pay for, but nobody new can buy it.
+
+The workshop cadence changed at the same time, from "two live workshops every szn" to **one live
+masterclass and one live astro tapping every month**, which is what slide 07 now says.
+
+**Before posting, re-read `app/src/app/membership/page.tsx` and diff the prices and the cadence
+against slides 07, 10 and 12.** This deck has gone stale twice already.
 
 ## Open items
 
-1. **The $33 Social tier cannot be bought.** `SOCIAL_CHECKOUT_URL` is still `undefined` in
-   `app/src/app/membership/page.tsx`, and the Stripe product does not exist. Slide 10 sells it.
-   Create the product and paste the payment link, or pull Social off the slide before posting.
-2. **Gem licence** — see the caveat above.
-3. **Numerology** — a stored memory says the numerology feature shipped in full, but there is no
-   trace of it anywhere in `app/src`. The memory looks stale. Left out of the carousel.
+1. **Gem licence** — see the caveat above.
+2. **Slide 08 carries dated workshops.** It currently names the 3 August masterclass as a replay
+   and the 17 August astro tapping as the next live class, which is correct as of 16 Aug 2026 and
+   goes stale the moment 17 August passes. `app/src/lib/workshops.ts` is the source; Virgo szn
+   classes are on 26 August and 2 September.
 
 ## Source of truth for facts on the slides
 
