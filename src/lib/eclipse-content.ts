@@ -1,4 +1,4 @@
-// The eclipse engine. An eclipse is not just a bigger moon: it is a lunation landing on the lunar
+// The eclipse engine. An eclipse is a lunation landing on the lunar
 // nodes, the chart's fated axis, so it gets its own composer rather than sharing the generic moon
 // template in moon-content.ts. It reads the eclipse in her chart, works out which end of her nodal
 // axis it sits on, and coaches the fated-versus-yours distinction that ordinary moons never need.
@@ -71,8 +71,8 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
   const dateLabel = date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
   const whatThisIs = isLunar
-    ? `A lunar eclipse is a full moon with the earth's shadow across it, and it sits on the lunar nodes, the fated axis of the chart. That is what turns it from a bright night into something with force behind it: it forces a culmination rather than simply lighting one. This one falls in ${eSign}, on the ${onNorth ? "north node, the growth end" : "south node, the release end"} of the axis the whole collective is moving along, so it tends to land as an ending or a reckoning that arrives on its own timeline, not yours.`
-    : `A solar eclipse is a new moon with the moon blocking out the sun, and it sits on the lunar nodes, the fated axis of the chart. That is what turns it from a strong reset into something with real weight: it forces a beginning rather than gently seeding one. This one falls in ${eSign}, on the ${onNorth ? "north node, the growth end" : "south node, the release end"} of the axis the whole collective is moving along, so it tends to arrive as an event, a door opening or closing, on a timeline that is not yours to set.`;
+    ? `A lunar eclipse happens when the moon lands right on the lunar nodes, the fated axis of the chart, the line the whole collective is being moved along. That is where the weight comes from: sitting on the axis forces a culmination rather than simply lighting one. This one falls in ${eSign}, on the ${onNorth ? "north node, the growth end" : "south node, the release end"}, so it tends to land as an ending or a reckoning that arrives on its own timeline, not yours.`
+    : `A solar eclipse happens when the moon lands right on the lunar nodes, the fated axis of the chart, the line the whole collective is being moved along, and blocks out the sun as it does. That is where the weight comes from: sitting on the axis forces a beginning rather than gently seeding one. This one falls in ${eSign}, on the ${onNorth ? "north node, the growth end" : "south node, the release end"}, so it tends to arrive as an event, a door opening or closing, on a timeline that is not yours to set.`;
 
   const primer: ReadingSection[] = [
     {
