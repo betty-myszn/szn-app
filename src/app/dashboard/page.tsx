@@ -363,25 +363,7 @@ export default function DashboardPage() {
         <div className="max-w-6xl mx-auto">
           <div style={eyebrow}>for you, right now</div>
           <h2 style={{ ...sectionHead, marginBottom: 26 }}>what your szn is <span className="pk">asking of you.</span></h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div style={{ borderRadius: 22, background: "#fff", border: "2px solid var(--pink)", padding: 30 }}>
-              <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey)", marginBottom: 12 }}>your goal this szn</div>
-              {primaryGoal ? (
-                <>
-                  <h3 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 16 }}>{primaryGoal.title}</h3>
-                  <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.6, marginBottom: 18 }}>
-                    {szn?.manifestationMission ? `This szn's move: ${szn.manifestationMission.actionStep}` : `${season.sign} season is backing this one. Front-load the brave moves.`}
-                  </p>
-                  <Link href="/goals" className="no-underline" style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>open my goals →</Link>
-                </>
-              ) : (
-                <>
-                  <h3 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 12 }}>name what you&apos;re calling in.</h3>
-                  <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.6, marginBottom: 18 }}>Set a goal and your whole portal starts personalising around it.</p>
-                  <Link href="/goals" className="no-underline" style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>set my goal →</Link>
-                </>
-              )}
-            </div>
+          <div className="grid grid-cols-1 gap-4">
             <div style={{ borderRadius: 22, background: "var(--dark)", color: "#fff", padding: 30 }}>
               <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>the pattern i&apos;m noticing</div>
               {pattern && pattern.severity !== "active" ? (
