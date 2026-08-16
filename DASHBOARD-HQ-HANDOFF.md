@@ -64,7 +64,13 @@ old dashboard and need rebuilding in the new pastel/rounded language:
 - `LifeAreasGuide` → the prototype turns this into a **life-areas accordion** ("love + relationships",
   "money + career", "confidence + visibility", "creativity + pleasure"), each row expands to a short
   line + "read the full area →". Data via `composeLifeArea` per area.
-- `SeasonDesignInline` (Human Design × season)
+- ~~`SeasonDesignInline` (Human Design × season)~~ **DONE 16 Aug.** Was rendering the full
+  16-section reading inline and ran longer than the rest of the dashboard combined. Now a compact
+  block: four snapshot pills (type / strategy / authority / profile), the `typeLens.summary` line,
+  then six collapsed rows (design in full, what the season asks, centres, purpose+business+love+
+  money, shadow work + practice, challenge + weekly). Links out to `/your-season/human-design` for
+  the long read, which still uses the original `SeasonDesignReadingView` untouched. The daily
+  "today" panel is deliberately not repeated, the dashboard already opens with one.
 - `SeasonPersonalised` (full season guide; anchor `#season-guide` links here from the router)
 - `SeasonMeditation`
 Also pending: per-season hero art for non-Leo signs; "season progress" copy for now/next/revisit.
