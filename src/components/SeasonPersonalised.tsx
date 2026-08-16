@@ -11,7 +11,6 @@ import {
   whyPatternFormed,
   getFutureSelfPortrait,
   getFutureSelfLetter,
-  SIGNS_ON_THE_RIGHT_PATH,
   EXPERIMENTS,
   pickRecommendedExperiment,
 } from "@/lib/season-coaching";
@@ -157,16 +156,6 @@ export default function SeasonPersonalised() {
         </div>
       </section>
 
-      {/* Betty's Take */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto p-8" style={{ background: "var(--dark)" }}>
-          <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
-          <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>
-            {`${name}, I've coached a lot of women through a ${season.sign.toLowerCase()} szn, and the ones who get the most out of it aren't the ones who read the most about it, they're the ones who actually do something uncomfortable with it. Your ${ordinalHouse(activatedHouse)} house is lit up right now, which means ${houseMeaning.lifeAreas[0]} is the arena the universe picked for you this time, not somewhere safer. Don't redirect the energy somewhere more comfortable. Point it exactly where it's already pointing.`}
-          </p>
-        </div>
-      </section>
-
       {/* The Pattern You're Breaking */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
@@ -265,32 +254,6 @@ export default function SeasonPersonalised() {
           <Link href="/challenges" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
             open seasonal challenges
           </Link>
-        </div>
-      </section>
-
-      {/* Signs You're On The Right Path */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="tag mb-2">signs you&apos;re on the right path</div>
-          <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 20 }}>
-            you&apos;ll know this work is landing when&hellip;
-          </h2>
-          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {SIGNS_ON_THE_RIGHT_PATH.map((sign, i) => (
-              <div
-                key={sign}
-                className="p-6 flex items-start gap-3"
-                style={{
-                  borderRight: i % 2 === 0 ? "var(--border)" : undefined,
-                  borderBottom: i + 2 < SIGNS_ON_THE_RIGHT_PATH.length ? "var(--border)" : undefined,
-                  background: i % 2 === 0 ? "#fff" : "var(--cream)",
-                }}
-              >
-                <span style={{ color: "var(--pink)", fontSize: 16, fontWeight: 800 }}>✓</span>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>{sign}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

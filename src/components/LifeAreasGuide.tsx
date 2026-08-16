@@ -29,8 +29,8 @@ export default function LifeAreasGuide({
         <h2 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.7px", marginBottom: 10 }}>
           how {season.sign.toLowerCase()} szn is hitting every part of your life.
         </h2>
-        <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, marginBottom: 24, maxWidth: 640 }}>
-          Tap any area for its full landing page: what&apos;s actually being activated in your chart, the live transit hitting it right now, Betty&apos;s take, your protocol, affirmations and activation ritual.
+        <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, marginBottom: 20, maxWidth: 640 }}>
+          Tap any area for what&apos;s being activated in your chart, the live transit hitting it right now, your protocol, affirmations and activation ritual.
         </p>
         {!chart ? (
           <div>
@@ -38,49 +38,62 @@ export default function LifeAreasGuide({
             <Link href="/onboarding" className="btn-pink">add your chart</Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {LIFE_AREAS.map((area, i) => {
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(215px, 1fr))",
+              gap: 10,
+            }}
+          >
+            {LIFE_AREAS.map((area) => {
               const reading = composeLifeArea(area.id, chart, season, goal);
+              const tied = Boolean(goal && reading?.goalTieIn);
               return (
                 <Link
                   key={area.id}
                   href={`/your-season/life/${area.id}`}
-                  className="no-underline p-6 hover:bg-[#fafafa] transition-colors"
+                  className="no-underline hover:opacity-90 transition-opacity"
                   style={{
-                    borderRight: i % 2 === 0 ? "var(--border)" : undefined,
-                    borderBottom: i < LIFE_AREAS.length - 2 ? "var(--border)" : undefined,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 11,
+                    padding: "14px 16px",
+                    borderRadius: 14,
+                    border: `2px solid ${tied ? "var(--pink)" : "var(--dark)"}`,
+                    background: tied ? "var(--pink-bg)" : "#fff",
                     color: "var(--dark)",
                   }}
                 >
-                  <div className="flex items-center gap-3 mb-2 flex-wrap">
-                    <span style={{ fontSize: 20 }}>{area.emoji}</span>
-                    <span style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, letterSpacing: "-0.3px" }}>
+                  <span style={{ fontSize: 21, lineHeight: 1, flexShrink: 0 }}>{area.emoji}</span>
+                  <span style={{ minWidth: 0, flex: 1 }}>
+                    <span
+                      style={{
+                        display: "block",
+                        fontFamily: poppins,
+                        fontSize: 15,
+                        fontWeight: 800,
+                        letterSpacing: "-0.3px",
+                        lineHeight: 1.2,
+                      }}
+                    >
                       {area.label}
                     </span>
                     <span
                       style={{
-                        fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                        background: "var(--lav-light)", color: "#3C2A70", padding: "3px 9px",
+                        display: "block",
+                        fontSize: 9.5,
+                        fontWeight: 700,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: tied ? "var(--pink)" : "#3C2A70",
+                        marginTop: 3,
                       }}
                     >
-                      {ordinalHouse(area.houseNumbers[0])} house
+                      {tied ? "tied to your goal" : `${ordinalHouse(area.houseNumbers[0])} house`}
                     </span>
-                    {goal && reading?.goalTieIn && (
-                      <span
-                        style={{
-                          fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                          background: "var(--pink)", color: "var(--dark)", padding: "3px 9px",
-                        }}
-                      >
-                        tied to your goal
-                      </span>
-                    )}
-                  </div>
-                  <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 10 }}>
-                    {reading?.quickSummary}
-                  </p>
-                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>
-                    how {season.sign.toLowerCase()} szn affects your {area.label} →
+                  </span>
+                  <span aria-hidden style={{ fontSize: 15, color: "var(--pink)", flexShrink: 0 }}>
+                    &rarr;
                   </span>
                 </Link>
               );

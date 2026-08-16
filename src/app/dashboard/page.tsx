@@ -465,6 +465,10 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      {/* ── your full personalised season guide (reused) ── */}
+      <div id="season-guide" />
+      <SeasonPersonalised />
+
       {/* ── COACHING: bring me your actual life, with a live countdown ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
         <div className="max-w-6xl mx-auto">
@@ -515,10 +519,6 @@ export default function DashboardPage() {
 
       {/* ── human design × season (reused) ── */}
       <SeasonDesignInline />
-
-      {/* ── your full personalised season guide (reused) ── */}
-      <div id="season-guide" />
-      <SeasonPersonalised />
 
       {/* ── this szn's meditation (reused) ── */}
       <SeasonMeditation sign={season.sign} />
