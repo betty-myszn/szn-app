@@ -94,7 +94,17 @@ already derives:
 6. **Personalised journal prompts.** Currently generic per event type.
 7. **Voice.** The existing copy is the "polished astrologer" register Betty is rejecting.
 
-## Bug to fix first, it affects live readings today
+## ~~Bug to fix first~~ FIXED 16 Aug 2026 (commit a708d18)
+
+`houseForLongitude(longitude, cusps)` and `longitudeForSignDegree(sign, degree)` now exist in
+`interpretations.ts`. The eclipse, both ends of its nodal axis, every lunation, and the "for you"
+line on the cosmic weather rail all place by real degree. Season placement still uses the
+midpoint, which is correct there. Regression covered in `__tests__/house-for-longitude.test.ts`.
+
+**Use `houseForLongitude` for anything dated in the new eclipse work.** The original problem is
+described below, kept because it explains why the two functions exist.
+
+## The bug, for context
 
 `houseForSign(sign, cusps)` in `src/lib/interpretations.ts:10` places an event by the **midpoint
 of its sign**, hardcoded as `idx * 30 + 15`. It ignores the actual degree.
