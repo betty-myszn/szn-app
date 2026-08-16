@@ -24,6 +24,9 @@ export interface Workshop {
   replayPublishedAt: string | null;
   paragraphs: string[];
   callout: { plain: string; pink: string } | null;
+  /** Cover image for the workshop card/carousel (path under /public). Optional; cards fall back to
+   *  a gradient when there's no cover yet. */
+  coverImage?: string;
 }
 
 export const WORKSHOPS: Workshop[] = [
@@ -32,6 +35,7 @@ export const WORKSHOPS: Workshop[] = [
     label: "leo szn workshop 1",
     meta: "3 august · 7pm la time · first live class",
     title: "Leo Season: Enter Your Main Character Era",
+    coverImage: "/leo-workshop-cover.png",
     dark: true,
     startIso: "2026-08-03T19:00:00-07:00",
     durationMinutes: 75,
@@ -57,6 +61,7 @@ export const WORKSHOPS: Workshop[] = [
     label: "leo szn workshop 2",
     meta: "17 august · 7pm la time · next live class",
     title: "Visible AF: How to Show Up & Get Paid",
+    coverImage: "/visible-af-cover.png",
     dark: false,
     startIso: "2026-08-17T19:00:00-07:00",
     durationMinutes: 75,

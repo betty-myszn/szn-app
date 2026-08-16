@@ -13,7 +13,8 @@ import { SIGN_OVERVIEWS } from "@/lib/interpretations";
 import { GOAL_CATEGORY_TO_LIFE_AREA } from "@/lib/goals-store";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
-import { useEffect, useState } from "react";
+import { upcomingWorkshops, pastWorkshops, countdownTo, type Workshop } from "@/lib/workshops";
+import { useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
 import { loadGoals, getPrimaryGoal, type Goal } from "@/lib/goals-store";
@@ -23,13 +24,11 @@ import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type Da
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
 import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
-import SeasonExplore from "@/components/SeasonExplore";
 import SeasonThemes from "@/components/SeasonThemes";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
-import UpcomingEvents from "@/components/UpcomingEvents";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
@@ -82,6 +81,16 @@ export default function DashboardPage() {
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
   const [pollDraft, setPollDraft] = useState("");
   const [pollSubmitted, setPollSubmitted] = useState(false);
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Ticks the workshop countdown once a second.
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const scrollTrack = (dir: 1 | -1) => trackRef.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
 
   useEffect(() => {
     setStreak(computeJournalStreak(loadJournalEntries()));
@@ -164,6 +173,34 @@ export default function DashboardPage() {
     szn?.manifestationMission?.actionStep ||
     szn?.journalPrompts?.[0]?.prompt ||
     "Do the one brave thing you keep talking yourself out of.";
+
+  // Workshops for the carousel: what's still to come first, then finished ones as replays.
+  const upcoming = upcomingWorkshops(nowMs);
+  const past = pastWorkshops(nowMs);
+  const workshopSlides: { w: Workshop; kind: "upcoming" | "replay" }[] = [
+    ...upcoming.map((w) => ({ w, kind: "upcoming" as const })),
+    ...past.map((w) => ({ w, kind: "replay" as const })),
+  ];
+  const nextDated = upcoming.find((w) => w.startIso) ?? null;
+  const countdown = nextDated?.startIso ? countdownTo(nextDated.startIso, nowMs) : null;
+
+  // Season progress: week X of N, derived from the season's own start/end dates so it never needs
+  // hand-updating. Handles the one season (Capricorn) that wraps across new year.
+  const seasonProgress = (() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    let start = new Date(y, season.startMonth - 1, season.startDay);
+    let end = new Date(y, season.endMonth - 1, season.endDay);
+    if (end < start) {
+      if (now < start) start = new Date(y - 1, season.startMonth - 1, season.startDay);
+      else end = new Date(y + 1, season.endMonth - 1, season.endDay);
+    }
+    const totalDays = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000));
+    const elapsed = Math.min(totalDays, Math.max(0, Math.round((now.getTime() - start.getTime()) / 86400000)));
+    const totalWeeks = Math.max(1, Math.ceil(totalDays / 7));
+    return { totalWeeks, currentWeek: Math.min(totalWeeks, Math.floor(elapsed / 7) + 1) };
+  })();
+  const pad2 = (n: number) => String(n).padStart(2, "0");
 
   // "what do you need right now" routes to real destinations.
   const NEEDS = [
@@ -379,8 +416,93 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── HAPPENING: live workshops (reused, real data + countdown) ── */}
-      <UpcomingEvents />
+      {/* ── HAPPENING: workshops carousel with cover images ── */}
+      <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 26 }}>
+            <div>
+              <div style={eyebrow}>happening this szn</div>
+              <h2 style={sectionHead}>live this <span className="pk">month.</span></h2>
+            </div>
+            <div className="flex gap-2.5">
+              <button onClick={() => scrollTrack(-1)} aria-label="previous workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>‹</button>
+              <button onClick={() => scrollTrack(1)} aria-label="next workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>›</button>
+            </div>
+          </div>
+          <div ref={trackRef} style={{ display: "flex", gap: 16, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory" }}>
+            {workshopSlides.map(({ w, kind }) => (
+              <article key={w.id} style={{ flex: "0 0 320px", scrollSnapAlign: "start", borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "#fff", display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    height: 160,
+                    display: "grid",
+                    placeItems: "center",
+                    background: w.coverImage ? "#211d2c" : "linear-gradient(135deg, var(--pink), var(--lav))",
+                    backgroundImage: w.coverImage ? `url(${w.coverImage})` : undefined,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  {kind === "replay" && (
+                    <span style={{ width: 54, height: 54, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.92)", display: "grid", placeItems: "center", color: "#fff", fontSize: 16, paddingLeft: 3 }}>▶</span>
+                  )}
+                </div>
+                <div style={{ padding: 22, display: "flex", flexDirection: "column", flex: 1 }}>
+                  <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>{w.meta}</div>
+                  <h3 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.15, color: "var(--dark)" }}>{w.title}</h3>
+                  <div style={{ marginTop: "auto", paddingTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 40, background: kind === "upcoming" ? "var(--pink)" : "transparent", color: kind === "upcoming" ? "#fff" : "var(--grey)", border: kind === "upcoming" ? "none" : "1.5px solid #ddd" }}>
+                      {kind === "upcoming" ? "upcoming" : "replay"}
+                    </span>
+                    <Link href="/events" className="no-underline" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
+                      {kind === "upcoming" ? "save my seat →" : "watch →"}
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── COACHING: bring me your actual life, with a live countdown ── */}
+      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
+        <div className="max-w-6xl mx-auto">
+          <div style={{ ...eyebrow, color: "var(--pink)" }}>live coaching</div>
+          <div className="grid grid-cols-1 md:grid-cols-[1.35fr_1fr]" style={{ borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)" }}>
+            <div style={{ padding: "clamp(28px, 4vw, 42px)", background: "#fff" }}>
+              <h2 style={sectionHead}>bring me your <span className="pk">actual life.</span></h2>
+              <p style={{ color: "var(--grey)", fontSize: 15, lineHeight: 1.75, maxWidth: 440, margin: "14px 0 24px" }}>
+                Coaching is where the astrology gets practical. Money, visibility, relationships, business, identity or a full existential wobble. You bring it, we work it live.
+              </p>
+              <Link href="/events" className="no-underline" style={{ display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 40 }}>
+                book into coaching
+              </Link>
+            </div>
+            <div style={{ padding: "clamp(28px, 4vw, 40px)", background: "var(--pink)", color: "#fff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              {nextDated ? (
+                <>
+                  <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}>next live session starts in</div>
+                  {countdown && (
+                    <div className="flex gap-2.5" style={{ marginBottom: 16 }}>
+                      {[{ n: countdown.days, l: "days" }, { n: countdown.hours, l: "hrs" }, { n: countdown.minutes, l: "min" }, { n: countdown.seconds, l: "sec" }].map((b) => (
+                        <div key={b.l} style={{ flex: 1, textAlign: "center", background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "12px 0" }}>
+                          <div style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{pad2(b.n)}</div>
+                          <div style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginTop: 5 }}>{b.l}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", marginBottom: 20, lineHeight: 1.5 }}>{nextDated.title}<br />{nextDated.meta}</div>
+                  <Link href="/events" className="no-underline" style={{ alignSelf: "flex-start", background: "#fff", color: "var(--pink)", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "13px 26px", borderRadius: 40 }}>save my seat</Link>
+                </>
+              ) : (
+                <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 800 }}>Your next live session drops soon. ✦</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── the season's four themes ── */}
       <SeasonThemes season={season} />
@@ -467,8 +589,65 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── explore further / the vault (reused) ── */}
-      <SeasonExplore season={season} />
+      {/* ── SEASON PROGRESS ── */}
+      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div>
+            <div style={{ ...eyebrow, color: "var(--pink)" }}>season progress</div>
+            <h2 style={{ ...sectionHead, color: "#3C2A70", fontSize: "clamp(24px, 3.6vw, 38px)" }}>
+              {sign} szn · week {seasonProgress.currentWeek} of {seasonProgress.totalWeeks}
+            </h2>
+            <div className="flex gap-1.5" style={{ marginTop: 16 }}>
+              {Array.from({ length: seasonProgress.totalWeeks }).map((_, i) => (
+                <span key={i} style={{ height: 12, flex: 1, borderRadius: 40, border: "2px solid var(--purple)", background: i < seasonProgress.currentWeek ? "var(--pink)" : "transparent", borderColor: i < seasonProgress.currentWeek ? "var(--pink)" : "var(--purple)" }} />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-8" style={{ color: "#3C2A70" }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>now</div>
+              <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{season.themes[0]}</div>
+            </div>
+            {nextDated && (
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>next up</div>
+                <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{nextDated.title}</div>
+              </div>
+            )}
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>revisit</div>
+              <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>your replays</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE VAULT: missed something ── */}
+      <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 22 }}>
+            <div>
+              <div style={{ ...eyebrow, color: "var(--grey)" }}>missed something?</div>
+              <h2 style={{ ...sectionHead, fontSize: "clamp(22px, 3.4vw, 34px)" }}>the <span className="pk">vault.</span></h2>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            {[
+              { sym: "✦", t: "every season", b: "Past szns, all in one place.", href: "/seasons" },
+              { sym: "▷", t: "workshop replays", b: "Every class, saved forever.", href: "/events" },
+              { sym: "☾", t: "your wrapped", b: "Everything you've done this szn.", href: "/your-season/wrapped" },
+            ].map((v) => (
+              <Link key={v.t} href={v.href} className="no-underline" style={{ borderRadius: 14, border: "2px solid var(--dark)", overflow: "hidden", color: "var(--dark)" }}>
+                <div style={{ height: 66, display: "grid", placeItems: "center", fontSize: 26, background: "linear-gradient(135deg, var(--lav-light), var(--pink-bg))" }}>{v.sym}</div>
+                <div style={{ padding: "16px 18px" }}>
+                  <h4 style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, textTransform: "lowercase", marginBottom: 3 }}>{v.t}</h4>
+                  <p style={{ margin: 0, fontSize: 11, color: "var(--grey)" }}>{v.b}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── customise: what she reads, moved to the foot ── */}
       <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
