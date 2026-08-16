@@ -64,13 +64,26 @@ old dashboard and need rebuilding in the new pastel/rounded language:
 - `LifeAreasGuide` → the prototype turns this into a **life-areas accordion** ("love + relationships",
   "money + career", "confidence + visibility", "creativity + pleasure"), each row expands to a short
   line + "read the full area →". Data via `composeLifeArea` per area.
-- ~~`SeasonDesignInline` (Human Design × season)~~ **DONE 16 Aug.** Was rendering the full
-  16-section reading inline and ran longer than the rest of the dashboard combined. Now a compact
-  block: four snapshot pills (type / strategy / authority / profile), the `typeLens.summary` line,
-  then six collapsed rows (design in full, what the season asks, centres, purpose+business+love+
-  money, shadow work + practice, challenge + weekly). Links out to `/your-season/human-design` for
-  the long read, which still uses the original `SeasonDesignReadingView` untouched. The daily
-  "today" panel is deliberately not repeated, the dashboard already opens with one.
+- ~~`SeasonDesignInline` (Human Design × season)~~ **DONE 16 Aug.** Now a **doorway, not a
+  reading**: one gradient card with four snapshot pills (type / strategy / authority / profile),
+  the `typeLens.summary` line, chips naming what the full read covers, and a button to
+  `/your-season/human-design`. The full 16-section `SeasonDesignReadingView` is untouched and
+  still lives on that page with its own hero.
+
+  It took three passes to get here, which is worth knowing before anyone "improves" it again:
+  full reading inline (far too long) → six collapsed accordion rows (shorter, but still a whole
+  reading parked mid-scroll) → doorway. Betty's steer was *"is there something like a guide that's
+  needed for your astrology and your human design... this page scrolls down way too much"*, then
+  *"unless we just do it as a hd section that opens up to a new landing page?"*. **Do not push the
+  reading back inline.**
+
+  A per-area weave was considered and not taken: `WovenAreaRead.tsx` already merges astrology and
+  HD on each `/your-season/life/[area]` page, and `AREA_DESIGN` in `life-area-design.ts` covers 10
+  of the 11 areas (only `style-fashion` is missing, ~9 lines of config). That remains the obvious
+  route if the area grid should ever carry a "your design" line per card. The blocker is that
+  roughly half the HD reading is whole-person, not area-shaped: type, strategy, authority,
+  profile, definition, incarnation cross, the season challenge, the weekly check-in and the
+  EFT/somatic practices have no single area to belong to.
 - `SeasonPersonalised` (full season guide; anchor `#season-guide` links here from the router)
 - `SeasonMeditation`
 Also pending: per-season hero art for non-Leo signs; "season progress" copy for now/next/revisit.
