@@ -632,10 +632,10 @@ export default function MembershipPage() {
                 If you&apos;ve been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines... we&apos;re changing that.
               </p>
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 16 }}>
-                We&apos;re diving into the astrology behind visibility, personal branding and becoming known for what you do. The placements that reveal how you&apos;re designed to communicate, market yourself, attract opportunities and build a brand that people actually remember. Plus the fears that keep you hiding, people-pleasing, overthinking and making yourself smaller than your vision.
+                This is a tapping workshop, so we work underneath the mindset advice, down at the wiring. The shrinking, the over-editing, the waiting until you feel ready, all of it is your nervous system reading visibility as danger and money as unsafe, and we tap through those exact charges, the fear of being seen, judged, too much or wrong, until your body stops bracing every time you go to put yourself out there.
               </p>
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 24 }}>
-                Create content that feels magnetic, talk about your offers without feeling awkward, own your expertise, and build the kind of visibility that creates real momentum in your business. Wrapping up with powerful tapping and embodiment work to help you release the fear of being seen, back yourself unapologetically, and start showing up like the woman who&apos;s already decided she&apos;s getting paid.
+                By the end you&apos;ll have started reprogramming the beliefs that kept you hidden and small, so showing up, talking about your offers and charging what you&apos;re worth begins to feel natural instead of terrifying. You leave with the tapping rounds to keep going at home, and the settled, backed-yourself energy of a woman who has already decided she&apos;s getting paid.
               </p>
               <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
                 {ctaLabel}

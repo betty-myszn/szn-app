@@ -69,8 +69,8 @@ export const WORKSHOPS: Workshop[] = [
     paragraphs: [
       "You weren't born to be the internet's best kept secret.",
       "If you've been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines… we're changing that.",
-      "We're diving into the astrology behind visibility, personal branding and becoming known for what you do. The placements that reveal how you're designed to communicate, market yourself, attract opportunities and build a brand that people actually remember. Plus the fears that keep you hiding, people-pleasing, overthinking and making yourself smaller than your vision.",
-      "Create content that feels magnetic, talk about your offers without feeling awkward, own your expertise, and build the kind of visibility that creates real momentum in your business. Wrapping up with powerful tapping and embodiment work to help you release the fear of being seen, back yourself unapologetically, and start showing up like the woman who's already decided she's getting paid.",
+      "This is a tapping workshop, so we work underneath the mindset advice, down at the wiring. The shrinking, the over-editing, the waiting until you feel ready, all of it is your nervous system reading visibility as danger and money as unsafe, and we tap through those exact charges, the fear of being seen, judged, too much or wrong, until your body stops bracing every time you go to put yourself out there.",
+      "By the end you'll have started reprogramming the beliefs that kept you hidden and small, so showing up, talking about your offers and charging what you're worth begins to feel natural instead of terrifying. You leave with the tapping rounds to keep going at home, and the settled, backed-yourself energy of a woman who has already decided she's getting paid.",
     ],
     callout: null,
   },

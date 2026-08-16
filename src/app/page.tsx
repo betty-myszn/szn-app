@@ -577,6 +577,110 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── PODCAST: the free way in. A subscribe block for logged-out visitors, mirroring the
+           /podcast hero but condensed. Real Spotify + Apple show links. Buttons are brand-styled
+           (pink/black) rather than platform green, to keep the homepage on the brand palette. ── */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
+      >
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div
+              style={{
+                fontFamily: poppins,
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "var(--pink)",
+                marginBottom: 20,
+              }}
+            >
+              the myszn podcast · new episodes weekly
+            </div>
+            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 76px)", color: "#3C2A70" }}>
+              subscribe & never
+              <br />
+              miss an <span className="pk">episode.</span>
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.8, color: "#3C2A70", maxWidth: 460, margin: "22px 0 28px", fontWeight: 500 }}>
+              The weekly pep talk your future self would give you. Astrology, money, manifestation and
+              main character energy. Free, no membership needed.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://open.spotify.com/show/7Hi3IXajGlE1LuZD5sf08a?si=445720c35a884330"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px",
+                  background: "var(--dark)", color: "#fff", fontFamily: poppins, fontSize: 13,
+                  fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden>
+                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                </svg>
+                Spotify
+              </a>
+              <a
+                href="https://podcasts.apple.com/gb/podcast/my-szn/id1870482009"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px",
+                  background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 13,
+                  fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden>
+                  <path d="M5.34 0A5.328 5.328 0 000 5.34v13.32A5.328 5.328 0 005.34 24h13.32A5.328 5.328 0 0024 18.66V5.34A5.328 5.328 0 0018.66 0H5.34zm6.525 2.568c4.988 0 8.94 3.16 9.69 7.62.06.36-.18.72-.54.78-.36.06-.72-.18-.78-.54C19.56 6.36 16.11 3.6 11.88 3.6c-4.32 0-7.86 2.88-8.46 6.96-.06.36-.42.6-.78.54-.36-.06-.6-.42-.54-.78.72-4.56 4.8-7.752 9.765-7.752zM12 7.2c3.36 0 6.12 2.16 6.6 5.22.06.36-.18.72-.54.78-.36.06-.72-.18-.78-.54C16.92 10.08 14.7 8.28 12 8.28c-2.76 0-5.04 1.92-5.34 4.5-.06.36-.42.6-.78.54-.36-.06-.6-.42-.54-.78C5.76 9.48 8.58 7.2 12 7.2zm-.06 4.44c1.98 0 3.54 1.32 3.84 3.24.12.6.12 1.44-.12 2.52l-.6 2.28c-.18.66-.78 1.08-1.44 1.08h-3.36c-.66 0-1.26-.42-1.44-1.08l-.6-2.28c-.18-.84-.24-1.68-.06-2.52.36-1.92 1.86-3.24 3.78-3.24z" />
+                </svg>
+                Apple Podcasts
+              </a>
+            </div>
+          </div>
+
+          {/* Podcast artwork as the visual, framed with a "now playing" bar to echo the player in the
+              reference without needing a device-frame asset. */}
+          <div className="justify-self-center md:justify-self-end" style={{ width: "100%", maxWidth: 380 }}>
+            <div style={{ border: "var(--border)", background: "#fff" }}>
+              <Image
+                src="/myszn-podcast.png"
+                alt="MY SZN podcast cover art"
+                width={752}
+                height={754}
+                sizes="(max-width: 768px) 100vw, 380px"
+                style={{ width: "100%", height: "auto", aspectRatio: "1", objectFit: "cover", display: "block" }}
+              />
+              <div className="flex items-center gap-3 px-4 py-3" style={{ borderTop: "var(--border)" }}>
+                <span
+                  aria-hidden
+                  style={{
+                    width: 34, height: 34, flex: "none", borderRadius: "50%", background: "var(--pink)",
+                    color: "#fff", display: "grid", placeItems: "center", fontSize: 13,
+                  }}
+                >
+                  ▶
+                </span>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontFamily: poppins, fontSize: 12, fontWeight: 800, color: "var(--dark)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    latest episode
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--grey)" }}>the myszn podcast</div>
+                </div>
+                <span style={{ marginLeft: "auto", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
+                  new
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 9. CLOSING CTA: black, biggest type on the page ── */}
       <section
         id="waitlist"
