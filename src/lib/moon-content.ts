@@ -6,6 +6,8 @@ import {
   HOUSE_MEANINGS,
   ordinalHouse,
   houseForSign,
+  longitudeForSignDegree,
+  houseForLongitude,
   degreeMeaning,
   type SignTraits,
   type HouseMeaning,
@@ -271,7 +273,10 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
 
   const meta = EVENT_TYPE_META[event.type];
   const cusps = chart.houses.map((h) => h.longitude);
-  const house = houseForSign(event.sign, cusps);
+  // The lunation happens at a specific degree, so place it there. A sign can straddle two
+  // houses, and the midpoint fallback used to report the wrong one whenever it did.
+  const lunationLon = longitudeForSignDegree(event.sign, event.degree);
+  const house = lunationLon === null ? houseForSign(event.sign, cusps) : houseForLongitude(lunationLon, cusps);
   const houseMeaning = HOUSE_MEANINGS[house - 1];
   const traits = SIGN_TRAITS[event.sign] || SIGN_TRAITS.Leo;
   const bodyLabel = event.planet ? event.planet.toLowerCase() : "moon";

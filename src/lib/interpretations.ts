@@ -7,18 +7,44 @@ import { ZODIAC_SIGNS, type ChartData } from "@/types/chart";
 // Which natal house a given zodiac sign's midpoint falls in, given the natal house cusps.
 // Shared by any content engine that needs to place a transiting sign (season, lunation) into
 // the member's own chart rather than a generic sun-sign reading.
-export function houseForSign(sign: string, cusps: number[]): number {
-  const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
-  if (idx < 0 || cusps.length !== 12) return 1;
-  const longitude = idx * 30 + 15;
+/**
+ * Which house a specific ecliptic longitude falls in.
+ *
+ * Use this for anything that happens at a real degree: an eclipse, a lunation, a transit. House
+ * cusps rarely sit at 0° of a sign, so a sign can straddle two houses, and placing an event by
+ * its sign alone puts it in the wrong one whenever it falls the far side of the cusp.
+ */
+export function houseForLongitude(longitude: number, cusps: number[]): number {
+  if (cusps.length !== 12 || !Number.isFinite(longitude)) return 1;
+  const lon = ((longitude % 360) + 360) % 360;
   for (let i = 0; i < 12; i++) {
     const start = cusps[i];
     const end = cusps[(i + 1) % 12];
-    const norm = ((longitude - start + 360) % 360);
-    const span = ((end - start + 360) % 360);
+    const norm = (lon - start + 360) % 360;
+    const span = (end - start + 360) % 360;
     if (norm < span) return i + 1;
   }
   return 1;
+}
+
+/** The ecliptic longitude of a given degree of a given sign, e.g. 4° Pisces → 334. */
+export function longitudeForSignDegree(sign: string, degree: number): number | null {
+  const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
+  if (idx < 0) return null;
+  const d = Number.isFinite(degree) ? Math.max(0, Math.min(29.999, degree)) : 15;
+  return idx * 30 + d;
+}
+
+/**
+ * Which house a whole SIGN falls in, measured from its midpoint.
+ *
+ * Correct for "where does Leo season land for her", where the thing being placed is a 30° stretch
+ * rather than a moment. For a dated event, use houseForLongitude with the real degree instead.
+ */
+export function houseForSign(sign: string, cusps: number[]): number {
+  const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
+  if (idx < 0 || cusps.length !== 12) return 1;
+  return houseForLongitude(idx * 30 + 15, cusps);
 }
 
 export interface SignTraits {

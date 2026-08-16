@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { daysUntilSkyDate } from "@/lib/sky-zone";
-import { HOUSE_MEANINGS, ordinalHouse, houseForSign } from "@/lib/interpretations";
+import { HOUSE_MEANINGS, ordinalHouse, houseForLongitude, longitudeForSignDegree } from "@/lib/interpretations";
 import type { ChartData } from "@/types/chart";
 
 // What each lunation asks of her, once it has been placed in one of her houses. This used to live
@@ -112,9 +112,11 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
 
   // Only lunations and eclipses land in a specific house, and only if we have her chart.
   const cusps = chart ? chart.houses.map((h) => h.longitude) : null;
-  const personalise = (type: string, sign: string): string | undefined => {
+  const personalise = (type: string, sign: string, degree: number): string | undefined => {
     if (!cusps || !COACH[type]) return undefined;
-    const house = houseForSign(sign, cusps);
+    const lon = longitudeForSignDegree(sign, degree);
+    if (lon === null) return undefined;
+    const house = houseForLongitude(lon, cusps);
     const meaning = HOUSE_MEANINGS[house - 1];
     if (!meaning) return undefined;
     return `Lands in your ${ordinalHouse(house)} house of ${meaning.title}, so ${COACH[type]} around your ${meaning.lifeAreas[0]}.`;
@@ -140,7 +142,7 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
         hot: isNow || event.type === "solar_eclipse" || event.type === "lunar_eclipse",
         label: copy.label,
         body: copy.body,
-        mine: personalise(event.type, event.sign),
+        mine: personalise(event.type, event.sign, event.degree),
         href: `/your-season/moon?type=${event.type}&date=${event.date}&sign=${event.sign}&degree=${event.degree}${event.planet ? `&planet=${encodeURIComponent(event.planet)}` : ""}${event.nodeEnd ? `&nodeEnd=${event.nodeEnd}` : ""}`,
       });
     } else {

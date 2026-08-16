@@ -13,6 +13,8 @@ import {
   getBodyMeaning,
   ordinalHouse,
   houseForSign,
+  longitudeForSignDegree,
+  houseForLongitude,
   degreeMeaning,
 } from "@/lib/interpretations";
 import type { CalendarEventInput, LunationReading, ReadingSection, Exercise } from "@/lib/moon-content";
@@ -46,8 +48,12 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
   const eSign = eclipseSign.toLowerCase();
 
   const cusps = chart.houses.map((h) => h.longitude);
-  const eclipseHouse = houseForSign(eclipseSign, cusps);
-  const northHouse = houseForSign(northSign, cusps);
+  // Both ends of the axis sit at the same degree, opposite signs, so derive them from the
+  // eclipse's real degree rather than from the midpoint of each sign.
+  const eclipseLon = longitudeForSignDegree(eclipseSign, event.degree);
+  const northLon = longitudeForSignDegree(northSign, event.degree);
+  const eclipseHouse = eclipseLon === null ? houseForSign(eclipseSign, cusps) : houseForLongitude(eclipseLon, cusps);
+  const northHouse = northLon === null ? houseForSign(northSign, cusps) : houseForLongitude(northLon, cusps);
   const southHouse = oppositeHouse(northHouse);
   const eh = HOUSE_MEANINGS[eclipseHouse - 1];
   const northArea = HOUSE_AREA[northHouse - 1];
