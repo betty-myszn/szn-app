@@ -9,8 +9,6 @@ import { LIFE_AREAS } from "@/lib/life-areas";
 import {
   getPatternBreaking,
   whyPatternFormed,
-  getFutureSelfPortrait,
-  getFutureSelfLetter,
   EXPERIMENTS,
   pickRecommendedExperiment,
 } from "@/lib/season-coaching";
@@ -84,8 +82,6 @@ export default function SeasonPersonalised() {
 
   const pattern = getPatternBreaking(season.sign);
   const patternWhy = whyPatternFormed(season.sign, name);
-  const futureSelf = getFutureSelfPortrait(season.sign);
-  const futureSelfLetter = getFutureSelfLetter(season.sign, name);
   const recommendedExperiment = pickRecommendedExperiment(season);
 
   const currentExperiment = EXPERIMENTS.find((e) => e.id === activeExperiment) || null;
@@ -181,61 +177,6 @@ export default function SeasonPersonalised() {
               </span>
             </div>
           </Link>
-        </div>
-      </section>
-
-      {/* The Woman You're Becoming */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto p-8 md:p-10" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
-          <div className="tag mb-4">the woman you&apos;re becoming</div>
-          <h2 style={{ fontFamily: poppins, fontSize: "clamp(24px, 3.5vw, 32px)", fontWeight: 800, letterSpacing: "-0.7px", lineHeight: 1.25, color: "#3C2A70", marginBottom: 20 }}>
-            she doesn&apos;t think, behave or decide like the version of you reading this right now.
-          </h2>
-          <div className="grid md:grid-cols-2 gap-x-10 gap-y-5">
-            {[
-              { label: "how she thinks", text: futureSelf.thinks },
-              { label: "how she behaves", text: futureSelf.behaves },
-              { label: "how she decides", text: futureSelf.decides },
-              { label: "how she treats herself", text: futureSelf.treats },
-            ].map((item) => (
-              <div key={item.label}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 4 }}>
-                  {item.label}
-                </div>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "#3C2A70" }}>{item.text.charAt(0).toUpperCase() + item.text.slice(1)}.</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 pt-6" style={{ borderTop: "1.5px solid rgba(60,42,112,0.15)" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 4 }}>
-              how people experience her differently
-            </div>
-            <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.5, color: "#3C2A70" }}>
-              {futureSelf.experienced.charAt(0).toUpperCase() + futureSelf.experienced.slice(1)}.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Future Self Letter */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto p-8 md:p-10" style={{ background: "var(--dark)" }}>
-          <div className="tag mb-4" style={{ color: "var(--lav)" }}>a letter from your future self</div>
-          <p
-            style={{
-              fontFamily: poppins,
-              fontSize: "clamp(18px, 2.6vw, 22px)",
-              fontWeight: 600,
-              fontStyle: "italic",
-              lineHeight: 1.7,
-              color: "#fff",
-            }}
-          >
-            &ldquo;{futureSelfLetter}&rdquo;
-          </p>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 20, letterSpacing: "0.04em", textTransform: "uppercase" }}>
-            six months from now, written to you today
-          </p>
         </div>
       </section>
 

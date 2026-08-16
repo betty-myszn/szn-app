@@ -13,7 +13,7 @@ import { SIGN_OVERVIEWS } from "@/lib/interpretations";
 import { GOAL_CATEGORY_TO_LIFE_AREA } from "@/lib/goals-store";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
-import { upcomingWorkshops, pastWorkshops, countdownTo, type Workshop } from "@/lib/workshops";
+import { upcomingWorkshops, pastWorkshops, type Workshop } from "@/lib/workshops";
 import { useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
@@ -81,14 +81,11 @@ export default function DashboardPage() {
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
   const [pollDraft, setPollDraft] = useState("");
   const [pollSubmitted, setPollSubmitted] = useState(false);
-  const [nowMs, setNowMs] = useState(() => Date.now());
+  // Captured once at mount. Only the workshop lists read this, and they just need roughly-now to
+  // sort upcoming from past. The per-second interval that used to live here existed solely to tick
+  // the live coaching countdown, which has been removed.
+  const [nowMs] = useState(() => Date.now());
   const trackRef = useRef<HTMLDivElement>(null);
-
-  // Ticks the workshop countdown once a second.
-  useEffect(() => {
-    const id = setInterval(() => setNowMs(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
 
   const scrollTrack = (dir: 1 | -1) => trackRef.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
 
@@ -182,7 +179,6 @@ export default function DashboardPage() {
     ...past.map((w) => ({ w, kind: "replay" as const })),
   ];
   const nextDated = upcoming.find((w) => w.startIso) ?? null;
-  const countdown = nextDated?.startIso ? countdownTo(nextDated.startIso, nowMs) : null;
 
   // Season progress: week X of N, derived from the season's own start/end dates so it never needs
   // hand-updating. Handles the one season (Capricorn) that wraps across new year.
@@ -468,45 +464,6 @@ export default function DashboardPage() {
       {/* ── your full personalised season guide (reused) ── */}
       <div id="season-guide" />
       <SeasonPersonalised />
-
-      {/* ── COACHING: bring me your actual life, with a live countdown ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={{ ...eyebrow, color: "var(--pink)" }}>live coaching</div>
-          <div className="grid grid-cols-1 md:grid-cols-[1.35fr_1fr]" style={{ borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)" }}>
-            <div style={{ padding: "clamp(28px, 4vw, 42px)", background: "#fff" }}>
-              <h2 style={sectionHead}>bring me your <span className="pk">actual life.</span></h2>
-              <p style={{ color: "var(--grey)", fontSize: 15, lineHeight: 1.75, maxWidth: 440, margin: "14px 0 24px" }}>
-                Coaching is where the astrology gets practical. Money, visibility, relationships, business, identity or a full existential wobble. You bring it, we work it live.
-              </p>
-              <Link href="/events" className="no-underline" style={{ display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 40 }}>
-                book into coaching
-              </Link>
-            </div>
-            <div style={{ padding: "clamp(28px, 4vw, 40px)", background: "var(--pink)", color: "#fff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              {nextDated ? (
-                <>
-                  <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}>next live session starts in</div>
-                  {countdown && (
-                    <div className="flex gap-2.5" style={{ marginBottom: 16 }}>
-                      {[{ n: countdown.days, l: "days" }, { n: countdown.hours, l: "hrs" }, { n: countdown.minutes, l: "min" }, { n: countdown.seconds, l: "sec" }].map((b) => (
-                        <div key={b.l} style={{ flex: 1, textAlign: "center", background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "12px 0" }}>
-                          <div style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{pad2(b.n)}</div>
-                          <div style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginTop: 5 }}>{b.l}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", marginBottom: 20, lineHeight: 1.5 }}>{nextDated.title}<br />{nextDated.meta}</div>
-                  <Link href="/events" className="no-underline" style={{ alignSelf: "flex-start", background: "#fff", color: "var(--pink)", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "13px 26px", borderRadius: 40 }}>save my seat</Link>
-                </>
-              ) : (
-                <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 800 }}>Your next live session drops soon. ✦</p>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── the season's four themes ── */}
       <SeasonThemes season={season} />
