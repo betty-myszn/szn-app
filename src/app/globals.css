@@ -231,6 +231,13 @@ body {
   }
 }
 
+/* Blueprint "who you are / HER" divider: stacked on mobile (border on top), split on desktop
+   (border on the left). Kept in CSS rather than inline so the two orientations don't fight. */
+.blueprint-her-col { border-top: 1.5px solid rgba(255, 255, 255, 0.18); }
+@media (min-width: 768px) {
+  .blueprint-her-col { border-top: none; border-left: 1.5px solid rgba(255, 255, 255, 0.18); }
+}
+
 /* Rotated sticker badge, the trick both reference sites use to break the grid */
 .sticker {
   display: inline-block;

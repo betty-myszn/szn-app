@@ -8,6 +8,8 @@ import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
+import SoulBlueprint from "@/components/SoulBlueprint";
+import WhatIsMySzn from "@/components/WhatIsMySzn";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -81,7 +83,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
             { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
-            { num: "3", text: "First live class is 3 August at 7pm LA time" },
+            { num: "3", text: "Next live class is Monday 17 August at 7pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
               <span style={{
@@ -255,8 +257,8 @@ export default function MembershipPage() {
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
           {enrolmentOpen
-            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your first live class kicks off 3 August at 7pm LA time."
-            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. First live class kicks off 3 August at 7pm LA time."}
+            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your next live class kicks off Monday 17 August at 7pm LA time."
+            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Next live class kicks off Monday 17 August at 7pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
           1:1 coaching with Betty is VIP only. However many months of becoming her you want.
@@ -272,6 +274,12 @@ export default function MembershipPage() {
           {ctaLabel}
         </Link>
       </section>
+
+      {/* The plain-english one-liner, then the blueprint story: high on the sales page so the whole
+          thesis frames the pitch before the features. Both shared with the homepage via one component
+          each. The blueprint CTA points down to pricing rather than back to this same page. */}
+      <WhatIsMySzn />
+      <SoulBlueprint ctaHref="#pricing" />
 
       {/* ═══════════════ WHY MY SZN ═══════════════ */}
       <section className="px-8 py-20 md:py-28">
@@ -564,7 +572,7 @@ export default function MembershipPage() {
       {/* ═══════════════ UPCOMING WORKSHOPS ═══════════════ */}
       <section className="px-8 py-20 md:py-28" style={{ background: "#fafafa", borderTop: "var(--border)", borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">your first workshops inside the membership</div>
+          <div className="tag mb-6 text-center">your first month inside the membership</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
@@ -576,10 +584,10 @@ export default function MembershipPage() {
             {/* Workshop 1 */}
             <div className="p-8 md:p-12" style={{ background: "var(--dark)", borderRight: "var(--border)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--lav)", marginBottom: 8 }}>
-                leo szn workshop 1
+                this month&apos;s masterclass
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                3 august · 7pm la time · first live class
+                3 august · replay inside the membership
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Leo Season: Enter Your Main Character Era
@@ -609,10 +617,10 @@ export default function MembershipPage() {
             {/* Workshop 2 */}
             <div className="p-8 md:p-12" style={{ background: "var(--lav-light)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 8 }}>
-                leo szn workshop 2
+                this month&apos;s astro tapping
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                date tbc · inside the membership
+                17 august · 7pm la time · next live class
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Visible AF: How to Show Up &amp; Get Paid
@@ -692,7 +700,7 @@ export default function MembershipPage() {
                 Transformational Workshops
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", margin: 0 }}>
-                Every month I lead a live workshop based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They become it.
+                Every month I lead a live masterclass and a live astro tapping based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They become it.
               </p>
             </div>
             <div className="p-6 md:p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -760,7 +768,7 @@ export default function MembershipPage() {
                 The Vault
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", marginBottom: 12 }}>
-                Every workshop. Every masterclass. Every meditation. Every hypnosis. Every coaching session. Every replay. All inside your own library that grows every month.
+                Every masterclass, every astro tapping and every meditation, saved and searchable inside your own library that grows every month.
               </p>
               <p style={{ fontSize: 12, color: "var(--dark)", margin: 0, fontStyle: "italic" }}>
                 Not content you binge and forget. A resource you return to whenever you&apos;re ready to level up again.
@@ -781,9 +789,9 @@ export default function MembershipPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0" style={{ border: "var(--border)", borderTop: "none" }}>
             {[
-              { title: "Monthly Live Workshops", desc: "Deep-dive sessions on money, confidence, business, relationships, astrology, and healing. Taught live. Recorded forever. No fluff. Just transformation.", bg: "var(--mint)" },
-              { title: "Live Coaching & Q&A", desc: "Bring your questions. Bring your blocks. Get coached in real time on whatever is standing between you and the version of yourself you keep dreaming about becoming.", bg: "var(--gold)" },
-              { title: "Workshop Vault", desc: "Every single live session saved and searchable. Money. Manifestation. Business. Confidence. Healing. Astrology. All yours, forever. Build your own curriculum.", bg: "#fff" },
+              { title: "Monthly Masterclass", desc: "One live deep-dive a month on money, confidence, business, relationships, astrology or healing, taught live and recorded forever, so you can work each season as it's actually happening.", bg: "var(--mint)" },
+              { title: "Monthly Astro Tapping", desc: "One live astro tapping a month: the astrology of the moment turned into an EFT tapping and embodiment session, so the shift lands in your body and not just your notes app.", bg: "var(--gold)" },
+              { title: "The Replay Vault", desc: "Every masterclass and every astro tapping saved and searchable, all yours to return to whenever you're ready to go again. Build your own curriculum, at your own pace.", bg: "#fff" },
             ].map((item) => (
               <div key={item.title} className="p-8 md:p-10" style={{ background: item.bg, borderRight: "var(--border)" }}>
                 <div style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, marginBottom: 10, letterSpacing: "-0.3px" }}>
@@ -872,7 +880,7 @@ export default function MembershipPage() {
                 <span style={{ fontSize: 13, color: "var(--grey)" }}>you won&apos;t need a card</span>
               </div>
               <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, maxWidth: 520 }}>
-                Make a free account and get chatting in the astrology rooms with the girls, which is where most of the day to day actually happens. The personalised astrology and Human Design platform, the live group astrology coaching, the book club and the moon audios all sit in the membership tiers below, and they&apos;ll be waiting there for whenever you want them.
+                Make a free account and get chatting in the astrology rooms with the girls, which is where most of the day to day actually happens. The personalised astrology and Human Design platform, and the live monthly masterclass and astro tapping, all sit in the membership tiers below, and they&apos;ll be waiting there for whenever you want them.
               </p>
             </div>
             <Link
@@ -916,12 +924,10 @@ export default function MembershipPage() {
                 <div className="space-y-3 mb-7">
                   {[
                     "Full access to the MY SZN platform",
-                    "Two live coaching workshops every astrology season",
-                    "Workshop replay library",
+                    "One live masterclass a month",
+                    "One live astro tapping a month",
+                    "Replays of every masterclass and tapping",
                     "Community chat rooms",
-                    "Astrology Book Club",
-                    "One New Moon manifestation audio each month",
-                    "One Full Moon release audio each month",
                     "Seasonal astrology updates",
                     "Exclusive member resources",
                     "Discounts on reports and Cosmic Coaching",
@@ -1004,7 +1010,7 @@ export default function MembershipPage() {
             {[
               {
                 q: "What's the difference between the three tiers?",
-                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, live group coaching with Betty every month, seasonal workshops, the astrology book club, a New Moon and a Full Moon audio each month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
+                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, a live masterclass and a live astro tapping with Betty every month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
               },
               {
                 q: "Is it really personalised, or just my sun sign?",
@@ -1012,7 +1018,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes live group coaching with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
+                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes a live masterclass and a live astro tapping with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
@@ -1020,11 +1026,11 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start free for the community chat rooms and upgrade to MY SZN when you're ready for the full personalised platform, the book club, the moon audios and the monthly group coaching. You manage it all from your settings, and your upgrade takes effect straight away.",
+                a: "Anytime. Start free for the community chat rooms and upgrade to MY SZN when you're ready for the full personalised platform and the monthly masterclass and astro tapping. You manage it all from your settings, and your upgrade takes effect straight away.",
               },
               {
                 q: "How much time do I need to commit each week?",
-                a: "The live coaching and workshops happen monthly, not weekly. Between sessions you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
+                a: "The masterclass and the astro tapping happen monthly, not weekly. Between them you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
               },
               {
                 q: "How much does it cost?",
@@ -1085,7 +1091,7 @@ export default function MembershipPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "First live class 3 August", "Cancel anytime", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "Next live class 17 August", "Cancel anytime", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",

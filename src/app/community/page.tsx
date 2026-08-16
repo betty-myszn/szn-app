@@ -200,7 +200,7 @@ export default function CommunityPage() {
             </Link>
           ) : (
             <Link href="/membership" className="no-underline" style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 700 }}>
-              &bull; unlock the {season.sign.toLowerCase()} szn hub, moon audios and seasonal readings with MY SZN →
+              &bull; unlock the {season.sign.toLowerCase()} szn hub and seasonal readings with MY SZN →
             </Link>
           )}
         </div>
@@ -298,7 +298,7 @@ export default function CommunityPage() {
                   🔒 members&apos; rituals
                 </div>
                 <p style={{ fontSize: 12, lineHeight: 1.6, color: "var(--grey)", marginBottom: 10 }}>
-                  Book club, seasonal challenges and the new and full moon audios come with MY SZN, $88 a month.
+                  A live masterclass and astro tapping every month, plus your full personalised season hub, come with MY SZN, $88 a month.
                 </p>
                 <Link
                   href="/membership"
@@ -404,7 +404,7 @@ export default function CommunityPage() {
                     you&apos;re in the rooms. the rest is one tier up.
                   </div>
                   <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, maxWidth: 460 }}>
-                    MY SZN ($88/mo) opens the book club, the seasonal challenges, events, the new and full moon audios, and your full personalised platform built around your own chart. VIP ($555/mo) adds private monthly coaching with Betty.
+                    MY SZN ($88/mo) opens a live masterclass and astro tapping every month, plus your full personalised platform built around your own chart. VIP ($555/mo) adds private monthly coaching with Betty.
                   </p>
                 </div>
                 <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>

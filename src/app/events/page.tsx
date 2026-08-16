@@ -118,7 +118,7 @@ export default function EventsPage() {
           </h1>
           {member && (
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 540, margin: "16px auto 0" }}>
-              Live workshops, replays and rituals, all included in your membership. Show up live for the full experience, or catch the replay in your own time.
+              A live masterclass and astro tapping every month, replays and rituals, all included in your membership. Show up live for the full experience, or catch the replay in your own time.
             </p>
           )}
         </div>

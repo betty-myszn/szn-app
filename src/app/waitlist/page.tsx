@@ -470,7 +470,7 @@ export default function WaitlistPage() {
                 Transformational Workshops
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", margin: 0 }}>
-                Every month I lead a live workshop based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They embody it.
+                Every month I lead a live masterclass and a live astro tapping based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They embody it.
               </p>
             </div>
             <div className="p-6 md:p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -513,7 +513,7 @@ export default function WaitlistPage() {
                 The Vault
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", marginBottom: 12 }}>
-                Every workshop. Every masterclass. Every meditation. Every hypnosis. Every coaching session. Every replay. All inside your own beautiful library that grows every month.
+                Every masterclass, every astro tapping and every meditation, saved and searchable inside your own beautiful library that grows every month.
               </p>
               <p style={{ fontSize: 12, color: "var(--dark)", margin: 0, fontStyle: "italic" }}>
                 Not content you binge and forget. A resource you return to whenever life asks you to become someone new.

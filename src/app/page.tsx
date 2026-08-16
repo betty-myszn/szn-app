@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useEnrolmentOpen } from "@/lib/enrolment";
-import { WORKSHOPS, formatWorkshopWhenLA } from "@/lib/workshops";
+import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
+import SoulBlueprint from "@/components/SoulBlueprint";
+import WhatIsMySzn from "@/components/WhatIsMySzn";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -31,7 +33,7 @@ function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
 
 const STATS = [
   { n: "365", label: "days of guidance personalised to your chart" },
-  { n: "2", label: "live coaching workshops every single szn" },
+  { n: "2", label: "live sessions with Betty every month, a masterclass and an astro tapping" },
   { n: "24/7", label: "a community of women becoming her" },
 ];
 
@@ -44,11 +46,11 @@ const HEADLINES = [
     cta: "read your szn",
   },
   {
-    kicker: "✦ this week inside",
-    title: "two live workshops.",
-    body: "Visibility and getting paid to be fully yourself, live with Betty, replays saved forever.",
+    kicker: "✦ this month inside",
+    title: "masterclass + astro tapping.",
+    body: "One live masterclass and one live astro tapping a month, live with Betty, replays saved forever.",
     href: "/events",
-    cta: "see the workshops",
+    cta: "see what's on",
   },
   {
     kicker: "☾ from the community",
@@ -107,8 +109,8 @@ const BENTO = [
     fg: "#fff",
     sub: "rgba(255,255,255,0.6)",
     glyph: "★",
-    title: "live coaching workshops",
-    body: "Astrology, tapping, embodiment and coaching, live every szn. Replays saved forever.",
+    title: "a monthly masterclass + astro tapping",
+    body: "One live masterclass and one live astro tapping with Betty every month. Astrology, tapping and embodiment. Replays saved forever.",
     href: "/events",
     wide: true,
   },
@@ -122,10 +124,12 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
 
-  // Read the next dated class straight off the workshop data rather than retyping it here. The
-  // ticker previously hardcoded the weekday, and when the class moved from 28 July to 3 August it
-  // carried on telling every homepage visitor the wrong day. Derived, it can't drift again.
-  const nextWorkshop = WORKSHOPS.find((w) => w.startIso);
+  // Read the next class straight off the workshop data rather than retyping it here. The ticker
+  // previously hardcoded the weekday, and when the class moved it carried on telling every homepage
+  // visitor the wrong day. It also used to grab the first dated class in the list, which kept
+  // pointing at a workshop that had already happened; upcomingWorkshops drops past classes and
+  // sorts soonest-first, so [0] is always genuinely the next one.
+  const nextWorkshop = upcomingWorkshops(Date.now())[0];
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
@@ -157,8 +161,8 @@ export default function Home() {
           `✦ ${szn} szn`,
           enrolmentOpen ? "✦ enrolment open now" : "✦ doors open soon",
           nextWorkshop?.startIso
-            ? `✦ live workshop ${formatWorkshopWhenLA(nextWorkshop.startIso)}`
-            : "✦ live workshops every szn",
+            ? `✦ live class ${formatWorkshopWhenLA(nextWorkshop.startIso)}`
+            : "✦ a masterclass + astro tapping every month",
           "✦ your personal birth chart",
           "✦ new: your human design",
           "✦ the astrology community",
@@ -323,6 +327,14 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* ── WHAT EVEN IS THIS: the plain-english, in-voice one-liner, straight after the hero. ── */}
+      <WhatIsMySzn />
+
+      {/* ── THE BLUEPRINT STORY: the whole thesis, high up so it frames everything below. Problem →
+           soul blueprint → the arc → what my szn does. Shared with /membership via one component so
+           the two pages can't drift into different versions of the core idea. ── */}
+      <SoulBlueprint />
 
       {/* ── 2. STATS: black, huge numerals, tiny copy ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 64, paddingBottom: 64 }}>
@@ -555,11 +567,11 @@ export default function Home() {
               <span className="pk">era.</span>
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
-              {szn} szn isn&apos;t something you read about. Two live workshops on visibility, confidence and getting
-              paid to be fully yourself, starting 3 august, then the tools to actually live it.
+              {szn} szn isn&apos;t something you read about. A live masterclass and a live astro tapping every month,
+              the next one monday 17 august, then the tools to actually live it.
             </p>
             <Link href="/events" className="btn-pink no-underline">
-              see the workshops
+              see what&apos;s on
             </Link>
           </div>
         </div>

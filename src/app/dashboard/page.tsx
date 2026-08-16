@@ -12,7 +12,7 @@ import { SIGN_OVERVIEWS } from "@/lib/interpretations";
 import { GOAL_CATEGORY_TO_LIFE_AREA } from "@/lib/goals-store";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
 import { loadGoals, getPrimaryGoal, type Goal } from "@/lib/goals-store";
@@ -43,6 +43,17 @@ const cardTitle: React.CSSProperties = {
   marginBottom: 10,
 };
 
+// The dashboard is grouped into these clickable buckets so a member lands on a short, focused view
+// instead of one endless scroll. Order matters: "your szn" is the reading she comes for and opens
+// by default. Kept in current section order as much as possible so nothing had to be rebuilt.
+const TABS = [
+  { id: "your-szn", label: "your szn" },
+  { id: "today", label: "today" },
+  { id: "go-deeper", label: "go deeper" },
+  { id: "do-connect", label: "do & connect" },
+] as const;
+type TabId = (typeof TABS)[number]["id"];
+
 function SectionTag({ children }: { children: React.ReactNode }) {
   return <div className="tag mb-2">{children}</div>;
 }
@@ -61,6 +72,15 @@ export default function DashboardPage() {
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
   const [pollDraft, setPollDraft] = useState("");
   const [pollSubmitted, setPollSubmitted] = useState(false);
+  const [tab, setTab] = useState<TabId>("your-szn");
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  // Switch bucket and jump back to the top of it, so she always lands at the start of the new
+  // section rather than wherever the previous one happened to be scrolled to.
+  const selectTab = (id: TabId) => {
+    setTab(id);
+    requestAnimationFrame(() => tabsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  };
 
   useEffect(() => {
     setStreak(computeJournalStreak(loadJournalEntries()));
@@ -123,7 +143,7 @@ export default function DashboardPage() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             {hasBillingIssue(member)
               ? "We couldn't process your last payment. Update your payment method to get back in."
-              : "This is where your membership lives, live workshops, your full chart portal, shadow work, the community. Join to unlock it."}
+              : "This is where your membership lives, the monthly masterclass and astro tapping, your full chart portal, shadow work, the community. Join to unlock it."}
           </p>
           <Link href={hasBillingIssue(member) ? "/api/stripe/portal" : "/membership"} className="btn-pink">
             {hasBillingIssue(member) ? "update payment method" : "see membership options"}
@@ -221,6 +241,43 @@ export default function DashboardPage() {
         </section>
       )}
 
+      {/* Section tabs: the dashboard is split into a few clickable buckets instead of one endless
+          scroll. Non-sticky on purpose, the global NavBar already owns sticky top-0; selectTab jumps
+          back to the top of the bucket so she always lands at its start. */}
+      <div ref={tabsRef} className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)" }}>
+        <div className="max-w-6xl mx-auto flex gap-1 md:gap-3" style={{ overflowX: "auto" }}>
+          {TABS.map((t) => {
+            const active = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => selectTab(t.id)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "18px 12px",
+                  fontFamily: poppins,
+                  fontSize: 12,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                  color: active ? "var(--pink)" : "var(--grey-light)",
+                  borderBottom: active ? "3px solid var(--pink)" : "3px solid transparent",
+                  flex: "none",
+                }}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ══ TAB: your szn ══ the reading she comes for */}
+      {tab === "your-szn" && (
+      <>
       {/* Unmissable: what this season actually is, the sign itself, not just the label */}
       <section className="px-5 md:px-8 py-14" style={{ background: "var(--pink)", borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto text-center">
@@ -295,47 +352,12 @@ export default function DashboardPage() {
       {/* This season's meditation, for every member. Sits after the season reading so she has the
           context before the practice, and renders nothing at all for a season with no audio yet. */}
       <SeasonMeditation sign={season.sign} />
+      </>
+      )}
 
-      {/* Build-your-own-dashboard control, only touches what she reads, never the action sections */}
-      <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
-        <div className="max-w-6xl mx-auto">
-          <button
-            onClick={() => setCustomizing((v) => !v)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--grey-light)",
-            }}
-          >
-            {customizing ? "done customising ✓" : "customise this dashboard ✎"}
-          </button>
-          {customizing && (
-            <div className="flex flex-wrap gap-3 mt-4">
-              {DASHBOARD_SECTIONS.map((s) => {
-                const on = prefs ? prefs[s.id] : true;
-                return (
-                  <label
-                    key={s.id}
-                    title={s.desc}
-                    className="flex items-center gap-2"
-                    style={{ border: "1.5px solid " + (on ? "var(--pink)" : "#ddd"), padding: "8px 14px", cursor: "pointer", background: on ? "rgba(255,45,135,0.06)" : "#fff" }}
-                  >
-                    <input type="checkbox" checked={on} onChange={() => handleToggleSection(s.id)} style={{ accentColor: "var(--pink)" }} />
-                    <span style={{ fontSize: 12, fontWeight: 700 }}>{s.label}</span>
-                  </label>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
-
+      {/* ══ TAB: today ══ the daily stuff */}
+      {tab === "today" && (
+      <>
       {/* Poll or question from the team, self-hiding once answered or when nothing's active */}
       {activePoll && (
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
@@ -466,10 +488,13 @@ export default function DashboardPage() {
                 ? `It's your solar return szn, ${member.name.toLowerCase()}. The spotlight is literally yours this month, visibility comes easier, confidence hits harder, and the universe is co-signing your glow-up.`
                 : `${season.sign} season is activating the part of your chart that rules ${season.themes[0]}. Work with it, not against it.`}
             </p>
-            <a
-              href="#season-guide"
-              className="no-underline"
+            <button
+              onClick={() => selectTab("go-deeper")}
               style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
                 fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: "0.1em",
@@ -479,8 +504,8 @@ export default function DashboardPage() {
                 paddingBottom: 2,
               }}
             >
-              see your full season guide ↓
-            </a>
+              see your full season guide →
+            </button>
           </div>
 
           {/* Big 3 */}
@@ -585,6 +610,12 @@ export default function DashboardPage() {
         </section>
       )}
 
+      </>
+      )}
+
+      {/* ══ TAB: go deeper ══ the full read + what to explore next */}
+      {tab === "go-deeper" && (
+      <>
       {/* Continue exploring your chart */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-6xl mx-auto grid md:grid-cols-[1fr_auto] gap-6 items-center p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
@@ -655,6 +686,12 @@ export default function DashboardPage() {
       </section>
       )}
 
+      </>
+      )}
+
+      {/* ══ TAB: do & connect ══ act on it, and the community */}
+      {tab === "do-connect" && (
+      <>
       {/* Action row */}
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-6xl mx-auto">
@@ -742,9 +779,9 @@ export default function DashboardPage() {
             >
               <div className="tag mb-2" style={{ color: "#854F0B" }}>events · this szn</div>
               <p style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.5, marginBottom: 6, color: "#854F0B" }}>
-                your first live class lands 3 august.
+                your next live class lands monday 17 august.
               </p>
-              <p style={{ fontSize: 12, color: "#854F0B", opacity: 0.8, lineHeight: 1.6 }}>Enter Your Main Character Era. Save your seat.</p>
+              <p style={{ fontSize: 12, color: "#854F0B", opacity: 0.8, lineHeight: 1.6 }}>Visible AF: How to Show Up &amp; Get Paid. Save your seat.</p>
             </Link>
             <Link
               href="/your-season/wrapped"
@@ -796,6 +833,49 @@ export default function DashboardPage() {
 
       {/* Explore further: themes, every life area, community, wrapped, next szn teaser */}
       <SeasonExplore season={season} />
+      </>
+      )}
+
+      {/* Build-your-own-dashboard control, always at the foot of the page so it governs the reads
+          in every tab. Only touches what she reads, never the action sections. */}
+      <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => setCustomizing((v) => !v)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--grey-light)",
+            }}
+          >
+            {customizing ? "done customising ✓" : "customise this dashboard ✎"}
+          </button>
+          {customizing && (
+            <div className="flex flex-wrap gap-3 mt-4">
+              {DASHBOARD_SECTIONS.map((s) => {
+                const on = prefs ? prefs[s.id] : true;
+                return (
+                  <label
+                    key={s.id}
+                    title={s.desc}
+                    className="flex items-center gap-2"
+                    style={{ border: "1.5px solid " + (on ? "var(--pink)" : "#ddd"), padding: "8px 14px", cursor: "pointer", background: on ? "rgba(255,45,135,0.06)" : "#fff" }}
+                  >
+                    <input type="checkbox" checked={on} onChange={() => handleToggleSection(s.id)} style={{ accentColor: "var(--pink)" }} />
+                    <span style={{ fontSize: 12, fontWeight: 700 }}>{s.label}</span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
     </>
   );
 }

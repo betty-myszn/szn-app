@@ -19,7 +19,7 @@ type PlanId = "free" | "monthly" | "vip";
 // sets her password afterwards.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
   { id: "free", name: "Free", tagline: "the chat rooms, plus your birth and human design charts", price: "$0" },
-  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, live coaching, book club and moon audios", price: "$88/mo" },
+  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astro tapping every month", price: "$88/mo" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 
@@ -248,7 +248,7 @@ export default function SignupPage() {
                 <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
                   {plan === "vip"
                     ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
-                    : "MY SZN is the full personalised platform built around your own chart, with live group coaching every season, the book club, and the new and full moon audios."}
+                    : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astro tapping with Betty every month."}
                 </p>
                 <CheckoutButton
                   checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}

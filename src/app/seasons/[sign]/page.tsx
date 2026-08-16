@@ -156,7 +156,7 @@ export default async function SeasonPage({
             <div style={{ marginBottom: 28 }}>
               <Link
                 href="/events/replays"
-                aria-label={`Watch the ${season.name} season workshop replay inside the membership`}
+                aria-label={`Watch the ${season.name} season class replay inside the membership`}
                 style={{
                   display: "block",
                   position: "relative",
