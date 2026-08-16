@@ -27,6 +27,32 @@ export function houseForLongitude(longitude: number, cusps: number[]): number {
   return 1;
 }
 
+/**
+ * The "a house can hold more than one sign" explainer, for any dated event whose sign is not the
+ * sign on the house cusp it lands in.
+ *
+ * Members who know their rising read "Pisces eclipse in your 1st house" as a mistake, because they
+ * think "my 1st house is Aquarius". Both are true: the cusp is Aquarius and Pisces is swallowed
+ * inside the same house (intercepted, or simply a later sign in a wide house). This names both
+ * signs and teaches the concept, so it lands as smart rather than broken. Returns "" when the
+ * event sign IS the cusp sign, so it only ever appears when it is actually needed.
+ *
+ * Shared by every composer that places a dated event: eclipses, lunations, ingresses.
+ */
+export function houseSpanNote(
+  eventSign: string,
+  houseNumber: number,
+  cuspSign: string | undefined,
+  eventNoun: string,
+): string {
+  if (!cuspSign) return "";
+  const es = eventSign.toLowerCase();
+  const cs = cuspSign.toLowerCase();
+  if (es === cs) return "";
+  const h = ordinalHouse(houseNumber);
+  return ` Quick thing so this does not look wrong, because it is the part everyone second-guesses: a house and a sign are not the same thing. Your ${h} house opens in ${cs}, which is the sign you will see on your ${h} house everywhere else, but the house is wide enough to take in ${es} as well, so the whole of ${es} sits inside it too. A single house often holds more than one sign like this. That is exactly why a ${eventNoun} in ${es} lands in the house you think of as your ${cs} house, and both things are true at once.`;
+}
+
 /** The ecliptic longitude of a given degree of a given sign, e.g. 4° Pisces → 334. */
 export function longitudeForSignDegree(sign: string, degree: number): number | null {
   const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);

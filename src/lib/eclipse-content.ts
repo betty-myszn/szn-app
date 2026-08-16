@@ -13,6 +13,7 @@ import {
   getBodyMeaning,
   ordinalHouse,
   houseForSign,
+  houseSpanNote,
   longitudeForSignDegree,
   houseForLongitude,
   degreeMeaning,
@@ -105,16 +106,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
   // rising sees an eclipse in one sign land in a house she thinks of as another, e.g. an Aquarius
   // rising with a Pisces eclipse in her 1st because Pisces is intercepted there. Naming it stops
   // that reading as a mistake.
-  const cuspSign = chart.houses[eclipseHouse - 1]?.sign;
-  // Always explain it when the eclipse sign is not the sign on the cusp. A member who knows her
-  // rising will otherwise read "Pisces eclipse in your 1st house" as an error, because she thinks
-  // "my 1st house is Aquarius". Both are true: the cusp is Aquarius and Pisces is swallowed inside
-  // the same house. Naming both signs and teaching that a house can hold more than one sign is the
-  // difference between this landing as smart and landing as broken.
-  const interceptedNote =
-    cuspSign && cuspSign.toLowerCase() !== eSign
-      ? ` Quick thing so this does not look wrong, because it is the part everyone second-guesses: a house and a sign are not the same thing. Your ${ordinalHouse(eclipseHouse)} house opens in ${cuspSign.toLowerCase()}, which is the sign you will see on your ${ordinalHouse(eclipseHouse)} house everywhere else, but the house is wide enough to take in ${eSign} as well, so the whole of ${eSign} sits inside it too. A single house often holds more than one sign like this. That is exactly why a ${eSign} eclipse lands in the house you think of as your ${cuspSign.toLowerCase()} house, and both things are true at once.`
-      : "";
+  const interceptedNote = houseSpanNote(eclipseSign, eclipseHouse, chart.houses[eclipseHouse - 1]?.sign, label);
 
   const chartParagraphs: string[] = [
     `This ${label} in ${eSign} lands in your ${ordinalHouse(eclipseHouse)} house of ${eh.title}, ${eh.rules}.${interceptedNote} For you specifically it is putting real pressure on ${eclipseArea}, landing at ${degreeMeaning(event.degree)} ${eh.coach}`,

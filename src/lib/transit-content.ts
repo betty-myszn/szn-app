@@ -5,6 +5,7 @@ import {
   getBodyMeaning,
   interpretAspect,
   houseForSign,
+  houseSpanNote,
   ordinalHouse,
 } from "@/lib/interpretations";
 
@@ -64,7 +65,7 @@ export function composeMajorTransit(event: MajorTransitInput, chart: ChartData):
       dateLabel,
       emoji: "\u{1F30C}",
       whatThisIs: `${bodyLabel} changes sign rarely, this is a slow, generational planet, so when it moves into a new sign it's not a today thing, it's a whole-era thing. ${body?.deepDive ?? ""} ${overview ? overview.archetype : ""}`,
-      inYourChart: `This lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. For you specifically, that means ${bodyLabel.toLowerCase()}'s themes, ${bodyDomain}, start playing out through ${houseArea} for the years this transit lasts. ${houseMeaning.coach}`,
+      inYourChart: `This lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}.${houseSpanNote(event.sign, house, chart.houses[house - 1]?.sign, `${bodyLabel.toLowerCase()} ingress`)} For you specifically, that means ${bodyLabel.toLowerCase()}'s themes, ${bodyDomain}, start playing out through ${houseArea} for the years this transit lasts. ${houseMeaning.coach}`,
       bettysTake: `Most people clock the big planetary ingresses as world news, not personal news. It's both. With this one landing in your ${ordinalHouse(house)} house, the collective shift has a very specific address in your life: ${houseArea}. Watch that area for slow, structural change over the coming months, not overnight drama.`,
       theMove: `Start paying attention to ${houseArea} now, before this transit is in full swing. ${houseMeaning.coach}`,
       journalPrompt: `Where has ${houseArea} already been quietly asking for a different approach, one this transit is about to force anyway?`,

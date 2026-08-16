@@ -6,6 +6,7 @@ import {
   HOUSE_MEANINGS,
   ordinalHouse,
   houseForSign,
+  houseSpanNote,
   longitudeForSignDegree,
   houseForLongitude,
   degreeMeaning,
@@ -343,7 +344,7 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData): Lu
   const rulerPlanet = chart.planets.find((p) => p.name.toLowerCase() === rulerName.toLowerCase());
 
   const chartParagraphs: string[] = [
-    `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}. That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. It's landing at ${degreeMeaning(event.degree)} ${houseMeaning.coach}`,
+    `This ${bodyLabel} in ${event.sign.toLowerCase()} lands in your ${ordinalHouse(house)} house of ${houseMeaning.title}, ${houseMeaning.rules}.${houseSpanNote(event.sign, house, chart.houses[house - 1]?.sign, meta.label)} That means this event isn't a generic sky update, for you specifically it's activating ${houseArea}. It's landing at ${degreeMeaning(event.degree)} ${houseMeaning.coach}`,
 
     isOppositionEvent
       ? `A full moon is always an axis rather than a single point, because the sun sits directly opposite the moon. So while your ${ordinalHouse(house)} house is the one being lit, your ${ordinalHouse(oppositeHouse)} house of ${oppMeaning.title} is holding the other end, ${oppMeaning.rules}. That is usually where the pressure is coming from. What surfaces in your ${houseArea} this week is very often the cost of something you have been carrying in your ${oppMeaning.lifeAreas[0]}, and the resolution is rarely picking one, it is finding the version where both get to exist.`

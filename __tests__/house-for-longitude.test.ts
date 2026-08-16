@@ -1,4 +1,4 @@
-import { houseForLongitude, houseForSign, longitudeForSignDegree } from "@/lib/interpretations";
+import { houseForLongitude, houseForSign, longitudeForSignDegree, houseSpanNote } from "@/lib/interpretations";
 
 // A chart whose cusps fall mid-sign, which is the normal case on Placidus. Every cusp here sits
 // at 20 degrees of its sign, so each sign straddles two houses: the first 20 degrees of a sign
@@ -45,6 +45,30 @@ describe("houseForLongitude", () => {
     // Leo spans 120 to 150. The 5th cusp is at 140, so early Leo is the 4th and late Leo the 5th.
     expect(houseForLongitude(longitudeForSignDegree("Leo", 2)!, midSignCusps)).toBe(4);
     expect(houseForLongitude(longitudeForSignDegree("Leo", 27)!, midSignCusps)).toBe(5);
+  });
+});
+
+describe("houseSpanNote", () => {
+  it("stays silent when the event sign is the sign on the cusp", () => {
+    expect(houseSpanNote("Aquarius", 1, "Aquarius", "eclipse")).toBe("");
+  });
+
+  it("explains, naming both signs, when they differ (interception)", () => {
+    // Betty's case: Aquarius on the 1st cusp, Pisces intercepted inside the 1st.
+    const note = houseSpanNote("Pisces", 1, "Aquarius", "lunar eclipse");
+    expect(note).not.toBe("");
+    expect(note).toContain("aquarius");
+    expect(note).toContain("pisces");
+    expect(note).toContain("1st house");
+    expect(note).toContain("lunar eclipse");
+  });
+
+  it("is silent when the cusp sign is unknown", () => {
+    expect(houseSpanNote("Pisces", 1, undefined, "eclipse")).toBe("");
+  });
+
+  it("uses no em dashes", () => {
+    expect(houseSpanNote("Pisces", 1, "Aquarius", "new moon")).not.toContain("—");
   });
 });
 
