@@ -55,10 +55,10 @@ export const WORKSHOPS: Workshop[] = [
   {
     id: "leo-szn-workshop-2",
     label: "leo szn workshop 2",
-    meta: "date tbc · inside the membership",
+    meta: "17 august · 7pm la time · next live class",
     title: "Visible AF: How to Show Up & Get Paid",
     dark: false,
-    startIso: null,
+    startIso: "2026-08-17T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     zoomUrl: null,

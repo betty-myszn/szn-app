@@ -15,6 +15,18 @@
 const BREVO_API = "https://api.brevo.com/v3";
 const LIST_PAID_MEMBERS = "MY SZN Members";
 
+// Free-tier joiners go on their own list ("my szn free members", id 15) so they can be emailed and
+// segmented apart from paid members, the waitlist and free-chart contacts. An explicit id, not a
+// name lookup: the subscribe route learned the hard way that matching a list by name silently files
+// everyone nowhere on the smallest rename or capital letter (see src/app/api/subscribe/route.ts).
+// Override with BREVO_LIST_FREE_MEMBERS if the id ever changes.
+const CANONICAL_LIST_FREE_MEMBERS = 15;
+
+function freeMembersListId(): number {
+  const v = process.env.BREVO_LIST_FREE_MEMBERS?.trim();
+  return v && /^\d+$/.test(v) ? parseInt(v, 10) : CANONICAL_LIST_FREE_MEMBERS;
+}
+
 export type BrevoContactResult =
   | { ok: true; listId: number }
   | { ok: false; error: string };
@@ -74,6 +86,56 @@ async function ensureAttribute(name: string, type: string): Promise<void> {
     console.error(`Brevo ensureAttribute ${name} failed`, res.status, detail.slice(0, 200));
   } catch (e) {
     console.error(`Brevo ensureAttribute ${name} threw`, e instanceof Error ? e.message : e);
+  }
+}
+
+export interface FreeMemberContact {
+  email: string;
+  name?: string | null;
+}
+
+// Upserts a free-tier joiner as a Brevo contact and files them on the free-members list (id 15).
+// Mirrors syncPaidMemberToBrevo but carries no paid attributes. Called from the free signup route
+// after the Supabase profile is promoted to 'free'. updateEnabled makes it an upsert, so a contact
+// who was already on the waitlist or free-chart list is updated in place and ADDED to the free list
+// (Brevo's listIds adds, it never removes them from the others). NEVER throws: a contact-sync
+// failure must never fail or block the signup, so the caller gets a result object.
+export async function syncFreeMemberToBrevo(contact: FreeMemberContact): Promise<BrevoContactResult> {
+  if (!process.env.BREVO_API_KEY) return { ok: false, error: "BREVO_API_KEY not set" };
+  if (!contact.email) return { ok: false, error: "no_email" };
+
+  try {
+    // Only the two attributes this path sets need ensuring; both already exist in steady state.
+    await Promise.all([ensureAttribute("MEMBERSHIP_LEVEL", "text"), ensureAttribute("SIGNUP_SOURCE", "text")]);
+    const listId = freeMembersListId();
+
+    const attributes: Record<string, string> = {
+      MEMBERSHIP_LEVEL: "free",
+      SIGNUP_SOURCE: "free-membership",
+    };
+    const parts = (contact.name ?? "").trim().split(/\s+/).filter(Boolean);
+    if (parts[0]) attributes.FIRSTNAME = parts[0];
+    if (parts.length > 1) attributes.LASTNAME = parts.slice(1).join(" ");
+
+    const res = await brevo("/contacts", {
+      method: "POST",
+      body: JSON.stringify({
+        email: contact.email,
+        attributes,
+        listIds: [listId],
+        updateEnabled: true,
+      }),
+    });
+
+    if (res.ok) {
+      console.log("brevo free member synced", { email: contact.email, listId });
+      return { ok: true, listId };
+    }
+    const err = await res.json().catch(() => ({}));
+    if (err?.code === "duplicate_parameter") return { ok: true, listId };
+    return { ok: false, error: `brevo ${res.status}: ${JSON.stringify(err).slice(0, 200)}` };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
 }
 
