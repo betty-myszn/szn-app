@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow } from "@/lib/membership-gate";
+import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow, isExpiredTrialRow } from "@/lib/membership-gate";
 
 // This project's Next.js version renamed middleware.ts to proxy.ts (the export is named
 // `proxy`, not `middleware`), see node_modules/next/dist/docs for details. It does two jobs:
@@ -127,9 +127,16 @@ export async function proxy(request: NextRequest) {
   // exposes her own.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, onboarded")
+    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, onboarded")
     .eq("id", user.id)
     .maybeSingle();
+
+  // Expired free trial: whatever gated route she lands on, send her to her own "your free week is
+  // over" page rather than the generic pricing bounce, so she keeps the designed win-back state and
+  // her saved account. An ACTIVE trial passes hasFullAccessFromRow below and never reaches here.
+  if (isExpiredTrialRow(profile)) {
+    return redirectPreservingSession(request, response, "/free-trial/ended");
+  }
 
   const roomAccess = hasRoomAccessFromRow(profile); // free tier + any paid tier
   const access = hasAccessFromRow(profile); // any active paid tier, incl. social

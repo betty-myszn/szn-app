@@ -11,7 +11,27 @@ export type MembershipRow = {
   subscription_current_period_end: string | null;
   subscription_cancel_at_period_end?: boolean | null;
   onboarded?: boolean | null;
+  // Free 7-day trial. When membership_level is 'trial', access is gated purely on this timestamp
+  // (see hasAccessFromRow), never on any Stripe status, since a trial has no subscription.
+  trial_expires_at?: string | null;
 };
+
+// True when this row is a free-trial member whose 7 days have NOT yet run out. This is the whole of
+// the trial access rule: a dedicated 'trial' level plus an expiry checked at request time, so the
+// trial ends exactly when trial_expires_at passes with no cron and no Stripe. A trial with a null or
+// past expiry returns false here (and reads as an expired trial via isExpiredTrialRow).
+export function isActiveTrialRow(row: MembershipRow | null | undefined): boolean {
+  if (!row || (row.membership_level ?? "none") !== "trial") return false;
+  return !!row.trial_expires_at && new Date(row.trial_expires_at).getTime() > Date.now();
+}
+
+// True when this row was a free trial that has now ended: still carries the 'trial' level (nothing
+// flips it, by design, so we can tell an expired trial apart from a lapsed paid member and show her
+// the dedicated "your free week is over" page) but trial_expires_at has passed.
+export function isExpiredTrialRow(row: MembershipRow | null | undefined): boolean {
+  if (!row || (row.membership_level ?? "none") !== "trial") return false;
+  return !row.trial_expires_at || new Date(row.trial_expires_at).getTime() <= Date.now();
+}
 
 // True when this row may enter the live chat ROOMS: the free front-door tier plus every paying
 // tier (social, monthly, vip). This is the lowest gate in the funnel. 'free' is unlocked by simply
@@ -39,6 +59,12 @@ export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boo
 // full-platform distinction lives one level up in hasFullAccessFromRow.
 export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
+
+  // Free trial: access is the trial window and nothing else. No Stripe status applies (a trial has
+  // no subscription), and once trial_expires_at passes this returns false on the very next request,
+  // which is the whole of the "trial can't accidentally retain access" guarantee.
+  if ((row.membership_level ?? "none") === "trial") return isActiveTrialRow(row);
+
   const status = row.subscription_status ?? "";
   const grantsByStatus = ACCESS_GRANTING_STATUSES.has(status) && (row.membership_level ?? "none") !== "none";
   if (!grantsByStatus) return false;
@@ -62,7 +88,10 @@ export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean
 export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!hasAccessFromRow(row)) return false;
   const level = row?.membership_level ?? "none";
-  return level === "monthly" || level === "vip";
+  // 'trial' unlocks the full personalised platform for its 7 days, deliberately: the whole point of
+  // the trial is to put her properly inside, not in a stripped-back preview. hasAccessFromRow above
+  // has already confirmed the trial window is still open, so an expired trial never reaches here.
+  return level === "monthly" || level === "vip" || level === "trial";
 }
 
 // Where a freshly-authenticated member should land, decided purely from membership state.
@@ -75,6 +104,9 @@ export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boo
 // - Full access and onboarded: the real portal.
 export function postAuthDestination(row: MembershipRow | null | undefined): string {
   if (hasRoomAccessFromRow(row) && !hasAccessFromRow(row)) return "/home"; // free tier
+  // An expired trial logging back in lands on her own "your free week is over" page, never the
+  // generic pricing bounce, so she keeps the designed win-back state and her saved account.
+  if (isExpiredTrialRow(row)) return "/free-trial/ended";
   if (!hasAccessFromRow(row)) return "/membership?reason=none";
   if (!hasFullAccessFromRow(row)) return "/community";
   if (!row?.onboarded) return "/onboarding";

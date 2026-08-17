@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
-import { isAdminMember, getMemberCount } from "@/lib/member";
+import { isAdminMember, getMemberCount, getTrialStats } from "@/lib/member";
 import { ALL_ROOMS, loadPosts, deletePost, deleteComment, type Post } from "@/lib/community-store";
 import { loadRoomMessages, deleteRoomMessage, type ChatMessage } from "@/lib/chat-rooms";
 import { loadGoals } from "@/lib/goals-store";
@@ -45,10 +45,12 @@ export default function AdminPage() {
   const [pollOptions, setPollOptions] = useState(["", ""]);
   const [pollSent, setPollSent] = useState(false);
   const [memberCount, setMemberCount] = useState(0);
+  const [trialStats, setTrialStats] = useState({ active: 0, expired: 0, converted: 0 });
 
   useEffect(() => {
     (async () => {
       setMemberCount(await getMemberCount());
+      setTrialStats(await getTrialStats());
       setBroadcasts(await loadBroadcasts());
       const [polls, responses, allPosts] = await Promise.all([loadPolls(), loadResponses(), loadPosts()]);
       setPolls(polls);
@@ -416,6 +418,9 @@ export default function AdminPage() {
             {(() => {
               const stats = [
                 { label: "total members", value: memberCount },
+                { label: "trialing now", value: trialStats.active },
+                { label: "trials expired", value: trialStats.expired },
+                { label: "trial → paid", value: trialStats.converted },
                 { label: "community posts", value: posts.length },
                 { label: "comments", value: totalComments },
                 { label: "chat messages", value: totalChatMessages },

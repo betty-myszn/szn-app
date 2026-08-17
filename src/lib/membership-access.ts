@@ -10,8 +10,26 @@ const ACCESS_GRANTING_STATUSES = new Set(["active", "trialing", "past_due"]);
 
 // The one place every page/component asks "can she see this", so a member/VIP check never has
 // to be re-derived ad hoc from membershipLevel + subscriptionStatus scattered across the app.
+// True for the free 7-day trial while it's still running. During its window a trial is a full member
+// (dashboard, workshops, community all open), but it carries no Stripe subscription, so it's its own
+// predicate rather than folded into the paid checks that read subscription state. Mirrors
+// isActiveTrialRow in membership-gate.ts, the server view of the exact same rule.
+export function isTrial(member: Member | null): boolean {
+  if (!member || member.membershipLevel !== "trial") return false;
+  return !!member.trialExpiresAt && new Date(member.trialExpiresAt).getTime() > Date.now();
+}
+
+// A trial whose 7 days have run out. Nothing flips the level off 'trial' by design, so an expired
+// trial is simply "level is trial, window has passed". She's routed to her own win-back page.
+export function isExpiredTrial(member: Member | null): boolean {
+  return !!member && member.membershipLevel === "trial" && !isTrial(member);
+}
+
+// Full-platform tiers for "where is her home" routing: the paid monthly/vip tiers plus an active
+// trial. Not used for content gating (that goes through hasActiveAccess), only for the home routing
+// in memberHomeHref below.
 export function isMember(member: Member | null): boolean {
-  return !!member && (member.membershipLevel === "monthly" || member.membershipLevel === "vip");
+  return !!member && (member.membershipLevel === "monthly" || member.membershipLevel === "vip" || isTrial(member));
 }
 
 export function isVip(member: Member | null): boolean {
@@ -19,7 +37,11 @@ export function isVip(member: Member | null): boolean {
 }
 
 export function hasActiveAccess(member: Member | null): boolean {
-  if (!member || !isMember(member)) return false;
+  if (!member) return false;
+  // An active trial has full access; an expired trial has none. Handled first because a trial has no
+  // subscriptionStatus for the paid check below to read.
+  if (member.membershipLevel === "trial") return isTrial(member);
+  if (member.membershipLevel !== "monthly" && member.membershipLevel !== "vip") return false;
   return !!member.subscriptionStatus && ACCESS_GRANTING_STATUSES.has(member.subscriptionStatus);
 }
 
@@ -29,6 +51,10 @@ export function hasActiveAccess(member: Member | null): boolean {
 // stricter monthly/vip full-platform gate, social passes here but not there.
 export function hasPaidCommunityAccess(member: Member | null): boolean {
   if (!member) return false;
+  // An active trial is a full member for its 7 days, so it gets the rituals too (and, via
+  // hasRoomAccess below, the rooms). Handled first because a trial carries no subscriptionStatus for
+  // the paid check to read. Mirrors hasAccessFromRow, which already unlocks the trial server-side.
+  if (member.membershipLevel === "trial") return isTrial(member);
   const level = member.membershipLevel;
   if (level !== "social" && level !== "monthly" && level !== "vip") return false;
   return !!member.subscriptionStatus && ACCESS_GRANTING_STATUSES.has(member.subscriptionStatus);
@@ -55,6 +81,7 @@ export function isFreeMember(member: Member | null): boolean {
 export function memberHomeHref(member: Member | null): string {
   if (!member) return "/";
   if (isFreeMember(member)) return "/home";
+  if (isExpiredTrial(member)) return "/free-trial/ended"; // her own win-back page, not pricing
   if (!isMember(member)) return "/community"; // $33 social: the rooms and rituals she paid for
   return "/dashboard";
 }

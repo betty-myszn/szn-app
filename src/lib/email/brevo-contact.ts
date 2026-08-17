@@ -27,6 +27,19 @@ function freeMembersListId(): number {
   return v && /^\d+$/.test(v) ? parseInt(v, 10) : CANONICAL_LIST_FREE_MEMBERS;
 }
 
+// Free-trial joiners go on their own list ("free trial my szn", id 18) so trial signups can be
+// emailed and segmented apart from free members (15), paid members and the waitlist. Explicit id,
+// never a name lookup, same reasoning as the free-members list above. When a trial member later
+// converts, the Stripe webhook adds her to the paid list and sets PAID=true while she stays on
+// list 18, which is exactly what makes "how many trials, and how many converted" readable in Brevo.
+// Override with BREVO_LIST_FREE_TRIAL if the id ever changes.
+const CANONICAL_LIST_FREE_TRIAL = 18;
+
+function freeTrialListId(): number {
+  const v = process.env.BREVO_LIST_FREE_TRIAL?.trim();
+  return v && /^\d+$/.test(v) ? parseInt(v, 10) : CANONICAL_LIST_FREE_TRIAL;
+}
+
 export type BrevoContactResult =
   | { ok: true; listId: number }
   | { ok: false; error: string };
@@ -129,6 +142,48 @@ export async function syncFreeMemberToBrevo(contact: FreeMemberContact): Promise
 
     if (res.ok) {
       console.log("brevo free member synced", { email: contact.email, listId });
+      return { ok: true, listId };
+    }
+    const err = await res.json().catch(() => ({}));
+    if (err?.code === "duplicate_parameter") return { ok: true, listId };
+    return { ok: false, error: `brevo ${res.status}: ${JSON.stringify(err).slice(0, 200)}` };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+// Upserts a free-trial joiner as a Brevo contact and files them on the free-trial list (id 18).
+// Mirrors syncFreeMemberToBrevo exactly (no paid attributes), just a different list and source tag.
+// Called from the trial signup route after the Supabase profile is set to 'trial'. NEVER throws: a
+// contact-sync failure must never fail or block the signup, so the caller gets a result object.
+export async function syncTrialMemberToBrevo(contact: FreeMemberContact): Promise<BrevoContactResult> {
+  if (!process.env.BREVO_API_KEY) return { ok: false, error: "BREVO_API_KEY not set" };
+  if (!contact.email) return { ok: false, error: "no_email" };
+
+  try {
+    await Promise.all([ensureAttribute("MEMBERSHIP_LEVEL", "text"), ensureAttribute("SIGNUP_SOURCE", "text")]);
+    const listId = freeTrialListId();
+
+    const attributes: Record<string, string> = {
+      MEMBERSHIP_LEVEL: "trial",
+      SIGNUP_SOURCE: "free-trial",
+    };
+    const parts = (contact.name ?? "").trim().split(/\s+/).filter(Boolean);
+    if (parts[0]) attributes.FIRSTNAME = parts[0];
+    if (parts.length > 1) attributes.LASTNAME = parts.slice(1).join(" ");
+
+    const res = await brevo("/contacts", {
+      method: "POST",
+      body: JSON.stringify({
+        email: contact.email,
+        attributes,
+        listIds: [listId],
+        updateEnabled: true,
+      }),
+    });
+
+    if (res.ok) {
+      console.log("brevo trial member synced", { email: contact.email, listId });
       return { ok: true, listId };
     }
     const err = await res.json().catch(() => ({}));

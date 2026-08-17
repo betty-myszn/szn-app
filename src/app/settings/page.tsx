@@ -13,7 +13,7 @@ import { EMAIL_PREF_FIELDS, loadEmailPrefs, saveEmailPrefs, type EmailPrefs } fr
 import { updateSavedName, getSavedBirthData } from "@/lib/url-params";
 import { syncBirthDataToSupabase } from "@/lib/chart-sync";
 import { getMyReferralCode, getReferralCount } from "@/lib/referral";
-import { isVip, hasActiveAccess, hasBillingIssue, isCancellationScheduled } from "@/lib/membership-access";
+import { isVip, hasActiveAccess, hasBillingIssue, isCancellationScheduled, isTrial } from "@/lib/membership-access";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -46,6 +46,10 @@ export default function SettingsPage() {
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [referralCount, setReferralCount] = useState(0);
   const [linkCopied, setLinkCopied] = useState(false);
+  // Mount-guarded clock: reading Date.now() during render violates react-hooks/purity (kept on in
+  // this project). Set once on mount and used only for the trial days-left badge below.
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
 
   useEffect(() => {
     if (!member) return;
@@ -134,6 +138,52 @@ export default function SettingsPage() {
                   </p>
                   <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
                     see membership options
+                  </Link>
+                </>
+              ) : member.membershipLevel === "trial" ? (
+                // Free 7-day trial. Deliberately shows NO Stripe billing UI (no "manage membership"
+                // portal button, no renewal date): a trial has no Stripe customer, so that button
+                // would 404. Active trial gets a days-left badge; an expired trial gets the win-back
+                // line. Both point at /membership to become a paying member in this same account.
+                <>
+                  {isTrial(member) ? (
+                    <>
+                      <div className="flex items-center gap-3 mb-3 flex-wrap">
+                        <span style={{ fontFamily: poppins, fontSize: 18, fontWeight: 800 }}>Free trial</span>
+                        <span
+                          style={{
+                            fontSize: 9,
+                            fontWeight: 700,
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            padding: "4px 10px",
+                            background: "var(--lav-light)",
+                            color: "#3C2A70",
+                          }}
+                        >
+                          {(() => {
+                            const d =
+                              now && member.trialExpiresAt
+                                ? Math.max(0, Math.ceil((new Date(member.trialExpiresAt).getTime() - now) / 86400000))
+                                : null;
+                            return d === null ? "trial active" : d === 1 ? "1 day left" : `${d} days left`;
+                          })()}
+                        </span>
+                      </div>
+                      <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
+                        You&apos;re inside on your free 7-day trial with full access. No card is on file and nothing
+                        will be charged, your access ends automatically when the trial does. Become a member to keep
+                        everything going in this same account.
+                      </p>
+                    </>
+                  ) : (
+                    <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
+                      Your free week has ended. Your account, chart and everything you started are still saved. Become
+                      a member to pick up right where you left off.
+                    </p>
+                  )}
+                  <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
+                    become a member
                   </Link>
                 </>
               ) : (

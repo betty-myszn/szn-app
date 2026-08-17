@@ -9,9 +9,10 @@
 // live chat rooms ONLY, never the rituals (book club / moon audios) or the platform. It is created
 // exclusively by the free-signup route, never by a Stripe checkout, so it is deliberately absent
 // from CANONICAL_PRICE_TO_TIER below and can never be resolved from a price id.
-export type MembershipLevel = "none" | "free" | "social" | "monthly" | "vip";
-// A tier that a Stripe price can map to. 'free' is excluded on purpose: no price ever grants it.
-type PaidTier = Exclude<MembershipLevel, "none" | "free">;
+export type MembershipLevel = "none" | "free" | "trial" | "social" | "monthly" | "vip";
+// A tier that a Stripe price can map to. 'free' and 'trial' are excluded on purpose: they're the
+// two no-charge tiers, created only by their own signup routes, never by any Stripe price.
+type PaidTier = Exclude<MembershipLevel, "none" | "free" | "trial">;
 
 // The real, live Price IDs, hardcoded as the canonical mapping. These were previously read only
 // from env vars, but a live incident proved that fragile: when the deployed STRIPE_PRICE_* values

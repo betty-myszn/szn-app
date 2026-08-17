@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/client";
 import { getSavedBirthData, getSavedPlacements, type SavedPlacements } from "@/lib/url-params";
 import { hasFullAccessFromRow } from "@/lib/membership-gate";
 
-export type MembershipLevel = "none" | "free" | "social" | "monthly" | "vip";
+export type MembershipLevel = "none" | "free" | "trial" | "social" | "monthly" | "vip";
 
 export interface Member {
   id: string;
@@ -21,6 +21,9 @@ export interface Member {
   subscriptionStatus: string | null;
   subscriptionCurrentPeriodEnd: string | null;
   subscriptionCancelAtPeriodEnd: boolean;
+  /** ISO expiry of the free 7-day trial, null for everyone who isn't a trial member. Access during
+   *  the trial is gated purely on this (see isTrial in membership-access.ts). */
+  trialExpiresAt: string | null;
   /** True once she's finished onboarding, gates entry to the real portal */
   onboarded: boolean;
   /** False for legacy magic-link-only accounts, drives the optional "add a password" banner */
@@ -52,7 +55,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, password_set"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, password_set"
     )
     .eq("id", user.id)
     .single();
@@ -73,6 +76,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionStatus: profile?.subscription_status ?? null,
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
+    trialExpiresAt: profile?.trial_expires_at ?? null,
     onboarded: !!profile?.onboarded,
     passwordSet: !!profile?.password_set,
   };
@@ -94,4 +98,28 @@ export async function getMemberCount(): Promise<number> {
   const supabase = createClient();
   const { count } = await supabase.from("profiles").select("id", { count: "exact", head: true });
   return count || 0;
+}
+
+export interface TrialStats {
+  /** trials still inside their 7-day window right now */
+  active: number;
+  /** trials whose window has passed and who have not (yet) become paid members */
+  expired: number;
+  /** accounts that had a trial (trial_started_at set) and are now on a paid tier: conversions */
+  converted: number;
+}
+
+// Trial funnel counts for the admin dashboard. Admin only, same RLS reasoning as getMemberCount:
+// the profiles_admin_read policy lets an admin session count every row; a non-admin session would
+// only ever see her own, and this is only rendered behind the admin gate. Uses head+count queries
+// so nothing but the totals crosses the wire.
+export async function getTrialStats(): Promise<TrialStats> {
+  const supabase = createClient();
+  const nowIso = new Date().toISOString();
+  const [active, expired, converted] = await Promise.all([
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").gt("trial_expires_at", nowIso),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").lte("trial_expires_at", nowIso),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).not("trial_started_at", "is", null).in("membership_level", ["monthly", "vip"]),
+  ]);
+  return { active: active.count || 0, expired: expired.count || 0, converted: converted.count || 0 };
 }
