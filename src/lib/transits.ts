@@ -1,4 +1,5 @@
 import swisseph from "swisseph";
+import { isApplying } from "@/lib/astrology";
 import path from "path";
 import { DateTime } from "luxon";
 import {
@@ -136,6 +137,7 @@ export function calculateTransits(natalChart: ChartData): TransitData {
       degree: signData.degree,
       minute: signData.minute,
       retrograde: result.longitudeSpeed < 0,
+      longitudeSpeed: result.longitudeSpeed,
       natalHouse,
     });
   }
@@ -178,7 +180,7 @@ export function calculateTransits(natalChart: ChartData): TransitData {
             natalDegree: natal.degree,
             aspectType: type,
             orb: Math.round(orb * 100) / 100,
-            applying: diff < config.angle,
+            applying: isApplying(transit.longitude, transit.longitudeSpeed, natal.longitude, 0, config.angle),
             significance: getSignificance(transit.name, natal.name),
           });
           break;

@@ -27,6 +27,10 @@ export interface PlanetPosition {
   second: number;
   house: number;
   retrograde: boolean;
+  /** Degrees per day of ecliptic motion, signed (negative = retrograde). Used to tell whether an
+   * aspect is applying or separating. Optional because derived points (Part of Fortune) have no
+   * single meaningful speed. */
+  longitudeSpeed?: number;
   formattedDegree: string;
 }
 
@@ -190,6 +194,7 @@ export interface TransitPosition {
   degree: number;
   minute: number;
   retrograde: boolean;
+  longitudeSpeed: number; // signed deg/day, for applying/separating
   natalHouse: number; // which natal house the transit planet is in
 }
 

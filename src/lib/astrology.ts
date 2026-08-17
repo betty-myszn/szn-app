@@ -112,7 +112,7 @@ function calculateAspects(planets: PlanetPosition[]): Aspect[] {
             type,
             angle: config.angle,
             orb: Math.round(orb * 100) / 100,
-            applying: diff < config.angle,
+            applying: isApplying(p1.longitude, p1.longitudeSpeed, p2.longitude, p2.longitudeSpeed, config.angle),
           });
           break;
         }
@@ -121,6 +121,28 @@ function calculateAspects(planets: PlanetPosition[]): Aspect[] {
   }
 
   return aspects;
+}
+
+// An aspect is applying when its orb is closing, which depends on the two bodies' relative motion,
+// not on whether the current separation happens to be under the exact angle. Needs both speeds; if
+// either is unknown (a derived point like Part of Fortune) we can't tell, so report separating.
+// For a transit to a natal point, pass 0 as the natal speed since natal positions are fixed.
+export function isApplying(
+  lon1: number,
+  spd1: number | undefined,
+  lon2: number,
+  spd2: number | undefined,
+  angle: number,
+): boolean {
+  if (spd1 === undefined || spd2 === undefined) return false;
+  // Signed separation in (-180, 180].
+  const delta = (((lon1 - lon2 + 540) % 360) - 180);
+  // Rate of change of the absolute separation.
+  const dAbs = Math.sign(delta) * (spd1 - spd2);
+  // Signed distance of the current separation from exact.
+  const g = Math.abs(delta) - angle;
+  // Orb is closing when g and its rate of change pull toward zero, i.e. have opposite signs.
+  return g * dAbs < 0;
 }
 
 export function birthDataToUtc(birthData: BirthData): {
@@ -208,6 +230,7 @@ export function calculateChart(birthData: BirthData): ChartData {
       ...signData,
       house,
       retrograde,
+      longitudeSpeed: speedLng,
     });
   }
 
@@ -225,6 +248,7 @@ export function calculateChart(birthData: BirthData): ChartData {
     ...southSignData,
     house: southHouse,
     retrograde: northNode.retrograde,
+    longitudeSpeed: northNode.longitudeSpeed === undefined ? undefined : -northNode.longitudeSpeed,
   });
 
   // Part of Fortune: sect-aware (day chart Asc + Moon − Sun; night chart Asc + Sun − Moon).
