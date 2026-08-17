@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
@@ -139,6 +140,7 @@ export default function EventsPage() {
               {workshop.coverImage && (
                 <div
                   style={{
+                    position: "relative",
                     borderRadius: 14,
                     overflow: "hidden",
                     border: workshop.dark ? "1px solid rgba(255,255,255,0.15)" : "var(--border)",
@@ -147,13 +149,14 @@ export default function EventsPage() {
                     background: "#000",
                   }}
                 >
-                  {/* plain img, not next/image: the cover just needs to fill a 16:9 frame and the
-                      file is already sized for it */}
-                  <img
+                  {/* next/image so the cover is resized and served in a modern format instead of
+                      shipping the full file. sizes: full width on mobile, half the 2-col grid up. */}
+                  <Image
                     src={workshop.coverImage}
                     alt={workshop.title}
-                    loading="lazy"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
               )}
