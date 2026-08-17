@@ -136,6 +136,27 @@ export default function EventsPage() {
                 borderRight: i === 0 ? "var(--border)" : undefined,
               }}
             >
+              {workshop.coverImage && (
+                <div
+                  style={{
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    border: workshop.dark ? "1px solid rgba(255,255,255,0.15)" : "var(--border)",
+                    marginBottom: 22,
+                    aspectRatio: "16 / 9",
+                    background: "#000",
+                  }}
+                >
+                  {/* plain img, not next/image: the cover just needs to fill a 16:9 frame and the
+                      file is already sized for it */}
+                  <img
+                    src={workshop.coverImage}
+                    alt={workshop.title}
+                    loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                </div>
+              )}
               <div
                 style={{
                   fontSize: 11,
