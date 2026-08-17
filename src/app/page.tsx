@@ -571,7 +571,7 @@ export default function Home() {
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
               {szn} szn isn&apos;t something you read about. A live masterclass and a live astro tapping every month,
-              the next one monday 17 august, then the tools to actually live it.
+              the next one wednesday 19 august, then the tools to actually live it.
             </p>
             <Link href="/events" className="btn-pink no-underline">
               see what&apos;s on

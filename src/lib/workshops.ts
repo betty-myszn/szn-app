@@ -59,11 +59,11 @@ export const WORKSHOPS: Workshop[] = [
   {
     id: "leo-szn-workshop-2",
     label: "leo szn workshop 2",
-    meta: "17 august · 7pm la time · next live class",
+    meta: "19 august · 7pm la time · next live class",
     title: "Visible AF: How to Show Up & Get Paid",
     coverImage: "/visible-af-cover.jpg",
     dark: false,
-    startIso: "2026-08-17T19:00:00-07:00",
+    startIso: "2026-08-19T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     zoomUrl: null,

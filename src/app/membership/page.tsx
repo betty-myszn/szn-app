@@ -83,7 +83,7 @@ function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }
           {[
             { num: "1", text: "Check your inbox for a confirmation email from us" },
             { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
-            { num: "3", text: "Next live class is Monday 17 August at 7pm LA time" },
+            { num: "3", text: "Next live class is Wednesday 19 August at 7pm LA time" },
           ].map((step) => (
             <div key={step.num} className="flex gap-3 items-start">
               <span style={{
@@ -257,8 +257,8 @@ export default function MembershipPage() {
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
           {enrolmentOpen
-            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your next live class kicks off Monday 17 August at 7pm LA time."
-            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Next live class kicks off Monday 17 August at 7pm LA time."}
+            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your next live class kicks off Wednesday 19 August at 7pm LA time."
+            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Next live class kicks off Wednesday 19 August at 7pm LA time."}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
           1:1 coaching with Betty is VIP only. However many months of becoming her you want.
@@ -620,7 +620,7 @@ export default function MembershipPage() {
                 this month&apos;s astro tapping
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                17 august · 7pm la time · next live class
+                19 august · 7pm la time · next live class
               </div>
               <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
                 Visible AF: How to Show Up &amp; Get Paid
@@ -1091,7 +1091,7 @@ export default function MembershipPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "Next live class 17 August", "Cancel anytime", "Limited spots"].map((b) => (
+                {["1:1 coaching with Betty", "Founding member pricing", "Next live class 19 August", "Cancel anytime", "Limited spots"].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",
