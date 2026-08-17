@@ -1,10 +1,15 @@
 "use client";
 
+import { createContext, useContext, useState } from "react";
 import type { LifeAreaReading } from "@/lib/life-areas";
 import type { AreaDesignReading } from "@/lib/life-area-design";
 import { GATE_CONTENT } from "@/lib/human-design-gate-content";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+
+// When true, each Band collapses into a click-to-open row instead of sitting open. Passed by
+// context so the fourteen Band call sites don't each need the prop threaded through.
+const CollapsibleCtx = createContext(false);
 
 // Astrology and Human Design woven into one full, designed read for a single life area.
 // The chart keeps its full depth (ingredients, signature, aspects, the block, the deeper
@@ -16,16 +21,19 @@ export default function WovenAreaRead({
   reading,
   design,
   seasonSign,
+  collapsible = false,
 }: {
   reading: LifeAreaReading;
   design: AreaDesignReading | null;
   seasonSign: string;
+  collapsible?: boolean;
 }) {
   const season = seasonSign.toLowerCase();
   const coreGates = design ? design.gates.filter((g) => g.core) : [];
   const extraGates = design ? design.gates.filter((g) => !g.core) : [];
 
   return (
+    <CollapsibleCtx.Provider value={collapsible}>
     <div style={{ maxWidth: 700, margin: "0 auto" }}>
       {/* HERO */}
       <div style={{ background: "var(--dark)", color: "#fff", borderRadius: 20, padding: "34px 28px", marginBottom: 18 }}>
@@ -224,6 +232,7 @@ export default function WovenAreaRead({
         as the live pages.
       </p>
     </div>
+    </CollapsibleCtx.Provider>
   );
 }
 
@@ -267,14 +276,39 @@ function DesignCallout({ heading, body }: { heading: string; body: string }) {
 }
 
 function Band({ bg, n, label, children }: { bg: string; n: number; label: string; children: React.ReactNode }) {
-  const onDark = false;
-  return (
-    <div style={{ background: bg, borderRadius: 18, padding: "22px 24px", marginBottom: 14, border: bg === "#fff" ? "1px solid rgba(0,0,0,0.08)" : undefined }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <span style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, color: "var(--pink)", border: "1.5px solid var(--pink)", borderRadius: 999, width: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
-        <div style={{ ...eyebrow, opacity: onDark ? 1 : 0.6 }}>{label}</div>
+  const collapsible = useContext(CollapsibleCtx);
+  // First section opens by default so the page never lands fully closed.
+  const [open, setOpen] = useState(!collapsible || n === 1);
+  const numberChip = (
+    <span style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, color: "var(--pink)", border: "1.5px solid var(--pink)", borderRadius: 999, width: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
+  );
+  const outer: React.CSSProperties = { background: bg, borderRadius: 18, padding: "22px 24px", marginBottom: 14, border: bg === "#fff" ? "1px solid rgba(0,0,0,0.08)" : undefined };
+
+  if (!collapsible) {
+    return (
+      <div style={outer}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+          {numberChip}
+          <div style={{ ...eyebrow, opacity: 0.6 }}>{label}</div>
+        </div>
+        {children}
       </div>
-      {children}
+    );
+  }
+
+  return (
+    <div style={{ ...outer, padding: open ? "22px 24px" : "18px 24px" }}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", padding: 0, cursor: "pointer", textAlign: "left" }}
+      >
+        {numberChip}
+        <div style={{ ...eyebrow, opacity: 0.75, flex: 1 }}>{label}</div>
+        <span aria-hidden style={{ fontFamily: poppins, fontSize: 20, lineHeight: 1, fontWeight: 700, color: "var(--pink)", flexShrink: 0, transform: open ? "rotate(45deg)" : "none", transition: "transform 0.18s" }}>+</span>
+      </button>
+      {open && <div style={{ marginTop: 14 }}>{children}</div>}
     </div>
   );
 }

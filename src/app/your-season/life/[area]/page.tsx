@@ -116,7 +116,10 @@ export default function LifeAreaPage() {
         </div>
       </section>
       <section className="px-5 md:px-8 py-10">
-        <WovenAreaRead reading={reading} design={design} seasonSign={season.sign} />
+        {/* Collapsible preview on confidence only, so Betty can approve the click-to-open design
+            before it rolls out to every area. Remove the condition (or set collapsible always) to
+            apply it everywhere. */}
+        <WovenAreaRead reading={reading} design={design} seasonSign={season.sign} collapsible={areaId === "confidence"} />
       </section>
       <section className="px-5 md:px-8 pb-12">
         <div style={{ maxWidth: 700, margin: "0 auto" }}>
