@@ -16,6 +16,27 @@ import { addJournalEntry } from "@/lib/journal-store";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+const sectionHead: React.CSSProperties = {
+  fontFamily: poppins,
+  fontSize: "clamp(28px, 4.6vw, 50px)",
+  fontWeight: 800,
+  letterSpacing: "-1.2px",
+  lineHeight: 1.04,
+  color: "var(--dark)",
+  textTransform: "lowercase",
+  margin: "0 0 22px",
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: poppins,
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: "0.18em",
+  textTransform: "uppercase",
+  color: "var(--pink)",
+  marginBottom: 12,
+};
+
 // One personalised mission per activated house
 const HOUSE_MISSIONS: Record<number, string> = {
   1: "Debut the new you, change the profile photo, wear the look, introduce yourself the way the next version of you would.",
@@ -101,28 +122,28 @@ export default function SeasonPersonalised() {
 
   return (
     <>
-      {/* Where the season falls */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+      {/* Where the season falls, in the soft rounded language so it reads differently from the
+          hard-edged "the work this szn" block below it */}
+      <section className="px-5 md:px-8 py-12" style={{ background: "var(--cream)", borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-5">welcome to your personalised {season.sign.toLowerCase()} szn guide, {name.toLowerCase()}</div>
-          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            <Link
-              href={houseHref}
-              className="no-underline block p-8 hover:opacity-90 transition-opacity"
-              style={{ background: "var(--pink)", borderRight: "var(--border)" }}
-            >
-              <div className="tag mb-3" style={{ color: "#fff" }}>where {season.sign.toLowerCase()} falls in your chart</div>
-              <h2 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.7px", lineHeight: 1.2, color: "#fff", marginBottom: 12 }}>
-                {season.sign.toLowerCase()} activates your {ordinalHouse(activatedHouse)} house of {houseMeaning.title}.
-              </h2>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", lineHeight: 1.8, marginBottom: 16 }}>
-                While everyone else gets generic {season.sign.toLowerCase()} szn advice, yours is specific: this energy is lighting up {houseMeaning.rules}. That makes this an incredible szn for {houseMeaning.lifeAreas.slice(0, 3).join(", ")}.
-              </p>
-              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", borderBottom: "1.5px solid #fff", paddingBottom: 2 }}>
-                see your full {ordinalHouse(activatedHouse)} house breakdown →
-              </span>
-            </Link>
-            <Link href={themeHref} className="no-underline block p-8 hover:bg-[#fafafa] transition-colors">
+          <div style={eyebrow}>welcome, {name.toLowerCase()}</div>
+          <h2 style={sectionHead}>your personalised <span className="pk">{season.sign.toLowerCase()} szn guide.</span></h2>
+
+          <Link href={houseHref} className="no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "var(--lav-light)", padding: 32, marginBottom: 16 }}>
+            <div className="tag mb-3" style={{ color: "#3C2A70" }}>where {season.sign.toLowerCase()} falls in your chart</div>
+            <h3 style={{ fontFamily: poppins, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, letterSpacing: "-0.8px", lineHeight: 1.12, color: "#3C2A70", marginBottom: 14 }}>
+              {season.sign.toLowerCase()} activates your {ordinalHouse(activatedHouse)} house of {houseMeaning.title}.
+            </h3>
+            <p style={{ fontSize: 15, color: "#3C2A70", lineHeight: 1.8, marginBottom: 16, maxWidth: 680 }}>
+              While everyone else gets generic {season.sign.toLowerCase()} szn advice, yours is specific: this energy is lighting up {houseMeaning.rules}. That makes this an incredible szn for {houseMeaning.lifeAreas.slice(0, 3).join(", ")}.
+            </p>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3C2A70", borderBottom: "1.5px solid #3C2A70", paddingBottom: 2 }}>
+              see your full {ordinalHouse(activatedHouse)} house breakdown &rarr;
+            </span>
+          </Link>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href={themeHref} className="no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--pink)", background: "var(--pink-bg)", padding: 28 }}>
               <div className="tag mb-3">your theme this szn</div>
               <h3 style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 10, color: "var(--dark)" }}>
                 {seasonTraits.flavour[0]} energy, aimed at your {houseMeaning.lifeAreas[0]}.
@@ -132,13 +153,11 @@ export default function SeasonPersonalised() {
                 {sunSign === season.sign ? " And it's your solar return szn, your personal new year. The glow-up is scheduled." : ""}
               </p>
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", borderBottom: "1.5px solid var(--pink)", paddingBottom: 2 }}>
-                get your full {houseMeaning.lifeAreas[0]} protocol →
+                get your full {houseMeaning.lifeAreas[0]} protocol &rarr;
               </span>
             </Link>
-          </div>
-          {activatedRuler && (
-            <div style={{ border: "var(--border)", borderTop: "none" }}>
-              <div className="p-8">
+            {activatedRuler && (
+              <div style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "#fff", padding: 28 }}>
                 <div className="tag mb-3">how this szn reaches you</div>
                 <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>
                   <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
@@ -147,15 +166,15 @@ export default function SeasonPersonalised() {
                     : ""}
                 </p>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 
       {/* The work this szn: pattern, opportunities + challenges, mission + ritual, merged */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto flex flex-col gap-5">
-          <div className="tag">the work this szn</div>
+          <h2 style={{ ...sectionHead, margin: 0 }}>the work <span className="pk">this szn.</span></h2>
           <Link href="/your-season/pattern" className="no-underline grid md:grid-cols-2 gap-0 block" style={{ border: "var(--border)" }}>
             <div className="p-8 hover:opacity-90 transition-opacity" style={{ background: "var(--pink)", borderRight: "var(--border)" }}>
               <div className="tag mb-3" style={{ color: "#fff" }}>the old identity</div>
@@ -230,7 +249,7 @@ export default function SeasonPersonalised() {
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5" style={{ background: "var(--dark)" }}>
           <div>
-            <div className="tag mb-2" style={{ color: "var(--pink)" }}>this szn&apos;s challenges</div>
+            <h2 style={{ ...sectionHead, color: "#fff", margin: "0 0 12px" }}>this szn's <span className="pk">challenges.</span></h2>
             <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 8 }}>
               collect the proof you&apos;re becoming her.
             </h2>
@@ -247,7 +266,7 @@ export default function SeasonPersonalised() {
       {/* Experiments */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-2">run an experiment</div>
+          <h2 style={sectionHead}>run an <span className="pk">experiment.</span></h2>
           <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 10 }}>
             don&apos;t just read it, test it.
           </h2>
@@ -333,7 +352,9 @@ export default function SeasonPersonalised() {
 
       {/* Seasonal prompts + affirmations, personalised */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+        <div className="max-w-5xl mx-auto">
+          <h2 style={sectionHead}>prompts + <span className="pk">affirmations.</span></h2>
+          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
           <div className="p-8" style={{ borderRight: "var(--border)" }}>
             <div className="tag mb-4">seasonal journal prompts · yours</div>
             <div className="flex flex-col gap-4">
@@ -364,6 +385,7 @@ export default function SeasonPersonalised() {
                 </p>
               ))}
             </div>
+          </div>
           </div>
         </div>
       </section>

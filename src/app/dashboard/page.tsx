@@ -349,6 +349,9 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      {/* ── your leo szn, area by area (reused) ── */}
+      <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
+
       {/* ── HAPPENING: workshops carousel with cover images ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
         <div className="max-w-6xl mx-auto">
@@ -404,9 +407,6 @@ export default function DashboardPage() {
 
       {/* ── newest replay spotlight (self-hides until one exists) ── */}
       <ReplayHighlight />
-
-      {/* ── your leo szn, area by area (reused) ── */}
-      <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
 
       {/* ── human design × season (reused) ── */}
       <SeasonDesignInline />
