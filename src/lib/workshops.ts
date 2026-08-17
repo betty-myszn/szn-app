@@ -107,6 +107,7 @@ export const WORKSHOPS: Workshop[] = [
     meta: "2 september · 6:30pm la time · virgo szn preview",
     title: "Virgo Season: Get Your Sh*t Together & Become Her",
     dark: false,
+    coverImage: "/virgo-workshop-cover.jpg",
     startIso: "2026-09-02T18:30:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
