@@ -249,7 +249,7 @@ export default function SeasonPersonalised() {
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5" style={{ background: "var(--dark)" }}>
           <div>
-            <h2 style={{ ...sectionHead, color: "#fff", margin: "0 0 12px" }}>this szn's <span className="pk">challenges.</span></h2>
+            <h2 style={{ ...sectionHead, color: "#fff", margin: "0 0 12px" }}>this szn&rsquo;s <span className="pk">challenges.</span></h2>
             <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 8 }}>
               collect the proof you&apos;re becoming her.
             </h2>

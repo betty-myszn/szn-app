@@ -129,7 +129,10 @@ export default function Home() {
   // visitor the wrong day. It also used to grab the first dated class in the list, which kept
   // pointing at a workshop that had already happened; upcomingWorkshops drops past classes and
   // sorts soonest-first, so [0] is always genuinely the next one.
-  const nextWorkshop = upcomingWorkshops(Date.now())[0];
+  // Captured once at mount rather than read during render: Date.now() in the render body is an
+  // impure read, and the next workshop does not change within a session anyway.
+  const [nowMs] = useState(() => Date.now());
+  const nextWorkshop = upcomingWorkshops(nowMs)[0];
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");

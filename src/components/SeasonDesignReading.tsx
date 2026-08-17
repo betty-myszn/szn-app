@@ -204,7 +204,7 @@ export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesi
       </div>
 
       <p style={{ fontSize: 12, opacity: 0.5, marginTop: 24, lineHeight: 1.6 }}>
-        Combines your natal Human Design with the Sun's journey through {r.season.sign} this season.
+        Combines your natal Human Design with the Sun&rsquo;s journey through {r.season.sign} this season.
       </p>
     </>
   );

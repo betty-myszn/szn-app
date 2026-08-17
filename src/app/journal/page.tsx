@@ -272,7 +272,7 @@ export default function JournalPage() {
             <div style={{ border: "var(--border)" }}>
               <div className="p-7" style={{ background: "var(--gold)", borderBottom: "var(--border)" }}>
                 <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.5, color: "#854F0B" }}>
-                  Log every win, however small. Landed a client, raised your prices, started therapy, posted consistently, had the hard conversation. This becomes proof of how far you've actually come.
+                  Log every win, however small. Landed a client, raised your prices, started therapy, posted consistently, had the hard conversation. This becomes proof of how far you&rsquo;ve actually come.
                 </p>
               </div>
               <div className="p-7 flex flex-col md:flex-row gap-3">
