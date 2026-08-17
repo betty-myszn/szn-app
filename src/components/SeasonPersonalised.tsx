@@ -152,10 +152,10 @@ export default function SeasonPersonalised() {
         </div>
       </section>
 
-      {/* The Pattern You're Breaking */}
+      {/* The work this szn: pattern, opportunities + challenges, mission + ritual, merged */}
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="tag mb-5">the pattern you&apos;re breaking this szn</div>
+        <div className="max-w-5xl mx-auto flex flex-col gap-5">
+          <div className="tag">the work this szn</div>
           <Link href="/your-season/pattern" className="no-underline grid md:grid-cols-2 gap-0 block" style={{ border: "var(--border)" }}>
             <div className="p-8 hover:opacity-90 transition-opacity" style={{ background: "var(--pink)", borderRight: "var(--border)" }}>
               <div className="tag mb-3" style={{ color: "#fff" }}>the old identity</div>
@@ -177,6 +177,52 @@ export default function SeasonPersonalised() {
               </span>
             </div>
           </Link>
+          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+          <div className="p-8" style={{ borderRight: "var(--border)" }}>
+            <div className="tag mb-4">your opportunities</div>
+            <div className="flex flex-col gap-4">
+              {[
+                { label: "confidence", text: seasonTraits.confidence },
+                { label: "career & money", text: `with your ${ordinalHouse(activatedHouse)} house activated, moves around your ${houseMeaning.lifeAreas[0]} pay double this szn` },
+                { label: "relationships", text: seasonTraits.love },
+                { label: "growth", text: seasonTraits.growth },
+              ].map((item) => (
+                <div key={item.label}>
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 3 }}>
+                    {item.label}
+                  </div>
+                  <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7 }}>
+                    {item.text.charAt(0).toUpperCase() + item.text.slice(1)}.
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-8" style={{ background: "var(--dark)" }}>
+            <div className="tag mb-4" style={{ color: "var(--lav)" }}>your challenges</div>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85, marginBottom: 16 }}>
+              The shadow to watch: {seasonTraits.shadow}. With this szn hitting your {ordinalHouse(activatedHouse)} house, it&apos;ll show up around {houseMeaning.lifeAreas[0]} first.
+            </p>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85 }}>
+              <span style={{ color: "var(--pink)", fontWeight: 700 }}>coach&apos;s note: </span>
+              When it appears, don&apos;t fight it, name it. Write it down, say it out loud, then take the smallest possible action in the opposite direction. Patterns lose power when they lose secrecy.
+            </p>
+          </div>
+        </div>
+          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+          <div className="p-8" style={{ background: "var(--gold)", borderRight: "var(--border)" }}>
+            <div className="tag mb-3">your main character mission</div>
+            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.35, color: "#854F0B" }}>
+              {HOUSE_MISSIONS[activatedHouse]}
+            </p>
+          </div>
+          <div className="p-8" style={{ background: "var(--lav-light)" }}>
+            <div className="tag mb-3">your szn ritual</div>
+            <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.85 }}>
+              Each morning this szn: hand on heart, three breaths, then say your affirmation, &ldquo;{season.affirmation}&rdquo;, and visualise one scene from your {houseMeaning.lifeAreas[0]} glow-up as if it already happened. Ninety seconds. If tension comes up, tap gently on the collarbone while you repeat it. Consistency beats intensity.
+            </p>
+          </div>
+        </div>
         </div>
       </section>
 
@@ -277,59 +323,7 @@ export default function SeasonPersonalised() {
         </div>
       </section>
 
-      {/* Opportunities + challenges */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-          <div className="p-8" style={{ borderRight: "var(--border)" }}>
-            <div className="tag mb-4">your opportunities</div>
-            <div className="flex flex-col gap-4">
-              {[
-                { label: "confidence", text: seasonTraits.confidence },
-                { label: "career & money", text: `with your ${ordinalHouse(activatedHouse)} house activated, moves around your ${houseMeaning.lifeAreas[0]} pay double this szn` },
-                { label: "relationships", text: seasonTraits.love },
-                { label: "growth", text: seasonTraits.growth },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 3 }}>
-                    {item.label}
-                  </div>
-                  <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7 }}>
-                    {item.text.charAt(0).toUpperCase() + item.text.slice(1)}.
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="p-8" style={{ background: "var(--dark)" }}>
-            <div className="tag mb-4" style={{ color: "var(--lav)" }}>your challenges</div>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85, marginBottom: 16 }}>
-              The shadow to watch: {seasonTraits.shadow}. With this szn hitting your {ordinalHouse(activatedHouse)} house, it&apos;ll show up around {houseMeaning.lifeAreas[0]} first.
-            </p>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85 }}>
-              <span style={{ color: "var(--pink)", fontWeight: 700 }}>coach&apos;s note: </span>
-              When it appears, don&apos;t fight it, name it. Write it down, say it out loud, then take the smallest possible action in the opposite direction. Patterns lose power when they lose secrecy.
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Mission + ritual */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-          <div className="p-8" style={{ background: "var(--gold)", borderRight: "var(--border)" }}>
-            <div className="tag mb-3">your main character mission</div>
-            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.35, color: "#854F0B" }}>
-              {HOUSE_MISSIONS[activatedHouse]}
-            </p>
-          </div>
-          <div className="p-8" style={{ background: "var(--lav-light)" }}>
-            <div className="tag mb-3">your szn ritual</div>
-            <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.85 }}>
-              Each morning this szn: hand on heart, three breaths, then say your affirmation, &ldquo;{season.affirmation}&rdquo;, and visualise one scene from your {houseMeaning.lifeAreas[0]} glow-up as if it already happened. Ninety seconds. If tension comes up, tap gently on the collarbone while you repeat it. Consistency beats intensity.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* The "your cosmic calendar" section was removed on 16 Aug 2026. It listed the same
           lunations and eclipses the cosmic weather rail already shows at the top of the dashboard,
