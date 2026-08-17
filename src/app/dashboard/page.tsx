@@ -21,7 +21,6 @@ import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type Da
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
 import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
-import SeasonThemes from "@/components/SeasonThemes";
 import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
@@ -402,9 +401,6 @@ export default function DashboardPage() {
       {/* ── your full personalised season guide (reused) ── */}
       <div id="season-guide" />
       <SeasonPersonalised />
-
-      {/* ── the season's four themes ── */}
-      <SeasonThemes season={season} />
 
       {/* ── newest replay spotlight (self-hides until one exists) ── */}
       <ReplayHighlight />
