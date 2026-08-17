@@ -352,13 +352,14 @@ export default function DashboardPage() {
       {/* ── your leo szn, area by area (reused) ── */}
       <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
 
-      {/* ── HAPPENING: workshops carousel with cover images ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
+      {/* ── UPCOMING MASTERCLASSES: workshops carousel with cover images. Titled by what it is, not
+          by season, because the list runs across seasons (Leo into Virgo), not just this szn. ── */}
+      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 26 }}>
             <div>
-              <div style={eyebrow}>happening this szn</div>
-              <h2 style={sectionHead}>live this <span className="pk">month.</span></h2>
+              <div style={eyebrow}>live with betty</div>
+              <h2 style={sectionHead}>upcoming <span className="pk">masterclasses.</span></h2>
             </div>
             <div className="flex gap-2.5">
               <button onClick={() => scrollTrack(-1)} aria-label="previous workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>‹</button>
