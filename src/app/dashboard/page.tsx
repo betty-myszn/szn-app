@@ -8,18 +8,15 @@ import { useYourSzn } from "@/lib/use-your-szn";
 import { useChart } from "@/lib/use-chart";
 import { formatSeasonDates } from "@/lib/seasons";
 import { useSeason } from "@/lib/use-season";
-import { composeLifeArea } from "@/lib/life-areas";
 import { SIGN_OVERVIEWS } from "@/lib/interpretations";
-import { GOAL_CATEGORY_TO_LIFE_AREA } from "@/lib/goals-store";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
 import { upcomingWorkshops, pastWorkshops, type Workshop } from "@/lib/workshops";
 import { useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
-import { loadGoals, getPrimaryGoal, type Goal } from "@/lib/goals-store";
+import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
 import { loadChallengeProgress, computeChallengeStreak } from "@/lib/challenge-progress";
-import { loadSignals, detectAvoidance, type AvoidancePattern } from "@/lib/signals";
 import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type DashboardPrefs } from "@/lib/dashboard-preferences";
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
 import Ticker from "@/components/Ticker";
@@ -75,7 +72,6 @@ export default function DashboardPage() {
   const [streak, setStreak] = useState<{ current: number; longest: number } | null>(null);
   const [primaryGoal, setPrimaryGoal] = useState<Goal | null | undefined>(undefined);
   const [challengeStreak, setChallengeStreak] = useState({ current: 0, longest: 0, activeToday: false });
-  const [pattern, setPattern] = useState<AvoidancePattern | null>(null);
   const [prefs, setPrefs] = useState<DashboardPrefs | null>(null);
   const [customizing, setCustomizing] = useState(false);
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
@@ -93,8 +89,6 @@ export default function DashboardPage() {
     setStreak(computeJournalStreak(loadJournalEntries()));
     setPrimaryGoal(getPrimaryGoal());
     setChallengeStreak(computeChallengeStreak(loadChallengeProgress()));
-    const patterns = detectAvoidance(loadGoals(), loadSignals(), season.sign);
-    setPattern(patterns[0] || null);
     setPrefs(loadDashboardPrefs());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -162,8 +156,6 @@ export default function DashboardPage() {
   const rising = RISING_VIBES[member.placements.rising];
   const signOverview = SIGN_OVERVIEWS[season.sign];
   const tarot = getTarotOfDay(member.email || member.name);
-  const goalReading =
-    primaryGoal && chart ? composeLifeArea(GOAL_CATEGORY_TO_LIFE_AREA[primaryGoal.category], chart, season, primaryGoal) : null;
   const sign = season.sign.toLowerCase();
   const heroImg = heroImageForSign(season.sign);
   const oneMove =
@@ -355,42 +347,6 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── FOR YOU, RIGHT NOW: goal + pattern + goal astrology ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--pink-bg)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={eyebrow}>for you, right now</div>
-          <h2 style={{ ...sectionHead, marginBottom: 26 }}>what your szn is <span className="pk">asking of you.</span></h2>
-          <div className="grid grid-cols-1 gap-4">
-            <div style={{ borderRadius: 22, background: "var(--dark)", color: "#fff", padding: 30 }}>
-              <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>the pattern i&apos;m noticing</div>
-              {pattern && pattern.severity !== "active" ? (
-                <>
-                  <p style={{ fontFamily: poppins, fontSize: 16, fontWeight: 700, lineHeight: 1.5, letterSpacing: "-0.2px", margin: "0 0 18px" }}>
-                    {pattern.severity === "avoiding"
-                      ? `You said "${pattern.goal.title}" mattered. It's been ${pattern.daysSinceLastSignal} days since anything moved on it. That's the pattern showing you exactly where you're avoiding yourself.`
-                      : `"${pattern.goal.title}" has gone quiet, ${pattern.daysSinceLastSignal} days since you last moved on it. Just a nudge before it becomes a crisis.`}
-                  </p>
-                  <Link href="/goals" className="no-underline" style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#fff" }}>do something about it →</Link>
-                </>
-              ) : (
-                <p style={{ fontFamily: poppins, fontSize: 16, fontWeight: 700, lineHeight: 1.5, margin: 0 }}>
-                  Nothing&apos;s slipping right now. Keep the evidence stacking up, {member.name.toLowerCase()}.
-                </p>
-              )}
-            </div>
-          </div>
-          {goalReading && primaryGoal && (
-            <div style={{ marginTop: 16, borderRadius: 22, background: "var(--lav-light)", border: "2px solid var(--purple)", padding: "26px 30px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
-              <div>
-                <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 8 }}>the astrology behind &ldquo;{primaryGoal.title}&rdquo;</div>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#3C2A70", maxWidth: 640 }}>{goalReading.inYourChart}</p>
-              </div>
-              <Link href={`/your-season/life/${goalReading.id}`} className="no-underline" style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", whiteSpace: "nowrap" }}>go deeper on {goalReading.label} →</Link>
-            </div>
-          )}
         </div>
       </section>
 
