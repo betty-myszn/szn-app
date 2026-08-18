@@ -288,7 +288,10 @@ export default function FreeTrialPage() {
             <div className="hero-cta">
               <a href="#ft-signup" className="cta">start my free 7 days</a>
               <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
-                {"no card required. your access ends automatically after 7 days."}
+                {"no card required. your full access ends automatically after 7 days."}
+              </p>
+              <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
+                {"and after your week, the chat rooms and your charts stay yours, free."}
               </p>
             </div>
           </div>

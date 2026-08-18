@@ -875,20 +875,20 @@ export default function MembershipPage() {
               </div>
               <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 8 }}>
                 <span style={{ fontFamily: pp, fontSize: 34, fontWeight: 800, color: "var(--dark)", letterSpacing: "-1.5px", lineHeight: 1 }}>
-                  Free
+                  Free trial
                 </span>
-                <span style={{ fontSize: 13, color: "var(--grey)" }}>you won&apos;t need a card</span>
+                <span style={{ fontSize: 13, color: "var(--grey)" }}>full access for 7 days · no card</span>
               </div>
               <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, maxWidth: 520 }}>
-                Make a free account and get chatting in the astrology rooms with the girls, which is where most of the day to day actually happens. The personalised astrology and Human Design platform, and the live monthly masterclass and astro tapping, all sit in the membership tiers below, and they&apos;ll be waiting there for whenever you want them.
+                Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astro tapping, the meditations and the community rooms. No card needed, and when the week is up the chat rooms and your charts stay yours, free, for whenever you want to come back.
               </p>
             </div>
             <Link
-              href="/signup"
+              href="/free-trial"
               className="btn-pink"
               style={{ whiteSpace: "nowrap", textAlign: "center" }}
             >
-              join the rooms, free
+              start my free 7 days
             </Link>
           </div>
 
@@ -1026,7 +1026,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start free for the community chat rooms and upgrade to MY SZN when you're ready for the full personalised platform and the monthly masterclass and astro tapping. You manage it all from your settings, and your upgrade takes effect straight away.",
+                a: "Anytime. Start with a free 7-day trial of the whole platform, no card needed. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astro tapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
               },
               {
                 q: "How much time do I need to commit each week?",
