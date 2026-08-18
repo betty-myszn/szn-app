@@ -570,7 +570,7 @@ export default function NavBar() {
                 member login
               </Link>
               <Link
-                href="/chart"
+                href="/free-trial"
                 className="no-underline"
                 style={{
                   background: "var(--pink)",
@@ -584,7 +584,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                free chart
+                free trial
               </Link>
             </>
           )}
@@ -795,9 +795,19 @@ export default function NavBar() {
               </button>
             </>
           ) : (
-            <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
-              member login
-            </Link>
+            <>
+              <Link
+                href="/free-trial"
+                onClick={() => setOpen(false)}
+                className="no-underline"
+                style={{ color: "var(--pink)", fontWeight: 800 }}
+              >
+                start free trial
+              </Link>
+              <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
+                member login
+              </Link>
+            </>
           )}
         </div>
       )}

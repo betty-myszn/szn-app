@@ -213,43 +213,32 @@ export default function Home() {
             chart, and it moves every time the sky does.
           </p>
           <div className="flex items-center gap-4 flex-wrap">
-            {/* While the doors are open the primary CTA goes straight into the payment-first
-                flow (pricing, then Stripe Checkout). Once the window closes it reverts to
-                collecting leads, no redesign needed. See src/lib/enrolment.ts. */}
+            {/* The free 7-day trial is the primary front door: full access, no card. The paid join
+                sits beside it as the secondary option (or the waitlist when enrolment is closed), so
+                the paid path is always one click away without being the cold ask a stranger sees first. */}
+            <Link
+              href="/free-trial"
+              className="no-underline"
+              style={{
+                background: "var(--dark)",
+                color: "#fff",
+                fontFamily: poppins,
+                fontSize: 15,
+                fontWeight: 800,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "22px 46px",
+                display: "inline-block",
+              }}
+            >
+              start your free 7 days
+            </Link>
             {enrolmentOpen ? (
-              <Link
-                href="/membership"
-                className="no-underline"
-                style={{
-                  background: "var(--dark)",
-                  color: "#fff",
-                  fontFamily: poppins,
-                  fontSize: 15,
-                  fontWeight: 800,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "22px 46px",
-                  display: "inline-block",
-                }}
-              >
-                join my szn
+              <Link href="/membership" className="btn-outline no-underline">
+                or join · $88/mo
               </Link>
             ) : (
-              <a
-                href="#waitlist"
-                className="no-underline"
-                style={{
-                  background: "var(--dark)",
-                  color: "#fff",
-                  fontFamily: poppins,
-                  fontSize: 15,
-                  fontWeight: 800,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "22px 46px",
-                  display: "inline-block",
-                }}
-              >
+              <a href="#waitlist" className="btn-outline no-underline">
                 join the waitlist
               </a>
             )}
@@ -257,6 +246,9 @@ export default function Home() {
               member login
             </Link>
           </div>
+          <p style={{ fontSize: 13, color: "var(--dark)", marginTop: 16, fontWeight: 600 }}>
+            7 days free, no card needed. $88/mo to keep the full membership after your week.
+          </p>
         </div>
       </section>
 
@@ -300,7 +292,7 @@ export default function Home() {
                 up, what to look out for, the shadow, and the work to actually do with it.
               </p>
               <Link
-                href="/membership"
+                href="/free-trial"
                 className="no-underline"
                 style={{
                   display: "inline-block",
@@ -314,7 +306,7 @@ export default function Home() {
                   padding: "15px 30px",
                 }}
               >
-                unlock your eclipse guide →
+                get your eclipse guide free →
               </Link>
             </div>
             {/* the glittery eclipse moon: on the right on desktop, centred under the copy on mobile
@@ -708,12 +700,12 @@ export default function Home() {
             }}
           >
             {enrolmentOpen
-              ? "Join MY SZN and unlock a personalised astrology portal built around your unique birth chart, helping you become the woman you're here to be."
+              ? "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and it's $88/mo to keep it all after your week."
               : "Join the waitlist and you'll be first through the doors when they open. You sign up with your birth date, time and place, and that builds the whole portal around you."}
           </p>
           {enrolmentOpen ? (
             <Link
-              href="/membership"
+              href="/free-trial"
               className="no-underline"
               style={{
                 background: "var(--pink)",
@@ -727,7 +719,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              join my szn
+              start your free 7 days
             </Link>
           ) : !joined ? (
             <form

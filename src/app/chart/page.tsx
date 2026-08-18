@@ -182,10 +182,10 @@ export default function ChartPage() {
       {/* Membership CTA */}
       <div className="px-8 py-14 text-center" style={{ background: "var(--pink-light)", borderTop: "var(--border)" }}>
         <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
-          want to go deeper than your chart?
+          go deeper than your chart
         </p>
         <h2 style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 800, lineHeight: 1.15, marginBottom: 12 }}>
-          Join the MY SZN membership.
+          Try MY SZN free for 7 days.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
           Your chart is just the beginning. Get a live masterclass and astro tapping every month, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
@@ -193,12 +193,12 @@ export default function ChartPage() {
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           From $88/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
-        <a href="/membership" style={{
+        <a href="/free-trial" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
           fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 700,
           letterSpacing: "0.1em", textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
         }}>
-          join the waitlist
+          start your free 7 days
         </a>
       </div>
     </>
