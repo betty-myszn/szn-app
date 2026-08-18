@@ -14,19 +14,27 @@ export function useMember(): { member: Member | null; ready: boolean } {
   useEffect(() => {
     let active = true;
     const sync = async () => {
-      let m = await getCurrentMember();
+      const m = await getCurrentMember();
       if (!active) return;
-      // Logged in: pull her chart, goals, journal and challenge progress down from Supabase
-      // (once per tab session, hydrateSessionOnce no-ops on repeat calls) in case this browser
-      // has never seen them before, then re-read the member so placements reflect what landed.
-      if (m) {
-        await hydrateSessionOnce();
-        if (!active) return;
-        m = await getCurrentMember();
-        if (!active) return;
-      }
+      // Render as soon as we know who she is. Do NOT block the first paint on hydrateSessionOnce:
+      // it pulls her chart, goals, journal, challenge progress, signals and preferences down from
+      // Supabase (eight round-trips), and awaiting it here left every personalised page on a blank
+      // white screen for several seconds, because those pages render nothing until `ready` flips.
+      // Mark ready with the member now; hydrate in the background and re-read the member once it
+      // lands so placements/streaks fill in without ever blocking the paint. On a returning browser
+      // the local data is already there, so nothing visibly changes; only a brand-new device sees a
+      // brief empty state fill in, which is far better than a five-second white screen.
       setMember(m);
       setReady(true);
+      if (m) {
+        hydrateSessionOnce()
+          .then(async () => {
+            if (!active) return;
+            const refreshed = await getCurrentMember();
+            if (active) setMember(refreshed);
+          })
+          .catch(() => {});
+      }
     };
     sync();
 
