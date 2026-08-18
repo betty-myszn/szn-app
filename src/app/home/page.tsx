@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
-import { isFreeMember, memberHomeHref } from "@/lib/membership-access";
+import { isFreeMember, isExpiredTrial, memberHomeHref } from "@/lib/membership-access";
 import { allPosts } from "@/lib/blog";
 import { upcomingWorkshops, formatWorkshopWhen } from "@/lib/workshops";
 import { getCurrentSeason, formatSeasonDates } from "@/lib/seasons";
@@ -53,14 +53,25 @@ export default function FreeHomePage() {
     <div style={{ background: "var(--cream, #FBF9F6)" }}>
       {/* ── Welcome + the two things she can do right now ── */}
       <section className="px-5 md:px-8 pt-12 pb-8" style={{ maxWidth: 1100, margin: "0 auto" }}>
-        <div className="tag mb-3">your free account</div>
+        <div className="tag mb-3">{isExpiredTrial(member) ? "your free week has ended" : "your free account"}</div>
         <h1 style={{ fontFamily: poppins, fontSize: 38, fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.05, marginBottom: 12 }}>
           hey {firstName},<br />
-          <span className="pk">the girls are in the rooms.</span>
+          <span className="pk">{isExpiredTrial(member) ? "your week is up, the rooms aren't." : "the girls are in the rooms."}</span>
         </h1>
-        <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 32 }}>
-          This is yours for free, for as long as you want it. The chat rooms are open all day, the blog keeps you across what the sky is doing, and your charts are sitting below whenever you want to read yourself.
-        </p>
+        {isExpiredTrial(member) ? (
+          <>
+            <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 20 }}>
+              Your free week is over, but the chat rooms and your charts are still yours. Your personalised platform, the workshops and the meditations are members-only now. Become a member to get them back and pick up exactly where you left off.
+            </p>
+            <Link href="/membership" className="btn-pink no-underline" style={{ display: "inline-block", marginBottom: 32 }}>
+              become a member
+            </Link>
+          </>
+        ) : (
+          <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 32 }}>
+            This is yours for free, for as long as you want it. The chat rooms are open all day, the blog keeps you across what the sky is doing, and your charts are sitting below whenever you want to read yourself.
+          </p>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Link

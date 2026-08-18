@@ -131,14 +131,7 @@ export async function proxy(request: NextRequest) {
     .eq("id", user.id)
     .maybeSingle();
 
-  // Expired free trial: whatever gated route she lands on, send her to her own "your free week is
-  // over" page rather than the generic pricing bounce, so she keeps the designed win-back state and
-  // her saved account. An ACTIVE trial passes hasFullAccessFromRow below and never reaches here.
-  if (isExpiredTrialRow(profile)) {
-    return redirectPreservingSession(request, response, "/free-trial/ended");
-  }
-
-  const roomAccess = hasRoomAccessFromRow(profile); // free tier + any paid tier
+  const roomAccess = hasRoomAccessFromRow(profile); // free tier + expired trials + any paid tier
   const access = hasAccessFromRow(profile); // any active paid tier, incl. social
   const fullAccess = hasFullAccessFromRow(profile); // monthly or vip only
 
@@ -165,7 +158,13 @@ export async function proxy(request: NextRequest) {
 
   // Full platform. A social member has active access but not full access, so she lands on the
   // upgrade prompt rather than the pricing-from-scratch page.
-  if (!access) return redirectPreservingSession(request, response, "/membership?reason=none");
+  if (!access) {
+    // An expired trial hitting a premium door (personalised platform, workshops, meditations) gets
+    // her designed "your free week is over" win-back page instead of the generic pricing bounce.
+    // She keeps the chat rooms and her chart via /home and /community, which pass the gate above.
+    if (isExpiredTrialRow(profile)) return redirectPreservingSession(request, response, "/free-trial/ended");
+    return redirectPreservingSession(request, response, "/membership?reason=none");
+  }
   if (!fullAccess) return redirectPreservingSession(request, response, "/membership?reason=upgrade");
   if (!profile?.onboarded) return redirectPreservingSession(request, response, "/onboarding");
   return response;

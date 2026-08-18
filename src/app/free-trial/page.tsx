@@ -459,7 +459,7 @@ export default function FreeTrialPage() {
             <div className="tl"><div className="d">day 1</div><b>you&apos;re in</b><p>{"sign up in under a minute with no card. you're logged straight in as a full member, chart already built."}</p></div>
             <div className="tl"><div className="d">days 1 to 7</div><b>live in it</b><p>{"your platform, the live workshops and replays, the astro tapping, the vault and the member rooms. all of it."}</p></div>
             <div className="tl"><div className="d">day 6</div><b>a gentle heads up</b><p>{"we'll remind you your free week is nearly up, so the end never catches you by surprise."}</p></div>
-            <div className="tl"><div className="d">day 7</div><b>it ends on its own</b><p>{"access closes automatically. no charge, nothing to cancel. you stay only if you choose to."}</p></div>
+            <div className="tl"><div className="d">day 7</div><b>it winds down on its own</b><p>{"your personalised platform, workshops and meditations close. you keep the chat rooms and your chart. no charge, nothing to cancel."}</p></div>
           </div>
         </div>
       </section>
@@ -479,7 +479,7 @@ export default function FreeTrialPage() {
             </details>
             <details>
               <summary>What happens on day 7?</summary>
-              <div className="a">{"Your full access closes and you'll see a page inviting you to become a member. Your account, your chart and everything you started stay saved, so if you join later you pick up exactly where you left off."}</div>
+              <div className="a">{"Your personalised platform, the workshops and the meditations close, but you keep the chat rooms and your chart. Everything you started stays saved, so if you become a member you pick up exactly where you left off."}</div>
             </details>
             <details>
               <summary>Do I really get everything a paying member gets?</summary>

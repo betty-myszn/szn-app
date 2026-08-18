@@ -38,6 +38,10 @@ const css = `
 @media(max-width:719px){.fte .ri:last-child{border-bottom:none;}}
 .fte .ri .x{flex-shrink:0;width:22px;height:22px;display:grid;place-items:center;color:var(--grey-light);font-size:13px;border:1.5px solid rgba(26,26,26,.3);}
 .fte .ri b{font-family:var(--font-poppins),Poppins,sans-serif;text-transform:lowercase;font-weight:700;font-size:15px;}
+.fte .ri.keep{opacity:1;}
+.fte .ri.keep .x{color:var(--pink);border-color:var(--pink);}
+.fte .backlink{display:inline-block;margin-top:22px;font-family:var(--font-poppins),Poppins,sans-serif;font-weight:700;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--lav);text-decoration:none;}
+.fte .backlink:hover{color:#fff;}
 
 .fte .coming h2{font-size:clamp(28px,5vw,48px);text-transform:lowercase;margin-top:18px;}
 .fte .ev-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:32px;}
@@ -72,13 +76,20 @@ const css = `
 .fte .foot .ey{color:var(--grey-light);display:block;margin-top:10px;}
 `;
 
-const RECAP = [
-  "your full chart portal",
-  "this season's reading",
-  "every workshop + replay",
-  "the astro tapping library",
+// What an expired trial keeps for free, versus what becoming a member unlocks again.
+const STILL_YOURS = [
+  "the chat rooms",
+  "your birth chart",
+  "your human design chart",
+];
+
+const MEMBERS_ONLY = [
+  "your personalised platform",
+  "this season's readings",
+  "the workshops + replays",
+  "the astro tapping",
+  "the meditations",
   "the vault + resources",
-  "the member rooms",
 ];
 
 const COMING: Array<{ cover: string; meta: string; title: string; desc: string }> = [
@@ -106,25 +117,32 @@ export default function TrialEndedPage() {
           <span className="ey">your free week</span>
           <h1 className="disp">your free week<br />is over.</h1>
           <p className="lead">
-            {"For the last seven days you had the whole of MY SZN. I hope it started to feel like yours."}
+            {"The chat rooms and your chart are still yours to keep. Your personalised platform, the workshops and the meditations are the part that's for members."}
           </p>
+          <Link href="/community" className="backlink">back to the chat rooms →</Link>
         </div>
       </header>
 
       <section className="sec recap">
         <div className="wrap">
-          <div className="rl">what you had this week</div>
+          <div className="rl">still yours, free</div>
           <div className="recap-grid">
-            {RECAP.map((item) => (
-              <div className="ri" key={item}>
+            {STILL_YOURS.map((item) => (
+              <div className="ri keep" key={item}>
                 <span className="x">✦</span>
                 <b>{item}</b>
               </div>
             ))}
           </div>
-          <p className="micro" style={{ marginTop: 18, textAlign: "center" }}>
-            your access to all of this has now closed.
-          </p>
+          <div className="rl" style={{ marginTop: 44 }}>members only now</div>
+          <div className="recap-grid">
+            {MEMBERS_ONLY.map((item) => (
+              <div className="ri" key={item}>
+                <span className="x">✕</span>
+                <b>{item}</b>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

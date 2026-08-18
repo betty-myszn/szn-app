@@ -41,6 +41,9 @@ export function isExpiredTrialRow(row: MembershipRow | null | undefined): boolea
 export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
   if ((row.membership_level ?? "none") === "free") return true;
+  // An expired trial keeps the chat rooms (rooms-and-chart-only, the same shape as the free tier);
+  // everything premium is gone. An ACTIVE trial is handled by hasAccessFromRow below (full access).
+  if (isExpiredTrialRow(row)) return true;
   return hasAccessFromRow(row);
 }
 
@@ -103,10 +106,10 @@ export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boo
 // - Full access but not onboarded: the chart onboarding is mandatory before the portal opens.
 // - Full access and onboarded: the real portal.
 export function postAuthDestination(row: MembershipRow | null | undefined): string {
-  if (hasRoomAccessFromRow(row) && !hasAccessFromRow(row)) return "/home"; // free tier
-  // An expired trial logging back in lands on her own "your free week is over" page, never the
-  // generic pricing bounce, so she keeps the designed win-back state and her saved account.
-  if (isExpiredTrialRow(row)) return "/free-trial/ended";
+  // Free tier AND expired trials: rooms-and-chart-only home. Both have room access but no paid
+  // access, so both land on /home, where an expired trial additionally sees a "your free week
+  // ended" banner and the premium doors sit walled.
+  if (hasRoomAccessFromRow(row) && !hasAccessFromRow(row)) return "/home";
   if (!hasAccessFromRow(row)) return "/membership?reason=none";
   if (!hasFullAccessFromRow(row)) return "/community";
   if (!row?.onboarded) return "/onboarding";
