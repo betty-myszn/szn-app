@@ -4,7 +4,7 @@ import { useState } from "react";
 import PlacesAutocomplete from "@/components/PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
-import { syncBirthDataToSupabase, syncChartToSupabase } from "@/lib/chart-sync";
+import { syncChartToSupabase } from "@/lib/chart-sync";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -213,6 +213,18 @@ export default function FreeTrialPage() {
     };
 
     setLoading(true);
+
+    // Kick the chart calculation off IN PARALLEL with account creation. /api/calculate needs no
+    // session and only uses the birth data, so it can run while the account is being created rather
+    // than after it, which takes the slowest single step off the critical path and cuts the wait.
+    const calcPromise = fetch("/api/calculate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(birthData),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+
     try {
       const res = await fetch("/api/account/create-trial", {
         method: "POST",
@@ -242,25 +254,20 @@ export default function FreeTrialPage() {
         return;
       }
 
-      // Account created and signed in. Calculate and cache her chart exactly like onboarding does,
-      // so she lands with her real chart rather than the demo. Non-fatal: if the calc fails she
-      // still gets inside, the chart just fills in later.
+      // Account created + signed in. The route already saved her birth data server-side, so here we
+      // only cache the chart the parallel calc produced, so she lands with her real chart rather
+      // than the demo. Non-fatal: if the calc failed she still gets inside and it fills in on first
+      // view.
       try {
-        const calc = await fetch("/api/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(birthData),
-        });
-        if (calc.ok) {
-          const chartData = await calc.json();
+        const chartData = await calcPromise;
+        if (chartData) {
           const placements = placementsFromChart(chartData);
           saveBirthData(birthData);
           savePlacements(placements);
-          await syncBirthDataToSupabase(birthData);
           await syncChartToSupabase(chartData, placements);
         }
       } catch (err) {
-        console.error("trial chart calc failed (non-fatal)", err);
+        console.error("trial chart cache failed (non-fatal)", err);
       }
 
       window.location.href = data.signedIn === false ? "/login" : "/dashboard";

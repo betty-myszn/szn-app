@@ -148,10 +148,13 @@ export async function POST(request: NextRequest) {
   }
 
   // File her on the Brevo "free trial my szn" list (id 18) so trial signups are segmented apart from
-  // free and paid contacts. Awaited but non-fatal: syncTrialMemberToBrevo never throws, so a Brevo
-  // hiccup can't cost her the account she just created.
-  const brevoResult = await syncTrialMemberToBrevo({ email, name: firstName });
-  if (!brevoResult.ok) console.error("account/create-trial: brevo trial sync failed", brevoResult.error);
+  // free and paid contacts. Fire-and-forget on purpose: filing a marketing contact is not worth
+  // making her wait on an external API (2-3 Brevo round-trips) before she gets inside. This runs on
+  // Railway's persistent Node server, so the promise finishes after the response is sent;
+  // syncTrialMemberToBrevo never throws and logs its own failures.
+  void syncTrialMemberToBrevo({ email, name: firstName }).then((r) => {
+    if (!r.ok) console.error("account/create-trial: brevo trial sync failed", r.error);
+  });
 
   // Store her birth details now (admin client, since birth_data RLS is owner-only and she has no
   // session yet), so her chart is ready the moment she's inside. The client also calculates and
