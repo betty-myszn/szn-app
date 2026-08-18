@@ -79,6 +79,21 @@ export async function proxy(request: NextRequest) {
     );
   }
 
+  // Route type first, from the pathname alone (cheap string matching), BEFORE any Supabase call, so
+  // a logged-in member browsing PUBLIC pages doesn't pay an auth round-trip on every one of them.
+  // Before this, every home / seasons / blog / chart / membership hit by a signed-in member made a
+  // full network call to Supabase auth to refresh the token before the page could render, which is
+  // a big chunk of the per-page latency. The session still refreshes on any gated route she reaches
+  // (below) and on the client (the browser client auto-refreshes), so skipping the refresh on
+  // public pages costs nothing and removes that call from the common case.
+  const { pathname } = request.nextUrl;
+  const inFullPlatform = pathMatches(pathname, FULL_PLATFORM);
+  const inCommunity = pathMatches(pathname, COMMUNITY_AREA);
+  const inFreeHome = pathMatches(pathname, FREE_HOME);
+  const inOnboarding = pathname === ONBOARDING || pathname.startsWith(ONBOARDING + "/");
+  const inLoginOnly = pathMatches(pathname, LOGIN_ONLY);
+  if (!inFullPlatform && !inCommunity && !inOnboarding && !inLoginOnly && !inFreeHome) return response;
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -100,20 +115,10 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Touches the session so Supabase can refresh an expiring token before it reaches a page.
+  // Touches the session so Supabase can refresh an expiring token before it reaches a gated page.
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
-  const inFullPlatform = pathMatches(pathname, FULL_PLATFORM);
-  const inCommunity = pathMatches(pathname, COMMUNITY_AREA);
-  const inFreeHome = pathMatches(pathname, FREE_HOME);
-  const inOnboarding = pathname === ONBOARDING || pathname.startsWith(ONBOARDING + "/");
-  const inLoginOnly = pathMatches(pathname, LOGIN_ONLY);
-
-  // Public route: nothing to gate, just carry the refreshed session forward.
-  if (!inFullPlatform && !inCommunity && !inOnboarding && !inLoginOnly && !inFreeHome) return response;
 
   // Any gated route requires a session first.
   if (!user) {
