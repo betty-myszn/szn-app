@@ -95,7 +95,7 @@ export default function ChallengesPage() {
 
   const submitBadgeShare = () => {
     if (!badgeShareDraft.trim() || !member) return;
-    addPost(member.name.toLowerCase(), `${member.placements.sun.toLowerCase()} sun`, "wins", badgeShareDraft.trim());
+    addPost(member.name.toLowerCase(), member.placements?.sun ? `${member.placements.sun.toLowerCase()} sun` : "my szn member", "wins", badgeShareDraft.trim());
     setBadgeToShare(null);
     setBadgeShareDraft("");
     setShareFlash(true);
@@ -109,7 +109,7 @@ export default function ChallengesPage() {
 
   const submitShare = () => {
     if (!shareDraft.trim() || !member) return;
-    addPost(member.name.toLowerCase(), `${member.placements.sun.toLowerCase()} sun`, "challenges", shareDraft.trim());
+    addPost(member.name.toLowerCase(), member.placements?.sun ? `${member.placements.sun.toLowerCase()} sun` : "my szn member", "challenges", shareDraft.trim());
     setSharingId(null);
     setShareDraft("");
     setShareFlash(true);

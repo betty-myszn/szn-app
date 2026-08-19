@@ -152,7 +152,18 @@ export default function DashboardPage() {
     );
   }
 
-  const rising = RISING_VIBES[member.placements.rising];
+  // Placements can be missing or empty here, and that is not an edge case: `ready` now flips as
+  // soon as the member is known and hydration finishes in the background (see useMember), so the
+  // first paint can land before her chart has been pulled down. A brand-new trial signup has no
+  // saved chart at all. Every read below must therefore tolerate "" / undefined, an unguarded
+  // .toLowerCase() on a missing placement throws and blanks the whole dashboard.
+  const placements = member.placements ?? null;
+  const bigThree = [
+    { l: "sun", s: placements?.sun },
+    { l: "moon", s: placements?.moon },
+    { l: "rising", s: placements?.rising },
+  ].filter((p): p is { l: string; s: string } => typeof p.s === "string" && p.s.length > 0);
+  const rising = placements?.rising ? RISING_VIBES[placements.rising] : undefined;
   const signOverview = SIGN_OVERVIEWS[season.sign];
   const tarot = getTarotOfDay(member.email || member.name);
   const sign = season.sign.toLowerCase();
@@ -273,11 +284,7 @@ export default function DashboardPage() {
                 ))}
               </div>
               <div className="flex flex-wrap gap-2.5">
-                {[
-                  { l: "sun", s: member.placements.sun },
-                  { l: "moon", s: member.placements.moon },
-                  { l: "rising", s: member.placements.rising },
-                ].map((p) => (
+                {bigThree.map((p) => (
                   <span key={p.l} style={{ fontSize: 11, color: "var(--dark)", background: "#fff", border: "1.5px solid rgba(26,26,26,0.12)", borderRadius: 40, padding: "7px 14px" }}>
                     <b style={{ color: "var(--pink)", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: 10, marginRight: 5 }}>{p.l}</b>
                     {p.s.toLowerCase()}

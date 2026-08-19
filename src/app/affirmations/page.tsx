@@ -103,7 +103,7 @@ export default function AffirmationsPage() {
           <div className="p-8" style={{ borderRight: "var(--border)" }}>
             <div className="tag mb-3">why these words</div>
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8 }}>
-              These affirmations are tuned to {season.sign.toLowerCase()} szn and your {member.placements.sun.toLowerCase()} sun, themes of {season.themes.slice(0, 2).join(" and ")}. They change with every szn, so the words always match the work.
+              These affirmations are tuned to {season.sign.toLowerCase()} szn{member.placements?.sun ? ` and your ${member.placements.sun.toLowerCase()} sun` : ""}, themes of {season.themes.slice(0, 2).join(" and ")}. They change with every szn, so the words always match the work.
             </p>
           </div>
           <div className="p-8" style={{ background: "var(--pink-light)" }}>

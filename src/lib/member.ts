@@ -32,6 +32,17 @@ export interface Member {
 
 // Standing in for a real chart until onboarding has saved one, keeps every page that reads
 // member.placements working even for a brand new member mid-onboarding.
+// Drops keys whose value isn't a non-empty string, so a partially-filled stored object can be
+// merged over the demo defaults without punching holes in it.
+function pruneEmpty(p: SavedPlacements | null): Partial<SavedPlacements> {
+  if (!p) return {};
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(p)) {
+    if (typeof v === "string" && v.trim() !== "") out[k] = v;
+  }
+  return out as Partial<SavedPlacements>;
+}
+
 const DEMO_PLACEMENTS: SavedPlacements = {
   sun: "Leo",
   moon: "Pisces",
@@ -70,7 +81,12 @@ export async function getCurrentMember(): Promise<Member | null> {
     memberSince: profile?.created_at || user.created_at || new Date().toISOString(),
     isAdmin: !!profile?.is_admin,
     hasRealChart: !!placements?.sun,
-    placements: placements || DEMO_PLACEMENTS,
+    // A stored placements object can be partial: placementsFromChart falls back to "" for anything
+    // the ephemeris didn't return, and an older browser may hold a shape written before a field was
+    // added. `placements || DEMO_PLACEMENTS` only caught a missing object, so an object with empty
+    // or absent signs sailed through and every `.toLowerCase()` on it threw, blanking the page.
+    // Filling the gaps from DEMO_PLACEMENTS keeps every key a real string.
+    placements: { ...DEMO_PLACEMENTS, ...pruneEmpty(placements) },
     membershipLevel: (profile?.membership_level as MembershipLevel) || "none",
     hasFullAccess: hasFullAccessFromRow(profile),
     subscriptionStatus: profile?.subscription_status ?? null,

@@ -124,7 +124,7 @@ export default function CommunityPage() {
     if (!draft.trim()) return;
     const content = draft.trim();
     setDraft("");
-    const updated = await addPost(member.name.toLowerCase(), `${member.placements.sun.toLowerCase()} sun`, draftSpace, content);
+    const updated = await addPost(member.name.toLowerCase(), member.placements?.sun ? `${member.placements.sun.toLowerCase()} sun` : "my szn member", draftSpace, content);
     setPosts(updated);
   };
 
@@ -324,7 +324,7 @@ export default function CommunityPage() {
                       borderRight: (i + 1) % 4 !== 0 ? "1px solid #eee" : undefined,
                       borderBottom: i < SIGN_ROOMS.length - 4 ? "1px solid #eee" : undefined,
                       color: "var(--dark)",
-                      background: member.placements.sun.toLowerCase() === room.id ? "var(--gold)" : "#fff",
+                      background: member.placements?.sun?.toLowerCase() === room.id ? "var(--gold)" : "#fff",
                     }}
                   >
                     {roomsWithUnread.has(room.id) && (

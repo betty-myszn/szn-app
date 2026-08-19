@@ -26,8 +26,27 @@ export default function StylePage() {
     );
   }
 
-  const venus = member.placements.venus;
-  const rising = member.placements.rising;
+  // Placements can be missing on first paint (useMember marks ready before hydration finishes) and
+  // are absent entirely for a member who hasn't added her birth details yet. Send her to onboarding
+  // rather than dereferencing an empty sign, which would throw and blank the page.
+  const venus = member.placements?.venus;
+  const rising = member.placements?.rising;
+  if (!venus || !rising) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center" style={{ maxWidth: 420 }}>
+          <h1 style={{ fontFamily: poppins, fontSize: 28, fontWeight: 800, marginBottom: 16 }}>
+            your style codes are loading.
+          </h1>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
+            Add your birth details and this page fills in with your Venus style codes and your rising
+            vibe, how to dress like the woman you&apos;re becoming.
+          </p>
+          <Link href="/onboarding" className="btn-pink">add your chart</Link>
+        </div>
+      </section>
+    );
+  }
   const venusNotes = VENUS_STYLE_NOTES[venus];
   const venusStyle = VENUS_STYLE[venus];
   const risingVibe = RISING_VIBES[rising];
