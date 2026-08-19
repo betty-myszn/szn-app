@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { getSavedBirthData, getSavedPlacements, type SavedPlacements } from "@/lib/url-params";
+import { clearSavedBirthData, getSavedBirthData, getSavedPlacements, type SavedPlacements } from "@/lib/url-params";
 import { hasFullAccessFromRow } from "@/lib/membership-gate";
 
 export type MembershipLevel = "none" | "free" | "trial" | "social" | "monthly" | "vip";
@@ -56,20 +56,47 @@ const DEMO_PLACEMENTS: SavedPlacements = {
   midheaven: "Sagittarius",
 };
 
+// supabase-js reports "no session" as an AuthSessionMissingError rather than a bare null user, so
+// a logged-out visitor and a broken auth service arrive here looking similar. Matched on the error
+// name with a message fallback, since only the name is part of the public API.
+function isMissingSessionError(error: { name?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  return error.name === "AuthSessionMissingError" || /session missing|session_not_found/i.test(error.message ?? "");
+}
+
 export async function getCurrentMember(): Promise<Member | null> {
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // supabase-js does NOT throw on a network/service failure here: it resolves with user null and an
+  // error set. Ignoring that error made a transient blip indistinguishable from "logged out", so a
+  // live trial or paying member got "members only, babe, log in" and reasonably concluded her
+  // account was gone. Re-throw instead, so useMember can tell her it's our side and offer a retry.
+  // A clean "no session" (no error, no user) still returns null, which is a real logged-out member.
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  // "Auth session missing" is NOT a failure: it's what supabase-js returns for a plain logged-out
+  // visitor, so it must stay a null member (the "members only, log in" state). Only a real fault
+  // (network, 5xx, service down) is re-thrown, otherwise every logged-out visitor would be shown
+  // the "something went wrong, try again" screen instead of a login prompt.
+  if (authError && !isMissingSessionError(authError)) {
+    throw new Error(`auth lookup failed: ${authError.message}`);
+  }
+  const user = authData?.user;
   if (!user) return null;
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
       "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, password_set"
     )
     .eq("id", user.id)
-    .single();
+    // maybeSingle, not single: a genuinely missing profile row must stay a null profile (exactly
+    // what the old ignored-error path produced, and what proxy.ts uses), not a thrown error that
+    // would trap her on a retry screen forever. Only a real query failure reaches the throw below.
+    .maybeSingle();
+  // Same reasoning one level down: a failed profile read left membership_level undefined, which
+  // reads as "none" and shows an active member the "your portal's waiting, see membership options"
+  // upsell, telling someone who is already paying to pay again. Treat it as a failure, not a
+  // downgrade.
+  if (profileError) throw new Error(`profile lookup failed: ${profileError.message}`);
 
   const placements = getSavedPlacements();
   const birthData = getSavedBirthData();
@@ -101,7 +128,19 @@ export async function getCurrentMember(): Promise<Member | null> {
 export async function logout(): Promise<void> {
   const supabase = createClient();
   await supabase.auth.signOut();
-  if (typeof window !== "undefined") window.dispatchEvent(new Event("myszn-auth-change"));
+  // Drop the cached chart on the way out. It's keyed to the browser, not the account, so leaving it
+  // behind meant the next person to log in on a shared laptop inherited the previous member's
+  // placements: hydration only overwrites them when SHE has a chart of her own, so someone without
+  // one would have been shown a stranger's sun, moon and rising as her own reading.
+  clearSavedBirthData();
+  if (typeof window !== "undefined") {
+    try {
+      sessionStorage.removeItem("myszn_hydrated_session");
+    } catch {
+      // sessionStorage unavailable, the next login just re-hydrates anyway
+    }
+    window.dispatchEvent(new Event("myszn-auth-change"));
+  }
 }
 
 export function isAdminMember(member: Member | null): boolean {

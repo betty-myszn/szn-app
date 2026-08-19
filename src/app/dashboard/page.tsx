@@ -64,7 +64,7 @@ const sectionHead: React.CSSProperties = {
 };
 
 export default function DashboardPage() {
-  const { member, ready } = useMember();
+  const { member, ready, error } = useMember();
   const { data: szn } = useYourSzn();
   const { chart } = useChart();
   const season = useSeason();
@@ -117,7 +117,45 @@ export default function DashboardPage() {
     setPrefs(toggleDashboardSection(id));
   };
 
-  if (!ready) return null;
+  // Never return null here: a bare null is a blank white screen, and `ready` used to be able to
+  // hang false forever if the member lookup threw. `ready` is now guaranteed to flip (see
+  // useMember), so this is a genuine, brief "still loading" and gets a branded state instead.
+  if (!ready) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center" aria-live="polite">
+          <div
+            className="animate-spin"
+            style={{ width: 30, height: 30, margin: "0 auto 18px", borderRadius: "50%", border: "3px solid var(--pink-light, #f6d9e7)", borderTopColor: "var(--pink)" }}
+          />
+          <p style={{ fontFamily: poppins, fontSize: 14, color: "var(--grey)" }}>loading your season...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // The lookup itself failed (transient Supabase/auth/network), not a logged-out member. Offer a
+  // real way back in instead of a blank page or a misleading "members only".
+  if (error && !member) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center" style={{ maxWidth: 420 }}>
+          <h1 style={{ fontFamily: poppins, fontSize: 28, fontWeight: 800, marginBottom: 16 }}>
+            we couldn&apos;t load your season.
+          </h1>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 22 }}>
+            Nothing is lost and it isn&apos;t you, this is on our side. Give it another go.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <button onClick={() => window.location.reload()} className="btn-pink" style={{ cursor: "pointer", border: "none" }}>
+              try again
+            </button>
+            <Link href="/login" className="btn-outline no-underline">log in</Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (!member) {
     return (
@@ -152,11 +190,37 @@ export default function DashboardPage() {
     );
   }
 
-  // Placements can be missing or empty here, and that is not an edge case: `ready` now flips as
-  // soon as the member is known and hydration finishes in the background (see useMember), so the
-  // first paint can land before her chart has been pulled down. A brand-new trial signup has no
-  // saved chart at all. Every read below must therefore tolerate "" / undefined, an unguarded
-  // .toLowerCase() on a missing placement throws and blanks the whole dashboard.
+  // No REAL chart on this device yet. Two ways to get here: her chart is still hydrating from
+  // Supabase on a fresh browser (a second, then hasRealChart flips true and this whole block
+  // re-renders into the real dashboard on its own), or she genuinely has no chart (a signup where
+  // the client-side calc didn't land). Either way we must NOT render the dashboard proper, because
+  // member.placements is padded with DEMO_PLACEMENTS as an anti-crash net and rendering it would
+  // show a real member a stranger's Leo/Pisces/Aquarius chart. Show a loading state that offers a
+  // route to onboarding as a fallback, never fake astrology.
+  if (!member.hasRealChart) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center" style={{ maxWidth: 440 }} aria-live="polite">
+          <div
+            className="animate-spin"
+            style={{ width: 30, height: 30, margin: "0 auto 18px", borderRadius: "50%", border: "3px solid var(--pink-light, #f6d9e7)", borderTopColor: "var(--pink)" }}
+          />
+          <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>
+            setting up your season...
+          </h1>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
+            We&apos;re pulling your chart together. If this doesn&apos;t clear in a moment, add your
+            birth details and we&apos;ll build your personalised season from scratch.
+          </p>
+          <Link href="/onboarding" className="btn-pink">add your birth details</Link>
+        </div>
+      </section>
+    );
+  }
+
+  // Placements are real and present from here (hasRealChart gate above). Reads stay defensively
+  // optional-chained anyway, since an individual outer body can still be "" if the ephemeris didn't
+  // return it, and an unguarded .toLowerCase() on that would blank the page.
   const placements = member.placements ?? null;
   const bigThree = [
     { l: "sun", s: placements?.sun },
