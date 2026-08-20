@@ -69,8 +69,8 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: null,
     zoomMeetingId: null,
     zoomPasscode: null,
-    replayYoutubeId: null,
-    replayPublishedAt: null,
+    replayYoutubeId: "FfdDrqfZ4ic",
+    replayPublishedAt: "2026-08-20",
     paragraphs: [
       "You weren't born to be the internet's best kept secret.",
       "If you've been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines… we're changing that.",
