@@ -8,6 +8,7 @@
 // rhetorical questions.
 
 import type { SeasonDesign, SeasonBlock } from "@/types/season-design";
+import { VIRGO_SEASON } from "@/lib/season-design-virgo";
 
 const block = (summary: string, identity: string, cycle: string, guidance: string): SeasonBlock => ({
   summary,
@@ -550,6 +551,7 @@ export const LEO_SEASON: SeasonDesign = {
 // Registry, keyed by lowercase sign. Future seasons drop in here.
 export const SEASON_DESIGNS: Record<string, SeasonDesign> = {
   leo: LEO_SEASON,
+  virgo: VIRGO_SEASON,
 };
 
 export function getSeasonDesign(sign: string): SeasonDesign | null {

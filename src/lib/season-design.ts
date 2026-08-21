@@ -60,7 +60,7 @@ function gateActivation(gate: number, natal: boolean): GateActivation {
   };
 }
 
-// Build the full Leo-through-Human-Design reading. `sign` defaults to the current
+// Build the full season-through-Human-Design reading. `sign` defaults to the current
 // calendar season; pass one to preview a specific season. Returns null if that
 // season has no Human Design definition yet.
 export function buildSeasonDesignReading(

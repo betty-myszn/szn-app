@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
+import { useSeason } from "@/lib/use-season";
 import { hasActiveAccess } from "@/lib/membership-access";
 import {
   getRsvp,
@@ -17,7 +18,7 @@ import {
   setNotifyMe,
   type RsvpRecord,
 } from "@/lib/rsvp";
-import { WORKSHOPS, workshopStatus, pastWorkshops, type Workshop } from "@/lib/workshops";
+import { WORKSHOPS, workshopStatus, pastWorkshops, seasonOfNextWorkshop, type Workshop } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -27,6 +28,7 @@ const STAR_BURST_ANGLES = Array.from({ length: 8 }, (_, i) => (i / 8) * Math.PI 
 
 export default function EventsPage() {
   const { member, ready } = useMember();
+  const season = useSeason();
   const [rsvps, setRsvps] = useState<Record<string, RsvpRecord | null>>({});
   const [showAttendees, setShowAttendees] = useState<Record<string, boolean>>({});
   const [burstId, setBurstId] = useState<string | null>(null);
@@ -115,7 +117,7 @@ export default function EventsPage() {
               lineHeight: 1.05,
             }}
           >
-            Leo szn is about to <span className="pk">hit different.</span>
+            {(now === null ? season.sign : seasonOfNextWorkshop(now, season.sign)).toLowerCase()} szn is about to <span className="pk">hit different.</span>
           </h1>
           {member && (
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 540, margin: "16px auto 0" }}>

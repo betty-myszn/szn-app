@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlacesAutocomplete from "@/components/PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
 import { syncChartToSupabase } from "@/lib/chart-sync";
+import { workshopCardRow, shortWorkshopMeta } from "@/lib/workshops";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -192,6 +193,22 @@ export default function FreeTrialPage() {
   const [company, setCompany] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // The workshop row reads the real schedule, so it leads with whatever is actually next and
+  // never advertises a finished class as upcoming. Clock read on the client so the
+  // upcoming-vs-past split can't differ between the server pass and hydration.
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
+  const eventCards =
+    now === null
+      ? []
+      : workshopCardRow(now, 4).map((w) => ({
+          id: w.id,
+          cover: w.coverImage ?? "",
+          meta: shortWorkshopMeta(w, now),
+          title: w.title,
+          desc: w.blurb,
+        }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -386,10 +403,9 @@ export default function FreeTrialPage() {
             {"Every month I lead a live masterclass and a live astro tapping based on the current season, blending astrology, coaching, Human Design and subconscious rewiring. Here's what's on the calendar right now, and your free week drops you right in the middle of them."}
           </p>
           <div className="ev-grid ev-4" style={{ marginTop: 34 }}>
-            <EventCard cover="/leo-workshop-cover.jpg" meta="3 aug · masterclass" title="Leo Season: Enter Your Main Character Era" desc="The astrology of confidence, visibility and self-expression." />
-            <EventCard cover="/visible-af-cover.jpg" meta="19 aug · astro tapping" title="Visible AF: How to Show Up & Get Paid" desc="Tap through the fear of being seen and charge what you're worth." />
-            <EventCard cover="/virgo-goalsetting-cover.jpg" meta="26 aug · working session" title="Virgo Goal-Setting: Map the Rest of Your Year" desc="Turn the vague wishes in your head into a plan you'll follow." />
-            <EventCard cover="/virgo-workshop-cover.jpg" meta="10 sep · masterclass" title="Virgo Season: Get Your Sh*t Together & Become Her" desc="Close the gap between meaning to, and getting it done." />
+            {eventCards.map((card) => (
+              <EventCard key={card.id} cover={card.cover} meta={card.meta} title={card.title} desc={card.desc} />
+            ))}
           </div>
         </div>
       </section>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
+import type { SeasonInfo } from "@/lib/seasons";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
@@ -37,11 +38,14 @@ const STATS = [
   { n: "24/7", label: "a community of women becoming her" },
 ];
 
-const HEADLINES = [
+// The lead story follows the sky, so the day the Sun changes sign this headline changes with it
+// rather than sitting here going stale. Everything else on the page is evergreen.
+function headlines(season: SeasonInfo) {
+  return [
   {
     kicker: "☉ the sky right now",
-    title: "leo szn has begun.",
-    body: "Confidence is officially in session. Your portal has already shifted to match it, new themes, new prompts, new work.",
+    title: `${season.sign.toLowerCase()} szn has begun.`,
+    body: `${season.focus} Your portal has already shifted to match it, new themes, new prompts, new work.`,
     href: "/your-season",
     cta: "read your szn",
   },
@@ -59,7 +63,8 @@ const HEADLINES = [
     href: "/community",
     cta: "meet the club",
   },
-];
+  ];
+}
 
 const BENTO = [
   {
@@ -441,7 +446,7 @@ export default function Home() {
             <span>today&apos;s headlines</span>
           </div>
           <div className="news" style={{ borderTop: "var(--border)", borderBottom: "var(--border)" }}>
-            {HEADLINES.map((h) => (
+            {headlines(season).map((h) => (
               <article key={h.title} className="p-8">
                 <div className="tag mb-4">{h.kicker}</div>
                 <h3

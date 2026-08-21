@@ -15,6 +15,7 @@ export interface SeasonInfo {
   ritual: string; // one concrete practice to run through the season
   watchFor: string; // the shadow pattern this season tends to surface
   weeklyArc: string[]; // four beats, how the season's energy builds across its run
+  tickerLines: string[]; // five short slogans for the dashboard ticker, this season's energy in shorthand
 }
 
 // Approximate tropical zodiac season boundaries (exact ingress shifts by a day either side,
@@ -43,6 +44,13 @@ export const SEASONS: SeasonInfo[] = [
       "the push, momentum builds if you keep choosing action over analysis",
       "the proof, you can look back and see exactly what starting anyway got you",
     ],
+    tickerLines: [
+      "start before you're ready",
+      "make the first move",
+      "back yourself louder",
+      "do it scared",
+      "no more waiting",
+    ],
   },
   {
     sign: "Taurus", symbol: "♉", element: "earth",
@@ -66,6 +74,13 @@ export const SEASONS: SeasonInfo[] = [
       "the build, small, unglamorous, repeated actions start compounding",
       "the test, comfort tempts you to stop one step before the real result",
       "the harvest, the thing you built slowly turns out to be the thing that lasts",
+    ],
+    tickerLines: [
+      "receive it all",
+      "charge your worth",
+      "slow is luxury",
+      "buy the good one",
+      "rest is productive",
     ],
   },
   {
@@ -91,6 +106,13 @@ export const SEASONS: SeasonInfo[] = [
       "the sort, you start noticing which threads are worth pulling and which were just noise",
       "the send, you finally say, write or pitch the thing that's been sitting in drafts",
     ],
+    tickerLines: [
+      "say the thing",
+      "send the message",
+      "ask the question",
+      "post it anyway",
+      "talk that talk",
+    ],
   },
   {
     sign: "Cancer", symbol: "♋", element: "water",
@@ -114,6 +136,13 @@ export const SEASONS: SeasonInfo[] = [
       "the sort, old feelings or memories surface, asking to finally be processed rather than managed",
       "the tend, you start actively caring for your emotional world instead of just surviving it",
       "the return, you re-emerge steadier, with a clearer read on what actually feels safe",
+    ],
+    tickerLines: [
+      "protect your peace",
+      "feel it fully",
+      "go home early",
+      "soft is strong",
+      "let them care",
     ],
   },
   {
@@ -139,6 +168,13 @@ export const SEASONS: SeasonInfo[] = [
       "the shine, you choose to show up fully anyway, and it starts to feel more natural",
       "the standing ovation, this season's confidence becomes evidence you can carry into the next one",
     ],
+    tickerLines: [
+      "live the dreaaam",
+      "wear the outfit",
+      "say yaaaaas",
+      "post the video",
+      "take up space",
+    ],
   },
   {
     sign: "Virgo", symbol: "♍", element: "earth",
@@ -162,6 +198,13 @@ export const SEASONS: SeasonInfo[] = [
       "the fix, you tighten one system at a time instead of overhauling everything at once",
       "the discipline, consistency starts to feel less like effort and more like identity",
       "the polish, the improved version of your daily life becomes the new normal, not the exception",
+    ],
+    tickerLines: [
+      "ship it imperfect",
+      "fix the system",
+      "drink the water",
+      "finish the thing",
+      "raise the standard",
     ],
   },
   {
@@ -187,6 +230,13 @@ export const SEASONS: SeasonInfo[] = [
       "the recalibration, one relationship or agreement shifts to actually reflect what you want",
       "the balance, ease returns, but this time it's built on honesty instead of avoidance",
     ],
+    tickerLines: [
+      "know your worth",
+      "say what you want",
+      "make it beautiful",
+      "even it out",
+      "choose you too",
+    ],
   },
   {
     sign: "Scorpio", symbol: "♏", element: "water",
@@ -210,6 +260,13 @@ export const SEASONS: SeasonInfo[] = [
       "the descent, facing it feels harder before it feels better, this is normal, not a sign you're doing it wrong",
       "the shed, an old identity, relationship or story starts to loosen its grip",
       "the rebirth, you emerge with real, earned power instead of the performance of it",
+    ],
+    tickerLines: [
+      "face it head on",
+      "no more pretending",
+      "want it out loud",
+      "let it burn",
+      "go all the way",
     ],
   },
   {
@@ -235,6 +292,13 @@ export const SEASONS: SeasonInfo[] = [
       "the overreach, you learn the difference between bold and unrooted the hard way, or you catch it in time",
       "the view, you can see further than you could at the start of the season, and that view is the point",
     ],
+    tickerLines: [
+      "dream it bigger",
+      "book the flight",
+      "say yes to more",
+      "go find out",
+      "aim higher",
+    ],
   },
   {
     sign: "Capricorn", symbol: "♑", element: "earth",
@@ -258,6 +322,13 @@ export const SEASONS: SeasonInfo[] = [
       "the grind, unglamorous, repeated effort becomes the whole strategy, not a means to skip past",
       "the test, exhaustion or self-doubt asks whether the climb is even worth it, it is",
       "the summit, something you built patiently starts visibly holding weight",
+    ],
+    tickerLines: [
+      "build the empire",
+      "do it daily",
+      "own the plan",
+      "play the long game",
+      "boss it up",
     ],
   },
   {
@@ -283,6 +354,13 @@ export const SEASONS: SeasonInfo[] = [
       "the commitment, you choose authenticity over blending in, even when it's easier not to",
       "the frequency, your original angle starts attracting exactly the people and outcomes built for it",
     ],
+    tickerLines: [
+      "be the weird one",
+      "break the mould",
+      "fit in never",
+      "do it your way",
+      "change the rules",
+    ],
   },
   {
     sign: "Pisces", symbol: "♓", element: "water",
@@ -306,6 +384,13 @@ export const SEASONS: SeasonInfo[] = [
       "the blur, boundaries between you and others, or between plan and fantasy, get harder to feel",
       "the anchor, you choose one intuitive hit to actually act on instead of just floating in all of them",
       "the manifestation, something that started as a feeling becomes something you can point to",
+    ],
+    tickerLines: [
+      "trust the vision",
+      "follow the feeling",
+      "dream it real",
+      "rest and receive",
+      "let it come",
     ],
   },
 ];

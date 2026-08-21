@@ -427,7 +427,7 @@ export default function GoalsPage() {
           <div className="mt-8 p-7" style={{ background: "var(--lav-light)", border: "var(--border)" }}>
             <div className="tag mb-2">this szn&apos;s edge</div>
             <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.8 }}>
-              {season.sign} season amplifies {season.themes.slice(0, 2).join(" and ")}. Goals that need courage and visibility get cosmic backup right now, front-load the scary ones.
+              {season.sign} season amplifies {season.themes.slice(0, 2).join(" and ")}. {season.focus} Goals that lean on this season&apos;s energy get cosmic backup right now, so front-load those.
             </p>
           </div>
         </div>

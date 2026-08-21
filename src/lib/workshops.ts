@@ -5,6 +5,13 @@
 export interface Workshop {
   id: string;
   label: string;
+  /** The zodiac season the class belongs to, so a page showing next month's classes can say which
+   *  season they're for rather than which one the calendar is currently in. */
+  season: string;
+  /** What sort of class it is, used for the short card metas on the acquisition pages. */
+  kind: "masterclass" | "astro tapping" | "working session";
+  /** One-line summary for the small cards on the acquisition pages. */
+  blurb: string;
   meta: string;
   title: string;
   dark: boolean;
@@ -32,7 +39,10 @@ export interface Workshop {
 export const WORKSHOPS: Workshop[] = [
   {
     id: "leo-szn-workshop-1",
+    season: "Leo",
     label: "leo szn workshop 1",
+    kind: "masterclass",
+    blurb: "The astrology of confidence, visibility and self-expression.",
     meta: "3 august · 7pm la time · first live class",
     title: "Leo Season: Enter Your Main Character Era",
     coverImage: "/leo-workshop-cover.jpg",
@@ -58,6 +68,9 @@ export const WORKSHOPS: Workshop[] = [
   },
   {
     id: "leo-szn-workshop-2",
+    season: "Leo",
+    kind: "astro tapping",
+    blurb: "Tap through the fear of being seen and charge what you're worth.",
     label: "leo szn workshop 2",
     meta: "19 august · 7pm la time · next live class",
     title: "Visible AF: How to Show Up & Get Paid",
@@ -81,7 +94,10 @@ export const WORKSHOPS: Workshop[] = [
   },
   {
     id: "virgo-szn-workshop-1",
+    season: "Virgo",
     label: "virgo szn workshop 1",
+    kind: "working session",
+    blurb: "Turn the vague wishes in your head into a plan you'll follow.",
     meta: "26 august · 6:30pm la time · kick off virgo szn",
     title: "Virgo Season Goal-Setting: Map the Rest of Your Year",
     dark: true,
@@ -104,7 +120,10 @@ export const WORKSHOPS: Workshop[] = [
   },
   {
     id: "virgo-szn-workshop-2",
+    season: "Virgo",
     label: "virgo szn workshop 2",
+    kind: "masterclass",
+    blurb: "Close the gap between meaning to, and getting it done.",
     meta: "10 september · 7pm la time · virgo szn preview",
     title: "Virgo Season: Get Your Sh*t Together & Become Her",
     dark: false,
@@ -182,6 +201,41 @@ export function pastWorkshops(nowMs: number): Workshop[] {
   return WORKSHOPS.filter((w) => workshopStatus(w, nowMs) === "past").sort(
     (a, b) => new Date(b.startIso!).getTime() - new Date(a.startIso!).getTime()
   );
+}
+
+/**
+ * The classes to show in a fixed-width card row on the acquisition pages: everything still to come,
+ * soonest first, then the most recent finished ones to fill the row out. That way the row is always
+ * led by what a new member would actually be joining for, and never advertises a past class as
+ * upcoming, without ever going half empty between seasons.
+ */
+export function workshopCardRow(nowMs: number, count: number): Workshop[] {
+  const upcoming = upcomingWorkshops(nowMs).filter((w) => w.startIso);
+  if (upcoming.length >= count) return upcoming.slice(0, count);
+  return [...upcoming, ...pastWorkshops(nowMs).slice(0, count - upcoming.length)];
+}
+
+/**
+ * The season the next class belongs to, which is what a page inviting someone to join should name.
+ * Between the last class of one season and the first of the next that is the season ahead, not the
+ * one the calendar is still in. Falls back to whatever season it currently is.
+ */
+export function seasonOfNextWorkshop(nowMs: number, fallback: string): string {
+  return upcomingWorkshops(nowMs).find((w) => w.startIso)?.season ?? fallback;
+}
+
+/** Short card meta, e.g. "26 aug · working session", or "3 aug · replay" once a class is over. */
+export function shortWorkshopMeta(workshop: Workshop, nowMs: number): string {
+  if (!workshop.startIso) return `date tbc · ${workshop.kind}`;
+  const when = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "America/Los_Angeles",
+    day: "numeric",
+    month: "short",
+  })
+    .format(new Date(workshop.startIso))
+    .toLowerCase();
+  const past = workshopStatus(workshop, nowMs) === "past";
+  return `${when} · ${past ? "replay" : workshop.kind}`;
 }
 
 // How long a freshly uploaded replay is showcased as "new" on the season home before it settles

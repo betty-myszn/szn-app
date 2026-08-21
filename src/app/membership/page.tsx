@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
+import { upcomingWorkshops, seasonOfNextWorkshop } from "@/lib/workshops";
+import { useSeason } from "@/lib/use-season";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import SoulBlueprint from "@/components/SoulBlueprint";
 import WhatIsMySzn from "@/components/WhatIsMySzn";
@@ -181,6 +183,17 @@ export default function MembershipPage() {
   const enrolmentOpen = useEnrolmentOpen();
   const ctaHref = enrolmentOpen ? "#pricing" : "#waitlist-form";
   const ctaLabel = enrolmentOpen ? "join my szn" : "join the waitlist";
+
+  // The upcoming-workshops block reads the same schedule as /events, so this sales page never
+  // advertises a class that has already happened. Clock read on the client so the upcoming split
+  // is stable across a render rather than running Date.now() during one.
+  const season = useSeason();
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
+  const nextTwo = now === null ? [] : upcomingWorkshops(now).slice(0, 2);
+  // Named after the season the classes belong to, which in the run-up to a new season is the one
+  // ahead rather than the one the calendar is still in.
+  const workshopSeason = now === null ? season.sign : seasonOfNextWorkshop(now, season.sign);
 
   return (
     <div>
@@ -577,71 +590,74 @@ export default function MembershipPage() {
             fontFamily: pp, fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800,
             letterSpacing: "-1.2px", lineHeight: 1.1, textAlign: "center", marginBottom: 48,
           }}>
-            Leo szn is about to <span className="pk">hit different.</span>
+            {workshopSeason.toLowerCase()} szn is about to <span className="pk">hit different.</span>
           </h2>
 
+          {nextTwo.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-            {/* Workshop 1 */}
-            <div className="p-8 md:p-12" style={{ background: "var(--dark)", borderRight: "var(--border)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--lav)", marginBottom: 8 }}>
-                this month&apos;s masterclass
+            {nextTwo.map((workshop, i) => (
+              <div
+                key={workshop.id}
+                className="p-8 md:p-12"
+                style={{
+                  background: workshop.dark ? "var(--dark)" : "var(--lav-light)",
+                  borderRight: i === 0 ? "var(--border)" : undefined,
+                }}
+              >
+                {workshop.coverImage && (
+                  <div style={{
+                    position: "relative", borderRadius: 14, overflow: "hidden",
+                    border: workshop.dark ? "1px solid rgba(255,255,255,0.15)" : "var(--border)",
+                    marginBottom: 22, aspectRatio: "16 / 9", background: "#000",
+                  }}>
+                    <Image
+                      src={workshop.coverImage}
+                      alt={workshop.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                )}
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: workshop.dark ? "var(--lav)" : "#7B68AE", marginBottom: 8 }}>
+                  {workshop.label}
+                </div>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
+                  {workshop.meta}
+                </div>
+                <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: workshop.dark ? "#fff" : "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
+                  {workshop.title}
+                </h3>
+                {workshop.paragraphs.map((para, n) => (
+                  <p
+                    key={n}
+                    style={{
+                      fontSize: 13,
+                      lineHeight: 1.8,
+                      color: workshop.dark ? (n === 0 ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.65)") : "var(--dark)",
+                      marginBottom: n === workshop.paragraphs.length - 1 ? 24 : 16,
+                    }}
+                  >
+                    {para}
+                  </p>
+                ))}
+                {workshop.callout && (
+                  <div className="p-4 mb-6" style={{
+                    background: workshop.dark ? "rgba(255,45,135,0.1)" : "rgba(255,45,135,0.08)",
+                    border: "1px solid rgba(255,45,135,0.25)",
+                  }}>
+                    <p style={{ fontFamily: pp, fontSize: 14, fontWeight: 800, color: workshop.dark ? "#fff" : "var(--dark)", lineHeight: 1.4, margin: 0 }}>
+                      {workshop.callout.plain}<span style={{ color: "var(--pink)" }}>{workshop.callout.pink}</span>
+                    </p>
+                  </div>
+                )}
+                <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
+                  {ctaLabel}
+                </Link>
               </div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                3 august · replay inside the membership
-              </div>
-              <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
-                Leo Season: Enter Your Main Character Era
-              </h3>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.75)", marginBottom: 16 }}>
-                Leo season is your cosmic reminder that you didn&apos;t come here to watch everyone else live the life you want.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: 16 }}>
-                If you&apos;ve been overthinking every move, watering yourself down, waiting until you feel &ldquo;ready&rdquo;, or hiding the parts of you that were always meant to be seen... this is your invitation to leave that version of yourself behind.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: 16 }}>
-                We&apos;ll dive into the astrology of confidence, visibility and self-expression, exploring the placements that reveal where you&apos;re designed to shine, what&apos;s been keeping you playing smaller than your potential, and how to work with this Leo season to become the woman who walks into every room knowing she belongs there.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(255,255,255,0.65)", marginBottom: 24 }}>
-                Powerful prompts, astrology, tapping and embodiment exercises to help you release the fear of being seen, reconnect with your natural magnetism and start showing up like the main character of your own damn life.
-              </p>
-              <div className="p-4 mb-6" style={{ background: "rgba(255,45,135,0.1)", border: "1px solid rgba(255,45,135,0.25)" }}>
-                <p style={{ fontFamily: pp, fontSize: 14, fontWeight: 800, color: "#fff", lineHeight: 1.4, margin: 0 }}>
-                  Because your next era isn&apos;t waiting for permission. It&apos;s waiting for <span style={{ color: "var(--pink)" }}>you.</span>
-                </p>
-              </div>
-              <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
-                {ctaLabel}
-              </Link>
-            </div>
-
-            {/* Workshop 2 */}
-            <div className="p-8 md:p-12" style={{ background: "var(--lav-light)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#7B68AE", marginBottom: 8 }}>
-                this month&apos;s astro tapping
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 20 }}>
-                19 august · 7pm la time · next live class
-              </div>
-              <h3 style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, color: "var(--dark)", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 16 }}>
-                Visible AF: How to Show Up &amp; Get Paid
-              </h3>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 16 }}>
-                You weren&apos;t born to be the internet&apos;s best kept secret.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 16 }}>
-                If you&apos;ve been sitting on ideas, rewriting captions seventeen times, waiting until you feel more confident, or watching everyone else take up space while you quietly cheer them on from the sidelines... we&apos;re changing that.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 16 }}>
-                This is a tapping workshop, so we work underneath the mindset advice, down at the wiring. The shrinking, the over-editing, the waiting until you feel ready, all of it is your nervous system reading visibility as danger and money as unsafe, and we tap through those exact charges, the fear of being seen, judged, too much or wrong, until your body stops bracing every time you go to put yourself out there.
-              </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginBottom: 24 }}>
-                By the end you&apos;ll have started reprogramming the beliefs that kept you hidden and small, so showing up, talking about your offers and charging what you&apos;re worth begins to feel natural instead of terrifying. You leave with the tapping rounds to keep going at home, and the settled, backed-yourself energy of a woman who has already decided she&apos;s getting paid.
-              </p>
-              <Link href={ctaHref} className="btn-pink block text-center no-underline" style={{ padding: "16px 32px" }}>
-                {ctaLabel}
-              </Link>
-            </div>
+            ))}
           </div>
+          )}
         </div>
       </section>
 

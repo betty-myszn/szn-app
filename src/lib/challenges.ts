@@ -110,6 +110,7 @@ export const SEASON_CHALLENGES: Record<string, SeasonChallengeSet> = {
       { id: "raise-the-standard", text: "raise your own standard on one thing, quietly, starting today.", category: "confidence", xp: 20 },
       { id: "share-the-imperfect", text: "share the unfinished thing instead of hiding it until it's flawless.", category: "purpose", xp: 30 },
       { id: "clean-slate", text: "clear the one messy corner that's been draining your focus.", category: "general", xp: 15 },
+      { id: "say-the-specific-thing", text: "tell them the specific thing you need instead of hoping they work it out.", category: "love", xp: 25 },
       { id: "hidden-virgo", text: "send the thing you've been quietly perfecting for weeks, exactly as it is right now.", category: "general", xp: 50, hidden: true },
     ],
   },

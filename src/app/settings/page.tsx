@@ -310,7 +310,7 @@ export default function SettingsPage() {
                 ))}
               </div>
               <p style={{ fontSize: 11, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
-                Every szn gets its own sticker collection, this szn&apos;s set is unlocked to browse now, more seasons roll out as the year turns.
+                Every szn gets its own sticker collection, unlocked to browse as soon as it lands, and more seasons roll out as the year turns.
               </p>
             </div>
           </div>

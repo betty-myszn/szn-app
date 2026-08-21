@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import Link from "next/link";
 import type { GateActivation, SeasonBlock, SeasonDesignReading } from "@/types/season-design";
 
@@ -8,10 +8,16 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // Presentational view for the combined season + Human Design reading. Every element
 // is an expandable card: collapsed it shows a one-line summary, opened it reveals
-// three layers, who you are here, how Leo moves it for you, and what to do.
+// three layers, who you are here, how the season moves it for you, and what to do.
+//
+// The season's own name comes from the reading rather than being written into the labels, so a new
+// season drops in with its content file and every card relabels itself.
+const SeasonSign = createContext("this season");
+
 export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesignReading; embedded?: boolean }) {
+  const sign = r.season.sign.toLowerCase();
   return (
-    <>
+    <SeasonSign.Provider value={sign}>
       {!embedded && (
         <>
           <p style={eyebrow}>welcome to your</p>
@@ -90,7 +96,7 @@ export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesi
       )}
       {r.gates.temporary.length > 0 && (
         <>
-          <SubHead text="temporary leo gates, borrowed for the season" />
+          <SubHead text={`temporary ${r.season.sign.toLowerCase()} gates, borrowed for the season`} />
           <div style={{ display: "grid", gap: 10 }}>
             {r.gates.temporary.map((g) => <GateCard key={g.gate} g={g} />)}
           </div>
@@ -206,7 +212,7 @@ export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesi
       <p style={{ fontSize: 12, opacity: 0.5, marginTop: 24, lineHeight: 1.6 }}>
         Combines your natal Human Design with the Sun&rsquo;s journey through {r.season.sign} this season.
       </p>
-    </>
+    </SeasonSign.Provider>
   );
 }
 
@@ -228,6 +234,7 @@ function ExpandableBlock({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(!!defaultOpen);
+  const seasonSign = useContext(SeasonSign);
   const border = accentColor ?? (accent ? "var(--pink)" : "rgba(0,0,0,0.08)");
   return (
     <div style={{ ...card, borderLeft: `3px solid ${border}`, padding: 0, overflow: "hidden" }}>
@@ -259,7 +266,7 @@ function ExpandableBlock({
       {open && (
         <div style={{ padding: "0 16px 16px" }}>
           <Layer label="who you are here" text={block.identity} />
-          <Layer label={`how ${"leo"} moves this for you`} text={block.cycle} />
+          <Layer label={`how ${seasonSign} moves this for you`} text={block.cycle} />
           <Layer label="what to do" text={block.guidance} highlight />
         </div>
       )}

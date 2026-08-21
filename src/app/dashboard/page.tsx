@@ -37,10 +37,14 @@ import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-// Per-season hero cut-out. Only Leo has art so far; other seasons fall back to no image (the pastel
-// card stands on its own) until their art exists.
+// Per-season hero cut-out. A season with no art falls back to no image and the pastel card stands
+// on its own, so adding a new season's hero is one line here plus the file in /public.
+const HERO_ART: Record<string, string> = {
+  Leo: "/leo-lion.png",
+};
+
 function heroImageForSign(sign: string): string | null {
-  return sign === "Leo" ? "/leo-lion.png" : null;
+  return HERO_ART[sign] ?? null;
 }
 
 const eyebrow: React.CSSProperties = {
@@ -295,14 +299,7 @@ export default function DashboardPage() {
       <PasswordPromptBanner />
       <Ticker
         variant="lav"
-        items={[
-          `it's ${sign} szn, baby`,
-          "live the dreaaam",
-          "wear the outfit",
-          "say yaaaaas",
-          "post the video",
-          "take up space",
-        ]}
+        items={[`it's ${sign} szn, baby`, ...season.tickerLines]}
       />
 
       {/* ── HERO: light pastel card, per-season cut-out on the right ── */}

@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSeasonDesign } from "@/lib/use-season-design";
 import SeasonDesignReadingView, {
   Shell,
@@ -8,10 +10,23 @@ import SeasonDesignReadingView, {
   seasonLinkBtnOutline,
 } from "@/components/SeasonDesignReading";
 
-// Leo Season through Human Design, the member view. Reads the logged-in member's
-// saved birth data and renders the shared reading component.
+// The current season through Human Design, the member view. Reads the logged-in member's
+// saved birth data and renders the shared reading component. Which season it is comes from
+// the date, so this page follows the sky on its own.
+//
+// ?sign=virgo previews a season before the Sun gets there, which is how a new season's reading
+// gets checked over while the current one is still live.
 export default function SeasonDesignPage() {
-  const { reading, loading, unavailable } = useSeasonDesign();
+  return (
+    <Suspense fallback={<Shell><p style={{ opacity: 0.6 }}>reading your season...</p></Shell>}>
+      <SeasonDesign />
+    </Suspense>
+  );
+}
+
+function SeasonDesign() {
+  const previewSign = useSearchParams().get("sign") ?? undefined;
+  const { reading, loading, unavailable } = useSeasonDesign(previewSign);
 
   if (loading) return <Shell><p style={{ opacity: 0.6 }}>reading your season...</p></Shell>;
 
@@ -19,7 +34,7 @@ export default function SeasonDesignPage() {
     return (
       <Shell>
         <p style={{ marginBottom: 12 }}>
-          The Human Design reading for this season is on its way. Leo Season is the first one live.
+          The Human Design reading for this season is on its way. Check back in a few days.
         </p>
         <Link href="/human-design" style={seasonLinkBtnOutline}>see my human design chart</Link>
       </Shell>
