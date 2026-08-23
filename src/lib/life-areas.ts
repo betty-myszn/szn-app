@@ -1038,6 +1038,19 @@ export function composeLifeArea(
   const seasonOverview = SIGN_OVERVIEWS[season.sign];
   const rulerOverview = rulerPlacement ? SIGN_OVERVIEWS[rulerPlacement.rulerSign] : undefined;
 
+  // Affirmations are woven from the CURRENT season plus this area, so they always match the szn a
+  // member is actually in (Virgo now, Libra next) rather than a static area line that ignores the
+  // sky. Built from season data (flavour, theme, focus) so every one of the twelve seasons composes
+  // its own set for every area, no per-season hand-writing. The richer static area affirmations that
+  // used to sit here are kept in AREA_EXTRAS for reference but no longer shown, because Betty wants
+  // this slot to always speak to the season.
+  const sznSign = season.sign.toLowerCase();
+  const seasonAffirmations = [
+    `I give my ${meta.label} ${seasonTraits.flavour[0]} energy this ${sznSign} szn.`,
+    `I grow my ${meta.label} through ${season.themes[0]} this szn, not someday.`,
+    `The ${sznSign} szn move for my ${meta.label}: ${focusLead(season)}, starting now.`,
+  ];
+
   // Every life area has a natural significator planet (Mercury for mindset, Venus for love, etc.)
   // AND a chart-specific house-cusp ruler, often two different planets. Both genuinely drive the
   // area: the ruler runs the house, and the significator is the planet the area is fundamentally
@@ -1168,7 +1181,7 @@ export function composeLifeArea(
       secondaryHouseNumber && secondaryHouseMeaningRaw ? ` ${secondaryHouseMeaningRaw.coach}` : ""
     } Between both houses, the sign, and the ruling planet, this szn is giving you an unusually direct line into ${meta.label}, it's worth using it deliberately rather than letting it pass as background weather.`,
     goalTieIn,
-    affirmations: extras.affirmations,
+    affirmations: seasonAffirmations,
     activation: extras.activation,
     transitLine,
     transitLines,

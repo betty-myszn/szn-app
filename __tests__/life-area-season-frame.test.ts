@@ -50,3 +50,25 @@ describe("life-area signature never claims the season activates the area's own h
     expect(seasonHouse).not.toBe(2); // but Virgo season is not in his 2nd
   });
 });
+
+describe("life-area affirmations always match the current season, for every area", () => {
+  const chart = calculateChart(obama);
+  const libra = SEASONS.find((s) => s.sign === "Libra")!;
+
+  for (const area of ["money", "relationships", "career", "mindset"]) {
+    it(`${area}: Virgo season affirmations name the season and the area`, () => {
+      const r = composeLifeArea(area, chart, virgo, null, null);
+      expect(r!.affirmations.length).toBeGreaterThan(0);
+      // Every affirmation is woven from Virgo season, not a static area line.
+      expect(r!.affirmations.every((a) => a.toLowerCase().includes("virgo") || a.toLowerCase().includes("routines"))).toBe(true);
+      // At least one clearly ties the season to this exact area.
+      expect(r!.affirmations.some((a) => a.toLowerCase().includes("virgo szn"))).toBe(true);
+    });
+  }
+
+  it("the same slot re-seasons itself: Libra season produces Libra affirmations, not Virgo", () => {
+    const r = composeLifeArea("money", chart, libra, null, null);
+    expect(r!.affirmations.some((a) => a.toLowerCase().includes("libra szn"))).toBe(true);
+    expect(r!.affirmations.every((a) => !a.toLowerCase().includes("virgo"))).toBe(true);
+  });
+});
