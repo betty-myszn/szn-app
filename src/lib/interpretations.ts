@@ -73,6 +73,107 @@ export function houseForSign(sign: string, cusps: number[]): number {
   return houseForLongitude(idx * 30 + 15, cusps);
 }
 
+/** The zodiac sign sitting on a given house cusp, derived straight from the cusp longitude. */
+function cuspSignOf(cusps: number[], house: number): string {
+  const lon = (((cusps[house - 1] % 360) + 360) % 360);
+  return ZODIAC_SIGNS[Math.floor(lon / 30)];
+}
+
+export interface SeasonHouseSegment {
+  house: number;
+  startDeg: number; // degrees into the sign (0-30) where this house segment begins
+  endDeg: number; // degrees into the sign where it ends
+}
+
+/**
+ * Every house a whole SIGN passes through, in the order the sun moves through it (0° to 30° of the
+ * sign). A 30° sign frequently straddles a house cusp, so a season starts in one house and crosses
+ * into the next partway through, and near an intercepted axis it can pass through three. Placing the
+ * sign by its midpoint alone (houseForSign) names only the middle house and silently drops the rest,
+ * which is why a season that genuinely spans two houses used to be described as if it sat in one.
+ *
+ * Crossings within half a degree of the sign's own edges are treated as sitting on the boundary, so
+ * a cusp that lands a whisker before the next sign does not spawn a misleading sliver of a house.
+ */
+export function seasonHouseSegments(sign: string, cusps: number[]): SeasonHouseSegment[] {
+  const idx = ZODIAC_SIGNS.indexOf(sign as (typeof ZODIAC_SIGNS)[number]);
+  if (idx < 0 || cusps.length !== 12) return [];
+  const start = idx * 30;
+  const crossings = cusps
+    .map((c, i) => ({ off: ((((c % 360) + 360) % 360) - start + 360) % 360, house: i + 1 }))
+    .filter((c) => c.off > 0.5 && c.off < 29.5)
+    .sort((a, b) => a.off - b.off);
+  const segments: SeasonHouseSegment[] = [];
+  let cursor = 0;
+  let house = houseForLongitude(start, cusps);
+  for (const cross of crossings) {
+    segments.push({ house, startDeg: cursor, endDeg: cross.off });
+    cursor = cross.off;
+    house = cross.house;
+  }
+  segments.push({ house, startDeg: cursor, endDeg: 30 });
+  return segments;
+}
+
+export interface SeasonPlacement {
+  primaryHouse: number; // the midpoint house, which still drives the rest of the season page
+  houses: number[]; // every house the sign runs through, in the order the sun reaches them
+  short: string; // one concise sentence for tight spaces, "" when the sign sits neatly on its cusp
+  full: string; // fuller teaching, "" when the sign sits neatly on its cusp
+}
+
+/**
+ * How a whole season sign actually sits in a member's chart, ready to drop into copy.
+ *
+ * Handles the two things the midpoint-only version glossed over:
+ *   1. interception, one house holding more than one sign (via houseSpanNote), and
+ *   2. a sign spanning more than one house, which the old copy never mentioned at all.
+ *
+ * Returns "" for both strings when the sign sits inside a single house whose cusp it shares, so the
+ * explanation only ever appears when it is genuinely needed.
+ */
+export function composeSeasonPlacement(sign: string, cusps: number[]): SeasonPlacement {
+  const s = sign.toLowerCase();
+  const primaryHouse = houseForSign(sign, cusps);
+  const segments = seasonHouseSegments(sign, cusps);
+  const houses = segments.map((seg) => seg.house);
+
+  // Single house: either the sign shares that house's cusp (nothing to explain) or it is intercepted,
+  // one house holding more than one sign, which is the houseSpanNote case.
+  if (segments.length <= 1) {
+    const only = segments[0]?.house ?? primaryHouse;
+    const cuspSign = cuspSignOf(cusps, only);
+    const note = houseSpanNote(sign, only, cuspSign, "season");
+    const short = note
+      ? ` Your ${ordinalHouse(only)} house opens in ${cuspSign.toLowerCase()}, wide enough that the whole of ${s} sits inside it, which is why ${s} szn lands right here.`
+      : "";
+    return { primaryHouse, houses, short, full: note };
+  }
+
+  // Multiple houses: the sign crosses one or more cusps, so name every house in the order the sun
+  // reaches it and teach the crossover, so it reads as intentional rather than broken.
+  const firstHouse = segments[0].house;
+  const lastHouse = segments[segments.length - 1].house;
+  const firstTitle = HOUSE_MEANINGS[firstHouse - 1]?.title ?? "that area";
+  const lastTitle = HOUSE_MEANINGS[lastHouse - 1]?.title ?? "the next area";
+  const cuspSignFirst = cuspSignOf(cusps, firstHouse);
+  const firstIntercept =
+    cuspSignFirst.toLowerCase() !== s
+      ? ` (which opens in ${cuspSignFirst.toLowerCase()}, so ${s} sits inside it rather than on the cusp)`
+      : "";
+  const laterClauses = segments.slice(1).map((seg) => {
+    const title = HOUSE_MEANINGS[seg.house - 1]?.title ?? "the next area";
+    return `around ${Math.round(seg.startDeg)}° ${s} crosses into your ${ordinalHouse(seg.house)} house of ${title}`;
+  });
+  const countWord = segments.length === 2 ? "two" : segments.length === 3 ? "three" : String(segments.length);
+
+  const full = ` Worth knowing, because it is the part that looks wrong until it clicks: ${s} does not sit inside a single house for you, it runs across ${countWord} of them. The sun opens ${s} season in your ${ordinalHouse(firstHouse)} house of ${firstTitle}${firstIntercept}, then ${laterClauses.join(", then ")}, so the early weeks of ${s} season run through your ${ordinalHouse(firstHouse)} house and the later weeks through your ${ordinalHouse(lastHouse)} house. Both are live this szn, so read them together rather than picking one.`;
+
+  const short = ` For you ${s} spans ${countWord} houses: it opens in your ${ordinalHouse(firstHouse)} house of ${firstTitle} and crosses into your ${ordinalHouse(lastHouse)} house of ${lastTitle} partway through the season, so both are lit.`;
+
+  return { primaryHouse, houses, short, full };
+}
+
 export interface SignTraits {
   essence: string; // "you lead with..."
   gift: string;

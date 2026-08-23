@@ -1,5 +1,5 @@
 import type { ChartData } from "@/types/chart";
-import { SIGN_TRAITS, BODY_MEANINGS, HOUSE_MEANINGS, ordinalHouse, houseForSign, houseSpanNote } from "@/lib/interpretations";
+import { SIGN_TRAITS, BODY_MEANINGS, HOUSE_MEANINGS, ordinalHouse, houseForSign, composeSeasonPlacement } from "@/lib/interpretations";
 
 // Each season theme maps to a base meaning + a natal body it's read through.
 // The page then personalises it with the member's chart (their sign for that body)
@@ -103,13 +103,14 @@ export function composeTheme(
 
   const cusps = chart.houses.map((h) => h.longitude);
   const activatedHouse = houseForSign(seasonSign, cusps);
+  const seasonPlacement = composeSeasonPlacement(seasonSign, cusps);
   const houseMeaning = HOUSE_MEANINGS[activatedHouse - 1];
   const titleWord = slug.replace(/-/g, " ");
 
   return {
     title: titleWord,
     meaning: entry.meaning,
-    inYourChart: `This ${seasonSign.toLowerCase()} szn is lighting up your ${ordinalHouse(activatedHouse)} house of ${houseMeaning.title}, so ${titleWord} plays out through ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you specifically.${houseSpanNote(seasonSign, activatedHouse, chart.houses[activatedHouse - 1]?.sign, "season")} And your ${sign.toLowerCase()} ${bodyName} (${bodyTitle}) shapes how you experience it: you meet ${titleWord} with ${traits.essence}.`,
+    inYourChart: `This ${seasonSign.toLowerCase()} szn is lighting up your ${ordinalHouse(activatedHouse)} house of ${houseMeaning.title}, so ${titleWord} plays out through ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")} for you specifically.${seasonPlacement.full} And your ${sign.toLowerCase()} ${bodyName} (${bodyTitle}) shapes how you experience it: you meet ${titleWord} with ${traits.essence}.`,
     yourGift: `${entry.coach} Your natural edge with this theme, thanks to your ${sign.toLowerCase()} ${bodyName}: ${traits.gift}.`,
     yourChallenge: `The shadow to watch is ${traits.shadow}. When ${titleWord} energy peaks this szn, that's the exact pattern to catch in real time, and it loses most of its power the moment you name it.`,
     howToWorkIt: `Bring ${titleWord} into your ${houseMeaning.lifeAreas[0]} on purpose this szn. ${houseMeaning.coach} One deliberate move in that arena is worth a hundred good intentions.`,

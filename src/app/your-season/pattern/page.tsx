@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
-import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign, houseSpanNote } from "@/lib/interpretations";
+import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign, composeSeasonPlacement } from "@/lib/interpretations";
 import { getPatternBreaking, whyPatternFormed, getPatternBreakSteps } from "@/lib/season-coaching";
 import { addJournalEntry } from "@/lib/journal-store";
 
@@ -49,6 +49,7 @@ export default function PatternPage() {
   const name = chart.birthData.name || "babe";
   const cusps = chart.houses.map((h) => h.longitude);
   const activatedHouse = houseForSign(season.sign, cusps);
+  const seasonPlacement = composeSeasonPlacement(season.sign, cusps);
   const houseMeaning = HOUSE_MEANINGS[activatedHouse - 1];
   const traits = SIGN_TRAITS[season.sign];
   const pattern = getPatternBreaking(season.sign);
@@ -130,7 +131,7 @@ export default function PatternPage() {
         <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
           <div className="tag mb-3">where it&apos;s actually showing up for you this szn</div>
           <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>
-            {`${season.sign} szn is activating your ${ordinalHouse(activatedHouse)} house of ${houseMeaning.title}, so this pattern isn't showing up as an abstract idea, it's showing up specifically around ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")}. That's the exact territory to watch for it in real time, not somewhere safer or more theoretical.${houseSpanNote(season.sign, activatedHouse, chart.houses[activatedHouse - 1]?.sign, "season")}`}
+            {`${season.sign} szn is activating your ${ordinalHouse(activatedHouse)} house of ${houseMeaning.title}, so this pattern isn't showing up as an abstract idea, it's showing up specifically around ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")}. That's the exact territory to watch for it in real time, not somewhere safer or more theoretical.${seasonPlacement.full}`}
           </p>
         </div>
       </section>

@@ -1,4 +1,11 @@
-import { houseForLongitude, houseForSign, longitudeForSignDegree, houseSpanNote } from "@/lib/interpretations";
+import {
+  houseForLongitude,
+  houseForSign,
+  longitudeForSignDegree,
+  houseSpanNote,
+  seasonHouseSegments,
+  composeSeasonPlacement,
+} from "@/lib/interpretations";
 
 // A chart whose cusps fall mid-sign, which is the normal case on Placidus. Every cusp here sits
 // at 20 degrees of its sign, so each sign straddles two houses: the first 20 degrees of a sign
@@ -115,5 +122,61 @@ describe("an intercepted season sign (Betty's 7th house)", () => {
   it("stays silent when the season sign is the sign on the cusp", () => {
     // Leo season on a Leo 7th cusp needs no interception explainer.
     expect(houseSpanNote("Leo", 7, "Leo", "season")).toBe("");
+  });
+});
+
+// The second half of the fix: a whole sign is 30 degrees wide, so it often straddles a cusp and
+// runs through two houses across the month. The old copy placed a season by its midpoint into one
+// house and never mentioned the other. These cusps put the 7th cusp at 5 Leo and the 8th cusp at
+// 20 Virgo, so Virgo (150 to 180) starts in the 7th and crosses into the 8th at 20 Virgo.
+const spanningCusps = [305, 350, 20, 50, 80, 100, 125, 170, 200, 230, 260, 280];
+
+describe("seasonHouseSegments", () => {
+  it("splits a sign that crosses a cusp into ordered segments the sun moves through", () => {
+    const segs = seasonHouseSegments("Virgo", spanningCusps);
+    expect(segs.map((s) => s.house)).toEqual([7, 8]);
+    // The 8th cusp is at 20 Virgo, so the crossover sits 20 degrees into the sign.
+    expect(Math.round(segs[1].startDeg)).toBe(20);
+  });
+
+  it("returns a single segment when the whole sign sits inside one house (interception)", () => {
+    // interceptedCusps has a 7th house running 125 to 200, which swallows all of Virgo.
+    const segs = seasonHouseSegments("Virgo", interceptedCusps);
+    expect(segs.map((s) => s.house)).toEqual([7]);
+  });
+});
+
+describe("composeSeasonPlacement", () => {
+  it("names both houses, in time order, when the season sign spans two of them", () => {
+    const p = composeSeasonPlacement("Virgo", spanningCusps);
+    expect(p.primaryHouse).toBe(7); // the midpoint still drives the rest of the page
+    expect(p.houses).toEqual([7, 8]);
+    expect(p.full).toContain("7th house of partnership");
+    expect(p.full).toContain("8th house of depth & shared power");
+    expect(p.full).toContain("20°");
+    expect(p.full).toContain("read them together");
+    expect(p.short).toContain("spans two houses");
+    // Voice rule: never an em dash.
+    expect(p.full).not.toContain("—");
+    expect(p.short).not.toContain("—");
+  });
+
+  it("explains interception when the whole sign sits inside one non-cusp house", () => {
+    // Betty's real case: Virgo intercepted inside her Leo 7th house, one house only.
+    const p = composeSeasonPlacement("Virgo", interceptedCusps);
+    expect(p.houses).toEqual([7]);
+    expect(p.full).toContain("leo");
+    expect(p.full).toContain("virgo");
+    expect(p.full).toContain("7th house");
+    expect(p.short).toContain("wide enough");
+  });
+
+  it("stays silent when the sign sits neatly on its own cusp", () => {
+    // Cusps at exactly 0 of every sign: Leo (120-150) fills the 5th house alone, cusp sign Leo.
+    const wholeSignCusps = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+    const p = composeSeasonPlacement("Leo", wholeSignCusps);
+    expect(p.houses).toEqual([5]);
+    expect(p.full).toBe("");
+    expect(p.short).toBe("");
   });
 });
