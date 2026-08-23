@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSavedBirthData } from "@/lib/url-params";
 import { hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
+import { getCurrentSeason } from "@/lib/seasons";
 import type { SeasonDesignReading } from "@/types/season-design";
 
 // Fetches the combined season + Human Design reading for the saved birth data.
@@ -19,7 +20,11 @@ export function useSeasonDesign(sign?: string): {
 
   useEffect(() => {
     let cancelled = false;
-    const cacheKey = `myszn_season_design_${sign ?? "current"}`;
+    // Key by the actual season sign, never a season-agnostic "current". A session left open across
+    // a season boundary (Leo into Virgo) would otherwise re-serve the previous season's cached
+    // reading to that user, so the overlay would read Leo while everyone else is on Virgo.
+    const resolvedSign = (sign ?? getCurrentSeason().sign).toLowerCase();
+    const cacheKey = `myszn_season_design_${resolvedSign}`;
 
     async function run() {
       let birthData = getSavedBirthData();
