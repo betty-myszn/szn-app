@@ -1053,8 +1053,8 @@ export function composeLifeArea(
     : "";
 
   const signature = rulerPlacement
-    ? `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, that's where this szn's pressure on ${meta.label} is actually landing. Your ${ordinalHouse(primaryHouse)} house begins in ${cuspSign}, so ${rName} rules that story. ${capitalize(rName)} sits in ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${rulerPlacement.rulerHouse === primaryHouse ? ", right where it governs, no detour needed" : `, of ${HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1]?.title}`}, which means ${houseMeaning.rules} runs through ${rulerSignTraits?.essence || cuspTraits.essence}. ${capitalize(describeOccupants(houseTenants, meta.label, traitKey, rulerPlacement.rulerId))}.${archetypalAside} That's your signature here this szn, the specific mechanics of your own ${houseMeaning.title}.`
-    : `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}. ${cuspSign} on that house cusp means ${houseMeaning.rules} runs through ${cuspTraits.essence}.`;
+    ? `Your ${meta.label} plays out through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, and that's the corner of your chart ${season.sign} season leans on when it presses on this part of your life. Your ${ordinalHouse(primaryHouse)} house begins in ${cuspSign}, so ${rName} rules that story. ${capitalize(rName)} sits in ${rulerPlacement.rulerSign.toLowerCase()} in your ${ordinalHouse(rulerPlacement.rulerHouse)} house${rulerPlacement.rulerHouse === primaryHouse ? ", right where it governs, no detour needed" : `, of ${HOUSE_MEANINGS[rulerPlacement.rulerHouse - 1]?.title}`}, which means ${houseMeaning.rules} runs through ${rulerSignTraits?.essence || cuspTraits.essence}. ${capitalize(describeOccupants(houseTenants, meta.label, traitKey, rulerPlacement.rulerId))}.${archetypalAside} That's your signature here this szn, the specific mechanics of your own ${houseMeaning.title}.`
+    : `Your ${meta.label} plays out through your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, the corner ${season.sign} season leans on here. ${cuspSign} on that house cusp means ${houseMeaning.rules} runs through ${cuspTraits.essence}.`;
 
   // The interpretive payoff, the 80%. Each paragraph answers one of the "why does this matter"
   // questions using the real chain, ruler-in-sign, ruler-in-house, season, tension, real life,
@@ -1077,7 +1077,7 @@ export function composeLifeArea(
         `In real life over the next few weeks, expect ${meta.label} to keep surfacing through ${rulerHouseMeaning.lifeAreas[0]}, that's where the season will keep knocking. The move that works with your wiring instead of against it: lead with ${rulerSignTraits.gift.split(",")[0] || traitLine}, watch for the ${rulerSignTraits.shadow.split(".")[0].toLowerCase()} default, and let ${season.sign.toLowerCase()} szn's ${seasonTraits.gift.split(",")[0]} carry the part of this you've been avoiding. Small, specific, this week, not a someday overhaul.`,
       ]
     : [
-        `${season.sign} season activates your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title}, the part of your chart that runs ${meta.label}. ${houseMeaning.coach}`,
+        `Your ${ordinalHouse(primaryHouse)} house of ${houseMeaning.title} is the part of your chart that runs your ${meta.label}, and it's where ${season.sign} season's push reaches this area. ${houseMeaning.coach}`,
         `This szn's job for you: ${season.focus} Point that at ${houseMeaning.lifeAreas[0]} specifically, and use the protocol below rather than just reading about it.`,
       ];
 

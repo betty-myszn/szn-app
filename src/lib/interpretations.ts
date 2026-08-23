@@ -167,7 +167,7 @@ export function composeSeasonPlacement(sign: string, cusps: number[]): SeasonPla
   });
   const countWord = segments.length === 2 ? "two" : segments.length === 3 ? "three" : String(segments.length);
 
-  const full = ` Worth knowing, because it is the part that looks wrong until it clicks: ${s} does not sit inside a single house for you, it runs across ${countWord} of them. The sun opens ${s} season in your ${ordinalHouse(firstHouse)} house of ${firstTitle}${firstIntercept}, then ${laterClauses.join(", then ")}, so the early weeks of ${s} season run through your ${ordinalHouse(firstHouse)} house and the later weeks through your ${ordinalHouse(lastHouse)} house. Both are live this szn, so read them together rather than picking one.`;
+  const full = ` Worth knowing, because it is the part that looks wrong until it clicks: ${s} does not sit inside a single house for you, it runs across ${countWord} of them. The sun opens ${s} season in your ${ordinalHouse(firstHouse)} house of ${firstTitle}${firstIntercept}, then ${laterClauses.join(", then ")}, so as the sun tracks through ${s} the emphasis moves from your ${ordinalHouse(firstHouse)} house toward your ${ordinalHouse(lastHouse)} house. Both are live this szn, so read them together rather than picking one.`;
 
   const short = ` For you ${s} spans ${countWord} houses: it opens in your ${ordinalHouse(firstHouse)} house of ${firstTitle} and crosses into your ${ordinalHouse(lastHouse)} house of ${lastTitle} partway through the season, so both are lit.`;
 
