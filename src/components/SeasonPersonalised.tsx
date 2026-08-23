@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
-import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign, composeRulerPlacement } from "@/lib/interpretations";
+import { HOUSE_MEANINGS, SIGN_TRAITS, ordinalHouse, houseForSign, composeRulerPlacement, houseSpanNote } from "@/lib/interpretations";
 import { LIFE_AREAS } from "@/lib/life-areas";
 import {
   getPatternBreaking,
@@ -95,6 +95,12 @@ export default function SeasonPersonalised() {
   const themeLifeAreaId = findLifeAreaForHouse(activatedHouse);
   const themeHref = themeLifeAreaId ? `/your-season/life/${themeLifeAreaId}` : houseHref;
   const activatedCuspSign = chart.houses[activatedHouse - 1]?.sign || houseMeaning.naturalSign;
+  // The season is a whole sign, placed by its midpoint, so a wide or intercepted house can hold a
+  // season whose sign is not the sign on the cusp (e.g. virgo szn landing in a leo-cusp 7th house).
+  // When that happens we teach the interception instead of asserting a claim that reads as a bug,
+  // exactly the way the eclipse and moon reads already do.
+  const cuspHoldsSeason = activatedCuspSign.toLowerCase() === season.sign.toLowerCase();
+  const seasonSpanNote = houseSpanNote(season.sign, activatedHouse, activatedCuspSign, "season");
   const activatedRuler = composeRulerPlacement(activatedCuspSign, activatedHouse, chart);
   const activatedTenants = chart.planets.filter((p) => p.house === activatedHouse);
   const name = chart.birthData.name || "babe";
@@ -135,7 +141,7 @@ export default function SeasonPersonalised() {
               {season.sign.toLowerCase()} activates your {ordinalHouse(activatedHouse)} house of {houseMeaning.title}.
             </h3>
             <p style={{ fontSize: 15, color: "#3C2A70", lineHeight: 1.8, marginBottom: 16, maxWidth: 680 }}>
-              While everyone else gets generic {season.sign.toLowerCase()} szn advice, yours is specific: this energy is lighting up {houseMeaning.rules}. That makes this an incredible szn for {houseMeaning.lifeAreas.slice(0, 3).join(", ")}.
+              While everyone else gets generic {season.sign.toLowerCase()} szn advice, yours is specific: this energy is lighting up {houseMeaning.rules}. That makes this an incredible szn for {houseMeaning.lifeAreas.slice(0, 3).join(", ")}.{!cuspHoldsSeason ? ` Your ${ordinalHouse(activatedHouse)} house opens in ${activatedCuspSign.toLowerCase()}, and it runs wide enough that the whole of ${season.sign.toLowerCase()} sits inside it too, which is why ${season.sign.toLowerCase()} szn lands right here rather than anywhere else.` : ""}
             </p>
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3C2A70", borderBottom: "1.5px solid #3C2A70", paddingBottom: 2 }}>
               see your full {ordinalHouse(activatedHouse)} house breakdown &rarr;
@@ -160,7 +166,15 @@ export default function SeasonPersonalised() {
               <div style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "#fff", padding: 28 }}>
                 <div className="tag mb-3">how this szn reaches you</div>
                 <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>
-                  <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
+                  {cuspHoldsSeason ? (
+                    <>
+                      <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}. That house begins in <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules it. {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
+                    </>
+                  ) : (
+                    <>
+                      <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}.{seasonSpanNote} The cusp itself is <strong>{activatedCuspSign.toLowerCase()}</strong>, so <strong>{activatedRuler.rulerName}</strong> rules the whole house, and {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.
+                    </>
+                  )}
                   {activatedTenants.length > 0
                     ? ` ${activatedTenants.map((p) => p.name).join(" and ")} also ${activatedTenants.length === 1 ? "lives" : "live"} inside this house, adding to the picture, but ${activatedTenants.length === 1 ? "it isn't" : "they aren't"} the ruler.`
                     : ""}

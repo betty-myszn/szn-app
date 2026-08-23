@@ -87,3 +87,33 @@ describe("houseForSign, the sign-midpoint version", () => {
     expect(houseForLongitude(lateLeo, midSignCusps)).not.toBe(houseForSign("Leo", midSignCusps));
   });
 });
+
+// Betty's own chart, and the reason the season guide read wrong: her 7th house cusp is in Leo, and
+// the house is wide enough (125 to 200) to swallow the whole of Virgo, so Virgo is intercepted
+// inside her Leo 7th house. Both Leo season and Virgo season put the season sun in the 7th, which
+// is correct Placidus astrology but reads as a bug unless the interception is explained. The season
+// guide now composes that explanation with houseSpanNote, exactly like the eclipse and moon reads.
+const interceptedCusps = [305, 20, 45, 70, 95, 110, 125, 200, 225, 250, 275, 290];
+
+describe("an intercepted season sign (Betty's 7th house)", () => {
+  it("places both Leo and Virgo season in the same wide 7th house", () => {
+    expect(houseForSign("Leo", interceptedCusps)).toBe(7);
+    expect(houseForSign("Virgo", interceptedCusps)).toBe(7);
+  });
+
+  it("confirms the 7th cusp is Leo, so Virgo is the non-cusp (intercepted) sign", () => {
+    // 125 = 5 Leo, so the sign on the 7th cusp is Leo, not Virgo.
+    expect(houseForLongitude(125, interceptedCusps)).toBe(7);
+    const note = houseSpanNote("Virgo", 7, "Leo", "season");
+    expect(note).not.toBe("");
+    expect(note).toContain("leo");
+    expect(note).toContain("virgo");
+    expect(note).toContain("7th house");
+    expect(note).toContain("season");
+  });
+
+  it("stays silent when the season sign is the sign on the cusp", () => {
+    // Leo season on a Leo 7th cusp needs no interception explainer.
+    expect(houseSpanNote("Leo", 7, "Leo", "season")).toBe("");
+  });
+});
