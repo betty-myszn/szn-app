@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import type { SeasonInfo } from "@/lib/seasons";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
@@ -126,9 +127,6 @@ export default function Home() {
   const { member, ready } = useMember();
   const season = useSeason();
   const enrolmentOpen = useEnrolmentOpen();
-  const [email, setEmail] = useState("");
-  const [joined, setJoined] = useState(false);
-
   // Read the next class straight off the workshop data rather than retyping it here. The ticker
   // previously hardcoded the weekday, and when the class moved it carried on telling every homepage
   // visitor the wrong day. It also used to grab the first dated class in the list, which kept
@@ -144,21 +142,6 @@ export default function Home() {
   }, [ready, member, router]);
 
   if (!ready || member) return null;
-
-  const handleWaitlist = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setJoined(true);
-    try {
-      await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "membership-waitlist" }),
-      });
-    } catch {
-      // mock mode, the confirmation still shows
-    }
-  };
 
   const szn = season.sign.toLowerCase();
 
@@ -243,9 +226,9 @@ export default function Home() {
                 or join · $88/mo
               </Link>
             ) : (
-              <a href="#waitlist" className="btn-outline no-underline">
-                join the waitlist
-              </a>
+              <Link href="/membership" className="btn-outline no-underline">
+                see what&apos;s inside
+              </Link>
             )}
             <Link href="/login" className="btn-outline no-underline">
               member login
@@ -706,50 +689,25 @@ export default function Home() {
           >
             {enrolmentOpen
               ? "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and it's $88/mo to keep it all after your week."
-              : "Join the waitlist and you'll be first through the doors when they open. You sign up with your birth date, time and place, and that builds the whole portal around you."}
+              : "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and the paid doors reopen while you're still inside your week."}
           </p>
-          {enrolmentOpen ? (
-            <Link
-              href="/free-trial"
-              className="no-underline"
-              style={{
-                background: "var(--pink)",
-                color: "var(--dark)",
-                fontFamily: poppins,
-                fontSize: 15,
-                fontWeight: 800,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "22px 52px",
-                display: "inline-block",
-              }}
-            >
-              start your free 7 days
-            </Link>
-          ) : !joined ? (
-            <form
-              onSubmit={handleWaitlist}
-              className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto"
-              style={{ border: "1.5px solid #fff" }}
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your email address"
-                className="flex-1"
-                style={{ border: "none", outline: "none", padding: "18px 20px", fontSize: 14, background: "#fff" }}
-              />
-              <button type="submit" className="btn-pink" style={{ cursor: "pointer", border: "none", padding: "18px 30px" }}>
-                join the waitlist
-              </button>
-            </form>
-          ) : (
-            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, color: "var(--pink)" }}>
-              you&apos;re on the list. watch your inbox, your era is loading. &#10022;
-            </p>
-          )}
+          <Link
+            href={FREE_TRIAL_CTA.href}
+            className="no-underline"
+            style={{
+              background: "var(--pink)",
+              color: "var(--dark)",
+              fontFamily: poppins,
+              fontSize: 15,
+              fontWeight: 800,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              padding: "22px 52px",
+              display: "inline-block",
+            }}
+          >
+            {FREE_TRIAL_CTA.label}
+          </Link>
         </div>
       </section>
     </>

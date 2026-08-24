@@ -6,6 +6,7 @@ import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import { pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -68,7 +69,7 @@ export default function ReplayVaultPage() {
               <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 460, margin: "0 auto 20px" }}>
                 Join to watch every workshop back, whenever you like.
               </p>
-              <Link href="/#waitlist" className="btn-pink">join the waitlist</Link>
+              <Link href={FREE_TRIAL_CTA.href} className="btn-pink">{FREE_TRIAL_CTA.label}</Link>
             </div>
           ) : past.length === 0 ? (
             <div className="p-8 text-center" style={{ border: "var(--border)", background: "var(--lav-light)" }}>

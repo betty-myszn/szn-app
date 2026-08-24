@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { OG_IMAGE } from "@/lib/site";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -172,12 +173,12 @@ export default function PodcastPage() {
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           From $88/mo · Cancel anytime · 1:1 coaching on VIP, $555/mo
         </p>
-        <a href="/membership" style={{
+        <a href={FREE_TRIAL_CTA.href} style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
           fontFamily: pp, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
         }}>
-          join the waitlist
+          {FREE_TRIAL_CTA.label}
         </a>
       </div>
     </>

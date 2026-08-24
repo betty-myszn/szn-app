@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { track, EVENTS } from "@/lib/analytics";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 import type { ChartData } from "@/types/chart";
 import {
   ZODIAC_SYMBOLS,
@@ -377,7 +378,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               join the membership &rarr;
             </a>
             <a
-              href="/waitlist"
+              href={FREE_TRIAL_CTA.href}
               style={{
                 background: "transparent",
                 color: "rgba(255,255,255,0.7)",
@@ -390,7 +391,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 textDecoration: "none",
               }}
             >
-              join the waitlist
+              {FREE_TRIAL_CTA.label}
             </a>
           </div>
         </div>

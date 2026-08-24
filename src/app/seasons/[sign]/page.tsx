@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import SeasonWaitlistForm from "@/components/SeasonWaitlistForm";
 import { SEASON_PAGES, SEASON_SLUGS } from "@/lib/season-pages";
 import { replayForSign } from "@/lib/workshops";
 import { OG_IMAGE } from "@/lib/site";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -241,10 +241,12 @@ export default async function SeasonPage({
             Experience {season.name} szn inside <span className="pk">MY SZN.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", maxWidth: 420, margin: "0 auto 28px" }}>
-            Join the waitlist for early access. Founding member pricing. Limited spaces.
+            Start your free 7 days and read this season against your own chart. No card needed.
           </p>
           <div className="flex justify-center">
-            <SeasonWaitlistForm />
+            <Link href={FREE_TRIAL_CTA.href} className="btn-pink no-underline" style={{ padding: "16px 36px" }}>
+              {FREE_TRIAL_CTA.label}
+            </Link>
           </div>
         </div>
       </section>

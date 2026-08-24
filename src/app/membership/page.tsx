@@ -8,6 +8,7 @@ import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import { upcomingWorkshops, seasonOfNextWorkshop } from "@/lib/workshops";
+import { joinCta, FREE_TRIAL_CTA } from "@/lib/cta";
 import { useSeason } from "@/lib/use-season";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import SoulBlueprint from "@/components/SoulBlueprint";
@@ -15,7 +16,6 @@ import WhatIsMySzn from "@/components/WhatIsMySzn";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
-const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 
 // Stripe payment links now live in @/lib/checkout (imported above) so the signup page and this page
 // can never drift onto different URLs.
@@ -26,130 +26,6 @@ const dm = "var(--font-dm-sans), 'DM Sans', sans-serif";
 // not deleted: 'social' still exists in stripe-tiers.ts and still passes hasAccessFromRow, so the
 // members already paying $33 keep the rituals they're being charged for until they cancel or
 // upgrade. Do not re-add a CTA here without first deciding what happens to those members.
-
-function WaitlistForm({ dark = false, id = "" }: { dark?: boolean; id?: string }) {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [invested, setInvested] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !name || !invested) return;
-    setSubmitting(true);
-    try {
-      await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, source: "membership" }),
-      });
-    } catch {}
-    setSubmitted(true);
-    setSubmitting(false);
-  };
-
-  const inputStyle = {
-    width: "100%",
-    padding: "14px 16px",
-    fontSize: 14,
-    fontFamily: dm,
-    border: dark ? "1.5px solid var(--pink)" : "var(--border)",
-    background: dark ? "rgba(255,255,255,0.05)" : "#fff",
-    color: dark ? "#fff" : "var(--dark)",
-    outline: "none",
-  };
-
-  const labelStyle = {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase" as const,
-    color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)",
-    marginBottom: 8,
-    display: "block",
-  };
-
-  if (submitted) {
-    const stepColor = dark ? "rgba(255,255,255,0.5)" : "var(--dark)";
-    const numBg = dark ? "rgba(255,45,135,0.15)" : "var(--pink-light)";
-    return (
-      <div style={{ padding: "20px 0" }}>
-        <div style={{ textAlign: "center", marginBottom: 24 }}>
-          <div style={{ fontSize: 28, marginBottom: 12 }}>&#10024;</div>
-          <div style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, marginBottom: 8, color: dark ? "#fff" : "var(--dark)" }}>
-            You&apos;re on the list, gorgeous.
-          </div>
-        </div>
-        <div className="space-y-4" style={{ maxWidth: 400, margin: "0 auto" }}>
-          {[
-            { num: "1", text: "Check your inbox for a confirmation email from us" },
-            { num: "2", text: "You'll be first in line at founding member pricing when doors open" },
-            { num: "3", text: "Next live class is Wednesday 19 August at 7pm LA time" },
-          ].map((step) => (
-            <div key={step.num} className="flex gap-3 items-start">
-              <span style={{
-                fontFamily: pp, fontSize: 12, fontWeight: 800, color: "var(--pink)",
-                width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-                background: numBg, flexShrink: 0,
-              }}>
-                {step.num}
-              </span>
-              <span style={{ fontSize: 14, color: dark ? "#fff" : "var(--dark)", lineHeight: 1.5 }}>
-                {step.text}
-              </span>
-            </div>
-          ))}
-        </div>
-        <p style={{ fontSize: 13, color: stepColor, textAlign: "center", marginTop: 20, lineHeight: 1.6 }}>
-          Your era starts now. We&apos;ll send you everything you need before doors open.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4" id={id}>
-      <div>
-        <label style={labelStyle}>first name</label>
-        <input type="text" required placeholder="Your first name" value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} />
-      </div>
-      <div>
-        <label style={labelStyle}>email address</label>
-        <input type="email" required placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-      </div>
-      <label style={{ display: "flex", gap: 12, alignItems: "flex-start", cursor: "pointer", padding: "12px 16px", background: dark ? "rgba(255,45,135,0.08)" : "var(--pink-light)", border: dark ? "1px solid rgba(255,45,135,0.25)" : "1px solid rgba(255,45,135,0.15)" }}>
-        <input
-          type="checkbox"
-          required
-          checked={invested}
-          onChange={(e) => setInvested(e.target.checked)}
-          style={{ marginTop: 3, accentColor: "var(--pink)", width: 18, height: 18, flexShrink: 0 }}
-        />
-        <div>
-          <span style={{ fontSize: 14, fontWeight: 600, color: dark ? "#fff" : "var(--dark)", lineHeight: 1.5 }}>
-            I&apos;m ready to invest in my transformation
-          </span>
-          <span style={{ display: "block", fontSize: 12, color: dark ? "rgba(255,255,255,0.5)" : "var(--dark)", marginTop: 4, opacity: 0.7 }}>
-            cancel anytime · payment plans available
-          </span>
-        </div>
-      </label>
-      <button
-        type="submit"
-        className="w-full cursor-pointer"
-        style={{
-          background: "var(--pink)", color: "var(--dark)", fontFamily: dm,
-          fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
-          textTransform: "uppercase", padding: "16px 32px", border: "none",
-        }}
-      >
-        {submitting ? "joining..." : "join the waitlist"}
-      </button>
-    </form>
-  );
-}
-
 
 // Shown when the route gate sent her here, so the pricing page explains why she landed on it
 // instead of just silently appearing. Reads ?reason= set by the proxy / auth callback.
@@ -176,13 +52,11 @@ function MembershipReasonBanner() {
 }
 
 export default function MembershipPage() {
-  // Single source of truth for every launch-related CTA on this page, shared with the homepage
-  // and LaunchCountdown. While the doors are open there is no waitlist anywhere: every primary
-  // CTA scrolls to the pricing cards, which hold the real Stripe checkout buttons. When the
-  // window closes it all reverts to lead capture automatically.
+  // Every launch-related CTA on this page, from one rule in @/lib/cta. Doors open: the primary CTA
+  // scrolls to the pricing cards, which hold the real Stripe checkout buttons. Doors closed: it
+  // becomes the free trial, never a waitlist, so a visitor who can't buy today still gets in today.
   const enrolmentOpen = useEnrolmentOpen();
-  const ctaHref = enrolmentOpen ? "#pricing" : "#waitlist-form";
-  const ctaLabel = enrolmentOpen ? "join my szn" : "join the waitlist";
+  const { href: ctaHref, label: ctaLabel } = joinCta(enrolmentOpen, "#pricing");
 
   // The upcoming-workshops block reads the same schedule as /events, so this sales page never
   // advertises a class that has already happened. Clock read on the client so the upcoming split
@@ -238,25 +112,18 @@ export default function MembershipPage() {
             <LaunchCountdown variant="dark" />
           </div>
 
-          {/* Doors open: no waitlist anywhere. The primary CTA drops her into the pricing cards
-              (real Stripe checkout). Doors closed: collect the lead. See src/lib/enrolment.ts. */}
-          {enrolmentOpen ? (
-            <div className="flex flex-col items-center gap-4">
-              <Link href="#pricing" className="btn-pink no-underline" style={{ display: "inline-block", padding: "16px 44px" }}>
-                join my szn
-              </Link>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
-                Doors are open. Choose your plan below. Founding member pricing, limited spots.
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-4">
-              <WaitlistForm dark id="hero-form" />
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
-                Join the waitlist and you&apos;ll be first through the doors when they open.
-              </p>
-            </div>
-          )}
+          {/* Doors open: the primary CTA drops her into the pricing cards (real Stripe checkout).
+              Doors closed: the free trial, so she gets in today either way. See @/lib/cta. */}
+          <div className="flex flex-col items-center gap-4">
+            <Link href={ctaHref} className="btn-pink no-underline" style={{ display: "inline-block", padding: "16px 44px" }}>
+              {ctaLabel}
+            </Link>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
+              {enrolmentOpen
+                ? "Doors are open. Choose your plan below. Founding member pricing, limited spots."
+                : "Start your free 7 days and you'll already be inside when the doors reopen."}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -874,7 +741,7 @@ export default function MembershipPage() {
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
             {enrolmentOpen
               ? "Enrolment is open now. Choose your plan below. Limited founding member spots."
-              : "Enrolment is currently closed. Join the waitlist to be first in when doors reopen."}
+              : "Enrolment is currently closed. Start your free 7 days and you'll be inside while you wait."}
           </p>
 
           {/* Free front-door tier: the entry ramp, deliberately a full-width band ABOVE the three
@@ -1103,7 +970,7 @@ export default function MembershipPage() {
               }}>
                 {enrolmentOpen
                   ? "The doors are open right now to a limited number of founding members. Cancel anytime. Choose your plan and your personalised portal is built the moment you're in."
-                  : "We open the doors to a limited number of founding members at a time. Cancel anytime. Join the waitlist and this is your invite the moment they reopen."}
+                  : "We open the doors to a limited number of founding members at a time. Cancel anytime. Start your free 7 days now and you'll already be inside when they reopen."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
@@ -1143,13 +1010,16 @@ export default function MembershipPage() {
                 </>
               ) : (
                 <>
-                  <div className="tag mb-3">join the waitlist</div>
+                  <div className="tag mb-3">start your free week</div>
                   <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
-                    Early access. Founding pricing. First in when the doors reopen.
+                    Full access for 7 days, no card needed. You&apos;ll be inside and using your portal
+                    before the paid doors reopen.
                   </p>
-                  <WaitlistForm />
+                  <Link href={FREE_TRIAL_CTA.href} className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
+                    {FREE_TRIAL_CTA.label}
+                  </Link>
                   <div className="flex flex-wrap gap-2 mt-6">
-                    {["Founding pricing", "First in line", "Cancel anytime"].map((b) => (
+                    {["No card needed", "Full access", "Cancel anytime"].map((b) => (
                       <span key={b} style={{
                         fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
                         color: "var(--dark)", padding: "6px 12px",

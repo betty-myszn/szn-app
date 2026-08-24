@@ -90,7 +90,7 @@ export default function SignupPage() {
             <CheckoutButton
               checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
               label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $88/mo"}
-              waitlistHref="/membership#pricing"
+              fallbackHref="/membership#pricing"
               plan={plan}
               value={plan === "vip" ? 555 : 88}
             />

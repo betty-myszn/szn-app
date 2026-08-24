@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMember } from "@/lib/use-member";
 import { track, EVENTS } from "@/lib/analytics";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -11,7 +12,8 @@ interface CheckoutButtonProps {
   checkoutUrl?: string;
   label: string;
   dark?: boolean;
-  waitlistHref?: string;
+  /** Where the button points when this plan has no checkout url yet. Defaults to the free trial. */
+  fallbackHref?: string;
   /** Plan slug for analytics, e.g. "monthly". Passed explicitly rather than parsed out of
    *  `label`, so rewording a button can never quietly rename a funnel step in GA4. */
   plan?: string;
@@ -38,7 +40,7 @@ function withClientReferenceId(checkoutUrl: string, userId: string): string {
 // in, we attach her user id via client_reference_id for a clean id-based link; if she's logged
 // out, she checks out on the plain link and the webhook parks her membership by email, which she
 // claims when she sets up her account (password) on /create-account afterwards.
-export default function CheckoutButton({ checkoutUrl, label, dark = false, waitlistHref = "#waitlist-form", plan, value }: CheckoutButtonProps) {
+export default function CheckoutButton({ checkoutUrl, label, dark = false, fallbackHref = FREE_TRIAL_CTA.href, plan, value }: CheckoutButtonProps) {
   const [agreed, setAgreed] = useState(false);
   const { member } = useMember();
 
@@ -48,7 +50,7 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
   if (!checkoutUrl) {
     return (
       <a
-        href={waitlistHref}
+        href={fallbackHref}
         className="block text-center no-underline"
         style={{
           background: "var(--pink)",
@@ -62,7 +64,7 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, waitl
           border: "none",
         }}
       >
-        join the waitlist
+        {FREE_TRIAL_CTA.label}
       </a>
     );
   }

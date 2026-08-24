@@ -6,6 +6,7 @@ import Image from "next/image";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
+import { FREE_TRIAL_CTA } from "@/lib/cta";
 import { hasActiveAccess } from "@/lib/membership-access";
 import {
   getRsvp,
@@ -258,8 +259,8 @@ export default function EventsPage() {
                   </div>
                 )}
                 {!member ? (
-                  <Link href="/#waitlist" className="btn-pink">
-                    join the waitlist
+                  <Link href={FREE_TRIAL_CTA.href} className="btn-pink">
+                    {FREE_TRIAL_CTA.label}
                   </Link>
                 ) : !workshop.startIso ? (
                   notified[workshop.id] ? (
@@ -448,7 +449,7 @@ export default function EventsPage() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link href="/#waitlist" className="btn-pink">join the waitlist</Link>
+              <Link href={FREE_TRIAL_CTA.href} className="btn-pink">{FREE_TRIAL_CTA.label}</Link>
             </div>
           </div>
         </section>
