@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
-import { upcomingWorkshops, seasonOfNextWorkshop } from "@/lib/workshops";
+import { upcomingWorkshops, seasonOfNextWorkshop, shortWorkshopMeta } from "@/lib/workshops";
 import { joinCta, FREE_TRIAL_CTA } from "@/lib/cta";
 import { useSeason } from "@/lib/use-season";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
@@ -974,7 +974,15 @@ export default function MembershipPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
-                {["1:1 coaching with Betty", "Founding member pricing", "Next live class 19 August", "Cancel anytime", "Limited spots"].map((b) => (
+                {[
+                  "1:1 coaching with Betty",
+                  "Founding member pricing",
+                  // Read off the schedule rather than typed in, so it can't sit here advertising a
+                  // class that already happened.
+                  nextTwo[0] ? `Next live class ${shortWorkshopMeta(nextTwo[0], now ?? 0).split(" · ")[0]}` : "A live class every month",
+                  "Cancel anytime",
+                  "Limited spots",
+                ].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
                     color: "var(--dark)", padding: "8px 16px",
