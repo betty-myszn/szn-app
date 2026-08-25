@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, DM_Sans } from "next/font/google";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import Analytics from "@/components/Analytics";
+import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
+import InstallPrompt from "@/components/InstallPrompt";
 import CookieConsent from "@/components/CookieConsent";
 import CookieSettingsLink from "@/components/CookieSettingsLink";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
@@ -34,6 +36,13 @@ export const metadata: Metadata = {
   // stops query-string and trailing-slash variants being indexed as separate pages.
   alternates: { canonical: "/" },
   applicationName: SITE_NAME,
+  // Installed-app behaviour on iOS: run full-screen with a translucent status bar and show "MY SZN"
+  // as the home-screen label. The apple-touch-icon comes from app/apple-icon.png automatically.
+  appleWebApp: {
+    capable: true,
+    title: "MY SZN",
+    statusBarStyle: "black-translucent",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -58,6 +67,12 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+};
+
+// Theme colour tints the phone status bar when the app runs installed (standalone). In Next this
+// lives on the viewport export, not metadata. Dark to match the icon and splash screen.
+export const viewport: Viewport = {
+  themeColor: "#1a1a1a",
 };
 
 // Identity for the whole site, emitted once. The Organization block is what lets Google associate
@@ -101,6 +116,8 @@ export default function RootLayout({
         />
 
         <Analytics />
+        <ServiceWorkerRegistrar />
+        <InstallPrompt />
 
         {/* Nav */}
         <NavBar />
