@@ -13,6 +13,29 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
 
+// The iOS share icon (square tray with an up arrow), drawn inline so it always renders and matches
+// exactly what she taps in Safari.
+function ShareGlyph() {
+  return (
+    <svg
+      width="14"
+      height="17"
+      viewBox="0 0 24 28"
+      fill="none"
+      stroke="#fff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      style={{ flexShrink: 0, opacity: 0.9 }}
+    >
+      <path d="M12 2 L12 16" />
+      <path d="M7 7 L12 2 L17 7" />
+      <path d="M5.5 11 H4.5 A2.5 2.5 0 0 0 2 13.5 V23.5 A2.5 2.5 0 0 0 4.5 26 H19.5 A2.5 2.5 0 0 0 22 23.5 V13.5 A2.5 2.5 0 0 0 19.5 11 H18.5" />
+    </svg>
+  );
+}
+
 export default function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [isIOS, setIsIOS] = useState(false);
@@ -98,8 +121,21 @@ export default function InstallPrompt() {
           Add MY SZN to your home screen
         </div>
         {isIOS ? (
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", lineHeight: 1.5, marginTop: 3 }}>
-            Tap the Share icon, then &ldquo;Add to Home Screen&rdquo;.
+          <div
+            style={{
+              fontSize: 12,
+              color: "rgba(255,255,255,0.72)",
+              lineHeight: 1.5,
+              marginTop: 3,
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              flexWrap: "wrap",
+            }}
+          >
+            <span>Tap</span>
+            <ShareGlyph />
+            <span>then &ldquo;Add to Home Screen&rdquo;.</span>
           </div>
         ) : (
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", lineHeight: 1.5, marginTop: 3 }}>
