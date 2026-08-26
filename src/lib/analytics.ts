@@ -8,8 +8,13 @@
 // the defaults in place, so GA4 stays in cookieless mode: we still get a rough, unattributed hit
 // count, we do not get a person.
 
-/** Public GA4 measurement id, e.g. "G-XXXXXXXXXX". Empty in environments that haven't set it. */
-export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
+/**
+ * Public GA4 measurement id for the live MY SZN property. Hardcoded on purpose: this is the one and
+ * only property the site reports to, so no stale NEXT_PUBLIC_GA_MEASUREMENT_ID left in a host
+ * dashboard or an old build can silently point analytics at a different account. Blank outside
+ * production builds so `next dev` never counts localhost traffic against the live property.
+ */
+export const GA_MEASUREMENT_ID = process.env.NODE_ENV === "production" ? "G-Q60BG85SVM" : "";
 
 /** localStorage key holding her choice. Read by the inline bootstrap script too, keep in sync. */
 export const CONSENT_STORAGE_KEY = "myszn-cookie-consent";
