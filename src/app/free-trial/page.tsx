@@ -6,6 +6,7 @@ import type { BirthData, BirthLocation } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
 import { syncChartToSupabase } from "@/lib/chart-sync";
 import { workshopCardRow, shortWorkshopMeta } from "@/lib/workshops";
+import { track, EVENTS } from "@/lib/analytics";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -270,6 +271,11 @@ export default function FreeTrialPage() {
         setLoading(false);
         return;
       }
+
+      // Trial account created. Log the conversion here, before the chart-cache step below, so a slow
+      // or failed cache never costs us the signup event. GA4 recommended name, method tags it apart
+      // from the paid sign_up fired on /create-account.
+      track(EVENTS.SIGN_UP, { method: "free_trial" });
 
       // Account created + signed in. The route already saved her birth data server-side, so here we
       // only cache the chart the parallel calc produced, so she lands with her real chart rather
