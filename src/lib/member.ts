@@ -178,3 +178,38 @@ export async function getTrialStats(): Promise<TrialStats> {
   ]);
   return { active: active.count || 0, expired: expired.count || 0, converted: converted.count || 0 };
 }
+
+export interface MemberRow {
+  id: string;
+  name: string;
+  email: string;
+  membershipLevel: MembershipLevel;
+  joinedAt: string;
+  /** ISO expiry for a trial account, null otherwise. Lets the directory show who's mid-trial. */
+  trialExpiresAt: string | null;
+  onboarded: boolean;
+}
+
+// The real member directory behind the "total members" number, admin only. Same RLS reasoning as
+// getMemberCount: profiles_admin_read lets an admin session read every row, a member session only
+// ever sees her own, and this is rendered behind the admin gate. Newest first, because the question
+// this answers is almost always "who just joined?".
+export async function listMembers(limit = 500): Promise<MemberRow[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("id, name, email, membership_level, created_at, trial_expires_at, onboarded")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  return (data ?? []).map((row) => ({
+    id: row.id as string,
+    // Someone who signed up but never finished onboarding has no name yet, so the email carries
+    // the row instead of an empty cell.
+    name: ((row.name as string | null) ?? "").trim(),
+    email: (row.email as string) ?? "",
+    membershipLevel: ((row.membership_level as MembershipLevel) ?? "none"),
+    joinedAt: (row.created_at as string) ?? "",
+    trialExpiresAt: (row.trial_expires_at as string | null) ?? null,
+    onboarded: !!row.onboarded,
+  }));
+}

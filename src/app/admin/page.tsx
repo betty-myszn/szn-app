@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
-import { isAdminMember, getMemberCount, getTrialStats } from "@/lib/member";
+import { isAdminMember, getMemberCount, getTrialStats, listMembers, type MemberRow, type MembershipLevel } from "@/lib/member";
 import { ALL_ROOMS, loadPosts, deletePost, deleteComment, type Post } from "@/lib/community-store";
 import { loadRoomMessages, deleteRoomMessage, type ChatMessage } from "@/lib/chat-rooms";
 import { loadGoals } from "@/lib/goals-store";
@@ -23,6 +23,30 @@ import {
 } from "@/lib/polls";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+
+// Tier chips for the member directory. Paid tiers carry the pink, everything else stays quiet, so
+// the paying members are the ones that catch the eye when scanning the list.
+const TIER_STYLE: Record<MembershipLevel, { label: string; bg: string; fg: string }> = {
+  vip: { label: "vip", bg: "var(--dark)", fg: "#fff" },
+  monthly: { label: "my szn", bg: "var(--pink)", fg: "#fff" },
+  trial: { label: "trial", bg: "var(--lav)", fg: "var(--dark)" },
+  social: { label: "social", bg: "var(--lav-light)", fg: "#3C2A70" },
+  free: { label: "free", bg: "#f2f2f2", fg: "var(--grey)" },
+  none: { label: "no tier", bg: "#f2f2f2", fg: "var(--grey-light)" },
+};
+
+const dayMonthYear = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+// A trial member's most useful date is when her week runs out, everyone else's is when she joined.
+function memberLine(m: MemberRow): string {
+  if (m.membershipLevel === "trial" && m.trialExpiresAt) {
+    const endsMs = new Date(m.trialExpiresAt).getTime();
+    const days = Math.ceil((endsMs - Date.now()) / 86400000);
+    return days > 0 ? `${days} day${days === 1 ? "" : "s"} of trial left` : `trial ended ${dayMonthYear(m.trialExpiresAt)}`;
+  }
+  return m.joinedAt ? `joined ${dayMonthYear(m.joinedAt)}` : "";
+}
 
 export default function AdminPage() {
   const { member, ready } = useMember();
@@ -46,6 +70,8 @@ export default function AdminPage() {
   const [pollSent, setPollSent] = useState(false);
   const [memberCount, setMemberCount] = useState(0);
   const [trialStats, setTrialStats] = useState({ active: 0, expired: 0, converted: 0 });
+  const [members, setMembers] = useState<MemberRow[]>([]);
+  const [memberSearch, setMemberSearch] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -79,6 +105,14 @@ export default function AdminPage() {
     loadRoomMessages(selectedRoom).then(setRoomMessages);
   }, [selectedRoom]);
 
+  // The member directory is admin-only twice over: the page never renders it to anyone else, and
+  // the profiles_admin_read policy means a non-admin session would only ever get her own row back.
+  // Waiting for the admin check here means the query is never even issued for anyone else.
+  useEffect(() => {
+    if (!ready || !isAdminMember(member)) return;
+    listMembers().then(setMembers);
+  }, [ready, member]);
+
   if (!ready) return null;
 
   if (!member) {
@@ -109,6 +143,15 @@ export default function AdminPage() {
       </section>
     );
   }
+
+  // The member directory, filtered on name and email together so one box answers both "who is
+  // Sarah?" and "which account is this address?".
+  const memberQuery = memberSearch.trim().toLowerCase();
+  const visibleMembers = memberQuery
+    ? members.filter(
+        (m) => m.name.toLowerCase().includes(memberQuery) || m.email.toLowerCase().includes(memberQuery)
+      )
+    : members;
 
   const totalComments = posts.reduce((sum, p) => sum + p.comments.length, 0);
   const totalChatMessages = Object.values(roomCounts).reduce((sum, n) => sum + n, 0);
@@ -447,6 +490,69 @@ export default function AdminPage() {
               ));
             })()}
           </div>
+        </div>
+      </section>
+
+      {/* Member directory: the names behind the "total members" number */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-5">
+            <div className="tag" style={{ marginBottom: 0 }}>
+              members · {memberQuery ? `${visibleMembers.length} of ${members.length}` : members.length}
+            </div>
+            <input
+              value={memberSearch}
+              onChange={(e) => setMemberSearch(e.target.value)}
+              placeholder="search a name or email"
+              style={{ border: "var(--border)", outline: "none", padding: "11px 14px", fontSize: 13, minWidth: 240 }}
+            />
+          </div>
+
+          {members.length === 0 ? (
+            <p style={{ fontSize: 14, color: "var(--grey-light)" }}>No members loaded.</p>
+          ) : visibleMembers.length === 0 ? (
+            <p style={{ fontSize: 14, color: "var(--grey-light)" }}>Nobody matches &ldquo;{memberSearch}&rdquo;.</p>
+          ) : (
+            <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
+              {visibleMembers.map((m, i) => (
+                <div
+                  key={m.id}
+                  className="flex items-center justify-between gap-4 flex-wrap p-5"
+                  style={{ borderBottom: i < visibleMembers.length - 1 ? "var(--border)" : undefined }}
+                >
+                  <div style={{ flex: "1 1 240px", minWidth: 200 }}>
+                    <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)" }}>
+                      {m.name || "no name yet"}
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--grey)", marginTop: 3, wordBreak: "break-all" }}>{m.email}</div>
+                  </div>
+                  <div className="flex items-center gap-3 flex-wrap" style={{ marginLeft: "auto" }}>
+                    {!m.onboarded && (
+                      <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--grey-light)", border: "1.5px solid #ddd", padding: "4px 9px" }}>
+                        not onboarded
+                      </span>
+                    )}
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 800,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        padding: "5px 10px",
+                        background: TIER_STYLE[m.membershipLevel].bg,
+                        color: TIER_STYLE[m.membershipLevel].fg,
+                      }}
+                    >
+                      {TIER_STYLE[m.membershipLevel].label}
+                    </span>
+                    <span style={{ fontSize: 11, color: "var(--grey-light)", minWidth: 132, textAlign: "right" }}>
+                      {memberLine(m)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
