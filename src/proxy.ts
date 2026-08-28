@@ -74,8 +74,11 @@ export async function proxy(request: NextRequest) {
       anonPath.startsWith(ONBOARDING + "/") ||
       pathMatches(anonPath, LOGIN_ONLY);
     if (!needsAuth) return response;
+    // Carry the query string through the login hop as well as the path: deep links from emails and
+    // the sky alert (/your-season/moon?type=lunar_eclipse&date=...) are nothing but their params, so
+    // dropping the search sent a logged-out member to "we couldn't find that date" after signing in.
     return NextResponse.redirect(
-      new URL(`/login?redirect=${encodeURIComponent(anonPath)}`, request.url)
+      new URL(`/login?redirect=${encodeURIComponent(anonPath + request.nextUrl.search)}`, request.url)
     );
   }
 
@@ -122,7 +125,11 @@ export async function proxy(request: NextRequest) {
 
   // Any gated route requires a session first.
   if (!user) {
-    return redirectPreservingSession(request, response, `/login?redirect=${encodeURIComponent(pathname)}`);
+    return redirectPreservingSession(
+      request,
+      response,
+      `/login?redirect=${encodeURIComponent(pathname + request.nextUrl.search)}`
+    );
   }
 
   // Logged in is all these need.
