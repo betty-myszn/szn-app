@@ -203,7 +203,9 @@ function MoonPageContent() {
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
             <div className="tag mb-3">what it brings up</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.bringsUp}</p>
+            {reading.bringsUp.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+            ))}
           </div>
         </section>
       )}
@@ -213,7 +215,9 @@ function MoonPageContent() {
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
             <div className="tag mb-3">what to look out for</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.lookOutFor}</p>
+            {reading.lookOutFor.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+            ))}
           </div>
         </section>
       )}
@@ -223,7 +227,9 @@ function MoonPageContent() {
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink-light)" }}>
             <div className="tag mb-3" style={{ color: "var(--pink)" }}>the shadow</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.shadow}</p>
+            {reading.shadow.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+            ))}
           </div>
         </section>
       )}
@@ -343,6 +349,25 @@ function MoonPageContent() {
             <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.5, color: "#3C2A70", marginBottom: 20 }}>
               {reading.journalPrompt}
             </p>
+            {reading.journalPrompts && reading.journalPrompts.length > 0 && (
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 22px" }}>
+                {reading.journalPrompts.map((q, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.75,
+                      color: "var(--grey)",
+                      paddingLeft: 16,
+                      borderLeft: `2px solid ${i % 2 === 0 ? "var(--pink)" : "var(--lav)"}`,
+                      marginBottom: 12,
+                    }}
+                  >
+                    {q}
+                  </li>
+                ))}
+              </ul>
+            )}
             <Link href="/journal" className="btn-pink">open my journal</Link>
           </div>
           <div className="p-8" style={{ background: "var(--pink)" }}>

@@ -259,6 +259,10 @@ export interface LunationReading {
   /** A distinct, do-it-this-week practice. Preferred by the page over theMove when present. */
   exercise?: Exercise;
   journalPrompt: string;
+  /** Optional extra reflection questions rendered under the journal prompt. Eclipses use these to
+   *  place the date inside the wider eighteen-month series ("go back to September 2024...") rather
+   *  than leaving her with a single question about one night. */
+  journalPrompts?: string[];
   affirmation: string;
 }
 
