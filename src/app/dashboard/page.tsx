@@ -375,6 +375,11 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
+           class that just landed is the most time-sensitive thing on the page. Self-hides once the
+           replay is a few days old, and falls back to the slim vault banner. ── */}
+      <ReplayHighlight />
+
       {/* ── TODAY: the daily hook ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>
         <div className="max-w-6xl mx-auto">
@@ -474,9 +479,6 @@ export default function DashboardPage() {
       {/* ── your full personalised season guide (reused) ── */}
       <div id="season-guide" />
       <SeasonPersonalised />
-
-      {/* ── newest replay spotlight (self-hides until one exists) ── */}
-      <ReplayHighlight />
 
       {/* ── human design × season (reused) ── */}
       <SeasonDesignInline />

@@ -28,23 +28,24 @@ export default function ReplayHighlight() {
 
   if (fresh) {
     return (
-      <section className="px-5 md:px-8 py-8" style={{ borderBottom: "var(--border)" }}>
+      <section className="px-5 md:px-8" style={{ borderBottom: "var(--border)", paddingTop: 32, paddingBottom: 32 }}>
         <div className="max-w-6xl mx-auto">
           <Link
             href={href}
-            className="flex flex-col md:flex-row"
+            className="block"
             style={{ border: "var(--border)", background: "var(--lav-light)", textDecoration: "none" }}
           >
-            {/* The cover, so the new replay reads as something to press play on rather than
-                another block of text. Whole card is the link, the play badge just says so. */}
+            {/* The cover runs the full width of the card: a class that has just landed is the thing
+                she should see the moment the page loads, so it is sized like a feature rather than
+                a thumbnail. Capped in height so a wide screen doesn't turn it into a billboard. */}
             <div
-              className="w-full md:w-1/2"
               style={{
                 position: "relative",
+                width: "100%",
                 aspectRatio: "16 / 9",
+                maxHeight: 460,
                 background: replay.coverImage ? "#211d2c" : "linear-gradient(135deg, var(--pink), var(--lav))",
                 borderBottom: "var(--border)",
-                flexShrink: 0,
               }}
             >
               {replay.coverImage && (
@@ -52,67 +53,69 @@ export default function ReplayHighlight() {
                   src={replay.coverImage}
                   alt={replay.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 1200px) 100vw, 1150px"
                   style={{ objectFit: "cover" }}
+                  priority
                 />
               )}
+              <span
+                style={{
+                  position: "absolute",
+                  top: 18,
+                  left: 18,
+                  display: "inline-block",
+                  fontSize: 11,
+                  fontWeight: 800,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  background: "var(--pink)",
+                  padding: "7px 14px",
+                }}
+              >
+                ✦ new replay
+              </span>
               {/* Bottom right rather than dead centre: every cover carries its own title artwork
                   across the middle, and a centred badge lands right on top of it. */}
               <span
                 style={{
                   position: "absolute",
-                  right: 16,
-                  bottom: 16,
-                  width: 58,
-                  height: 58,
+                  right: 20,
+                  bottom: 20,
+                  width: 76,
+                  height: 76,
                   borderRadius: "50%",
-                  border: "2px solid rgba(255,255,255,0.92)",
+                  border: "3px solid rgba(255,255,255,0.92)",
                   background: "rgba(26,26,26,0.55)",
                   display: "grid",
                   placeItems: "center",
                   color: "#fff",
-                  fontSize: 18,
-                  paddingLeft: 4,
+                  fontSize: 24,
+                  paddingLeft: 5,
                 }}
               >
                 ▶
               </span>
             </div>
 
-            <div className="p-7 md:p-9">
-              <div className="flex items-center gap-3 flex-wrap" style={{ marginBottom: 12 }}>
-                <span
-                  style={{
-                    display: "inline-block",
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "#fff",
-                    background: "var(--pink)",
-                    padding: "5px 11px",
-                  }}
-                >
-                  ✦ new replay
-                </span>
-                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70" }}>
-                  {replay.label}
-                </span>
+            <div className="p-7 md:p-10">
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 12 }}>
+                {replay.label}
               </div>
               <h2
                 style={{
                   fontFamily: poppins,
-                  fontSize: "clamp(22px, 3.5vw, 30px)",
+                  fontSize: "clamp(28px, 4.6vw, 46px)",
                   fontWeight: 800,
-                  letterSpacing: "-0.8px",
-                  lineHeight: 1.12,
+                  letterSpacing: "-1.2px",
+                  lineHeight: 1.06,
                   color: "#2E1C63",
-                  marginBottom: 10,
+                  marginBottom: 14,
                 }}
               >
                 {replay.title}
               </h2>
-              <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.75, maxWidth: 560, marginBottom: 18 }}>
+              <p style={{ fontSize: 16, color: "var(--grey)", lineHeight: 1.75, maxWidth: 640, marginBottom: 22 }}>
                 The replay just landed in the vault, so you can watch the whole thing back in your own time, as many times as you like.
               </p>
               <span className="btn-pink" style={{ pointerEvents: "none" }}>

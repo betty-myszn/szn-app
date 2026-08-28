@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
+import ReplayTeaser from "@/components/ReplayTeaser";
 import { useSeason } from "@/lib/use-season";
 import type { SeasonInfo } from "@/lib/seasons";
 import { FREE_TRIAL_CTA } from "@/lib/cta";
@@ -663,6 +664,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── THE VAULT: the newest class replay, locked. Sits after the podcast (the free way in)
+           so a visitor meets the free thing first and the members-only thing second. Hides itself
+           for anyone who already has access. ── */}
+      <ReplayTeaser />
 
       {/* ── 9. CLOSING CTA: black, biggest type on the page ── */}
       <section

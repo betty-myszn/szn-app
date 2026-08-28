@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Ticker from "@/components/Ticker";
+import ReplayTeaser from "@/components/ReplayTeaser";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { FREE_TRIAL_CTA } from "@/lib/cta";
@@ -404,6 +405,10 @@ export default function EventsPage() {
           ))}
         </div>
       </section>
+
+      {/* The newest replay, locked, for anyone without access: a guest can see the class exists and
+          what it was, and starting the free week is what opens it. Self-hides for members. */}
+      <ReplayTeaser />
 
       {member ? (
         /* Members: a doorway into the replay vault, which lives on its own page */
