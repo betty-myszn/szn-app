@@ -298,10 +298,16 @@ export function formatWorkshopWhenLA(startIso: string): string {
     day: "numeric",
     month: "long",
   }).format(d);
-  const hour = new Intl.DateTimeFormat("en-US", {
+  // Minutes only when there are any: most classes are on the hour and read best as "7pm", but a
+  // 6:30pm start was being advertised here as "6pm", half an hour earlier than the class.
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: CLASS_ZONE,
     hour: "numeric",
+    minute: "2-digit",
     hour12: true,
-  }).format(d);
-  return `${date.toLowerCase()} · ${hour.toLowerCase().replace(/\s+/g, "")} la time`;
+  }).formatToParts(d);
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  const minute = part("minute");
+  const time = minute === "00" ? `${part("hour")}${part("dayPeriod")}` : `${part("hour")}:${minute}${part("dayPeriod")}`;
+  return `${date.toLowerCase()} · ${time.toLowerCase().replace(/\s+/g, "")} la time`;
 }

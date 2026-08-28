@@ -39,3 +39,10 @@ it("stays anchored to LA when read from another timezone", () => {
     process.env.TZ = original;
   }
 });
+
+// A class that doesn't start on the hour has to advertise its real minute: the Virgo goal-setting
+// session starts at 6:30pm LA and was being shown as "6pm".
+it("keeps the minutes on a class that isn't on the hour", () => {
+  const virgo = WORKSHOPS.find((x) => x.id === "virgo-szn-workshop-1")!;
+  expect(formatWorkshopWhenLA(virgo.startIso!)).toBe("wed 26 august · 6:30pm la time");
+});
