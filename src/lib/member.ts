@@ -147,12 +147,37 @@ export function isAdminMember(member: Member | null): boolean {
   return !!member && member.isAdmin;
 }
 
-// Real platform-wide member count, admin only (RLS only grants reading every profile row to
-// an admin, everyone else can only see her own).
-export async function getMemberCount(): Promise<number> {
+export interface MemberBreakdown {
+  /** every profiles row: paying, trialing, free and lapsed together */
+  total: number;
+  /** monthly + vip, the people actually paying right now */
+  paying: number;
+  /** trials still inside their week */
+  trialing: number;
+  /** free accounts: the chat-rooms tier, plus anyone whose trial has run out */
+  free: number;
+}
+
+// What the "total members" number was hiding: it counts every profiles row, so a free chat-rooms
+// account and an expired trial both read as "member". Admin only, same RLS reasoning as the counts
+// above, and head+count queries so only the totals cross the wire.
+export async function getMemberBreakdown(): Promise<MemberBreakdown> {
   const supabase = createClient();
-  const { count } = await supabase.from("profiles").select("id", { count: "exact", head: true });
-  return count || 0;
+  const nowIso = new Date().toISOString();
+  const [total, paying, trialing] = await Promise.all([
+    supabase.from("profiles").select("id", { count: "exact", head: true }),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).in("membership_level", ["monthly", "vip"]),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").gt("trial_expires_at", nowIso),
+  ]);
+  const totalCount = total.count || 0;
+  const payingCount = paying.count || 0;
+  const trialingCount = trialing.count || 0;
+  return {
+    total: totalCount,
+    paying: payingCount,
+    trialing: trialingCount,
+    free: Math.max(0, totalCount - payingCount - trialingCount),
+  };
 }
 
 export interface TrialStats {

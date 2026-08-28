@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
-import { isAdminMember, getMemberCount, getTrialStats, listMembers, type MemberRow, type MembershipLevel } from "@/lib/member";
+import { isAdminMember, getMemberBreakdown, getTrialStats, listMembers, type MemberRow, type MembershipLevel } from "@/lib/member";
 import { ALL_ROOMS, loadPosts, deletePost, deleteComment, type Post } from "@/lib/community-store";
 import { loadRoomMessages, deleteRoomMessage, type ChatMessage } from "@/lib/chat-rooms";
 import { loadGoals } from "@/lib/goals-store";
@@ -68,14 +68,14 @@ export default function AdminPage() {
   const [pollType, setPollType] = useState<PollType>("choice");
   const [pollOptions, setPollOptions] = useState(["", ""]);
   const [pollSent, setPollSent] = useState(false);
-  const [memberCount, setMemberCount] = useState(0);
+  const [breakdown, setBreakdown] = useState({ total: 0, paying: 0, trialing: 0, free: 0 });
   const [trialStats, setTrialStats] = useState({ active: 0, expired: 0, converted: 0 });
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [memberSearch, setMemberSearch] = useState("");
 
   useEffect(() => {
     (async () => {
-      setMemberCount(await getMemberCount());
+      setBreakdown(await getMemberBreakdown());
       setTrialStats(await getTrialStats());
       setBroadcasts(await loadBroadcasts());
       const [polls, responses, allPosts] = await Promise.all([loadPolls(), loadResponses(), loadPosts()]);
@@ -460,7 +460,8 @@ export default function AdminPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
             {(() => {
               const stats = [
-                { label: "total members", value: memberCount },
+                { label: "paying members", value: breakdown.paying },
+                { label: "all accounts", value: breakdown.total },
                 { label: "trialing now", value: trialStats.active },
                 { label: "trials expired", value: trialStats.expired },
                 { label: "trial → paid", value: trialStats.converted },
@@ -468,10 +469,10 @@ export default function AdminPage() {
                 { label: "comments", value: totalComments },
                 { label: "chat messages", value: totalChatMessages },
                 { label: "most active room", value: mostActiveRoom ? mostActiveRoom.label : "-" },
-                { label: "active goals", value: goalCount.active },
-                { label: "completed goals", value: goalCount.completed },
-                { label: "journal entries", value: journalCount },
-                { label: "current streak", value: `${streak.current} day${streak.current === 1 ? "" : "s"}` },
+                { label: "your active goals", value: goalCount.active },
+                { label: "your completed goals", value: goalCount.completed },
+                { label: "your journal entries", value: journalCount },
+                { label: "your current streak", value: `${streak.current} day${streak.current === 1 ? "" : "s"}` },
               ];
               return stats.map((stat, i) => (
               <div
@@ -497,8 +498,13 @@ export default function AdminPage() {
       <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between gap-4 flex-wrap mb-5">
-            <div className="tag" style={{ marginBottom: 0 }}>
-              members · {memberQuery ? `${visibleMembers.length} of ${members.length}` : members.length}
+            <div>
+              <div className="tag" style={{ marginBottom: 0 }}>
+                members · {memberQuery ? `${visibleMembers.length} of ${members.length}` : members.length}
+              </div>
+              <div style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 6 }}>
+                {breakdown.paying} paying · {breakdown.trialing} on trial · {breakdown.free} free
+              </div>
             </div>
             <input
               value={memberSearch}
