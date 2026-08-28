@@ -17,14 +17,6 @@ const memberLinks = [
   { href: "/blog", label: "blog" },
 ];
 
-// Challenges are a seasonal, done-together thing, so they live under community rather than under
-// the personal "my szn" section. Community is the header (links to the feed), challenges indents
-// beneath it, mirroring the "my chart" dropdown pattern.
-const communityMenu = [
-  { href: "/community", label: "community" },
-  { href: "/challenges", label: "challenges", indent: true },
-];
-
 // Two readings of the same birth data, so they sit together under one "my chart" menu rather than
 // Human Design taking its own top-level nav slot. Desktop renders this as the dropdown's contents;
 // mobile has no dropdown, so it indents them under a "my chart" heading to show the same nesting.
@@ -65,7 +57,6 @@ const guestLinks = [
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [communityOpen, setCommunityOpen] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [workshopsOpen, setWorkshopsOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
@@ -87,7 +78,6 @@ export default function NavBar() {
   const links = member ? (freeMember ? freeLinks : memberLinks) : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
-  const communitySectionActive = pathname?.startsWith("/community") || pathname?.startsWith("/challenges");
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
   const workshopsSectionActive = pathname?.startsWith("/events");
 
@@ -241,60 +231,16 @@ export default function NavBar() {
             </div>
           )}
           {paidMember && (
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setCommunityOpen((o) => !o)}
-                className="hover:text-[var(--pink)] transition-colors"
-                style={{
-                  background: "none",
-                  border: "none",
-                  font: "inherit",
-                  letterSpacing: "inherit",
-                  textTransform: "inherit",
-                  cursor: "pointer",
-                  padding: 0,
-                  color: communitySectionActive ? "var(--pink)" : "var(--dark)",
-                  fontWeight: communitySectionActive ? 800 : undefined,
-                }}
-              >
-                community ▾
-              </button>
-              {communityOpen && (
-                <div
-                  className="flex flex-col"
-                  style={{
-                    position: "absolute",
-                    top: 28,
-                    left: 0,
-                    minWidth: 160,
-                    background: "#fff",
-                    border: "var(--border)",
-                    zIndex: 200,
-                  }}
-                >
-                  {communityMenu.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setCommunityOpen(false)}
-                      className="no-underline hover:text-[var(--pink)]"
-                      style={{
-                        fontSize: 11,
-                        fontWeight: isActive(item.href) ? 800 : 700,
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: item.indent ? "10px 14px 10px 26px" : "10px 14px",
-                        borderBottom: "1px solid #eee",
-                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link
+              href="/community"
+              className="no-underline hover:text-[var(--pink)] transition-colors"
+              style={{
+                color: isActive("/community") ? "var(--pink)" : "var(--dark)",
+                fontWeight: isActive("/community") ? 800 : undefined,
+              }}
+            >
+              chat rooms
+            </Link>
           )}
           {paidMember && (
             <div style={{ position: "relative" }}>
@@ -753,46 +699,14 @@ export default function NavBar() {
             </>
           )}
           {paidMember && (
-            <>
-              <button
-                type="button"
-                onClick={() => setCommunityOpen((o) => !o)}
-                aria-expanded={communityOpen}
-                className="hover:text-[var(--pink)] transition-colors"
-                style={{
-                  background: "none",
-                  border: "none",
-                  font: "inherit",
-                  letterSpacing: "inherit",
-                  textTransform: "inherit",
-                  cursor: "pointer",
-                  padding: 0,
-                  textAlign: "left",
-                  color: communitySectionActive ? "var(--pink)" : "var(--dark)",
-                  fontWeight: communitySectionActive ? 800 : undefined,
-                }}
-              >
-                community {communityOpen ? "▴" : "▾"}
-              </button>
-              {communityOpen &&
-                communityMenu.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => {
-                      setCommunityOpen(false);
-                      setOpen(false);
-                    }}
-                    className="no-underline hover:text-[var(--pink)]"
-                    style={{
-                      paddingLeft: item.indent ? 16 : undefined,
-                      color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                    }}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-            </>
+            <Link
+              href="/community"
+              onClick={() => setOpen(false)}
+              className="no-underline hover:text-[var(--pink)]"
+              style={{ color: isActive("/community") ? "var(--pink)" : "var(--dark)" }}
+            >
+              chat rooms
+            </Link>
           )}
           {paidMember && (
             <>
