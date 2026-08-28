@@ -27,6 +27,7 @@ import {
   oppositeHouse,
   transitingNorthNodeSign,
 } from "@/lib/nodal-content";
+import { daysUntilSkyDate } from "@/lib/sky-zone";
 
 // Betty's collective opening for the 27-28 August 2026 Pisces lunar eclipse, the closing act of the
 // Pisces/Virgo cycle. Shown to every member at the top of this eclipse's reading. Verbatim, one
@@ -61,6 +62,146 @@ function eclipsePrompts(area: string, sign: string): string[] {
   ];
 }
 
+// ── NATAL CONTACTS ────────────────────────────────────────────────────────────────────────────
+// The single biggest lift in feeling personally seen: whether this eclipse's actual degree touches
+// something she was born with. Everything here is measured from real longitudes, never from signs,
+// so a contact is only reported when the degrees genuinely are that close.
+
+type AspectName = "conjunction" | "opposition" | "square" | "trine" | "sextile";
+
+// Orbs are deliberately tight. A wide orb would let almost every eclipse "contact" something, which
+// would make the section meaningless. Conjunctions and oppositions get slightly more room because
+// they are the ones actually felt as an eclipse hitting a placement.
+const ECLIPSE_ASPECTS: { name: AspectName; angle: number; orb: number }[] = [
+  { name: "conjunction", angle: 0, orb: 6 },
+  { name: "opposition", angle: 180, orb: 6 },
+  { name: "square", angle: 90, orb: 5 },
+  { name: "trine", angle: 120, orb: 5 },
+  { name: "sextile", angle: 60, orb: 3 },
+];
+
+interface NatalContact {
+  bodyId: string;
+  bodyName: string;
+  sign?: string;
+  house?: number;
+  aspect: AspectName;
+  orb: number;
+}
+
+function separation(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+
+// What each contact actually MEANS when an eclipse sets it off, written as the combination rather
+// than a definition of the planet. Keyed by body id; anything not listed falls back to its domain.
+const CONTACT_MEANING: Record<string, string> = {
+  sun: "your sense of who you are is directly in the frame, so this eclipse is far more likely to change something about how you see yourself, not just what you are doing",
+  moon: "it is landing on your emotional wiring, which is why this one may feel disproportionately big on the inside even if very little looks dramatic from the outside",
+  rising: "it is landing on the face you meet the world with, so this is one of the eclipses that can visibly change how you present, what you are called, or how people read you",
+  mercury: "it is landing on how you think and speak, so expect the shift to arrive through a conversation, a message, a piece of information or a decision you finally put into words",
+  venus: "it is landing on how you love, attract and value things, so relationships, money, taste or self-worth are the department this eclipse is actually working in",
+  mars: "it is landing on your drive and your anger, so this one is likely to force action, confrontation, or the end of something you have been passively tolerating",
+  jupiter: "it is landing on where you expand, so this eclipse tends to arrive as an opportunity, an opening, or a genuine widening of what you thought was available to you",
+  saturn: "it is landing on your mastery point, which is why this eclipse can feel heavy and consequential: it is asking for a commitment, a structure, or an honest reckoning with responsibility",
+  uranus: "it is landing on your rebel wiring, so the change is likely to be sudden, liberating and hard to argue with, the kind that resolves something you had been dragging out",
+  neptune: "it is landing on your imagination and your blind spot at once, so this eclipse can be revelatory and disorienting together, and it is worth being slow about what you conclude",
+  pluto: "it is landing on your deepest transformation point, which is why this one tends to be the eclipse people talk about years later as the before-and-after line",
+  chiron: "it is landing on your core wound, so this eclipse is likely to press exactly where you are most sensitive, and that soreness is the material rather than the problem",
+  northnode: "it is landing on your own north node, your growth direction, which makes this eclipse unusually fated: it is pushing you along the exact line your chart already points you down",
+  southnode: "it is landing on your own south node, the familiar end you keep returning to, so this eclipse is most likely to close a loop you have circled many times before",
+  midheaven: "it is landing on your career and public point, so this eclipse tends to show up as work, status, reputation or the direction your life visibly points in",
+};
+
+const ASPECT_FRAME: Record<AspectName, string> = {
+  conjunction: "sitting directly on",
+  opposition: "sitting exactly opposite",
+  square: "at a right angle to",
+  trine: "in easy flow with",
+  sextile: "in supportive contact with",
+};
+
+const ASPECT_TONE: Record<AspectName, string> = {
+  conjunction: "A conjunction is the most direct contact there is: the eclipse and this part of you are occupying the same degree, so whatever the eclipse does, it does through this.",
+  opposition: "An opposition puts the eclipse and this part of you at opposite ends of the same axis, so this tends to play out through tension, other people, or a pull in two directions that has to be balanced rather than won.",
+  square: "A square is friction that produces movement. It is the aspect that makes something actually happen rather than stay theoretical, and it usually costs a bit of comfort to get there.",
+  trine: "A trine is the easy one, which is its own risk: it can flow past unnoticed. What it offers is genuine support, but you have to reach for it, because ease rarely announces itself.",
+  sextile: "A sextile is an opportunity that waits to be taken. It will not force your hand, so this contact tends to reward a deliberate choice rather than deliver something unprompted.",
+};
+
+// Finds every natal placement and angle the eclipse degree genuinely contacts, tightest first.
+function findNatalContacts(eclipseLon: number, chart: ChartData): NatalContact[] {
+  const targets: { id: string; name: string; lon: number; sign?: string; house?: number }[] = chart.planets.map((p) => ({
+    id: p.id,
+    name: p.name,
+    lon: p.longitude,
+    sign: p.sign,
+    house: p.house,
+  }));
+  // The angles are not in the planets list, and an eclipse on the ascendant or midheaven is one of
+  // the most strongly felt contacts there is, so they are added explicitly.
+  targets.push({ id: "rising", name: "Ascendant", lon: chart.ascendant });
+  targets.push({ id: "midheaven", name: "Midheaven", lon: chart.midheaven });
+
+  const found: NatalContact[] = [];
+  for (const t of targets) {
+    const sep = separation(eclipseLon, t.lon);
+    for (const a of ECLIPSE_ASPECTS) {
+      const orb = Math.abs(sep - a.angle);
+      if (orb <= a.orb) {
+        found.push({ bodyId: t.id, bodyName: t.name, sign: t.sign, house: t.house, aspect: a.name, orb });
+        break; // one aspect per body, the one it actually makes
+      }
+    }
+  }
+  // Tightest first, and conjunctions win ties because they are what she will actually feel.
+  return found.sort((a, b) => {
+    if (a.aspect === "conjunction" && b.aspect !== "conjunction") return -1;
+    if (b.aspect === "conjunction" && a.aspect !== "conjunction") return 1;
+    return a.orb - b.orb;
+  });
+}
+
+// ── WHAT TO WATCH NOW ─────────────────────────────────────────────────────────────────────────
+// The page must not read the same three weeks after the eclipse as it does the week before. Phase
+// is measured in SKY_ZONE (US Eastern), the same anchor every published date in the app uses, so
+// "today" here always agrees with the date printed at the top of the reading.
+function watchNowFor(eventDate: string, area: string, isLunar: boolean, now: Date): { label: string; body: string } {
+  const days = daysUntilSkyDate(eventDate, now);
+
+  if (days > 14) {
+    return {
+      label: `${days} days out`,
+      body: `The eclipse has not landed yet, so nothing here needs deciding. What is genuinely useful this far out is a baseline: notice where your ${area} stands right now, honestly, before the pressure arrives. Eclipses are much easier to read afterwards if you can remember what you actually thought before one. Write the current state down somewhere you will find it again.`,
+    };
+  }
+  if (days > 1) {
+    return {
+      label: `${days} days to go`,
+      body: `You are inside the run-up. The fortnight before an eclipse is usually where things start quietly moving, so watch for what is already shifting around your ${area} without you pushing it: the conversation that keeps almost happening, the situation that has started wobbling, the thing you have begun thinking about differently. That is the eclipse arriving early. Resist the urge to force any of it into a conclusion this week.`,
+    };
+  }
+  if (days >= -1) {
+    return {
+      label: "you are inside the window",
+      body: `This is the peak. Judgement is at its least reliable right now and feeling is at its most convincing, which is a combination worth knowing about before you act on anything. Notice what surfaces around your ${area}, write it down, and let it stand for a few days before you decide what it means. ${isLunar ? "Lunar eclipses tend to deliver the information through other people and events over these days, so pay attention to what arrives rather than what you conclude." : "Solar eclipses tend to open a door around now, and it rarely comes with enough time to feel ready, so notice what you are being offered before you rule it out."} Rest more than seems necessary.`,
+    };
+  }
+  if (days >= -30) {
+    const ago = Math.abs(days);
+    return {
+      label: `${ago} day${ago === 1 ? "" : "s"} on`,
+      body: `The eclipse has passed, so this is the part that actually matters: check the receipts. What has genuinely changed around your ${area} since it landed? Look for the concrete evidence rather than the mood, because the meaning of an eclipse usually settles over the month afterwards rather than on the night. Something that felt catastrophic at the peak often reads very differently from here, and something that seemed minor at the time can turn out to have been the hinge the whole thing turned on.`,
+    };
+  }
+  const ago = Math.abs(days);
+  return {
+    label: `${ago} days on`,
+    body: `You are well past this one now, which makes it good material rather than live weather. Look back at what moved around your ${area} in the weeks after it, because that is the clearest read you will get on what this eclipse was actually doing. Eclipses land on the same axis for around eighteen months, so what began or ended here is very likely to come back at the next one, one step further on. Knowing what this one did is how you recognise the next.`,
+  };
+}
+
 function listClauses(clauses: string[]): string {
   if (clauses.length === 0) return "";
   if (clauses.length === 1) return clauses[0];
@@ -69,7 +210,7 @@ function listClauses(clauses: string[]): string {
 
 // Assumes composeLunation only calls this for solar_eclipse / lunar_eclipse with event.nodeEnd set;
 // it still guards nodeEnd so a missing value reads as a south-node eclipse rather than crashing.
-export function composeEclipse(event: CalendarEventInput, chart: ChartData): LunationReading {
+export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?: Date): LunationReading {
   const isLunar = event.type === "lunar_eclipse";
   const label = isLunar ? "lunar eclipse" : "solar eclipse";
   const emoji = isLunar ? "\u{1F315}\u{2600}" : "\u{1F311}\u{2600}";
@@ -127,7 +268,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
     // taught as its own lesson here.
     {
       heading: `why this one is so ${eSign}`,
-      body: `This eclipse lands in ${eSign}, and that is the flavour of everything it stirs, so ${eSign} is what to read it through: ${traits.essence}. It arrives at the closing stretch of the eclipse family that has been running on this sign for the better part of two years, which is why it can feel less like a fresh shock and more like the final act of something you have been living through for a while. What it moves will look like ${eh.lifeAreas.slice(0, 2).join(" and ")} in your own life, and it will move in a ${eSign} way rather than a tidy one.`,
+      body: `This eclipse lands in ${eSign}, and that is the flavour of everything it stirs, so ${eSign} is what to read it through: ${traits.essence}. It arrives at the closing stretch of the eclipse family that has been running on this sign for the better part of two years, which is why it can feel like the final act of something you have been living through for a while, rather than a shock arriving from nowhere. What it moves will look like ${eh.lifeAreas.slice(0, 2).join(" and ")} in your own life, and it will move in a ${eSign} way rather than a tidy one.`,
     },
     {
       heading: "it comes in a family, not alone",
@@ -164,12 +305,12 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
       ? onNorth
         ? `It sits on the north node, currently in ${north}, the growth end of the axis the whole collective is moving along, and right now that growth end runs through this house of yours. What this house is asking of you over the next eighteen months is ${northNote.growingToward}, and an eclipse here tends to shove you a chapter further into it whether or not you felt ready. Growth this direct rarely feels comfortable: ${nNode.northFeels}. That discomfort is the sensation of doing something for the first time, not a sign you got it wrong.`
         : `It sits on the south node, currently in ${south}, the familiar end of the collective axis being asked to release, and right now that release end runs through this house of yours. Your strength here is genuine and you keep every bit of it, ${sNode.southGift}, but the reflex being retired is ${sNode.southReflex}. An eclipse on the south node tends to close something here so the growth end of the axis finally has room to move.`
-      : `This one belongs to the eclipse family that has been working on ${eSign} for close to two years, so what it touches in this house of yours is almost certainly not new. It is the same theme you have been quietly living with, arriving at the point where it wants a conclusion rather than more patience. ${eh.coach} Expect it to read less like a bolt from nowhere and more like the moment the thing you already suspected becomes impossible to keep filing away.`,
+      : `This one belongs to the eclipse family that has been working on ${eSign} for close to two years, so what it touches in this house of yours is almost certainly not new. It is the same theme you have been quietly living with, arriving at the point where it wants a conclusion rather than more patience. ${eh.coach} Expect it to read as the moment the thing you already suspected becomes impossible to keep filing away.`,
 
     `An eclipse is always an axis, so the other end is holding the pressure too. Your ${ordinalHouse(farHouse)} house of ${fh.title} sets the terms underneath this, ${fh.rules}. ${onNorth ? `That south-node end is the comfort you will be most tempted to retreat into exactly as the growth end asks more of you.` : `That north-node end is where the space this ending clears is actually meant to go, so notice what wants to grow there once you stop holding the old thing open.`}`,
 
     natalHere.length > 0
-      ? `This is not landing on an empty patch of sky. It falls directly on ${natalList}, which is what makes this eclipse personal to you rather than general. When an eclipse sets off a placement you were born with, it turns the volume all the way up on it, and you tend to recognise the feeling the moment it arrives, less like news and more like something you already knew becoming impossible to ignore.`
+      ? `This is not landing on an empty patch of sky. It falls directly on ${natalList}, which is what makes this eclipse personal to you rather than general. When an eclipse sets off a placement you were born with, it turns the volume all the way up on it, and you tend to recognise the feeling the moment it arrives, as something you already knew becoming impossible to ignore.`
       : `You have no natal planets sitting in this house, which is genuinely useful to know. It means this area runs less on a fixed, built-in pattern and more through circumstances and other people, so what the eclipse brings here has room to actually be new rather than an old reflex firing again.`,
   ];
 
@@ -201,7 +342,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
 
         `The other end of the axis is involved too, even though the spotlight is here. Your ${ordinalHouse(farHouse)} house of ${fh.title} holds the counterweight, so what gets forced around your ${eclipseArea} will almost certainly have consequences for ${farAreas}. Eclipses rebalance a whole axis rather than a single room, and the pressure you feel is usually the two ends being pulled into a truer proportion with each other.`,
 
-        `The days either side can feel physically strange: disrupted sleep, unusually vivid dreams, an emotional tide that seems out of proportion to what is actually happening, and a body that wants considerably more rest than your calendar has allowed for. None of that is you being dramatic. It is a nervous system processing something bigger than a normal week, and treating it as a signal to slow down rather than a fault to push through will serve you far better than powering on.`,
+        `The days either side can feel physically strange: disrupted sleep, unusually vivid dreams, an emotional tide that seems out of proportion to what is actually happening, and a body that wants considerably more rest than your calendar has allowed for. That is a nervous system doing real work on something bigger than a normal week. Treat it as a signal to slow down, and give yourself materially more rest than the week seems to justify.`,
 
         onNorth
           ? `Even on the growth end, a lunar eclipse tends to clear the ground with an ending before the new thing has anywhere to root. If something falls away around your ${eclipseArea} now, read it as the clearing rather than the punishment. The growth this axis is pointing you toward genuinely needs the space.`
@@ -240,7 +381,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
   const shadow = [
     `The shadow this eclipse exposes is ${traits.shadow}, and an eclipse does not do subtle. Around your ${eclipseArea} it surfaces fast and often in front of other people, which stings and is also the most honest information this whole window hands you.`,
 
-    `Shadow here does not mean a flaw to be ashamed of. It means the part of the pattern that runs automatically, usually because it protected you at some point and was never consciously retired. Under eclipse pressure it fires before you can choose, which is precisely why an eclipse is such an efficient way to see it. You are watching your own default in real time rather than in hindsight.`,
+    `Shadow here means the part of the pattern that runs automatically, usually because it protected you at some point and was never consciously retired. Under eclipse pressure it fires before you can choose, which is precisely why an eclipse is such an efficient way to see it. You get to watch your own default in real time, while it is happening.`,
 
     `In your ${ordinalHouse(eclipseHouse)} house of ${eh.title}, it tends to wear a specific costume: it will look reasonable. It will feel like protecting yourself, being realistic, or finally saying what needed saying. That is the giveaway. The reflex almost always arrives dressed as good judgement, and around ${areasLong} it is unusually persuasive because you have run it so many times before.`,
 
@@ -267,6 +408,41 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
         ],
       };
 
+  // Natal contacts. Only computed when the eclipse degree resolved to a real longitude, because a
+  // contact claimed from a sign alone would be a guess, and a wrong "this is sitting on your Venus"
+  // is far worse than saying nothing.
+  const contacts = eclipseLon === null ? [] : findNatalContacts(eclipseLon, chart).slice(0, 3);
+  const natalContact = contacts.length
+    ? [
+        (() => {
+          const c = contacts[0];
+          const tight = c.aspect === "conjunction" && c.orb <= 2;
+          const where = c.house ? ` in your ${ordinalHouse(c.house)} house` : "";
+          const inSign = c.sign ? ` in ${c.sign.toLowerCase()}` : "";
+          const meaning = CONTACT_MEANING[c.bodyId] ?? `it is landing on ${getBodyMeaning(c.bodyId)?.domain ?? "this part of you"}`;
+          return `${tight ? "Okay, this just got personal." : "This one reaches something you were born with."} The eclipse is ${ASPECT_FRAME[c.aspect]} your natal ${c.bodyName}${inSign}${where}, within ${c.orb.toFixed(1)} degrees. That contact is what makes this eclipse specifically yours: ${meaning}.`;
+        })(),
+
+        ASPECT_TONE[contacts[0].aspect],
+
+        `Practically, that means the ${eclipseArea} story this eclipse is telling will run through your ${contacts[0].bodyName.toLowerCase()} specifically. When an eclipse sets off a natal placement, it turns the volume all the way up on something that has always been part of your wiring, so what surfaces will feel recognisable rather than foreign. Most people describe it as something they already knew becoming impossible to keep ignoring.`,
+
+        ...(contacts.length > 1
+          ? [
+              `It is also ${listClauses(
+                contacts.slice(1).map((c) => {
+                  const inSign = c.sign ? ` in ${c.sign.toLowerCase()}` : "";
+                  const where = c.house ? `, ${ordinalHouse(c.house)} house` : "";
+                  return `${ASPECT_FRAME[c.aspect]} your natal ${c.bodyName}${inSign}${where} (${c.orb.toFixed(1)}°)`;
+                })
+              )}. Secondary contacts colour the main one rather than compete with it, so read them as the texture this eclipse arrives with.`,
+            ]
+          : []),
+      ].join("\n\n")
+    : undefined;
+
+  const watchNow = watchNowFor(event.date, eclipseArea, isLunar, now ?? new Date());
+
   const bettysTake = `I tell my girls to treat eclipse season differently to a normal moon. Less setting a neat intention, more expecting a door to open or close on its own timeline. This one is landing in your ${eSign} ${ordinalHouse(eclipseHouse)} house, so it plays out through your ${eclipseArea}, and it will move through ${traits.essence}, not through anyone else's version of it. Don't force a decision to prove you are in control. Notice what is already shifting, respond to it like an adult, and let the eclipse do the part that was never yours to do.`;
 
   return {
@@ -283,6 +459,8 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
     bringsUp,
     lookOutFor,
     shadow,
+    natalContact,
+    watchNow,
     bettysTake,
     exercise,
     journalPrompt: `What is actually shifting around my ${eclipseArea} on its own right now, and what would change if I stopped trying to force it and simply responded to it honestly?`,

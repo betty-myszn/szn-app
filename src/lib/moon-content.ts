@@ -263,6 +263,12 @@ export interface LunationReading {
    *  place the date inside the wider eighteen-month series ("go back to September 2024...") rather
    *  than leaving her with a single question about one night. */
   journalPrompts?: string[];
+  /** Eclipses only: set when the eclipse degree genuinely contacts a natal placement or angle.
+   *  Multi-paragraph (split on a blank line). Absent when nothing is in orb, rather than padded. */
+  natalContact?: string;
+  /** Eclipses only: the section that changes with today's date, so the page never reads as though
+   *  the eclipse is still coming once it has passed. */
+  watchNow?: { label: string; body: string };
   affirmation: string;
 }
 
@@ -270,13 +276,13 @@ function capitaliseFirst(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-export function composeLunation(event: CalendarEventInput, chart: ChartData): LunationReading {
+export function composeLunation(event: CalendarEventInput, chart: ChartData, now?: Date): LunationReading {
   if (event.type === "node_ingress") return composeNodeIngress(event, chart);
   // Eclipses get the far deeper nodal-axis composer, but only when the calendar has told us which
   // end of the axis this one sits on. Without that (e.g. a hand-edited or stale link) they fall back
   // to the generic lunation reading below, which is still complete, just without the nodal layer.
   if ((event.type === "solar_eclipse" || event.type === "lunar_eclipse") && event.nodeEnd) {
-    return composeEclipse(event, chart);
+    return composeEclipse(event, chart, now);
   }
 
   const meta = EVENT_TYPE_META[event.type];

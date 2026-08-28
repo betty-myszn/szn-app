@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
@@ -9,6 +9,24 @@ import { useSeason } from "@/lib/use-season";
 import { composeLunation, type LunationType } from "@/lib/moon-content";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+
+interface EclipseEvent {
+  type: "solar_eclipse" | "lunar_eclipse";
+  date: string;
+  sign: string;
+  degree: number;
+  nodeEnd: "north" | "south";
+}
+
+// An eclipse family runs on an AXIS, so the timeline shows this sign and the one opposite it.
+const OPPOSITE_SIGN: Record<string, string> = {
+  Aries: "Libra", Libra: "Aries",
+  Taurus: "Scorpio", Scorpio: "Taurus",
+  Gemini: "Sagittarius", Sagittarius: "Gemini",
+  Cancer: "Capricorn", Capricorn: "Cancer",
+  Leo: "Aquarius", Aquarius: "Leo",
+  Virgo: "Pisces", Pisces: "Virgo",
+};
 
 const VALID_TYPES: LunationType[] = [
   "new_moon",
@@ -33,6 +51,30 @@ function MoonPageContent() {
   const planet = params.get("planet") || undefined;
   const nodeEndParam = params.get("nodeEnd");
   const nodeEnd = nodeEndParam === "north" || nodeEndParam === "south" ? nodeEndParam : undefined;
+
+  // Mount-guarded clock: reading the date during render is impure (react-hooks/purity), and the
+  // "what to watch now" section has to be measured against a real today. Null until mounted, which
+  // simply means that one section renders a beat later rather than blocking anything.
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => setNow(new Date()), []);
+
+  // The eclipse series, fetched only for eclipses. Computed from the ephemeris server-side so the
+  // timeline can never drift from the dates the rest of the app publishes.
+  const isEclipse = type === "solar_eclipse" || type === "lunar_eclipse";
+  const [series, setSeries] = useState<EclipseEvent[] | null>(null);
+  useEffect(() => {
+    if (!isEclipse || !date) return;
+    let active = true;
+    fetch(`/api/eclipses?around=${encodeURIComponent(date)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (active && d?.eclipses) setSeries(d.eclipses as EclipseEvent[]);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [isEclipse, date]);
 
   if (!ready) return null;
 
@@ -86,7 +128,11 @@ function MoonPageContent() {
     );
   }
 
-  const reading = composeLunation({ type, date, sign, degree: Number(degree), planet, nodeEnd }, chart);
+  const reading = composeLunation({ type, date, sign, degree: Number(degree), planet, nodeEnd }, chart, now ?? undefined);
+
+  // The eclipses on this same axis: this sign and its opposite. That is the eighteen-month family
+  // the reading keeps referring to, so the timeline shows exactly those rather than every eclipse.
+  const axisSeries = series?.filter((e) => e.sign === sign || e.sign === OPPOSITE_SIGN[sign]) ?? [];
 
   return (
     <>
@@ -194,6 +240,106 @@ function MoonPageContent() {
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
             <div className="tag mb-3">{reading.degreeNote.heading}</div>
             <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.degreeNote.body}</p>
+          </div>
+        </section>
+      )}
+
+      {/* Natal contact: only when the eclipse degree genuinely touches a placement or angle */}
+      {reading.natalContact && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
+            <div className="tag mb-3" style={{ color: "#3C2A70" }}>this one touches your chart</div>
+            {reading.natalContact.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* What to watch now: changes with today's date */}
+      {reading.watchNow && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="flex items-baseline gap-3 flex-wrap mb-3">
+              <div className="tag">what to watch now</div>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  padding: "4px 10px",
+                  background: "var(--pink)",
+                  color: "#fff",
+                }}
+              >
+                {reading.watchNow.label}
+              </span>
+            </div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{reading.watchNow.body}</p>
+          </div>
+        </section>
+      )}
+
+      {/* The eclipse family on this axis */}
+      {axisSeries.length > 1 && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+            <div className="tag mb-3">the eclipse family this belongs to</div>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginBottom: 22 }}>
+              Eclipses land on the same axis for around eighteen months at a time, so this date is one
+              scene in a longer story. Here is the whole run on your {sign}/{OPPOSITE_SIGN[sign] ?? ""} axis.
+              What began or ended at one of these is very often what comes back at the next.
+            </p>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {axisSeries.map((e) => {
+                const isThis = e.date === date;
+                const d = new Date(`${e.date}T12:00:00Z`);
+                return (
+                  <li
+                    key={`${e.date}-${e.type}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: 12,
+                      flexWrap: "wrap",
+                      padding: "12px 14px",
+                      marginBottom: 8,
+                      border: isThis ? "2px solid var(--pink)" : "1.5px solid rgba(26,26,26,0.15)",
+                      background: isThis ? "var(--pink-bg)" : "transparent",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: poppins,
+                        fontSize: 13,
+                        fontWeight: 800,
+                        color: isThis ? "var(--pink)" : "var(--dark)",
+                        minWidth: 130,
+                      }}
+                    >
+                      {d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                    </span>
+                    <span style={{ fontSize: 13, color: "var(--grey)" }}>
+                      {e.type === "lunar_eclipse" ? "lunar eclipse" : "solar eclipse"} at {e.degree}° {e.sign.toLowerCase()}
+                    </span>
+                    {isThis && (
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          color: "var(--pink)",
+                        }}
+                      >
+                        you are here
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </section>
       )}
