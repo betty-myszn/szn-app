@@ -649,6 +649,34 @@ export function oppositeSign(sign: string): string {
   return ZODIAC_SIGNS[(idx + 6) % 12];
 }
 
+// Transiting true-node axis by date. The north node backs through the zodiac roughly every
+// eighteen months, so the sign is a slow date lookup, not a per-chart calculation. These are the
+// true-node sign-ingress dates (US Eastern, matching the node_ingress events the calendar route
+// derives from SE_TRUE_NODE, and everyone's natal chart which also reads the true node).
+//
+// This exists because an eclipse can fall in the sign NEXT DOOR to the node it sits on, right at a
+// cusp like the 2026 Pisces to Aquarius turn: the 27-28 August 2026 lunar eclipse is at ~5 Pisces,
+// but the true node had already backed into Aquarius weeks earlier (before the 12 August Leo
+// eclipse). So the node axis must be read from the node itself, never from the eclipse's own sign.
+// Extend this list when the node changes sign next.
+const NODE_INGRESSES: { from: string; north: string }[] = [
+  { from: "2026-07-26", north: "Aquarius" },
+  { from: "2025-01-11", north: "Pisces" },
+  { from: "2023-07-17", north: "Aries" },
+  { from: "2022-01-18", north: "Taurus" },
+  { from: "2020-05-05", north: "Gemini" },
+  { from: "2018-11-06", north: "Cancer" },
+];
+
+/** The sign the transiting north node is in on a given date (ISO). Falls back to the oldest entry
+ *  for dates before the table starts. */
+export function transitingNorthNodeSign(dateISO: string): string {
+  for (const period of NODE_INGRESSES) {
+    if (dateISO >= period.from) return period.north;
+  }
+  return NODE_INGRESSES[NODE_INGRESSES.length - 1].north;
+}
+
 // Quadrant house systems place cusps in exact opposition, so the south node house is always the
 // north node house plus six. Deriving it rather than recalculating guarantees the axis reads as
 // an axis, which is the entire point of this page.

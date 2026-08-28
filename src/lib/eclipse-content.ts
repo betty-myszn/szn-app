@@ -25,7 +25,20 @@ import {
   signNode,
   oppositeSign,
   oppositeHouse,
+  transitingNorthNodeSign,
 } from "@/lib/nodal-content";
+
+// Betty's collective opening for the 27-28 August 2026 Pisces lunar eclipse, the closing act of the
+// Pisces/Virgo cycle. Shown to every member at the top of this eclipse's reading. Verbatim, one
+// paragraph per string.
+const PISCES_ECLIPSE_OPENING: string[] = [
+  "If the energy has felt absolutely WILDDDD lately, with emotions coming out of nowhere, dreams becoming ridiculously vivid, old memories resurfacing at the weirdest times, your intuition getting louder and your body simultaneously requesting approximately fourteen business days of sleep, the Pisces Lunar Eclipse on August 27-28, 2026 is happening right in the middle of all of it.",
+  "We're reaching the closing stages of a much bigger Pisces-Virgo eclipse cycle that began back in September 2024, bringing almost two years of changes around dreams, reality, intuition, boundaries, wellbeing, work, spirituality, emotional patterns and the parts of your life that have been slowly shifting while you've been busy living them.",
+  "Eclipses make considerably more sense when you follow the entire cycle rather than looking at one date in isolation, because the woman who entered this chapter in September 2024 probably had very different ideas about what she wanted, who mattered, what success looked like, where her energy belonged and what she imagined she'd be doing by now.",
+  "Fast-forward almost two years and babyyyyyy, a LOT can change.",
+  "Most of that change happens while you're getting on with your life, making decisions, meeting people, losing interest in things, becoming obsessed with new ideas, raising your standards, changing your priorities and discovering that certain situations simply don't fit anymore, so you don't always recognise the scale of what's happened until you deliberately look backwards.",
+  "The perspective available now could be HUGE.",
+];
 
 function listClauses(clauses: string[]): string {
   if (clauses.length === 0) return "";
@@ -42,19 +55,26 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
 
   const eclipseSign = event.sign;
   const onNorth = event.nodeEnd === "north"; // the eclipse itself sits on the north-node end
-  const northSign = onNorth ? eclipseSign : oppositeSign(eclipseSign);
+  // The node axis is read from the ACTUAL transiting node, never derived from the eclipse's own
+  // sign: at an eighteen-month cusp (the 2026 Pisces->Aquarius turn) an eclipse can land in the sign
+  // next door to the node it sits on, e.g. a ~5 Pisces eclipse on the north node while that node is
+  // already in Aquarius. See transitingNorthNodeSign.
+  const northSign = transitingNorthNodeSign(event.date);
   const southSign = oppositeSign(northSign);
   const north = northSign.toLowerCase();
   const south = southSign.toLowerCase();
   const eSign = eclipseSign.toLowerCase();
+  // True at a normal eclipse, false only at a node-cusp eclipse where the eclipse sign and the node
+  // sign differ (e.g. Pisces eclipse, Aquarius node).
+  const eclipseOnNodeSign = eSign === north || eSign === south;
 
   const cusps = chart.houses.map((h) => h.longitude);
-  // Both ends of the axis sit at the same degree, opposite signs, so derive them from the
-  // eclipse's real degree rather than from the midpoint of each sign.
+  // The eclipse house comes from the eclipse's own degree. The node houses come from the node
+  // SIGN, because the node can be a whole sign away from the eclipse at a cusp, so its degree is
+  // not the eclipse's degree.
   const eclipseLon = longitudeForSignDegree(eclipseSign, event.degree);
-  const northLon = longitudeForSignDegree(northSign, event.degree);
   const eclipseHouse = eclipseLon === null ? houseForSign(eclipseSign, cusps) : houseForLongitude(eclipseLon, cusps);
-  const northHouse = northLon === null ? houseForSign(northSign, cusps) : houseForLongitude(northLon, cusps);
+  const northHouse = houseForSign(northSign, cusps);
   const southHouse = oppositeHouse(northHouse);
   const eh = HOUSE_MEANINGS[eclipseHouse - 1];
   const northArea = HOUSE_AREA[northHouse - 1];
@@ -81,7 +101,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
     },
     {
       heading: "the axis this one sits on",
-      body: `The nodes are always one axis, not two separate points. Right now the north node, the growth end, is in ${north}, and the south node, the familiar end you are being asked to release, is in ${south}. This eclipse falls in ${eSign}, which puts it on the ${onNorth ? `${north} north node, so it pushes on growth and beginnings` : `${south} south node, so it pushes on release and endings`}. Whatever it stirs is a scene in that eighteen-month story, not a one-off mood.`,
+      body: `The nodes are always one axis, not two separate points. Right now the north node, the growth end, is in ${north}, and the south node, the familiar end you are being asked to release, is in ${south}. This eclipse falls in ${eSign}, sitting on the ${onNorth ? "north-node end, so it pushes on growth and beginnings" : "south-node end, so it pushes on release and endings"}.${eclipseOnNodeSign ? "" : ` The eclipse degree sits just into ${eSign} while the node itself has already backed into ${onNorth ? north : south}, which is exactly what happens at the turn of an eighteen-month cycle like this one.`} Whatever it stirs is a scene in that eighteen-month story, not a one-off mood.`,
     },
     {
       heading: "it comes in a family, not alone",
@@ -167,6 +187,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData): Lun
     dateLabel,
     emoji,
     whatThisIs,
+    collectiveOpening: isLunar && eclipseSign === "Pisces" ? PISCES_ECLIPSE_OPENING : undefined,
     primerTitle: "the eclipse, explained",
     primer,
     inYourChart,

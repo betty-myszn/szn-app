@@ -123,6 +123,23 @@ function MoonPageContent() {
         </div>
       </section>
 
+      {/* Collective opening: the bigger-picture framing shown to everyone, ahead of the personal read */}
+      {reading.collectiveOpening && reading.collectiveOpening.length > 0 && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="tag mb-5">the bigger picture</div>
+            {reading.collectiveOpening.map((para, i) => (
+              <p
+                key={i}
+                style={{ fontSize: 16, lineHeight: 1.9, color: "var(--dark)", marginTop: i === 0 ? 0 : 16 }}
+              >
+                {para}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Primer: the astrology behind the event, for members meeting it for the first time */}
       {reading.primer && (
         <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>

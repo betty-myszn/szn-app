@@ -232,6 +232,9 @@ export interface LunationReading {
   dateLabel: string;
   emoji: string;
   whatThisIs: string;
+  /** Collective, non-personalised opening shown at the very top of the reading (before the primer),
+   *  for framing a specific eclipse for everyone. One paragraph per string. */
+  collectiveOpening?: string[];
   /** Optional teaching section, rendered between the hero and the chart reading. */
   primerTitle?: string;
   primer?: ReadingSection[];
