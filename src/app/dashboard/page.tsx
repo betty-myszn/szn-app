@@ -459,7 +459,8 @@ export default function DashboardPage() {
                     <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 40, background: kind === "upcoming" ? "var(--pink)" : "transparent", color: kind === "upcoming" ? "#fff" : "var(--grey)", border: kind === "upcoming" ? "none" : "1.5px solid #ddd" }}>
                       {kind === "upcoming" ? "upcoming" : "replay"}
                     </span>
-                    <Link href="/events" className="no-underline" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
+                    {/* A replay card goes straight to its own card in the vault, an upcoming one to the events page. */}
+                    <Link href={kind === "upcoming" ? "/events" : `/events/replays#${w.id}`} className="no-underline" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
                       {kind === "upcoming" ? "save my seat →" : "watch →"}
                     </Link>
                   </div>

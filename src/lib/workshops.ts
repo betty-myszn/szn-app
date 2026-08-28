@@ -108,8 +108,8 @@ export const WORKSHOPS: Workshop[] = [
     zoomUrl: null,
     zoomMeetingId: null,
     zoomPasscode: null,
-    replayYoutubeId: null,
-    replayPublishedAt: null,
+    replayYoutubeId: "NgKBnHmj7K8",
+    replayPublishedAt: "2026-08-28",
     paragraphs: [
       "We're opening Virgo season the way it's meant to be opened, by sitting down together and deciding exactly where the rest of your year is going before the season carries you into it.",
       "Virgo carries the most practical, get-it-done energy of the whole zodiac, which makes this the perfect moment to turn the vague wishes in your head into a plan you'll actually follow.",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
@@ -16,6 +16,20 @@ export default function ReplayVaultPage() {
   const { member, ready } = useMember();
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => setNow(Date.now()), []);
+
+  // The cards only exist once the member check has resolved, which is long after the browser has
+  // given up on the #hash in the url, so a deep link from the season home's new-replay spotlight
+  // would land at the top of the page. Scroll to it by hand the moment there is something to hit.
+  const scrolledToHash = useRef(false);
+  useEffect(() => {
+    if (!ready || now === null || scrolledToHash.current) return;
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    scrolledToHash.current = true;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [ready, now]);
 
   if (!ready || now === null) return null;
 
@@ -83,7 +97,14 @@ export default function ReplayVaultPage() {
           ) : (
             <div className="flex flex-col gap-8">
               {past.map((workshop) => (
-                <div key={workshop.id} className="p-6 md:p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
+                // id + scroll margin so /events/replays#<workshop id> lands on this card with the
+                // sticky nav clear of it, which is where the season home's new-replay spotlight points.
+                <div
+                  key={workshop.id}
+                  id={workshop.id}
+                  className="p-6 md:p-8"
+                  style={{ border: "var(--border)", background: "var(--lav-light)", scrollMarginTop: 96 }}
+                >
                   <div
                     style={{
                       fontSize: 11,
