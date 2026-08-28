@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { syncFreeMemberToBrevo } from "@/lib/email/brevo-contact";
+import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
 
 export const runtime = "nodejs";
 
@@ -146,6 +147,15 @@ export async function POST(request: NextRequest) {
   // can't cost her the account she just created.
   const brevoResult = await syncFreeMemberToBrevo({ email, name: firstName });
   if (!brevoResult.ok) console.error("account/create-free: brevo free-member sync failed", brevoResult.error);
+
+  // Tell the team. A free signup never touches Stripe, so the webhook's new-member alert never
+  // fires for one, which is why these used to arrive silently. Fire-and-forget and non-fatal.
+  void sendNewSignupAdminAlert(admin, {
+    userId: created.user.id,
+    email,
+    name: firstName,
+    signupKind: "free",
+  });
 
   // Birth details are optional at signup, and when she gives them we store them now so her free
   // birth chart and free human design chart are already waiting the moment she verifies. Written

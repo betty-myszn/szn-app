@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { syncTrialMemberToBrevo } from "@/lib/email/brevo-contact";
+import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
 
 export const runtime = "nodejs";
 
@@ -154,6 +155,17 @@ export async function POST(request: NextRequest) {
   // syncTrialMemberToBrevo never throws and logs its own failures.
   void syncTrialMemberToBrevo({ email, name: firstName }).then((r) => {
     if (!r.ok) console.error("account/create-trial: brevo trial sync failed", r.error);
+  });
+
+  // Tell the team someone started a trial. A trial never touches Stripe, so the webhook's
+  // new-member alert never fires for one; without this, free signups arrive silently. Same
+  // fire-and-forget treatment as the Brevo sync: never allowed to slow down or fail her signup.
+  void sendNewSignupAdminAlert(admin, {
+    userId: created.user.id,
+    email,
+    name: firstName,
+    signupKind: "trial",
+    trialEndsAt: expiresIso,
   });
 
   // Store her birth details now (admin client, since birth_data RLS is owner-only and she has no

@@ -8,6 +8,9 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // (stripe_session_id, kind) that makes the welcome email exactly-once. Reusing it means a Stripe
 // webhook retry can't send a second "new member" alert, with no new schema.
 const ADMIN_ALERT_KIND = "admin_new_member";
+// Free trial and free-tier signups, which never touch Stripe. Kept as its own kind so paid joins and
+// free joins can be told apart in the send log.
+const SIGNUP_ALERT_KIND = "admin_new_signup";
 
 /**
  * Where new-member alerts go. Defaults to the Brevo sender identity (the support inbox) so this
@@ -117,6 +120,121 @@ export function buildNewMemberAlert(args: NewMemberAlertArgs): { subject: string
     </div>`;
 
   return { subject: `New member: ${displayName} · ${planName}`, htmlContent };
+}
+
+export interface SignupAlertArgs {
+  /** The new member's Supabase user id, used only to make the alert exactly-once. */
+  userId: string;
+  email: string;
+  name?: string | null;
+  /** Which front door she came through. */
+  signupKind: "trial" | "free";
+  /** ISO expiry, trial signups only. */
+  trialEndsAt?: string | null;
+}
+
+/**
+ * Tells the team someone joined WITHOUT paying: the free 7-day trial, or the free tier. These never
+ * touch Stripe, so the webhook alert above never fires for them, which is why they were silent.
+ *
+ * Idempotency reuses the same transactional_emails table and its partial unique index on
+ * (stripe_session_id, kind). There is no Stripe session here, so the id column carries a synthetic
+ * "signup:<userId>" key instead: one alert per account, permanently, with no new schema. The column
+ * name is Stripe-flavoured for historical reasons; treat it as the send's idempotency key.
+ */
+export async function sendNewSignupAdminAlert(
+  admin: SupabaseAdmin,
+  args: SignupAlertArgs
+): Promise<AdminAlertOutcome> {
+  const recipients = adminRecipients();
+  if (recipients.length === 0) return { status: "skipped", reason: "no_admin_recipient" };
+
+  const idempotencyKey = `signup:${args.userId}`;
+  const { data: prior } = await admin
+    .from("transactional_emails")
+    .select("id")
+    .eq("stripe_session_id", idempotencyKey)
+    .eq("kind", SIGNUP_ALERT_KIND)
+    .eq("status", "sent")
+    .maybeSingle();
+  if (prior) return { status: "skipped", reason: "already_sent" };
+
+  const isTrial = args.signupKind === "trial";
+  const displayName = cleanName(args.name) || "(no name given)";
+  const label = isTrial ? "Free 7-day trial" : "Free account";
+
+  const rows: [string, string][] = [
+    ["Name", displayName],
+    ["Email", args.email],
+    ["Joined on", label],
+    ...(isTrial && args.trialEndsAt
+      ? ([["Trial ends", new Date(args.trialEndsAt).toUTCString()]] as [string, string][])
+      : []),
+    ["When", new Date().toISOString()],
+  ];
+
+  const htmlContent = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1a1a1a;line-height:1.6">
+      <p style="font-size:17px;font-weight:700;margin:0 0 4px">${isTrial ? "New free trial ✦" : "New free member ✦"}</p>
+      <p style="margin:0 0 18px;color:#666">${esc(displayName)} just joined on the ${esc(label.toLowerCase())}.</p>
+      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:520px">
+        ${rows
+          .map(
+            ([l, v]) => `
+        <tr>
+          <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;color:#888;white-space:nowrap;vertical-align:top">${esc(l)}</td>
+          <td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;word-break:break-word">${esc(v)}</td>
+        </tr>`
+          )
+          .join("")}
+      </table>
+      ${
+        isTrial
+          ? `<p style="margin:18px 0 0;padding:12px;background:#FFF0F7;border:1px solid #FFC2DE;color:#8A1F52">
+               She has full access for 7 days, with no card on file. Nothing will be charged, and her
+               access closes on its own.
+             </p>`
+          : ""
+      }
+    </div>`;
+
+  const subject = isTrial
+    ? `New free trial: ${displayName}`
+    : `New free member: ${displayName}`;
+
+  let messageId: string | null = null;
+  let lastError = "";
+  let anyOk = false;
+  for (const to of recipients) {
+    const result = await sendBrevoEmail({ to: { email: to }, subject, htmlContent });
+    if (result.ok) {
+      anyOk = true;
+      messageId = messageId ?? result.messageId;
+    } else {
+      lastError = result.error;
+      console.error("admin signup alert failed for a recipient", { to, error: result.error });
+    }
+  }
+
+  const { error: logError } = await admin.from("transactional_emails").insert({
+    email: recipients.join(","),
+    kind: SIGNUP_ALERT_KIND,
+    stripe_session_id: idempotencyKey,
+    status: anyOk ? "sent" : "failed",
+    provider: "brevo",
+    provider_message_id: messageId,
+    error: anyOk ? null : lastError,
+  });
+  if (logError && logError.code !== "23505") {
+    console.error("transactional_emails: signup alert log insert failed", logError.message);
+  }
+
+  if (anyOk) {
+    console.log("admin signup alert sent", { signupKind: args.signupKind, recipients });
+    return { status: "sent", messageId };
+  }
+  console.error("admin signup alert FAILED (account unaffected)", { email: args.email, error: lastError });
+  return { status: "failed", error: lastError };
 }
 
 export type AdminAlertOutcome =
