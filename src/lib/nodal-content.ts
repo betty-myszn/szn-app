@@ -803,5 +803,15 @@ export function composeNodeIngress(event: CalendarEventInput, chart: ChartData):
     moveQuestions,
     journalPrompt: `When things feel uncertain I reach for my ${southArea}. What would I do differently if I trusted my ${northArea} to hold me?`,
     affirmation: `I bring the wisdom of my ${southArea} with me, and I keep choosing my ${northArea} anyway.`,
+    // A full set, so the affirmations are never outnumbered by the questions. An ingress is an
+    // eighteen-month brief, so these are written to be said back over months, not just today.
+    affirmations: [
+      `I bring the wisdom of my ${southArea} with me, and I keep choosing my ${northArea} anyway.`,
+      `I am allowed to be a beginner in my ${northArea}.`,
+      `The discomfort of growing is not evidence that I chose wrong.`,
+      `I keep the strength my ${southArea} built, and I stop hiding inside it.`,
+      `I can do the unfamiliar thing badly at first and still be on my path.`,
+      `I trust the direction even on the days I cannot see the whole road.`,
+    ],
   };
 }

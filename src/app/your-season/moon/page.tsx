@@ -517,10 +517,36 @@ function MoonPageContent() {
             <Link href="/journal" className="btn-pink">open my journal</Link>
           </div>
           <div className="p-8" style={{ background: "var(--pink)" }}>
-            <div className="tag mb-4" style={{ color: "#fff" }}>your affirmation</div>
+            <div className="tag mb-4" style={{ color: "#fff" }}>
+              your affirmation{reading.affirmations && reading.affirmations.length > 1 ? "s" : ""}
+            </div>
             <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.3, color: "#fff" }}>
               &ldquo;{reading.affirmation}&rdquo;
             </p>
+            {reading.affirmations && reading.affirmations.length > 1 && (
+              <ul style={{ listStyle: "none", padding: 0, margin: "22px 0 0" }}>
+                {reading.affirmations
+                  // The headline affirmation is already shown above, so it isn't repeated here.
+                  .filter((a) => a !== reading.affirmation)
+                  .map((a, i) => (
+                    <li
+                      key={i}
+                      style={{
+                        fontFamily: poppins,
+                        fontSize: 15,
+                        fontWeight: 700,
+                        lineHeight: 1.5,
+                        color: "#fff",
+                        paddingLeft: 16,
+                        borderLeft: "2px solid rgba(255,255,255,0.45)",
+                        marginBottom: 12,
+                      }}
+                    >
+                      &ldquo;{a}&rdquo;
+                    </li>
+                  ))}
+              </ul>
+            )}
           </div>
         </div>
       </section>

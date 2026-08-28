@@ -468,5 +468,26 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
     affirmation: onNorth
       ? `I let this eclipse move me forward in my ${eclipseArea}, and I trust what is opening even before I feel ready.`
       : `I let what is ending in my ${eclipseArea} actually end, and I trust the space it clears.`,
+    // A proper set, matching the journal questions rather than being outnumbered by them. Split
+      // across the two things an eclipse actually asks: letting it move, and not forcing it.
+    affirmations: onNorth
+      ? [
+          `I let this eclipse move me forward in my ${eclipseArea}, and I trust what is opening even before I feel ready.`,
+          `I am allowed to walk through a door I did not plan for.`,
+          `Feeling unqualified is the ordinary sensation of doing something for the first time.`,
+          `My ${eSign} energy is safe to be trusted here.`,
+          `I respond to what is actually happening instead of forcing what is not.`,
+          `I do not have to earn what is already reaching me.`,
+          `I can move at the pace this actually requires, and rest when it asks me to.`,
+        ]
+      : [
+          `I let what is ending in my ${eclipseArea} actually end, and I trust the space it clears.`,
+          `I can grieve something and still know that it is finished.`,
+          `The truth arriving now is on my side, even where it stings.`,
+          `My ${eSign} energy does not have to hold this together anymore.`,
+          `I let the timing be what it is instead of arguing with it.`,
+          `I keep everything this taught me, and I put down everything it cost me.`,
+          `I am allowed to rest while this settles.`,
+        ],
   };
 }

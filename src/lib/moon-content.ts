@@ -62,6 +62,10 @@ interface EventTypeMeta {
   actionFraming: string;
   promptFraming: string;
   affirmationFrame: (houseArea: string) => string;
+  /** A full set of affirmations, personalised to her house area and sign. Every reading carries a
+   *  proper set of these, matching the number of journal questions: one line to say back to
+   *  yourself is not enough for a whole lunation. affirmationFrame above stays as the headline. */
+  affirmationSet: (houseArea: string, sign: string) => string[];
   // The four sections Betty asked every reading to carry, on top of the chart breakdown: what the
   // event brings up, what to watch for, the shadow it exposes, and the exercise that works it.
   bringsUp: (c: SectionCtx) => string;
@@ -82,6 +86,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "set one specific, written intention today",
     promptFraming: "What am I actually ready to call in here, specifically enough that I'd know if it arrived?",
     affirmationFrame: (area) => `I plant this intention around my ${area} and trust the cycle to grow it.`,
+    affirmationSet: (area, sign) => [
+      `I plant this intention around my ${area} and trust the cycle to grow it.`,
+      `I am allowed to want this clearly, out loud, and without shrinking it first.`,
+      `I do not need the whole plan to take the first real step.`,
+      `My ${sign} energy knows how to begin, and I let it lead.`,
+      `I choose the version of this that actually excites me, over the version that feels safe.`,
+      `What I start now has the whole cycle to become something.`,
+    ],
     bringsUp: (c) =>
       `A new moon rarely lands as an event. It tends to show up as a quiet restlessness around your ${c.area}, a fresh idea you cannot quite put down, a sense that a chapter could begin here if you let it. What surfaces now is possibility with nowhere to go yet, so the thing worth watching is whatever you keep almost letting yourself want.`,
     lookOutFor: (c) =>
@@ -106,6 +118,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "name one thing this illuminated that you can no longer pretend not to see",
     promptFraming: "What has this brought to light that I've been quietly avoiding looking at directly?",
     affirmationFrame: (area) => `I release what no longer serves my ${area}, and I trust what this has shown me.`,
+    affirmationSet: (area, sign) => [
+      `I release what no longer serves my ${area}, and I trust what this has shown me.`,
+      `I can see this clearly now, and I let clarity be enough.`,
+      `I am allowed to finish things that were only ever meant for a season.`,
+      `My ${sign} energy has nothing to prove and nothing to hold onto.`,
+      `I let the feeling move through me without letting it make my decisions.`,
+      `What is complete in my ${area} is allowed to be complete.`,
+    ],
     bringsUp: (c) =>
       `A full moon brings things to a head. Something that has been building quietly for the last fortnight around your ${c.area} tends to become impossible to ignore now, emotionally, practically, or both at once. Feelings run higher and clarity arrives whether or not you asked for it, and what you have been half-avoiding usually chooses this week to make itself plain.`,
     lookOutFor: (c) =>
@@ -130,6 +150,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "notice what's shifting on its own right now rather than trying to force a decision to match the intensity",
     promptFraming: "What door is actually opening or closing here, on its own, whether or not I was ready for it?",
     affirmationFrame: (area) => `I don't force this, I notice what's already shifting in my ${area} and I let it move at its own pace.`,
+    affirmationSet: (area, sign) => [
+      `I let this eclipse move me forward in my ${area}, even before I feel ready.`,
+      `I am allowed to walk through a door I did not plan for.`,
+      `Being unqualified for the next thing is the ordinary feeling of growth.`,
+      `My ${sign} energy is safe to be trusted here.`,
+      `I respond to what is actually happening rather than forcing what is not.`,
+      `I do not need to earn the opportunity that is already reaching me.`,
+    ],
     bringsUp: (c) =>
       `This one sits on the fated axis, so it is a redirection rather than a seed you plant. Expect something around your ${c.area} to actually move: an opening, an offer, a beginning that arrives on its own timeline rather than the one you planned. Eclipses do not wait to be tended, so what would normally take a season can land in a fortnight.`,
     lookOutFor: (c) =>
@@ -154,6 +182,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "let the ending complete instead of trying to extend something past its natural close",
     promptFraming: "What's actually ending here, and what have I been doing to try to keep it alive past its time?",
     affirmationFrame: (area) => `I let what's ending in my ${area} actually end, the closure is the point, not the problem.`,
+    affirmationSet: (area, sign) => [
+      `I let what is ending in my ${area} actually end, and I trust the space it clears.`,
+      `I can grieve something and still know it is finished.`,
+      `The truth arriving now is on my side, even where it stings.`,
+      `My ${sign} energy does not have to hold this together anymore.`,
+      `I let the timing be what it is instead of arguing with it.`,
+      `I am allowed to rest while this settles.`,
+    ],
     bringsUp: (c) =>
       `This one sits on the fated axis, so it closes rather than merely illuminates. Something around your ${c.area} that has been building is completed for you rather than by you: an ending arrives, a truth becomes undeniable, a chapter shuts on a timeline that is not yours to negotiate.`,
     lookOutFor: (c) =>
@@ -178,6 +214,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "revisit, reread or reconnect with something instead of launching something new",
     promptFraming: "What's asking to be revisited right now instead of pushed forward?",
     affirmationFrame: (area) => `I use this window to review and refine my ${area}, not to force it forward.`,
+    affirmationSet: (area, sign) => [
+      `I use this window to review and refine my ${area}, not to force it forward.`,
+      `Slowing down is doing the work, not avoiding it.`,
+      `I am allowed to change my mind with new information.`,
+      `My ${sign} energy does not lose anything by going back over it.`,
+      `I revisit without rewriting my whole story.`,
+      `What needs finishing gets my attention before what needs starting.`,
+    ],
     bringsUp: (c) =>
       `A retrograde turns the volume down on new launches and up on everything left unfinished. Expect the past to come back around your ${c.area}: old messages, old faces, old decisions asking to be looked at again. Things feel slower and slightly tangled, and the work that wants doing now is review rather than launch.`,
     lookOutFor: (c) =>
@@ -202,6 +246,14 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     actionFraming: "send, launch or sign the thing you paused during the retrograde",
     promptFraming: "What did I pause during this retrograde that's actually ready to move now?",
     affirmationFrame: (area) => `I'm clear to move forward on my ${area} now, the review period did its job.`,
+    affirmationSet: (area, sign) => [
+      `I am clear to move forward on my ${area} now, the review period did its job.`,
+      `I trust the decisions I made carefully.`,
+      `What I learned in the pause comes with me.`,
+      `My ${sign} energy is ready to move at full speed again.`,
+      `I stop waiting for a certainty that was never coming.`,
+      `Forward is available to me now.`,
+    ],
     bringsUp: (c) =>
       `When a retrograde ends the fog clears and forward motion becomes reliable again around your ${c.area}. The delays, the crossed wires and the false starts from the last few weeks start to resolve, and the thing you paused finally has a clear road in front of it.`,
     lookOutFor: (c) =>
@@ -270,6 +322,9 @@ export interface LunationReading {
    *  the eclipse is still coming once it has passed. */
   watchNow?: { label: string; body: string };
   affirmation: string;
+  /** The full set of affirmations for this event, personalised to her house and sign. Every reading
+   *  carries these so the affirmations are never outnumbered by the journal questions. */
+  affirmations?: string[];
 }
 
 function capitaliseFirst(s: string): string {
@@ -396,5 +451,6 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData, now
     exercise: meta.exercise(ctx),
     journalPrompt: `${meta.promptFraming} (Think specifically about your ${houseArea}.)`,
     affirmation: meta.affirmationFrame(houseArea),
+    affirmations: meta.affirmationSet(houseArea, event.sign.toLowerCase()),
   };
 }
