@@ -43,11 +43,15 @@ const workshopsMenu = [
 const freeLinks = [
   { href: "/home", label: "home" },
   { href: "/community", label: "chat rooms" },
+  { href: "/chart", label: "my chart" },
   { href: "/blog", label: "blog" },
 ];
 
 const guestLinks = [
   { href: "/", label: "home" },
+  // The free birth chart is the lowest-friction way in and the biggest single source of signups, so
+  // it sits in the menu on every page rather than only in the homepage hero.
+  { href: "/chart", label: "free chart" },
   { href: "/seasons", label: "seasons" },
   { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },

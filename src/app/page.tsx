@@ -214,8 +214,11 @@ export default function Home() {
               href="/chart"
               className="no-underline"
               style={{
-                background: "var(--pink)",
-                color: "#fff",
+                // The hero field is pink, so a pink button disappears into it. White ground with
+                // pink type keeps it reading as the brand's pink CTA while actually being visible,
+                // and it sits as an equal partner to the black trial button beside it.
+                background: "#fff",
+                color: "var(--pink)",
                 fontFamily: poppins,
                 fontSize: 15,
                 fontWeight: 800,
@@ -244,18 +247,15 @@ export default function Home() {
             >
               start your free 7 days
             </Link>
-            {enrolmentOpen ? (
-              <Link href="/membership" className="btn-outline no-underline">
-                or join · $88/mo
-              </Link>
-            ) : (
+            {/* Exactly two CTAs, both free doors. "Member login" lived here too and is already in
+                the nav, so it only pulled warm traffic out of the funnel; the $88 ask was a cold
+                open for someone who does not yet know what this is, and the trial leads there
+                anyway. When enrolment is closed the paid link returns as the secondary. */}
+            {!enrolmentOpen && (
               <Link href="/membership" className="btn-outline no-underline">
                 see what&apos;s inside
               </Link>
             )}
-            <Link href="/login" className="btn-outline no-underline">
-              member login
-            </Link>
           </div>
           <p style={{ fontSize: 13, color: "var(--dark)", marginTop: 16, fontWeight: 600 }}>
             Your birth chart is free, always. The 7-day trial is free too, no card needed, then $88/mo
@@ -263,6 +263,9 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* ── WHAT EVEN IS THIS: the plain-english, in-voice one-liner, straight after the hero. ── */}
+      <WhatIsMySzn />
 
       {/* ── ECLIPSE SEASON: timed acquisition banner, high up for logged-out visitors (members are
            redirected to /dashboard). Self-hides after the season via isEclipseSeasonLive(). Black so
@@ -335,13 +338,43 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── WHAT EVEN IS THIS: the plain-english, in-voice one-liner, straight after the hero. ── */}
-      <WhatIsMySzn />
-
+      {/* ── ORDER (reworked): hook → what it is → timed promo → the story (problem, blueprint,
+           method) → PROOF (quote + stats) while the tension is fresh → what you get → the live
+           sky as the demo → workshops → the close. The podcast moved BELOW the close: it is
+           top-of-funnel content and it was interrupting the closing run. ── */}
       {/* ── THE BLUEPRINT STORY: the whole thesis, high up so it frames everything below. Problem →
            soul blueprint → the arc → what my szn does. Shared with /membership via one component so
            the two pages can't drift into different versions of the core idea. ── */}
       <SoulBlueprint />
+
+      {/* ── 6. QUOTE: pink, one massive sentence ── */}
+      <section
+        className="px-5 md:px-8 text-center"
+        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 100, paddingBottom: 100 }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <div style={{ fontSize: 30, color: "#fff", marginBottom: 22 }}>&#10022;</div>
+          <blockquote
+            className="display"
+            style={{ fontSize: "clamp(30px, 5.2vw, 66px)", color: "var(--dark)", textTransform: "none" }}
+          >
+            &ldquo;I finally stopped wondering what my birth chart meant and actually started living it.&rdquo;
+          </blockquote>
+          <div
+            style={{
+              fontFamily: poppins,
+              fontSize: 11,
+              fontWeight: 800,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "#fff",
+              marginTop: 34,
+            }}
+          >
+            a my szn member
+          </div>
+        </div>
+      </section>
 
       {/* ── 2. STATS: black, huge numerals, tiny copy ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 64, paddingBottom: 64 }}>
@@ -490,35 +523,6 @@ export default function Home() {
         items={["✦ read it", "✦ live it", "✦ become her", "✦ repeat every szn"]}
       />
 
-      {/* ── 6. QUOTE: pink, one massive sentence ── */}
-      <section
-        className="px-5 md:px-8 text-center"
-        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 100, paddingBottom: 100 }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div style={{ fontSize: 30, color: "#fff", marginBottom: 22 }}>&#10022;</div>
-          <blockquote
-            className="display"
-            style={{ fontSize: "clamp(30px, 5.2vw, 66px)", color: "var(--dark)", textTransform: "none" }}
-          >
-            &ldquo;I finally stopped wondering what my birth chart meant and actually started living it.&rdquo;
-          </blockquote>
-          <div
-            style={{
-              fontFamily: poppins,
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "#fff",
-              marginTop: 34,
-            }}
-          >
-            a my szn member
-          </div>
-        </div>
-      </section>
-
       {/* ── 7. BENTO: deliberately unequal tiles ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 72, paddingBottom: 72 }}>
         <div className="max-w-6xl mx-auto">
@@ -584,6 +588,108 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── THE VAULT: the newest class replay, locked. Sits after the podcast (the free way in)
+           so a visitor meets the free thing first and the members-only thing second. Hides itself
+           for anyone who already has access. ── */}
+      <ReplayTeaser />
+
+      {/* ── WHAT IT COSTS: the page asked for the join in the hero and the close but never once said
+           plainly what it costs or what the trial actually involves, so the decision was being made
+           on guesswork. One honest beat, immediately before the close. ── */}
+      <section className="px-5 md:px-8" style={{ background: "var(--cream)", paddingTop: 64, paddingBottom: 64, borderBottom: "var(--border)" }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="tag mb-5">what it costs</div>
+          <h2 className="display" style={{ fontSize: "clamp(28px, 4.6vw, 56px)", color: "var(--dark)", maxWidth: 820 }}>
+            try the whole thing free.<br />
+            <span className="pk">decide after.</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-10" style={{ border: "1.5px solid var(--dark)" }}>
+            <div className="p-7" style={{ borderRight: "1.5px solid var(--dark)" }}>
+              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
+                free
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
+                your birth chart
+              </div>
+              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
+                Your full birth chart and Human Design, read in plain English. Yours to keep, no card,
+                no catch.
+              </p>
+            </div>
+            <div className="p-7" style={{ borderRight: "1.5px solid var(--dark)", background: "var(--pink-light)" }}>
+              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
+                7 days free
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
+                the whole membership
+              </div>
+              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
+                Everything a paying member gets, for a week. No card needed, so nothing can charge you.
+                Afterwards you keep the chat rooms and your charts for free.
+              </p>
+            </div>
+            <div className="p-7">
+              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
+                $88<span style={{ fontSize: 15, color: "var(--grey)" }}>/mo</span>
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
+                only if you stay
+              </div>
+              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
+                The full personalised platform, a live masterclass and an astro tapping every month,
+                and the community. Cancel whenever it stops being for you.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 9. CLOSING CTA: black, biggest type on the page ── */}
+      <section
+        id="waitlist"
+        className="bleed px-5 md:px-8 text-center"
+        style={{ background: "var(--dark)", paddingTop: 100, paddingBottom: 100 }}
+      >
+        <div className="bleed-content max-w-4xl mx-auto">
+          <h2 className="display" style={{ fontSize: "clamp(40px, 8vw, 104px)", color: "#fff" }}>
+            ready to
+            <br />
+            become your
+            <br />
+            <span className="pk">Future You? ✨</span>
+          </h2>
+          <p
+            style={{
+              fontSize: 15,
+              color: "rgba(255,255,255,0.6)",
+              lineHeight: 1.8,
+              maxWidth: 520,
+              margin: "34px auto 34px",
+            }}
+          >
+            {enrolmentOpen
+              ? "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and it's $88/mo to keep it all after your week."
+              : "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and the paid doors reopen while you're still inside your week."}
+          </p>
+          <Link
+            href={FREE_TRIAL_CTA.href}
+            className="no-underline"
+            style={{
+              background: "var(--pink)",
+              color: "var(--dark)",
+              fontFamily: poppins,
+              fontSize: 15,
+              fontWeight: 800,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              padding: "22px 52px",
+              display: "inline-block",
+            }}
+          >
+            {FREE_TRIAL_CTA.label}
+          </Link>
+        </div>
+      </section>
       {/* ── PODCAST: the free way in. A subscribe block for logged-out visitors, mirroring the
            /podcast hero but condensed. Real Spotify + Apple show links. Buttons are brand-styled
            (pink/black) rather than platform green, to keep the homepage on the brand palette. ── */}
@@ -688,57 +794,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── THE VAULT: the newest class replay, locked. Sits after the podcast (the free way in)
-           so a visitor meets the free thing first and the members-only thing second. Hides itself
-           for anyone who already has access. ── */}
-      <ReplayTeaser />
-
-      {/* ── 9. CLOSING CTA: black, biggest type on the page ── */}
-      <section
-        id="waitlist"
-        className="bleed px-5 md:px-8 text-center"
-        style={{ background: "var(--dark)", paddingTop: 100, paddingBottom: 100 }}
-      >
-        <div className="bleed-content max-w-4xl mx-auto">
-          <h2 className="display" style={{ fontSize: "clamp(40px, 8vw, 104px)", color: "#fff" }}>
-            ready to
-            <br />
-            become your
-            <br />
-            <span className="pk">Future You? ✨</span>
-          </h2>
-          <p
-            style={{
-              fontSize: 15,
-              color: "rgba(255,255,255,0.6)",
-              lineHeight: 1.8,
-              maxWidth: 520,
-              margin: "34px auto 34px",
-            }}
-          >
-            {enrolmentOpen
-              ? "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and it's $88/mo to keep it all after your week."
-              : "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and the paid doors reopen while you're still inside your week."}
-          </p>
-          <Link
-            href={FREE_TRIAL_CTA.href}
-            className="no-underline"
-            style={{
-              background: "var(--pink)",
-              color: "var(--dark)",
-              fontFamily: poppins,
-              fontSize: 15,
-              fontWeight: 800,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              padding: "22px 52px",
-              display: "inline-block",
-            }}
-          >
-            {FREE_TRIAL_CTA.label}
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
