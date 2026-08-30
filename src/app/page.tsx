@@ -471,28 +471,44 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-6">why it&apos;s personal</div>
-          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 940 }}>
-            nobody here gets to decide what your life should look like. <span className="pk">that&apos;s yours.</span>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 980 }}>
+            nobody here gets to decide what your dream life looks like.{" "}
+            <span className="pk">that&apos;s YOUR job.</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-10">
             <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
-              Most personal development hands every woman the same formula and calls it a plan. One
-              woman in here is building a company with staff. Another wants a four-day week and her
-              afternoons back. Those two need completely different work, and your chart is how we tell
-              the difference, so every season lands on your actual life instead of a template.
+              <strong style={{ color: "var(--dark)" }}>Your dream life is personal.</strong> Maybe you
+              want to build a huge company, make millions and have your name on everything. Maybe you
+              want a four-day week, more money in the bank and afternoons that actually belong to you.
+              Maybe you want both.
             </p>
-            <div className="p-8" style={{ background: "var(--dark)", alignSelf: "start" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
-                and about the money
-              </div>
-              <p style={{ fontFamily: poppins, fontSize: "clamp(21px, 2.6vw, 30px)", fontWeight: 800, lineHeight: 1.3, color: "#fff", letterSpacing: "-0.5px", marginBottom: 16 }}>
-                Money is what gives you options.
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
+              Your birth chart + Human Design help us understand what YOU want, how you&apos;re wired
+              and where your biggest opportunities for growth are, so every szn helps you create your
+              version of an incredible life instead of following somebody else&apos;s formula.
+            </p>
+          </div>
+
+          {/* The money argument gets its own headed block now rather than sitting as a side panel:
+              it is the sharpest thing on the page and was being read as a footnote to the section
+              above it. Still inside this section, so the page does not get longer. */}
+          <div className="p-8 md:p-12 mt-12" style={{ background: "var(--dark)" }}>
+            <h3 className="display" style={{ fontSize: "clamp(26px, 4vw, 46px)", color: "#fff", marginBottom: 14 }}>
+              and yes, we talk about <span className="pk">MONEY.</span>
+            </h3>
+            <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2.1vw, 22px)", fontWeight: 800, lineHeight: 1.4, color: "#fff", letterSpacing: "-0.3px", marginBottom: 20, maxWidth: 720 }}>
+              because women having their own money changes everything.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14">
+              <p style={{ fontSize: 15.5, lineHeight: 1.85, color: "rgba(255,255,255,0.8)" }}>
+                Money gives you choices. It lets you leave the job you&apos;ve outgrown, say no to the
+                client you don&apos;t want, book the flight, start the business, make the first hire,
+                take Fridays off, help your family, buy the thing and build a life with waaaay more
+                freedom.
               </p>
-              <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "rgba(255,255,255,0.78)" }}>
-                It is what lets you walk away from the job, the contract or the relationship you have
-                outgrown, and it is what lets you start: the business, the first hire, the flight, the
-                year you work less and see your people more. We talk about women making more money
-                here, in actual dollars, because that is the difference between wishing and choosing.
+              <p style={{ fontSize: 15.5, lineHeight: 1.85, color: "rgba(255,255,255,0.8)" }}>
+                We talk about making more money here in actual $$$ because dreaming about a bigger
+                life is one thing. Having the money to actually choose it is another.
               </p>
             </div>
           </div>
