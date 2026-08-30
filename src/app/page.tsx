@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { FREE_TRIAL_CTA } from "@/lib/cta";
-import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
+import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -26,10 +26,10 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 //   the trial        hero and 10 only
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
-function Ticker({ items }: { items: string[] }) {
+function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
   const doubled = [...items, ...items];
   return (
-    <div className="ticker">
+    <div className={`ticker${variant === "lav" ? " ticker--lav" : ""}`}>
       <div className="ticker-inner">
         {doubled.map((text, i) => (
           <span key={i}>
@@ -58,7 +58,7 @@ const HOW_IT_WORKS = [
   {
     label: "your people",
     title: "you are not doing it on your own",
-    body: "The rooms run alongside all of it, so whatever you are working on this season gets talked about with women deep in exactly the same thing.",
+    body: "The rooms run alongside all of it, so whatever you are working on this season gets talked about with women deep in exactly the same thing. The rooms are free for good, and membership adds the seasonal programming that runs inside them.",
   },
 ];
 
@@ -69,7 +69,7 @@ const INCLUDED = [
   "Shadow work, journalling and goals",
   "A live masterclass every month",
   "A live astro tapping every month",
-  "The community rooms and Ask Betty",
+  "The seasonal programming in the rooms",
   "The full replay vault",
   "Seasonal and eclipse guides",
 ];
@@ -88,7 +88,16 @@ export default function Home() {
     const id = setTimeout(() => setNow(Date.now()), 0);
     return () => clearTimeout(id);
   }, []);
-  const nextWorkshops = now === null ? [] : upcomingWorkshops(now).slice(0, 2);
+  // The season's workshops: what is still to come, plus the most recent one that has already run,
+  // because its replay is inside the membership the moment she joins. Without the replay the section
+  // emptied out as soon as a class passed, which made a live season look like nothing was happening.
+  const seasonWorkshops =
+    now === null
+      ? []
+      : [
+          ...upcomingWorkshops(now).slice(0, 2).map((w) => ({ w, replay: false })),
+          ...pastWorkshops(now).slice(0, 1).map((w) => ({ w, replay: true })),
+        ].slice(0, 3);
 
   if (ready && member) return null;
 
@@ -101,13 +110,17 @@ export default function Home() {
         className="px-5 md:px-8"
         style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
       >
-        <div className="max-w-6xl mx-auto">
+        {/* Two columns on desktop: the copy carries the argument, the collage carries the feeling
+            and fills what was a large dead pink area to the right. Stacks on mobile with the image
+            underneath, so the words always land first. */}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-10 md:gap-14 items-center">
+          <div>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 22 }}>
             your life · your money · your moves
           </div>
           <h1
             className="display"
-            style={{ fontSize: "clamp(42px, 8vw, 100px)", color: "var(--dark)", maxWidth: 1020, lineHeight: 0.96 }}
+            style={{ fontSize: "clamp(40px, 6vw, 78px)", color: "var(--dark)", lineHeight: 0.98 }}
           >
             you didn&apos;t come here
             <br />
@@ -146,21 +159,31 @@ export default function Home() {
             >
               start your free 7 days
             </Link>
-            {/* Deliberately does NOT claim the chat rooms stay free after the trial: community is one
-                of the three things the membership is sold on, so that promise is a product decision
-                still to be settled, not a copy line. The chart is a clean acquisition product. */}
+            {/* The chat rooms are free permanently by product decision, so the promise is honest and
+                it is worth making: nobody risks anything by starting. The paid layer inside community
+                is the seasonal programming (book club, challenges, workshop chat), not the rooms. */}
             <p style={{ fontSize: 14, color: "var(--dark)", fontWeight: 600, lineHeight: 1.6 }}>
               Everything, free for 7 days. No card, so nothing can charge you. It&apos;s $88 a month
-              after that, and only if you want to stay.
+              after that, and only if you want to stay. The chat rooms stay yours free either way.
             </p>
             <Link href="/chart" style={{ fontSize: 13, fontWeight: 700, color: "var(--dark)", textDecoration: "underline" }}>
               or just come for your free birth chart
             </Link>
           </div>
+          </div>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-collage.png"
+            alt=""
+            aria-hidden="true"
+            style={{ width: "100%", height: "auto", display: "block", border: "var(--border)" }}
+          />
         </div>
       </section>
 
       <Ticker
+        variant="lav"
         items={[
           "personalised to your chart",
           "a live masterclass every month",
@@ -437,9 +460,9 @@ export default function Home() {
             {season.description}
           </p>
 
-          {nextWorkshops.length > 0 && (
+          {seasonWorkshops.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10">
-              {nextWorkshops.map((w) => (
+              {seasonWorkshops.map(({ w, replay }) => (
                 <div key={w.id} style={{ background: "#fff", border: "var(--border)", overflow: "hidden" }}>
                   {w.coverImage && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -447,7 +470,7 @@ export default function Home() {
                   )}
                   <div style={{ padding: 22 }}>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 8 }}>
-                      {w.startIso ? formatWorkshopWhenLA(w.startIso) : w.meta}
+                      {replay ? "replay available now" : w.startIso ? formatWorkshopWhenLA(w.startIso) : w.meta}
                     </div>
                     <div style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.2 }}>
                       {w.title}
@@ -482,6 +505,11 @@ export default function Home() {
               Everyone is in the same season at the same time, so nobody needs the backstory. These
               are women who know exactly what a Scorpio szn money block feels like, and who will tell
               you straight when you are talking yourself out of something good.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
+              The rooms are free, permanently, whether you ever pay us a penny or not. Membership adds
+              the seasonal programming that runs inside them: the book club, the challenges and the
+              workshop chat.
             </p>
           </div>
         </div>
