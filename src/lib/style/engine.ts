@@ -19,6 +19,7 @@ import { SIGN_VECTORS } from "./signs";
 import { RISING_ARCHITECTURE, type RisingArchitecture } from "./rising";
 import { VENUS_AESTHETIC, type VenusAesthetic } from "./venus";
 import { BASE_WEIGHTS, SITUATIONS, situationById, type SituationDef } from "./situations";
+import { PRODUCTS, productsForSeason, affiliateWrap, type Product } from "./catalogue";
 
 // Each placement has a job, so it speaks loudly to the dimensions it owns and quietly elsewhere.
 // Without this, five placements average into mush and every chart starts looking the same.
@@ -224,4 +225,90 @@ export function scoreProduct(
   const base = similarity(profile.vector, product.vector);
   const penalised = (product.attributes ?? []).some((a) => profile.downrank.includes(a));
   return penalised ? base * 0.5 : base;
+}
+
+// ── seasonal edit ───────────────────────────────────────────────────────────────
+
+export interface RankedProduct {
+  product: Product;
+  /** Cosine similarity against her profile, 0 to 1. */
+  match: number;
+  /** Display score. Raw cosine on all-positive vectors always lands in a narrow band near the top,
+   *  so every item would read as 95% and the number would tell her nothing. This spreads the pool
+   *  across a readable range so the ordering is visible. It is a relative fit within this edit,
+   *  not an absolute claim. */
+  vibe: number;
+  /** Why this piece is in her edit, e.g. "for your Venus in Scorpio". */
+  reason: string;
+  url: string;
+}
+
+/** The dimension a product leads on, used to explain the pick in her own chart's terms. */
+function reasonFor(product: Product, profile: StyleProfile): string {
+  const rising = profile.placements.rising;
+  const venus = profile.placements.venus;
+  const aestheticColours = [
+    ...profile.aesthetic.colour.hero,
+    ...profile.aesthetic.colour.supporting,
+    ...profile.aesthetic.colour.accent,
+  ].map((s) => s.name.toLowerCase());
+  const colourHit = product.colours.some((c) =>
+    aestheticColours.some((a) => a.includes(c.toLowerCase()) || c.toLowerCase().includes(a))
+  );
+  if (colourHit) return `for your Venus in ${venus}, this is your colour`;
+  if (product.seasons.includes(rising)) return `built for your ${rising} rising`;
+  if (product.vector.structure >= 80 && profile.vector.structure >= 65) return `the structure your rising wants`;
+  if (product.vector.sensual >= 75 && profile.vector.sensual >= 65) return `for your Venus in ${venus}`;
+  if (product.vector.texture >= 75 && profile.vector.texture >= 65) return `the texture your Venus reaches for`;
+  return `fits your ${rising} rising and ${venus} Venus`;
+}
+
+/**
+ * Her personalised edit for a season. Products are filtered to the season, scored against her
+ * profile, penalised for carrying a downranked attribute, and returned best first.
+ */
+export function seasonalEdit(
+  placements: StylePlacements,
+  season: Sign,
+  options: { situationId?: string; limit?: number } = {}
+): { profile: StyleProfile; items: RankedProduct[] } | null {
+  const profile = composeStyleProfile(placements, { situationId: options.situationId });
+  if (!profile) return null;
+
+  const pool = productsForSeason(season);
+  const scored = pool
+    .map((product) => ({ product, match: scoreProduct(profile, product) }))
+    .sort((a, b) => b.match - a.match);
+
+  const items = spread(scored).map((s) => ({
+    ...s,
+    reason: reasonFor(s.product, profile),
+    url: affiliateWrap(s.product.url),
+  })).slice(0, options.limit ?? 12);
+
+  return { profile, items };
+}
+
+/** Spread a sorted pool's raw cosine scores across a readable display range. */
+function spread(scored: { product: Product; match: number }[]): { product: Product; match: number; vibe: number }[] {
+  if (scored.length === 0) return [];
+  const top = scored[0].match;
+  const bottom = scored[scored.length - 1].match;
+  const range = top - bottom;
+  return scored.map((s) => ({
+    ...s,
+    vibe: range < 1e-6 ? 95 : Math.round(72 + ((s.match - bottom) / range) * 27),
+  }));
+}
+
+/** Everything in the catalogue, ranked, ignoring season. Useful for a full wardrobe view. */
+export function rankedWardrobe(placements: StylePlacements, limit = 20): RankedProduct[] {
+  const profile = composeStyleProfile(placements);
+  if (!profile) return [];
+  const scored = PRODUCTS.map((product) => ({ product, match: scoreProduct(profile, product) })).sort(
+    (a, b) => b.match - a.match
+  );
+  return spread(scored)
+    .map((s) => ({ ...s, reason: reasonFor(s.product, profile), url: affiliateWrap(s.product.url) }))
+    .slice(0, limit);
 }
