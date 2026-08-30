@@ -61,13 +61,26 @@ export default function SoulBlueprint({
             <br />
             <span className="pk">but is any of it personalised to you?</span>
           </h2>
-          <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", maxWidth: 620, marginTop: 26, fontWeight: 500 }}>
-            Women can reach more personal development than any generation before them: podcasts, books,
-            courses, methods, morning routines, an endless scroll of ways to fix yourself. The
-            information keeps growing, and the woman doesn&apos;t change with it. Most of it assumes
-            everyone should run the same way, wake at 5am, follow this routine, be more disciplined, be
-            more visible. It hands her someone else&apos;s life and calls it a plan.
-          </p>
+          {/* The copy sat alone with a lot of dead space to its right on desktop. The planet fills it
+              and carries the brand, sitting beside the text on wide screens and dropping under it on
+              mobile so the writing always leads. */}
+          <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-14" style={{ marginTop: 26 }}>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", maxWidth: 620, fontWeight: 500, flex: "1 1 auto" }}>
+              Women can reach more personal development than any generation before them: podcasts, books,
+              courses, methods, morning routines, an endless scroll of ways to fix yourself. The
+              information keeps growing, and the woman doesn&apos;t change with it. Most of it assumes
+              everyone should run the same way, wake at 5am, follow this routine, be more disciplined, be
+              more visible. It hands her someone else&apos;s life and calls it a plan.
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/cosmic-planet.png"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              style={{ width: "min(340px, 72vw)", height: "auto", flexShrink: 0, alignSelf: "center", display: "block" }}
+            />
+          </div>
         </div>
       </section>
 
@@ -189,7 +202,7 @@ export default function SoulBlueprint({
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-6">the work</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 72px)", color: "var(--dark)", maxWidth: 900 }}>
-            who you are, to her, to <span className="pk">her life.</span>
+            from who you are today, to her, to <span className="pk">her whole life.</span>
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-0 mt-12" style={{ border: "1.5px solid var(--dark)" }}>
