@@ -104,7 +104,7 @@ export const SITUATIONS: SituationDef[] = [
     weights: { venus: 0.4, mars: 0.25, rising: 0.2, sun: 0.1, moon: 0.05 },
     nudges: { edge: 25, glamour: 20, bodyConscious: 20, sensual: 15, casual: -25 },
     focus: "dress",
-    colourTiers: ["hero", "accent"],
+    colourTiers: ["accent", "hero"],
   },
   {
     id: "party",
