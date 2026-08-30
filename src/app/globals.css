@@ -639,5 +639,5 @@ html, body { overflow-x: hidden; }
     z-index: 0;
   }
   .close-planet { right: -90px; width: 380px; opacity: 0.95; }
-  .close-money  { left: -20px;  width: 320px; top: 58%; }
+  .close-money  { left: 40px;   width: 320px; top: 70%; }
 }
