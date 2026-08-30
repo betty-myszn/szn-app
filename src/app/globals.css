@@ -572,12 +572,29 @@ html, body { overflow-x: hidden; }
   .hero-cutout {
     /* Big enough that the planet at the top of the collage sits level with the headline, and she
        still crosses the banner's bottom rule. */
-    /* Stays inside its own column. This collage has elements spread to both edges (laptop and
-       compass on the left), so any horizontal bleed lands them on top of the copy. Size comes from
-       the column being wider, not from overflowing it. */
-    width: 100%;
+    /* Bleeds off the RIGHT edge of the screen only, so the planet reads as arriving from
+       off-screen instead of being clipped inside a box. Never bleeds LEFT: this collage has a
+       laptop and compass out at its left edge, and those would land on top of the copy.
+       body has overflow-x:hidden, so the right-hand bleed cannot create a sideways scrollbar. */
+    /* max-width:none is required: the global image reset caps images at 100%, which silently
+       swallowed the width increase and left the bleed doing nothing.
+
+       The bleed is computed rather than guessed. The inner container is max-w-6xl (1152px)
+       centred, so the gap from its right edge to the viewport edge is exactly 50vw - 576px.
+       Matching that lands the image flush with the screen edge at any desktop width, so the
+       planet arrives from off-screen instead of being clipped short of it. The max() keeps it
+       sane on narrower screens, where the container is the viewport minus its padding. */
+    --hero-bleed: max(32px, calc(50vw - 576px));
+    max-width: none;
+    width: calc(100% + var(--hero-bleed));
     margin-left: 0;
-    margin-top: -72px;
+    margin-right: calc(-1 * var(--hero-bleed));
+    /* Lifts the planet level with the eyebrow above the headline.
+       This has to scale: the image is bottom-anchored and its height grows with the bleed, so a
+       fixed lift that is right at 1280px sends it up behind the nav by 1600px. The slope keeps the
+       top roughly put as the image grows (measured: +146px of height per +320px of viewport), and
+       the min() caps it so it can never stop lifting altogether on very wide screens. */
+    margin-top: min(-20px, calc(45.6vw - 754px));
     margin-bottom: -104px;
   }
 }
