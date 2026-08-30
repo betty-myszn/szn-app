@@ -40,6 +40,10 @@ export interface Product {
   vector: StyleVector;
   /** Tags the engine can downrank against, matching the rising/venus downrank vocabularies. */
   attributes: string[];
+  /** Retailer image, where one has been captured. Optional on purpose: licensed image URLs arrive
+   *  with the affiliate feed, and until then the UI falls back to a colour tile rather than a
+   *  broken photo. */
+  image?: string;
   checkedAt: string;
 }
 
@@ -60,6 +64,28 @@ const p = (
   id, title, brand, retailer: "ASOS", category, price, url, colours, seasons,
   vector: vec(vector), attributes, checkedAt: CHECKED,
 });
+
+// Product images captured alongside the curation. Keyed by product id so the catalogue entries stay
+// readable, and so a feed can replace this wholesale later.
+const IMAGES: Record<string, string> = {
+  "monki-wide-tailored-gray": "monki-high-waist-wide-leg-tailored-pants-in-dark-gray-melange/207969313-1-grey",
+  "jdy-wide-chocolate": "jdy-wide-leg-tailored-pants-in-chocolate-brown/209448608-1-brown",
+  "asos-peplum-shell-brown": "asos-design-linen-blend-tailored-peplum-shell-top-in-brown-part-of-a-set/210140965-1-brown",
+  "other-stories-poplin-blue": "other-stories-pure-cotton-poplin-shirt-with-back-tie-detail-in-light-blue/210373840-1-lightblue",
+  "asos-cinch-mocha": "asos-design-cinch-waist-blazer-in-mocha/209074015-1-mocha",
+  "asos-funnel-chocolate": "asos-design-faux-leather-funnel-neck-jacket-in-chocolate-brown/210194842-1-brown",
+  "asos-reign-platform-mocha": "asos-design-reign-square-toe-mid-heel-platform-boots-in-mocha-suedette/208592493-1-mochasuedette",
+  "asos-linen-wide-cream": "asos-design-linen-blend-wide-leg-pants-with-pleated-detailing-in-cream/209846937-1-cream",
+  "asos-evelyn-platform-tan": "asos-design-evelyn-platform-heeled-ankle-boots-in-tan/208592768-1-tanpu",
+  "asos-rib-slash-chocolate": "asos-design-rib-slash-neck-shoulder-seam-mini-dress-in-chocolate/210801014-1-chocolate",
+  "asos-curve-twill-wide-chocolate": "asos-design-curve-cotton-twill-wide-leg-pants-in-chocolate/210005274-1-chocolate",
+};
+
+/** Full image URL at a sensible width, or null when this product has no captured image yet. */
+export function productImage(id: string, width = 320): string | null {
+  const path = IMAGES[id];
+  return path ? `https://images.asos-media.com/products/${path}?$n_${width}w$` : null;
+}
 
 export const PRODUCTS: Product[] = [
   // ── bottoms ──────────────────────────────────────────────────────────────────
