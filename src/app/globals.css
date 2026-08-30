@@ -570,12 +570,37 @@ html, body { overflow-x: hidden; }
 }
 @media (min-width: 768px) {
   .hero-cutout {
-    width: 128%;
-    max-width: none;
-    margin-left: -14%;
+    /* Big enough that the planet at the top of the collage sits level with the headline, and she
+       still crosses the banner's bottom rule. */
+    /* Stays inside its own column. This collage has elements spread to both edges (laptop and
+       compass on the left), so any horizontal bleed lands them on top of the copy. Size comes from
+       the column being wider, not from overflowing it. */
+    width: 100%;
+    margin-left: 0;
+    margin-top: -72px;
     margin-bottom: -104px;
   }
 }
 @media (max-width: 767px) {
   .hero-cutout { margin-bottom: -72px; }
+}
+
+/* ── Astrology journaling banner art ──
+   The pen should nearly touch the top of the band and the journal nearly the bottom, so the image
+   is pulled out past the section's vertical padding. Only the image moves: the copy column keeps
+   its own spacing, so the writing stays exactly where it was. */
+.journal-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+@media (min-width: 768px) {
+  .journal-art {
+    width: 118%;
+    margin-left: -9%;
+    /* eat the band's 88px padding at both ends, leaving a small breathing gap */
+    margin-top: -72px;
+    margin-bottom: -72px;
+  }
 }

@@ -122,7 +122,7 @@ export default function Home() {
         {/* Two columns on desktop: the copy carries the argument, the collage carries the feeling
             and fills what was a large dead pink area to the right. Stacks on mobile with the image
             underneath, so the words always land first. */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-10 md:gap-14 items-center">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 items-end">
           <div>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 22 }}>
             your life · your money · your moves
@@ -137,17 +137,19 @@ export default function Home() {
           </h1>
           <p
             style={{
-              fontSize: "clamp(16px, 2.1vw, 20px)",
-              lineHeight: 1.75,
+              // One line only. The hero sells the want; the mechanism (chart, seasons, the work,
+              // the rooms) is explained properly in the very next section, so repeating any of it
+              // here just crowds the banner and unbalances it against the image.
+              fontSize: "clamp(17px, 2.2vw, 22px)",
+              lineHeight: 1.6,
               color: "var(--dark)",
-              maxWidth: 620,
-              marginTop: 28,
-              fontWeight: 500,
+              maxWidth: 460,
+              marginTop: 24,
+              fontWeight: 600,
             }}
           >
-            MY SZN is for women who want more. More of themselves, more money, more of the life
-            they actually want. Astrology gives us the framework, every season hands us the
-            assignment, and then we do the real work together.
+            For women who want more of themselves, more money, and more of the life they actually
+            want.
           </p>
 
           <div className="mt-9 flex flex-col items-start gap-4">
@@ -166,17 +168,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              start your free 7 days
-            </Link>
-            {/* The chat rooms are free permanently by product decision, so the promise is honest and
-                it is worth making: nobody risks anything by starting. The paid layer inside community
-                is the seasonal programming (book club, challenges, workshop chat), not the rooms. */}
-            <p style={{ fontSize: 14, color: "var(--dark)", fontWeight: 600, lineHeight: 1.6 }}>
-              Everything, free for 7 days. No card, so nothing can charge you. It&apos;s $88 a month
-              after that, and only if you want to stay. The chat rooms stay yours free either way.
-            </p>
-            <Link href="/chart" style={{ fontSize: 13, fontWeight: 700, color: "var(--dark)", textDecoration: "underline" }}>
-              or just come for your free birth chart
+              start your free trial
             </Link>
           </div>
           </div>
@@ -427,7 +419,14 @@ export default function Home() {
              introduce it. Kept to a single claim so it does not become another feature essay. */}
       <section
         className="px-5 md:px-8"
-        style={{ background: "var(--pink-bg)", borderBottom: "var(--border)", paddingTop: 88, paddingBottom: 88 }}
+        style={{
+          background: "var(--pink-bg)",
+          borderBottom: "var(--border)",
+          paddingTop: 88,
+          paddingBottom: 88,
+          // The journal is allowed to fill the band edge to edge; the copy keeps its padding.
+          overflow: "hidden",
+        }}
       >
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-10 md:gap-14 items-center">
           <div>
@@ -454,10 +453,10 @@ export default function Home() {
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            className="journal-art"
             src="/astrology-journaling.png"
             alt=""
             aria-hidden="true"
-            style={{ width: "115%", maxWidth: "none", height: "auto", display: "block", marginLeft: "-7%" }}
           />
         </div>
       </section>
