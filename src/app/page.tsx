@@ -210,14 +210,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-6">what my szn actually is</div>
           <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 880 }}>
-            every szn, we go after a different part of <span className="pk">your life.</span>
+            every szn, we create your dream life in <span className="pk">a different area.</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-11" style={{ border: "var(--border)" }}>
             {[
-              { szn: "virgo szn", body: "your habits, your standards, and the goals you keep rewriting instead of starting." },
-              { szn: "libra szn", body: "your relationships, your boundaries, and everything you have been putting up with for far too long." },
-              { szn: "scorpio szn", body: "money, power, and every single thing you have been avoiding since roughly forever." },
+              { szn: "virgo szn", body: "your habits, your standards, your routines, and the goals that turn the life in your head into the life you're actually living." },
+              { szn: "libra szn", body: "your relationships, your boundaries, your confidence, and creating a life filled with the kind of love and connection you actually want." },
+              { szn: "scorpio szn", body: "your money, your power, your deepest desires, and the patterns that need to change when you're ready for MORE." },
             ].map((s, i) => (
               <div key={s.szn} className="p-7" style={{ borderRight: i < 2 ? "var(--border)" : undefined, background: i === 1 ? "var(--pink-bg)" : "#fff" }}>
                 <div style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 8, textTransform: "lowercase" }}>
@@ -229,10 +229,10 @@ export default function Home() {
           </div>
 
           <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500, maxWidth: 720, marginTop: 30 }}>
-            Your chart and your Human Design decide what that season looks like for you specifically,
-            so you are never handed the same advice as everybody else. A new chapter lands roughly
-            every four weeks, which is what stops this becoming another membership you joined once and
-            never opened again.
+            Your birth chart and Human Design make every szn completely personal to YOU, so
+            you&apos;re working on what actually matters for your life. Every four weeks, we focus on a
+            different area, make moves, raise your standards, and keep building your dream life one
+            szn at a time.
           </p>
 
           {/* Betty, given real estate rather than a thumbnail. Same treatment as her founder block on
