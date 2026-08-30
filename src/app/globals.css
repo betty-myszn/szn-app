@@ -625,18 +625,19 @@ html, body { overflow-x: hidden; }
 /* ── Closing CTA planet ──
    Decorative only. Sits off the right edge behind the copy, echoing the hero's bleed. Hidden below
    1024px: there is no spare width there and it would end up underneath the text. */
-.close-planet { display: none; }
+.close-planet,
+.close-money { display: none; }
 @media (min-width: 1024px) {
-  .close-planet {
+  .close-planet,
+  .close-money {
     display: block;
     position: absolute;
-    right: -90px;
     top: 50%;
     transform: translateY(-50%);
-    width: 380px;
     height: auto;
-    opacity: 0.95;
     pointer-events: none;
     z-index: 0;
   }
+  .close-planet { right: -90px; width: 380px; opacity: 0.95; }
+  .close-money  { left: -60px;  width: 260px; }
 }

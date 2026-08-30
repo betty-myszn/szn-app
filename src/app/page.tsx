@@ -655,6 +655,8 @@ export default function Home() {
             close carries the same treatment as the hero. Hidden on small screens, where there is no
             spare width and it would sit under the text. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="close-money" src="/cosmic-money.png" alt="" aria-hidden="true" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="close-planet" src="/cosmic-planet.png" alt="" aria-hidden="true" />
         <div className="max-w-4xl mx-auto text-center" style={{ position: "relative", zIndex: 1 }}>
           <h2 className="display" style={{ fontSize: "clamp(38px, 7vw, 88px)", color: "#fff", lineHeight: 0.98 }}>
