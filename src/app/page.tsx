@@ -148,8 +148,7 @@ export default function Home() {
               fontWeight: 600,
             }}
           >
-            For women who want more of themselves, more money, and more of the life they actually
-            want.
+            For women who want to make BIGGER moves, more $$$ and create their absolute BEST life.
           </p>
 
           <div className="mt-9 flex flex-col items-start gap-4">
