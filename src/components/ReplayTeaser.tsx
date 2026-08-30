@@ -46,13 +46,14 @@ export default function ReplayTeaser({ background = "var(--cream)" }: { backgrou
         >
           {/* darkening layer so the play button and the badge stay legible over any frame */}
           <span style={{ position: "absolute", inset: 0, background: "rgba(20,10,40,0.35)" }} aria-hidden="true" />
+          {/* Bottom right, not dead centre: the cover carries its own title artwork across the
+              middle and a centred button lands right on top of it. */}
           <span
             aria-hidden="true"
             style={{
               position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
+              right: 18,
+              bottom: 18,
               width: 74,
               height: 74,
               borderRadius: "50%",

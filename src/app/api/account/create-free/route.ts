@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
+import { isSignupBlocked } from "@/lib/signup-blocklist";
 import { syncFreeMemberToBrevo } from "@/lib/email/brevo-contact";
 import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
 
@@ -71,6 +72,13 @@ export async function POST(request: NextRequest) {
   if (!validatePassword(password).ok) return NextResponse.json({ error: "weak_password" }, { status: 400 });
 
   const admin = createAdminClient();
+
+  // Blocked from the platform: refuse before anything is created, matching on a normalised
+  // email (so +tags and gmail dots resolve to the same identity) or a blocked IP. Returns the
+  // same shape as any other rejection so the response gives nothing away.
+  if (await isSignupBlocked(admin, { email, ip: clientIp(request) })) {
+    return NextResponse.json({ error: "already_exists" }, { status: 409 });
+  }
 
   // Throttle first, by email and IP, so the open door can't be turned into an account/email spam
   // engine now that payment no longer gates signups.

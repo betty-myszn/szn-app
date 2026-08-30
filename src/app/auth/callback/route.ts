@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicOrigin } from "@/lib/request-origin";
-import { hasAccessFromRow, postAuthDestination } from "@/lib/membership-gate";
+import { hasAccessFromRow, postAuthDestination, isBlockedRow } from "@/lib/membership-gate";
 import { linkPendingMembership } from "@/lib/claim-membership";
 
 // Only ever redirect back into our own app, an open redirect here would let a crafted
@@ -34,6 +34,13 @@ export async function GET(request: NextRequest) {
   if (!user) return NextResponse.redirect(`${origin}/login?error=link_expired`);
 
   const membership = await linkPendingMembership(user.id, user.email ?? null);
+
+  // Blocked account: 404 rather than complete the login, so the platform simply does not appear to
+  // exist for them. The Supabase auth ban stops most attempts before this, and this covers the rest.
+  if (isBlockedRow(membership)) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const destination = postAuthDestination(membership);
 
   // A specific member area she was heading to wins only if she's a fully-set-up member (has

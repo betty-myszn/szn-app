@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow, isExpiredTrialRow } from "@/lib/membership-gate";
+import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow, isExpiredTrialRow, isBlockedRow } from "@/lib/membership-gate";
 
 // This project's Next.js version renamed middleware.ts to proxy.ts (the export is named
 // `proxy`, not `middleware`), see node_modules/next/dist/docs for details. It does two jobs:
@@ -132,16 +132,25 @@ export async function proxy(request: NextRequest) {
     );
   }
 
-  // Logged in is all these need.
-  if (inLoginOnly) return response;
 
   // The rest hinge on the real membership row, read under her own session so RLS only ever
   // exposes her own.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, onboarded")
+    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, onboarded, blocked")
     .eq("id", user.id)
     .maybeSingle();
+
+  // Blocked accounts get a plain 404 on every gated route, including the login-only ones
+  // (settings/admin), so the platform simply does not appear to exist for them. No explanation and
+  // nothing to appeal to by design. This catches a session that was already live when the block was
+  // applied; new logins are refused separately by the Supabase auth ban.
+  if (isBlockedRow(profile)) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  // Logged in is all these need (blocked members were already turned away above).
+  if (inLoginOnly) return response;
 
   const roomAccess = hasRoomAccessFromRow(profile); // free tier + expired trials + any paid tier
   const access = hasAccessFromRow(profile); // any active paid tier, incl. social

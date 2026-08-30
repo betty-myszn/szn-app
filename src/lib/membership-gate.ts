@@ -14,7 +14,16 @@ export type MembershipRow = {
   // Free 7-day trial. When membership_level is 'trial', access is gated purely on this timestamp
   // (see hasAccessFromRow), never on any Stripe status, since a trial has no subscription.
   trial_expires_at?: string | null;
+  // Set by an admin to remove someone from the platform. Overrides every other gate below.
+  blocked?: boolean | null;
 };
+
+// True when this account has been blocked from the platform. Checked FIRST by every gate, so a
+// blocked member fails every access check regardless of what she has paid for or how much trial she
+// has left. The row and her data are untouched, which is what makes a block reversible.
+export function isBlockedRow(row: MembershipRow | null | undefined): boolean {
+  return !!row?.blocked;
+}
 
 // True when this row is a free-trial member whose 7 days have NOT yet run out. This is the whole of
 // the trial access rule: a dedicated 'trial' level plus an expiry checked at request time, so the
@@ -40,6 +49,7 @@ export function isExpiredTrialRow(row: MembershipRow | null | undefined): boolea
 // those. The rituals (book club, moon audios, seasonal updates) sit ABOVE this, on hasAccessFromRow.
 export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
+  if (isBlockedRow(row)) return false; // blocked beats every tier, including free
   if ((row.membership_level ?? "none") === "free") return true;
   // An expired trial keeps the chat rooms (rooms-and-chart-only, the same shape as the free tier);
   // everything premium is gone. An ACTIVE trial is handled by hasAccessFromRow below (full access).
@@ -62,6 +72,7 @@ export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boo
 // full-platform distinction lives one level up in hasFullAccessFromRow.
 export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
+  if (isBlockedRow(row)) return false;
 
   // Free trial: access is the trial window and nothing else. No Stripe status applies (a trial has
   // no subscription), and once trial_expires_at passes this returns false on the very next request,

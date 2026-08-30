@@ -37,7 +37,7 @@ export function isVip(member: Member | null): boolean {
 }
 
 export function hasActiveAccess(member: Member | null): boolean {
-  if (!member) return false;
+  if (!member || member.blocked) return false;
   // An active trial has full access; an expired trial has none. Handled first because a trial has no
   // subscriptionStatus for the paid check below to read.
   if (member.membershipLevel === "trial") return isTrial(member);
@@ -50,7 +50,7 @@ export function hasActiveAccess(member: Member | null): boolean {
 // paying member gets that a free member does not. Distinct from hasActiveAccess, which is the
 // stricter monthly/vip full-platform gate, social passes here but not there.
 export function hasPaidCommunityAccess(member: Member | null): boolean {
-  if (!member) return false;
+  if (!member || member.blocked) return false;
   // An active trial is a full member for its 7 days, so it gets the rituals too (and, via
   // hasRoomAccess below, the rooms). Handled first because a trial carries no subscriptionStatus for
   // the paid check to read. Mirrors hasAccessFromRow, which already unlocks the trial server-side.
@@ -63,7 +63,7 @@ export function hasPaidCommunityAccess(member: Member | null): boolean {
 // Client mirror of hasRoomAccessFromRow: the lowest gate, the live chat rooms. The free front-door
 // tier gets in, and so does every paying tier. Rituals sit above this on hasPaidCommunityAccess.
 export function hasRoomAccess(member: Member | null): boolean {
-  if (!member) return false;
+  if (!member || member.blocked) return false;
   if (member.membershipLevel === "free") return true;
   // An expired trial keeps the chat rooms (and her chart via the public chart pages); everything
   // premium is gone. Same rooms-only shape as the free tier. An ACTIVE trial passes through

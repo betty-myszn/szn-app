@@ -26,6 +26,8 @@ export interface Member {
   trialExpiresAt: string | null;
   /** True once she's finished onboarding, gates entry to the real portal */
   onboarded: boolean;
+  /** Set by an admin: this account is blocked from the platform. Fails every client gate. */
+  blocked: boolean;
   /** False for legacy magic-link-only accounts, drives the optional "add a password" banner */
   passwordSet: boolean;
 }
@@ -85,7 +87,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, password_set"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set"
     )
     .eq("id", user.id)
     // maybeSingle, not single: a genuinely missing profile row must stay a null profile (exactly
@@ -120,6 +122,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
     trialExpiresAt: profile?.trial_expires_at ?? null,
+    blocked: !!profile?.blocked,
     onboarded: !!profile?.onboarded,
     passwordSet: !!profile?.password_set,
   };
