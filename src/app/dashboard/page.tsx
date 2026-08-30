@@ -26,6 +26,7 @@ import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
 import ReplayHighlight from "@/components/ReplayHighlight";
+import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
@@ -404,6 +405,11 @@ export default function DashboardPage() {
 
       {/* ── COSMIC WEATHER: high up, live transits ── */}
       <SkyAlert chart={chart} />
+
+      {/* ── THE SKY ON HER CHART: live transit-to-natal contacts. Sits directly under the collective
+             weather so the page goes "here is the sky" then "here is what it is doing to YOU". The
+             data was already being computed by /api/your-szn and thrown away; this renders it. ── */}
+      <TransitsToYourChart transits={szn?.transits} />
 
       {/* ── WHAT DO YOU NEED RIGHT NOW: the router ── */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>

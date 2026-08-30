@@ -83,7 +83,7 @@ function getMoonPhase(sunLong: number, moonLong: number): MoonPhase {
 // Significance based on which planets are involved
 function getSignificance(transitPlanet: string, natalPlanet: string): "major" | "moderate" | "minor" {
   const outerPlanets = ["Saturn", "Uranus", "Neptune", "Pluto", "Chiron"];
-  const personalPlanets = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Ascendant"];
+  const personalPlanets = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Ascendant", "Midheaven"];
 
   if (outerPlanets.includes(transitPlanet) && personalPlanets.includes(natalPlanet)) return "major";
   if (outerPlanets.includes(transitPlanet) && outerPlanets.includes(natalPlanet)) return "moderate";
@@ -156,9 +156,14 @@ export function calculateTransits(natalChart: ChartData): TransitData {
   // Include the Ascendant (Rising) as a natal sensitive point
   const ascendantLong = natalChart.ascendant;
   const ascSignData = longitudeToSign(ascendantLong);
+  // The Midheaven matters as much as the Ascendant for transits (career, status, public direction)
+  // and was previously missing, so a transit sitting exactly on someone's MC was silently dropped.
+  const midheavenLong = natalChart.midheaven;
+  const mcSignData = longitudeToSign(midheavenLong);
   const natalPointsToCheck = [
     ...natalChart.planets,
     { id: "ascendant", name: "Ascendant", longitude: ascendantLong, sign: ascSignData.sign, degree: ascSignData.degree, minute: ascSignData.minute, house: 1, retrograde: false },
+    { id: "midheaven", name: "Midheaven", longitude: midheavenLong, sign: mcSignData.sign, degree: mcSignData.degree, minute: mcSignData.minute, house: 10, retrograde: false },
   ];
 
   for (const transit of currentPositions) {
@@ -195,15 +200,24 @@ export function calculateTransits(natalChart: ChartData): TransitData {
 
   // Activated placements
   const activatedPlacements: ActivatedPlacement[] = transitAspects
+    // The transiting Moon is deliberately excluded here. It moves ~13 degrees a day, so a 2-degree
+    // orb lasts roughly four hours: true at the moment of calculation, but stale by the time she
+    // reads it. It stays in transitAspects for anything that wants the full picture; this list is
+    // the "what is actually working on your chart" one, so it holds only contacts that persist.
+    .filter((a) => a.transitPlanet !== "Moon")
     .filter((a) => a.significance !== "minor")
     .slice(0, 8)
     .map((a) => {
       const natalP = natalChart.planets.find((p) => p.name === a.natalPlanet);
       const themes = PLANET_THEMES[a.natalPlanet] || PLANET_THEMES["Sun"];
+      // The angles are not in natalChart.planets, so the lookup above misses them and the old
+      // `|| 1` fallback reported the Midheaven as sitting in the 1st house. The angles ARE house
+      // cusps by definition: the Ascendant is the 1st, the Midheaven the 10th.
+      const angleHouse = a.natalPlanet === "Midheaven" ? 10 : a.natalPlanet === "Ascendant" ? 1 : undefined;
       return {
         natalPlanet: a.natalPlanet,
         natalSign: a.natalSign,
-        natalHouse: natalP?.house || 1,
+        natalHouse: angleHouse ?? natalP?.house ?? 1,
         activatedBy: a.transitPlanet,
         aspectType: a.aspectType,
         orb: a.orb,
