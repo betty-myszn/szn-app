@@ -21,6 +21,28 @@ export function normaliseEmail(raw: string): string {
   return `${local}@${domain}`;
 }
 
+// Blocked in CODE as well as in the database.
+//
+// The blocked_signups table needs a migration that has not been run yet, and a block that only
+// exists in a table nobody has created blocks nothing. These entries work the moment this deploys,
+// with no database change, and they keep working afterwards as a belt-and-braces layer.
+//
+// Emails here must be written in NORMALISED form (lowercased, no +tag, and no dots for gmail), which
+// is what normaliseEmail below produces, so alias variants are caught automatically.
+const BLOCKED_EMAILS: ReadonlySet<string> = new Set([
+  "cosmicxchemist@gmail.com",
+  "alinaxrae@gmail.com",
+]);
+
+// IPs are a blunt instrument: households, offices and mobile carriers share them, so an IP here can
+// catch someone innocent. This one is deliberate and evidenced: both blocked accounts signed up from
+// it on the same day, and no other member has ever been seen on it. Review it periodically, because
+// addresses get reassigned, and a VPN defeats it in seconds anyway. The email matching above is what
+// does the durable work.
+const BLOCKED_IPS: ReadonlySet<string> = new Set([
+  "138.19.47.80",
+]);
+
 /**
  * True when this signup attempt is blocked, by normalised email or by IP.
  *
@@ -33,6 +55,11 @@ export async function isSignupBlocked(
   { email, ip }: { email: string; ip?: string | null }
 ): Promise<boolean> {
   const normalised = normaliseEmail(email);
+
+  // The in-code list first: it needs no database and cannot be defeated by a missing migration.
+  if (BLOCKED_EMAILS.has(normalised)) return true;
+  if (ip && BLOCKED_IPS.has(ip)) return true;
+
   try {
     const { data, error } = await admin
       .from("blocked_signups")
