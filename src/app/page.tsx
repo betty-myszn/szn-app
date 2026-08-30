@@ -202,9 +202,31 @@ export default function Home() {
             chart, and it moves every time the sky does.
           </p>
           <div className="flex items-center gap-4 flex-wrap">
-            {/* The free 7-day trial is the primary front door: full access, no card. The paid join
-                sits beside it as the secondary option (or the waitlist when enrolment is closed), so
-                the paid path is always one click away without being the cold ask a stranger sees first. */}
+            {/* TWO free front doors, side by side and deliberately equal in weight.
+                - The free birth chart (pink) is the lowest-friction way in and historically the
+                  biggest single source of signups. It was dropped from this hero at some point,
+                  which quietly removed the top of the funnel; it is back as the pink CTA.
+                - The free 7-day trial (black) is the full-access front door and the path to a paying
+                  member, so it stays just as prominent right beside it.
+                The paid join and member login follow as outline buttons, one click away without
+                being the cold ask a stranger sees first. */}
+            <Link
+              href="/chart"
+              className="no-underline"
+              style={{
+                background: "var(--pink)",
+                color: "#fff",
+                fontFamily: poppins,
+                fontSize: 15,
+                fontWeight: 800,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "22px 46px",
+                display: "inline-block",
+              }}
+            >
+              get your free birth chart
+            </Link>
             <Link
               href="/free-trial"
               className="no-underline"
@@ -236,7 +258,8 @@ export default function Home() {
             </Link>
           </div>
           <p style={{ fontSize: 13, color: "var(--dark)", marginTop: 16, fontWeight: 600 }}>
-            7 days free, no card needed. $88/mo to keep the full membership after your week.
+            Your birth chart is free, always. The 7-day trial is free too, no card needed, then $88/mo
+            only if you want to keep the full membership.
           </p>
         </div>
       </section>

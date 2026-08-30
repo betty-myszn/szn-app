@@ -137,7 +137,7 @@ export async function proxy(request: NextRequest) {
   // exposes her own.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, onboarded, blocked")
+    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, onboarded")
     .eq("id", user.id)
     .maybeSingle();
 

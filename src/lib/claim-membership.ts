@@ -12,7 +12,7 @@ import { hasAccessFromRow, type MembershipRow } from "@/lib/membership-gate";
 // state so the caller can route her correctly.
 
 const MEMBERSHIP_COLUMNS =
-  "membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, onboarded, blocked";
+  "membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, onboarded";
 
 export async function linkPendingMembership(userId: string, email: string | null): Promise<MembershipRow | null> {
   const admin = createAdminClient();

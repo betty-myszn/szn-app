@@ -87,7 +87,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, password_set"
     )
     .eq("id", user.id)
     // maybeSingle, not single: a genuinely missing profile row must stay a null profile (exactly
@@ -122,7 +122,10 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end ?? null,
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
     trialExpiresAt: profile?.trial_expires_at ?? null,
-    blocked: !!profile?.blocked,
+    // Read from the profile once the `blocked` column exists in the database (migration
+    // 2026-08-28-block-user.sql). Until then it is not selected, so this stays false and nobody is
+    // blocked client-side. The Supabase auth ban is what actually holds the block meanwhile.
+    blocked: false,
     onboarded: !!profile?.onboarded,
     passwordSet: !!profile?.password_set,
   };
