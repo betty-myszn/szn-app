@@ -438,7 +438,7 @@ export default function Home() {
               astrology based <span className="pk">journaling.</span>
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", maxWidth: 560, marginBottom: 20 }}>
-              This is basically your DREAM journal. We use your birth chart and the season
+              This is basically your DREAM life journal. We use your birth chart and the season
               you&apos;re in to create journal prompts personalised to YOU, helping you deep dive into
               every area of your life, figure out what you actually want, work through what&apos;s
               getting in the way, and create a life you&apos;re obsessed with.
