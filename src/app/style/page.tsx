@@ -1,33 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
-import { RISING_VIBES, VENUS_STYLE, VENUS_STYLE_NOTES } from "@/lib/style-data";
-import { seasonalEdit } from "@/lib/style/engine";
-import { SITUATIONS } from "@/lib/style/situations";
-import { productImage } from "@/lib/style/catalogue";
-import type { Sign } from "@/lib/style/types";
+import { RISING_VIBES, VENUS_STYLE, VENUS_STYLE_NOTES, getSymbol } from "@/lib/style-data";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 export default function StylePage() {
   const { member, ready } = useMember();
   const season = useSeason();
-  const [situationId, setSituationId] = useState("everyday");
-
-  const venus = member?.placements?.venus;
-  const rising = member?.placements?.rising;
-
-  // Ranking runs over the whole catalogue, so memoise it against the three things that change it.
-  const edit = useMemo(() => {
-    if (!rising || !venus) return null;
-    return seasonalEdit({ rising: rising as Sign, venus: venus as Sign }, season.sign as Sign, {
-      situationId,
-      limit: 12,
-    });
-  }, [rising, venus, season.sign, situationId]);
 
   if (!ready) return null;
 
@@ -44,8 +26,11 @@ export default function StylePage() {
     );
   }
 
-  // Placements can be missing on first paint, and are absent entirely for a member who has not added
-  // her birth details, so send her to onboarding rather than dereferencing an empty sign.
+  // Placements can be missing on first paint (useMember marks ready before hydration finishes) and
+  // are absent entirely for a member who hasn't added her birth details yet. Send her to onboarding
+  // rather than dereferencing an empty sign, which would throw and blank the page.
+  const venus = member.placements?.venus;
+  const rising = member.placements?.rising;
   if (!venus || !rising) {
     return (
       <section className="min-h-[60vh] flex items-center justify-center px-5">
@@ -54,249 +39,141 @@ export default function StylePage() {
             your style codes are loading.
           </h1>
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-            Add your birth details and this page fills in with your own edit, built from your rising
-            sign and your Venus.
+            Add your birth details and this page fills in with your Venus style codes and your rising
+            vibe, how to dress like the woman you&apos;re becoming.
           </p>
           <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>
     );
   }
-
   const venusNotes = VENUS_STYLE_NOTES[venus];
   const venusStyle = VENUS_STYLE[venus];
   const risingVibe = RISING_VIBES[rising];
-  const szn = season.sign.toLowerCase();
 
   return (
     <>
-      {/* Hero */}
-      <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="tag mb-3" style={{ color: "var(--lav)" }}>shop your szn · {szn}</div>
+      <section className="px-5 md:px-8 py-14" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-3">style codes · venus in {venus.toLowerCase()} · {rising.toLowerCase()} rising</div>
           <h1
             style={{
               fontFamily: poppins,
-              fontSize: "clamp(30px, 5.4vw, 48px)",
+              fontSize: "clamp(32px, 5vw, 48px)",
               fontWeight: 800,
-              letterSpacing: "-1.3px",
-              lineHeight: 1.04,
+              letterSpacing: "-1px",
+              lineHeight: 1.08,
               color: "#fff",
-              marginBottom: 16,
+              marginBottom: 14,
             }}
           >
-            your edit,<br />
-            <span className="pk">ranked by your chart.</span>
+            dress like your <span className="pk">next era.</span>
           </h1>
-          <div className="flex gap-2 flex-wrap">
-            {[
-              ["rising", rising],
-              ["venus", venus],
-            ].map(([label, sign]) => (
-              <span
-                key={label}
-                style={{
-                  fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: "#fff", border: "1.5px solid rgba(255,255,255,0.35)", padding: "7px 13px",
-                }}
-              >
-                {label} <b style={{ color: "var(--lav)" }}>{String(sign).toLowerCase()}</b>
-              </span>
-            ))}
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: 560 }}>
+            Your chart holds your style blueprint, your venus is what you love, your rising is how you magnetise. Dressed together, they&apos;re how you show up as her.
+          </p>
+        </div>
+      </section>
+
+      {/* Venus + Rising */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+          <div className="p-8" style={{ borderRight: "var(--border)" }}>
+            <div style={{ fontSize: 26, marginBottom: 8 }}>♀ {getSymbol(venus)}</div>
+            <div className="tag mb-3">venus in {venus.toLowerCase()} · what you wear</div>
+            <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, marginBottom: 14 }}>
+              {venusNotes.wear}
+            </p>
+            <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 18 }}>
+              {venusNotes.why}
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              {venusNotes.colours.map((c) => (
+                <span
+                  key={c}
+                  style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    background: "var(--pink-light)",
+                    color: "#993556",
+                    padding: "5px 12px",
+                  }}
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="p-8" style={{ background: "var(--lav-light)" }}>
+            <div style={{ fontSize: 26, marginBottom: 8 }}>↑ {getSymbol(rising)}</div>
+            <div className="tag mb-3">{rising.toLowerCase()} rising · how you magnetise</div>
+            <p style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.4, color: "#3C2A70", marginBottom: 12 }}>
+              {risingVibe.desc}.
+            </p>
+            <p style={{ fontSize: 14, color: "#3C2A70", lineHeight: 1.8 }}>
+              Your first impression is {risingVibe.energy}. Lean into it, the world reads your rising before it ever meets your sun.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Situation switcher */}
-      <div
-        className="flex overflow-x-auto"
-        style={{ borderBottom: "var(--border)", background: "#fff", position: "sticky", top: 0, zIndex: 5 }}
-      >
-        {SITUATIONS.map((s) => {
-          const on = s.id === situationId;
-          return (
-            <button
-              key={s.id}
-              onClick={() => setSituationId(s.id)}
-              style={{
-                flex: "0 0 auto",
-                padding: "15px 18px",
-                background: on ? "var(--pink)" : "#fff",
-                color: on ? "#fff" : "#8a8a8a",
-                border: "none",
-                borderRight: "var(--border)",
-                fontFamily: poppins,
-                fontSize: 13,
-                fontWeight: 800,
-                letterSpacing: "-0.2px",
-                whiteSpace: "nowrap",
-                cursor: "pointer",
-              }}
-            >
-              {s.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {edit && (
-        <section className="px-5 md:px-8 py-8">
-          <div className="max-w-6xl mx-auto">
-            {/* The composed look for this situation */}
-            <div className="p-5 md:p-6" style={{ background: "var(--lav-light)", border: "var(--border)" }}>
-              <div className="tag mb-2">your look for {edit.profile.situation.label}</div>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "#2E1C63" }}>{edit.profile.outfit.look}</p>
-            </div>
-
-            {/* Palette */}
-            <div className="flex flex-wrap gap-2 mt-4 mb-7">
-              {edit.profile.outfit.palette.map((c) => (
-                <span
-                  key={c.hex + c.name}
-                  className="inline-flex items-center gap-2"
-                  style={{ border: "1px solid #ddd", padding: "4px 10px", fontSize: 11, fontWeight: 600 }}
-                >
-                  <i style={{ width: 13, height: 13, background: c.hex, border: "1px solid rgba(0,0,0,0.2)", display: "inline-block" }} />
-                  {c.name}
-                </span>
-              ))}
-            </div>
-
-            {/* The edit */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {edit.items.map((item) => {
-                const img = productImage(item.product.id);
-                return (
-                  <a
-                    key={item.product.id}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="no-underline flex flex-col"
-                    style={{ border: "var(--border)", background: "#fff", color: "inherit" }}
-                  >
-                    <span style={{ position: "relative", aspectRatio: "3 / 4", background: "#f4f1f8", overflow: "hidden", display: "block" }}>
-                      {img ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={img} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                      ) : (
-                        // No captured image yet, so show the piece's own colours rather than a broken photo.
-                        <span style={{ position: "absolute", inset: 0, display: "flex" }}>
-                          {item.product.colours.map((c) => (
-                            <span key={c} style={{ flex: 1, background: swatchFor(c) }} />
-                          ))}
-                        </span>
-                      )}
-                      <span
-                        style={{
-                          position: "absolute", top: 8, left: 8, background: "var(--pink)", color: "#fff",
-                          fontFamily: poppins, fontWeight: 800, fontSize: 11, padding: "4px 8px",
-                        }}
-                      >
-                        {item.vibe}%
-                      </span>
-                      <span
-                        style={{
-                          position: "absolute", bottom: 8, left: 8, background: "rgba(255,255,255,0.92)",
-                          fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 7px",
-                        }}
-                      >
-                        {item.product.category}
-                      </span>
-                    </span>
-                    <span className="p-3" style={{ display: "block" }}>
-                      <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 12, color: "#2E1C63", display: "block" }}>
-                        {item.product.brand}
-                      </span>
-                      <span style={{ fontSize: 12.5, lineHeight: 1.4, color: "#333", display: "block", margin: "3px 0 6px" }}>
-                        {item.product.title}
-                      </span>
-                      <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 13, display: "block" }}>
-                        ${item.product.price.toFixed(2)}
-                      </span>
-                      <span style={{ fontSize: 10.5, color: "var(--pink)", fontWeight: 700, lineHeight: 1.35, display: "block", marginTop: 5 }}>
-                        {item.reason}
-                      </span>
-                    </span>
-                  </a>
-                );
-              })}
-            </div>
-
-            <p style={{ fontSize: 11, color: "var(--grey-light)", lineHeight: 1.7, marginTop: 16 }}>
-              Prices were checked when this edit was built and can change at the retailer. Opening a piece takes you to ASOS.
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Your style codes, the written layer under the shop */}
-      <section className="px-5 md:px-8 py-12" style={{ borderTop: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">your style codes</div>
-          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+      {/* Signature details */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-5">the details that make it read as you</div>
+          <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
             <div className="p-7" style={{ borderRight: "var(--border)" }}>
-              <h2 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", color: "#2E1C63", marginBottom: 8 }}>
-                your venus in {venus.toLowerCase()}
-              </h2>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", marginBottom: 10 }}>{venusNotes?.wear}</p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--grey-light)" }}>{venusNotes?.why}</p>
+              <div className="tag mb-2">your signature move</div>
+              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8 }}>{venusNotes.signature}</p>
+            </div>
+            <div className="p-7" style={{ borderRight: "var(--border)" }}>
+              <div className="tag mb-2">reach for this texture</div>
+              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8 }}>{venusNotes.texture}</p>
             </div>
             <div className="p-7">
-              <h2 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", color: "#2E1C63", marginBottom: 8 }}>
-                your {rising.toLowerCase()} rising
-              </h2>
-              <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", marginBottom: 10 }}>
-                You read as {risingVibe?.desc}.
+              <div className="tag mb-2">what to skip</div>
+              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8 }}>{venusNotes.avoid}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Signature edit */}
+      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-5">your signature edit</div>
+          <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
+            <div className="p-7" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
+              <div className="tag mb-2">your signature scent profile</div>
+              <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#3C2A70" }}>
+                {venusStyle.scent.toLowerCase()}
               </p>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--grey-light)" }}>
-                Your first impression is {risingVibe?.energy}. Your rising sets the shape of an outfit,
-                your Venus decides the colour and the fabric.
+            </div>
+            <div className="p-7" style={{ background: "var(--pink)" }}>
+              <div className="tag mb-2" style={{ color: "#fff" }}>your wardrobe direction</div>
+              <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff" }}>
+                {venusStyle.style.toLowerCase()}
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-3 gap-0 mt-0" style={{ border: "var(--border)", borderTop: "none" }}>
-            {[
-              ["your signature", venusNotes?.signature],
-              ["your texture", venusNotes?.texture],
-              ["what to skip", venusNotes?.avoid],
-            ].map(([label, body], i) => (
-              <div key={String(label)} className="p-7" style={{ borderRight: i < 2 ? "var(--border)" : undefined }}>
-                <div className="tag mb-2">{label}</div>
-                <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8 }}>{body}</p>
-              </div>
-            ))}
-          </div>
-
-          <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.8, marginTop: 18 }}>
-            Your scent code this szn is {venusStyle?.scent.toLowerCase()}, and your edit is {venusStyle?.style.toLowerCase()}.
+      {/* Season overlay */}
+      <section className="px-5 md:px-8 py-12">
+        <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
+          <div className="tag mb-3">{season.sign.toLowerCase()} szn overlay</div>
+          <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 12 }}>
+            this szn, turn the volume up.
+          </h2>
+          <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 640, marginBottom: 20 }}>
+            {season.sign} season rewards {season.themes[0]}, so this is the szn to wear the piece you&apos;ve been saving. The gold jewellery, the statement colour, the outfit you always talk yourself out of. Your future self dresses like the invitation already arrived.
           </p>
+          <Link href="/your-season" className="btn-pink">see what this szn is serving</Link>
         </div>
       </section>
     </>
   );
-}
-
-// Rough colour-name to hex, only used for the fallback tile when a product has no captured image.
-const SWATCHES: Record<string, string> = {
-  black: "#111111", white: "#f7f7f7", cream: "#F1E7D6", ivory: "#F5F0E6", chocolate: "#4B342A",
-  brown: "#6B4A35", mocha: "#9C7B62", mole: "#7d6f63", taupe: "#B3A394", stone: "#CFC6B8",
-  beige: "#D8CBB6", natural: "#E0D6C3", tan: "#B87333", camel: "#C19A6B", olive: "#6B7048",
-  khaki: "#8A8B6C", green: "#3f6b4a", gray: "#8b8b8b", "dark gray": "#4a4a4a", "light gray": "#c9c9c9",
-  silver: "#C0C0C0", gunmetal: "#6e7378", navy: "#1F2A44", blue: "#3a63a8", "light blue": "#C5D8E8",
-  "mid blue": "#4A6FA5", "dark blue": "#22314f", lightwash: "#A9C0DE", "washed black": "#2b2b2b",
-  indigo: "#2f3d63", teal: "#2b6f6f", aqua: "#7FDBDA", "surf spray": "#BFE3DE", "ice blue": "#D6ECF3",
-  red: "#C8102E", burgundy: "#4A0D21", oxblood: "#5B1A1A", wine: "#5E2129", berry: "#7b1e3a",
-  fig: "#5a3350", plum: "#4a2b4f", "deep plum": "#4A2B4F", "rum raisin": "#5c3242", magenta: "#C2185B",
-  pink: "#F4C2C2", "light pink": "#F6D4DC", "pastel yellow": "#F3E7A9", buttermilk: "#F5E9C8",
-  butter: "#F2E3B3", yellow: "#FFD93D", mustard: "#C9922B", purple: "#6A0DAD", lavender: "#C8B4F8",
-  gold: "#D4AF37", metallic: "#BFAE7C", "off white": "#F2EFE9", oatmeal: "#DCD3C1", sand: "#E4D5B7",
-  caramel: "#B57A3C", zebra: "#3a3a3a", leopard: "#9c7143", camo: "#5c6144", "animal print": "#8a6a45",
-  stripe: "#dcdcdc", floral: "#d8bcd0", print: "#b9a68f", "bleached denim": "#cfd9e6", bleach: "#dfe6ee",
-};
-
-function swatchFor(colour: string): string {
-  const key = colour.toLowerCase();
-  return SWATCHES[key] ?? "#d9d2e6";
 }
