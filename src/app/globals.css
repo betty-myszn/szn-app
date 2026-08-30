@@ -621,3 +621,22 @@ html, body { overflow-x: hidden; }
     margin-bottom: -72px;
   }
 }
+
+/* ── Closing CTA planet ──
+   Decorative only. Sits off the right edge behind the copy, echoing the hero's bleed. Hidden below
+   1024px: there is no spare width there and it would end up underneath the text. */
+.close-planet { display: none; }
+@media (min-width: 1024px) {
+  .close-planet {
+    display: block;
+    position: absolute;
+    right: -90px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    height: auto;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+}

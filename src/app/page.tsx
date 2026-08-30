@@ -647,8 +647,16 @@ export default function Home() {
       </section>
 
       {/* ─── 10. FINAL CTA ─── job: the offer. Nothing new, one button. */}
-      <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 88, paddingBottom: 96 }}>
-        <div className="max-w-4xl mx-auto text-center">
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--dark)", paddingTop: 88, paddingBottom: 96, position: "relative", overflow: "hidden" }}
+      >
+        {/* Decorative planet, right-hand side. Sits behind the copy and runs off the edge so the
+            close carries the same treatment as the hero. Hidden on small screens, where there is no
+            spare width and it would sit under the text. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="close-planet" src="/cosmic-planet.png" alt="" aria-hidden="true" />
+        <div className="max-w-4xl mx-auto text-center" style={{ position: "relative", zIndex: 1 }}>
           <h2 className="display" style={{ fontSize: "clamp(38px, 7vw, 88px)", color: "#fff", lineHeight: 0.98 }}>
             try it FREE
             <br />
