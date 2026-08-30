@@ -625,6 +625,17 @@ html, body { overflow-x: hidden; }
 /* ── Closing CTA planet ──
    Decorative only. Sits off the right edge behind the copy, echoing the hero's bleed. Hidden below
    1024px: there is no spare width there and it would end up underneath the text. */
+/* ── Dark glitter ground ──
+   Replaces flat black on the dark sections. The colour stays underneath as the fallback, so if the
+   texture ever fails to load the sections are still dark and the white text stays readable. */
+.bg-glitter {
+  background-color: var(--dark);
+  background-image: url("/glitter-dark.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .close-planet,
 .close-money { display: none; }
 @media (min-width: 1024px) {

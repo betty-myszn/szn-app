@@ -290,8 +290,8 @@ export default function Home() {
              ROOM LIST, which is real product furniture, rather than fake conversation. Swap the whole
              row for real portal captures when they exist. */}
       <section
-        className="px-5 md:px-8"
-        style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+        className="px-5 md:px-8 bg-glitter"
+        style={{ borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-6" style={{ color: "var(--pink)" }}>inside your portal</div>
@@ -491,7 +491,7 @@ export default function Home() {
           {/* The money argument gets its own headed block now rather than sitting as a side panel:
               it is the sharpest thing on the page and was being read as a footnote to the section
               above it. Still inside this section, so the page does not get longer. */}
-          <div className="p-8 md:p-12 mt-12" style={{ background: "var(--dark)" }}>
+          <div className="p-8 md:p-12 mt-12 bg-glitter">
             <h3 className="display" style={{ fontSize: "clamp(26px, 4vw, 46px)", color: "#fff", marginBottom: 14 }}>
               and yes, we talk about <span className="pk">MONEY.</span>
             </h3>
@@ -648,8 +648,8 @@ export default function Home() {
 
       {/* ─── 10. FINAL CTA ─── job: the offer. Nothing new, one button. */}
       <section
-        className="px-5 md:px-8"
-        style={{ background: "var(--dark)", paddingTop: 88, paddingBottom: 96, position: "relative", overflow: "hidden" }}
+        className="px-5 md:px-8 bg-glitter"
+        style={{ paddingTop: 88, paddingBottom: 96, position: "relative", overflow: "hidden" }}
       >
         {/* Decorative planet, right-hand side. Sits behind the copy and runs off the edge so the
             close carries the same treatment as the hero. Hidden on small screens, where there is no
