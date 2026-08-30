@@ -8,9 +8,12 @@
   --dark: #1a1a1a;
   --pink-light: #FFE0F0;
   --pink-bg: #FFF0F7;
-  --gold: #FFF4D6;
+  /* Was a butter yellow (#FFF4D6). Yellow and warm cream are banned from this brand, so
+     both this and --cream below now point at lilac tints. The token names are kept so the
+     ~75 existing usages did not all need editing; nothing here should ever be warm again. */
+  --gold: #EDE6FE;
   --mint: #E1F5EE;
-  --cream: #FFF8F0;
+  --cream: #FAF8FF;
   --grey: #1a1a1a;
   --grey-light: #555;
   --border: 1.5px solid #1a1a1a;
@@ -327,7 +330,7 @@ body {
 .pp-tag--style    { background: var(--pink-light); color: #993556; }
 .pp-tag--money    { background: var(--mint); color: #0F6E56; }
 .pp-tag--heal     { background: var(--lav-light); color: #3C2A70; }
-.pp-tag--manifest { background: var(--gold); color: #854F0B; }
+.pp-tag--manifest { background: var(--gold); color: #3C2A70; }
 .pp-tag--identity { background: #F1EFE8; color: #5F5E5A; }
 .pp-tag--drive    { background: #FCEBEB; color: #A32D2D; }
 
@@ -551,4 +554,28 @@ html, body { overflow-x: hidden; }
 }
 .myszn-disco-planet.is-hovered .myszn-sparkle {
   animation-duration: 1.4s;
+}
+
+/* ── Hero cutout ──
+   She is a transparent PNG that deliberately breaks the hero's bottom rule, so she reads as
+   standing out of the banner rather than sitting in a frame. The overhang is desktop-only:
+   on a phone the columns stack and an overhang would just collide with the section below. */
+.hero-cutout {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: -72px; /* eats the hero's bottom padding so she crosses the rule */
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 768px) {
+  .hero-cutout {
+    width: 128%;
+    max-width: none;
+    margin-left: -14%;
+    margin-bottom: -104px;
+  }
+}
+@media (max-width: 767px) {
+  .hero-cutout { margin-bottom: -72px; }
 }

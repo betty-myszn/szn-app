@@ -222,8 +222,8 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
                   <span style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)" }}>{c.date ? formatDate(c.date) : "★"}</span>
                   <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)", whiteSpace: "nowrap" }}>{c.timing}</span>
                 </div>
-                <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: c.gold ? "#854F0B" : c.hot ? "var(--pink)" : "#3C2A70", marginBottom: 8 }}>{c.label}</div>
-                <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: c.gold ? "#854F0B" : "var(--grey)", display: "-webkit-box", WebkitLineClamp: c.mine ? 3 : 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.body}</p>
+                <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: c.gold ? "#3C2A70" : c.hot ? "var(--pink)" : "#3C2A70", marginBottom: 8 }}>{c.label}</div>
+                <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: c.gold ? "#3C2A70" : "var(--grey)", display: "-webkit-box", WebkitLineClamp: c.mine ? 3 : 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.body}</p>
                 {c.mine && (
                   <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1.5px solid rgba(26,26,26,0.12)" }}>
                     <div style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 4 }}>

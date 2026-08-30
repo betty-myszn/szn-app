@@ -148,7 +148,7 @@ export default function HousePage() {
         <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
             <div className="tag mb-3">textbook house vs your house</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#854F0B" }}>{deepDive.rulerLine}</p>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{deepDive.rulerLine}</p>
           </div>
         </section>
       )}
@@ -295,8 +295,8 @@ export default function HousePage() {
           <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
             <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
               <div className="tag mb-3">the stretch move</div>
-              <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>{deepDive.stretchMove}</p>
-              <p style={{ fontSize: 12, color: "#854F0B", marginTop: 14, opacity: 0.8 }}>
+              <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{deepDive.stretchMove}</p>
+              <p style={{ fontSize: 12, color: "#3C2A70", marginTop: 14, opacity: 0.8 }}>
                 This is the one action that creates outsized change. The protocol builds the muscle, this is where you actually use it.
               </p>
             </div>

@@ -393,10 +393,10 @@ function MoonPageContent() {
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
             <div className="tag mb-3">your exercise</div>
-            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.4px", color: "#854F0B", marginBottom: 8 }}>
+            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.4px", color: "#3C2A70", marginBottom: 8 }}>
               {reading.exercise.title}
             </p>
-            <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600, marginBottom: 20 }}>
+            <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600, marginBottom: 20 }}>
               {reading.exercise.intro}
             </p>
             <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -412,11 +412,11 @@ function MoonPageContent() {
                 >
                   <span
                     aria-hidden
-                    style={{ fontFamily: poppins, fontWeight: 800, fontSize: 15, color: "#854F0B", flexShrink: 0, width: 18 }}
+                    style={{ fontFamily: poppins, fontWeight: 800, fontSize: 15, color: "#3C2A70", flexShrink: 0, width: 18 }}
                   >
                     {i + 1}
                   </span>
-                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#854F0B", fontWeight: 600 }}>{step}</span>
+                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "#3C2A70", fontWeight: 600 }}>{step}</span>
                 </li>
               ))}
             </ol>
@@ -429,7 +429,7 @@ function MoonPageContent() {
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
           <div className="tag mb-3">the move</div>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>{reading.theMove}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{reading.theMove}</p>
           {reading.moveOptions && (
             <ul style={{ listStyle: "none", padding: 0, margin: "18px 0 0" }}>
               {reading.moveOptions.map((option) => (
@@ -438,7 +438,7 @@ function MoonPageContent() {
                   style={{
                     fontSize: 14,
                     lineHeight: 1.7,
-                    color: "#854F0B",
+                    color: "#3C2A70",
                     fontWeight: 600,
                     paddingLeft: 20,
                     marginTop: 10,
@@ -457,7 +457,7 @@ function MoonPageContent() {
             <>
               <div
                 className="tag"
-                style={{ color: "#854F0B", marginTop: 28, marginBottom: 4, paddingTop: 20, borderTop: "1px solid rgba(133,79,11,0.3)" }}
+                style={{ color: "#3C2A70", marginTop: 28, marginBottom: 4, paddingTop: 20, borderTop: "1px solid rgba(133,79,11,0.3)" }}
               >
                 then sit with these
               </div>
@@ -470,7 +470,7 @@ function MoonPageContent() {
                       fontSize: 15,
                       lineHeight: 1.6,
                       letterSpacing: "-0.2px",
-                      color: "#854F0B",
+                      color: "#3C2A70",
                       fontWeight: 700,
                       paddingTop: 12,
                       marginTop: 12,

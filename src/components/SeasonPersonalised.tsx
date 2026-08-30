@@ -236,7 +236,7 @@ export default function SeasonPersonalised() {
           <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
           <div className="p-8" style={{ background: "var(--gold)", borderRight: "var(--border)" }}>
             <div className="tag mb-3">your main character mission</div>
-            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.35, color: "#854F0B" }}>
+            <p style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.35, color: "#3C2A70" }}>
               {HOUSE_MISSIONS[activatedHouse]}
             </p>
           </div>

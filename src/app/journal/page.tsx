@@ -38,7 +38,7 @@ const REFLECTION_PROMPTS = [
 
 const WIN_CATEGORY_STYLES: Record<string, { bg: string; color: string }> = {
   career: { bg: "var(--mint)", color: "#0F6E56" },
-  money: { bg: "var(--gold)", color: "#854F0B" },
+  money: { bg: "var(--gold)", color: "#3C2A70" },
   confidence: { bg: "var(--pink-light)", color: "#993556" },
   relationships: { bg: "var(--lav-light)", color: "#3C2A70" },
   other: { bg: "var(--cream)", color: "#5F5E5A" },
@@ -271,7 +271,7 @@ export default function JournalPage() {
           ) : (
             <div style={{ border: "var(--border)" }}>
               <div className="p-7" style={{ background: "var(--gold)", borderBottom: "var(--border)" }}>
-                <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.5, color: "#854F0B" }}>
+                <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.5, color: "#3C2A70" }}>
                   Log every win, however small. Landed a client, raised your prices, started therapy, posted consistently, had the hard conversation. This becomes proof of how far you&rsquo;ve actually come.
                 </p>
               </div>

@@ -162,14 +162,14 @@ export default function PlacementPage() {
         <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--gold)" }}>
             <div className="tag mb-3">what {sign.toLowerCase()} energy actually is</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#854F0B" }}>{signOverview.archetype}</p>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{signOverview.archetype}</p>
             <div className="flex gap-2 flex-wrap" style={{ marginTop: 16 }}>
               {[`${signOverview.element} element`, `${signOverview.modality} modality`, `ruled by ${signOverview.ruler}`].map((tag) => (
                 <span
                   key={tag}
                   style={{
                     fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-                    background: "rgba(133,79,11,0.12)", color: "#854F0B", padding: "5px 12px",
+                    background: "rgba(133,79,11,0.12)", color: "#3C2A70", padding: "5px 12px",
                   }}
                 >
                   {tag}
@@ -231,10 +231,10 @@ export default function PlacementPage() {
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--grey)" }}>{sections.whyItRepeats}</p>
             </div>
             <div className="p-7" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#854F0B", marginBottom: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>
                 this week&apos;s move
               </div>
-              <p style={{ fontSize: 13, lineHeight: 1.8, color: "#854F0B", fontWeight: 600 }}>{sections.thisWeeksMove}</p>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: "#3C2A70", fontWeight: 600 }}>{sections.thisWeeksMove}</p>
             </div>
             <div className="p-7" style={{ background: "var(--mint)" }}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#0F6E56", marginBottom: 10 }}>

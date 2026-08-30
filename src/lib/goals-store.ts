@@ -27,7 +27,7 @@ export const CATEGORY_STYLES: Record<GoalCategory, { bg: string; color: string }
   career: { bg: "var(--mint)", color: "#0F6E56" },
   business: { bg: "#E8F3FF", color: "#1A5FA8" },
   purpose: { bg: "#F3E8FF", color: "#6B21A8" },
-  money: { bg: "var(--gold)", color: "#854F0B" },
+  money: { bg: "var(--gold)", color: "#3C2A70" },
   love: { bg: "var(--pink-light)", color: "#993556" },
   confidence: { bg: "var(--lav-light)", color: "#3C2A70" },
   wellbeing: { bg: "var(--cream)", color: "#5F5E5A" },

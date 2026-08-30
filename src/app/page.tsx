@@ -108,7 +108,16 @@ export default function Home() {
              screen; the edge is in the claim, and the language earns its bite further down. */}
       <section
         className="px-5 md:px-8"
-        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
+        style={{
+          background: "var(--pink)",
+          borderBottom: "var(--border)",
+          paddingTop: 72,
+          paddingBottom: 72,
+          // She is allowed to break the bottom edge, so nothing here may clip.
+          overflow: "visible",
+          position: "relative",
+          zIndex: 1,
+        }}
       >
         {/* Two columns on desktop: the copy carries the argument, the collage carries the feeling
             and fills what was a large dead pink area to the right. Stacks on mobile with the image
@@ -172,13 +181,19 @@ export default function Home() {
           </div>
           </div>
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-collage.png"
-            alt=""
-            aria-hidden="true"
-            style={{ width: "100%", height: "auto", display: "block", border: "var(--border)" }}
-          />
+          {/* Background removed, and deliberately oversized with a negative bottom margin so she
+              crosses the banner's bottom rule and stands out of it. The hero's own bottom padding
+              gives her the room; on mobile the overhang is dropped so she cannot collide with the
+              section underneath. */}
+          <div style={{ position: "relative", alignSelf: "end" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="hero-cutout"
+              src="/hero-cutout.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
         </div>
       </section>
 
@@ -407,6 +422,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── ASTROLOGY-BASED JOURNALING ─── a banner, not a section: it gives one concrete example of
+             what "the work" actually looks like day to day, immediately after the three pillars
+             introduce it. Kept to a single claim so it does not become another feature essay. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--pink-bg)", borderBottom: "var(--border)", paddingTop: 88, paddingBottom: 88 }}
+      >
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-10 md:gap-14 items-center">
+          <div>
+            <div className="tag mb-4">the work, daily</div>
+            <h2
+              className="display"
+              style={{ fontSize: "clamp(32px, 5vw, 60px)", color: "var(--dark)", marginBottom: 18 }}
+            >
+              astrology based <span className="pk">journaling.</span>
+            </h2>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", maxWidth: 560, marginBottom: 20 }}>
+              Your journal writes its prompts from your chart and the season you are actually in, so
+              you are answering the question that matters this month instead of staring at a blank
+              page. It tracks what you keep circling back to, and shows you the pattern before you run
+              it again.
+            </p>
+            <Link
+              href={FREE_TRIAL_CTA.href}
+              className="no-underline"
+              style={{ fontSize: 13, fontWeight: 700, color: "var(--pink)", textDecoration: "underline" }}
+            >
+              try it free for 7 days
+            </Link>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/astrology-journaling.png"
+            alt=""
+            aria-hidden="true"
+            style={{ width: "115%", maxWidth: "none", height: "auto", display: "block", marginLeft: "-7%" }}
+          />
+        </div>
+      </section>
+
       {/* ─── 5. WHY IT'S PERSONAL ─── job: ONE argument, that nobody here defines her life for her.
              Halved from the previous draft: the generic-advice list and the six hypothetical women
              were making the same point four times over. Two contrasting examples is enough. The
@@ -520,7 +575,16 @@ export default function Home() {
              prices raised, careers changed) this becomes a grid and gets far stronger. */}
       <section
         className="px-5 md:px-8"
-        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
+        style={{
+          background: "var(--pink)",
+          borderBottom: "var(--border)",
+          paddingTop: 72,
+          paddingBottom: 72,
+          // She is allowed to break the bottom edge, so nothing here may clip.
+          overflow: "visible",
+          position: "relative",
+          zIndex: 1,
+        }}
       >
         <div className="max-w-4xl mx-auto text-center">
           <div className="tag mb-8" style={{ color: "#fff" }}>from a member</div>

@@ -112,7 +112,7 @@ export function buildNewMemberAlert(args: NewMemberAlertArgs): { subject: string
       ${
         accountClaimed
           ? ""
-          : `<p style="margin:18px 0 0;padding:12px;background:#FFF7E6;border:1px solid #F0D9A8;color:#7A5A10">
+          : `<p style="margin:18px 0 0;padding:12px;background:#F3EEFE;border:1px solid #C8B4F8;color:#3C2A70">
                They paid before creating an account. The welcome email has their activation link, so
                no action is needed unless they never turn up.
              </p>`

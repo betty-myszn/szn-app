@@ -163,7 +163,7 @@ export default function SeasonWrappedPage() {
               >
                 <div
                   className="tag mb-3"
-                  style={{ color: goalVerdict.severity === "avoiding" ? "var(--pink)" : goalVerdict.severity === "quiet" ? "#854F0B" : "#0F6E56" }}
+                  style={{ color: goalVerdict.severity === "avoiding" ? "var(--pink)" : goalVerdict.severity === "quiet" ? "#3C2A70" : "#0F6E56" }}
                 >
                   the goal you set this szn
                 </div>
@@ -173,7 +173,7 @@ export default function SeasonWrappedPage() {
                     fontSize: "clamp(22px, 3.5vw, 30px)",
                     fontWeight: 800,
                     letterSpacing: "-0.6px",
-                    color: goalVerdict.severity === "avoiding" ? "#fff" : goalVerdict.severity === "quiet" ? "#854F0B" : "#0F6E56",
+                    color: goalVerdict.severity === "avoiding" ? "#fff" : goalVerdict.severity === "quiet" ? "#3C2A70" : "#0F6E56",
                     marginBottom: 14,
                   }}
                 >
@@ -183,7 +183,7 @@ export default function SeasonWrappedPage() {
                   style={{
                     fontSize: 15,
                     lineHeight: 1.85,
-                    color: goalVerdict.severity === "avoiding" ? "rgba(255,255,255,0.9)" : goalVerdict.severity === "quiet" ? "#854F0B" : "#0F6E56",
+                    color: goalVerdict.severity === "avoiding" ? "rgba(255,255,255,0.9)" : goalVerdict.severity === "quiet" ? "#3C2A70" : "#0F6E56",
                     fontWeight: 500,
                     maxWidth: 640,
                   }}

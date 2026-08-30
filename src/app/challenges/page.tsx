@@ -396,7 +396,7 @@ export default function ChallengesPage() {
             {hiddenUnlocked ? (
               <div className="p-6" style={{ border: "1.5px solid var(--gold)", background: "rgba(133,79,11,0.06)" }}>
                 <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", background: "var(--gold)", color: "#854F0B", padding: "3px 9px" }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", background: "var(--gold)", color: "#3C2A70", padding: "3px 9px" }}>
                     bonus unlocked
                   </span>
                   <span style={{ fontSize: 10, fontWeight: 700, color: "var(--pink)" }}>+{hiddenChallenge.xp} xp</span>

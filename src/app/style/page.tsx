@@ -147,7 +147,7 @@ export default function StylePage() {
           <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
             <div className="p-7" style={{ borderRight: "var(--border)", background: "var(--gold)" }}>
               <div className="tag mb-2">your signature scent profile</div>
-              <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#854F0B" }}>
+              <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#3C2A70" }}>
                 {venusStyle.scent.toLowerCase()}
               </p>
             </div>

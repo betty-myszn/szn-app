@@ -138,7 +138,7 @@ export default function PlacementSectionPage() {
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--gold)" }}>
           <div className="tag mb-3">what {sign.toLowerCase()} energy actually is</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#854F0B" }}>{deep.signMeaning}</p>
+          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{deep.signMeaning}</p>
         </div>
       </section>
 
@@ -193,10 +193,10 @@ export default function PlacementSectionPage() {
               </p>
             </div>
             <div className="p-8" style={{ background: "var(--gold)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#854F0B", marginBottom: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>
                 the belief you&apos;re building instead
               </div>
-              <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: "#854F0B" }}>
+              <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: "#3C2A70" }}>
                 &ldquo;{deep.shiftAfter}&rdquo;
               </p>
             </div>

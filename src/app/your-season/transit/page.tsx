@@ -130,7 +130,7 @@ function TransitPageContent() {
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
           <div className="tag mb-3">the move</div>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#854F0B", fontWeight: 600 }}>{reading.theMove}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{reading.theMove}</p>
         </div>
       </section>
 
