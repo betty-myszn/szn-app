@@ -2,26 +2,34 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
-import ReplayTeaser from "@/components/ReplayTeaser";
 import { useSeason } from "@/lib/use-season";
-import type { SeasonInfo } from "@/lib/seasons";
 import { FREE_TRIAL_CTA } from "@/lib/cta";
-import { useEnrolmentOpen } from "@/lib/enrolment";
 import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
-import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
-import HumanDesignExplainer from "@/components/HumanDesignExplainer";
-import SoulBlueprint from "@/components/SoulBlueprint";
-import WhatIsMySzn from "@/components/WhatIsMySzn";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The homepage. MY SZN is personal development for women: the astrological seasons give it
+// structure, her own chart makes it personal, the deeper work is the mechanism and the community is
+// why she comes back. Astrology is the framework, not the product.
+//
+// Ten sections, each with ONE job. Every idea gets ONE proper sell; later references stay short and
+// exist only for comprehension. Before adding anything, check it is not already said above:
+//
+//   personalisation  sold in 5, shown in 3, never re-argued
+//   community        SHOWN in 3, SOLD in 7, one line in 9
+//   the seasons      explained in 2, used live in 6
+//   the deeper work  explained in 4, never re-listed
+//   money            argued once, in 5
+//   the trial        hero and 10 only
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
+function Ticker({ items }: { items: string[] }) {
   const doubled = [...items, ...items];
   return (
-    <div className={`ticker${variant === "lav" ? " ticker--lav" : ""}`}>
+    <div className="ticker">
       <div className="ticker-inner">
         {doubled.map((text, i) => (
           <span key={i}>
@@ -34,766 +42,538 @@ function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
   );
 }
 
-const STATS = [
-  { n: "365", label: "days of guidance personalised to your chart" },
-  { n: "2", label: "live sessions with Betty every month, a masterclass and an astro tapping" },
-  { n: "24/7", label: "a community of women becoming her" },
+// The three parts of the product, stated once. "Your people" describes the ROOMS' function only;
+// the emotional sell for community lives in section 7 and must not be duplicated here.
+const HOW_IT_WORKS = [
+  {
+    label: "your framework",
+    title: "your chart, and the season we're in",
+    body: "Your birth chart and Human Design show how you are actually wired: where you are strong, where you stall, and what you need that the woman next to you does not. The season decides where we point it.",
+  },
+  {
+    label: "your work",
+    title: "we don't stop at knowing yourself",
+    body: "Every season comes with shadow work, journalling, goals, manifestation, tapping and live coaching with me, pointed straight at whatever is actually in your way. Understanding your chart is where this starts, not where it stops.",
+  },
+  {
+    label: "your people",
+    title: "you are not doing it on your own",
+    body: "The rooms run alongside all of it, so whatever you are working on this season gets talked about with women deep in exactly the same thing.",
+  },
 ];
 
-// The lead story follows the sky, so the day the Sun changes sign this headline changes with it
-// rather than sitting here going stale. Everything else on the page is evergreen.
-function headlines(season: SeasonInfo) {
-  return [
-  {
-    kicker: "☉ the sky right now",
-    title: `${season.sign.toLowerCase()} szn has begun.`,
-    body: `${season.focus} Your portal has already shifted to match it, new themes, new prompts, new work.`,
-    href: "/your-season",
-    cta: "read your szn",
-  },
-  {
-    kicker: "✦ this month inside",
-    title: "masterclass + astro tapping.",
-    body: "One live masterclass and one live astro tapping a month, live with Betty, replays saved forever.",
-    href: "/events",
-    cta: "see what's on",
-  },
-  {
-    kicker: "☾ from the community",
-    title: "the becoming-her thread.",
-    body: "Wins, questions and the kind of support that only lands when the other women actually know your chart.",
-    href: "/community",
-    cta: "meet the club",
-  },
-  ];
-}
-
-const BENTO = [
-  {
-    cls: "bento-a",
-    bg: "var(--pink)",
-    fg: "#fff",
-    sub: "rgba(255,255,255,0.85)",
-    glyph: "☉",
-    title: "your birth chart",
-    body: "Every placement, every house, every aspect, written in plain English and rebuilt around you. Not a chart you decode. A chart you live.",
-    href: "/my-chart",
-    big: true,
-  },
-  {
-    cls: "bento-b",
-    bg: "var(--lav-light)",
-    fg: "var(--dark)",
-    sub: "#3C2A70",
-    glyph: "✦",
-    title: "goals with backup",
-    body: "Call it in, then get astro-aligned guidance on making it real.",
-    href: "/goals",
-  },
-  {
-    cls: "bento-c",
-    bg: "#fff",
-    fg: "var(--dark)",
-    sub: "var(--grey-light)",
-    glyph: "☾",
-    title: "shadow journal",
-    body: "Prompts that move with the sky.",
-    href: "/journal",
-  },
-  {
-    cls: "bento-d",
-    bg: "var(--gold)",
-    fg: "var(--dark)",
-    sub: "#854F0B",
-    glyph: "♀",
-    title: "style codes",
-    body: "Dress like the woman you're becoming.",
-    href: "/style",
-  },
-  {
-    cls: "bento-e",
-    bg: "var(--dark)",
-    fg: "#fff",
-    sub: "rgba(255,255,255,0.6)",
-    glyph: "★",
-    title: "a monthly masterclass + astro tapping",
-    body: "One live masterclass and one live astro tapping with Betty every month. Astrology, tapping and embodiment. Replays saved forever.",
-    href: "/events",
-    wide: true,
-  },
+// Confirmation, not another pitch. Eight lines, because by this point she understands the product.
+const INCLUDED = [
+  "Your birth chart and Human Design",
+  "Personalised seasonal guidance",
+  "Shadow work, journalling and goals",
+  "A live masterclass every month",
+  "A live astro tapping every month",
+  "The community rooms and Ask Betty",
+  "The full replay vault",
+  "Seasonal and eclipse guides",
 ];
 
 export default function Home() {
   const router = useRouter();
   const { member, ready } = useMember();
   const season = useSeason();
-  const enrolmentOpen = useEnrolmentOpen();
-  // Read the next class straight off the workshop data rather than retyping it here. The ticker
-  // previously hardcoded the weekday, and when the class moved it carried on telling every homepage
-  // visitor the wrong day. It also used to grab the first dated class in the list, which kept
-  // pointing at a workshop that had already happened; upcomingWorkshops drops past classes and
-  // sorts soonest-first, so [0] is always genuinely the next one.
-  // Captured once at mount rather than read during render: Date.now() in the render body is an
-  // impure read, and the next workshop does not change within a session anyway.
-  const [nowMs] = useState(() => Date.now());
-  const nextWorkshop = upcomingWorkshops(nowMs)[0];
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
   }, [ready, member, router]);
 
-  if (!ready || member) return null;
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    const id = setTimeout(() => setNow(Date.now()), 0);
+    return () => clearTimeout(id);
+  }, []);
+  const nextWorkshops = now === null ? [] : upcomingWorkshops(now).slice(0, 2);
 
-  const szn = season.sign.toLowerCase();
+  if (ready && member) return null;
 
   return (
     <>
-      <Ticker
-        items={[
-          `✦ ${szn} szn`,
-          enrolmentOpen ? "✦ enrolment open now" : "✦ doors open soon",
-          nextWorkshop?.startIso
-            ? `✦ live class ${formatWorkshopWhenLA(nextWorkshop.startIso)}`
-            : "✦ a masterclass + astro tapping every month",
-          "✦ your personal birth chart",
-          "✦ new: your human design",
-          "✦ the astrology community",
-        ]}
-      />
-
-      {/* ── 1. HERO: pink field, one statement ── */}
+      {/* ─── 1. HERO ─── job: create desire and give her one thing to click. The mission only, no
+             mechanisms: the model gets explained in section 2. Deliberately no swearing on the first
+             screen; the edge is in the claim, and the language earns its bite further down. */}
       <section
-        className="bleed px-5 md:px-8"
+        className="px-5 md:px-8"
         style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
       >
-        <div className="bleed-content max-w-6xl mx-auto">
-          <div
-            style={{
-              fontFamily: poppins,
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#fff",
-              marginBottom: 26,
-            }}
-          >
-            {enrolmentOpen ? "enrolment open now" : `${szn} szn edition`}
+        <div className="max-w-6xl mx-auto">
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 22 }}>
+            your life · your money · your moves
           </div>
           <h1
             className="display"
-            style={{ fontSize: "clamp(52px, 12vw, 148px)", color: "var(--dark)", maxWidth: 1000 }}
+            style={{ fontSize: "clamp(42px, 8vw, 100px)", color: "var(--dark)", maxWidth: 1020, lineHeight: 0.96 }}
           >
-            it&apos;s your szn,
+            you didn&apos;t come here
             <br />
-            <span style={{ color: "#fff" }}>bbbyyy.</span>
+            <span style={{ color: "#fff" }}>to play small.</span>
           </h1>
           <p
             style={{
-              fontSize: "clamp(15px, 1.6vw, 19px)",
-              lineHeight: 1.65,
+              fontSize: "clamp(16px, 2.1vw, 20px)",
+              lineHeight: 1.75,
               color: "var(--dark)",
-              maxWidth: 540,
-              margin: "30px 0 34px",
+              maxWidth: 620,
+              marginTop: 28,
               fontWeight: 500,
             }}
           >
-            Your personalised astrology platform, coaching membership and community. Built entirely around your birth
-            chart, and it moves every time the sky does.
+            MY SZN is for women who want more. More of themselves, more money, more of the life
+            they actually want. Astrology gives us the framework, every season hands us the
+            assignment, and then we do the real work together.
           </p>
-          <div className="flex items-center gap-4 flex-wrap">
-            {/* TWO free front doors, side by side and deliberately equal in weight.
-                - The free birth chart (pink) is the lowest-friction way in and historically the
-                  biggest single source of signups. It was dropped from this hero at some point,
-                  which quietly removed the top of the funnel; it is back as the pink CTA.
-                - The free 7-day trial (black) is the full-access front door and the path to a paying
-                  member, so it stays just as prominent right beside it.
-                The paid join and member login follow as outline buttons, one click away without
-                being the cold ask a stranger sees first. */}
+
+          <div className="mt-9 flex flex-col items-start gap-4">
             <Link
-              href="/chart"
-              className="no-underline"
-              style={{
-                // The hero field is pink, so a pink button disappears into it. White ground with
-                // pink type keeps it reading as the brand's pink CTA while actually being visible,
-                // and it sits as an equal partner to the black trial button beside it.
-                background: "#fff",
-                color: "var(--pink)",
-                fontFamily: poppins,
-                fontSize: 15,
-                fontWeight: 800,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "22px 46px",
-                display: "inline-block",
-              }}
-            >
-              get your free birth chart
-            </Link>
-            <Link
-              href="/free-trial"
+              href={FREE_TRIAL_CTA.href}
               className="no-underline"
               style={{
                 background: "var(--dark)",
                 color: "#fff",
                 fontFamily: poppins,
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: 800,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                padding: "22px 46px",
+                padding: "24px 52px",
                 display: "inline-block",
               }}
             >
               start your free 7 days
             </Link>
-            {/* Exactly two CTAs, both free doors. "Member login" lived here too and is already in
-                the nav, so it only pulled warm traffic out of the funnel; the $88 ask was a cold
-                open for someone who does not yet know what this is, and the trial leads there
-                anyway. When enrolment is closed the paid link returns as the secondary. */}
-            {!enrolmentOpen && (
-              <Link href="/membership" className="btn-outline no-underline">
-                see what&apos;s inside
-              </Link>
-            )}
-          </div>
-          <p style={{ fontSize: 13, color: "var(--dark)", marginTop: 16, fontWeight: 600 }}>
-            Your birth chart is free, always. The 7-day trial is free too, no card needed, then $88/mo
-            only if you want to keep the full membership.
-          </p>
-        </div>
-      </section>
-
-      {/* ── WHAT EVEN IS THIS: the plain-english, in-voice one-liner, straight after the hero. ── */}
-      <WhatIsMySzn />
-
-      {/* ── ECLIPSE SEASON: timed acquisition banner, high up for logged-out visitors (members are
-           redirected to /dashboard). Self-hides after the season via isEclipseSeasonLive(). Black so
-           it stands out from the pink hero directly above it instead of blending into it. The
-           personalised eclipse guide lives inside the paid platform, so the CTA drives the join, not
-           a free signup. The glittery eclipse moon sits where the 8/8 lion did (transparent PNG,
-           reads cleanly on black). ── */}
-      {isEclipseSeasonLive() && (
-        <section
-          className="px-5 md:px-8"
-          style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72, overflow: "hidden" }}
-        >
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-            {/* writing + CTA on the left */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <span className="sticker" style={{ background: "var(--pink)", color: "#fff" }}>
-                eclipse season · now
-              </span>
-              <h2
-                style={{
-                  fontFamily: poppins,
-                  fontSize: "clamp(30px, 5vw, 60px)",
-                  fontWeight: 800,
-                  letterSpacing: "-1px",
-                  color: "#fff",
-                  margin: "16px 0 10px",
-                }}
-              >
-                eclipse season is here, <span className="pk">baby.</span>
-              </h2>
-              <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2.4vw, 22px)", fontWeight: 700, letterSpacing: "-0.3px", color: "#fff", marginBottom: 14 }}>
-                Here&apos;s everything you need to know.
-              </p>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(255,255,255,0.72)", maxWidth: 560, marginBottom: 22, fontWeight: 500 }}>
-                Two eclipses are shaking things loose this month, a Leo solar eclipse on the 12th and a
-                Pisces lunar eclipse on the 28th. Eclipses are the year&apos;s big turning points, the
-                moments things start and end on their own timeline. Inside MY SZN your personalised
-                eclipse guide reads exactly what each one is touching in your own chart: what it lights
-                up, what to look out for, the shadow, and the work to actually do with it.
-              </p>
-              <Link
-                href="/free-trial"
-                className="no-underline"
-                style={{
-                  display: "inline-block",
-                  background: "var(--pink)",
-                  color: "#fff",
-                  fontFamily: poppins,
-                  fontSize: 13,
-                  fontWeight: 800,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "15px 30px",
-                }}
-              >
-                get your eclipse guide free →
-              </Link>
-            </div>
-            {/* the glittery eclipse moon: on the right on desktop, centred under the copy on mobile
-                (shown on both, not desktop-only). */}
-            <Image
-              src="/eclipse-moon.png"
-              alt=""
-              aria-hidden
-              width={1080}
-              height={1080}
-              style={{ width: "clamp(240px, 40vw, 460px)", height: "auto", flexShrink: 0, alignSelf: "center" }}
-            />
-          </div>
-        </section>
-      )}
-
-      {/* ── ORDER (reworked): hook → what it is → timed promo → the story (problem, blueprint,
-           method) → PROOF (quote + stats) while the tension is fresh → what you get → the live
-           sky as the demo → workshops → the close. The podcast moved BELOW the close: it is
-           top-of-funnel content and it was interrupting the closing run. ── */}
-      {/* ── THE BLUEPRINT STORY: the whole thesis, high up so it frames everything below. Problem →
-           soul blueprint → the arc → what my szn does. Shared with /membership via one component so
-           the two pages can't drift into different versions of the core idea. ── */}
-      <SoulBlueprint />
-
-      {/* ── 6. QUOTE: pink, one massive sentence ── */}
-      <section
-        className="px-5 md:px-8 text-center"
-        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 100, paddingBottom: 100 }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div style={{ fontSize: 30, color: "#fff", marginBottom: 22 }}>&#10022;</div>
-          <blockquote
-            className="display"
-            style={{ fontSize: "clamp(30px, 5.2vw, 66px)", color: "var(--dark)", textTransform: "none" }}
-          >
-            &ldquo;I finally stopped wondering what my birth chart meant and actually started living it.&rdquo;
-          </blockquote>
-          <div
-            style={{
-              fontFamily: poppins,
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "#fff",
-              marginTop: 34,
-            }}
-          >
-            a my szn member
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. STATS: black, huge numerals, tiny copy ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 64, paddingBottom: 64 }}>
-        <div className="max-w-6xl mx-auto stats">
-          {STATS.map((s, i) => (
-            <div
-              key={s.n}
-              className="text-center px-6 py-6"
-              style={{
-                borderLeft: i > 0 ? "1.5px solid rgba(255,255,255,0.18)" : undefined,
-              }}
-            >
-              <div className="stat-n" style={{ color: "var(--pink)" }}>
-                {s.n}
-              </div>
-              <div
-                style={{
-                  fontSize: 13,
-                  lineHeight: 1.6,
-                  color: "rgba(255,255,255,0.65)",
-                  maxWidth: 230,
-                  margin: "14px auto 0",
-                }}
-              >
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 3. COSMIC HOME: copy only. This was a two-column split with a flat colour placeholder
-           panel standing in for a product screenshot. The placeholder was cut, and rather than
-           leave a dead column the section is now a single centred block. When real portal
-           screenshots exist, this is the place to put one back. ── */}
-      <section className="px-5 md:px-8" style={{ background: "#fff", paddingTop: 72, paddingBottom: 72, borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="rule mb-12" style={{ color: "var(--dark)" }}>
-            <span>&#10022;&nbsp; inside my szn &nbsp;&#10022;</span>
-          </div>
-          <div style={{ maxWidth: 720 }}>
-            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
-              your cosmic
-              <br />
-              <span className="pk">home.</span>
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
-              One portal that already knows your sun, moon, rising and every placement underneath. Your readings, your
-              prompts, your workshops and your guidance, all rebuilt around the exact sky you were born under.
+            {/* Deliberately does NOT claim the chat rooms stay free after the trial: community is one
+                of the three things the membership is sold on, so that promise is a product decision
+                still to be settled, not a copy line. The chart is a clean acquisition product. */}
+            <p style={{ fontSize: 14, color: "var(--dark)", fontWeight: 600, lineHeight: 1.6 }}>
+              Everything, free for 7 days. No card, so nothing can charge you. It&apos;s $88 a month
+              after that, and only if you want to stay.
             </p>
-            <Link href="/membership" className="btn-pink no-underline">
-              see what&apos;s inside
+            <Link href="/chart" style={{ fontSize: 13, fontWeight: 700, color: "var(--dark)", textDecoration: "underline" }}>
+              or just come for your free birth chart
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. GIANT LILAC BLOCK: type over the disco planet ── */}
-      <section
-        className="bleed birth-chart-block px-5 md:px-8"
-        style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 96, paddingBottom: 96 }}
-      >
-        {/* Sits behind everything via .bleed-shape (z-index 0) while .bleed-content below is
-            z-index 1, so the headline and the paragraph read over the top of it. aria-hidden and
-            empty alt: it's decoration, not content. */}
-        <Image
-          src="/disco-planet.png"
-          alt=""
-          aria-hidden
-          width={1080}
-          height={1080}
-          priority={false}
-          className="bleed-shape disco-planet-mark"
-        />
-        <div className="bleed-content max-w-6xl mx-auto">
-          <h2 className="display" style={{ fontSize: "clamp(46px, 10vw, 132px)", color: "#3C2A70" }}>
-            your
-            <br />
-            personalised
-            <br />
-            <span style={{ color: "var(--pink)" }}>birth chart.</span>
-          </h2>
-          <div className="flex items-end justify-between gap-8 flex-wrap" style={{ marginTop: 40 }}>
-            <p style={{ fontSize: 17, lineHeight: 1.7, color: "#3C2A70", maxWidth: 420, fontWeight: 500 }}>
-              Calculated to the degree, then rewritten every szn as the sky moves over it.
-            </p>
-          </div>
-        </div>
-        {/* Pinned to the ring rather than left in the paragraph row, so it tracks the planet at
-            every width instead of drifting away from it. Lives outside .bleed-content because the
-            planet is positioned against the section box, and both need the same coordinate space.
-            Last child so that on mobile, where it drops back into normal flow, it still lands
-            under the paragraph exactly as the old flex-wrap put it. */}
-        <span className="ring-sticker sticker" style={{ background: "var(--pink)", color: "#fff" }}>
-          updated every szn
-        </span>
-      </section>
-
-      {/* The Human Design explainer, shared with /membership and /waitlist so the three pages
-          can't drift into three different descriptions of the same feature. Sits directly after
-          the birth chart block on purpose: the pitch is that it's the second half of the same
-          reading, off birth details she has already given us. */}
-      <HumanDesignExplainer />
-
-      {/* ── 5. NEWSPAPER: three stories, hairline rules ── */}
-      <section className="px-5 md:px-8" style={{ background: "#fff", paddingTop: 72, paddingBottom: 72, borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="rule mb-10" style={{ color: "var(--dark)" }}>
-            <span>today&apos;s headlines</span>
-          </div>
-          <div className="news" style={{ borderTop: "var(--border)", borderBottom: "var(--border)" }}>
-            {headlines(season).map((h) => (
-              <article key={h.title} className="p-8">
-                <div className="tag mb-4">{h.kicker}</div>
-                <h3
-                  className="display"
-                  style={{ fontSize: "clamp(26px, 3vw, 34px)", color: "var(--dark)", marginBottom: 14 }}
-                >
-                  {h.title}
-                </h3>
-                <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", marginBottom: 18 }}>{h.body}</p>
-                <Link
-                  href={h.href}
-                  className="no-underline"
-                  style={{
-                    fontFamily: poppins,
-                    fontSize: 11,
-                    fontWeight: 800,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--dark)",
-                    borderBottom: "2px solid var(--pink)",
-                    paddingBottom: 3,
-                  }}
-                >
-                  {h.cta} &#8594;
-                </Link>
-              </article>
-            ))}
           </div>
         </div>
       </section>
 
       <Ticker
-        variant="lav"
-        items={["✦ read it", "✦ live it", "✦ become her", "✦ repeat every szn"]}
+        items={[
+          "personalised to your chart",
+          "a live masterclass every month",
+          "live astro tapping with betty",
+          "the community rooms",
+          "no card to start",
+        ]}
       />
 
-      {/* ── 7. BENTO: deliberately unequal tiles ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 72, paddingBottom: 72 }}>
+      {/* ─── 2. WHAT IT IS ─── job: make the model obvious. The season examples do the explaining, so
+             the copy around them stays plain. Betty appears here, in the first third, because the
+             coaching and the perspective are part of what people are joining. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
         <div className="max-w-6xl mx-auto">
-          <div className="rule mb-10" style={{ color: "#fff" }}>
-            <span>&#10022;&nbsp; your cosmic toolkit &nbsp;&#10022;</span>
+          <div className="tag mb-6">what my szn actually is</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 880 }}>
+            every szn, we go after a different part of <span className="pk">your life.</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-11" style={{ border: "var(--border)" }}>
+            {[
+              { szn: "virgo szn", body: "your habits, your standards, and the goals you keep rewriting instead of starting." },
+              { szn: "libra szn", body: "your relationships, your boundaries, and everything you have been putting up with for far too long." },
+              { szn: "scorpio szn", body: "money, power, and every single thing you have been avoiding since roughly forever." },
+            ].map((s, i) => (
+              <div key={s.szn} className="p-7" style={{ borderRight: i < 2 ? "var(--border)" : undefined, background: i === 1 ? "var(--pink-bg)" : "#fff" }}>
+                <div style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 8, textTransform: "lowercase" }}>
+                  {s.szn}
+                </div>
+                <p style={{ fontSize: 14, lineHeight: 1.75, color: "var(--grey)" }}>{s.body}</p>
+              </div>
+            ))}
           </div>
-          <div className="bento" style={{ border: "1.5px solid var(--dark)" }}>
-            {BENTO.map((b) => (
-              <Link
-                key={b.title}
-                href={b.href}
-                className={`${b.cls} no-underline p-7 flex flex-col transition-opacity hover:opacity-90`}
-                style={{ background: b.bg, color: b.fg }}
+
+          <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500, maxWidth: 720, marginTop: 30 }}>
+            Your chart and your Human Design decide what that season looks like for you specifically,
+            so you are never handed the same advice as everybody else. A new chapter lands roughly
+            every four weeks, which is what stops this becoming another membership you joined once and
+            never opened again.
+          </p>
+
+          {/* Betty, given real estate rather than a thumbnail. Same treatment as her founder block on
+              the membership page: a half-width image panel with the copy beside it, so the human
+              behind the framework lands properly and inside the first third of the page. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 mt-14" style={{ border: "var(--border)", background: "#fff" }}>
+            <div style={{ position: "relative", overflow: "hidden", minHeight: 460 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/betty-founder.png"
+                alt="Betty Andrews, founder of MY SZN"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 20,
+                  left: 20,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.5)",
+                }}
               >
-                <div style={{ fontSize: b.big ? 46 : 26, marginBottom: b.big ? 18 : 10, lineHeight: 1 }}>{b.glyph}</div>
-                <h3
-                  className="display"
-                  style={{ fontSize: b.big ? "clamp(30px, 4vw, 46px)" : b.wide ? 26 : 20, marginBottom: 10 }}
-                >
-                  {b.title}
-                </h3>
-                <p style={{ fontSize: b.big ? 15 : 13, lineHeight: 1.7, color: b.sub, maxWidth: 380 }}>{b.body}</p>
-                <span
-                  style={{
-                    marginTop: "auto",
-                    paddingTop: 20,
-                    fontFamily: poppins,
-                    fontSize: 10,
-                    fontWeight: 800,
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  open &#8594;
-                </span>
-              </Link>
+                Betty Andrews / Founder
+              </div>
+            </div>
+            <div className="p-8 md:p-12 flex flex-col justify-center">
+              <div className="tag mb-5">who&apos;s running this</div>
+              <h3
+                className="display"
+                style={{ fontSize: "clamp(26px, 3.4vw, 42px)", color: "var(--dark)", marginBottom: 18 }}
+              >
+                hey, i&apos;m <span className="pk">betty.</span>
+              </h3>
+              <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--grey)", marginBottom: 14 }}>
+                I teach the masterclass, I run the astro tapping, I write the seasonal work, and
+                I&apos;m in the rooms with you most days. When you ask a question in here, you&apos;re
+                asking me.
+              </p>
+              <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--grey)" }}>
+                I built MY SZN because I watched women become completely unstoppable for one season a
+                year and then shrink back and wait until they felt ready again. This is my framework
+                for making that a way of living instead of an annual event, and it is not an app with
+                my name slapped on it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 3. SHOW THE PRODUCT ─── job: prove a real personalised product exists. Nothing here
+             impersonates a member: no invented usernames, quotes or results. The room card shows the
+             ROOM LIST, which is real product furniture, rather than fake conversation. Swap the whole
+             row for real portal captures when they exist. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="tag mb-6" style={{ color: "var(--pink)" }}>inside your portal</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "#fff", maxWidth: 880 }}>
+            this is what opens the second you&apos;re in.
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
+            {/* seasonal guidance: astrology turned into something to DO */}
+            <div style={{ background: "#fff", border: "var(--border)", padding: 24 }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
+                your {season.sign.toLowerCase()} szn
+              </div>
+              <div style={{ fontFamily: poppins, fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", margin: "8px 0 10px", textTransform: "lowercase" }}>
+                seasonal guidance
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--grey)" }}>{season.focus}</p>
+              <div style={{ marginTop: 14, padding: "12px 14px", background: "var(--pink-bg)", border: "1.5px solid var(--dark)", fontSize: 12.5, lineHeight: 1.65 }}>
+                <strong style={{ fontFamily: poppins, textTransform: "lowercase" }}>your money szn ✦</strong>
+                <br />
+                Jupiter is moving through your 2nd house. This is where you think bigger about
+                earning, and get honest about what you are actually willing to ask for.
+              </div>
+            </div>
+
+            {/* her chart */}
+            <div style={{ background: "#fff", border: "var(--border)", padding: 24 }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
+                calculated for you
+              </div>
+              <div style={{ fontFamily: poppins, fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", margin: "8px 0 10px", textTransform: "lowercase" }}>
+                your birth chart
+              </div>
+              <div style={{ display: "grid", placeItems: "center", padding: "6px 0 10px" }}>
+                <svg width="128" height="128" viewBox="0 0 150 150" aria-hidden="true">
+                  <circle cx="75" cy="75" r="70" fill="#fff" stroke="#1a1a1a" strokeWidth="1.5" />
+                  <circle cx="75" cy="75" r="50" fill="none" stroke="#1a1a1a" strokeWidth="1.5" />
+                  <circle cx="75" cy="75" r="16" fill="var(--pink-bg)" stroke="#1a1a1a" strokeWidth="1.5" />
+                  <g stroke="#1a1a1a" strokeWidth="1">
+                    <line x1="5" y1="75" x2="145" y2="75" />
+                    <line x1="75" y1="5" x2="75" y2="145" />
+                    <line x1="25" y1="25" x2="125" y2="125" />
+                    <line x1="125" y1="25" x2="25" y2="125" />
+                  </g>
+                  <g fill="var(--pink)">
+                    <circle cx="118" cy="52" r="4" />
+                    <circle cx="58" cy="12" r="4" />
+                    <circle cx="30" cy="104" r="4" />
+                    <circle cx="112" cy="110" r="4" />
+                  </g>
+                </svg>
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--grey)" }}>
+                Every placement, house and aspect, plus your Human Design, in plain English with no
+                gatekeeping.
+              </p>
+            </div>
+
+            {/* the rooms: the real room list, not invented conversation */}
+            <div style={{ background: "#fff", border: "var(--border)", padding: 24 }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
+                open all day
+              </div>
+              <div style={{ fontFamily: poppins, fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", margin: "8px 0 12px", textTransform: "lowercase" }}>
+                the community rooms
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                {["general", "money + business", "manifestation", "astrology", "ask betty"].map((r) => (
+                  <li
+                    key={r}
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "var(--dark)",
+                      border: "1.5px solid var(--dark)",
+                      padding: "9px 12px",
+                      background: "var(--lav-light)",
+                    }}
+                  >
+                    # {r}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 4. HOW IT WORKS ─── job: explain the system once, in three parts. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="tag mb-6">how it works</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 880 }}>
+            three things, and it doesn&apos;t work without all three.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-12" style={{ border: "var(--border)" }}>
+            {HOW_IT_WORKS.map((c, i) => (
+              <div
+                key={c.label}
+                className="p-8"
+                style={{
+                  borderRight: i < HOW_IT_WORKS.length - 1 ? "var(--border)" : undefined,
+                  background: i === 2 ? "var(--lav-light)" : "#fff",
+                }}
+              >
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
+                  {c.label}
+                </div>
+                <div style={{ fontFamily: poppins, fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.2, marginBottom: 12, textTransform: "lowercase" }}>
+                  {c.title}
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "var(--grey)" }}>{c.body}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 8. CONFIDENCE ERA: copy only, same reason as section 3. The placeholder panel that
-           used to sit beside this copy was cut; a real workshop photo would go here. ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--cream)", paddingTop: 72, paddingBottom: 72, borderBottom: "var(--border)" }}>
+      {/* ─── 5. WHY IT'S PERSONAL ─── job: ONE argument, that nobody here defines her life for her.
+             Halved from the previous draft: the generic-advice list and the six hypothetical women
+             were making the same point four times over. Two contrasting examples is enough. The
+             money argument lives here and nowhere else. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
         <div className="max-w-6xl mx-auto">
-          <div style={{ maxWidth: 720 }}>
-            <div className="tag mb-4">your first workshops inside</div>
-            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 78px)", color: "var(--dark)" }}>
-              your
-              <br />
-              confidence
-              <br />
-              <span className="pk">era.</span>
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--grey)", maxWidth: 560, margin: "24px 0 28px" }}>
-              {szn} szn isn&apos;t something you read about. A live masterclass and a live astro tapping every month,
-              the next one wednesday 19 august, then the tools to actually live it.
+          <div className="tag mb-6">why it&apos;s personal</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 940 }}>
+            nobody here gets to decide what your life should look like. <span className="pk">that&apos;s yours.</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-10">
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
+              Most personal development hands every woman the same formula and calls it a plan. One
+              woman in here is building a company with staff. Another wants a four-day week and her
+              afternoons back. Those two need completely different work, and your chart is how we tell
+              the difference, so every season lands on your actual life instead of a template.
             </p>
-            <Link href="/events" className="btn-pink no-underline">
-              see what&apos;s on
+            <div className="p-8" style={{ background: "var(--dark)", alignSelf: "start" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
+                and about the money
+              </div>
+              <p style={{ fontFamily: poppins, fontSize: "clamp(21px, 2.6vw, 30px)", fontWeight: 800, lineHeight: 1.3, color: "#fff", letterSpacing: "-0.5px", marginBottom: 16 }}>
+                Money is what gives you options.
+              </p>
+              <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "rgba(255,255,255,0.78)" }}>
+                It is what lets you walk away from the job, the contract or the relationship you have
+                outgrown, and it is what lets you start: the business, the first hire, the flight, the
+                year you work less and see your people more. We talk about women making more money
+                here, in actual dollars, because that is the difference between wishing and choosing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 6. THIS SZN ─── job: why now. Reads the live season and the real workshop schedule, so
+             it turns over by itself instead of going stale. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="tag mb-6" style={{ color: "#3C2A70" }}>what&apos;s happening right now</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "#3C2A70", maxWidth: 940 }}>
+            it&apos;s {season.sign.toLowerCase()} szn. {season.tagline.toLowerCase()}
+          </h2>
+          <p style={{ fontSize: 17, lineHeight: 1.85, color: "#3C2A70", maxWidth: 620, marginTop: 22, fontWeight: 500 }}>
+            {season.description}
+          </p>
+
+          {nextWorkshops.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10">
+              {nextWorkshops.map((w) => (
+                <div key={w.id} style={{ background: "#fff", border: "var(--border)", overflow: "hidden" }}>
+                  {w.coverImage && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={w.coverImage} alt="" aria-hidden="true" style={{ width: "100%", height: "auto", display: "block", borderBottom: "var(--border)" }} />
+                  )}
+                  <div style={{ padding: 22 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 8 }}>
+                      {w.startIso ? formatWorkshopWhenLA(w.startIso) : w.meta}
+                    </div>
+                    <div style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.2 }}>
+                      {w.title}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ─── 7. THE ROOMS ─── job: the EMOTIONAL sell for community. This is the one place community
+             is argued; section 3 showed it and section 9 gets a single line. No invented members. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="tag mb-6">the rooms</div>
+          <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 940 }}>
+            basically the astro girls support group <span className="pk">for the baddies.</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-10">
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
+              This is where you bring the shit you are actually working through. What to charge. The
+              business decision you have been sitting on for a fortnight. Whether to send the message.
+              The thing that came up in the shadow work at 2am and would sound completely unhinged to
+              anyone who is not in here.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", fontWeight: 500 }}>
+              Everyone is in the same season at the same time, so nobody needs the backstory. These
+              are women who know exactly what a Scorpio szn money block feels like, and who will tell
+              you straight when you are talking yourself out of something good.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 8. PROOF ─── job: evidence. One real member quote, because one is what exists. Adding
+             invented stories here would be worse than the gap. When real ones arrive (money made,
+             prices raised, careers changed) this becomes a grid and gets far stronger. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="tag mb-8" style={{ color: "#fff" }}>from a member</div>
+          <p className="display" style={{ fontSize: "clamp(26px, 4.4vw, 50px)", color: "#fff", lineHeight: 1.18, textTransform: "none" }}>
+            &ldquo;I finally stopped wondering what my birth chart meant and actually started living
+            it.&rdquo;
+          </p>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginTop: 24 }}>
+            a my szn member
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 9. WHAT'S INCLUDED ─── job: confirmation, not a pitch. Eight lines, no descriptions:
+             everything here has already been explained or shown above. */}
+      <section
+        className="px-5 md:px-8"
+        style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="tag mb-6">what&apos;s included</div>
+          <h2 className="display" style={{ fontSize: "clamp(28px, 4.4vw, 54px)", color: "var(--dark)", maxWidth: 820 }}>
+            everything, from day one.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-0 mt-9">
+            {INCLUDED.map((item) => (
+              <div
+                key={item}
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  padding: "15px 0",
+                  borderBottom: "1.5px solid rgba(26,26,26,0.12)",
+                  fontSize: 15.5,
+                  color: "var(--dark)",
+                  fontWeight: 500,
+                }}
+              >
+                <span style={{ color: "var(--pink)", fontWeight: 800 }}>✦</span>
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 10. FINAL CTA ─── job: the offer. Nothing new, one button. */}
+      <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 88, paddingBottom: 96 }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="display" style={{ fontSize: "clamp(38px, 7vw, 88px)", color: "#fff", lineHeight: 0.98 }}>
+            seven days.
+            <br />
+            <span className="pk">the whole thing.</span>
+          </h2>
+          <p style={{ fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.8)", maxWidth: 540, margin: "26px auto 0", fontWeight: 500 }}>
+            Open your portal, come to a workshop, get in the rooms, do the work, and see whether you
+            actually use it. No card, so nothing can charge you. It is $88 a month after that, and
+            only if you want to stay.
+          </p>
+          <div className="mt-10">
+            <Link
+              href={FREE_TRIAL_CTA.href}
+              className="no-underline"
+              style={{
+                background: "var(--pink)",
+                color: "#fff",
+                fontFamily: poppins,
+                fontSize: 16,
+                fontWeight: 800,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "24px 56px",
+                display: "inline-block",
+              }}
+            >
+              start your free 7 days
             </Link>
           </div>
         </div>
       </section>
-
-      {/* ── THE VAULT: the newest class replay, locked. Sits after the podcast (the free way in)
-           so a visitor meets the free thing first and the members-only thing second. Hides itself
-           for anyone who already has access. ── */}
-      <ReplayTeaser />
-
-      {/* ── WHAT IT COSTS: the page asked for the join in the hero and the close but never once said
-           plainly what it costs or what the trial actually involves, so the decision was being made
-           on guesswork. One honest beat, immediately before the close. ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--cream)", paddingTop: 64, paddingBottom: 64, borderBottom: "var(--border)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">what it costs</div>
-          <h2 className="display" style={{ fontSize: "clamp(28px, 4.6vw, 56px)", color: "var(--dark)", maxWidth: 820 }}>
-            try the whole thing free.<br />
-            <span className="pk">decide after.</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-10" style={{ border: "1.5px solid var(--dark)" }}>
-            <div className="p-7" style={{ borderRight: "1.5px solid var(--dark)" }}>
-              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
-                free
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
-                your birth chart
-              </div>
-              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
-                Your full birth chart and Human Design, read in plain English. Yours to keep, no card,
-                no catch.
-              </p>
-            </div>
-            <div className="p-7" style={{ borderRight: "1.5px solid var(--dark)", background: "var(--pink-light)" }}>
-              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
-                7 days free
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
-                the whole membership
-              </div>
-              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
-                Everything a paying member gets, for a week. No card needed, so nothing can charge you.
-                Afterwards you keep the chat rooms and your charts for free.
-              </p>
-            </div>
-            <div className="p-7">
-              <div style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 6 }}>
-                $88<span style={{ fontSize: 15, color: "var(--grey)" }}>/mo</span>
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
-                only if you stay
-              </div>
-              <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)" }}>
-                The full personalised platform, a live masterclass and an astro tapping every month,
-                and the community. Cancel whenever it stops being for you.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 9. CLOSING CTA: black, biggest type on the page ── */}
-      <section
-        id="waitlist"
-        className="bleed px-5 md:px-8 text-center"
-        style={{ background: "var(--dark)", paddingTop: 100, paddingBottom: 100 }}
-      >
-        <div className="bleed-content max-w-4xl mx-auto">
-          <h2 className="display" style={{ fontSize: "clamp(40px, 8vw, 104px)", color: "#fff" }}>
-            ready to
-            <br />
-            become your
-            <br />
-            <span className="pk">Future You? ✨</span>
-          </h2>
-          <p
-            style={{
-              fontSize: 15,
-              color: "rgba(255,255,255,0.6)",
-              lineHeight: 1.8,
-              maxWidth: 520,
-              margin: "34px auto 34px",
-            }}
-          >
-            {enrolmentOpen
-              ? "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and it's $88/mo to keep it all after your week."
-              : "Start your free 7 days and step into the whole personalised astrology portal built around your birth chart. No card needed, and the paid doors reopen while you're still inside your week."}
-          </p>
-          <Link
-            href={FREE_TRIAL_CTA.href}
-            className="no-underline"
-            style={{
-              background: "var(--pink)",
-              color: "var(--dark)",
-              fontFamily: poppins,
-              fontSize: 15,
-              fontWeight: 800,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              padding: "22px 52px",
-              display: "inline-block",
-            }}
-          >
-            {FREE_TRIAL_CTA.label}
-          </Link>
-        </div>
-      </section>
-      {/* ── PODCAST: the free way in. A subscribe block for logged-out visitors, mirroring the
-           /podcast hero but condensed. Real Spotify + Apple show links. Buttons are brand-styled
-           (pink/black) rather than platform green, to keep the homepage on the brand palette. ── */}
-      <section
-        className="px-5 md:px-8"
-        style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}
-      >
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div
-              style={{
-                fontFamily: poppins,
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--pink)",
-                marginBottom: 20,
-              }}
-            >
-              the myszn podcast · new episodes weekly
-            </div>
-            <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 76px)", color: "#3C2A70" }}>
-              subscribe & never
-              <br />
-              miss an <span className="pk">episode.</span>
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: 1.8, color: "#3C2A70", maxWidth: 460, margin: "22px 0 28px", fontWeight: 500 }}>
-              The weekly pep talk your future self would give you. Astrology, money, manifestation and
-              main character energy. Free, no membership needed.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="https://open.spotify.com/show/7Hi3IXajGlE1LuZD5sf08a?si=445720c35a884330"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="no-underline"
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px",
-                  background: "var(--dark)", color: "#fff", fontFamily: poppins, fontSize: 13,
-                  fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden>
-                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
-                </svg>
-                Spotify
-              </a>
-              <a
-                href="https://podcasts.apple.com/gb/podcast/my-szn/id1870482009"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="no-underline"
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px",
-                  background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 13,
-                  fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden>
-                  <path d="M5.34 0A5.328 5.328 0 000 5.34v13.32A5.328 5.328 0 005.34 24h13.32A5.328 5.328 0 0024 18.66V5.34A5.328 5.328 0 0018.66 0H5.34zm6.525 2.568c4.988 0 8.94 3.16 9.69 7.62.06.36-.18.72-.54.78-.36.06-.72-.18-.78-.54C19.56 6.36 16.11 3.6 11.88 3.6c-4.32 0-7.86 2.88-8.46 6.96-.06.36-.42.6-.78.54-.36-.06-.6-.42-.54-.78.72-4.56 4.8-7.752 9.765-7.752zM12 7.2c3.36 0 6.12 2.16 6.6 5.22.06.36-.18.72-.54.78-.36.06-.72-.18-.78-.54C16.92 10.08 14.7 8.28 12 8.28c-2.76 0-5.04 1.92-5.34 4.5-.06.36-.42.6-.78.54-.36-.06-.6-.42-.54-.78C5.76 9.48 8.58 7.2 12 7.2zm-.06 4.44c1.98 0 3.54 1.32 3.84 3.24.12.6.12 1.44-.12 2.52l-.6 2.28c-.18.66-.78 1.08-1.44 1.08h-3.36c-.66 0-1.26-.42-1.44-1.08l-.6-2.28c-.18-.84-.24-1.68-.06-2.52.36-1.92 1.86-3.24 3.78-3.24z" />
-                </svg>
-                Apple Podcasts
-              </a>
-            </div>
-          </div>
-
-          {/* Podcast artwork as the visual, framed with a "now playing" bar to echo the player in the
-              reference without needing a device-frame asset. */}
-          <div className="justify-self-center md:justify-self-end" style={{ width: "100%", maxWidth: 380 }}>
-            <div style={{ border: "var(--border)", background: "#fff" }}>
-              <Image
-                src="/myszn-podcast.png"
-                alt="MY SZN podcast cover art"
-                width={752}
-                height={754}
-                sizes="(max-width: 768px) 100vw, 380px"
-                style={{ width: "100%", height: "auto", aspectRatio: "1", objectFit: "cover", display: "block" }}
-              />
-              <div className="flex items-center gap-3 px-4 py-3" style={{ borderTop: "var(--border)" }}>
-                <span
-                  aria-hidden
-                  style={{
-                    width: 34, height: 34, flex: "none", borderRadius: "50%", background: "var(--pink)",
-                    color: "#fff", display: "grid", placeItems: "center", fontSize: 13,
-                  }}
-                >
-                  ▶
-                </span>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontFamily: poppins, fontSize: 12, fontWeight: 800, color: "var(--dark)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    latest episode
-                  </div>
-                  <div style={{ fontSize: 11, color: "var(--grey)" }}>the myszn podcast</div>
-                </div>
-                <span style={{ marginLeft: "auto", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
-                  new
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </>
   );
 }
