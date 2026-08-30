@@ -650,14 +650,18 @@ export default function Home() {
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", paddingTop: 88, paddingBottom: 96 }}>
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="display" style={{ fontSize: "clamp(38px, 7vw, 88px)", color: "#fff", lineHeight: 0.98 }}>
-            seven days.
+            try it FREE
             <br />
-            <span className="pk">the whole thing.</span>
+            <span className="pk">for 7 days.</span>
           </h2>
-          <p style={{ fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.8)", maxWidth: 540, margin: "26px auto 0", fontWeight: 500 }}>
-            Open your portal, come to a workshop, get in the rooms, do the work, and see whether you
-            actually use it. No card, so nothing can charge you. It is $88 a month after that, and
-            only if you want to stay.
+          <p style={{ fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.8)", maxWidth: 620, margin: "26px auto 0", fontWeight: 500 }}>
+            Get the WHOLE MY SZN experience for seven days, completely free. Explore your personalised
+            portal, use your journal, watch the workshops, join the rooms, dive into your chart +
+            Human Design, and see what happens when you actually start creating your dream life with
+            us.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
+            No card. No commitment. $88/month only if you decide to stay.
           </p>
           <div className="mt-10">
             <Link
