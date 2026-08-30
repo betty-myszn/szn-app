@@ -46,19 +46,19 @@ function Ticker({ items, variant }: { items: string[]; variant?: "lav" }) {
 // the emotional sell for community lives in section 7 and must not be duplicated here.
 const HOW_IT_WORKS = [
   {
-    label: "your framework",
-    title: "your chart, and the season we're in",
-    body: "Your birth chart and Human Design show how you are actually wired: where you are strong, where you stall, and what you need that the woman next to you does not. The season decides where we point it.",
+    label: "your blueprint",
+    title: "your chart + the szn we're in",
+    body: "Your birth chart + Human Design show us how YOU are wired, what you want, where you thrive, what keeps tripping you up, and what you need to create your version of an incredible life. Every szn, we take that blueprint into a different area of your life.",
   },
   {
-    label: "your work",
-    title: "we don't stop at knowing yourself",
-    body: "Every season comes with shadow work, journalling, goals, manifestation, tapping and live coaching with me, pointed straight at whatever is actually in your way. Understanding your chart is where this starts, not where it stops.",
+    label: "your moves",
+    title: "because knowing yourself is only the beginning",
+    body: "Every szn gives you the shadow work, journalling, goals, manifestation, tapping + live coaching to actually DO something with what you know. We work through what's holding you back, decide what you want next, and start making the moves that get you there.",
   },
   {
     label: "your people",
-    title: "you are not doing it on your own",
-    body: "The rooms run alongside all of it, so whatever you are working on this season gets talked about with women deep in exactly the same thing. The rooms are free for good, and membership adds the seasonal programming that runs inside them.",
+    title: "because everything's better with your girls",
+    body: "You've got a community of ambitious women creating bigger lives alongside you, talking through what's coming up, sharing the wins, asking for help and actually getting it. The community rooms are free for good, with MY SZN membership giving you all the personalised seasonal work we do together.",
   },
 ];
 
@@ -388,7 +388,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-6">how it works</div>
           <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 62px)", color: "var(--dark)", maxWidth: 880 }}>
-            three things, and it doesn&apos;t work without all three.
+            how we create your <span className="pk">dream life.</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-12" style={{ border: "var(--border)" }}>
             {HOW_IT_WORKS.map((c, i) => (
