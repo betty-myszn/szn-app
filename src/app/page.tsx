@@ -679,7 +679,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              start your free 7 days
+              start your free trial
             </Link>
           </div>
         </div>
