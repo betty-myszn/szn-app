@@ -438,10 +438,10 @@ export default function Home() {
               astrology based <span className="pk">journaling.</span>
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.85, color: "var(--grey)", maxWidth: 560, marginBottom: 20 }}>
-              Your journal writes its prompts from your chart and the season you are actually in, so
-              you are answering the question that matters this month instead of staring at a blank
-              page. It tracks what you keep circling back to, and shows you the pattern before you run
-              it again.
+              This is basically your DREAM journal. We use your birth chart and the season
+              you&apos;re in to create journal prompts personalised to YOU, helping you deep dive into
+              every area of your life, figure out what you actually want, work through what&apos;s
+              getting in the way, and create a life you&apos;re obsessed with.
             </p>
             <Link
               href={FREE_TRIAL_CTA.href}
