@@ -46,6 +46,13 @@ function authorised(request: NextRequest): boolean {
 export async function POST(request: NextRequest) {
   if (!authorised(request)) return new NextResponse(null, { status: 404 });
 
+  // No template configured means nothing can send, so stop before the query rather than looping
+  // over every expired member and writing a 'failed' log row for each one, every hour.
+  if (!process.env.BREVO_TEMPLATE_TRIAL_ENDED?.trim()) {
+    console.error("cron/trial-ended: BREVO_TEMPLATE_TRIAL_ENDED not set, nothing sent");
+    return NextResponse.json({ ok: false, error: "template_not_configured" }, { status: 503 });
+  }
+
   const admin = createAdminClient();
   const now = new Date();
   const nowIso = now.toISOString();
@@ -55,7 +62,7 @@ export async function POST(request: NextRequest) {
   // expiry, inside the window, and not blocked. A blocked member must never be marketed to.
   const { data: expired, error } = await admin
     .from("profiles")
-    .select("id, email, trial_expires_at")
+    .select("id, email, name, trial_expires_at")
     .eq("membership_level", "trial")
     .lt("trial_expires_at", nowIso)
     .gt("trial_expires_at", floorIso)
@@ -75,7 +82,11 @@ export async function POST(request: NextRequest) {
     if (!row.email) { skipped += 1; continue; }
     // Sequential on purpose: this is a marketing send to a handful of people, and hitting Brevo with
     // fifty parallel requests is how an API key gets rate limited.
-    const outcome = await sendTrialEndedEmail(admin, { userId: row.id as string, email: row.email as string });
+    const outcome = await sendTrialEndedEmail(admin, {
+      userId: row.id as string,
+      email: row.email as string,
+      name: (row.name as string | null) ?? null,
+    });
     if (outcome.status === "sent") sent += 1;
     else if (outcome.status === "skipped") skipped += 1;
     else { failed += 1; console.error("cron/trial-ended: send failed", { email: row.email, error: outcome.error }); }
