@@ -5,7 +5,8 @@ import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { isSignupBlocked } from "@/lib/signup-blocklist";
 import { syncTrialMemberToBrevo } from "@/lib/email/brevo-contact";
-import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
+import { sendNewSignupAdminAlert, sendRepeatTrialAlert } from "@/lib/email/admin-notify";
+import { birthFingerprint, claimTrial, hasUsedTrial, isExemptFromTrialGuard } from "@/lib/trial-fingerprint";
 
 export const runtime = "nodejs";
 
@@ -112,6 +113,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "already_exists" }, { status: 409 });
   }
 
+  // Second repeat-trial guard, on the one detail a repeat trialler cannot change. The email check
+  // above only catches someone reusing an address; this catches the same person arriving with a new
+  // address and a different IP, which is what actually happened. Someone farming a second free week
+  // has to submit the same birth details, because different details mean a stranger's chart and the
+  // trial is worthless to them.
+  //
+  // Deliberately returns the SAME response as the email check, so the page tells her she already has
+  // an account and points her at login. It gives nothing away about how she was recognised, and a
+  // genuine person in this position really does already have an account.
+  const fingerprint = birthFingerprint({
+    dateOfBirth: birth!.dateOfBirth!,
+    birthTime: birth!.birthTime!,
+    latitude: place!.latitude!,
+    longitude: place!.longitude!,
+  });
+  if (!isExemptFromTrialGuard(email) && (await hasUsedTrial(admin, fingerprint))) {
+    await releaseRate(admin, rateKey);
+    // Tell the team, because this guard can be wrong and a wrong one costs a real signup. The alert
+    // carries the SQL to release it.
+    void sendRepeatTrialAlert({ email, firstName, fingerprint });
+    return NextResponse.json({ error: "already_exists" }, { status: 409 });
+  }
+
   // Create the account server-side, confirmed at creation and signed in below, so there's no magic
   // link for an email scanner to burn and nothing to click. Mirrors account/create-free.
   const { data: created, error: createError } = await admin.auth.admin.createUser({
@@ -155,6 +179,11 @@ export async function POST(request: NextRequest) {
     await releaseRate(admin, rateKey);
     return NextResponse.json({ error: "trial_write_failed", detail: trialError.message }, { status: 500 });
   }
+
+  // Claim this chart's free week, now that the trial is really live. Deliberately after the rollback
+  // path above: a signup that failed and deleted its own auth user must not leave a fingerprint
+  // behind, or a real person would be locked out of a trial she never got.
+  await claimTrial(admin, fingerprint, created.user.id);
 
   // File her on the Brevo "free trial my szn" list (id 18) so trial signups are segmented apart from
   // free and paid contacts. Fire-and-forget on purpose: filing a marketing contact is not worth

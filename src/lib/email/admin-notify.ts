@@ -310,3 +310,48 @@ export async function sendNewMemberAdminAlert(
   console.error("admin new-member alert FAILED (membership unaffected)", { sessionId, error: lastError });
   return { status: "failed", error: lastError };
 }
+
+/**
+ * Someone was refused a free trial because her birth details already claimed one.
+ *
+ * This exists because the guard can be wrong. Date, minute and city is a very specific combination,
+ * but it is not unique: twins collide, and so can two strangers who were both born in London and
+ * both typed 12:00 because nobody knows their real birth time. A refusal that only ever appeared in
+ * a server log would cost a real signup silently, so every one of them comes to the inbox instead,
+ * with enough detail to release it by hand.
+ *
+ * Fire-and-forget, like the other alerts: never allowed to slow down or fail the request.
+ */
+export async function sendRepeatTrialAlert(args: {
+  email: string;
+  firstName: string;
+  fingerprint: string;
+}): Promise<void> {
+  const recipients = adminRecipients();
+  const htmlContent = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #111;">
+      <h2 style="margin: 0 0 12px;">Trial refused: birth details already used</h2>
+      <p style="margin: 0 0 16px;">
+        <strong>${esc(args.firstName)}</strong> (${esc(args.email)}) tried to start a free trial with
+        birth details that have already had one. She was shown the "you already have an account"
+        message and pointed at login.
+      </p>
+      <p style="margin: 0 0 16px;">
+        This is usually a second trial on a new email address. It can also be a genuine coincidence:
+        two people born on the same date, at the same minute, in the same city. If this one is real,
+        delete the matching row and she can sign up straight away:
+      </p>
+      <pre style="background:#f5f3ff;padding:12px;border-radius:8px;font-size:12px;overflow-x:auto;">delete from trial_fingerprints
+where fingerprint = '${esc(args.fingerprint)}';</pre>
+    </div>`;
+
+  for (const to of recipients) {
+    const result = await sendBrevoEmail({
+      to: { email: to },
+      subject: `Trial refused (repeat birth details): ${args.email}`,
+      htmlContent,
+    });
+    if (!result.ok) console.error("repeat trial alert failed", { to, error: result.error });
+  }
+}
+
