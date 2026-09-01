@@ -47,22 +47,36 @@ const freeLinks = [
   { href: "/blog", label: "blog" },
 ];
 
+// The guest menu is four doors, not six. Home and the paid offer stand alone; everything that is
+// browsing rather than deciding goes under EXPLORE, so the free trial button is competing with two
+// links instead of six. Coaching is a different business (The Cosmic Co) and is marked as leaving
+// the site, which is what the arrow is for.
 const guestLinks = [
   { href: "/", label: "home" },
+  { href: "/membership", label: "join my szn" },
+];
+
+const exploreMenu = [
   // The free birth chart is the lowest-friction way in and the biggest single source of signups, so
-  // it sits in the menu on every page rather than only in the homepage hero.
-  { href: "/chart", label: "free chart" },
+  // it sits at the top of the menu it now lives in.
+  { href: "/chart", label: "free birth chart" },
   { href: "/seasons", label: "seasons" },
-  { href: "/blog", label: "blog" },
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
+  { href: "/blog", label: "blog" },
 ];
+
+/** Betty's coaching business, a separate site. Opens in a new tab so a visitor reading MY SZN does
+ *  not lose her place, and carries rel="noopener" because a target="_blank" link without it hands
+ *  the opened page a handle back to this one. */
+const COACHING_URL = "https://thecosmicco.com";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [workshopsOpen, setWorkshopsOpen] = useState(false);
+  const [exploreOpen, setExploreOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [unread, setUnread] = useState(0);
@@ -82,6 +96,8 @@ export default function NavBar() {
   const links = member ? (freeMember ? freeLinks : memberLinks) : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
+  // Highlights EXPLORE while the visitor is on any page inside it, so she can see where she is.
+  const exploreActive = exploreMenu.some((item) => isActive(item.href));
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
   const workshopsSectionActive = pathname?.startsWith("/events");
 
@@ -312,6 +328,75 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
+          {!member && (
+            <div style={{ position: "relative" }} onMouseLeave={() => setExploreOpen(false)}>
+              <button
+                type="button"
+                onClick={() => setExploreOpen((v) => !v)}
+                onMouseEnter={() => setExploreOpen(true)}
+                className="hover:text-[var(--pink)] transition-colors"
+                style={{
+                  background: "none",
+                  border: "none",
+                  font: "inherit",
+                  letterSpacing: "inherit",
+                  textTransform: "inherit",
+                  cursor: "pointer",
+                  padding: 0,
+                  color: exploreActive ? "var(--pink)" : "var(--dark)",
+                  fontWeight: exploreActive ? 800 : undefined,
+                }}
+              >
+                explore &#9662;
+              </button>
+              {exploreOpen && (
+                <div
+                  className="flex flex-col"
+                  style={{
+                    position: "absolute",
+                    top: 28,
+                    left: 0,
+                    minWidth: 200,
+                    background: "#fff",
+                    border: "var(--border)",
+                    zIndex: 200,
+                  }}
+                >
+                  {exploreMenu.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setExploreOpen(false)}
+                      className="no-underline hover:text-[var(--pink)]"
+                      style={{
+                        fontSize: 11,
+                        fontWeight: isActive(item.href) ? 800 : 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        padding: "10px 14px",
+                        borderBottom: "1px solid #eee",
+                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
+                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {!member && (
+            <a
+              href={COACHING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="no-underline hover:text-[var(--pink)] transition-colors"
+              style={{ color: "var(--dark)" }}
+            >
+              coaching &#8599;
+            </a>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -600,7 +685,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                free trial
+                💖 start free trial
               </Link>
             </>
           )}
@@ -768,6 +853,34 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
+          {!member && (
+            <>
+              {/* No dropdown on mobile, so the nesting is shown by indenting, the same way the
+                  member menus already handle their sub-items. */}
+              <div style={{ fontWeight: 800, color: exploreActive ? "var(--pink)" : "var(--dark)" }}>explore</div>
+              {exploreMenu.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="no-underline hover:text-[var(--pink)]"
+                  style={{ paddingLeft: 16, color: isActive(item.href) ? "var(--pink)" : "var(--dark)" }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <a
+                href={COACHING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="no-underline hover:text-[var(--pink)]"
+                style={{ color: "var(--dark)" }}
+              >
+                coaching &#8599;
+              </a>
+            </>
+          )}
           {member ? (
             <>
               <Link
@@ -831,7 +944,7 @@ export default function NavBar() {
                 className="no-underline"
                 style={{ color: "var(--pink)", fontWeight: 800 }}
               >
-                start free trial
+                💖 start free trial
               </Link>
               <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
                 member login
