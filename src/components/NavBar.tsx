@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
@@ -77,6 +77,10 @@ export default function NavBar() {
   const [chartOpen, setChartOpen] = useState(false);
   const [workshopsOpen, setWorkshopsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
+  const exploreCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
+  }, []);
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [unread, setUnread] = useState(0);
@@ -329,7 +333,18 @@ export default function NavBar() {
             </Link>
           ))}
           {!member && (
-            <div style={{ position: "relative" }} onMouseLeave={() => setExploreOpen(false)}>
+            <div
+              style={{ position: "relative", paddingBottom: 14, marginBottom: -14 }}
+              onMouseEnter={() => {
+                if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
+              }}
+              onMouseLeave={() => {
+                // Grace period rather than an instant close, so a mouse that clips the edge of the
+                // menu on its way somewhere else does not make the panel blink.
+                if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
+                exploreCloseTimer.current = setTimeout(() => setExploreOpen(false), 180);
+              }}
+            >
               <button
                 type="button"
                 onClick={() => setExploreOpen((v) => !v)}
@@ -354,7 +369,7 @@ export default function NavBar() {
                   className="flex flex-col"
                   style={{
                     position: "absolute",
-                    top: 28,
+                    top: 24,
                     left: 0,
                     minWidth: 200,
                     background: "#fff",
