@@ -90,7 +90,7 @@ const STILL_YOURS = [
 
 const MEMBERS_ONLY = [
   "your personalised platform",
-  "this season's readings",
+  "your szn guide",
   "the workshops + replays",
   "the astro tapping",
   "the meditations",
