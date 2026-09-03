@@ -11,3 +11,16 @@
 
 export const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/fZueVe5sj13peCe6ON7kc0l";
 export const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
+
+/**
+ * Stripe's hosted Customer Portal login page.
+ *
+ * The server route at /api/stripe/portal is the PREFERRED door and should stay the one members
+ * click: it creates a portal session for her own customer id, read from her own RLS-protected
+ * profile row, so she lands straight in her billing with nothing to type. This URL is the fallback
+ * for the one case that route cannot serve, a logged-in member whose profile has no
+ * stripe_customer_id yet (a webhook that has not landed, or a legacy account), where the route
+ * would otherwise bounce her to the pricing page as though she had never paid. Stripe verifies her
+ * by emailing a code, so it is safe to link publicly.
+ */
+export const STRIPE_PORTAL_URL = "https://billing.stripe.com/p/login/cNi9AUcUL3bx0Lo1ut7kc00";

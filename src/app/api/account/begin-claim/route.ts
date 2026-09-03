@@ -28,7 +28,20 @@ export async function POST(request: NextRequest) {
   let email: string | null = null;
   try {
     const session = await stripe.checkout.sessions.retrieve(payload.session_id);
-    if (session.payment_status !== "paid") {
+
+    // A checkout that started a FREE TRIAL takes a card but charges nothing today, so Stripe
+    // reports payment_status "no_payment_required" rather than "paid". Requiring "paid" refused
+    // every trial signup with "payment not completed" AFTER Stripe had already taken the card,
+    // which is the worst possible place to fail.
+    //
+    // The check still has to prove this person really completed this checkout, since knowing an
+    // email must never be enough to claim an account. Two things together do that: the session is
+    // complete, and it produced a real subscription. A $0 session with a live subscription attached
+    // is a genuine trial start; an abandoned or unpaid session has neither.
+    const completed = session.status === "complete";
+    const paid = session.payment_status === "paid";
+    const trialStarted = session.payment_status === "no_payment_required" && !!session.subscription;
+    if (!completed || !(paid || trialStarted)) {
       return NextResponse.json({ error: "payment_not_completed" }, { status: 402 });
     }
     email = session.customer_details?.email?.toLowerCase() ?? null;

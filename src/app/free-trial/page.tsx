@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import PlacesAutocomplete from "@/components/PlacesAutocomplete";
-import type { BirthData, BirthLocation } from "@/types/chart";
-import { saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
-import { syncChartToSupabase } from "@/lib/chart-sync";
+import { MONTHLY_CHECKOUT_URL } from "@/lib/checkout";
 import { workshopCardRow, shortWorkshopMeta, upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { track, EVENTS } from "@/lib/analytics";
 
@@ -185,15 +182,6 @@ const CHECKS: Array<[string, string]> = [
 ];
 
 export default function FreeTrialPage() {
-  const [firstName, setFirstName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [dob, setDob] = useState("");
-  const [time, setTime] = useState("");
-  const [location, setLocation] = useState<BirthLocation | null>(null);
-  const [company, setCompany] = useState(""); // honeypot
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // The workshop row reads the real schedule, so it leads with whatever is actually next and
   // never advertises a finished class as upcoming. Clock read on the client so the
@@ -223,94 +211,6 @@ export default function FreeTrialPage() {
   const insideFreeWeek =
     now !== null && !!nextWorkshop?.startIso && new Date(nextWorkshop.startIso).getTime() - now <= 7 * 86_400_000;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (loading) return;
-    setError(null);
-    if (!firstName.trim()) return setError("Add your first name.");
-    if (!EMAIL_RE.test(email)) return setError("Add a valid email address.");
-    if (password.length < 10) return setError("Use at least 10 characters for your password.");
-    if (!dob) return setError("Add your date of birth.");
-    if (!time) return setError("Add your exact birth time.");
-    if (!location) return setError("Pick your birth place from the suggestions.");
-
-    const birthData: BirthData = {
-      name: firstName.trim(),
-      dateOfBirth: dob,
-      birthTime: time,
-      birthTimeApproximate: false,
-      location,
-    };
-
-    setLoading(true);
-
-    // Kick the chart calculation off IN PARALLEL with account creation. /api/calculate needs no
-    // session and only uses the birth data, so it can run while the account is being created rather
-    // than after it, which takes the slowest single step off the critical path and cuts the wait.
-    const calcPromise = fetch("/api/calculate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(birthData),
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .catch(() => null);
-
-    try {
-      const res = await fetch("/api/account/create-trial", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          first_name: firstName.trim(),
-          email: email.trim(),
-          password,
-          company,
-          birth_data: birthData,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        if (data.error === "already_exists") {
-          setError("You already have a MY SZN account. Log in instead.");
-        } else if (data.error === "rate_limited") {
-          setError("Too many attempts just now. Try again in a little while.");
-        } else if (data.error === "weak_password") {
-          setError("Use at least 10 characters for your password.");
-        } else if (data.error === "birth_required") {
-          setError("Add your birth date, time and place so we can build your chart.");
-        } else {
-          setError("Something went wrong creating your trial. Please try again.");
-        }
-        setLoading(false);
-        return;
-      }
-
-      // Trial account created. Log the conversion here, before the chart-cache step below, so a slow
-      // or failed cache never costs us the signup event. GA4 recommended name, method tags it apart
-      // from the paid sign_up fired on /create-account.
-      track(EVENTS.SIGN_UP, { method: "free_trial" });
-
-      // Account created + signed in. The route already saved her birth data server-side, so here we
-      // only cache the chart the parallel calc produced, so she lands with her real chart rather
-      // than the demo. Non-fatal: if the calc failed she still gets inside and it fills in on first
-      // view.
-      try {
-        const chartData = await calcPromise;
-        if (chartData) {
-          const placements = placementsFromChart(chartData);
-          saveBirthData(birthData);
-          savePlacements(placements);
-          await syncChartToSupabase(chartData, placements);
-        }
-      } catch (err) {
-        console.error("trial chart cache failed (non-fatal)", err);
-      }
-
-      window.location.href = data.signedIn === false ? "/login" : "/dashboard";
-    } catch {
-      setError("Something went wrong creating your trial. Please try again.");
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="ft">
@@ -570,51 +470,30 @@ export default function FreeTrialPage() {
       <section className="sec signup" id="ft-signup">
         <div className="wrap">
           <div className="rl">start your free 7 days</div>
-          <form className="form-card frame" onSubmit={handleSubmit} noValidate>
+          <div className="form-card frame">
             <div className="form-inner">
-              <div className="field">
-                <label htmlFor="ft-fn">first name</label>
-                <input id="ft-fn" type="text" placeholder="your first name" autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-              </div>
-              <div className="field">
-                <label htmlFor="ft-em">email address</label>
-                <input id="ft-em" type="email" placeholder="you@email.com" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </div>
-              <div className="field">
-                <label htmlFor="ft-pw">create a password</label>
-                <input id="ft-pw" type="password" placeholder="at least 10 characters" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              </div>
-              <div className="field">
-                <label htmlFor="ft-dob">date of birth</label>
-                <input id="ft-dob" type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-              </div>
-              <div className="row2">
-                <div className="field">
-                  <label htmlFor="ft-bt">exact birth time</label>
-                  <input id="ft-bt" type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-                </div>
-                <div className="field">
-                  <label htmlFor="ft-loc">birth location</label>
-                  <PlacesAutocomplete id="ft-loc" onSelect={setLocation} value={location?.placeName} />
-                </div>
-              </div>
-
-              {/* Honeypot: hidden from humans, bots fill it and get silently rejected server-side. */}
-              <div className="hp" aria-hidden="true">
-                <label htmlFor="ft-company">company</label>
-                <input id="ft-company" type="text" tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} />
-              </div>
-
-              <button type="submit" className={`cta cta-block ${loading ? "busy" : ""}`} disabled={loading}>
-                {loading ? "creating your trial…" : "start my free 7 days"}
-              </button>
-              {error && <p className="err">{error}</p>}
+              <p style={{ fontSize: 17, lineHeight: 1.7, margin: "0 0 20px" }}>
+                Your card goes in through Stripe, and <strong>you are charged $0 today</strong>. You get
+                the whole of MY SZN for seven days, and on day eight it becomes $88 a month unless you
+                cancel first. Cancelling takes about ten seconds and you can do it from inside your
+                account the moment you are in.
+              </p>
+              <a
+                href={MONTHLY_CHECKOUT_URL}
+                className="cta cta-block"
+                onClick={() => track(EVENTS.BEGIN_CHECKOUT, { plan: "monthly_trial", value: 0 })}
+              >
+                start my free 7 days
+              </a>
               <div className="form-foot">
-                <p className="micro">{"no card required. you're logged straight in, and your access ends automatically after 7 days."}</p>
-                <p className="micro" style={{ marginTop: 6 }}>{"if you want to stay after your week, membership is $88 a month, cancel anytime."}</p>
+                <p className="micro">$0 today. $88 a month from day 8. Cancel any time before then and you pay nothing.</p>
+                <p className="micro" style={{ marginTop: 6 }}>
+                  You&rsquo;ll set your password and add your birth details straight after checkout, and
+                  then you&rsquo;re in.
+                </p>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </section>
 

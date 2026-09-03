@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicOrigin } from "@/lib/request-origin";
+import { STRIPE_PORTAL_URL } from "@/lib/checkout";
 
 export const runtime = "nodejs";
 
@@ -30,8 +31,12 @@ export async function GET(request: NextRequest) {
     .eq("id", user.id)
     .single();
 
+  // No customer id on the profile. Sending her to the pricing page tells a member who is being
+  // charged that she is not a member, and worse, leaves someone mid-trial with no way to cancel
+  // before the first $88. Hand her Stripe's own portal login instead, which finds her by email.
   if (!profile?.stripe_customer_id) {
-    return NextResponse.redirect(`${origin}/membership`);
+    console.warn("stripe portal: no customer id on profile, using hosted portal login", { userId: user.id });
+    return NextResponse.redirect(STRIPE_PORTAL_URL);
   }
 
   const session = await stripe.billingPortal.sessions.create({

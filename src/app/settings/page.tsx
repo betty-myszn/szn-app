@@ -222,7 +222,43 @@ export default function SettingsPage() {
                     </div>
                   )}
 
-                  {member.subscriptionCurrentPeriodEnd && (
+                  {/* Stripe free trial in progress. She has a card on file and a date when it will be
+                      charged, so both facts get said plainly and the way out is right next to them.
+                      This is the disclosure a card-taking trial owes her, not a nicety. */}
+                  {member.subscriptionStatus === "trialing" && !isCancellationScheduled(member) && (
+                    <div
+                      style={{
+                        border: "1.5px solid var(--dark)",
+                        background: "var(--lav-light)",
+                        padding: "16px 18px",
+                        marginBottom: 18,
+                      }}
+                    >
+                      <p style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, margin: "0 0 6px" }}>
+                        You&apos;re on your free 7 days
+                      </p>
+                      <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.65, margin: 0 }}>
+                        Nothing has been charged. Your card will be charged{" "}
+                        <strong style={{ color: "var(--dark)" }}>$88</strong>
+                        {member.subscriptionCurrentPeriodEnd && (
+                          <>
+                            {" "}on{" "}
+                            <strong style={{ color: "var(--dark)" }}>
+                              {new Date(member.subscriptionCurrentPeriodEnd).toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </strong>
+                          </>
+                        )}
+                        {" "}unless you cancel before then. Cancel any time using the button below and you
+                        keep your access until your seven days are up.
+                      </p>
+                    </div>
+                  )}
+
+                  {member.subscriptionCurrentPeriodEnd && member.subscriptionStatus !== "trialing" && (
                     <p style={{ fontSize: 13, color: "var(--grey)", marginBottom: isCancellationScheduled(member) ? 6 : 20 }}>
                       {isCancellationScheduled(member) ? "Your membership ends on " : "Renews on "}
                       <strong style={{ color: "var(--dark)" }}>
@@ -239,7 +275,7 @@ export default function SettingsPage() {
 
                   <div className="flex items-center gap-4 flex-wrap">
                     <a href="/api/stripe/portal" className="btn-pink" style={{ display: "inline-block" }}>
-                      manage membership
+                      {member.subscriptionStatus === "trialing" ? "manage or cancel" : "manage membership"}
                     </a>
                     {!isVip(member) && (
                       <Link

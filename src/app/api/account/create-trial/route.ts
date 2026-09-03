@@ -10,6 +10,18 @@ import { birthFingerprint, claimTrial, hasUsedTrial, isExemptFromTrialGuard } fr
 
 export const runtime = "nodejs";
 
+// RETIRED. The 7-day trial now runs through Stripe, which takes a card, charges $0 today and starts
+// billing $88 on day 8 unless she cancels. This route minted a trial with NO card at all, so leaving
+// it callable would keep a second, free door open next to the paid one: the page no longer posts
+// here, but an endpoint does not stop existing because nothing links to it.
+//
+// The whole handler is kept below the early return rather than deleted, because it is the reference
+// for how a trial account was built (profile promotion, birth data, Brevo list 18, auto sign-in) and
+// the five members still finishing a card-free trial were created by it.
+//
+// Members already mid-trial are untouched: they have accounts already, and membership-gate.ts still
+// honours membership_level 'trial' until their trial_expires_at passes.
+
 // Free 7-day trial signup. This is the SECOND place the payment-first lockdown is deliberately
 // opened (the first is account/create-free): it mints a real account with no Stripe checkout and no
 // claim token, on the 'trial' level, which grants the FULL platform but only until trial_expires_at
@@ -29,7 +41,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // with from the browser.
 const TRIAL_DAYS = 7;
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
+  return NextResponse.json({ error: "trial_moved_to_stripe" }, { status: 410 });
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function retiredCreateTrial(request: NextRequest) {
   let payload: {
     first_name?: string;
     email?: string;
