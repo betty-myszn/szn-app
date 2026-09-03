@@ -41,10 +41,56 @@ export const SIGN_ROOMS: SpaceMeta[] = ZODIAC_SIGNS.map((sign, i) => ({
   desc: `for the ${sign.toLowerCase()}s, and anyone with ${sign.toLowerCase()} placements, to talk shop`,
 }));
 
+// Every room that has ever existed, which is what lookups and moderation read. Deliberately NOT the
+// list members are shown: see listedRooms below.
 export const ALL_ROOMS: SpaceMeta[] = [...SPACES, ...SIGN_ROOMS];
 
 export function findRoom(id: string): SpaceMeta | undefined {
   return ALL_ROOMS.find((r) => r.id === id);
+}
+
+// ── What members actually see ────────────────────────────────────────────────────────────────────
+//
+// The hub used to list all 20 rooms: 8 topic spaces and one room per zodiac sign. At this size that
+// guarantees almost every one of them is empty whenever anyone looks, and an empty room reads as a
+// dead membership rather than a quiet one. It also made "post once in a room", the first-run step on
+// the dashboard, much harder than it needs to be: the room she picks decides whether anyone answers.
+//
+// So the listing is now a short, deliberately busy set, while ALL_ROOMS above stays complete. Nothing
+// is deleted: every message in a retired room is still in the database, findRoom still resolves it so
+// old links keep working and its name still renders on old posts, and the admin tools still see all
+// of them. Re-listing a room later is a one-line change here.
+const LISTED_SPACE_IDS: readonly string[] = ["general", "wins", "astrology", "events"];
+
+/**
+ * The one sign room that is live: whichever sign's season it currently is, relabelled for the season
+ * so it reads as the room everyone is in right now. Keeps the existing sign-room id, so the room a
+ * member walks into already has its history rather than starting empty every six weeks.
+ *
+ * Twelve sign rooms scattered a small group across eleven dead doors, when only ever one of them is
+ * the season anybody is actually in.
+ */
+export function seasonRoom(seasonSign: string | null | undefined): SpaceMeta | null {
+  const id = seasonSign?.toLowerCase();
+  if (!id) return null;
+  const base = SIGN_ROOMS.find((r) => r.id === id);
+  if (!base) return null;
+  return { ...base, label: `${id} szn room`, desc: `everyone in ${id} szn, in one room` };
+}
+
+/**
+ * The rooms to show a member, in order: the open topic rooms, then this season's room, then the
+ * ritual rooms. Access filtering (rituals are members-only) stays with the caller, which already
+ * knows what she's paid for.
+ */
+export function listedRooms(seasonSign: string | null | undefined): SpaceMeta[] {
+  const listed = SPACES.filter((s) => LISTED_SPACE_IDS.includes(s.id));
+  const season = seasonRoom(seasonSign);
+  if (!season) return listed;
+  // Slotted in ahead of the rituals so the open rooms read as one group.
+  const firstRitual = listed.findIndex((s) => isRitualSpace(s.id));
+  const at = firstRitual === -1 ? listed.length : firstRitual;
+  return [...listed.slice(0, at), season, ...listed.slice(at)];
 }
 
 export interface Comment {

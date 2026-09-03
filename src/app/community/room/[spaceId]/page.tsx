@@ -5,7 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { hasRoomAccess, hasPaidCommunityAccess } from "@/lib/membership-access";
-import { SPACES, SIGN_ROOMS, findRoom, isRitualSpace } from "@/lib/community-store";
+import { listedRooms, findRoom, isRitualSpace } from "@/lib/community-store";
+import { useSeason } from "@/lib/use-season";
 import {
   loadRoomMessages,
   addRoomMessage,
@@ -50,6 +51,7 @@ export default function ChatRoomPage() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const season = useSeason();
   const space = findRoom(params.spaceId);
 
   useEffect(() => {
@@ -60,11 +62,13 @@ export default function ChatRoomPage() {
 
   useEffect(() => {
     if (!space) return;
-    const others = [...SPACES, ...SIGN_ROOMS].filter((s) => s.id !== space.id);
+    const others = listedRooms(season.sign).filter((s) => s.id !== space.id);
     Promise.all(others.map(async (s) => [s.id, await hasUnread(s.id)] as const)).then((entries) => {
       setUnreadMap(Object.fromEntries(entries));
     });
-  }, [space?.id]);
+    // season.sign is a dependency because the listed set includes this season's room, which changes
+    // on the flip.
+  }, [space?.id, season.sign]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -170,8 +174,9 @@ export default function ChatRoomPage() {
   };
 
   // Free members don't see the ritual rooms in the "other rooms" grid, matching what they can enter.
-  const otherSpaces = SPACES.filter((s) => s.id !== space.id && (paidCommunity || !isRitualSpace(s.id)));
-  const otherSignRooms = SIGN_ROOMS.filter((s) => s.id !== space.id);
+  // Only the listed rooms appear: a retired room still opens by URL and keeps its history, it just
+  // isn't somewhere we send anyone new.
+  const otherSpaces = listedRooms(season.sign).filter((s) => s.id !== space.id && (paidCommunity || !isRitualSpace(s.id)));
 
   return (
     <>
@@ -374,33 +379,8 @@ export default function ChatRoomPage() {
         </div>
       </section>
 
-      {/* Sign rooms */}
       <section className="px-5 md:px-8 py-10">
         <div className="max-w-3xl mx-auto">
-          <div className="tag mb-4">sign rooms</div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-0" style={{ border: "var(--border)" }}>
-            {otherSignRooms.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => router.push(`/community/room/${s.id}`)}
-                className="p-3 text-center hover:bg-[#fafafa] transition-colors relative"
-                style={{
-                  border: "none",
-                  borderRight: (i + 1) % 6 !== 0 ? "1px solid #eee" : undefined,
-                  borderBottom: i < otherSignRooms.length - 6 ? "1px solid #eee" : undefined,
-                  cursor: "pointer",
-                  background: "#fff",
-                }}
-              >
-                {unreadMap[s.id] && (
-                  <span style={{ position: "absolute", top: 6, right: 6, width: 6, height: 6, borderRadius: "50%", background: "var(--pink)" }} />
-                )}
-                <div style={{ fontSize: 16, marginBottom: 2 }}>{s.emoji}</div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--dark)", textTransform: "capitalize" }}>{s.id}</div>
-              </button>
-            ))}
-          </div>
-
           {/* Free members: the rooms are open, everything else is an upgrade away. */}
           {!paidCommunity && (
             <div

@@ -7,7 +7,7 @@ import { useMember } from "@/lib/use-member";
 import { hasRoomAccess, hasPaidCommunityAccess, hasBillingIssue } from "@/lib/membership-access";
 import { useSeason } from "@/lib/use-season";
 import { useYourSzn } from "@/lib/use-your-szn";
-import { loadPosts, addPost, toggleLike as toggleLikeStore, addComment, SPACES, SIGN_ROOMS, isRitualSpace, type Post } from "@/lib/community-store";
+import { loadPosts, addPost, toggleLike as toggleLikeStore, addComment, listedRooms, findRoom, isRitualSpace, type Post } from "@/lib/community-store";
 import { hasUnread } from "@/lib/chat-rooms";
 import { getPersonalisedChallenges } from "@/lib/challenges";
 import { loadChallengeProgress, isChallengeCompleted } from "@/lib/challenge-progress";
@@ -109,7 +109,10 @@ export default function CommunityPage() {
   // challenges, events) are the $33 programming, so they're hidden from her spaces and feed and
   // replaced with an upgrade nudge below. Every paying tier keeps the full set.
   const paidCommunity = hasPaidCommunityAccess(member);
-  const availableSpaces = paidCommunity ? SPACES : SPACES.filter((s) => !isRitualSpace(s.id));
+  // The short listed set rather than all 20 rooms, with this season's sign room standing in for the
+  // twelve that used to be here. See listedRooms in community-store for why.
+  const rooms = listedRooms(season.sign);
+  const availableSpaces = paidCommunity ? rooms : rooms.filter((s) => !isRitualSpace(s.id));
 
   const toggleLike = async (id: string) => {
     const post = posts.find((p) => p.id === id);
@@ -147,7 +150,7 @@ export default function CommunityPage() {
     return inSpace && matches;
   });
 
-  const activeSpaceMeta = SPACES.find((s) => s.id === activeSpace);
+  const activeSpaceMeta = findRoom(activeSpace);
 
   const chartTwins = findChartTwins(member.placements as unknown as Record<string, string>, member.name);
   const challenges = getPersonalisedChallenges(season, getPrimaryGoal()).filter((c) => !c.hidden).slice(0, 4);
@@ -156,9 +159,7 @@ export default function CommunityPage() {
     .map((c) => ({ challenge: c, youDone: isChallengeCompleted(challengeProgress, season.sign, c.id) }))
     .sort((a, b) => Number(b.youDone) - Number(a.youDone));
 
-  const roomsWithUnread = new Set(
-    [...availableSpaces, ...SIGN_ROOMS].filter((r) => hasUnread(r.id)).map((r) => r.id)
-  );
+  const roomsWithUnread = new Set(availableSpaces.filter((r) => hasUnread(r.id)).map((r) => r.id));
 
   return (
     <>
@@ -310,35 +311,6 @@ export default function CommunityPage() {
               </div>
             )}
 
-            {/* Sign rooms */}
-            <div className="mt-8">
-              <div className="tag mb-3">sign rooms</div>
-              <div className="grid grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
-                {SIGN_ROOMS.map((room, i) => (
-                  <Link
-                    key={room.id}
-                    href={`/community/room/${room.id}`}
-                    className="no-underline p-3 text-center relative hover:bg-[#fafafa] transition-colors"
-                    title={room.label}
-                    style={{
-                      borderRight: (i + 1) % 4 !== 0 ? "1px solid #eee" : undefined,
-                      borderBottom: i < SIGN_ROOMS.length - 4 ? "1px solid #eee" : undefined,
-                      color: "var(--dark)",
-                      background: member.placements?.sun?.toLowerCase() === room.id ? "var(--gold)" : "#fff",
-                    }}
-                  >
-                    {roomsWithUnread.has(room.id) && (
-                      <span style={{ position: "absolute", top: 4, right: 4, width: 6, height: 6, borderRadius: "50%", background: "var(--pink)" }} />
-                    )}
-                    <div style={{ fontSize: 16 }}>{room.emoji}</div>
-                  </Link>
-                ))}
-              </div>
-              <p style={{ fontSize: 10, color: "var(--grey-light)", marginTop: 8 }}>
-                ✦ your sun sign room is highlighted
-              </p>
-            </div>
-
             {/* Chart twins */}
             {chartTwins.length > 0 && (
               <div className="mt-8">
@@ -480,7 +452,7 @@ export default function CommunityPage() {
                 </p>
               )}
               {visible.map((post, i) => {
-                const space = SPACES.find((s) => s.id === post.space);
+                const space = findRoom(post.space);
                 return (
                   <article key={post.id} className="p-6" style={{ borderBottom: i < visible.length - 1 ? "var(--border)" : undefined }}>
                     <div className="flex items-center gap-3 mb-3 flex-wrap">
