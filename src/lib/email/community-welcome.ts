@@ -1,16 +1,20 @@
 import { sendBrevoEmail, sendBrevoTemplateEmail, type BrevoSendResult } from "@/lib/email/brevo";
+import { resendConfigured, sendResendEmail } from "@/lib/email/resend";
 
 // The nudge that goes out when someone is welcomed in the community chat. The in-app bell only
 // works on someone who comes back on her own; this is what reaches a new member who has not opened
 // the app since she signed up, which is exactly the person the welcome was written for.
 //
-// Brevo, because it is the only sender this app has. Resend is wired to Supabase for auth emails
-// (magic links, password) and the app itself holds no Resend key, so member-facing mail goes
-// through Brevo the same way the welcome and trial-ended emails already do.
+// Sender, in order of preference:
+//   1. Resend, when RESEND_API_KEY and RESEND_FROM_EMAIL are both set. Betty asked for this one.
+//   2. A Brevo template, when BREVO_TEMPLATE_COMMUNITY_WELCOME names one, so the design can change
+//      without a deploy.
+//   3. The small branded email below, through Brevo, so the feature works with nothing configured.
 //
-// Uses a Brevo template when BREVO_TEMPLATE_COMMUNITY_WELCOME names one, so the design stays
-// editable without a deploy, and otherwise sends the small branded email below so the feature
-// works today rather than waiting on a template being built.
+// Falling back rather than failing is the point: the message is already posted in the chat by the
+// time this runs, and a missing environment variable must not turn that into a silent dead end.
+// Worth knowing that this is the first app-sent mail to go through Resend at all; everything else
+// the app sends is Brevo, and Resend was previously reached only by Supabase for auth mail.
 
 const ROOM_URL = "https://itsmyszn.com/community/room/general";
 
@@ -69,9 +73,23 @@ function escapeHtml(value: string): string {
 }
 
 /** Never throws: a mail problem must not fail the run that already posted the message. */
-export async function sendCommunityWelcomeEmail(msg: CommunityWelcomeEmail): Promise<BrevoSendResult> {
+export async function sendCommunityWelcomeEmail(
+  msg: CommunityWelcomeEmail
+): Promise<BrevoSendResult | { ok: true; messageId: string | null }> {
   const firstName = (msg.name ?? "").trim().split(/\s+/)[0] || "babe";
   try {
+    if (resendConfigured()) {
+      const sent = await sendResendEmail({
+        to: { email: msg.email, name: msg.name ?? undefined },
+        subject: `${firstName}, you got tagged in the MY SZN chat 💜`,
+        htmlContent: html(firstName, msg.message),
+      });
+      // A Resend failure falls through to Brevo rather than dropping the email, since the member
+      // has already been told in the chat that Betty is talking to her.
+      if (sent.ok) return sent;
+      console.error("community welcome: resend failed, falling back to brevo", sent.error);
+    }
+
     const templateId = process.env.BREVO_TEMPLATE_COMMUNITY_WELCOME?.trim();
     if (templateId && /^\d+$/.test(templateId)) {
       return await sendBrevoTemplateEmail({
