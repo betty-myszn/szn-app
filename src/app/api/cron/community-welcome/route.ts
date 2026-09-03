@@ -5,7 +5,7 @@ import {
   chunkForMessages,
   findWelcomeSender,
   groupWelcomeMessage,
-  mentionTokenFor,
+  resolveMentionTokens,
   postWelcomeBatch,
   WELCOME_DELAY_MINUTES,
   WELCOME_MAX_AGE_HOURS,
@@ -140,13 +140,20 @@ export async function POST(request: NextRequest) {
   const groups = chunkForMessages(candidates);
 
   if (dryRun) {
-    const preview = groups.map((group) => ({
-      names: group.length,
-      message: groupWelcomeMessage(
-        group.map((m) => mentionTokenFor(m.name)).filter((t): t is string => t !== null),
-        seed
-      ),
-    }));
+    // Resolved the same way the real post resolves them, so a preview can never show "@Sarah" for
+    // a message that will actually say "@SarahElizabeth".
+    const { data: allProfiles } = await admin.from("profiles").select("name");
+    const allNames = (allProfiles ?? []).map((r) => (r.name as string | null) ?? null);
+    const preview = groups.map((group) => {
+      const tokenById = resolveMentionTokens(group, allNames);
+      return {
+        names: group.length,
+        message: groupWelcomeMessage(
+          group.filter((m) => tokenById.has(m.id)).map((m) => tokenById.get(m.id) as string),
+          seed
+        ),
+      };
+    });
     return NextResponse.json({
       ok: true,
       dry_run: true,
