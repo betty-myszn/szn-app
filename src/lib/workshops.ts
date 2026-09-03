@@ -119,15 +119,21 @@ export const WORKSHOPS: Workshop[] = [
     callout: null,
   },
   {
+    // The id stays virgo-szn-workshop-2 even though this is now the new moon class. RSVPs and
+    // "notify me" are stored against the workshop id, so renaming it would silently orphan anyone
+    // who has already said she is coming.
     id: "virgo-szn-workshop-2",
     season: "Virgo",
-    label: "virgo szn workshop 2",
+    label: "new moon workshop",
     kind: "masterclass",
-    blurb: "Close the gap between meaning to, and getting it done.",
-    meta: "10 september · 7pm la time · virgo szn preview",
-    title: "Virgo Season: Get Your Sh*t Together & Become Her",
+    blurb: "Set it properly, on the night the whole cycle resets.",
+    meta: "10 september · 7pm la time · new moon in virgo",
+    title: "New Moon in Virgo: Set It, Then Become Her",
     dark: false,
     coverImage: "/virgo-workshop-cover.jpg",
+    // 7pm LA on 10 September, and the new moon is exact at 20:27 LA the same evening (18° Virgo,
+    // computed from the ephemeris, not looked up). So the class runs INTO the exact moment rather
+    // than near it, which is the whole reason for this date.
     startIso: "2026-09-10T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
@@ -137,14 +143,14 @@ export const WORKSHOPS: Workshop[] = [
     replayYoutubeId: null,
     replayPublishedAt: null,
     paragraphs: [
-      "With your goals set, this is the session where we do the deeper work of actually becoming the woman who follows through on them.",
-      "If your life has been running on half-finished to-do lists, good intentions you keep pushing to next week, and a version of you that only shows up once everything finally feels organised enough, this is where that pattern ends.",
-      "We'll work with the astrology of discipline, devotion and self-mastery, looking at the placements that show where you're built to turn chaos into order, the habits that have been quietly draining you, and how to use this Virgo season to build a life that runs on systems instead of stress.",
-      "Expect grounding prompts, real astrology, tapping and embodiment work to help you close the gap between the woman you keep meaning to become and the one who simply gets it done.",
+      "We are live at 7pm LA and the new moon is exact at 8.27pm, at 18 degrees of Virgo. So we set your intentions together in the ninety minutes before the sky actually resets, which means you walk into the new cycle with it already written rather than remembering three days later that you meant to.",
+      "Most people treat a new moon as a vague vibe and a nice bath. I treat it as a deadline. You are going to write the actual intention down, in one sentence, specific enough that you would know if it came true, because a woolly wish gives you a woolly result every single time.",
+      "A Virgo new moon seeds the unglamorous things that quietly run your entire life: your habits, your standards, your health, the systems that mean you stop relying on motivation you do not have on a Tuesday. We will look at where 18 degrees of Virgo lands in your own chart, so you know which part of your life is actually being reset for you rather than setting an intention about something the sky is not even touching.",
+      "Expect real astrology, astrotapping to clear whatever comes up when you try to want something out loud, and a written intention you leave with. Then we let it run the twenty nine days.",
     ],
     callout: {
-      plain: "This is the season you stop waiting to feel ready and start becoming ",
-      pink: "her.",
+      plain: "Everyone gets a fresh cycle on the 10th. Almost nobody uses it on purpose. ",
+      pink: "You will.",
     },
   },
 ];
