@@ -124,13 +124,16 @@ export const WORKSHOPS: Workshop[] = [
     // who has already said she is coming.
     id: "virgo-szn-workshop-2",
     season: "Virgo",
-    label: "new moon workshop",
-    kind: "masterclass",
-    blurb: "Set it properly, on the night the whole cycle resets.",
+    label: "new moon circle",
+    kind: "working session",
+    blurb: "Get your sh*t together and become her, on the night the whole cycle resets.",
     meta: "10 september · 7pm la time · new moon in virgo",
-    title: "New Moon in Virgo: Set It, Then Become Her",
+    // Named to match the cover art she made, which calls it the Virgo New Moon Circle. One name for
+    // one thing: a card whose title disagrees with the headline printed across its own image reads
+    // as two different events.
+    title: "Virgo New Moon Circle",
     dark: false,
-    coverImage: "/virgo-workshop-cover.jpg",
+    coverImage: "/virgo-new-moon-cover.jpg",
     // 7pm LA on 10 September, and the new moon is exact at 20:27 LA the same evening (18° Virgo,
     // computed from the ephemeris, not looked up). So the class runs INTO the exact moment rather
     // than near it, which is the whole reason for this date.
