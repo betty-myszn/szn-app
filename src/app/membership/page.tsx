@@ -9,6 +9,10 @@ import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import { upcomingWorkshops, seasonOfNextWorkshop, shortWorkshopMeta } from "@/lib/workshops";
 import { joinCta, FREE_TRIAL_CTA } from "@/lib/cta";
+import { useMember } from "@/lib/use-member";
+import { isTrial } from "@/lib/membership-access";
+import { trialCountdown } from "@/lib/trial-countdown";
+import { entryBandFor } from "@/lib/membership-entry-band";
 import { useSeason } from "@/lib/use-season";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import SoulBlueprint from "@/components/SoulBlueprint";
@@ -56,7 +60,7 @@ export default function MembershipPage() {
   // scrolls to the pricing cards, which hold the real Stripe checkout buttons. Doors closed: it
   // becomes the free trial, never a waitlist, so a visitor who can't buy today still gets in today.
   const enrolmentOpen = useEnrolmentOpen();
-  const { href: ctaHref, label: ctaLabel } = joinCta(enrolmentOpen, "#pricing");
+  const { href: joinHref, label: joinLabel } = joinCta(enrolmentOpen, "#pricing");
 
   // The upcoming-workshops block reads the same schedule as /events, so this sales page never
   // advertises a class that has already happened. Clock read on the client so the upcoming split
@@ -68,6 +72,20 @@ export default function MembershipPage() {
   // Named after the season the classes belong to, which in the run-up to a new season is the one
   // ahead rather than the one the calendar is still in.
   const workshopSeason = now === null ? season.sign : seasonOfNextWorkshop(now, season.sign);
+
+  // Who is reading this page, because the entry band below the hero used to be the same for
+  // everyone: a full-width "start my free 7 days" sitting ABOVE the paid cards. A woman already
+  // inside her free week was being sold the exact thing she was already using, at the one moment
+  // she was there to buy, and nobody who already has an account can start a trial anyway (the
+  // create-trial route refuses any email that already exists), so the offer was undeliverable for
+  // every logged-in reader. The branching lives in @/lib/membership-entry-band, where it's tested.
+  const { member, ready } = useMember();
+  const trial = now !== null && member && isTrial(member) ? trialCountdown(member.trialExpiresAt, now) : null;
+  const entryBand = entryBandFor(member, now, ready);
+
+  // Never point a trial member at the trial. Everything else on the page keeps the standing rule.
+  const ctaHref = trial ? "#pricing" : joinHref;
+  const ctaLabel = trial ? "become a member" : joinLabel;
 
   return (
     <div>
@@ -744,36 +762,43 @@ export default function MembershipPage() {
               : "Enrolment is currently closed. Start your free 7 days and you'll be inside while you wait."}
           </p>
 
-          {/* Free front-door tier: the entry ramp, deliberately a full-width band ABOVE the three
-              paid cards rather than a fourth column, so it doesn't compete with the engineered
-              $88-centred hierarchy below. Free unlocks the live chat rooms only, and its CTA goes
-              straight to /signup (no Stripe, never gated by enrolment, the door is always open). */}
-          <div
-            className="p-6 md:p-7 mb-5 flex items-center justify-between gap-6 flex-wrap"
-            style={{ border: "var(--border)", background: "var(--lav-light)" }}
-          >
-            <div style={{ flex: "1 1 320px" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>
-                start here · free
-              </div>
-              <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 8 }}>
-                <span style={{ fontFamily: pp, fontSize: 34, fontWeight: 800, color: "var(--dark)", letterSpacing: "-1.5px", lineHeight: 1 }}>
-                  Free trial
-                </span>
-                <span style={{ fontSize: 13, color: "var(--grey)" }}>full access for 7 days · no card</span>
-              </div>
-              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, maxWidth: 520 }}>
-                Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astro tapping, the meditations and the community rooms. No card needed, and when the week is up the chat rooms and your charts stay yours, free, for whenever you want to come back.
-              </p>
-            </div>
-            <Link
-              href="/free-trial"
-              className="btn-pink"
-              style={{ whiteSpace: "nowrap", textAlign: "center" }}
+          {/* The entry band, deliberately full width ABOVE the paid cards rather than a fourth
+              column, so it doesn't compete with the engineered $88-centred hierarchy below. What it
+              offers depends on who's reading (see entryBand): a stranger gets the free week, anyone
+              who already has an account gets the join, since she can't start a trial anyway, and a
+              paying member gets no band at all. */}
+          {entryBand && (
+            <div
+              className="p-6 md:p-7 mb-5 flex items-center justify-between gap-6 flex-wrap"
+              style={
+                entryBand.mine
+                  ? { border: "2px solid var(--pink)", background: "var(--pink-bg)" }
+                  : { border: "var(--border)", background: "var(--lav-light)" }
+              }
             >
-              start my free 7 days
-            </Link>
-          </div>
+              <div style={{ flex: "1 1 320px" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: entryBand.mine ? "var(--pink)" : "#3C2A70", marginBottom: 10 }}>
+                  {entryBand.eyebrow}
+                </div>
+                <div className="flex items-baseline gap-3 flex-wrap" style={{ marginBottom: 8 }}>
+                  <span style={{ fontFamily: pp, fontSize: 34, fontWeight: 800, color: "var(--dark)", letterSpacing: "-1.5px", lineHeight: 1 }}>
+                    {entryBand.heading}
+                  </span>
+                  <span style={{ fontSize: 13, color: "var(--grey)" }}>{entryBand.sub}</span>
+                </div>
+                <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.65, maxWidth: 520 }}>
+                  {entryBand.body}
+                </p>
+              </div>
+              <Link
+                href={entryBand.href}
+                className="btn-pink"
+                style={{ whiteSpace: "nowrap", textAlign: "center" }}
+              >
+                {entryBand.cta}
+              </Link>
+            </div>
+          )}
 
           {/* Two paid tiers since the $33 social tier was retired: free now owns the chat rooms, so
               social had nothing left that was uniquely its own, and its rituals (book club, moon
@@ -1018,13 +1043,17 @@ export default function MembershipPage() {
                 </>
               ) : (
                 <>
-                  <div className="tag mb-3">start your free week</div>
+                  {/* Doors closed. A stranger is pointed at the free week; anyone who already has an
+                      account can't start one, so she's pointed at the join instead of at an offer
+                      the signup route would refuse. */}
+                  <div className="tag mb-3">{member ? "keep your platform" : "start your free week"}</div>
                   <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
-                    Full access for 7 days, no card needed. You&apos;ll be inside and using your portal
-                    before the paid doors reopen.
+                    {member
+                      ? "Membership is $88 a month, cancel anytime, and it keeps everything open on the account you already have."
+                      : "Full access for 7 days, no card needed. You'll be inside and using your portal before the paid doors reopen."}
                   </p>
-                  <Link href={FREE_TRIAL_CTA.href} className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
-                    {FREE_TRIAL_CTA.label}
+                  <Link href={member ? "#pricing" : FREE_TRIAL_CTA.href} className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
+                    {member ? "become a member" : FREE_TRIAL_CTA.label}
                   </Link>
                   <div className="flex flex-wrap gap-2 mt-6">
                     {["No card needed", "Full access", "Cancel anytime"].map((b) => (
