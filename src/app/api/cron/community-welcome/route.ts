@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendCommunityWelcomeEmail } from "@/lib/email/community-welcome";
 import {
   chunkForMessages,
   findWelcomeSender,
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
   let dryRun = false;
   let maxAgeHours = WELCOME_MAX_AGE_HOURS;
   let seedOverride: string | null = null;
+  let testEmailTo: string | null = null;
   try {
     const body = await request.json();
     dryRun = body?.dry_run === true;
@@ -61,8 +63,21 @@ export async function POST(request: NextRequest) {
     // The daily run seeds its wording with the date. A catch-up over people who joined weeks ago
     // must not be allowed to land on "look who joined today", so the seed can be chosen instead.
     if (typeof body?.seed === "string" && body.seed.trim()) seedOverride = body.seed.trim();
+    if (typeof body?.test_email_to === "string" && body.test_email_to.trim()) testEmailTo = body.test_email_to.trim();
   } catch {
     // pg_cron posts "{}", and an empty or malformed body just means a normal run.
+  }
+
+  // Smoke test: send one real welcome email to a named address and report which provider actually
+  // delivered it. Nothing is queried, posted or written. This exists because a Resend that is not
+  // configured falls back to Brevo silently, which looks exactly like a working Resend setup.
+  if (testEmailTo) {
+    const result = await sendCommunityWelcomeEmail({
+      email: testEmailTo,
+      name: "Betty",
+      message: "welcome to my sznnnn babes 💜🪩 @Betty we are so happy you're here. Give us your Big 3, and tell us what got you into astrology 👀",
+    });
+    return NextResponse.json({ test_email_to: testEmailTo, ...result });
   }
 
   const admin = createAdminClient();

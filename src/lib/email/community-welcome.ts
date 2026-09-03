@@ -73,9 +73,15 @@ function escapeHtml(value: string): string {
 }
 
 /** Never throws: a mail problem must not fail the run that already posted the message. */
+/** The provider is reported back so a test send can prove which one actually delivered, rather
+ *  than a silent fallback to Brevo looking exactly like a working Resend setup. */
+export type CommunityWelcomeSendResult =
+  | { ok: true; provider: "resend" | "brevo"; messageId: string | null }
+  | { ok: false; provider: "resend" | "brevo" | "none"; error: string };
+
 export async function sendCommunityWelcomeEmail(
   msg: CommunityWelcomeEmail
-): Promise<BrevoSendResult | { ok: true; messageId: string | null }> {
+): Promise<CommunityWelcomeSendResult> {
   const firstName = (msg.name ?? "").trim().split(/\s+/)[0] || "babe";
   try {
     if (resendConfigured()) {
@@ -86,24 +92,27 @@ export async function sendCommunityWelcomeEmail(
       });
       // A Resend failure falls through to Brevo rather than dropping the email, since the member
       // has already been told in the chat that Betty is talking to her.
-      if (sent.ok) return sent;
+      if (sent.ok) return { ok: true, provider: "resend", messageId: sent.messageId };
       console.error("community welcome: resend failed, falling back to brevo", sent.error);
     }
 
     const templateId = process.env.BREVO_TEMPLATE_COMMUNITY_WELCOME?.trim();
-    if (templateId && /^\d+$/.test(templateId)) {
-      return await sendBrevoTemplateEmail({
-        to: { email: msg.email, name: msg.name ?? undefined },
-        templateId: parseInt(templateId, 10),
-        params: { first_name: firstName, chat_message: msg.message, room_url: ROOM_URL },
-      });
-    }
-    return await sendBrevoEmail({
-      to: { email: msg.email, name: msg.name ?? undefined },
-      subject: `${firstName}, you got tagged in the MY SZN chat 💜`,
-      htmlContent: html(firstName, msg.message),
-    });
+    const viaBrevo: BrevoSendResult =
+      templateId && /^\d+$/.test(templateId)
+        ? await sendBrevoTemplateEmail({
+            to: { email: msg.email, name: msg.name ?? undefined },
+            templateId: parseInt(templateId, 10),
+            params: { first_name: firstName, chat_message: msg.message, room_url: ROOM_URL },
+          })
+        : await sendBrevoEmail({
+            to: { email: msg.email, name: msg.name ?? undefined },
+            subject: `${firstName}, you got tagged in the MY SZN chat 💜`,
+            htmlContent: html(firstName, msg.message),
+          });
+    return viaBrevo.ok
+      ? { ok: true, provider: "brevo", messageId: viaBrevo.messageId }
+      : { ok: false, provider: "brevo", error: viaBrevo.error };
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+    return { ok: false, provider: "none", error: e instanceof Error ? e.message : String(e) };
   }
 }
