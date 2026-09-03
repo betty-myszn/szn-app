@@ -135,4 +135,10 @@ export const EVENTS = {
   SIGN_UP: "sign_up",
   /** Any primary call-to-action press, with a label saying which one. */
   CTA_CLICK: "cta_click",
+  /** One of the three first-run steps done, carrying which one. The trial funnel had nothing at all
+   *  between sign_up and purchase, so there was no way to tell a trial that never got started from
+   *  one that was used properly and still didn't convert. */
+  ACTIVATION_STEP: "activation_step",
+  /** All three done. The number that predicts whether a trial converts. */
+  ACTIVATED: "activation_complete",
 } as const;

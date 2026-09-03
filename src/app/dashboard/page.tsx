@@ -29,6 +29,7 @@ import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import TrialKeepPanel from "@/components/TrialKeepPanel";
+import ActivationStrip from "@/components/ActivationStrip";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
@@ -299,6 +300,9 @@ export default function DashboardPage() {
   return (
     <>
       <PasswordPromptBanner />
+      {/* The first run: three moves that make the platform click, gone once she's done them. Stands
+          down for the last three days so it never stacks with the closing ask below. */}
+      <ActivationStrip hasGoal={!!primaryGoal} />
       {/* Only appears in the last three days of a free week, and only for a trial member. Fed her own
           streak and goal so what she'd be putting down is named rather than listed. */}
       <TrialKeepPanel streakDays={streak?.current ?? 0} goalTitle={primaryGoal?.title ?? null} />

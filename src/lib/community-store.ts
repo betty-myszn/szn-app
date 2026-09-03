@@ -1,4 +1,5 @@
 import { ZODIAC_SIGNS, ZODIAC_SYMBOLS } from "@/types/chart";
+import { markActivationStep } from "@/lib/activation";
 import { createClient } from "@/lib/supabase/client";
 
 export interface SpaceMeta {
@@ -258,6 +259,8 @@ export async function addPost(author: string, sign: string, space: string, conte
     space,
     content,
   });
+  // Counts as her first-run "post in a room" step, same as a chat message does.
+  markActivationStep("room");
   return loadPosts();
 }
 

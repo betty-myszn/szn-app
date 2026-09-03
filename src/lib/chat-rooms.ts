@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
+import { markActivationStep } from "@/lib/activation";
 
 export interface ChatMessage {
   id: string;
@@ -50,6 +51,9 @@ export async function addRoomMessage(spaceId: string, author: string, content: s
     author,
     content,
   });
+  // Saying something in a room is one of the three first-run steps. Marked here rather than in the
+  // room UI so it counts wherever she posted from.
+  markActivationStep("room");
   return loadRoomMessages(spaceId);
 }
 
