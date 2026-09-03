@@ -2,9 +2,14 @@ import type { createAdminClient } from "@/lib/supabase/admin";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
-// The automatic "welcome to MY SZN" message posted into the main chat a few minutes after someone
-// joins, from Betty's own profile, tagging the new member so she gets a notification and so the
-// room has a live conversation in it rather than a wall of nothing.
+// The automatic "welcome to MY SZN" post in the main chat, from Betty's own profile, tagging every
+// member who joined that day so each of them gets a notification and the room has a live
+// conversation in it rather than a wall of nothing.
+//
+// ONE post a day, naming everyone, rather than one post per arrival. A run of near-identical
+// greetings stacked up the room reads as a bot working through a list, where a single "look who
+// joined us today" reads as a room with people in it. It also gives the new members someone to
+// answer alongside instead of each of them replying into silence on their own.
 //
 // It asks the one question anybody in an astrology community can answer without thinking, which is
 // the whole trick: a new member gets an easy first thing to say, and everyone else gets a placement
@@ -13,13 +18,18 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 /** The room the welcome lands in: the general group chat, not a topic or sign room. */
 export const WELCOME_SPACE_ID = "general";
 
-/** How long after signup the welcome is held back. Long enough that it does not read as an
- *  automation firing in front of her, short enough that she is plausibly still looking. */
-export const WELCOME_DELAY_MINUTES = 7;
+/** Minimum age before someone is named. Only there so an account still mid-signup when the daily
+ *  run fires is picked up by tomorrow's instead of being announced half-made. */
+export const WELCOME_DELAY_MINUTES = 5;
 
-/** Do not welcome accounts older than this. Without it, the first run after deploy would post a
- *  welcome for every member who ever joined, all at once, into the main chat. */
-export const WELCOME_MAX_AGE_HOURS = 24;
+/** Do not welcome accounts older than this. Comfortably more than a day, so a run missed to an
+ *  outage still catches yesterday's joiners, while the first run after deploy cannot post a welcome
+ *  for every member who ever joined. */
+export const WELCOME_MAX_AGE_HOURS = 48;
+
+/** Most mentions in one message. Beyond this the run posts a second message rather than dropping
+ *  anyone, because a member who was silently skipped is never coming back round. */
+export const WELCOME_NAMES_PER_MESSAGE = 15;
 
 /**
  * The mention token for a member. Chat mentions are matched as @[A-Za-z0-9_]+ by both the room's
@@ -59,25 +69,67 @@ export const WELCOME_VARIANTS: readonly string[] = [
 ];
 
 /**
- * Which welcome a given member gets. Derived from her user id rather than picked at random, so a
- * retry after a failure posts the same message it was always going to, and so the choice can
- * actually be tested. Sequential signups get different ids and land on different variants.
+ * The group welcomes, used whenever more than one person joined that day. {names} becomes the whole
+ * list as live mentions. Same rule as the single ones: every variant keeps the Big 3 prompt, since
+ * that is the part the room actually replies to.
  */
-export function welcomeVariantIndex(userId: string): number {
+export const WELCOME_GROUP_VARIANTS: readonly string[] = [
+  "Look who joined MY SZN today 💜 {names} we are soooo happy you're here. Give us your Big 3, and tell us what got you into astrology 👀🪩",
+  "New besties in the chat 🪩 {names} welcome, welcome. Drop your Big 3 for us, and what made you fall in love with astrology? 💜",
+  "Everyone say hiiii to {names} 💜 so glad you found us. What are your Big 3, and what's the placement you will never shut up about? 👀",
+  "{names} just walked in 🪩 welcome babes. Tell us your Big 3, and what you're hoping this szn brings you 💜",
+  "Fresh faces in here today 👀 {names} welcome to MY SZN. What are your Big 3, and what sent you down the astrology rabbit hole? 🪩",
+];
+
+/**
+ * Which variant a given post gets. Derived from a seed rather than picked at random, so a retry
+ * posts the message it was always going to post and the choice can actually be tested. The seed is
+ * the day for a group post and the member's id for a solo one, so consecutive days and consecutive
+ * members land on different wording.
+ */
+export function welcomeVariantIndex(seed: string, poolSize: number = WELCOME_VARIANTS.length): number {
   let hash = 0;
-  for (let i = 0; i < userId.length; i++) hash = (hash * 31 + userId.charCodeAt(i)) >>> 0;
-  return hash % WELCOME_VARIANTS.length;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  return hash % poolSize;
 }
 
 /**
- * The message itself, with the member's first name as a live mention. userId picks which of the
+ * The list of mentions as it reads in a sentence: "@Sarah", "@Sarah and @Priya", "@Sarah, @Priya
+ * and @Jo". No serial comma, matching the app's en-GB copy everywhere else.
+ */
+export function formatMentionList(tokens: readonly string[]): string {
+  const mentions = tokens.map((t) => `@${t}`);
+  if (mentions.length <= 1) return mentions[0] ?? "";
+  return `${mentions.slice(0, -1).join(", ")} and ${mentions[mentions.length - 1]}`;
+}
+
+/**
+ * The message itself, with the member's first name as a live mention. seed picks which of the
  * welcomes she gets; without one it falls back to the first, which is what the copy previews use.
  */
-export function welcomeMessageFor(name: string | null | undefined, userId?: string): string | null {
+export function welcomeMessageFor(name: string | null | undefined, seed?: string): string | null {
   const token = mentionTokenFor(name);
   if (!token) return null;
-  const template = WELCOME_VARIANTS[userId ? welcomeVariantIndex(userId) : 0];
+  const template = WELCOME_VARIANTS[seed ? welcomeVariantIndex(seed) : 0];
   return template.replace("{name}", token);
+}
+
+/**
+ * The day's post. One name gets a solo welcome, because "look who joined today" reading out a list
+ * of one is worse than just greeting her. Two or more get a group one.
+ *
+ * Tokens are de-duplicated: two members both called Sarah would otherwise render "@Sarah and
+ * @Sarah", and the notification trigger reaches both of them from the single mention anyway.
+ */
+export function groupWelcomeMessage(tokens: readonly string[], seed: string): string | null {
+  const unique = [...new Set(tokens)];
+  if (unique.length === 0) return null;
+  if (unique.length === 1) {
+    const template = WELCOME_VARIANTS[welcomeVariantIndex(seed)];
+    return template.replace("{name}", unique[0]);
+  }
+  const template = WELCOME_GROUP_VARIANTS[welcomeVariantIndex(seed, WELCOME_GROUP_VARIANTS.length)];
+  return template.replace("{names}", formatMentionList(unique));
 }
 
 export interface WelcomeSender {
@@ -111,33 +163,55 @@ export async function findWelcomeSender(admin: SupabaseAdmin): Promise<WelcomeSe
 }
 
 export type WelcomeOutcome =
-  | { status: "posted" }
+  | { status: "posted"; named: number }
   | { status: "skipped"; reason: string }
   | { status: "failed"; error: string };
 
+export interface WelcomeCandidate {
+  id: string;
+  name: string | null;
+}
+
+/** Splits the day's joiners into message-sized groups, so a big day posts two short messages
+ *  rather than one unreadable wall of mentions, and nobody is dropped to make it fit. */
+export function chunkForMessages<T>(items: readonly T[], size = WELCOME_NAMES_PER_MESSAGE): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
+}
+
 /**
- * Posts one welcome and marks the member welcomed. The mention notification is NOT sent from here:
- * inserting the message fires the notify_on_chat_mention trigger, which is the same path a member
- * gets when a human tags them, so there is one mechanism rather than a special case that can drift
- * away from the real one.
+ * Posts the day's welcome for one group and marks every member in it welcomed. The mention
+ * notifications are NOT sent from here: inserting the message fires the notify_on_chat_mention
+ * trigger, which is the same path a member gets when a human tags her, so there is one mechanism
+ * rather than a special case that can drift away from the real one.
  *
- * community_welcomed_at is written even when the post itself was skipped for an unusable name, so a
- * member who can never be welcomed is not re-examined every five minutes forever.
+ * Members whose name yields no usable mention are still marked welcomed, so someone who can never
+ * be named is not re-examined every single day forever.
  */
-export async function postWelcomeMessage(
+export async function postWelcomeBatch(
   admin: SupabaseAdmin,
   sender: WelcomeSender,
-  member: { id: string; name: string | null }
+  members: readonly WelcomeCandidate[],
+  seed: string
 ): Promise<WelcomeOutcome> {
-  const content = welcomeMessageFor(member.name, member.id);
+  if (members.length === 0) return { status: "skipped", reason: "nobody_due" };
+
+  const named = members.filter((m) => mentionTokenFor(m.name) !== null);
+  const tokens = named.map((m) => mentionTokenFor(m.name) as string);
+  const content = groupWelcomeMessage(tokens, seed);
+
   if (!content) {
-    await markWelcomed(admin, member.id);
-    return { status: "skipped", reason: "no_usable_name" };
+    // Everyone in this group had an unusable name. Nothing worth posting, but they must still be
+    // marked or the same dead batch is reconsidered tomorrow and every day after.
+    await markWelcomed(admin, members.map((m) => m.id));
+    return { status: "skipped", reason: "no_usable_names" };
   }
 
   // chat_messages.id is a text column the client fills with Date.now(), which collides the moment
-  // two messages land in the same millisecond. A prefix keeps automated posts out of that race.
-  const id = `welcome-${member.id}`;
+  // two messages land in the same millisecond. Keyed on the first member instead: unique because a
+  // member is only ever in one batch, and it makes a re-run of the same day idempotent.
+  const id = `welcome-${members[0].id}`;
   const { error } = await admin.from("chat_messages").insert({
     id,
     space_id: WELCOME_SPACE_ID,
@@ -147,23 +221,24 @@ export async function postWelcomeMessage(
   });
 
   if (error) {
-    // A duplicate id means this member was already welcomed and the marking failed last time.
-    // Nothing to re-post, so mark them and move on.
+    // A duplicate id means this group was already posted and the marking failed last time. Nothing
+    // to re-post, so mark them and move on.
     if (error.code === "23505") {
-      await markWelcomed(admin, member.id);
+      await markWelcomed(admin, members.map((m) => m.id));
       return { status: "skipped", reason: "already_posted" };
     }
     return { status: "failed", error: error.message };
   }
 
-  await markWelcomed(admin, member.id);
-  return { status: "posted" };
+  await markWelcomed(admin, members.map((m) => m.id));
+  return { status: "posted", named: named.length };
 }
 
-async function markWelcomed(admin: SupabaseAdmin, userId: string): Promise<void> {
+async function markWelcomed(admin: SupabaseAdmin, userIds: readonly string[]): Promise<void> {
+  if (userIds.length === 0) return;
   const { error } = await admin
     .from("profiles")
     .update({ community_welcomed_at: new Date().toISOString() })
-    .eq("id", userId);
-  if (error) console.error("community welcome: could not mark welcomed", userId, error.message);
+    .in("id", userIds as string[]);
+  if (error) console.error("community welcome: could not mark welcomed", userIds.length, error.message);
 }

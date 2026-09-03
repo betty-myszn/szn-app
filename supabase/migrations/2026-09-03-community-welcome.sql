@@ -56,9 +56,14 @@ for each row execute function notify_on_chat_mention();
 
 -- ============================================================================
 -- THE CLOCK
--- Every five minutes, because the welcome is deliberately held back a few minutes after signup: a
--- message that lands the millisecond someone joins reads as an automation running, not as a room
--- with people in it. The route decides who (if anyone) is due.
+-- Once a day at 01:00 UTC, which is 08:00 in Vietnam where Betty is (UTC+7, no daylight saving, so
+-- that hour never drifts for her). For members it lands at 8pm US Eastern in winter and 9pm in
+-- summer, which is the evening scroll. It is 1am in the UK, so if the membership turns out to be
+-- UK-heavy this is the line to move: 08:00 UTC would put it at 9am UK and 3pm for Betty.
+--
+-- Daily rather than per signup because one post naming everybody reads as a room with people in it,
+-- where a run of near-identical greetings reads as a bot working through a list. The route decides
+-- who (if anyone) is due.
 --
 -- Before running: replace PASTE_YOUR_CRON_SECRET_HERE with CRON_SECRET from Railway. The secret is
 -- deliberately not committed, since anything in git is a secret you no longer have.
@@ -72,7 +77,7 @@ select cron.unschedule('community-welcome') where exists (
 
 select cron.schedule(
   'community-welcome',
-  '*/5 * * * *',
+  '0 1 * * *',   -- 01:00 UTC daily = 08:00 Vietnam
   $$
   select net.http_post(
     url     := 'https://itsmyszn.com/api/cron/community-welcome',
