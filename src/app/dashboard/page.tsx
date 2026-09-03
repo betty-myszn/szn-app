@@ -12,7 +12,7 @@ import { SIGN_OVERVIEWS } from "@/lib/interpretations";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
 import { upcomingWorkshops, pastWorkshops, type Workshop } from "@/lib/workshops";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
@@ -31,6 +31,7 @@ import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import TrialKeepPanel from "@/components/TrialKeepPanel";
 import ActivationStrip from "@/components/ActivationStrip";
 import WelcomeOverlay from "@/components/WelcomeOverlay";
+import DeepLinkScroll from "@/components/DeepLinkScroll";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
@@ -300,7 +301,12 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* Once, for a genuinely new account: what this platform is, then straight to her reading. */}
+      {/* ?open=guide from an email lands her on her szn guide instead of the top of the page.
+          Suspense because useSearchParams opts the tree into client rendering without it. */}
+      <Suspense fallback={null}>
+        <DeepLinkScroll />
+      </Suspense>
+      {/* Once, for a genuinely new account: what this platform is, then straight to her guide. */}
       <WelcomeOverlay />
       <PasswordPromptBanner />
       {/* The first run: three moves that make the platform click, gone once she's done them. Stands
