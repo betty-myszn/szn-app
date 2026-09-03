@@ -74,7 +74,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
     heading: expired ? "Your week is up" : "You're in the rooms",
     sub: "the chat rooms and your charts are still yours",
     body:
-      "Your personalised platform, this season's readings, the live workshops, the astro tapping and the meditations are the members-only part. Everything you've already written and started stays saved on this account, so joining picks it all back up rather than starting anything again.",
+      "Your personalised platform, your szn guide, the live workshops, the astro tapping and the meditations are the members-only part. Everything you've already written and started stays saved on this account, so joining picks it all back up rather than starting anything again.",
     cta: "become a member · $88/mo",
     href: "#pricing",
   };

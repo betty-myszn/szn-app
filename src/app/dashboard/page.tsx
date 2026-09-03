@@ -30,6 +30,7 @@ import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import TrialKeepPanel from "@/components/TrialKeepPanel";
 import ActivationStrip from "@/components/ActivationStrip";
+import WelcomeOverlay from "@/components/WelcomeOverlay";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
@@ -299,6 +300,8 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* Once, for a genuinely new account: what this platform is, then straight to her reading. */}
+      <WelcomeOverlay />
       <PasswordPromptBanner />
       {/* The first run: three moves that make the platform click, gone once she's done them. Stands
           down for the last three days so it never stacks with the closing ask below. */}

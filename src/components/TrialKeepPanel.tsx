@@ -55,7 +55,7 @@ export default function TrialKeepPanel({
           </h2>
 
           <p style={{ fontSize: 14.5, color: "var(--grey)", lineHeight: 1.75, maxWidth: 620, marginBottom: 20 }}>
-            {`Everything on this page, your personalised season reading, the workshops and the meditations, closes ${endsLabel}. `}
+            {`Everything on this page, your szn guide, the workshops and the meditations, closes ${endsLabel}. `}
             {streakDays > 0
               ? `Your ${streakDays} day journal streak stays saved on your account, along with everything you've written in it. `
               : "Everything you've written and started stays saved on your account. "}

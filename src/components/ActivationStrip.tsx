@@ -19,8 +19,8 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // owns the closing ask.
 const STAND_DOWN_WITH_DAYS_LEFT = 3;
 
-/** How long her season reading has to be on screen before it counts as read rather than scrolled
- *  past. Long enough that a bounce doesn't tick it, short enough that a real reader gets credit. */
+/** How long her szn guide has to be on screen before it counts as read rather than scrolled past.
+ *  Long enough that a bounce doesn't tick it, short enough that a real reader gets credit. */
 const READ_DWELL_MS = 10_000;
 
 /** The anchor the dashboard already puts immediately above SeasonPersonalised. */
@@ -34,7 +34,7 @@ interface StepCopy {
 }
 
 const STEPS: StepCopy[] = [
-  { key: "reading", label: "read your season reading", sub: "the part that's actually about you", href: `#${READING_ANCHOR}` },
+  { key: "reading", label: "read your szn guide", sub: "how to live your chart this season", href: `#${READING_ANCHOR}` },
   { key: "room", label: "post once in a room", sub: "say hi, the girls answer", href: "/community" },
   { key: "goal", label: "set one goal", sub: "one thing you want this season", href: "/goals" },
 ];
@@ -60,7 +60,7 @@ export default function ActivationStrip({ hasGoal }: { hasGoal: boolean }) {
     setState(activationState(hasGoal));
   }, [hasGoal, tick, now]);
 
-  // Marks the reading step once her own season read has genuinely been on screen for a while. The
+  // Marks the reading step once her szn guide has genuinely been on screen for a while. The
   // anchor is a zero-height div, so the timer starts when it crosses the viewport and runs to
   // completion: by then she is scrolled down inside the reading itself.
   useEffect(() => {

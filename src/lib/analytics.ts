@@ -141,4 +141,9 @@ export const EVENTS = {
   ACTIVATION_STEP: "activation_step",
   /** All three done. The number that predicts whether a trial converts. */
   ACTIVATED: "activation_complete",
+  /** A panel of the first-visit welcome was reached, carrying which one. */
+  WELCOME_STEP: "welcome_step",
+  /** The welcome closed, carrying the panel she was on and whether she finished it. Tells you which
+   *  panel loses people, rather than only how many saw it. */
+  WELCOME_CLOSED: "welcome_closed",
 } as const;
