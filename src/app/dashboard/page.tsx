@@ -28,6 +28,7 @@ import SeasonMeditation from "@/components/SeasonMeditation";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
+import TrialKeepPanel from "@/components/TrialKeepPanel";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
@@ -298,6 +299,9 @@ export default function DashboardPage() {
   return (
     <>
       <PasswordPromptBanner />
+      {/* Only appears in the last three days of a free week, and only for a trial member. Fed her own
+          streak and goal so what she'd be putting down is named rather than listed. */}
+      <TrialKeepPanel streakDays={streak?.current ?? 0} goalTitle={primaryGoal?.title ?? null} />
       <Ticker
         variant="lav"
         items={[`it's ${sign} szn, baby`, ...season.tickerLines]}

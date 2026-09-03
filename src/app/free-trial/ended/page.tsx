@@ -1,10 +1,15 @@
 import Link from "next/link";
+import { workshopCardRow, shortWorkshopMeta } from "@/lib/workshops";
 
 // The designed "your free week is over" state. An expired trial is redirected here from every gated
 // route (see proxy.ts) and lands here on login (postAuthDestination), so it must stand alone and
 // never look like a broken page. Her account, chart and everything she started stay saved; the only
 // door left open is the paid join, which reuses the normal /membership checkout so converting
 // updates her existing account (client_reference_id) rather than making her start over.
+
+// Re-rendered hourly rather than frozen at build, because the workshop row below is read from the
+// live schedule and a page baked at deploy time would go stale the moment a class passed.
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Your free week is over · MY SZN",
@@ -92,11 +97,6 @@ const MEMBERS_ONLY = [
   "the vault + resources",
 ];
 
-const COMING: Array<{ cover: string; meta: string; title: string; desc: string }> = [
-  { cover: "/visible-af-cover.jpg", meta: "19 aug · astro tapping", title: "Visible AF: How to Show Up & Get Paid", desc: "Tap through the fear of being seen, until showing up and charging your worth feels natural." },
-  { cover: "/virgo-goalsetting-cover.jpg", meta: "26 aug · working session", title: "Virgo Goal-Setting: Map the Rest of Your Year", desc: "Sit down together and decide where the rest of your year is going." },
-  { cover: "/virgo-workshop-cover.jpg", meta: "10 sep · masterclass", title: "Virgo Season: Get Your Sh*t Together & Become Her", desc: "The deeper work of becoming the woman who follows through." },
-];
 
 const BENEFITS: Array<[string, string]> = [
   ["pick up where you left off", "your chart, journal, goals and progress are all still saved on this account."],
@@ -107,7 +107,21 @@ const BENEFITS: Array<[string, string]> = [
   ["cancel anytime", "stay for as many seasons as it's working for you. no lock-in, no minimum."],
 ];
 
-export default function TrialEndedPage() {
+// Read from the real schedule rather than a hardcoded list, so a woman who just lost access is never
+// shown a class from a fortnight ago as the reason to come back. workshopCardRow leads with whatever
+// is genuinely still to come and tops the row up with the newest replays (which are in the vault
+// she'd be rejoining), so the row never runs half empty between seasons.
+//
+// The clock is read here rather than inside the component because reading it during a render is
+// impure; this page is regenerated hourly (see revalidate above), which is what keeps it current.
+async function comingUp() {
+  const now = Date.now();
+  return { now, coming: workshopCardRow(now, 3) };
+}
+
+export default async function TrialEndedPage() {
+  const { now, coming } = await comingUp();
+
   return (
     <div className="fte">
       <style>{css}</style>
@@ -151,14 +165,16 @@ export default function TrialEndedPage() {
           <div className="rl">what&apos;s coming next inside</div>
           <h2 className="disp" style={{ textAlign: "center" }}>the workshops you&apos;d be walking into.</h2>
           <div className="ev-grid">
-            {COMING.map((ev) => (
-              <div className="ev" key={ev.title}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="ev-cover" src={ev.cover} alt={ev.title} />
+            {coming.map((ev) => (
+              <div className="ev" key={ev.id}>
+                {ev.coverImage && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img className="ev-cover" src={ev.coverImage} alt={ev.title} />
+                )}
                 <div className="ev-body">
-                  <div className="m">{ev.meta}</div>
+                  <div className="m">{shortWorkshopMeta(ev, now)}</div>
                   <h4>{ev.title}</h4>
-                  <p>{ev.desc}</p>
+                  <p>{ev.blurb}</p>
                 </div>
               </div>
             ))}

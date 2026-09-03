@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins, DM_Sans } from "next/font/google";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
+import TrialBar from "@/components/TrialBar";
 import Analytics from "@/components/Analytics";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
@@ -121,6 +122,10 @@ export default function RootLayout({
 
         {/* Nav */}
         <NavBar />
+
+        {/* Where she is in her free week, and how to keep it. Renders nothing unless she's mid-trial,
+            and sits here rather than on the dashboard so it travels with her across the platform. */}
+        <TrialBar />
 
         {/* Main */}
         <main className="flex-1">{children}</main>

@@ -5,7 +5,7 @@ import PlacesAutocomplete from "@/components/PlacesAutocomplete";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { saveBirthData, savePlacements, placementsFromChart } from "@/lib/url-params";
 import { syncChartToSupabase } from "@/lib/chart-sync";
-import { workshopCardRow, shortWorkshopMeta } from "@/lib/workshops";
+import { workshopCardRow, shortWorkshopMeta, upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { track, EVENTS } from "@/lib/analytics";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -211,6 +211,18 @@ export default function FreeTrialPage() {
           desc: w.blurb,
         }));
 
+  // The spotlight and the urgency band read the same schedule as the card row above, so this page
+  // can never sell a class that has already happened. Three states, in order of what's true:
+  //  - a confirmed class inside her free week, which is a real dated reason to start today;
+  //  - a confirmed class after it, shown as what she'd be joining rather than as her week's headline;
+  //  - nothing confirmed at all, where the spotlight falls back to the newest replay (genuinely
+  //    waiting in the vault) and the urgency band, whose whole job is a real date, hides itself.
+  const nextWorkshop = now === null ? null : upcomingWorkshops(now).find((w) => w.startIso) ?? null;
+  const latestReplay = now === null ? null : pastWorkshops(now).find((w) => w.replayYoutubeId) ?? null;
+  const spotlight = nextWorkshop ?? latestReplay;
+  const insideFreeWeek =
+    now !== null && !!nextWorkshop?.startIso && new Date(nextWorkshop.startIso).getTime() - now <= 7 * 86_400_000;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
@@ -321,6 +333,9 @@ export default function FreeTrialPage() {
                 {"no card required. your full access ends automatically after 7 days."}
               </p>
               <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
+                {"membership is $88 a month if you decide to stay, and only ever if you choose it."}
+              </p>
+              <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
                 {"and after your week, the chat rooms and your charts stay yours, free."}
               </p>
             </div>
@@ -339,7 +354,7 @@ export default function FreeTrialPage() {
       {/* STRIP */}
       <section className="strip">
         <div className="wrap">
-          <p>{"7 days. the full membership. no card, no auto-charge, nothing to cancel."}</p>
+          <p>{"7 days. the full membership. no card, no auto-charge, nothing to cancel. $88 a month after, only if you say so."}</p>
         </div>
       </section>
 
@@ -379,27 +394,41 @@ export default function FreeTrialPage() {
         </div>
       </section>
 
-      {/* WORKSHOP SPOTLIGHT (the visibility one) */}
+      {/* WORKSHOP SPOTLIGHT, led by whatever is genuinely next */}
+      {spotlight && (
       <section className="sec" style={{ background: "var(--cream)", borderBottom: "1.5px solid var(--dark)" }}>
         <div className="wrap">
-          <div className="rl">the workshop waiting inside this week</div>
+          <div className="rl">
+            {insideFreeWeek
+              ? "the workshop waiting inside this week"
+              : nextWorkshop
+                ? "the next live workshop you'd walk into"
+                : "the workshop waiting in the vault"}
+          </div>
           <div className="spotlight">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="spot-cover" src="/visible-af-cover.jpg" alt="Visible AF workshop cover" />
+            {spotlight.coverImage && (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img className="spot-cover" src={spotlight.coverImage} alt={`${spotlight.title} cover`} />
+            )}
             <div className="spot-text">
-              <div className="wt">this month&apos;s live workshop</div>
-              <div className="when2">live 19 august · 7pm la time · replay saved inside</div>
-              <h3 className="spot-title">
-                Visible AF:<br />How to Show Up &amp; Get Paid.
-              </h3>
-              <p>
-                {"You weren't born to be the internet's best kept secret. This is a live astro tapping workshop that works underneath the mindset advice, down at the wiring, on the shrinking, the over-editing and the waiting until you feel ready. We tap through the fear of being seen, judged, too much or wrong, until showing up, talking about your offers and charging what you're worth feels natural instead of terrifying."}
-              </p>
-              <div className="incl">✦ yours free during your 7-day trial</div>
+              <div className="wt">{nextWorkshop ? `next live ${spotlight.kind}` : `the latest ${spotlight.kind}`}</div>
+              <div className="when2">
+                {nextWorkshop && spotlight.startIso
+                  ? `live ${formatWorkshopWhenLA(spotlight.startIso)} · replay saved inside`
+                  : "replay saved inside, watch it the day you start"}
+              </div>
+              <h3 className="spot-title">{spotlight.title}</h3>
+              {spotlight.paragraphs.slice(0, 2).map((para) => (
+                <p key={para}>{para}</p>
+              ))}
+              <div className="incl">
+                {insideFreeWeek ? "✦ live inside your free week" : "✦ every replay is yours free during your 7 days"}
+              </div>
             </div>
           </div>
         </div>
       </section>
+      )}
 
       {/* EVENTS ROW */}
       <section className="sec">
@@ -491,7 +520,7 @@ export default function FreeTrialPage() {
             <div className="tl"><div className="d">day 1</div><b>you&apos;re in</b><p>{"sign up in under a minute with no card. you're logged straight in as a full member, chart already built."}</p></div>
             <div className="tl"><div className="d">days 1 to 7</div><b>live in it</b><p>{"your platform, the live workshops and replays, the astro tapping, the vault and the member rooms. all of it."}</p></div>
             <div className="tl"><div className="d">day 6</div><b>a gentle heads up</b><p>{"we'll remind you your free week is nearly up, so the end never catches you by surprise."}</p></div>
-            <div className="tl"><div className="d">day 7</div><b>it winds down on its own</b><p>{"your personalised platform, workshops and meditations close. you keep the chat rooms and your chart. no charge, nothing to cancel."}</p></div>
+            <div className="tl"><div className="d">day 7</div><b>it winds down on its own</b><p>{"your personalised platform, workshops and meditations close. you keep the chat rooms and your chart. no charge, nothing to cancel, and staying on is $88 a month whenever you want it back."}</p></div>
           </div>
         </div>
       </section>
@@ -507,7 +536,11 @@ export default function FreeTrialPage() {
             </details>
             <details>
               <summary>Will I be charged when the 7 days end?</summary>
-              <div className="a">{"No. Because we never take a card, there's nothing to charge. Your access simply ends on its own after 7 days. If you want to stay, you choose to become a member. Nothing happens automatically."}</div>
+              <div className="a">{"No. Because we never take a card, there's nothing to charge. Your access simply ends on its own after 7 days. If you want to stay, membership is $88 a month and you choose it yourself. Nothing happens automatically."}</div>
+            </details>
+            <details>
+              <summary>What does it cost if I want to stay?</summary>
+              <div className="a">{"MY SZN is $88 a month, billed monthly, and you can cancel anytime from your settings. That's the whole membership, everything you had during your free week. There's also a VIP tier at $555 a month if you want direct 1:1 coaching with me, and $88 is the one almost everyone is on."}</div>
             </details>
             <details>
               <summary>What happens on day 7?</summary>
@@ -521,13 +554,17 @@ export default function FreeTrialPage() {
         </div>
       </section>
 
-      {/* URGENCY */}
-      <section className="urgent">
-        <div className="wrap">
-          <div className="u">next live workshop · 19 august · 7pm la time</div>
-          <p>start your free week now so you&apos;re inside for it.</p>
-        </div>
-      </section>
+      {/* URGENCY. Only rendered when there's a confirmed class close enough that starting today
+          really does put her inside it, so the deadline is a real calendar date rather than a
+          countdown we invented. */}
+      {insideFreeWeek && nextWorkshop?.startIso && (
+        <section className="urgent">
+          <div className="wrap">
+            <div className="u">next live workshop · {formatWorkshopWhenLA(nextWorkshop.startIso)}</div>
+            <p>start your free week now so you&apos;re inside for it.</p>
+          </div>
+        </section>
+      )}
 
       {/* SIGNUP */}
       <section className="sec signup" id="ft-signup">
@@ -574,6 +611,7 @@ export default function FreeTrialPage() {
               {error && <p className="err">{error}</p>}
               <div className="form-foot">
                 <p className="micro">{"no card required. you're logged straight in, and your access ends automatically after 7 days."}</p>
+                <p className="micro" style={{ marginTop: 6 }}>{"if you want to stay after your week, membership is $88 a month, cancel anytime."}</p>
               </div>
             </div>
           </form>
@@ -589,7 +627,7 @@ export default function FreeTrialPage() {
 
       <div className="sticky-cta">
         <a href="#ft-signup">start my free 7 days</a>
-        <div className="sn">no card required · access ends automatically after 7 days</div>
+        <div className="sn">no card today · $88 a month only if you stay</div>
       </div>
     </div>
   );
