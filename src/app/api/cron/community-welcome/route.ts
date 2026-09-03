@@ -48,9 +48,15 @@ export async function POST(request: NextRequest) {
   // Dry run reports who WOULD be welcomed and what the message would say, and writes nothing. This
   // is how you check the thing before letting it talk to the whole community in Betty's name.
   let dryRun = false;
+  let maxAgeHours = WELCOME_MAX_AGE_HOURS;
   try {
     const body = await request.json();
     dryRun = body?.dry_run === true;
+    // A one-off catch-up can reach further back than the daily run does, for the members who joined
+    // before any of this existed. Clamped so a typo cannot reach the entire history of the app.
+    if (typeof body?.max_age_hours === "number" && Number.isFinite(body.max_age_hours)) {
+      maxAgeHours = Math.min(Math.max(body.max_age_hours, 1), 24 * 90);
+    }
   } catch {
     // pg_cron posts "{}", and an empty or malformed body just means a normal run.
   }
@@ -65,22 +71,33 @@ export async function POST(request: NextRequest) {
 
   const now = Date.now();
   const dueBefore = new Date(now - WELCOME_DELAY_MINUTES * 60_000).toISOString();
-  const floor = new Date(now - WELCOME_MAX_AGE_HOURS * 3_600_000).toISOString();
+  const floor = new Date(now - maxAgeHours * 3_600_000).toISOString();
   // The day itself seeds the variant, so consecutive days read differently and a re-run on the same
   // day produces the same wording rather than a random second voice.
   const seed = new Date(now).toISOString().slice(0, 10);
 
   // Anyone who has actually joined something: a card trial (which arrives as monthly/vip with a
-  // trialing status), a paid member, or the legacy no-card trial level. Free-tier and lapsed
-  // accounts are not welcomed into the paid community. Blocked members never are.
+  // trialing status), a paid member, or the legacy no-card trial level. Free-tier accounts are not
+  // welcomed into the paid community, and blocked members never are.
+  //
+  // The trial_expires_at guard matters: a legacy trial keeps membership_level 'trial' after it runs
+  // out, because expiry is computed at request time rather than written back. Without this, a
+  // catch-up run would greet a room full of people who lost their access days ago. Paid members
+  // have no expiry at all, so the null branch is what lets them through.
+  //
+  // Betty's own admin account is excluded, since welcoming herself into her own community is a
+  // strange thing for the room to watch happen.
+  const nowIso = new Date(now).toISOString();
   const { data: due, error } = await admin
     .from("profiles")
     .select("id, name, created_at")
     .is("community_welcomed_at", null)
     .in("membership_level", ["trial", "monthly", "vip"])
+    .or(`trial_expires_at.is.null,trial_expires_at.gt.${nowIso}`)
     .lt("created_at", dueBefore)
     .gt("created_at", floor)
     .eq("blocked", false)
+    .eq("is_admin", false)
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -107,6 +124,7 @@ export async function POST(request: NextRequest) {
       dry_run: true,
       sender: sender.name,
       candidates: candidates.length,
+      max_age_hours: maxAgeHours,
       messages: preview,
     });
   }
