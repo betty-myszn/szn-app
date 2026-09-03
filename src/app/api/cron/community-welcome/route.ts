@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendCommunityWelcomeEmail } from "@/lib/email/community-welcome";
+import { sendMemberNotification } from "@/lib/notify/send";
 import {
   chunkForMessages,
   findWelcomeSender,
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   let dryRun = false;
   let maxAgeHours = WELCOME_MAX_AGE_HOURS;
   let seedOverride: string | null = null;
-  let testEmailTo: string | null = null;
+  let testUserId: string | null = null;
   try {
     const body = await request.json();
     dryRun = body?.dry_run === true;
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     // The daily run seeds its wording with the date. A catch-up over people who joined weeks ago
     // must not be allowed to land on "look who joined today", so the seed can be chosen instead.
     if (typeof body?.seed === "string" && body.seed.trim()) seedOverride = body.seed.trim();
-    if (typeof body?.test_email_to === "string" && body.test_email_to.trim()) testEmailTo = body.test_email_to.trim();
+    if (typeof body?.test_user_id === "string" && body.test_user_id.trim()) testUserId = body.test_user_id.trim();
   } catch {
     // pg_cron posts "{}", and an empty or malformed body just means a normal run.
   }
@@ -71,16 +71,25 @@ export async function POST(request: NextRequest) {
   // Smoke test: send one real welcome email to a named address and report which provider actually
   // delivered it. Nothing is queried, posted or written. This exists because a Resend that is not
   // configured falls back to Brevo silently, which looks exactly like a working Resend setup.
-  if (testEmailTo) {
-    const result = await sendCommunityWelcomeEmail({
-      email: testEmailTo,
-      name: "Betty",
-      message: "welcome to my sznnnn babes 💜🪩 @Betty we are so happy you're here. Give us your Big 3, and tell us what got you into astrology 👀",
-    });
-    return NextResponse.json({ test_email_to: testEmailTo, ...result });
-  }
-
   const admin = createAdminClient();
+
+  // Smoke test: puts one real notification and email through the exact production path, addressed
+  // by user id, and reports what happened. Exists because a mail failure is otherwise invisible
+  // until a member does not receive something nobody knew was owed to her.
+  if (testUserId) {
+    const result = await sendMemberNotification(admin, {
+      userId: testUserId,
+      kind: "welcome",
+      title: "betty welcomed you in the chat",
+      body: "welcome to my sznnnn babes 💜🪩 we are so happy you're here. Give us your Big 3, and tell us what got you into astrology 👀",
+      link: "/community/room/general",
+      actor: "betty",
+      email: true,
+      emailSubject: "you got welcomed into MY SZN 💜",
+      emailCta: "GO SAY HI",
+    });
+    return NextResponse.json({ test: true, ...result });
+  }
 
   const sender = await findWelcomeSender(admin);
   if (!sender) {
@@ -109,7 +118,7 @@ export async function POST(request: NextRequest) {
   const nowIso = new Date(now).toISOString();
   const { data: due, error } = await admin
     .from("profiles")
-    .select("id, name, email, created_at")
+    .select("id, name, created_at")
     .is("community_welcomed_at", null)
     .in("membership_level", ["trial", "monthly", "vip"])
     .or(`trial_expires_at.is.null,trial_expires_at.gt.${nowIso}`)
@@ -127,7 +136,6 @@ export async function POST(request: NextRequest) {
   const candidates: WelcomeCandidate[] = (due ?? []).map((row) => ({
     id: row.id as string,
     name: (row.name as string | null) ?? null,
-    email: (row.email as string | null) ?? null,
   }));
   const groups = chunkForMessages(candidates);
 

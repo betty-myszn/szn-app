@@ -38,19 +38,21 @@ export async function loadRoomMessages(spaceId: string): Promise<ChatMessage[]> 
   });
 }
 
-export async function addRoomMessage(spaceId: string, author: string, content: string): Promise<ChatMessage[]> {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return loadRoomMessages(spaceId);
-  await supabase.from("chat_messages").insert({
-    id: `${Date.now()}`,
-    space_id: spaceId,
-    user_id: user.id,
-    author,
-    content,
+export async function addRoomMessage(spaceId: string, _author: string, content: string): Promise<ChatMessage[]> {
+  // Posted through the server rather than inserted straight from here, because the message has to
+  // be able to notify the people it mentions, and a member's own session must never be able to
+  // write into someone else's notification feed. The route resolves "@name" to user ids once and
+  // everything after that is addressed by id. `author` is ignored by the route, which reads the
+  // name off the poster's own profile so it cannot be spoofed from the browser.
+  const res = await fetch("/api/chat/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spaceId, content }),
   });
+  if (!res.ok) {
+    console.error("addRoomMessage: post failed", res.status);
+    return loadRoomMessages(spaceId);
+  }
   // Saying something in a room is one of the three first-run steps. Marked here rather than in the
   // room UI so it counts wherever she posted from.
   markActivationStep("room");

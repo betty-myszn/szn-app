@@ -1,5 +1,5 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
-import { sendCommunityWelcomeEmail } from "@/lib/email/community-welcome";
+import { sendMemberNotifications } from "@/lib/notify/send";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -49,6 +49,51 @@ export function mentionTokenFor(name: string | null | undefined): string | null 
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^A-Za-z0-9_]/g, "");
   return cleaned.length > 0 ? cleaned : null;
+}
+
+/**
+ * The mention token for a member when other members share her first name.
+ *
+ * "@Sarah" is the right way to greet a Sarah, right up until there are three of them and the room
+ * cannot tell which one was welcomed, and the mention links to somebody else's profile. In that
+ * case her whole name is used instead, joined up because a mention cannot contain a space.
+ */
+export function fullMentionTokenFor(name: string | null | undefined): string | null {
+  const cleaned = (name ?? "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9_\s]/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .join("");
+  return cleaned.length > 0 ? cleaned : null;
+}
+
+/**
+ * Picks each member's mention, using her first name where that is unambiguous and her full name
+ * where it is not. `allNames` is every display name in the app, because the clash that matters is
+ * with any member at all, not only with the others being welcomed in the same message.
+ */
+export function resolveMentionTokens(
+  members: readonly { id: string; name: string | null }[],
+  allNames: readonly (string | null)[]
+): Map<string, string> {
+  const firstNameCounts = new Map<string, number>();
+  for (const name of allNames) {
+    const token = mentionTokenFor(name)?.toLowerCase();
+    if (token) firstNameCounts.set(token, (firstNameCounts.get(token) ?? 0) + 1);
+  }
+
+  const resolved = new Map<string, string>();
+  for (const member of members) {
+    const first = mentionTokenFor(member.name);
+    if (!first) continue;
+    const shared = (firstNameCounts.get(first.toLowerCase()) ?? 0) > 1;
+    const token = shared ? fullMentionTokenFor(member.name) ?? first : first;
+    resolved.set(member.id, token);
+  }
+  return resolved;
 }
 
 /**
@@ -172,9 +217,6 @@ export type WelcomeOutcome =
 export interface WelcomeCandidate {
   id: string;
   name: string | null;
-  /** Needed for the nudge email. The in-app bell only reaches someone who comes back on her own,
-   *  and a new member who has not opened the app since signing up is exactly who this is for. */
-  email?: string | null;
 }
 
 /** Splits the day's joiners into message-sized groups, so a big day posts two short messages
@@ -209,8 +251,17 @@ export async function postWelcomeBatch(
 ): Promise<WelcomeOutcome> {
   if (members.length === 0) return { status: "skipped", reason: "nobody_due" };
 
-  const named = members.filter((m) => mentionTokenFor(m.name) !== null);
-  const tokens = named.map((m) => mentionTokenFor(m.name) as string);
+  // Every display name in the app, so a first name that clashes with ANY member (not only with the
+  // others in this message) is written out in full instead. Three Sarahs and a "@Sarah" leaves the
+  // room unable to tell who was welcomed, and links the mention to the wrong profile.
+  const { data: allProfiles } = await admin.from("profiles").select("name");
+  const tokenById = resolveMentionTokens(
+    members,
+    (allProfiles ?? []).map((r) => (r.name as string | null) ?? null)
+  );
+
+  const named = members.filter((m) => tokenById.has(m.id));
+  const tokens = named.map((m) => tokenById.get(m.id) as string);
   const content = groupWelcomeMessage(tokens, seed);
 
   if (!content) {
@@ -242,33 +293,24 @@ export async function postWelcomeBatch(
     return { status: "failed", error: error.message };
   }
 
-  await notifyNamed(admin, sender, named, content, id);
-  await emailNamed(named, content);
+  // One call, one system: the bell and the email both come from the same event, addressed by user
+  // id so neither can reach the wrong Sarah or miss the right one.
+  await sendMemberNotifications(
+    admin,
+    named.map((m) => ({
+      userId: m.id,
+      kind: "welcome" as const,
+      title: `${sender.name} welcomed you in the chat`,
+      body: content,
+      link: `/community/room/${WELCOME_SPACE_ID}`,
+      actor: sender.name,
+      email: true,
+      emailSubject: "you got welcomed into MY SZN 💜",
+      emailCta: "GO SAY HI",
+    }))
+  );
   await markWelcomed(admin, members.map((m) => m.id));
   return { status: "posted", named: named.length };
-}
-
-/** One notification per member actually named, addressed by id so it cannot reach the wrong person
- *  and cannot miss someone whose display name is more than one word. Failure is logged, never
- *  thrown: the message is already up, and a missing bell is not worth failing the run over. */
-async function notifyNamed(
-  admin: SupabaseAdmin,
-  sender: WelcomeSender,
-  named: readonly WelcomeCandidate[],
-  content: string,
-  messageId: string
-): Promise<void> {
-  if (named.length === 0) return;
-  const rows = named.map((m) => ({
-    user_id: m.id,
-    type: "mention",
-    title: `${sender.name} welcomed you in the chat`,
-    body: content.slice(0, 140),
-    link: `/community/room/${WELCOME_SPACE_ID}`,
-    actor: sender.name,
-  }));
-  const { error } = await admin.from("notifications").insert(rows);
-  if (error) console.error("community welcome: could not notify named members", messageId, error.message);
 }
 
 async function markWelcomed(admin: SupabaseAdmin, userIds: readonly string[]): Promise<void> {
@@ -278,18 +320,4 @@ async function markWelcomed(admin: SupabaseAdmin, userIds: readonly string[]): P
     .update({ community_welcomed_at: new Date().toISOString() })
     .in("id", userIds as string[]);
   if (error) console.error("community welcome: could not mark welcomed", userIds.length, error.message);
-}
-
-/** Emails each member the message named. Sequential, because this is a handful of people and firing
- *  a burst of parallel requests is how an API key gets rate limited. Failures are logged and never
- *  thrown: the message is up and the bell has rung, and neither should be undone by a mail problem. */
-async function emailNamed(named: readonly WelcomeCandidate[], content: string): Promise<void> {
-  for (const member of named) {
-    if (!member.email) {
-      console.error("community welcome: no email on profile, skipping nudge", member.id);
-      continue;
-    }
-    const result = await sendCommunityWelcomeEmail({ email: member.email, name: member.name, message: content });
-    if (!result.ok) console.error("community welcome: nudge email failed", member.id, result.error);
-  }
 }

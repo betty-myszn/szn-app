@@ -8,6 +8,7 @@ import {
   formatMentionList,
   groupWelcomeMessage,
   mentionTokenFor,
+  resolveMentionTokens,
   welcomeMessageFor,
   welcomeVariantIndex,
   WELCOME_GROUP_VARIANTS,
@@ -166,5 +167,35 @@ describe("formatMentionList", () => {
   it("leaves every name matchable as a mention", () => {
     const list = formatMentionList(["Sarah", "Jo", "Priya"]);
     expect(list.match(/@([A-Za-z0-9_]+)/g)).toEqual(["@Sarah", "@Jo", "@Priya"]);
+  });
+});
+
+describe("mention tokens when names collide", () => {
+  it("uses a first name when nobody else shares it", () => {
+    const tokens = resolveMentionTokens([{ id: "u1", name: "Brunilda" }], ["Brunilda", "Elana", "Logan"]);
+    expect(tokens.get("u1")).toBe("Brunilda");
+  });
+
+  it("writes the full name when other members share the first name", () => {
+    // Three Sarahs in the app. "@Sarah" would leave the room unable to tell which one was welcomed
+    // and would link the mention to somebody else's profile.
+    const tokens = resolveMentionTokens(
+      [{ id: "u1", name: "Sarah Elizabeth" }],
+      ["Sarah", "Sarah", "Sarah Elizabeth", "Logan"]
+    );
+    expect(tokens.get("u1")).toBe("SarahElizabeth");
+  });
+
+  it("still produces something a mention can match", () => {
+    const tokens = resolveMentionTokens(
+      [{ id: "u1", name: "Sarah Elizabeth" }],
+      ["Sarah", "Sarah Elizabeth"]
+    );
+    expect(tokens.get("u1")).toMatch(/^[A-Za-z0-9_]+$/);
+  });
+
+  it("skips a member with no usable name rather than greeting an empty mention", () => {
+    const tokens = resolveMentionTokens([{ id: "u1", name: "💜" }], ["💜"]);
+    expect(tokens.has("u1")).toBe(false);
   });
 });
