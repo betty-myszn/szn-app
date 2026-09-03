@@ -79,6 +79,7 @@ export const WELCOME_GROUP_VARIANTS: readonly string[] = [
   "Everyone say hiiii to {names} 💜 so glad you found us. What are your Big 3, and what's the placement you will never shut up about? 👀",
   "{names} just walked in 🪩 welcome babes. Tell us your Big 3, and what you're hoping this szn brings you 💜",
   "Fresh faces in here today 👀 {names} welcome to MY SZN. What are your Big 3, and what sent you down the astrology rabbit hole? 🪩",
+  "welcome to my sznnnn babes 💜🪩 {names} we are so happy you're here. Give us your Big 3, and tell us what got you into astrology 👀",
 ];
 
 /**

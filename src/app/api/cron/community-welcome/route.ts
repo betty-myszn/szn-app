@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
   // is how you check the thing before letting it talk to the whole community in Betty's name.
   let dryRun = false;
   let maxAgeHours = WELCOME_MAX_AGE_HOURS;
+  let seedOverride: string | null = null;
   try {
     const body = await request.json();
     dryRun = body?.dry_run === true;
@@ -57,6 +58,9 @@ export async function POST(request: NextRequest) {
     if (typeof body?.max_age_hours === "number" && Number.isFinite(body.max_age_hours)) {
       maxAgeHours = Math.min(Math.max(body.max_age_hours, 1), 24 * 90);
     }
+    // The daily run seeds its wording with the date. A catch-up over people who joined weeks ago
+    // must not be allowed to land on "look who joined today", so the seed can be chosen instead.
+    if (typeof body?.seed === "string" && body.seed.trim()) seedOverride = body.seed.trim();
   } catch {
     // pg_cron posts "{}", and an empty or malformed body just means a normal run.
   }
@@ -74,7 +78,7 @@ export async function POST(request: NextRequest) {
   const floor = new Date(now - maxAgeHours * 3_600_000).toISOString();
   // The day itself seeds the variant, so consecutive days read differently and a re-run on the same
   // day produces the same wording rather than a random second voice.
-  const seed = new Date(now).toISOString().slice(0, 10);
+  const seed = seedOverride ?? new Date(now).toISOString().slice(0, 10);
 
   // Anyone who has actually joined something: a card trial (which arrives as monthly/vip with a
   // trialing status), a paid member, or the legacy no-card trial level. Free-tier accounts are not
@@ -125,6 +129,7 @@ export async function POST(request: NextRequest) {
       sender: sender.name,
       candidates: candidates.length,
       max_age_hours: maxAgeHours,
+      seed,
       messages: preview,
     });
   }
