@@ -70,7 +70,7 @@ const PANELS: Panel[] = [
     eyebrow: "the rooms",
     heading: () => "you're not doing this on your own.",
     body: (season) =>
-      `The rooms are where the rest of it happens: the group chat, a room for wins where nobody makes you play it down, one for astrology, and the ${season} szn room where everyone in this season ends up. On top of that there's a live masterclass and a live astro tapping with me every month, and every replay stays in the vault for you.`,
+      `The rooms are where the rest of it happens: the group chat, a room for wins where nobody makes you play it down, one for astrology, and the ${season} szn room where everyone in this season ends up. On top of that there's a live masterclass and a live astrotapping with me every month, and every replay stays in the vault for you.`,
     cta: "next",
   },
   {

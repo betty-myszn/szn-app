@@ -189,7 +189,7 @@ export default function DashboardPage() {
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
             {hasBillingIssue(member)
               ? "We couldn't process your last payment. Update your payment method to get back in."
-              : "This is where your membership lives, the monthly masterclass and astro tapping, your full chart portal, shadow work, the community. Join to unlock it."}
+              : "This is where your membership lives, the monthly masterclass and astrotapping, your full chart portal, shadow work, the community. Join to unlock it."}
           </p>
           <Link href={hasBillingIssue(member) ? "/api/stripe/portal" : "/membership"} className="btn-pink">
             {hasBillingIssue(member) ? "update payment method" : "see membership options"}

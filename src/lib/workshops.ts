@@ -9,7 +9,7 @@ export interface Workshop {
    *  season they're for rather than which one the calendar is currently in. */
   season: string;
   /** What sort of class it is, used for the short card metas on the acquisition pages. */
-  kind: "masterclass" | "astro tapping" | "working session";
+  kind: "masterclass" | "astrotapping" | "working session";
   /** One-line summary for the small cards on the acquisition pages. */
   blurb: string;
   meta: string;
@@ -69,7 +69,7 @@ export const WORKSHOPS: Workshop[] = [
   {
     id: "leo-szn-workshop-2",
     season: "Leo",
-    kind: "astro tapping",
+    kind: "astrotapping",
     blurb: "Tap through the fear of being seen and charge what you're worth.",
     label: "leo szn workshop 2",
     meta: "19 august · 7pm la time · next live class",

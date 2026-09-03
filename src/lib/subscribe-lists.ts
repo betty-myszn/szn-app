@@ -39,6 +39,17 @@ export function listIdFor(source: string | undefined | null): number {
       CANONICAL_LIST_CHART
     );
   if (s === "money-blueprint") return listIdFromEnv(process.env.BREVO_LIST_MONEY_BLUEPRINT) ?? CANONICAL_LIST_MONEY_BLUEPRINT;
+  // Shop Your SZN waitlist. Deliberately has NO canonical fallback id of its own: pointing it at a
+  // list number that does not exist in Brevo yet would fail every submission silently, so until
+  // BREVO_LIST_SHOP_YOUR_SIGN is set it files on the free-generator list where the contact is at
+  // least saved and tagged SIGNUP_SOURCE=shop-your-sign. It is never the membership waitlist, which
+  // is a different queue for a different product.
+  if (s === "shop-your-sign")
+    return (
+      listIdFromEnv(process.env.BREVO_LIST_SHOP_YOUR_SIGN) ??
+      listIdFromEnv(process.env.BREVO_LIST_FREE_CHART) ??
+      CANONICAL_LIST_CHART
+    );
   if (isWaitlistSource(s)) return listIdFromEnv(process.env.BREVO_LIST_WAITLIST) ?? CANONICAL_LIST_WAITLIST;
   // Unknown source: capture the contact on the free-generator list so it is still saved and tagged,
   // never the waitlist.

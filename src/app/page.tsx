@@ -68,7 +68,7 @@ const INCLUDED = [
   "Personalised seasonal guidance",
   "Shadow work, journalling and goals",
   "A live masterclass every month",
-  "A live astro tapping every month",
+  "A live astrotapping every month",
   "The seasonal programming in the rooms",
   "The full replay vault",
   "Seasonal and eclipse guides",
@@ -193,7 +193,7 @@ export default function Home() {
         items={[
           "personalised to your chart",
           "a live masterclass every month",
-          "live astro tapping with betty",
+          "live astrotapping™ with betty",
           "the community rooms",
           "no card to start",
         ]}
@@ -270,7 +270,7 @@ export default function Home() {
                 hey, i&apos;m <span className="pk">betty.</span>
               </h3>
               <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--grey)", marginBottom: 14 }}>
-                I teach the masterclass, I run the astro tapping, I write the seasonal work, and
+                I teach the masterclass, I run the astrotapping, I write the seasonal work, and
                 I&apos;m in the rooms with you most days. When you ask a question in here, you&apos;re
                 asking me.
               </p>

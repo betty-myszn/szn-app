@@ -4,7 +4,7 @@ import { OG_IMAGE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Join the Astrology + Human Design Membership for Women",
   description:
-    "Apply to MY SZN, where your birth chart and your Human Design are read together instead of separately. A live masterclass and astro tapping every month, subconscious rewiring, a personalised chart and design portal, and a community of ambitious women. Cancel anytime. Limited founding member spots.",
+    "Apply to MY SZN, where your birth chart and your Human Design are read together instead of separately. A live masterclass and astrotapping every month, subconscious rewiring, a personalised chart and design portal, and a community of ambitious women. Cancel anytime. Limited founding member spots.",
   alternates: { canonical: "/membership" },
   openGraph: {
     title: "MY SZN Membership, Your Era Starts Now",

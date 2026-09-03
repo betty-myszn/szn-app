@@ -19,7 +19,7 @@ type PlanId = "trial" | "monthly" | "vip";
 // (expired trials converge onto that same free tier) but is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
   { id: "trial", name: "Free 7-day trial", tagline: "the full experience for 7 days, then keep the chat rooms and your charts, free", price: "$0" },
-  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astro tapping every month", price: "$88/mo" },
+  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astrotapping every month", price: "$88/mo" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 
@@ -85,7 +85,7 @@ export default function SignupPage() {
             <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
               {plan === "vip"
                 ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
-                : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astro tapping with Betty every month."}
+                : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astrotapping with Betty every month."}
             </p>
             <CheckoutButton
               checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}

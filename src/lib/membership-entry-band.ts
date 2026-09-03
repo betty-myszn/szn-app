@@ -41,7 +41,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
       heading: "Free trial",
       sub: "full access for 7 days · no card",
       body:
-        "Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astro tapping, the meditations and the community rooms. No card needed, and when the week is up the chat rooms and your charts stay yours, free, for whenever you want to come back.",
+        "Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astrotapping, the meditations and the community rooms. No card needed, and when the week is up the chat rooms and your charts stay yours, free, for whenever you want to come back.",
       cta: "start my free 7 days",
       href: "/free-trial",
     };
@@ -60,7 +60,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
       heading: trial.finalDay ? "Last day inside" : `Day ${trial.dayNumber} of ${TRIAL_DAYS}`,
       sub: `your week ends ${trial.endsLabel}`,
       body:
-        "Nothing changes today. When your week ends, the chat rooms and your charts stay yours, and the personalised platform, the workshops, the astro tapping and the meditations close. Becoming a member keeps all of it open on this same account, so you carry on from exactly where you are.",
+        "Nothing changes today. When your week ends, the chat rooms and your charts stay yours, and the personalised platform, the workshops, the astrotapping and the meditations close. Becoming a member keeps all of it open on this same account, so you carry on from exactly where you are.",
       cta: "keep my platform · $88/mo",
       href: "#pricing",
     };
@@ -74,7 +74,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
     heading: expired ? "Your week is up" : "You're in the rooms",
     sub: "the chat rooms and your charts are still yours",
     body:
-      "Your personalised platform, your szn guide, the live workshops, the astro tapping and the meditations are the members-only part. Everything you've already written and started stays saved on this account, so joining picks it all back up rather than starting anything again.",
+      "Your personalised platform, your szn guide, the live workshops, the astrotapping and the meditations are the members-only part. Everything you've already written and started stays saved on this account, so joining picks it all back up rather than starting anything again.",
     cta: "become a member · $88/mo",
     href: "#pricing",
   };

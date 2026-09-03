@@ -92,7 +92,7 @@ const MEMBERS_ONLY = [
   "your personalised platform",
   "your szn guide",
   "the workshops + replays",
-  "the astro tapping",
+  "the astrotapping",
   "the meditations",
   "the vault + resources",
 ];
@@ -100,7 +100,7 @@ const MEMBERS_ONLY = [
 
 const BENEFITS: Array<[string, string]> = [
   ["pick up where you left off", "your chart, journal, goals and progress are all still saved on this account."],
-  ["a new workshop every month", "a live masterclass and a live astro tapping, every single season."],
+  ["a new workshop every month", "a live masterclass and a live astrotapping, every single season."],
   ["coaching + community", "the member rooms and the women who actually talk about this stuff with you."],
   ["a platform that evolves with you", "your portal changes with the season and the version of you that's ready to emerge."],
   ["the full vault, always", "every replay, workbook and resource, yours for as long as you stay."],

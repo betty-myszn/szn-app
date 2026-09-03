@@ -142,7 +142,7 @@ export default function FreeHomePage() {
             <h2 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, letterSpacing: "-1px" }}>
               coming up
             </h2>
-            <span style={{ fontSize: 12, color: "var(--grey)" }}>the monthly masterclass and astro tapping are part of MY SZN</span>
+            <span style={{ fontSize: 12, color: "var(--grey)" }}>the monthly masterclass and astrotapping are part of MY SZN</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {workshops.map((w) => (

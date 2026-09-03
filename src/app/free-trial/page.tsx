@@ -179,7 +179,7 @@ const CHECKS: Array<[string, string]> = [
   ["this season's content", "the current szn, as it unfolds"],
   ["live workshops + masterclasses", "the monthly live sessions"],
   ["every workshop replay", "the full back catalogue"],
-  ["astro tapping sessions + replays", "guided, any time"],
+  ["astrotapping™ sessions + replays", "guided, any time"],
   ["the vault + resources", "workbooks, guides, everything"],
   ["the community + member rooms", "where your people already are"],
 ];
@@ -435,7 +435,7 @@ export default function FreeTrialPage() {
         <div className="wrap">
           <div className="rl">workshops + member experiences</div>
           <p className="ev-intro">
-            {"Every month I lead a live masterclass and a live astro tapping based on the current season, blending astrology, coaching, Human Design and subconscious rewiring. Here's what's on the calendar right now, and your free week drops you right in the middle of them."}
+            {"Every month I lead a live masterclass and a live Astrotapping™ based on the current season, blending astrology, coaching, Human Design and subconscious rewiring. Here's what's on the calendar right now, and your free week drops you right in the middle of them."}
           </p>
           <div className="ev-grid ev-4" style={{ marginTop: 34 }}>
             {eventCards.map((card) => (
@@ -518,7 +518,7 @@ export default function FreeTrialPage() {
           </h2>
           <div className="timeline">
             <div className="tl"><div className="d">day 1</div><b>you&apos;re in</b><p>{"sign up in under a minute with no card. you're logged straight in as a full member, chart already built."}</p></div>
-            <div className="tl"><div className="d">days 1 to 7</div><b>live in it</b><p>{"your platform, the live workshops and replays, the astro tapping, the vault and the member rooms. all of it."}</p></div>
+            <div className="tl"><div className="d">days 1 to 7</div><b>live in it</b><p>{"your platform, the live workshops and replays, the astrotapping, the vault and the member rooms. all of it."}</p></div>
             <div className="tl"><div className="d">day 6</div><b>a gentle heads up</b><p>{"we'll remind you your free week is nearly up, so the end never catches you by surprise."}</p></div>
             <div className="tl"><div className="d">day 7</div><b>it winds down on its own</b><p>{"your personalised platform, workshops and meditations close. you keep the chat rooms and your chart. no charge, nothing to cancel, and staying on is $88 a month whenever you want it back."}</p></div>
           </div>
@@ -548,7 +548,7 @@ export default function FreeTrialPage() {
             </details>
             <details>
               <summary>Do I really get everything a paying member gets?</summary>
-              <div className="a">{"Yes. For the whole week you're a full member: your personalised platform, the live workshops and replays, the astro tapping, the vault and the community. Not a stripped-back preview."}</div>
+              <div className="a">{"Yes. For the whole week you're a full member: your personalised platform, the live workshops and replays, the astrotapping, the vault and the community. Not a stripped-back preview."}</div>
             </details>
           </div>
         </div>

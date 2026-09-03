@@ -122,7 +122,7 @@ export default function ChatRoomPage() {
             {space.label} is a members&apos; ritual.
           </h1>
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-            The open chat rooms are yours to keep. A live masterclass and astro tapping every month, plus your full personalised platform, come with MY SZN, $88 a month.
+            The open chat rooms are yours to keep. A live masterclass and astrotapping every month, plus your full personalised platform, come with MY SZN, $88 a month.
           </p>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link href="/membership" className="btn-pink">unlock the rituals</Link>
@@ -388,7 +388,7 @@ export default function ChatRoomPage() {
               style={{ background: "var(--dark)", border: "var(--border)" }}
             >
               <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, maxWidth: 460 }}>
-                A live masterclass and astro tapping every month open up in MY SZN ($88/mo), alongside your full personalised platform.
+                A live masterclass and astrotapping every month open up in MY SZN ($88/mo), alongside your full personalised platform.
               </p>
               <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
                 unlock the rituals

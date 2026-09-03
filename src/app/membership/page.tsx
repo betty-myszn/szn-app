@@ -601,7 +601,7 @@ export default function MembershipPage() {
                 Transformational Workshops
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", margin: 0 }}>
-                Every month I lead a live masterclass and a live astro tapping based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They become it.
+                Every month I lead a live masterclass and a live Astrotapping™ based on the current season, blending astrology, coaching, Human Design and subconscious rewiring so members don&apos;t just understand the energy. They become it.
               </p>
             </div>
             <div className="p-6 md:p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -669,7 +669,7 @@ export default function MembershipPage() {
                 The Vault
               </div>
               <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--dark)", marginBottom: 12 }}>
-                Every masterclass, every astro tapping and every meditation, saved and searchable inside your own library that grows every month.
+                Every masterclass, every astrotapping and every meditation, saved and searchable inside your own library that grows every month.
               </p>
               <p style={{ fontSize: 12, color: "var(--dark)", margin: 0, fontStyle: "italic" }}>
                 Not content you binge and forget. A resource you return to whenever you&apos;re ready to level up again.
@@ -691,8 +691,8 @@ export default function MembershipPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0" style={{ border: "var(--border)", borderTop: "none" }}>
             {[
               { title: "Monthly Masterclass", desc: "One live deep-dive a month on money, confidence, business, relationships, astrology or healing, taught live and recorded forever, so you can work each season as it's actually happening.", bg: "var(--mint)" },
-              { title: "Monthly Astro Tapping", desc: "One live astro tapping a month: the astrology of the moment turned into an EFT tapping and embodiment session, so the shift lands in your body and not just your notes app.", bg: "var(--gold)" },
-              { title: "The Replay Vault", desc: "Every masterclass and every astro tapping saved and searchable, all yours to return to whenever you're ready to go again. Build your own curriculum, at your own pace.", bg: "#fff" },
+              { title: "Monthly Astrotapping™", desc: "One live astrotapping a month: the astrology of the moment turned into an EFT tapping and embodiment session, so the shift lands in your body and not just your notes app.", bg: "var(--gold)" },
+              { title: "The Replay Vault", desc: "Every masterclass and every astrotapping saved and searchable, all yours to return to whenever you're ready to go again. Build your own curriculum, at your own pace.", bg: "#fff" },
             ].map((item) => (
               <div key={item.title} className="p-8 md:p-10" style={{ background: item.bg, borderRight: "var(--border)" }}>
                 <div style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, marginBottom: 10, letterSpacing: "-0.3px" }}>
@@ -833,7 +833,7 @@ export default function MembershipPage() {
                   {[
                     "Full access to the MY SZN platform",
                     "One live masterclass a month",
-                    "One live astro tapping a month",
+                    "One live astrotapping a month",
                     "Replays of every masterclass and tapping",
                     "Community chat rooms",
                     "Seasonal astrology updates",
@@ -918,7 +918,7 @@ export default function MembershipPage() {
             {[
               {
                 q: "What's the difference between the three tiers?",
-                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, a live masterclass and a live astro tapping with Betty every month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
+                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, a live masterclass and a live astrotapping with Betty every month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
               },
               {
                 q: "Is it really personalised, or just my sun sign?",
@@ -926,7 +926,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes a live masterclass and a live astro tapping with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
+                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes a live masterclass and a live astrotapping with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
@@ -934,11 +934,11 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start with a free 7-day trial of the whole platform, no card needed. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astro tapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
+                a: "Anytime. Start with a free 7-day trial of the whole platform, no card needed. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astrotapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
               },
               {
                 q: "How much time do I need to commit each week?",
-                a: "The masterclass and the astro tapping happen monthly, not weekly. Between them you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
+                a: "The masterclass and the astrotapping happen monthly, not weekly. Between them you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
               },
               {
                 q: "How much does it cost?",

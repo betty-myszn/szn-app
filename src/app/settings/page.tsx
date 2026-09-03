@@ -134,7 +134,7 @@ export default function SettingsPage() {
               {member.membershipLevel === "none" ? (
                 <>
                   <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
-                    You&apos;re not a member yet, join to unlock the monthly masterclass and astro tapping, your full chart portal and the community.
+                    You&apos;re not a member yet, join to unlock the monthly masterclass and astrotapping, your full chart portal and the community.
                   </p>
                   <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
                     see membership options
