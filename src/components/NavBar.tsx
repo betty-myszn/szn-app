@@ -42,7 +42,7 @@ const workshopsMenu = [
 // deliberately not nav items either.
 const freeLinks = [
   { href: "/home", label: "home" },
-  { href: "/community", label: "chat rooms" },
+  { href: "/community", label: "community" },
   { href: "/chart", label: "my chart" },
   { href: "/blog", label: "blog" },
 ];

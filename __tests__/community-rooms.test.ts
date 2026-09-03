@@ -12,27 +12,29 @@ describe("listed rooms", () => {
     expect(ALL_ROOMS.length).toBeGreaterThan(rooms.length);
   });
 
-  it("leads with the open rooms and puts the rituals last", () => {
+  it("leads with general chat and puts the rituals last", () => {
     const ids = listedRooms("Virgo").map((r) => r.id);
-    expect(ids).toEqual(["general", "wins", "astrology", "virgo", "events"]);
+    // General Chat is the front door: /community lands there, and everything else hangs off it.
+    expect(ids[0]).toBe("general");
+    expect(ids).toEqual(["general", "wins", "astrology", "events"]);
     const firstRitual = ids.findIndex((id) => isRitualSpace(id));
     const lastOpen = ids.map((id) => isRitualSpace(id)).lastIndexOf(false);
     expect(firstRitual).toBeGreaterThan(lastOpen - 1);
   });
 
-  it("shows exactly one sign room, the season's own, relabelled for it", () => {
+  it("no longer offers a season sign room as somewhere else to go", () => {
+    // Community IS the rooms now and General Chat is the front door. A separate room for the
+    // current sign split the same small group across two doors exactly when it needed to feel
+    // like one.
     const rooms = listedRooms("Virgo");
-    const signRooms = rooms.filter((r) => SIGN_ROOMS.some((s) => s.id === r.id));
-    expect(signRooms).toHaveLength(1);
-    expect(signRooms[0].id).toBe("virgo");
-    expect(signRooms[0].label).toBe("virgo szn room");
+    expect(rooms.filter((r) => SIGN_ROOMS.some((s) => s.id === r.id))).toHaveLength(0);
+    expect(listedRooms("Libra").map((r) => r.id)).not.toContain("libra");
   });
 
-  it("follows the season, keeping the sign room's existing id so its history carries over", () => {
-    expect(listedRooms("Libra").map((r) => r.id)).toContain("libra");
-    expect(listedRooms("Libra").map((r) => r.id)).not.toContain("virgo");
-    // The id matches the room that already existed, rather than a new empty one.
-    expect(SIGN_ROOMS.some((r) => r.id === "libra")).toBe(true);
+  it("keeps every retired room resolvable, so old links and their history still work", () => {
+    expect(seasonRoom("Libra")?.id).toBe("libra");
+    expect(findRoom("virgo")?.id).toBe("virgo");
+    expect(findRoom("business")?.id).toBe("business");
   });
 
   it("copes with an unknown or missing season rather than dropping the whole list", () => {

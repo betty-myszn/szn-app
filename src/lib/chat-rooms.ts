@@ -151,3 +151,21 @@ export async function hasUnread(spaceId: string): Promise<boolean> {
   if (!lastSeen) return true;
   return new Date(latestRow.created_at).getTime() > new Date(lastSeen).getTime();
 }
+
+/**
+ * Posts into a room from somewhere that is not the room itself, e.g. sharing a completed challenge
+ * or a badge. Goes through the same server route as a normal message, so it notifies anyone it
+ * mentions and cannot be attributed to the wrong member.
+ *
+ * This replaces the old "share to the community feed" path. Community is the rooms now, so a share
+ * that landed on the feed would land nowhere anyone is looking.
+ */
+export async function postToRoom(spaceId: string, content: string): Promise<void> {
+  const res = await fetch("/api/chat/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spaceId, content }),
+  });
+  if (!res.ok) console.error("postToRoom: failed", spaceId, res.status);
+  else markActivationStep("room");
+}

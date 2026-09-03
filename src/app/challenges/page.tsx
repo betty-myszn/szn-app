@@ -25,7 +25,7 @@ import {
   type ChallengeProgress,
   type Badge,
 } from "@/lib/challenge-progress";
-import { addPost } from "@/lib/community-store";
+import { postToRoom } from "@/lib/chat-rooms";
 import ShareButtons from "@/components/ShareButtons";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -95,7 +95,7 @@ export default function ChallengesPage() {
 
   const submitBadgeShare = () => {
     if (!badgeShareDraft.trim() || !member) return;
-    addPost(member.name.toLowerCase(), member.placements?.sun ? `${member.placements.sun.toLowerCase()} sun` : "my szn member", "wins", badgeShareDraft.trim());
+    postToRoom("wins", badgeShareDraft.trim());
     setBadgeToShare(null);
     setBadgeShareDraft("");
     setShareFlash(true);
@@ -109,7 +109,7 @@ export default function ChallengesPage() {
 
   const submitShare = () => {
     if (!shareDraft.trim() || !member) return;
-    addPost(member.name.toLowerCase(), member.placements?.sun ? `${member.placements.sun.toLowerCase()} sun` : "my szn member", "challenges", shareDraft.trim());
+    postToRoom("challenges", shareDraft.trim());
     setSharingId(null);
     setShareDraft("");
     setShareFlash(true);

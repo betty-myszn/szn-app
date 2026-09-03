@@ -60,7 +60,11 @@ export function findRoom(id: string): SpaceMeta | undefined {
 // is deleted: every message in a retired room is still in the database, findRoom still resolves it so
 // old links keep working and its name still renders on old posts, and the admin tools still see all
 // of them. Re-listing a room later is a one-line change here.
-const LISTED_SPACE_IDS: readonly string[] = ["general", "wins", "astrology", "events"];
+//
+// Cut back again now that Community IS the rooms: General Chat is the main space and everything
+// else has to earn its place, because a room nobody is in makes the membership look empty. Three
+// alongside it is plenty until the volume justifies more.
+const LISTED_SPACE_IDS: readonly string[] = ["general", "astrology", "wins", "events"];
 
 /**
  * The one sign room that is live: whichever sign's season it currently is, relabelled for the season
@@ -83,14 +87,12 @@ export function seasonRoom(seasonSign: string | null | undefined): SpaceMeta | n
  * ritual rooms. Access filtering (rituals are members-only) stays with the caller, which already
  * knows what she's paid for.
  */
-export function listedRooms(seasonSign: string | null | undefined): SpaceMeta[] {
-  const listed = SPACES.filter((s) => LISTED_SPACE_IDS.includes(s.id));
-  const season = seasonRoom(seasonSign);
-  if (!season) return listed;
-  // Slotted in ahead of the rituals so the open rooms read as one group.
-  const firstRitual = listed.findIndex((s) => isRitualSpace(s.id));
-  const at = firstRitual === -1 ? listed.length : firstRitual;
-  return [...listed.slice(0, at), season, ...listed.slice(at)];
+export function listedRooms(_seasonSign: string | null | undefined): SpaceMeta[] {
+  // No season room in the list any more. Community IS the rooms now, General Chat is the front
+  // door, and a separate room for the current sign split the same small group across two doors
+  // exactly when it needed to feel like one. seasonRoom() still resolves, so old links and the
+  // room's history are untouched, it simply is not offered as somewhere else to go.
+  return SPACES.filter((s) => LISTED_SPACE_IDS.includes(s.id));
 }
 
 export interface Comment {
@@ -289,26 +291,6 @@ export async function loadPosts(): Promise<Post[]> {
         .map((c) => ({ id: c.id, author: c.author, content: c.content, timeAgo: timeAgoFromIso(c.created_at) })),
     };
   });
-}
-
-export async function addPost(_author: string, sign: string, space: string, content: string): Promise<Post[]> {
-  // Posted through the server rather than inserted straight from here, because the post has to be
-  // able to notify the people it mentions, and a member's own session must never be able to write
-  // into someone else's notification feed. The route resolves "@name" to user ids once and
-  // everything after that is addressed by id. The display name is read from her own profile there
-  // rather than accepted from the browser, so it cannot be spoofed.
-  const res = await fetch("/api/community/post", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sign, space, content }),
-  });
-  if (!res.ok) {
-    console.error("addPost: post failed", res.status);
-    return loadPosts();
-  }
-  // Counts as her first-run "post in a room" step, same as a chat message does.
-  markActivationStep("room");
-  return loadPosts();
 }
 
 export async function toggleLike(postId: string, currentlyLiked: boolean): Promise<Post[]> {
