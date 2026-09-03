@@ -27,12 +27,21 @@ const COMPOSE_EMOJIS = [
   "🐍", "🐐", "🦂", "🌸",
 ];
 
-// Render @mentions in brand pink
+// Render @mentions in brand pink, and as a link to that member's profile. Being tagged now also
+// raises a notification (notify_on_chat_mention), so a mention is a real thing that happens to
+// someone rather than pink text they had to be in the room to see.
 function renderContent(text: string) {
   const parts = text.split(/(@[a-z0-9_]+)/gi);
   return parts.map((part, i) =>
     part.startsWith("@") ? (
-      <span key={i} style={{ color: "var(--pink)", fontWeight: 700 }}>{part}</span>
+      <Link
+        key={i}
+        href={`/community/profile/${part.slice(1).toLowerCase()}`}
+        className="no-underline"
+        style={{ color: "var(--pink)", fontWeight: 700 }}
+      >
+        {part}
+      </Link>
     ) : (
       <span key={i}>{part}</span>
     )
