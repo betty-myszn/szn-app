@@ -223,8 +223,9 @@ export default function SettingsPage() {
                   )}
 
                   {/* Stripe free trial in progress. She has a card on file and a date when it will be
-                      charged, so both facts get said plainly and the way out is right next to them.
-                      This is the disclosure a card-taking trial owes her, not a nicety. */}
+                      charged, so both facts get said plainly. This box says only what WILL happen;
+                      what cancelling does is said once under the button that does it, rather than
+                      twice a few lines apart. */}
                   {member.subscriptionStatus === "trialing" && !isCancellationScheduled(member) && (
                     <div
                       style={{
@@ -252,8 +253,7 @@ export default function SettingsPage() {
                             </strong>
                           </>
                         )}
-                        {" "}unless you cancel before then. Cancel any time using the button below and you
-                        keep your access until your seven days are up.
+                        {" "}unless you cancel before then.
                       </p>
                     </div>
                   )}
