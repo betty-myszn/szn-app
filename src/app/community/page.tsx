@@ -40,12 +40,21 @@ function findChartTwins(placements: Record<string, string>, ownName: string): { 
   return twins;
 }
 
-// Render @mentions in brand pink
+// Render @mentions in brand pink, and as a link to that member's profile. Being tagged here now
+// also raises a notification and an email, so a mention is a thing that happens to someone rather
+// than pink text they had to already be looking at the feed to see.
 function renderContent(text: string) {
   const parts = text.split(/(@[a-z0-9_]+)/gi);
   return parts.map((part, i) =>
     part.startsWith("@") ? (
-      <span key={i} style={{ color: "var(--pink)", fontWeight: 700 }}>{part}</span>
+      <Link
+        key={i}
+        href={`/community/profile/${part.slice(1).toLowerCase()}`}
+        className="no-underline"
+        style={{ color: "var(--pink)", fontWeight: 700 }}
+      >
+        {part}
+      </Link>
     ) : (
       <span key={i}>{part}</span>
     )

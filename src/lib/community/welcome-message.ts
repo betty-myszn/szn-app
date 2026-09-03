@@ -16,8 +16,12 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // the whole trick: a new member gets an easy first thing to say, and everyone else gets a placement
 // to react to.
 
-/** The room the welcome lands in: the general group chat, not a topic or sign room. */
+/** The space the welcome lands in: general chat, not a topic or sign room. */
 export const WELCOME_SPACE_ID = "general";
+
+/** community_posts.sign is not nullable and renders under the author's name on the feed. Betty
+ *  posts as the house rather than as a birth chart, so it carries the brand instead of a sun sign. */
+export const WELCOME_POST_SIGN = "my szn";
 
 /** Minimum age before someone is named. Only there so an account still mid-signup when the daily
  *  run fires is picked up by tomorrow's instead of being announced half-made. */
@@ -271,15 +275,20 @@ export async function postWelcomeBatch(
     return { status: "skipped", reason: "no_usable_names" };
   }
 
-  // chat_messages.id is a text column the client fills with Date.now(), which collides the moment
-  // two messages land in the same millisecond. Keyed on the first member instead: unique because a
-  // member is only ever in one batch, and it makes a re-run of the same day idempotent.
+  // Posted to the community FEED (community_posts), which is what /community shows and what members
+  // actually look at. The room chat at /community/room/general is a separate, much quieter surface,
+  // and a welcome nobody sees is the same as no welcome.
+  //
+  // The id is a text column the client fills with Date.now(), which collides the moment two posts
+  // land in the same millisecond. Keyed on the first member instead: unique because a member is
+  // only ever in one batch, and it makes a re-run of the same day idempotent.
   const id = `welcome-${members[0].id}`;
-  const { error } = await admin.from("chat_messages").insert({
+  const { error } = await admin.from("community_posts").insert({
     id,
-    space_id: WELCOME_SPACE_ID,
     user_id: sender.id,
     author: sender.name,
+    sign: WELCOME_POST_SIGN,
+    space: WELCOME_SPACE_ID,
     content,
   });
 
@@ -302,7 +311,7 @@ export async function postWelcomeBatch(
       kind: "welcome" as const,
       title: `${sender.name} welcomed you in the chat`,
       body: content,
-      link: `/community/room/${WELCOME_SPACE_ID}`,
+      link: "/community",
       actor: sender.name,
       email: true,
       emailSubject: "you got welcomed into MY SZN 💜",

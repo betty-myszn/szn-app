@@ -291,20 +291,21 @@ export async function loadPosts(): Promise<Post[]> {
   });
 }
 
-export async function addPost(author: string, sign: string, space: string, content: string): Promise<Post[]> {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return loadPosts();
-  await supabase.from("community_posts").insert({
-    id: `${Date.now()}`,
-    user_id: user.id,
-    author,
-    sign,
-    space,
-    content,
+export async function addPost(_author: string, sign: string, space: string, content: string): Promise<Post[]> {
+  // Posted through the server rather than inserted straight from here, because the post has to be
+  // able to notify the people it mentions, and a member's own session must never be able to write
+  // into someone else's notification feed. The route resolves "@name" to user ids once and
+  // everything after that is addressed by id. The display name is read from her own profile there
+  // rather than accepted from the browser, so it cannot be spoofed.
+  const res = await fetch("/api/community/post", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sign, space, content }),
   });
+  if (!res.ok) {
+    console.error("addPost: post failed", res.status);
+    return loadPosts();
+  }
   // Counts as her first-run "post in a room" step, same as a chat message does.
   markActivationStep("room");
   return loadPosts();
