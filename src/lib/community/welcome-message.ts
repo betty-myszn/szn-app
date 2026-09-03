@@ -1,4 +1,5 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
+import { sendCommunityWelcomeEmail } from "@/lib/email/community-welcome";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -171,6 +172,9 @@ export type WelcomeOutcome =
 export interface WelcomeCandidate {
   id: string;
   name: string | null;
+  /** Needed for the nudge email. The in-app bell only reaches someone who comes back on her own,
+   *  and a new member who has not opened the app since signing up is exactly who this is for. */
+  email?: string | null;
 }
 
 /** Splits the day's joiners into message-sized groups, so a big day posts two short messages
@@ -182,10 +186,17 @@ export function chunkForMessages<T>(items: readonly T[], size = WELCOME_NAMES_PE
 }
 
 /**
- * Posts the day's welcome for one group and marks every member in it welcomed. The mention
- * notifications are NOT sent from here: inserting the message fires the notify_on_chat_mention
- * trigger, which is the same path a member gets when a human tags her, so there is one mechanism
- * rather than a special case that can drift away from the real one.
+ * Posts the day's welcome for one group, notifies exactly the people it named, and marks them
+ * welcomed.
+ *
+ * The notifications are inserted here by user id rather than left to the notify_on_chat_mention
+ * trigger, which was the first design and was wrong. A mention has to be written as a first name,
+ * "@Sarah", while the trigger can only match text against whatever is in profiles.name. So a member
+ * called "Sarah Elizabeth" was never notified about her own welcome, and two unrelated members who
+ * happen to be called "Sarah" both were. Here we already know precisely who the message is about,
+ * so guessing from a string is not just unnecessary, it is the bug. The trigger stays for
+ * member-to-member mentions, where a name really is all anyone has to go on, and it now skips these
+ * automated posts so nobody is notified twice.
  *
  * Members whose name yields no usable mention are still marked welcomed, so someone who can never
  * be named is not re-examined every single day forever.
@@ -231,8 +242,33 @@ export async function postWelcomeBatch(
     return { status: "failed", error: error.message };
   }
 
+  await notifyNamed(admin, sender, named, content, id);
+  await emailNamed(named, content);
   await markWelcomed(admin, members.map((m) => m.id));
   return { status: "posted", named: named.length };
+}
+
+/** One notification per member actually named, addressed by id so it cannot reach the wrong person
+ *  and cannot miss someone whose display name is more than one word. Failure is logged, never
+ *  thrown: the message is already up, and a missing bell is not worth failing the run over. */
+async function notifyNamed(
+  admin: SupabaseAdmin,
+  sender: WelcomeSender,
+  named: readonly WelcomeCandidate[],
+  content: string,
+  messageId: string
+): Promise<void> {
+  if (named.length === 0) return;
+  const rows = named.map((m) => ({
+    user_id: m.id,
+    type: "mention",
+    title: `${sender.name} welcomed you in the chat`,
+    body: content.slice(0, 140),
+    link: `/community/room/${WELCOME_SPACE_ID}`,
+    actor: sender.name,
+  }));
+  const { error } = await admin.from("notifications").insert(rows);
+  if (error) console.error("community welcome: could not notify named members", messageId, error.message);
 }
 
 async function markWelcomed(admin: SupabaseAdmin, userIds: readonly string[]): Promise<void> {
@@ -242,4 +278,18 @@ async function markWelcomed(admin: SupabaseAdmin, userIds: readonly string[]): P
     .update({ community_welcomed_at: new Date().toISOString() })
     .in("id", userIds as string[]);
   if (error) console.error("community welcome: could not mark welcomed", userIds.length, error.message);
+}
+
+/** Emails each member the message named. Sequential, because this is a handful of people and firing
+ *  a burst of parallel requests is how an API key gets rate limited. Failures are logged and never
+ *  thrown: the message is up and the bell has rung, and neither should be undone by a mail problem. */
+async function emailNamed(named: readonly WelcomeCandidate[], content: string): Promise<void> {
+  for (const member of named) {
+    if (!member.email) {
+      console.error("community welcome: no email on profile, skipping nudge", member.id);
+      continue;
+    }
+    const result = await sendCommunityWelcomeEmail({ email: member.email, name: member.name, message: content });
+    if (!result.ok) console.error("community welcome: nudge email failed", member.id, result.error);
+  }
 }

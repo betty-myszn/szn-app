@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
   const nowIso = new Date(now).toISOString();
   const { data: due, error } = await admin
     .from("profiles")
-    .select("id, name, created_at")
+    .select("id, name, email, created_at")
     .is("community_welcomed_at", null)
     .in("membership_level", ["trial", "monthly", "vip"])
     .or(`trial_expires_at.is.null,trial_expires_at.gt.${nowIso}`)
@@ -112,6 +112,7 @@ export async function POST(request: NextRequest) {
   const candidates: WelcomeCandidate[] = (due ?? []).map((row) => ({
     id: row.id as string,
     name: (row.name as string | null) ?? null,
+    email: (row.email as string | null) ?? null,
   }));
   const groups = chunkForMessages(candidates);
 
