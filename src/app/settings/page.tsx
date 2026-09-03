@@ -126,7 +126,7 @@ export default function SettingsPage() {
       <section className="px-5 md:px-8 py-12">
         <div className="max-w-3xl mx-auto flex flex-col gap-8">
           {/* Membership */}
-          <div style={{ border: "var(--border)" }}>
+          <div id="membership" style={{ border: "var(--border)" }}>
             <div className="p-6" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
               <h2 style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, letterSpacing: "-0.3px" }}>membership</h2>
             </div>
@@ -269,13 +269,13 @@ export default function SettingsPage() {
 
                   {isCancellationScheduled(member) && (
                     <p style={{ fontSize: 12, color: "var(--grey-light)", marginBottom: 20 }}>
-                      Cancellation scheduled, you&apos;ll keep full access until then.
+                      Cancellation scheduled. You&apos;ll keep full access until then and you won&apos;t be billed again.
                     </p>
                   )}
 
                   <div className="flex items-center gap-4 flex-wrap">
                     <a href="/api/stripe/portal" className="btn-pink" style={{ display: "inline-block" }}>
-                      {member.subscriptionStatus === "trialing" ? "manage or cancel" : "manage membership"}
+                      manage or cancel
                     </a>
                     {!isVip(member) && (
                       <Link
@@ -287,6 +287,42 @@ export default function SettingsPage() {
                       </Link>
                     )}
                   </div>
+
+                  {/* The terms of cancelling, said in the same place as the button that does it and
+                      before she clicks rather than after. She can stop her own billing whenever she
+                      likes without asking anyone, what she keeps is the time she has already paid
+                      for, and the part-month behind her is not refunded. Someone who found this out
+                      afterwards would have found it out from her bank instead. */}
+                  {!isCancellationScheduled(member) && (
+                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 16, marginBottom: 0 }}>
+                      You can cancel yourself in there any time, no asking me first.
+                      {member.subscriptionStatus === "trialing" ? (
+                        <>
+                          {" "}Cancel before your seven days are up and you won&apos;t be charged at all, and you keep your
+                          access right until the trial ends.
+                        </>
+                      ) : (
+                        <>
+                          {" "}You keep everything until
+                          {member.subscriptionCurrentPeriodEnd ? (
+                            <>
+                              {" "}
+                              <strong style={{ color: "var(--grey)" }}>
+                                {new Date(member.subscriptionCurrentPeriodEnd).toLocaleDateString("en-GB", {
+                                  day: "numeric",
+                                  month: "long",
+                                  year: "numeric",
+                                })}
+                              </strong>
+                            </>
+                          ) : (
+                            " the end of the month you have paid for"
+                          )}
+                          , you won&apos;t be billed after that, and the month you&apos;re already in isn&apos;t refunded.
+                        </>
+                      )}
+                    </p>
+                  )}
                 </>
               )}
             </div>

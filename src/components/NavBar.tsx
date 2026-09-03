@@ -624,6 +624,7 @@ export default function NavBar() {
                     // Goals are part of the paid platform, so the free tier's account menu is just
                     // settings (and admin, for Betty's own account).
                     ...(paidMember ? [{ href: "/goals", label: "my goals" }] : []),
+                    ...(paidMember ? [{ href: "/settings#membership", label: "membership & billing" }] : []),
                     { href: "/settings", label: "settings" },
                     ...(admin ? [{ href: "/admin", label: "admin" }] : []),
                   ].map((item) => (
