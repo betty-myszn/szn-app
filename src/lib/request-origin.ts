@@ -24,14 +24,3 @@ export function getPublicOrigin(request: NextRequest | Request): string {
   if (forwardedHost) return `${forwardedProto}://${forwardedHost}`;
   return new URL(request.url).origin;
 }
-
-// The same public origin, for code that has no incoming request to read: the Stripe webhook, a
-// one-off script, anything minting a link that will be posted to Brevo rather than returned to a
-// browser. Falls back to the live domain so an emailed link is never relative or Railway-internal.
-export function getConfiguredOrigin(): string {
-  const raw =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.NEXT_PUBLIC_APP_URL ||
-    "https://itsmyszn.com";
-  return raw.trim().replace(/\/+$/, "");
-}

@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { tierForPriceId, ACCESS_GRANTING_STATUSES } from "@/lib/stripe-tiers";
 import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
-import { syncPaidMemberToBrevo, refreshBrevoBillingLink } from "@/lib/email/brevo-contact";
+import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 
 export const runtime = "nodejs";
@@ -72,22 +72,6 @@ async function trySyncBrevoContact(args: {
     }
   } catch (e) {
     console.error("stripe webhook: Brevo contact sync threw (membership unaffected)", e instanceof Error ? e.message : e);
-  }
-}
-
-// Fire-and-forget refresh of the emailed one-click billing link on her Brevo contact, called on
-// every paid invoice. The link is signed with an expiry, so re-minting it monthly is what keeps
-// "manage or cancel" in a campaign working for a member who joined a year ago. Decoupled from the
-// 2xx we return like every other Brevo call here: a marketing-tool problem can never make Stripe
-// retry a good payment.
-async function tryRefreshBillingLink(email: string | null | undefined, customerId: string | null | undefined): Promise<void> {
-  try {
-    const result = await refreshBrevoBillingLink(email, customerId);
-    if (!result.ok && result.error !== "contact_not_found") {
-      console.error("stripe webhook: billing link refresh failed (billing unaffected)", result.error);
-    }
-  } catch (e) {
-    console.error("stripe webhook: billing link refresh threw (billing unaffected)", e instanceof Error ? e.message : e);
   }
 }
 
@@ -487,10 +471,6 @@ export async function POST(request: Request) {
 
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         await syncSubscriptionOntoProfile(admin, stripe, subscription);
-
-        const invoiceCustomerId =
-          typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id ?? null;
-        await tryRefreshBillingLink(invoice.customer_email, invoiceCustomerId);
         break;
       }
 

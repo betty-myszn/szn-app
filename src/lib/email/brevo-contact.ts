@@ -12,8 +12,6 @@
 // never fail the Stripe webhook or block the membership/welcome email, so callers get a result
 // object. Mirrors the /contacts conventions already used by src/app/api/subscribe/route.ts.
 
-import { billingPortalLink } from "@/lib/billing-portal-link";
-
 const BREVO_API = "https://api.brevo.com/v3";
 const LIST_PAID_MEMBERS = "MY SZN Members";
 
@@ -88,7 +86,6 @@ const CUSTOM_ATTRIBUTES: Array<{ name: string; type: "text" | "boolean" | "date"
   { name: "STRIPE_CUSTOMER_ID", type: "text" },
   { name: "PAID", type: "boolean" },
   { name: "PAID_AT", type: "date" },
-  { name: "BILLING_LINK", type: "text" },
 ];
 
 async function ensureAttribute(name: string, type: string): Promise<void> {
@@ -228,15 +225,7 @@ export async function syncPaidMemberToBrevo(contact: PaidMemberContact): Promise
       PAID: true,
       PAID_AT: paidAt.toISOString().slice(0, 10), // Brevo date attribute expects YYYY-MM-DD
     };
-    if (contact.stripeCustomerId) {
-      attributes.STRIPE_CUSTOMER_ID = contact.stripeCustomerId;
-      // Her own one-click door into Stripe's billing portal, for {{ contact.BILLING_LINK }} in any
-      // Brevo campaign or automation (the trial-ending email uses it for "manage or cancel"). Null
-      // when no signing key is available, in which case the template's default fallback carries her
-      // to Stripe's hosted portal login instead.
-      const billingLink = billingPortalLink(contact.stripeCustomerId);
-      if (billingLink) attributes.BILLING_LINK = billingLink;
-    }
+    if (contact.stripeCustomerId) attributes.STRIPE_CUSTOMER_ID = contact.stripeCustomerId;
 
     const parts = (contact.name ?? "").trim().split(/\s+/).filter(Boolean);
     if (parts[0]) attributes.FIRSTNAME = parts[0];
@@ -268,38 +257,6 @@ export async function syncPaidMemberToBrevo(contact: PaidMemberContact): Promise
     const err = await res.json().catch(() => ({}));
     if (err?.code === "duplicate_parameter") return { ok: true, listId };
     return { ok: false, error: `brevo ${res.status}: ${JSON.stringify(err).slice(0, 200)}` };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
-  }
-}
-
-// Re-mints the one-click billing link on an existing contact and writes nothing else: no lists, no
-// plan lookup, no PAID flags. Called on every successful invoice so an active member is always
-// holding a link that still works, rather than one that quietly expired months after checkout and
-// dropped her back to typing her email into Stripe's hosted login. NEVER throws, same contract as
-// the syncs above: a Brevo problem must not fail the Stripe webhook.
-export async function refreshBrevoBillingLink(
-  email: string | null | undefined,
-  stripeCustomerId: string | null | undefined
-): Promise<BrevoContactResult> {
-  if (!process.env.BREVO_API_KEY) return { ok: false, error: "BREVO_API_KEY not set" };
-  if (!email) return { ok: false, error: "no_email" };
-  const billingLink = billingPortalLink(stripeCustomerId);
-  if (!billingLink) return { ok: false, error: "no_billing_link" };
-
-  try {
-    await ensureAttribute("BILLING_LINK", "text");
-    // PUT /contacts/{identifier} updates in place and, unlike the POST upsert, never creates a
-    // contact. A person with no Brevo contact yet has had no email to put the link in anyway, so a
-    // 404 here is a no-op rather than a failure worth shouting about.
-    const res = await brevo(`/contacts/${encodeURIComponent(email)}`, {
-      method: "PUT",
-      body: JSON.stringify({ attributes: { BILLING_LINK: billingLink } }),
-    });
-    if (res.ok) return { ok: true, listId: 0 };
-    if (res.status === 404) return { ok: false, error: "contact_not_found" };
-    const detail = await res.text().catch(() => "");
-    return { ok: false, error: `brevo ${res.status}: ${detail.slice(0, 200)}` };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
