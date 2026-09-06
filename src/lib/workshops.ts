@@ -146,14 +146,15 @@ export const WORKSHOPS: Workshop[] = [
     replayYoutubeId: null,
     replayPublishedAt: null,
     paragraphs: [
-      "We are live at 7pm LA and the new moon is exact at 8.27pm, at 18 degrees of Virgo. So we set your intentions together in the ninety minutes before the sky actually resets, which means you walk into the new cycle with it already written rather than remembering three days later that you meant to.",
-      "Most people treat a new moon as a vague vibe and a nice bath. I treat it as a deadline. You are going to write the actual intention down, in one sentence, specific enough that you would know if it came true, because a woolly wish gives you a woolly result every single time.",
-      "A Virgo new moon seeds the unglamorous things that quietly run your entire life: your habits, your standards, your health, the systems that mean you stop relying on motivation you do not have on a Tuesday. We will look at where 18 degrees of Virgo lands in your own chart, so you know which part of your life is actually being reset for you rather than setting an intention about something the sky is not even touching.",
-      "Expect real astrology, astrotapping to clear whatever comes up when you try to want something out loud, and a written intention you leave with. Then we let it run the twenty nine days.",
+      "This is the perfect reset for the woman you are becoming. A new moon hands you a completely clean twenty nine days, and what you decide to do with the first night of it tends to set the tone for the whole thing.",
+      "New moons are for telling the universe what you actually want. Not the softened, sensible, easier-to-say-out-loud version, the real one. We are going to get yours written down, out of your head and into a sentence you would recognise if it came true.",
+      "And there is no better moon for this than a Virgo one. Virgo is the part of the sky that wants the plan as well as the wish, so this is where you name the thing you want AND decide how you are going to get there: the habits, the standards, the small unglamorous moves that quietly build the woman who already has it.",
+      "We will look at where this new moon lands in your own chart, so you are setting an intention about the area of your life actually being reset rather than one the sky is not even touching. There is astrotapping to clear whatever comes up when you try to want something honestly, and you leave with your intention written and your first moves decided.",
+      "We are together in the hours before it goes exact, so you walk into the new cycle with all of it already set rather than remembering three days later that you meant to.",
     ],
     callout: {
-      plain: "Everyone gets a fresh cycle on the 10th. Almost nobody uses it on purpose. ",
-      pink: "You will.",
+      plain: "A clean twenty nine days, and a decision about what you are doing with them. ",
+      pink: "Come and set it properly.",
     },
   },
 ];
