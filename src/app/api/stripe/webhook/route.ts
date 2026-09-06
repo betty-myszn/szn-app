@@ -183,7 +183,13 @@ async function syncSubscriptionOntoProfile(
     subscription_current_period_end: item?.current_period_end
       ? new Date(item.current_period_end * 1000).toISOString()
       : null,
-    subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+    // Stripe schedules a cancellation two different ways and only one of them sets
+    // cancel_at_period_end. Cancelling from the Customer Portal during a trial leaves that flag
+    // FALSE and sets cancel_at to the trial end instead, verified against a real portal cancel.
+    // Reading only the flag meant a member who had just cancelled was still shown "Renews on
+    // 13 September", and the paid-through safety net never armed. Either signal means the same
+    // thing to us: this subscription is ending and is not coming back on its own.
+    subscription_cancel_at_period_end: subscription.cancel_at_period_end || subscription.cancel_at != null,
   };
 
   const { profileId, matchedBy } = await findProfileId(admin, {
@@ -281,7 +287,13 @@ export async function POST(request: Request) {
             subscription_current_period_end: item?.current_period_end
               ? new Date(item.current_period_end * 1000).toISOString()
               : null,
-            subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+            // Stripe schedules a cancellation two different ways and only one of them sets
+    // cancel_at_period_end. Cancelling from the Customer Portal during a trial leaves that flag
+    // FALSE and sets cancel_at to the trial end instead, verified against a real portal cancel.
+    // Reading only the flag meant a member who had just cancelled was still shown "Renews on
+    // 13 September", and the paid-through safety net never armed. Either signal means the same
+    // thing to us: this subscription is ending and is not coming back on its own.
+    subscription_cancel_at_period_end: subscription.cancel_at_period_end || subscription.cancel_at != null,
           };
 
           const { profileId, matchedBy } = await findProfileId(admin, {
