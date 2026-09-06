@@ -198,22 +198,24 @@ export default function SettingsPage() {
                         to it here too rather than only from the paid branch. */}
                     {member.stripeCustomerId && (
                       <a
-                        href={STRIPE_PORTAL_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="/api/stripe/portal"
                         className="no-underline"
-                        style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)", textDecoration: "underline" }}
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 800,
+                          letterSpacing: "0.08em",
+                          textTransform: "uppercase",
+                          color: "var(--dark)",
+                          border: "var(--border)",
+                          padding: "11px 20px",
+                          display: "inline-block",
+                        }}
                       >
-                        manage or cancel &#8599;
+                        cancel membership
                       </a>
                     )}
                   </div>
-                  {member.stripeCustomerId && (
-                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 14, marginBottom: 0 }}>
-                      Stripe looks after the billing, so it&apos;ll ask for your email and send you a link.
-                      Open that and you can cancel from there.
-                    </p>
-                  )}
+
                 </>
               ) : (
                 <>
@@ -305,14 +307,30 @@ export default function SettingsPage() {
                   )}
 
                   <div className="flex items-center gap-4 flex-wrap">
+                    {/* The app knows who she is, so it mints a portal session for her own customer
+                        and she lands inside her billing with nothing to type. /api/stripe/portal
+                        falls back to the hosted portal login only when there is no customer id to
+                        deep-link, so one href covers both. */}
+                    <a href="/api/stripe/portal" className="btn-pink" style={{ display: "inline-block" }}>
+                      manage membership
+                    </a>
+                    {/* Cancelling gets its own door, said in the word people actually look for.
+                        Hiding it inside "manage" is why members email asking how to cancel. */}
                     <a
-                      href={STRIPE_PORTAL_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-pink"
-                      style={{ display: "inline-block" }}
+                      href="/api/stripe/portal"
+                      className="no-underline"
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 800,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "var(--dark)",
+                        border: "var(--border)",
+                        padding: "11px 20px",
+                        display: "inline-block",
+                      }}
                     >
-                      manage or cancel
+                      cancel membership
                     </a>
                     {!isVip(member) && (
                       <Link
@@ -334,10 +352,12 @@ export default function SettingsPage() {
                       the click, so she lands on a login screen asking for an address. Unexplained,
                       that reads as a dead end at the exact moment she is trying to stop a payment,
                       and someone who cannot find the way out disputes the charge instead. */}
-                  <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 14, marginBottom: 0 }}>
-                    Stripe looks after the billing, so it&apos;ll ask for your email and send you a link.
-                    Open that and everything, including cancelling, is right there.
-                  </p>
+                  {!member.stripeCustomerId && (
+                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 14, marginBottom: 0 }}>
+                      Stripe looks after the billing, so it&apos;ll ask for your email and send you a link.
+                      Open that and everything, including cancelling, is right there.
+                    </p>
+                  )}
 
                   {!isCancellationScheduled(member) && (
                     <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 10, marginBottom: 0 }}>
