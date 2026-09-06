@@ -208,6 +208,12 @@ export default function SettingsPage() {
                       </a>
                     )}
                   </div>
+                  {member.stripeCustomerId && (
+                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 14, marginBottom: 0 }}>
+                      Stripe looks after the billing, so it&apos;ll ask for your email and send you a link.
+                      Open that and you can cancel from there.
+                    </p>
+                  )}
                 </>
               ) : (
                 <>
@@ -324,8 +330,17 @@ export default function SettingsPage() {
                       likes without asking anyone, what she keeps is the time she has already paid
                       for, and the part-month behind her is not refunded. Someone who found this out
                       afterwards would have found it out from her bank instead. */}
+                  {/* What the portal is about to do. Stripe verifies her by email rather than trusting
+                      the click, so she lands on a login screen asking for an address. Unexplained,
+                      that reads as a dead end at the exact moment she is trying to stop a payment,
+                      and someone who cannot find the way out disputes the charge instead. */}
+                  <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 14, marginBottom: 0 }}>
+                    Stripe looks after the billing, so it&apos;ll ask for your email and send you a link.
+                    Open that and everything, including cancelling, is right there.
+                  </p>
+
                   {!isCancellationScheduled(member) && (
-                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 16, marginBottom: 0 }}>
+                    <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 10, marginBottom: 0 }}>
                       You can cancel yourself in there any time, no asking me first.
                       {member.subscriptionStatus === "trialing" ? (
                         <>
