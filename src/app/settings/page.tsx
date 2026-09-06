@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { STRIPE_PORTAL_URL } from "@/lib/checkout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/member";
@@ -141,10 +142,15 @@ export default function SettingsPage() {
                   </Link>
                 </>
               ) : member.membershipLevel === "trial" ? (
-                // Free 7-day trial. Deliberately shows NO Stripe billing UI (no "manage membership"
-                // portal button, no renewal date): a trial has no Stripe customer, so that button
-                // would 404. Active trial gets a days-left badge; an expired trial gets the win-back
-                // line. Both point at /membership to become a paying member in this same account.
+                // membership_level 'trial' is the LEGACY card-free trial, from before the trial moved
+                // onto Stripe. A Stripe trial arrives as monthly/vip with a trialing status and is
+                // handled in the paid branch below, with its charge date and its cancel button.
+                //
+                // This branch used to hard-say "no card is on file and nothing will be charged",
+                // which was true for these accounts and would have become a lie the moment a Stripe
+                // trial ever reached it. The wording is now tied to whether a card actually exists
+                // rather than asserted, and the portal is offered whenever there is something to
+                // manage, so nobody is ever told she cannot be charged by a page that does not know.
                 <>
                   {isTrial(member) ? (
                     <>
@@ -171,9 +177,11 @@ export default function SettingsPage() {
                         </span>
                       </div>
                       <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
-                        You&apos;re inside on your free 7-day trial with full access. No card is on file and nothing
-                        will be charged, your access ends automatically when the trial does. Become a member to keep
-                        everything going in this same account.
+                        You&apos;re inside on your free 7-day trial with full access.{" "}
+                        {member.stripeCustomerId
+                          ? "You can manage or cancel any time before it ends, and you won't be charged if you cancel first."
+                          : "Your access ends automatically when the trial does."}{" "}
+                        Become a member to keep everything going in this same account.
                       </p>
                     </>
                   ) : (
@@ -182,9 +190,24 @@ export default function SettingsPage() {
                       a member to pick up right where you left off.
                     </p>
                   )}
-                  <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
-                    become a member
-                  </Link>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <Link href="/membership" className="btn-pink" style={{ display: "inline-block" }}>
+                      become a member
+                    </Link>
+                    {/* Anyone with a Stripe customer has something to manage, so she gets the door
+                        to it here too rather than only from the paid branch. */}
+                    {member.stripeCustomerId && (
+                      <a
+                        href={STRIPE_PORTAL_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="no-underline"
+                        style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)", textDecoration: "underline" }}
+                      >
+                        manage or cancel &#8599;
+                      </a>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
@@ -213,7 +236,9 @@ export default function SettingsPage() {
                         Payment issue. Please update your payment method to keep your access.
                       </p>
                       <a
-                        href="/api/stripe/portal"
+                        href={STRIPE_PORTAL_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="no-underline"
                         style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#A32D2D", textDecoration: "underline" }}
                       >
@@ -274,7 +299,13 @@ export default function SettingsPage() {
                   )}
 
                   <div className="flex items-center gap-4 flex-wrap">
-                    <a href="/api/stripe/portal" className="btn-pink" style={{ display: "inline-block" }}>
+                    <a
+                      href={STRIPE_PORTAL_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-pink"
+                      style={{ display: "inline-block" }}
+                    >
                       manage or cancel
                     </a>
                     {!isVip(member) && (

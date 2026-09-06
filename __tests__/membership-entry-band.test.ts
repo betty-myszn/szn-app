@@ -29,6 +29,7 @@ function memberAt(level: MembershipLevel, extra: Partial<Member> = {}): Member {
     trialExpiresAt: null,
     onboarded: true,
     blocked: false,
+  stripeCustomerId: null,
     passwordSet: true,
     ...extra,
   };

@@ -28,6 +28,10 @@ export interface Member {
   onboarded: boolean;
   /** Set by an admin: this account is blocked from the platform. Fails every client gate. */
   blocked: boolean;
+  /** True when Stripe holds a customer for her, which is the honest test for "is there a card on
+   *  file and something to manage". Used instead of asserting from membership level, which cannot
+   *  tell a card-free legacy trial from a Stripe one. */
+  stripeCustomerId: string | null;
   /** False for legacy magic-link-only accounts, drives the optional "add a password" banner */
   passwordSet: boolean;
 }
@@ -87,7 +91,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set, stripe_customer_id"
     )
     .eq("id", user.id)
     // maybeSingle, not single: a genuinely missing profile row must stay a null profile (exactly
@@ -123,6 +127,7 @@ export async function getCurrentMember(): Promise<Member | null> {
     subscriptionCancelAtPeriodEnd: !!profile?.subscription_cancel_at_period_end,
     trialExpiresAt: profile?.trial_expires_at ?? null,
     blocked: !!profile?.blocked,
+    stripeCustomerId: (profile?.stripe_customer_id as string | null) ?? null,
     onboarded: !!profile?.onboarded,
     passwordSet: !!profile?.password_set,
   };
