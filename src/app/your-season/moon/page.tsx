@@ -7,6 +7,7 @@ import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
 import { composeLunation, type LunationType } from "@/lib/moon-content";
+import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -168,6 +169,41 @@ function MoonPageContent() {
           </p>
         </div>
       </section>
+
+      {/* The circle for THIS lunation, sitting right under the hero where she has just read what the
+          moon is doing and is most likely to want to do something about it.
+          The day, date and time are read from the workshop entry rather than written here, so a
+          banner can never tell her a different day from the event it is selling. It only appears
+          when there is an upcoming workshop whose season matches the sign of the moon she is
+          reading, so it disappears on its own after the night and never fires on the wrong page. */}
+      {(() => {
+        if (!sign) return null;
+        const circle = upcomingWorkshops(now ? now.getTime() : Date.now()).find(
+          (w) => w.season?.toLowerCase() === sign.toLowerCase() && w.label.includes("moon")
+        );
+        if (!circle) return null;
+        return (
+          <section className="px-5 md:px-8 py-8" style={{ borderBottom: "var(--border)", background: "var(--lav-light)" }}>
+            <div className="max-w-4xl mx-auto flex items-center gap-4 flex-wrap justify-between">
+              <div>
+                <p style={{ margin: "0 0 4px", fontFamily: poppins, fontSize: 16, fontWeight: 800 }}>
+                  {circle.title}
+                </p>
+                <p style={{ margin: 0, fontSize: 14, color: "var(--grey)", lineHeight: 1.6 }}>
+                  {circle.startIso ? formatWorkshopWhenLA(circle.startIso) : circle.meta} &middot; we set these intentions together, live.
+                </p>
+              </div>
+              <Link
+                href="/events"
+                className="no-underline"
+                style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "13px 24px", borderRadius: 40, whiteSpace: "nowrap" }}
+              >
+                save my seat
+              </Link>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Collective opening: the bigger-picture framing shown to everyone, ahead of the personal read */}
       {reading.collectiveOpening && reading.collectiveOpening.length > 0 && (
