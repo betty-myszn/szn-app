@@ -380,6 +380,32 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Virgo new moon, 10 September. Shown from a week out and gone the morning after, so the
+              dashboard never carries a banner for a night that has already happened. The date is the
+              exact conjunction (20:27 LA, 18° Virgo, computed from the ephemeris), and the link
+              carries the same params the moon page reads, so she lands on her own reading rather
+              than a generic page. */}
+          {(() => {
+            const moment = new Date("2026-09-11T03:27:00Z").getTime();
+            if (nowMs < moment - 7 * 86400000 || nowMs > moment + 12 * 3600000) return null;
+            return (
+              <div className="flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
+                <p style={{ margin: 0, fontSize: 13, color: "var(--dark)" }}>
+                  🌑 <strong>new moon in virgo, thursday the 10th.</strong> We set your intentions together
+                  in the circle at 7pm LA, ninety minutes before it goes exact.
+                </p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <Link href="/events" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "12px 22px", borderRadius: 40, whiteSpace: "nowrap" }}>
+                    save my seat
+                  </Link>
+                  <Link href="/your-season/moon?type=new_moon&date=2026-09-10&sign=Virgo&degree=18" className="no-underline" style={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--dark)", textDecoration: "underline", whiteSpace: "nowrap" }}>
+                    read your new moon
+                  </Link>
+                </div>
+              </div>
+            );
+          })()}
+
           {isEclipseSeasonLive() && (
             <div className="flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
               <p style={{ margin: 0, fontSize: 13, color: "var(--dark)" }}>

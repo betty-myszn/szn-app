@@ -82,7 +82,7 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
     label: "new moon",
     emoji: "\u{1F311}",
     whatThisIs: "A new moon is the reset point in the lunar cycle, the sun and moon align, the sky goes dark, and the next twenty-nine days effectively start from zero. This is a seeding moment, not a harvest one. Whatever you plant now with intention has the whole cycle ahead of it to grow.",
-    bettysTakeGeneric: "Most people treat new moons as a vague vibe instead of a deadline. I coach mine to write the actual intention down, in one sentence, specific enough that they'd know if it came true. Vague wishes get vague results. Precise intentions get precise ones.",
+    bettysTakeGeneric: "A new moon is a deadline, and I coach mine to treat it like one. You write the intention down, in one sentence, specific enough that you would know if it came true. Precise intentions get precise results.",
     actionFraming: "set one specific, written intention today",
     promptFraming: "What am I actually ready to call in here, specifically enough that I'd know if it arrived?",
     affirmationFrame: (area) => `I plant this intention around my ${area} and trust the cycle to grow it.`,
@@ -331,6 +331,32 @@ function capitaliseFirst(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+/**
+ * The teaching layer shown to everyone before her personalised reading: what a new moon actually
+ * does, what THIS sign is for, and why a reset is the moment to aim at the woman she is becoming
+ * rather than at a tidier version of this week.
+ *
+ * Built from SIGN_TRAITS rather than written twelve times, so every future lunation gets the same
+ * depth on the day it lands instead of waiting for someone to write it.
+ */
+function newMoonPrimer(sign: string, traits: SignTraits): ReadingSection[] {
+  const s = sign.toLowerCase();
+  return [
+    {
+      heading: "what a new moon actually does",
+      body: `The sun and the moon meet in the same degree of the sky and the whole lunar cycle starts again from zero. Nothing is visible yet, which is the point: this is the seeding end of the cycle, not the harvest. What you decide here has the full twenty nine days ahead of it to grow, and what you leave undecided tends to stay undecided for the same twenty nine days.`,
+    },
+    {
+      heading: `${s} energy, and what it is for`,
+      body: `Every new moon carries the flavour of the sign it lands in, and this one is ${s}: ${traits.essence}. That is the material you are working with tonight. ${traits.gift.charAt(0).toUpperCase() + traits.gift.slice(1)}. So this is not a general-purpose wish, it is a reset with a particular talent, and intentions that use that talent go further than intentions that ignore it. Worth knowing the other side too, because it will show up: ${traits.shadow}.`,
+    },
+    {
+      heading: "becoming your future self",
+      body: `The version of you who already has the thing you are about to ask for is a slightly different woman than the one reading this. She has different habits, different standards, and a different sense of what she will put up with. Setting an intention is really deciding to start behaving like her before the evidence arrives. That is why the ${s} half matters: it tells you which of her habits to borrow first.`,
+    },
+  ];
+}
+
 export function composeLunation(event: CalendarEventInput, chart: ChartData, now?: Date): LunationReading {
   if (event.type === "node_ingress") return composeNodeIngress(event, chart);
   // Eclipses get the far deeper nodal-axis composer, but only when the calendar has told us which
@@ -442,6 +468,8 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData, now
     dateLabel,
     emoji: meta.emoji,
     whatThisIs: meta.whatThisIs,
+    primerTitle: event.type === "new_moon" ? "before your reading" : undefined,
+    primer: event.type === "new_moon" ? newMoonPrimer(event.sign, traits) : undefined,
     inYourChart,
     chartParagraphs,
     bringsUp: meta.bringsUp(ctx),
