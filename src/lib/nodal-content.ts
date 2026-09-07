@@ -702,7 +702,7 @@ function primerSections(northSign: string, southSign: string): ReadingSection[] 
     },
     {
       heading: "the goal is never to reject the south node",
-      body: "This is the part most people get wrong. The work is not to abandon your south node and start again as someone else. Everything you built there is the material you grow with. The invitation is to carry the wisdom of the south node forward, consciously, while deliberately choosing the north node direction when the two of them pull in opposite ways. Keep the skills, drop the reflex. That is the whole practice.",
+      body: "The work is not to abandon your south node and start again as someone else. Everything you built there is the material you grow with. The invitation is to carry the wisdom of the south node forward, consciously, while deliberately choosing the north node direction when the two of them pull in opposite ways. Keep the skills, drop the reflex. That is the whole practice.",
     },
     {
       heading: `first, what ${north} actually is`,
