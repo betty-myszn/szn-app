@@ -19,9 +19,10 @@ export interface Workshop {
   startIso: string | null;
   durationMinutes: number;
   location: string;
-  zoomUrl: string | null;
-  zoomMeetingId: string | null;
-  zoomPasscode: string | null;
+  /** True when a Zoom link exists for this workshop. The link itself is deliberately NOT a field:
+   *  this file is bundled into public pages, so anything stored here is readable by anonymous
+   *  visitors. Details live in workshop-zoom.ts and come from /api/workshops/join, members only. */
+  hasJoinLink: boolean;
   /** YouTube video id for the replay, set once the class is over and uploaded, null until then.
    *  Just the id (e.g. "dQw4w9WgXcQ"), not the full watch url. */
   replayYoutubeId: string | null;
@@ -50,9 +51,7 @@ export const WORKSHOPS: Workshop[] = [
     startIso: "2026-08-03T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, join link below once you're rsvp'd",
-    zoomUrl: "https://us06web.zoom.us/j/87348495713?pwd=eVykh1qIwFdS5xYVsT6dbUmklWRbCa.1",
-    zoomMeetingId: "873 4849 5713",
-    zoomPasscode: "391862",
+    hasJoinLink: false,
     replayYoutubeId: "0M03CqjaUnY",
     replayPublishedAt: "2026-08-06",
     paragraphs: [
@@ -79,9 +78,7 @@ export const WORKSHOPS: Workshop[] = [
     startIso: "2026-08-19T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
-    zoomUrl: null,
-    zoomMeetingId: null,
-    zoomPasscode: null,
+    hasJoinLink: false,
     replayYoutubeId: "FfdDrqfZ4ic",
     replayPublishedAt: "2026-08-20",
     paragraphs: [
@@ -105,9 +102,7 @@ export const WORKSHOPS: Workshop[] = [
     startIso: "2026-08-26T18:30:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
-    zoomUrl: null,
-    zoomMeetingId: null,
-    zoomPasscode: null,
+    hasJoinLink: false,
     replayYoutubeId: "NgKBnHmj7K8",
     replayPublishedAt: "2026-08-28",
     paragraphs: [
@@ -140,9 +135,7 @@ export const WORKSHOPS: Workshop[] = [
     startIso: "2026-09-10T19:00:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
-    zoomUrl: null,
-    zoomMeetingId: null,
-    zoomPasscode: null,
+    hasJoinLink: true,
     replayYoutubeId: null,
     replayPublishedAt: null,
     paragraphs: [

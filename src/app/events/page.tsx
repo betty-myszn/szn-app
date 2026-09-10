@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import WorkshopJoin from "@/components/WorkshopJoin";
 import Image from "next/image";
 import Ticker from "@/components/Ticker";
 import ReplayTeaser from "@/components/ReplayTeaser";
@@ -315,26 +316,12 @@ export default function EventsPage() {
                           </button>
                         </div>
 
-                        {workshop.zoomUrl && hasActiveAccess(member) && (
+                        {workshop.hasJoinLink && hasActiveAccess(member) && (
                           <div className="mb-4">
-                            <a
-                              href={workshop.zoomUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn-pink"
-                              style={{ display: "inline-block", marginBottom: 8 }}
-                            >
-                              join zoom meeting
-                            </a>
-                            {workshop.zoomMeetingId && (
-                              <p style={{ fontSize: 11, color: dimColor }}>
-                                meeting id {workshop.zoomMeetingId}
-                                {workshop.zoomPasscode ? ` · passcode ${workshop.zoomPasscode}` : ""}
-                              </p>
-                            )}
+                            <WorkshopJoin workshopId={workshop.id} enabled label="join zoom meeting" showDetails detailColor={dimColor} />
                           </div>
                         )}
-                        {workshop.zoomUrl && !hasActiveAccess(member) && (
+                        {workshop.hasJoinLink && !hasActiveAccess(member) && (
                           <p style={{ fontSize: 12, color: dimColor, marginBottom: 4 }}>
                             The Zoom link unlocks with an active membership.{" "}
                             <a href="/membership" style={{ color: "var(--pink)", fontWeight: 700 }}>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import WorkshopJoin from "@/components/WorkshopJoin";
 import Image from "next/image";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess, hasBillingIssue } from "@/lib/membership-access";
@@ -395,9 +396,16 @@ export default function DashboardPage() {
                   in the circle at 7pm LA, ninety minutes before it goes exact.
                 </p>
                 <div className="flex items-center gap-3 flex-wrap">
-                  <Link href="/events" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "12px 22px", borderRadius: 40, whiteSpace: "nowrap" }}>
-                    save my seat
-                  </Link>
+                  <WorkshopJoin
+                    workshopId="virgo-szn-workshop-2"
+                    enabled={hasActiveAccess(member)}
+                    label="join on zoom"
+                    fallback={
+                      <Link href="/events" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "12px 22px", borderRadius: 40, whiteSpace: "nowrap" }}>
+                        save my seat
+                      </Link>
+                    }
+                  />
                   <Link href="/your-season/moon?type=new_moon&date=2026-09-10&sign=Virgo&degree=18" className="no-underline" style={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--dark)", textDecoration: "underline", whiteSpace: "nowrap" }}>
                     read your new moon
                   </Link>

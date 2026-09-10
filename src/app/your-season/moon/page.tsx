@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import WorkshopJoin from "@/components/WorkshopJoin";
+import { hasActiveAccess } from "@/lib/membership-access";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { useSeason } from "@/lib/use-season";
@@ -193,13 +195,20 @@ function MoonPageContent() {
                   {circle.startIso ? formatWorkshopWhenLA(circle.startIso) : circle.meta} &middot; we set these intentions together, live.
                 </p>
               </div>
-              <Link
-                href="/events"
-                className="no-underline"
-                style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "13px 24px", borderRadius: 40, whiteSpace: "nowrap" }}
-              >
-                save my seat
-              </Link>
+              <WorkshopJoin
+                workshopId={circle.id}
+                enabled={circle.hasJoinLink && hasActiveAccess(member)}
+                label="join on zoom"
+                fallback={
+                  <Link
+                    href="/events"
+                    className="no-underline"
+                    style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "13px 24px", borderRadius: 40, whiteSpace: "nowrap" }}
+                  >
+                    save my seat
+                  </Link>
+                }
+              />
             </div>
           </section>
         );

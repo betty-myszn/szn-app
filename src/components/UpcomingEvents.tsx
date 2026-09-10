@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import WorkshopJoin from "@/components/WorkshopJoin";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import { getRsvp, type RsvpRecord } from "@/lib/rsvp";
@@ -229,21 +230,16 @@ export default function UpcomingEvents() {
                     >
                       ● happening right now
                     </div>
-                    {workshop.zoomUrl && canJoin ? (
-                      <a
-                        href={workshop.zoomUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-pink"
-                        style={{ display: "inline-block" }}
-                      >
-                        join zoom now
-                      </a>
-                    ) : (
-                      <Link href="/events" className="btn-pink" style={{ display: "inline-block" }}>
-                        event details
-                      </Link>
-                    )}
+                    <WorkshopJoin
+                      workshopId={workshop.id}
+                      enabled={workshop.hasJoinLink && canJoin}
+                      label="join zoom now"
+                      fallback={
+                        <Link href="/events" className="btn-pink" style={{ display: "inline-block" }}>
+                          event details
+                        </Link>
+                      }
+                    />
                   </div>
                 )}
 
