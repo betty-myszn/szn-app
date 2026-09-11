@@ -5,6 +5,7 @@ import Link from "next/link";
 import Ticker from "@/components/Ticker";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
+import ReplayPlayer from "@/components/ReplayPlayer";
 import { pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 import { FREE_TRIAL_CTA } from "@/lib/cta";
 
@@ -136,17 +137,9 @@ export default function ReplayVaultPage() {
                     {workshop.title}
                   </h2>
 
-                  {workshop.replayYoutubeId ? (
+                  {workshop.hasReplay ? (
                     hasActiveAccess(member) ? (
-                      <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", marginTop: 18, background: "#000" }}>
-                        <iframe
-                          src={`https://www.youtube-nocookie.com/embed/${workshop.replayYoutubeId}?rel=0`}
-                          title={workshop.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
-                        />
-                      </div>
+                      <ReplayPlayer workshopId={workshop.id} title={workshop.title} />
                     ) : (
                       <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8, marginTop: 12 }}>
                         The replay unlocks with an active membership.{" "}

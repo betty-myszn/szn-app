@@ -206,7 +206,7 @@ export default function FreeTrialPage() {
   //  - nothing confirmed at all, where the spotlight falls back to the newest replay (genuinely
   //    waiting in the vault) and the urgency band, whose whole job is a real date, hides itself.
   const nextWorkshop = now === null ? null : upcomingWorkshops(now).find((w) => w.startIso) ?? null;
-  const latestReplay = now === null ? null : pastWorkshops(now).find((w) => w.replayYoutubeId) ?? null;
+  const latestReplay = now === null ? null : pastWorkshops(now).find((w) => w.hasReplay) ?? null;
   const spotlight = nextWorkshop ?? latestReplay;
   const insideFreeWeek =
     now !== null && !!nextWorkshop?.startIso && new Date(nextWorkshop.startIso).getTime() - now <= 7 * 86_400_000;

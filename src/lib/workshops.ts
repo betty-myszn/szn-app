@@ -25,7 +25,10 @@ export interface Workshop {
   hasJoinLink: boolean;
   /** YouTube video id for the replay, set once the class is over and uploaded, null until then.
    *  Just the id (e.g. "dQw4w9WgXcQ"), not the full watch url. */
-  replayYoutubeId: string | null;
+  /** True when a replay exists. The video id is deliberately NOT a field: this file is bundled into
+   *  public pages and the replays are unlisted, so an id here is free viewing for anyone. The ids
+   *  live in workshop-replays.ts and come from /api/workshops/replay, members only. */
+  hasReplay: boolean;
   /** The day the replay went up (ISO date, e.g. "2026-08-06"), not the class date, since a
    *  recording is edited and uploaded after the fact. Drives the "new replay" feature window on
    *  the season home. null until a replay exists. */
@@ -52,7 +55,7 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, join link below once you're rsvp'd",
     hasJoinLink: false,
-    replayYoutubeId: "0M03CqjaUnY",
+    hasReplay: true,
     replayPublishedAt: "2026-08-06",
     paragraphs: [
       "Leo season is your cosmic reminder that you didn't come here to watch everyone else live the life you want.",
@@ -79,7 +82,7 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     hasJoinLink: false,
-    replayYoutubeId: "FfdDrqfZ4ic",
+    hasReplay: true,
     replayPublishedAt: "2026-08-20",
     paragraphs: [
       "You weren't born to be the internet's best kept secret.",
@@ -103,7 +106,7 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     hasJoinLink: false,
-    replayYoutubeId: "NgKBnHmj7K8",
+    hasReplay: true,
     replayPublishedAt: "2026-08-28",
     paragraphs: [
       "We're opening Virgo season the way it's meant to be opened, by sitting down together and deciding exactly where the rest of your year is going before the season carries you into it.",
@@ -136,7 +139,7 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     hasJoinLink: true,
-    replayYoutubeId: "xNKJsqbjgI4",
+    hasReplay: true,
     replayPublishedAt: "2026-09-11",
     paragraphs: [
       "This is the perfect reset for the woman you are becoming. A new moon hands you a completely clean twenty nine days, and what you decide to do with the first night of it tends to set the tone for the whole thing.",
@@ -248,7 +251,7 @@ export const REPLAY_FRESH_DAYS = 3;
 /** The most recently uploaded replay across all workshops, or null if none has one yet. Drives
  *  the single "new replay" spotlight on the home page (we only ever headline one at a time). */
 export function latestReplay(): Workshop | null {
-  const withReplay = WORKSHOPS.filter((w) => w.replayYoutubeId && w.replayPublishedAt);
+  const withReplay = WORKSHOPS.filter((w) => w.hasReplay && w.replayPublishedAt);
   if (withReplay.length === 0) return null;
   return withReplay.sort((a, b) => (b.replayPublishedAt! < a.replayPublishedAt! ? -1 : 1))[0];
 }
@@ -259,7 +262,7 @@ export function latestReplay(): Workshop | null {
 export function replayForSign(sign: string): Workshop | null {
   const prefix = `${sign.toLowerCase()}-`;
   const matches = WORKSHOPS.filter(
-    (w) => w.replayYoutubeId && w.replayPublishedAt && w.id.toLowerCase().startsWith(prefix)
+    (w) => w.hasReplay && w.replayPublishedAt && w.id.toLowerCase().startsWith(prefix)
   );
   if (matches.length === 0) return null;
   return matches.sort((a, b) => (b.replayPublishedAt! < a.replayPublishedAt! ? -1 : 1))[0];

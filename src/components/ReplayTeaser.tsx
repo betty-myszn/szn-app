@@ -22,11 +22,10 @@ export default function ReplayTeaser({ background = "var(--cream)" }: { backgrou
 
   const replay = latestReplay();
   if (!mounted || !ready || hasActiveAccess(member)) return null;
-  if (!replay?.replayYoutubeId) return null;
-
-  // The workshop's own cover when it has one, so the class looks the same here as it does inside;
-  // otherwise youtube's own frame, which every uploaded video has.
-  const thumb = replay.coverImage ?? `https://img.youtube.com/vi/${replay.replayYoutubeId}/maxresdefault.jpg`;
+  // The workshop's own cover only. A YouTube thumbnail URL carries the video id, and this teaser is
+  // shown to non-members, so falling back to one would give the replay away. No cover, no teaser.
+  if (!replay?.hasReplay || !replay.coverImage) return null;
+  const thumb = replay.coverImage;
 
   return (
     <section className="px-5 md:px-8" style={{ background, borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}>

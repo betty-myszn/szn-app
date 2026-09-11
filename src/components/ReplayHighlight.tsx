@@ -18,7 +18,7 @@ export default function ReplayHighlight() {
   if (now === null) return null;
 
   const replay = latestReplay();
-  if (!replay || !replay.replayYoutubeId) return null;
+  if (!replay || !replay.hasReplay) return null;
 
   const fresh = isReplayFresh(replay, now);
 

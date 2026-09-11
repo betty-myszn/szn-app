@@ -68,9 +68,9 @@ export default async function SeasonPage({
   // clicks through to the members-only vault, so the class is showcased here without giving the
   // full recording away on a public page.
   const replay = replayForSign(slug);
-  const replayThumb = replay?.replayYoutubeId
-    ? `https://img.youtube.com/vi/${replay.replayYoutubeId}/maxresdefault.jpg`
-    : null;
+  // The workshop's own cover, never a YouTube thumbnail: a thumbnail URL carries the video id, and
+  // this is a public page, so it would hand the members-only replay to anyone reading the HTML.
+  const replayThumb = replay?.hasReplay ? replay.coverImage ?? null : null;
 
   // Breadcrumbs give Google the hierarchy for the SERP trail; the Article block tells it this page
   // is writing about a topic rather than another sales page.
