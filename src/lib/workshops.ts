@@ -136,8 +136,8 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     hasJoinLink: true,
-    replayYoutubeId: null,
-    replayPublishedAt: null,
+    replayYoutubeId: "xNKJsqbjgI4",
+    replayPublishedAt: "2026-09-11",
     paragraphs: [
       "This is the perfect reset for the woman you are becoming. A new moon hands you a completely clean twenty nine days, and what you decide to do with the first night of it tends to set the tone for the whole thing.",
       "New moons are for telling the universe what you actually want. Not the softened, sensible, easier-to-say-out-loud version, the real one. We are going to get yours written down, out of your head and into a sentence you would recognise if it came true.",

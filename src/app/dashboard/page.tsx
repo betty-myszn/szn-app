@@ -388,7 +388,11 @@ export default function DashboardPage() {
               than a generic page. */}
           {(() => {
             const moment = new Date("2026-09-11T03:27:00Z").getTime();
-            if (nowMs < moment - 7 * 86400000 || nowMs > moment + 12 * 3600000) return null;
+            // Closes the moment the class ends (7pm LA + 75 minutes), not 12 hours after the moon.
+            // After that the "join on zoom" button points at a meeting that has finished, and the
+            // replay spotlight directly below takes over the job.
+            const classEnds = new Date("2026-09-11T03:15:00Z").getTime();
+            if (nowMs < moment - 7 * 86400000 || nowMs > classEnds) return null;
             return (
               <div className="flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
                 <p style={{ margin: 0, fontSize: 13, color: "var(--dark)" }}>
