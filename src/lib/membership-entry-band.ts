@@ -1,5 +1,5 @@
 import type { Member } from "@/lib/member";
-import { isTrial, isExpiredTrial, hasPaidCommunityAccess } from "@/lib/membership-access";
+import { hasPaidCommunityAccess } from "@/lib/membership-access";
 import { trialCountdown, TRIAL_DAYS, type TrialCountdown } from "@/lib/trial-countdown";
 
 // What the full-width band above the pricing cards on /membership should say, per reader.
@@ -47,11 +47,15 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
     };
   }
 
-  const trial: TrialCountdown | null = isTrial(member) ? trialCountdown(member.trialExpiresAt, nowMs) : null;
+  // Trial state is read against nowMs, never the wall clock. isTrial() and isExpiredTrial() call
+  // Date.now() internally, so leaning on them here made the band ignore its own time argument: the
+  // tests, which pin "now", started failing the day the real date passed their fixture's expiry.
+  const trial: TrialCountdown | null =
+    member.membershipLevel === "trial" ? trialCountdown(member.trialExpiresAt, nowMs) : null;
 
   // Already paying, including the retired $33 social tier. An active trial passes
   // hasPaidCommunityAccess too, so it has to be excluded explicitly.
-  if (!trial && hasPaidCommunityAccess(member)) return null;
+  if (member.membershipLevel !== "trial" && hasPaidCommunityAccess(member)) return null;
 
   if (trial) {
     return {
@@ -67,7 +71,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
   }
 
   // Has an account, isn't paying, can't start a trial: the free tier, or a week that has run out.
-  const expired = isExpiredTrial(member);
+  const expired = member.membershipLevel === "trial" && !trial;
   return {
     mine: true,
     eyebrow: expired ? "your free week has ended" : "you're on the free tier",
