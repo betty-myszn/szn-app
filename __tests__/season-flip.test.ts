@@ -47,11 +47,17 @@ describe("season content", () => {
   it("has a Human Design reading for the current and next season", () => {
     expect(getSeasonDesign("leo")?.sign).toBe("Leo");
     expect(getSeasonDesign("virgo")?.sign).toBe("Virgo");
+    expect(getSeasonDesign("libra")?.sign).toBe("Libra");
   });
 
   it("never puts Leo's words inside another season's Human Design reading", () => {
     const virgo = JSON.stringify(getSeasonDesign("virgo"));
     expect(virgo).not.toMatch(/Leo/i);
+  });
+
+  it("never puts an earlier season's words inside Libra's Human Design reading", () => {
+    const libra = JSON.stringify(getSeasonDesign("libra"));
+    expect(libra).not.toMatch(/Leo|Virgo/i);
   });
 });
 
