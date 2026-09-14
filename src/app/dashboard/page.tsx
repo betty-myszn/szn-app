@@ -47,6 +47,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // on its own, so adding a new season's hero is one line here plus the file in /public.
 const HERO_ART: Record<string, string> = {
   Leo: "/leo-lion.png",
+  Libra: "/libra-moon.png",
 };
 
 function heroImageForSign(sign: string): string | null {
