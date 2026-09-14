@@ -19,27 +19,22 @@ export const runtime = "nodejs";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Every free-text answer, with the minimum length that means "answered" rather than "dismissed".
+// Every free-text answer on the shorter form of 14 Sep 2026, in the order she meets them, so the
+// first blank one is the one named.
 const TEXT_FIELDS: { key: string; min: number; label: string }[] = [
-  { key: "about_you", min: 20, label: "Tell us a little about yourself" },
-  { key: "why_host", min: 20, label: "Why you'd love to host" },
+  { key: "why_host", min: 20, label: "Why you want to host" },
   { key: "astrology_relationship", min: 20, label: "Your relationship with astrology" },
-  { key: "community_means", min: 20, label: "What community means to you" },
-  { key: "people_skills", min: 20, label: "Your people skills" },
-  { key: "customer_service", min: 10, label: "Your customer service experience" },
-  { key: "scenario_answer", min: 20, label: "The dinner scenario" },
+  { key: "relevant_experience", min: 10, label: "Your experience" },
+  { key: "scenario_answer", min: 20, label: "The woman standing alone" },
+  { key: "second_scenario", min: 20, label: "The two women at the table" },
   { key: "local_ideas", min: 20, label: "Three places in your city" },
-  { key: "availability", min: 5, label: "Your availability" },
-  { key: "girls_night", min: 10, label: "The ultimate girls' night" },
+  { key: "girls_night", min: 10, label: "Your unforgettable night" },
 ];
 
 const ENUMS: Record<string, string[]> = {
-  astrology_level: ["very_confident", "know_my_chart", "basics", "learning", "new_but_curious"],
-  hosting_experience: ["professionally", "casually", "a_little", "never_but_keen"],
   frequency_ok: ["yes", "usually", "discuss"],
-  evenings_ok: ["yes", "mostly", "occasionally"],
   travel_ok: ["yes", "depends"],
   side_role_ok: ["yes", "no"],
-  partnerships_interest: ["yes", "potentially", "hosting_only"],
 };
 
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
@@ -90,12 +85,6 @@ export async function POST(request: NextRequest) {
   const speaking = Number(body.speaking_comfort);
   if (!Number.isInteger(speaking) || speaking < 1 || speaking > 5) {
     return NextResponse.json({ error: "missing_choice", field: "speaking_comfort" }, { status: 400 });
-  }
-  // Examples are only asked of someone who says she has hosted, which is also when they are required.
-  const hasHosted = str(body.hosting_experience) !== "never_but_keen";
-  const hostingExamples = hasHosted ? str(body.hosting_examples) : "";
-  if (hasHosted && hostingExamples.length < 10) {
-    return NextResponse.json({ error: "too_short", field: "hosting_examples", label: "Examples of events you've hosted" }, { status: 400 });
   }
 
   // Birth details, asked the same way the free chart asks: a date, a time with an "approximate" tick
@@ -150,13 +139,8 @@ export async function POST(request: NextRequest) {
     city_slug: citySlug,
     other_city: citySlug === "other" ? otherCity : null,
     occupation,
-    about_you: str(body.about_you),
     why_host: str(body.why_host),
     astrology_relationship: str(body.astrology_relationship),
-    astrology_level: str(body.astrology_level),
-    community_means: str(body.community_means),
-    people_skills: str(body.people_skills),
-    customer_service: str(body.customer_service),
     birth_date: birthDate,
     birth_time: birthTime,
     birth_time_approximate: birthTimeApproximate,
@@ -166,17 +150,13 @@ export async function POST(request: NextRequest) {
     birth_tz: tz,
     chart_summary: chartSummary,
     speaking_comfort: speaking,
-    hosting_experience: str(body.hosting_experience),
-    hosting_examples: hostingExamples || null,
-    relevant_experience: str(body.relevant_experience) || null,
+    relevant_experience: str(body.relevant_experience),
     scenario_answer: str(body.scenario_answer),
+    second_scenario: str(body.second_scenario),
     local_ideas: str(body.local_ideas),
-    availability: str(body.availability),
     frequency_ok: str(body.frequency_ok),
-    evenings_ok: str(body.evenings_ok),
     travel_ok: str(body.travel_ok),
     side_role_ok: str(body.side_role_ok),
-    partnerships_interest: str(body.partnerships_interest),
     girls_night: str(body.girls_night),
     status,
     updated_at: new Date().toISOString(),

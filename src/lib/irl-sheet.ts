@@ -1,8 +1,5 @@
 import { SITE_URL } from "@/lib/site";
-import {
-  EVENINGS, SIDE_ROLE, TRAVEL, astrologyLabel, frequencyLabel, hostingLabel, partnershipsLabel,
-  type ChartSummary,
-} from "@/lib/irl";
+import { SIDE_ROLE, TRAVEL, frequencyLabel, type ChartSummary } from "@/lib/irl";
 
 // Every host application also lands as a row in Betty's Google Sheet, through the small Apps Script
 // web app bound to that sheet (scripts/irl-host-sheet.gs, which has the steps to connect it at the
@@ -17,12 +14,11 @@ export interface IrlSheetArgs {
   occupation: string;
   birth_date: string; birth_time: string; birth_time_approximate: boolean; birth_place: string;
   chart_summary: ChartSummary | null;
-  about_you: string; why_host: string; astrology_relationship: string; astrology_level: string;
-  community_means: string; people_skills: string; customer_service: string; speaking_comfort: number;
-  hosting_experience: string; hosting_examples: string | null; relevant_experience: string | null;
-  scenario_answer: string; local_ideas: string; availability: string;
-  frequency_ok: string; evenings_ok: string; travel_ok: string; side_role_ok: string;
-  partnerships_interest: string; girls_night: string;
+  why_host: string; astrology_relationship: string; relevant_experience: string;
+  speaking_comfort: number; scenario_answer: string; second_scenario: string; local_ideas: string;
+  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
+  girls_night: string;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -60,7 +56,7 @@ export function sheetRow(a: IrlSheetArgs): Record<string, string | number> {
     "Instagram": a.instagram ? `https://instagram.com/${handle(a.instagram)}` : "",
     "TikTok": a.tiktok ? `https://tiktok.com/@${handle(a.tiktok)}` : "",
     "LinkedIn": a.linkedin ? (/^https?:\/\//.test(a.linkedin) ? a.linkedin : `https://${a.linkedin}`) : "",
-    "Work": a.occupation,
+    "What they do": a.occupation,
     "Born": bornCell(a),
     "Sun": c?.sun ?? "",
     "Moon": c?.moon ?? "",
@@ -73,26 +69,17 @@ export function sheetRow(a: IrlSheetArgs): Record<string, string | number> {
     "Authority": c?.hd_authority ?? "",
     "Profile": c?.hd_profile ?? "",
     "Definition": c?.hd_definition ?? "",
-    "About them": a.about_you,
     "Why they want to host": a.why_host,
     "Astrology, manifestation and personal development": a.astrology_relationship,
-    "Astrology knowledge": astrologyLabel(a.astrology_level),
-    "What community means to them": a.community_means,
-    "People skills": a.people_skills,
-    "Customer service experience": a.customer_service,
-    "Speaking to a group (1-5)": a.speaking_comfort,
-    "Hosted before": hostingLabel(a.hosting_experience),
-    "Events they've hosted": a.hosting_examples ?? "",
-    "Other relevant experience": a.relevant_experience ?? "",
-    "The woman standing alone at dinner": a.scenario_answer,
-    "Three places in their city": a.local_ideas,
-    "Availability": a.availability,
-    "1-2 events a month": frequencyLabel(a.frequency_ok),
-    "Evenings and weekends": optionLabel(EVENINGS, a.evenings_ok),
+    "Experience": a.relevant_experience,
+    "Leading a room (1-5)": a.speaking_comfort,
+    "The woman standing alone": a.scenario_answer,
+    "The two women who only talk to each other": a.second_scenario,
+    "Three places that scream MY SZN": a.local_ideas,
+    "1-2 evening or weekend events a month": frequencyLabel(a.frequency_ok),
     "Travel around the city": optionLabel(TRAVEL, a.travel_ok),
     "Freelance, hourly plus commission": optionLabel(SIDE_ROLE, a.side_role_ok),
-    "Finding venues and partners": partnershipsLabel(a.partnerships_interest),
-    "The ultimate girls' night": a.girls_night,
+    "One unforgettable night": a.girls_night,
     "Dashboard": `${SITE_URL}/admin/irl-hosts?id=${a.id}`,
   };
   for (const [k, v] of Object.entries(row)) if (typeof v === "string") row[k] = safeCell(v);

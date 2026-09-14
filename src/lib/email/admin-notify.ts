@@ -2,10 +2,7 @@ import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail } from "@/lib/email/brevo";
 import { planNameForPrice } from "@/lib/email/welcome";
 import { SITE_URL } from "@/lib/site";
-import {
-  EVENINGS, SIDE_ROLE, TRAVEL, astrologyLabel, frequencyLabel, hostingLabel, partnershipsLabel,
-  type ChartSummary,
-} from "@/lib/irl";
+import { SIDE_ROLE, TRAVEL, frequencyLabel, type ChartSummary } from "@/lib/irl";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -373,12 +370,11 @@ export interface IrlApplicationAlertArgs {
   occupation: string;
   birth_date: string; birth_time: string; birth_time_approximate: boolean; birth_place: string;
   chart_summary: ChartSummary | null;
-  about_you: string; why_host: string; astrology_relationship: string; astrology_level: string;
-  community_means: string; people_skills: string; customer_service: string; speaking_comfort: number;
-  hosting_experience: string; hosting_examples: string | null; relevant_experience: string | null;
-  scenario_answer: string; local_ideas: string; availability: string;
-  frequency_ok: string; evenings_ok: string; travel_ok: string; side_role_ok: string;
-  partnerships_interest: string; girls_night: string;
+  why_host: string; astrology_relationship: string; relevant_experience: string;
+  speaking_comfort: number; scenario_answer: string; second_scenario: string; local_ideas: string;
+  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
+  girls_night: string;
 }
 
 const optionLabel = (list: readonly { value: string; label: string }[], v: string) =>
@@ -434,34 +430,25 @@ export function buildIrlApplicationAlert(a: IrlApplicationAlertArgs): { subject:
         ["Instagram", a.instagram ? `instagram.com/${handle(a.instagram)}` : ""],
         ["TikTok", a.tiktok ? `tiktok.com/@${handle(a.tiktok)}` : ""],
         ["LinkedIn", a.linkedin ?? ""],
-        ["Occupation", a.occupation],
+        ["What she does", a.occupation],
       ])}
 
       ${heading("at a glance")}
       ${table([
-        ["Astrology", astrologyLabel(a.astrology_level)],
-        ["Hosted before", hostingLabel(a.hosting_experience)],
-        ["Speaking to a group", `${a.speaking_comfort} out of 5`],
-        ["Availability", a.availability],
-        ["1-2 events a month", frequencyLabel(a.frequency_ok)],
-        ["Evenings and weekends", optionLabel(EVENINGS, a.evenings_ok)],
+        ["Leading a room", `${a.speaking_comfort} out of 5`],
+        ["1-2 evening or weekend events a month", frequencyLabel(a.frequency_ok)],
         ["Travel around the city", optionLabel(TRAVEL, a.travel_ok)],
         ["OK as freelance, hourly plus commission", optionLabel(SIDE_ROLE, a.side_role_ok)],
-        ["Finding venues and partners", partnershipsLabel(a.partnerships_interest)],
       ])}
 
       ${heading("her answers")}
-      ${answer("About her", a.about_you)}
       ${answer("Why she wants to host", a.why_host)}
       ${answer("Her relationship with astrology, manifestation and personal development", a.astrology_relationship)}
-      ${answer("What creating a great community means to her", a.community_means)}
-      ${answer("Her people skills", a.people_skills)}
-      ${answer("Her customer service experience", a.customer_service)}
-      ${answer("Events she's hosted", a.hosting_examples)}
-      ${answer("Relevant experience", a.relevant_experience)}
-      ${answer("The woman standing alone at dinner", a.scenario_answer)}
-      ${answer("Three places, brands or experiences in her city", a.local_ideas)}
-      ${answer("The ultimate girls' night", a.girls_night)}
+      ${answer("Her hosting, events, hospitality, customer service or community experience", a.relevant_experience)}
+      ${answer("The woman standing alone", a.scenario_answer)}
+      ${answer("The two women who only talk to each other", a.second_scenario)}
+      ${answer("Three places, brands or experiences in her city that scream MY SZN", a.local_ideas)}
+      ${answer("Her one unforgettable night", a.girls_night)}
 
       <p style="margin:8px 0 0">
         <a href="${SITE_URL}/admin/irl-hosts${a.id ? `?id=${encodeURIComponent(a.id)}` : ""}" style="color:#FF2D87;font-weight:700">Rate, shortlist and compare in the dashboard</a>

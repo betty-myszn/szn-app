@@ -34,12 +34,10 @@ describe("buildIrlApplicationAlert", () => {
     birth_date: "1961-08-04", birth_time: "19:24", birth_time_approximate: false,
     birth_place: "Honolulu, Hawaii, United States",
     chart_summary: summariseApplicantChart(birth),
-    about_you: "About", why_host: "Why", astrology_relationship: "Astro", astrology_level: "basics",
-    community_means: "Community", people_skills: "People", customer_service: "Ten years in salons",
-    speaking_comfort: 4, hosting_experience: "casually", hosting_examples: "Monthly book club",
-    relevant_experience: null, scenario_answer: "Scenario", local_ideas: "Ideas",
-    availability: "Thursday evenings and most Sundays", frequency_ok: "yes", evenings_ok: "mostly",
-    travel_ok: "yes", side_role_ok: "yes", partnerships_interest: "potentially", girls_night: "Night",
+    why_host: "Why", astrology_relationship: "Astro", relevant_experience: "Ten years in salons",
+    speaking_comfort: 4, scenario_answer: "Scenario", second_scenario: "Pull up a chair between them",
+    local_ideas: "Ideas", frequency_ok: "usually", travel_ok: "depends", side_role_ok: "yes",
+    girls_night: "A candlelit rooftop",
   };
 
   it("puts the chart and every answer in the email, escaped", () => {
@@ -48,11 +46,11 @@ describe("buildIrlApplicationAlert", () => {
     expect(subject).toContain("Leo sun");
     expect(htmlContent).toContain("Aquarius");
     expect(htmlContent).toContain(app.chart_summary!.hd_type!);
-    expect(htmlContent).toContain("People");
-    expect(htmlContent).toContain("Mostly");
     expect(htmlContent).toContain("Ten years in salons");
-    expect(htmlContent).toContain("Monthly book club");
-    expect(htmlContent).toContain("Thursday evenings and most Sundays");
+    expect(htmlContent).toContain("Pull up a chair between them");
+    expect(htmlContent).toContain("A candlelit rooftop");
+    expect(htmlContent).toContain("Usually");
+    expect(htmlContent).toContain("Depends on location");
     expect(htmlContent).toContain("/admin/irl-hosts?id=abc-123");
     expect(htmlContent).not.toContain("<b>Test</b>");
   });
@@ -65,12 +63,10 @@ describe("sheetRow", () => {
     instagram: "@jess", tiktok: "jess", linkedin: "linkedin.com/in/jess", occupation: "Florist",
     birth_date: "1961-08-04", birth_time: "19:24:00", birth_time_approximate: true,
     birth_place: "Honolulu, Hawaii, United States", chart_summary: summariseApplicantChart(birth),
-    about_you: "=IMPORTXML(\"https://example.com\", \"//a\")", why_host: "Why", astrology_relationship: "Astro",
-    astrology_level: "basics", community_means: "Community", people_skills: "People",
-    customer_service: "Salons", speaking_comfort: 4, hosting_experience: "never_but_keen",
-    hosting_examples: null, relevant_experience: null, scenario_answer: "Scenario", local_ideas: "Ideas",
-    availability: "Weekends", frequency_ok: "yes", evenings_ok: "mostly", travel_ok: "yes",
-    side_role_ok: "yes", partnerships_interest: "potentially", girls_night: "Night",
+    why_host: "=IMPORTXML(\"https://example.com\", \"//a\")", astrology_relationship: "Astro",
+    relevant_experience: "Salons", speaking_comfort: 4, scenario_answer: "Scenario",
+    second_scenario: "Second", local_ideas: "Ideas", frequency_ok: "yes", travel_ok: "yes",
+    side_role_ok: "yes", girls_night: "Night",
   };
 
   it("turns every answer into a column, with links and the chart", () => {
@@ -81,14 +77,14 @@ describe("sheetRow", () => {
     expect(row["Sun"]).toBe("Leo");
     expect(row["Rising"]).toBe("Aquarius (approx.)");
     expect(row["Born"]).toBe("4 Aug 1961, 19:24 (approximate), Honolulu, Hawaii, United States");
-    expect(row["Events they've hosted"]).toBe("");
-    expect(row["Speaking to a group (1-5)"]).toBe(4);
+    expect(row["The two women who only talk to each other"]).toBe("Second");
+    expect(row["Leading a room (1-5)"]).toBe(4);
     expect(String(row["Dashboard"])).toMatch(/\/admin\/irl-hosts\?id=abc-123$/);
   });
 
   it("never lets an answer run as a formula", () => {
     const row = sheetRow(app);
-    expect(row["About them"]).toBe("'=IMPORTXML(\"https://example.com\", \"//a\")");
+    expect(row["Why they want to host"]).toBe("'=IMPORTXML(\"https://example.com\", \"//a\")");
     expect(row["Phone"]).toBe("'+44 7700 900123");
     expect(safeCell("@handle")).toBe("'@handle");
     expect(safeCell("-5")).toBe("'-5");

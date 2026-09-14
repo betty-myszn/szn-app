@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { isAdminMember } from "@/lib/member";
 import {
-  ASTROLOGY_LEVELS, FREQUENCY, HD_TYPES, HOSTING_EXPERIENCE, PARTNERSHIPS, RATING_FIELDS,
-  STATUSES, STATUS_LABELS, astrologyLabel, bigThree, frequencyLabel, hostingLabel, humanDesign,
-  partnershipsLabel, type ApplicationStatus, type ChartSummary,
+  FREQUENCY, HD_TYPES, RATING_FIELDS, SIDE_ROLE, STATUSES, STATUS_LABELS, TRAVEL, bigThree,
+  frequencyLabel, humanDesign, type ApplicationStatus, type ChartSummary,
 } from "@/lib/irl";
 import { ZODIAC_SIGNS } from "@/types/chart";
 
@@ -22,13 +21,11 @@ interface Application {
   full_name: string; email: string; phone: string | null;
   instagram: string | null; tiktok: string | null; linkedin: string | null;
   city_slug: string; other_city: string | null; occupation: string;
-  about_you: string; why_host: string; astrology_relationship: string; astrology_level: string;
-  community_means: string; speaking_comfort: number; hosting_experience: string;
-  relevant_experience: string | null; scenario_answer: string; local_ideas: string;
-  frequency_ok: string; evenings_ok: string; travel_ok: string; side_role_ok: string;
-  partnerships_interest: string; girls_night: string;
-  people_skills: string | null;
-  customer_service: string | null; hosting_examples: string | null; availability: string | null;
+  why_host: string; astrology_relationship: string; relevant_experience: string | null;
+  speaking_comfort: number; scenario_answer: string; second_scenario: string | null; local_ideas: string;
+  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
+  girls_night: string;
   birth_date: string | null; birth_time: string | null; birth_time_approximate: boolean | null;
   birth_place: string | null; chart_summary: ChartSummary | null;
   status: ApplicationStatus; shortlisted: boolean;
@@ -49,6 +46,9 @@ const CITY_TABS = [
   { slug: "los-angeles", name: "Los Angeles" },
   { slug: "other", name: "Other cities" },
 ];
+
+const optionText = (list: readonly { value: string; label: string }[], v: string) =>
+  list.find((o) => o.value === v)?.label ?? v;
 
 const cityName = (slug: string, other?: string | null) =>
   slug === "london" ? "London" : slug === "new-york" ? "New York"
@@ -75,10 +75,7 @@ export default function IrlHostsAdminPage() {
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState("all");
   const [status, setStatus] = useState("all");
-  const [astrology, setAstrology] = useState("all");
-  const [hosting, setHosting] = useState("all");
   const [availability, setAvailability] = useState("all");
-  const [partnerships, setPartnerships] = useState("all");
   const [hd, setHd] = useState("all");
   const [sun, setSun] = useState("all");
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
@@ -88,7 +85,7 @@ export default function IrlHostsAdminPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const p = new URLSearchParams({ city, status, astrology, hosting, availability, partnerships, hd, sun, sort });
+    const p = new URLSearchParams({ city, status, availability, hd, sun, sort });
     if (shortlistedOnly) p.set("shortlisted", "1");
     const res = await fetch(`/api/irl/admin?${p}`);
     if (res.ok) {
@@ -97,7 +94,7 @@ export default function IrlHostsAdminPage() {
       setSummary(d.summary);
     }
     setLoading(false);
-  }, [city, status, astrology, hosting, availability, partnerships, hd, sun, shortlistedOnly, sort]);
+  }, [city, status, availability, hd, sun, shortlistedOnly, sort]);
 
   useEffect(() => { if (ready && isAdminMember(member)) load(); }, [ready, member, load]);
 
@@ -177,10 +174,7 @@ export default function IrlHostsAdminPage() {
       <section className="px-5 md:px-8 py-6" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))" }}>
           <Filter label="status" value={status} onChange={setStatus} options={STATUSES.map((s) => [s, STATUS_LABELS[s]])} />
-          <Filter label="astrology" value={astrology} onChange={setAstrology} options={ASTROLOGY_LEVELS.map((o) => [o.value, o.label])} />
-          <Filter label="hosting" value={hosting} onChange={setHosting} options={HOSTING_EXPERIENCE.map((o) => [o.value, o.label])} />
           <Filter label="availability" value={availability} onChange={setAvailability} options={FREQUENCY.map((o) => [o.value, o.label])} />
-          <Filter label="partnerships" value={partnerships} onChange={setPartnerships} options={PARTNERSHIPS.map((o) => [o.value, o.label])} />
           <Filter label="human design" value={hd} onChange={setHd} options={HD_TYPES.map((t) => [t, t])} />
           <Filter label="sun sign" value={sun} onChange={setSun} options={ZODIAC_SIGNS.map((s) => [s, s])} />
           <Filter label="sort" value={sort} onChange={setSort} noAll options={[["newest","Newest"],["oldest","Oldest"],["city","City"],["status","Status"],["score","Score"]]} />
@@ -200,10 +194,10 @@ export default function IrlHostsAdminPage() {
             : apps.length === 0 ? <p style={{ color: "var(--grey)" }}>No applications match that.</p>
             : (
             <div style={{ overflowX: "auto", border: "var(--border)", background: "#fff" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1220 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1020 }}>
                 <thead>
                   <tr>
-                    {["", "name", "city", "occupation", "applied", "chart", "astrology", "hosted before", "availability", "partners", "score", "status", ""].map((h, i) => (
+                    {["", "name", "city", "what she does", "applied", "chart", "leading a room", "availability", "score", "status", ""].map((h, i) => (
                       <th key={i} style={{ textAlign: "left", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey)", padding: "12px 10px", borderBottom: "var(--border)", whiteSpace: "nowrap" }}>{h}</th>
                     ))}
                   </tr>
@@ -232,10 +226,8 @@ export default function IrlHostsAdminPage() {
                           </>
                         ) : <span style={{ color: "var(--grey)" }}>—</span>}
                       </td>
-                      <td style={td}>{astrologyLabel(a.astrology_level)}</td>
-                      <td style={td}>{hostingLabel(a.hosting_experience)}</td>
+                      <td style={{ ...td, fontVariantNumeric: "tabular-nums" }}>{a.speaking_comfort}/5</td>
                       <td style={td}>{frequencyLabel(a.frequency_ok)}</td>
-                      <td style={td}>{partnershipsLabel(a.partnerships_interest)}</td>
                       <td style={{ ...td, fontVariantNumeric: "tabular-nums", fontWeight: 700 }}>{a.overall_score ?? "—"}</td>
                       <td style={td}><StatusChip status={a.status} /></td>
                       <td style={{ ...td, whiteSpace: "nowrap" }}>
@@ -300,16 +292,15 @@ function Comparison({ apps, onClear }: { apps: Application[]; onClear: () => voi
     ["City", (a) => cityName(a.city_slug, a.other_city)],
     ["Big three", (a) => bigThree(a.chart_summary)],
     ["Human design", (a) => humanDesign(a.chart_summary)],
-    ["Occupation", (a) => a.occupation],
-    ["Hosting experience", (a) => hostingLabel(a.hosting_experience)],
-    ["Astrology", (a) => astrologyLabel(a.astrology_level)],
-    ["Speaking (1-5)", (a) => String(a.speaking_comfort)],
-    ["People skills", (a) => a.people_skills || "—"],
-    ["Customer service", (a) => a.customer_service || "—"],
-    ["Availability", (a) => [frequencyLabel(a.frequency_ok), a.availability].filter(Boolean).join(" · ")],
-    ["Partnerships", (a) => partnershipsLabel(a.partnerships_interest)],
+    ["What she does", (a) => a.occupation],
+    ["Experience", (a) => a.relevant_experience || "—"],
+    ["Leading a room (1-5)", (a) => String(a.speaking_comfort)],
+    ["Availability", (a) => frequencyLabel(a.frequency_ok)],
     ["Overall score", (a) => (a.overall_score != null ? String(a.overall_score) : "—")],
-    ["Local venue ideas", (a) => a.local_ideas],
+    ["The woman standing alone", (a) => a.scenario_answer],
+    ["The two who only talk to each other", (a) => a.second_scenario || "—"],
+    ["Three places that scream MY SZN", (a) => a.local_ideas],
+    ["One unforgettable night", (a) => a.girls_night],
   ];
   return (
     <section className="px-5 md:px-8 py-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)" }}>
@@ -375,19 +366,14 @@ function Profile({ app, onClose, onPatch }: {
 
           <ChartPanel app={app} />
 
-          <Block title="about them" body={app.about_you} />
           <Block title="why she wants it" body={app.why_host} />
-          <Block title="work and experience" body={app.relevant_experience || "(none given)"} />
-          <Block title="astrology and manifestation" body={app.astrology_relationship} extra={`${astrologyLabel(app.astrology_level)} · speaking confidence ${app.speaking_comfort}/5`} />
-          <Block title="community-building" body={app.community_means} />
-          {app.people_skills && <Block title="people skills" body={app.people_skills} />}
-          {app.customer_service && <Block title="customer service experience" body={app.customer_service} />}
-          <Block title="hosting experience" body={app.hosting_examples || hostingLabel(app.hosting_experience)} extra={app.hosting_examples ? hostingLabel(app.hosting_experience) : undefined} />
-          <Block title="the scenario answer" body={app.scenario_answer} />
-          <Block title="local venue and brand ideas" body={app.local_ideas} />
-          <Block title="availability" body={app.availability || frequencyLabel(app.frequency_ok)} extra={`${frequencyLabel(app.frequency_ok)} · evenings: ${app.evenings_ok} · travel: ${app.travel_ok} · freelance, hourly plus commission ok: ${app.side_role_ok}`} />
-          <Block title="partnership interest" body={partnershipsLabel(app.partnerships_interest)} />
-          <Block title="the ultimate girls' night" body={app.girls_night} />
+          <Block title="astrology and manifestation" body={app.astrology_relationship} />
+          <Block title="her experience" body={app.relevant_experience || "(none given)"} extra={`leading a room ${app.speaking_comfort}/5`} />
+          <Block title="the woman standing alone" body={app.scenario_answer} />
+          {app.second_scenario && <Block title="the two who only talk to each other" body={app.second_scenario} />}
+          <Block title="three places that scream my szn" body={app.local_ideas} />
+          <Block title="availability" body={frequencyLabel(app.frequency_ok)} extra={`travel: ${optionText(TRAVEL, app.travel_ok)} · freelance, hourly plus commission: ${optionText(SIDE_ROLE, app.side_role_ok)}`} />
+          <Block title="one unforgettable night" body={app.girls_night} />
 
           {/* ratings, internal only */}
           <div style={{ border: "var(--border)", background: "var(--lav-light)", padding: "20px 20px 22px", marginTop: 22 }}>
