@@ -1,5 +1,5 @@
 import { SITE_URL } from "@/lib/site";
-import { SIDE_ROLE, TRAVEL, frequencyLabel, type ChartSummary } from "@/lib/irl";
+import { practicalLabel, type ChartSummary } from "@/lib/irl";
 
 // Every host application also lands as a row in Betty's Google Sheet, through the small Apps Script
 // web app bound to that sheet (scripts/irl-host-sheet.gs, which has the steps to connect it at the
@@ -14,17 +14,15 @@ export interface IrlSheetArgs {
   occupation: string;
   birth_date: string; birth_time: string; birth_time_approximate: boolean; birth_place: string;
   chart_summary: ChartSummary | null;
-  why_host: string; astrology_relationship: string; relevant_experience: string;
-  speaking_comfort: number; scenario_answer: string; second_scenario: string; local_ideas: string;
-  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  why_host: string; astrology_relationship: string;
+  scenario_answer: string; second_scenario: string;
+  /** The one practical question: 1-2 evening or weekend events a month, hourly plus commission. */
+  frequency_ok: string;
   /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
   girls_night: string;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-const optionLabel = (list: readonly { value: string; label: string }[], v: string) =>
-  list.find((o) => o.value === v)?.label ?? v;
 
 const handle = (v: string | null) => (v ? v.trim().replace(/^@/, "") : "");
 
@@ -56,7 +54,7 @@ export function sheetRow(a: IrlSheetArgs): Record<string, string | number> {
     "Instagram": a.instagram ? `https://instagram.com/${handle(a.instagram)}` : "",
     "TikTok": a.tiktok ? `https://tiktok.com/@${handle(a.tiktok)}` : "",
     "LinkedIn": a.linkedin ? (/^https?:\/\//.test(a.linkedin) ? a.linkedin : `https://${a.linkedin}`) : "",
-    "Work and skills": a.occupation,
+    "Work, experience and skills": a.occupation,
     "Born": bornCell(a),
     "Sun": c?.sun ?? "",
     "Moon": c?.moon ?? "",
@@ -71,14 +69,9 @@ export function sheetRow(a: IrlSheetArgs): Record<string, string | number> {
     "Definition": c?.hd_definition ?? "",
     "Why they want to host": a.why_host,
     "Astrology, manifestation and personal development": a.astrology_relationship,
-    "Experience": a.relevant_experience,
-    "Leading a room (1-5)": a.speaking_comfort,
     "The woman standing alone": a.scenario_answer,
     "The two women who only talk to each other": a.second_scenario,
-    "Three places that scream MY SZN": a.local_ideas,
-    "1-2 evening or weekend events a month": frequencyLabel(a.frequency_ok),
-    "Travel around the city": optionLabel(TRAVEL, a.travel_ok),
-    "Freelance, hourly plus commission": optionLabel(SIDE_ROLE, a.side_role_ok),
+    "1-2 events a month, hourly plus commission": practicalLabel(a.frequency_ok),
     "One unforgettable night": a.girls_night,
     "Dashboard": `${SITE_URL}/admin/irl-hosts?id=${a.id}`,
   };

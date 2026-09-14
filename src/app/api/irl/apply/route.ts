@@ -21,20 +21,18 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Every free-text answer, with the minimum length that means "answered" rather than "dismissed", in
 // the order she meets them so the first blank one is the one named.
 const TEXT_FIELDS: { key: string; min: number; label: string }[] = [
-  { key: "occupation", min: 20, label: "Your work and the skills it's given you" },
+  { key: "occupation", min: 20, label: "Your work, experience and skills" },
   { key: "why_host", min: 20, label: "Why you want to host" },
   { key: "astrology_relationship", min: 20, label: "Your relationship with astrology" },
-  { key: "relevant_experience", min: 10, label: "Your experience" },
   { key: "scenario_answer", min: 20, label: "The woman standing alone" },
   { key: "second_scenario", min: 20, label: "The two women at the table" },
-  { key: "local_ideas", min: 20, label: "Three places in your city" },
   { key: "girls_night", min: 10, label: "Your unforgettable night" },
 ];
 
+// The one practical question: 1-2 evening or weekend events a month around her city, paid hourly
+// plus commission. Kept in frequency_ok.
 const ENUMS: Record<string, string[]> = {
-  frequency_ok: ["yes", "usually", "discuss"],
-  travel_ok: ["yes", "depends"],
-  side_role_ok: ["yes", "no"],
+  frequency_ok: ["yes", "discuss"],
 };
 
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
@@ -81,10 +79,6 @@ export async function POST(request: NextRequest) {
     if (!allowed.includes(str(body[key]))) {
       return NextResponse.json({ error: "missing_choice", field: key }, { status: 400 });
     }
-  }
-  const speaking = Number(body.speaking_comfort);
-  if (!Number.isInteger(speaking) || speaking < 1 || speaking > 5) {
-    return NextResponse.json({ error: "missing_choice", field: "speaking_comfort" }, { status: 400 });
   }
 
   // Birth details, asked the same way the free chart asks: a date, a time with an "approximate" tick
@@ -149,14 +143,9 @@ export async function POST(request: NextRequest) {
     birth_lng: lng,
     birth_tz: tz,
     chart_summary: chartSummary,
-    speaking_comfort: speaking,
-    relevant_experience: str(body.relevant_experience),
     scenario_answer: str(body.scenario_answer),
     second_scenario: str(body.second_scenario),
-    local_ideas: str(body.local_ideas),
     frequency_ok: str(body.frequency_ok),
-    travel_ok: str(body.travel_ok),
-    side_role_ok: str(body.side_role_ok),
     girls_night: str(body.girls_night),
     status,
     updated_at: new Date().toISOString(),

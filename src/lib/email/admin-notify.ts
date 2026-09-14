@@ -2,7 +2,7 @@ import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail } from "@/lib/email/brevo";
 import { planNameForPrice } from "@/lib/email/welcome";
 import { SITE_URL } from "@/lib/site";
-import { SIDE_ROLE, TRAVEL, frequencyLabel, type ChartSummary } from "@/lib/irl";
+import { practicalLabel, type ChartSummary } from "@/lib/irl";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -370,15 +370,13 @@ export interface IrlApplicationAlertArgs {
   occupation: string;
   birth_date: string; birth_time: string; birth_time_approximate: boolean; birth_place: string;
   chart_summary: ChartSummary | null;
-  why_host: string; astrology_relationship: string; relevant_experience: string;
-  speaking_comfort: number; scenario_answer: string; second_scenario: string; local_ideas: string;
-  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  why_host: string; astrology_relationship: string;
+  scenario_answer: string; second_scenario: string;
+  /** The one practical question: 1-2 evening or weekend events a month, hourly plus commission. */
+  frequency_ok: string;
   /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
   girls_night: string;
 }
-
-const optionLabel = (list: readonly { value: string; label: string }[], v: string) =>
-  list.find((o) => o.value === v)?.label ?? v;
 
 /**
  * The whole application in one email, chart first, so a decision can be made from the inbox without
@@ -434,20 +432,15 @@ export function buildIrlApplicationAlert(a: IrlApplicationAlertArgs): { subject:
 
       ${heading("at a glance")}
       ${table([
-        ["Leading a room", `${a.speaking_comfort} out of 5`],
-        ["1-2 evening or weekend events a month", frequencyLabel(a.frequency_ok)],
-        ["Travel around the city", optionLabel(TRAVEL, a.travel_ok)],
-        ["OK as freelance, hourly plus commission", optionLabel(SIDE_ROLE, a.side_role_ok)],
+        ["1-2 evening or weekend events a month, hourly plus commission", practicalLabel(a.frequency_ok)],
       ])}
 
       ${heading("her answers")}
-      ${answer("Her work and the skills it's given her", a.occupation)}
+      ${answer("Her work, experience and skills", a.occupation)}
       ${answer("Why she wants to host", a.why_host)}
       ${answer("Her relationship with astrology, manifestation and personal development", a.astrology_relationship)}
-      ${answer("Her hosting, events, hospitality, customer service or community experience", a.relevant_experience)}
       ${answer("The woman standing alone", a.scenario_answer)}
       ${answer("The two women who only talk to each other", a.second_scenario)}
-      ${answer("Three places, brands or experiences in her city that scream MY SZN", a.local_ideas)}
       ${answer("Her one unforgettable night", a.girls_night)}
 
       <p style="margin:8px 0 0">

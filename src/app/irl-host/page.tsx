@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import BirthDetailsFields, { type BirthDetails } from "@/components/BirthDetailsFields";
-import { FREQUENCY, LAUNCH_CITIES, SIDE_ROLE, TRAVEL } from "@/lib/irl";
+import { LAUNCH_CITIES, PRACTICAL } from "@/lib/irl";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 const INSTAGRAM = "https://instagram.com/itsmyszn";
@@ -232,7 +232,7 @@ const FIELD_ERRORS: Record<string, string> = {
 };
 
 function HostApplicationForm() {
-  const [form, setForm] = useState<Record<string, string>>({ city_slug: "", speaking_comfort: "" });
+  const [form, setForm] = useState<Record<string, string>>({ city_slug: "" });
   const [birth, setBirth] = useState<BirthDetails>({ dateOfBirth: "", birthTime: "", birthTimeApproximate: false, location: null });
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState<string | null>(null);
@@ -253,7 +253,6 @@ function HostApplicationForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          speaking_comfort: Number(form.speaking_comfort),
           birth_date: birth.dateOfBirth,
           birth_time: birth.birthTime,
           birth_time_approximate: birth.birthTimeApproximate,
@@ -347,51 +346,30 @@ function HostApplicationForm() {
           </FormBlock>
 
           <FormBlock n={3} title="about you">
-            <Field label="What do you do for work, and what skills has it given you that you&rsquo;d bring to hosting?" required><textarea rows={4} style={input} value={form.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)} /></Field>
+            <Field label="What do you do for work, and what experience and skills would you bring to hosting?" required>
+              <p style={hint}>Your job, plus anything in events, hospitality, customer service or community.</p>
+              <textarea rows={5} style={input} value={form.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)} />
+            </Field>
             <Field label="Why do you want to become a MY SZN IRL Host?" required><textarea rows={5} style={input} value={form.why_host ?? ""} onChange={(e) => set("why_host", e.target.value)} /></Field>
             <Field label="What&rsquo;s your relationship with astrology, manifestation and personal development?" required><textarea rows={5} style={input} value={form.astrology_relationship ?? ""} onChange={(e) => set("astrology_relationship", e.target.value)} /></Field>
           </FormBlock>
 
-          <FormBlock n={4} title="your experience">
-            <Field label="Tell us about any hosting, events, hospitality, customer service or community experience you&rsquo;ve had" required>
-              <textarea rows={5} style={input} value={form.relevant_experience ?? ""} onChange={(e) => set("relevant_experience", e.target.value)} />
-            </Field>
-            <Field label="How comfortable are you leading a room?" required>
-              <p style={hint}>1 is not at all, 5 is completely in your element.</p>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                {[1, 2, 3, 4, 5].map((n) => {
-                  const on = form.speaking_comfort === String(n);
-                  return (
-                    <button type="button" key={n} onClick={() => set("speaking_comfort", String(n))}
-                      style={{ flex: "1 1 56px", minWidth: 56, minHeight: 54, border: "var(--border)", background: on ? "var(--pink)" : "#fff", color: on ? "#fff" : "var(--dark)", fontFamily: poppins, fontWeight: 800, fontSize: 17, cursor: "pointer" }}>
-                      {n}
-                    </button>
-                  );
-                })}
-              </div>
-            </Field>
-          </FormBlock>
-
-          <FormBlock n={5} title="the real questions">
+          <FormBlock n={4} title="the real questions">
             <Field label="You walk into a MY SZN event and one woman is standing alone looking uncomfortable. What do you do?" required>
               <textarea rows={5} style={input} value={form.scenario_answer ?? ""} onChange={(e) => set("scenario_answer", e.target.value)} />
             </Field>
             <Field label="Two women arrive together, only speak to each other all night and aren&rsquo;t engaging with the rest of the table. How would you handle it?" required>
               <textarea rows={5} style={input} value={form.second_scenario ?? ""} onChange={(e) => set("second_scenario", e.target.value)} />
             </Field>
-            <Field label="Name three places, brands or experiences in your city that scream MY SZN" required>
-              <textarea rows={5} style={input} value={form.local_ideas ?? ""} onChange={(e) => set("local_ideas", e.target.value)} />
-            </Field>
           </FormBlock>
 
-          <FormBlock n={6} title="the practical bit">
-            <Radios name="frequency_ok" label="Can you generally host 1-2 evening or weekend events a month?" options={FREQUENCY} value={form.frequency_ok} onChange={set} />
-            <Radios name="travel_ok" label="Are you comfortable travelling around your city for events?" options={TRAVEL} value={form.travel_ok} onChange={set} />
-            <Radios name="side_role_ok" label="Are you happy with this being a freelance role, paid by the hour plus commission?" options={SIDE_ROLE} value={form.side_role_ok} onChange={set} />
+          {/* One question for the whole arrangement, stored in frequency_ok. */}
+          <FormBlock n={5} title="the practical bit">
+            <Radios name="frequency_ok" label="Do 1-2 evening or weekend events a month around your city, paid hourly plus commission, work for you?" options={PRACTICAL} value={form.frequency_ok} onChange={set} />
           </FormBlock>
 
           {/* Stored in girls_night, the column the question it replaced used. */}
-          <FormBlock n={7} title="one for fun...">
+          <FormBlock n={6} title="one for fun...">
             <Field label="MY SZN gives you the budget to create one unforgettable night in your city. Where are we going, what are we doing and what&rsquo;s the vibe?" required>
               <textarea rows={5} style={input} value={form.girls_night ?? ""} onChange={(e) => set("girls_night", e.target.value)} />
             </Field>

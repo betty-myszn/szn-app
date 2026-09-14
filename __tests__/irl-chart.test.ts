@@ -30,14 +30,13 @@ describe("buildIrlApplicationAlert", () => {
   const app: IrlApplicationAlertArgs = {
     reference: "IRL-LDN-0001", city: "London", status: "new",
     full_name: "Jess <b>Test</b>", email: "jess@example.com", phone: null,
-    instagram: "@jess", tiktok: null, linkedin: null, occupation: "Florist",
+    instagram: "@jess", tiktok: null, linkedin: null, occupation: "Florist, ten years in salons",
     birth_date: "1961-08-04", birth_time: "19:24", birth_time_approximate: false,
     birth_place: "Honolulu, Hawaii, United States",
     chart_summary: summariseApplicantChart(birth),
-    why_host: "Why", astrology_relationship: "Astro", relevant_experience: "Ten years in salons",
-    speaking_comfort: 4, scenario_answer: "Scenario", second_scenario: "Pull up a chair between them",
-    local_ideas: "Ideas", frequency_ok: "usually", travel_ok: "depends", side_role_ok: "yes",
-    girls_night: "A candlelit rooftop",
+    why_host: "Why", astrology_relationship: "Astro",
+    scenario_answer: "Scenario", second_scenario: "Pull up a chair between them",
+    frequency_ok: "discuss", girls_night: "A candlelit rooftop",
   };
 
   it("puts the chart and every answer in the email, escaped", () => {
@@ -46,11 +45,10 @@ describe("buildIrlApplicationAlert", () => {
     expect(subject).toContain("Leo sun");
     expect(htmlContent).toContain("Aquarius");
     expect(htmlContent).toContain(app.chart_summary!.hd_type!);
-    expect(htmlContent).toContain("Ten years in salons");
+    expect(htmlContent).toContain("Florist, ten years in salons");
     expect(htmlContent).toContain("Pull up a chair between them");
     expect(htmlContent).toContain("A candlelit rooftop");
-    expect(htmlContent).toContain("Usually");
-    expect(htmlContent).toContain("Depends on location");
+    expect(htmlContent).toContain("I'd like to talk it through");
     expect(htmlContent).toContain("/admin/irl-hosts?id=abc-123");
     expect(htmlContent).not.toContain("<b>Test</b>");
   });
@@ -64,9 +62,7 @@ describe("sheetRow", () => {
     birth_date: "1961-08-04", birth_time: "19:24:00", birth_time_approximate: true,
     birth_place: "Honolulu, Hawaii, United States", chart_summary: summariseApplicantChart(birth),
     why_host: "=IMPORTXML(\"https://example.com\", \"//a\")", astrology_relationship: "Astro",
-    relevant_experience: "Salons", speaking_comfort: 4, scenario_answer: "Scenario",
-    second_scenario: "Second", local_ideas: "Ideas", frequency_ok: "yes", travel_ok: "yes",
-    side_role_ok: "yes", girls_night: "Night",
+    scenario_answer: "Scenario", second_scenario: "Second", frequency_ok: "yes", girls_night: "Night",
   };
 
   it("turns every answer into a column, with links and the chart", () => {
@@ -78,7 +74,7 @@ describe("sheetRow", () => {
     expect(row["Rising"]).toBe("Aquarius (approx.)");
     expect(row["Born"]).toBe("4 Aug 1961, 19:24 (approximate), Honolulu, Hawaii, United States");
     expect(row["The two women who only talk to each other"]).toBe("Second");
-    expect(row["Leading a room (1-5)"]).toBe(4);
+    expect(row["1-2 events a month, hourly plus commission"]).toBe("Yes, that works for me");
     expect(String(row["Dashboard"])).toMatch(/\/admin\/irl-hosts\?id=abc-123$/);
   });
 

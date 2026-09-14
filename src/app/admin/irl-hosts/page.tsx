@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { isAdminMember } from "@/lib/member";
 import {
-  FREQUENCY, HD_TYPES, RATING_FIELDS, SIDE_ROLE, STATUSES, STATUS_LABELS, TRAVEL, bigThree,
-  frequencyLabel, humanDesign, type ApplicationStatus, type ChartSummary,
+  HD_TYPES, PRACTICAL, RATING_FIELDS, STATUSES, STATUS_LABELS, bigThree, humanDesign,
+  practicalLabel, type ApplicationStatus, type ChartSummary,
 } from "@/lib/irl";
 import { ZODIAC_SIGNS } from "@/types/chart";
 
@@ -21,9 +21,10 @@ interface Application {
   full_name: string; email: string; phone: string | null;
   instagram: string | null; tiktok: string | null; linkedin: string | null;
   city_slug: string; other_city: string | null; occupation: string;
-  why_host: string; astrology_relationship: string; relevant_experience: string | null;
-  speaking_comfort: number; scenario_answer: string; second_scenario: string | null; local_ideas: string;
-  frequency_ok: string; travel_ok: string; side_role_ok: string;
+  why_host: string; astrology_relationship: string;
+  scenario_answer: string; second_scenario: string | null;
+  /** The one practical question: 1-2 evening or weekend events a month, hourly plus commission. */
+  frequency_ok: string;
   /** The "one unforgettable night" answer, kept in the column the girls' night question used. */
   girls_night: string;
   birth_date: string | null; birth_time: string | null; birth_time_approximate: boolean | null;
@@ -49,9 +50,6 @@ const CITY_TABS = [
 
 /** Her work and skills answer is a paragraph now, so the table and the profile header show its start. */
 const short = (s: string, n = 60) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
-
-const optionText = (list: readonly { value: string; label: string }[], v: string) =>
-  list.find((o) => o.value === v)?.label ?? v;
 
 const cityName = (slug: string, other?: string | null) =>
   slug === "london" ? "London" : slug === "new-york" ? "New York"
@@ -177,7 +175,7 @@ export default function IrlHostsAdminPage() {
       <section className="px-5 md:px-8 py-6" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))" }}>
           <Filter label="status" value={status} onChange={setStatus} options={STATUSES.map((s) => [s, STATUS_LABELS[s]])} />
-          <Filter label="availability" value={availability} onChange={setAvailability} options={FREQUENCY.map((o) => [o.value, o.label])} />
+          <Filter label="practicalities" value={availability} onChange={setAvailability} options={PRACTICAL.map((o) => [o.value, o.label])} />
           <Filter label="human design" value={hd} onChange={setHd} options={HD_TYPES.map((t) => [t, t])} />
           <Filter label="sun sign" value={sun} onChange={setSun} options={ZODIAC_SIGNS.map((s) => [s, s])} />
           <Filter label="sort" value={sort} onChange={setSort} noAll options={[["newest","Newest"],["oldest","Oldest"],["city","City"],["status","Status"],["score","Score"]]} />
@@ -200,7 +198,7 @@ export default function IrlHostsAdminPage() {
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1020 }}>
                 <thead>
                   <tr>
-                    {["", "name", "city", "what she does", "applied", "chart", "leading a room", "availability", "score", "status", ""].map((h, i) => (
+                    {["", "name", "city", "work", "applied", "chart", "practicalities", "score", "status", ""].map((h, i) => (
                       <th key={i} style={{ textAlign: "left", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey)", padding: "12px 10px", borderBottom: "var(--border)", whiteSpace: "nowrap" }}>{h}</th>
                     ))}
                   </tr>
@@ -229,8 +227,7 @@ export default function IrlHostsAdminPage() {
                           </>
                         ) : <span style={{ color: "var(--grey)" }}>—</span>}
                       </td>
-                      <td style={{ ...td, fontVariantNumeric: "tabular-nums" }}>{a.speaking_comfort}/5</td>
-                      <td style={td}>{frequencyLabel(a.frequency_ok)}</td>
+                      <td style={td}>{practicalLabel(a.frequency_ok)}</td>
                       <td style={{ ...td, fontVariantNumeric: "tabular-nums", fontWeight: 700 }}>{a.overall_score ?? "—"}</td>
                       <td style={td}><StatusChip status={a.status} /></td>
                       <td style={{ ...td, whiteSpace: "nowrap" }}>
@@ -295,14 +292,11 @@ function Comparison({ apps, onClear }: { apps: Application[]; onClear: () => voi
     ["City", (a) => cityName(a.city_slug, a.other_city)],
     ["Big three", (a) => bigThree(a.chart_summary)],
     ["Human design", (a) => humanDesign(a.chart_summary)],
-    ["Work and skills", (a) => a.occupation],
-    ["Experience", (a) => a.relevant_experience || "—"],
-    ["Leading a room (1-5)", (a) => String(a.speaking_comfort)],
-    ["Availability", (a) => frequencyLabel(a.frequency_ok)],
+    ["Work, experience and skills", (a) => a.occupation],
+    ["Practicalities", (a) => practicalLabel(a.frequency_ok)],
     ["Overall score", (a) => (a.overall_score != null ? String(a.overall_score) : "—")],
     ["The woman standing alone", (a) => a.scenario_answer],
     ["The two who only talk to each other", (a) => a.second_scenario || "—"],
-    ["Three places that scream MY SZN", (a) => a.local_ideas],
     ["One unforgettable night", (a) => a.girls_night],
   ];
   return (
@@ -369,14 +363,12 @@ function Profile({ app, onClose, onPatch }: {
 
           <ChartPanel app={app} />
 
-          <Block title="her work and skills" body={app.occupation} />
+          <Block title="her work, experience and skills" body={app.occupation} />
           <Block title="why she wants it" body={app.why_host} />
           <Block title="astrology and manifestation" body={app.astrology_relationship} />
-          <Block title="her experience" body={app.relevant_experience || "(none given)"} extra={`leading a room ${app.speaking_comfort}/5`} />
           <Block title="the woman standing alone" body={app.scenario_answer} />
           {app.second_scenario && <Block title="the two who only talk to each other" body={app.second_scenario} />}
-          <Block title="three places that scream my szn" body={app.local_ideas} />
-          <Block title="availability" body={frequencyLabel(app.frequency_ok)} extra={`travel: ${optionText(TRAVEL, app.travel_ok)} · freelance, hourly plus commission: ${optionText(SIDE_ROLE, app.side_role_ok)}`} />
+          <Block title="1-2 events a month, hourly plus commission" body={practicalLabel(app.frequency_ok)} />
           <Block title="one unforgettable night" body={app.girls_night} />
 
           {/* ratings, internal only */}

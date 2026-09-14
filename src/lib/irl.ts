@@ -114,6 +114,15 @@ const labelFrom = (list: readonly { value: string; label: string }[], v: string 
 export const astrologyLabel = (v?: string | null) => labelFrom(ASTROLOGY_LEVELS, v);
 export const hostingLabel = (v?: string | null) => labelFrom(HOSTING_EXPERIENCE, v);
 export const frequencyLabel = (v?: string | null) => labelFrom(FREQUENCY, v);
+
+/** The one practical question left on the form since 14 Sep 2026: 1-2 evening or weekend events a
+ *  month around her city, paid hourly plus commission. Kept in frequency_ok, the column its first
+ *  part used, so an older "usually" still reads through frequencyLabel. */
+export const PRACTICAL = [
+  { value: "yes", label: "Yes, that works for me" },
+  { value: "discuss", label: "I'd like to talk it through" },
+] as const;
+export const practicalLabel = (v?: string | null) => labelFrom(PRACTICAL, v) || frequencyLabel(v);
 export const partnershipsLabel = (v?: string | null) => labelFrom(PARTNERSHIPS, v);
 
 /** IRL-LDN-0007. Short enough to read down a phone and unique enough to search on. */
