@@ -60,6 +60,8 @@ function memberLine(m: MemberRow): string {
 // Stripe trial is the 'monthly' tier too, so a tier label alone made a trialist look like a payer.
 function chipFor(m: MemberRow): { label: string; bg: string; fg: string } {
   const paidTier = m.membershipLevel === "monthly" || m.membershipLevel === "vip";
+  // Her own account is comped, so it must not read as a paying customer beside the real ones.
+  if (m.isAdmin) return { label: "owner", bg: "var(--dark)", fg: "#fff" };
   if (m.subscriptionStatus === "trialing") {
     return m.subscriptionCancelAtPeriodEnd
       ? { label: "trial cancelled", bg: "#f2f2f2", fg: "var(--grey)" }

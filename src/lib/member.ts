@@ -243,6 +243,7 @@ export interface MemberRow {
   subscriptionStatus: string | null;
   subscriptionCancelAtPeriodEnd: boolean;
   subscriptionCurrentPeriodEnd: string | null;
+  isAdmin: boolean;
 }
 
 // The real member directory behind the "total members" number, admin only. Same RLS reasoning as
@@ -253,7 +254,7 @@ export async function listMembers(limit = 500): Promise<MemberRow[]> {
   const supabase = createClient();
   const { data } = await supabase
     .from("profiles")
-    .select("id, name, email, membership_level, created_at, trial_expires_at, onboarded, subscription_status, subscription_cancel_at_period_end, subscription_current_period_end")
+    .select("id, name, email, membership_level, created_at, trial_expires_at, onboarded, subscription_status, subscription_cancel_at_period_end, subscription_current_period_end, is_admin")
     .order("created_at", { ascending: false })
     .limit(limit);
   return (data ?? []).map((row) => ({
@@ -269,5 +270,6 @@ export async function listMembers(limit = 500): Promise<MemberRow[]> {
     subscriptionStatus: (row.subscription_status as string | null) ?? null,
     subscriptionCancelAtPeriodEnd: !!row.subscription_cancel_at_period_end,
     subscriptionCurrentPeriodEnd: (row.subscription_current_period_end as string | null) ?? null,
+    isAdmin: !!row.is_admin,
   }));
 }
