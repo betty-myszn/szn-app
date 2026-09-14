@@ -64,6 +64,8 @@ const exploreMenu = [
   { href: "/events", label: "workshops" },
   { href: "/podcast", label: "podcast" },
   { href: "/blog", label: "blog" },
+  // MY SZN IRL host recruitment for London, New York and Los Angeles.
+  { href: "/irl-host", label: "become a host" },
 ];
 
 /** Betty's coaching business, a separate site. Opens in a new tab so a visitor reading MY SZN does

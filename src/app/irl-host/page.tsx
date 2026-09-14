@@ -336,9 +336,13 @@ function HostApplicationForm() {
             )}
           </FormBlock>
 
-          {/* The same birth details fields as the free chart. Deliberately no word on what they are
-              for: applicants are never shown their own chart or told it is part of the decision. */}
+          {/* The same birth details fields as the free chart. One line says why we ask, since it is
+              personal data; the chart itself is never shown to her. */}
           <FormBlock n={2} title="your birth details">
+            <p style={{ ...hint, margin: 0 }}>
+              We get to know every applicant through her chart and human design, and only the MY SZN
+              team ever sees it.
+            </p>
             <BirthDetailsFields value={birth} onChange={(p) => setBirth((b) => ({ ...b, ...p }))} labelStyle={label} inputStyle={input} />
           </FormBlock>
 
