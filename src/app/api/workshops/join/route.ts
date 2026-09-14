@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked")
+    .select("membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, is_admin")
     .eq("id", user.id)
     .maybeSingle();
   if (!hasAccessFromRow(profile)) return new NextResponse(null, { status: 403, headers: noStore });

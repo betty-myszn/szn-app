@@ -38,6 +38,7 @@ export function isVip(member: Member | null): boolean {
 
 export function hasActiveAccess(member: Member | null): boolean {
   if (!member || member.blocked) return false;
+  if (member.isAdmin) return true; // the owner always gets in, whatever Stripe says
   // An active trial has full access; an expired trial has none. Handled first because a trial has no
   // subscriptionStatus for the paid check below to read.
   if (member.membershipLevel === "trial") return isTrial(member);
@@ -51,6 +52,7 @@ export function hasActiveAccess(member: Member | null): boolean {
 // stricter monthly/vip full-platform gate, social passes here but not there.
 export function hasPaidCommunityAccess(member: Member | null): boolean {
   if (!member || member.blocked) return false;
+  if (member.isAdmin) return true; // the owner always gets in, whatever Stripe says
   // An active trial is a full member for its 7 days, so it gets the rituals too (and, via
   // hasRoomAccess below, the rooms). Handled first because a trial carries no subscriptionStatus for
   // the paid check to read. Mirrors hasAccessFromRow, which already unlocks the trial server-side.
@@ -64,6 +66,7 @@ export function hasPaidCommunityAccess(member: Member | null): boolean {
 // tier gets in, and so does every paying tier. Rituals sit above this on hasPaidCommunityAccess.
 export function hasRoomAccess(member: Member | null): boolean {
   if (!member || member.blocked) return false;
+  if (member.isAdmin) return true; // the owner always gets in, whatever Stripe says
   if (member.membershipLevel === "free") return true;
   // An expired trial keeps the chat rooms (and her chart via the public chart pages); everything
   // premium is gone. Same rooms-only shape as the free tier. An ACTIVE trial passes through
@@ -86,6 +89,7 @@ export function isFreeMember(member: Member | null): boolean {
 // can never drift into disagreeing about where a given tier belongs.
 export function memberHomeHref(member: Member | null): string {
   if (!member) return "/";
+  if (member.isAdmin && !member.blocked) return "/dashboard"; // the owner always lands in her portal
   if (isFreeMember(member)) return "/home"; // free tier, and expired trials (rooms + chart)
   if (!isMember(member)) return "/community"; // $33 social: the rooms and rituals she paid for
   return "/dashboard";

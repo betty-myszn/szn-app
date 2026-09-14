@@ -16,6 +16,10 @@ export type MembershipRow = {
   trial_expires_at?: string | null;
   // Set by an admin to remove someone from the platform. Overrides every other gate below.
   blocked?: boolean | null;
+  // The owner's account. Always has full access whatever Stripe says, so a test subscription ending,
+  // a webhook arriving late or a lapsed comp can never lock Betty out of her own platform. Only one
+  // account carries it. A block still wins over it, so it can never be used to get round one.
+  is_admin?: boolean | null;
 };
 
 // True when this account has been blocked from the platform. Checked FIRST by every gate, so a
@@ -73,6 +77,7 @@ export function hasRoomAccessFromRow(row: MembershipRow | null | undefined): boo
 export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean {
   if (!row) return false;
   if (isBlockedRow(row)) return false;
+  if (row.is_admin) return true; // the owner always gets in
 
   // Free trial: access is the trial window and nothing else. No Stripe status applies (a trial has
   // no subscription), and once trial_expires_at passes this returns false on the very next request,
@@ -100,6 +105,7 @@ export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean
 // she gets the community) but must upgrade for the chart-powered platform. Built on top of
 // hasAccessFromRow so the status/expiry safety nets are never duplicated or allowed to drift.
 export function hasFullAccessFromRow(row: MembershipRow | null | undefined): boolean {
+  if (row?.is_admin && !isBlockedRow(row)) return true; // the owner gets the full platform
   if (!hasAccessFromRow(row)) return false;
   const level = row?.membership_level ?? "none";
   // 'trial' unlocks the full personalised platform for its 7 days, deliberately: the whole point of
