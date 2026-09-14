@@ -105,6 +105,10 @@ export default function IrlHostPage() {
       {/* ── what we provide ───────────────────────────────────────────────── */}
       <Section title="what my szn gives you">
         <div className="grid gap-3 md:grid-cols-2">
+          <div className="md:col-span-2" style={{ border: "var(--border)", background: "var(--pink)", color: "#fff", padding: "22px 22px 24px" }}>
+            <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, textTransform: "lowercase", margin: "0 0 7px" }}>a free year of my szn</p>
+            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6 }}>A full year of MY SZN membership on us, with all our online events included.</p>
+          </div>
           {[
             ["a new toolkit every month", "The theme for each event, what to say and what not to say, what to do on the night and how to refer guests to MY SZN, plus astrology talking points and conversation prompts."],
             ["training + run sheets", "You’ll know exactly how the event works, what happens when and what you need before you walk into the room."],
