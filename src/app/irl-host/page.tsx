@@ -75,9 +75,9 @@ export default function IrlHostPage() {
           organisation and the room. We bring the astrology.
         </p>
         <p style={{ ...body, marginTop: 16 }}>
-          You&rsquo;re there to host the room and build the community. MY SZN handles the wider
-          concept, seasonal direction and astrology, while you&rsquo;ll help us make each event work
-          brilliantly in your city.
+          You&rsquo;re there to host the room and build the community. MY SZN chooses and books the
+          venues and handles the wider concept, seasonal direction and astrology, while you&rsquo;ll
+          help us make each event work brilliantly in your city.
         </p>
         <div style={{ border: "var(--border)", background: "var(--pink-bg)", padding: "20px 22px", margin: "22px 0" }}>
           <p style={{ margin: 0, fontFamily: poppins, fontWeight: 800, fontSize: 17, lineHeight: 1.45 }}>
@@ -90,10 +90,9 @@ export default function IrlHostPage() {
             "Welcoming attendees and making sure nobody stands on her own",
             "Facilitating introductions and keeping conversation moving",
             "Delivering simple seasonal astrology content from MY SZN materials",
-            "Following the event run sheets and host toolkits we give you",
-            "Helping spot interesting local venues and experiences",
+            "Following the monthly host toolkit and event run sheets we give you",
             "Capturing basic content on the night, and passing on what guests said",
-            "Growing the MY SZN community where you live",
+            "Referring guests to MY SZN, and earning commission on every person you bring to the platform",
           ].map((r) => (
             <li key={r} style={{ display: "flex", gap: 12, alignItems: "flex-start", fontSize: 16, lineHeight: 1.6 }}>
               <span style={{ color: "var(--pink)", fontWeight: 800 }}>&#10022;</span>
@@ -107,7 +106,7 @@ export default function IrlHostPage() {
       <Section title="what my szn gives you">
         <div className="grid gap-3 md:grid-cols-2">
           {[
-            ["everything you need to host", "Seasonal event concepts, astrology talking points, activities, conversation prompts and complete host toolkits."],
+            ["a new toolkit every month", "The theme for each event, what to say and what not to say, what to do on the night and how to refer guests to MY SZN, plus astrology talking points and conversation prompts."],
             ["training + run sheets", "You’ll know exactly how the event works, what happens when and what you need before you walk into the room."],
             ["the my szn brand", "Brand guidelines, guest communications and everything you need to make your events feel unmistakably MY SZN."],
             ["actual human support", "You’ll have someone to speak to while planning your event, plus support before and after you host."],
@@ -143,9 +142,9 @@ export default function IrlHostPage() {
               a flexible, paid freelance role
             </p>
             <p style={{ ...body, margin: "0 0 14px" }}>
-              You&rsquo;ll be paid an hourly base fee for the events you host, plus commission for new MY
-              SZN members you personally refer. This is freelance contract work designed to fit around
-              your existing work, business, studies or other projects.
+              You&rsquo;ll be paid an hourly base fee for the events you host, plus commission on every
+              person you refer to MY SZN. This is freelance contract work designed to fit around your
+              existing work, business, studies or other projects.
             </p>
             <p style={{ ...body, margin: 0 }}>
               As an independent contractor, you&rsquo;ll be responsible for your own taxes and any other
