@@ -172,14 +172,20 @@ export interface MemberBreakdown {
 export async function getMemberBreakdown(): Promise<MemberBreakdown> {
   const supabase = createClient();
   const nowIso = new Date().toISOString();
-  const [total, paying, trialing] = await Promise.all([
+  const [total, paying, trialing, stripeTrialing] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }),
-    supabase.from("profiles").select("id", { count: "exact", head: true }).in("membership_level", ["monthly", "vip"]),
+    // Paying means money is actually being taken: an active or grace-period subscription. A Stripe
+    // trial is monthly/vip too but has paid nothing yet, and the owner's comped account is not a
+    // customer, so neither counts. Counting by level alone put every trialist here.
+    supabase.from("profiles").select("id", { count: "exact", head: true })
+      .in("membership_level", ["monthly", "vip"]).in("subscription_status", ["active", "past_due"]).not("is_admin", "is", true),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").gt("trial_expires_at", nowIso),
+    // Stripe trials arrive as monthly/vip with a trialing status, not the old 'trial' level.
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "trialing"),
   ]);
   const totalCount = total.count || 0;
   const payingCount = paying.count || 0;
-  const trialingCount = trialing.count || 0;
+  const trialingCount = (trialing.count || 0) + (stripeTrialing.count || 0);
   return {
     total: totalCount,
     paying: payingCount,
@@ -189,11 +195,13 @@ export async function getMemberBreakdown(): Promise<MemberBreakdown> {
 }
 
 export interface TrialStats {
-  /** trials still inside their 7-day window right now */
+  /** trials still inside their 7-day window and heading for a first payment */
   active: number;
+  /** Stripe trials she has cancelled: access to the end of the week, never charged */
+  cancelled: number;
   /** trials whose window has passed and who have not (yet) become paid members */
   expired: number;
-  /** accounts that had a trial (trial_started_at set) and are now on a paid tier: conversions */
+  /** trials that became a paying member */
   converted: number;
 }
 
@@ -204,12 +212,23 @@ export interface TrialStats {
 export async function getTrialStats(): Promise<TrialStats> {
   const supabase = createClient();
   const nowIso = new Date().toISOString();
-  const [active, expired, converted] = await Promise.all([
+  const [legacyActive, stripeActive, stripeCancelled, expired, converted] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").gt("trial_expires_at", nowIso),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "trialing").not("subscription_cancel_at_period_end", "is", true),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "trialing").eq("subscription_cancel_at_period_end", true),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("membership_level", "trial").lte("trial_expires_at", nowIso),
-    supabase.from("profiles").select("id", { count: "exact", head: true }).not("trial_started_at", "is", null).in("membership_level", ["monthly", "vip"]),
+    // The free trial is the only way in now, so every paying member who isn't the owner came through
+    // one. The old query required trial_started_at, which only the retired no-card trial ever wrote,
+    // so it read zero while real Stripe trials were converting.
+    supabase.from("profiles").select("id", { count: "exact", head: true })
+      .in("membership_level", ["monthly", "vip"]).in("subscription_status", ["active", "past_due"]).not("is_admin", "is", true),
   ]);
-  return { active: active.count || 0, expired: expired.count || 0, converted: converted.count || 0 };
+  return {
+    active: (legacyActive.count || 0) + (stripeActive.count || 0),
+    cancelled: stripeCancelled.count || 0,
+    expired: expired.count || 0,
+    converted: converted.count || 0,
+  };
 }
 
 export interface MemberRow {
@@ -221,6 +240,9 @@ export interface MemberRow {
   /** ISO expiry for a trial account, null otherwise. Lets the directory show who's mid-trial. */
   trialExpiresAt: string | null;
   onboarded: boolean;
+  subscriptionStatus: string | null;
+  subscriptionCancelAtPeriodEnd: boolean;
+  subscriptionCurrentPeriodEnd: string | null;
 }
 
 // The real member directory behind the "total members" number, admin only. Same RLS reasoning as
@@ -231,7 +253,7 @@ export async function listMembers(limit = 500): Promise<MemberRow[]> {
   const supabase = createClient();
   const { data } = await supabase
     .from("profiles")
-    .select("id, name, email, membership_level, created_at, trial_expires_at, onboarded")
+    .select("id, name, email, membership_level, created_at, trial_expires_at, onboarded, subscription_status, subscription_cancel_at_period_end, subscription_current_period_end")
     .order("created_at", { ascending: false })
     .limit(limit);
   return (data ?? []).map((row) => ({
@@ -244,5 +266,8 @@ export async function listMembers(limit = 500): Promise<MemberRow[]> {
     joinedAt: (row.created_at as string) ?? "",
     trialExpiresAt: (row.trial_expires_at as string | null) ?? null,
     onboarded: !!row.onboarded,
+    subscriptionStatus: (row.subscription_status as string | null) ?? null,
+    subscriptionCancelAtPeriodEnd: !!row.subscription_cancel_at_period_end,
+    subscriptionCurrentPeriodEnd: (row.subscription_current_period_end as string | null) ?? null,
   }));
 }

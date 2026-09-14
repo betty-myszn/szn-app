@@ -45,7 +45,33 @@ function memberLine(m: MemberRow): string {
     const days = Math.ceil((endsMs - Date.now()) / 86400000);
     return days > 0 ? `${days} day${days === 1 ? "" : "s"} of trial left` : `trial ended ${dayMonthYear(m.trialExpiresAt)}`;
   }
+  // A Stripe trial or a cancellation matters more than the join date, so it wins the line.
+  const end = m.subscriptionCurrentPeriodEnd ? dayMonthYear(m.subscriptionCurrentPeriodEnd) : null;
+  if (m.subscriptionStatus === "trialing" && end) {
+    return m.subscriptionCancelAtPeriodEnd ? `access ends ${end}, won't be charged` : `first payment ${end}`;
+  }
+  if (m.subscriptionCancelAtPeriodEnd && end && (m.subscriptionStatus === "active" || m.subscriptionStatus === "past_due")) {
+    return `cancelled, ends ${end}`;
+  }
   return m.joinedAt ? `joined ${dayMonthYear(m.joinedAt)}` : "";
+}
+
+// The chip says what is actually happening with her money, rather than which tier she is on: a
+// Stripe trial is the 'monthly' tier too, so a tier label alone made a trialist look like a payer.
+function chipFor(m: MemberRow): { label: string; bg: string; fg: string } {
+  const paidTier = m.membershipLevel === "monthly" || m.membershipLevel === "vip";
+  if (m.subscriptionStatus === "trialing") {
+    return m.subscriptionCancelAtPeriodEnd
+      ? { label: "trial cancelled", bg: "#f2f2f2", fg: "var(--grey)" }
+      : { label: "on free trial", bg: "var(--lav)", fg: "var(--dark)" };
+  }
+  if (paidTier && m.subscriptionStatus === "past_due") return { label: "payment failed", bg: "var(--dark)", fg: "#fff" };
+  if (paidTier && m.subscriptionStatus === "active" && m.subscriptionCancelAtPeriodEnd) {
+    return { label: "paid, cancelling", bg: "var(--lav-light)", fg: "#3C2A70" };
+  }
+  if (m.membershipLevel === "monthly" && m.subscriptionStatus === "active") return { label: "paying", bg: "var(--pink)", fg: "#fff" };
+  if (m.membershipLevel === "none" && m.subscriptionStatus === "canceled") return { label: "cancelled", bg: "#f2f2f2", fg: "var(--grey-light)" };
+  return TIER_STYLE[m.membershipLevel];
 }
 
 export default function AdminPage() {
@@ -69,7 +95,7 @@ export default function AdminPage() {
   const [pollOptions, setPollOptions] = useState(["", ""]);
   const [pollSent, setPollSent] = useState(false);
   const [breakdown, setBreakdown] = useState({ total: 0, paying: 0, trialing: 0, free: 0 });
-  const [trialStats, setTrialStats] = useState({ active: 0, expired: 0, converted: 0 });
+  const [trialStats, setTrialStats] = useState({ active: 0, cancelled: 0, expired: 0, converted: 0 });
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [memberSearch, setMemberSearch] = useState("");
 
@@ -462,8 +488,8 @@ export default function AdminPage() {
               const stats = [
                 { label: "paying members", value: breakdown.paying },
                 { label: "all accounts", value: breakdown.total },
-                { label: "trialing now", value: trialStats.active },
-                { label: "trials expired", value: trialStats.expired },
+                { label: "on free trial", value: trialStats.active },
+                { label: "trial cancelled", value: trialStats.cancelled },
                 { label: "trial → paid", value: trialStats.converted },
                 { label: "community posts", value: posts.length },
                 { label: "comments", value: totalComments },
@@ -545,11 +571,11 @@ export default function AdminPage() {
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         padding: "5px 10px",
-                        background: TIER_STYLE[m.membershipLevel].bg,
-                        color: TIER_STYLE[m.membershipLevel].fg,
+                        background: chipFor(m).bg,
+                        color: chipFor(m).fg,
                       }}
                     >
-                      {TIER_STYLE[m.membershipLevel].label}
+                      {chipFor(m).label}
                     </span>
                     <span style={{ fontSize: 11, color: "var(--grey-light)", minWidth: 132, textAlign: "right" }}>
                       {memberLine(m)}
