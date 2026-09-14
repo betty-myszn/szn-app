@@ -47,6 +47,9 @@ const CITY_TABS = [
   { slug: "other", name: "Other cities" },
 ];
 
+/** Her work and skills answer is a paragraph now, so the table and the profile header show its start. */
+const short = (s: string, n = 60) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
+
 const optionText = (list: readonly { value: string; label: string }[], v: string) =>
   list.find((o) => o.value === v)?.label ?? v;
 
@@ -214,7 +217,7 @@ export default function IrlHostsAdminPage() {
                         <div style={{ fontSize: 11, color: "var(--grey)", fontWeight: 400 }}>{a.reference}</div>
                       </td>
                       <td style={td}>{cityName(a.city_slug, a.other_city)}</td>
-                      <td style={td}>{a.occupation}</td>
+                      <td style={{ ...td, maxWidth: 220 }}>{short(a.occupation)}</td>
                       <td style={{ ...td, whiteSpace: "nowrap" }}>{new Date(a.submitted_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</td>
                       <td style={{ ...td, minWidth: 170 }}>
                         {a.chart_summary ? (
@@ -292,7 +295,7 @@ function Comparison({ apps, onClear }: { apps: Application[]; onClear: () => voi
     ["City", (a) => cityName(a.city_slug, a.other_city)],
     ["Big three", (a) => bigThree(a.chart_summary)],
     ["Human design", (a) => humanDesign(a.chart_summary)],
-    ["What she does", (a) => a.occupation],
+    ["Work and skills", (a) => a.occupation],
     ["Experience", (a) => a.relevant_experience || "—"],
     ["Leading a room (1-5)", (a) => String(a.speaking_comfort)],
     ["Availability", (a) => frequencyLabel(a.frequency_ok)],
@@ -345,7 +348,7 @@ function Profile({ app, onClose, onPatch }: {
           <div>
             <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 20, color: "#fff", margin: 0 }}>{app.full_name}</p>
             <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.7)", margin: "3px 0 0" }}>
-              {cityName(app.city_slug, app.other_city)} · {app.occupation} · {app.reference}
+              {cityName(app.city_slug, app.other_city)} · {short(app.occupation, 48)} · {app.reference}
             </p>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "1px solid rgba(255,255,255,0.5)", color: "#fff", padding: "8px 14px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", cursor: "pointer" }}>close</button>
@@ -366,6 +369,7 @@ function Profile({ app, onClose, onPatch }: {
 
           <ChartPanel app={app} />
 
+          <Block title="her work and skills" body={app.occupation} />
           <Block title="why she wants it" body={app.why_host} />
           <Block title="astrology and manifestation" body={app.astrology_relationship} />
           <Block title="her experience" body={app.relevant_experience || "(none given)"} extra={`leading a room ${app.speaking_comfort}/5`} />

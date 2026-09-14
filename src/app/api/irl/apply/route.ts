@@ -18,10 +18,10 @@ export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Every free-text answer, with the minimum length that means "answered" rather than "dismissed".
-// Every free-text answer on the shorter form of 14 Sep 2026, in the order she meets them, so the
-// first blank one is the one named.
+// Every free-text answer, with the minimum length that means "answered" rather than "dismissed", in
+// the order she meets them so the first blank one is the one named.
 const TEXT_FIELDS: { key: string; min: number; label: string }[] = [
+  { key: "occupation", min: 20, label: "Your work and the skills it's given you" },
   { key: "why_host", min: 20, label: "Why you want to host" },
   { key: "astrology_relationship", min: 20, label: "Your relationship with astrology" },
   { key: "relevant_experience", min: 10, label: "Your experience" },
@@ -197,8 +197,9 @@ async function sendApplicantConfirmation(a: {
       <h2 style="font-size:22px;margin:0 0 14px;">We've got it &#127769;</h2>
       <p style="font-size:16px;line-height:1.7;margin:0 0 16px;">Hey ${escapeHtml(first)},</p>
       <p style="font-size:16px;line-height:1.7;margin:0 0 16px;">
-        Thanks for applying to become a MY SZN IRL Host in <strong>${escapeHtml(cityName)}</strong>.
-        Your application is in and shortlisted applicants will be contacted about the next stage.
+        Thank you so much for getting in touch about becoming a MY SZN IRL Host in
+        <strong>${escapeHtml(cityName)}</strong>. We&rsquo;ll be conducting interviews on Zoom over the
+        next few weeks, and we&rsquo;ll come back to you either way.
       </p>
       <p style="font-size:14px;line-height:1.7;color:#6b6b6b;margin:0 0 16px;">
         Your reference is <strong>${escapeHtml(a.reference)}</strong>, worth keeping if you need to

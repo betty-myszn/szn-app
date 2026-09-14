@@ -56,7 +56,7 @@ export function sheetRow(a: IrlSheetArgs): Record<string, string | number> {
     "Instagram": a.instagram ? `https://instagram.com/${handle(a.instagram)}` : "",
     "TikTok": a.tiktok ? `https://tiktok.com/@${handle(a.tiktok)}` : "",
     "LinkedIn": a.linkedin ? (/^https?:\/\//.test(a.linkedin) ? a.linkedin : `https://${a.linkedin}`) : "",
-    "What they do": a.occupation,
+    "Work and skills": a.occupation,
     "Born": bornCell(a),
     "Sun": c?.sun ?? "",
     "Moon": c?.moon ?? "",

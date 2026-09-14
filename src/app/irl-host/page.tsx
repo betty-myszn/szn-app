@@ -224,7 +224,7 @@ const FIELD_ERRORS: Record<string, string> = {
   email_required: "That email doesn't look quite right.",
   city_required: "Pick your city.",
   other_city_required: "Tell us which city you're based in.",
-  occupation_required: "Tell us what you currently do.",
+  occupation_required: "Tell us what you do for work.",
   instagram_required: "We need your Instagram handle.",
   birth_date_required: "We need your date of birth.",
   birth_time_required: "We need your time of birth. If you don't know it exactly, put your best guess and tick approximate.",
@@ -289,8 +289,8 @@ function HostApplicationForm() {
             YAYYYYY, WE&rsquo;VE GOT IT &#127769;
           </h2>
           <p style={{ ...body, margin: "0 auto", maxWidth: 460 }}>
-            Thanks for applying to become a MY SZN IRL Host. Your application has been received and
-            shortlisted applicants will be contacted about the next stage.
+            Thank you so much for getting in touch. We&rsquo;ll be conducting interviews on Zoom over the
+            next few weeks, and we&rsquo;ll come back to you either way.
           </p>
           {done && (
             <p style={{ fontSize: 13.5, color: "var(--grey)", marginTop: 18 }}>
@@ -347,7 +347,7 @@ function HostApplicationForm() {
           </FormBlock>
 
           <FormBlock n={3} title="about you">
-            <Field label="What do you currently do?" required><input style={input} value={form.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)} /></Field>
+            <Field label="What do you do for work, and what skills has it given you that you&rsquo;d bring to hosting?" required><textarea rows={4} style={input} value={form.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)} /></Field>
             <Field label="Why do you want to become a MY SZN IRL Host?" required><textarea rows={5} style={input} value={form.why_host ?? ""} onChange={(e) => set("why_host", e.target.value)} /></Field>
             <Field label="What&rsquo;s your relationship with astrology, manifestation and personal development?" required><textarea rows={5} style={input} value={form.astrology_relationship ?? ""} onChange={(e) => set("astrology_relationship", e.target.value)} /></Field>
           </FormBlock>
@@ -419,8 +419,8 @@ function HostApplicationForm() {
           </p>
           <p style={{ ...body, fontSize: 15.5, lineHeight: 1.7 }}>
             We&rsquo;re reviewing applications for our first hosts in London, New York and Los Angeles
-            now. If we think you could be a brilliant fit, we&rsquo;ll invite you for a relaxed video
-            chat so we can get to know each other properly.
+            now, and we&rsquo;ll be holding relaxed Zoom interviews over the next few weeks so we can
+            get to know each other properly. We&rsquo;ll come back to you either way.
           </p>
         </div>
       </div>

@@ -430,7 +430,6 @@ export function buildIrlApplicationAlert(a: IrlApplicationAlertArgs): { subject:
         ["Instagram", a.instagram ? `instagram.com/${handle(a.instagram)}` : ""],
         ["TikTok", a.tiktok ? `tiktok.com/@${handle(a.tiktok)}` : ""],
         ["LinkedIn", a.linkedin ?? ""],
-        ["What she does", a.occupation],
       ])}
 
       ${heading("at a glance")}
@@ -442,6 +441,7 @@ export function buildIrlApplicationAlert(a: IrlApplicationAlertArgs): { subject:
       ])}
 
       ${heading("her answers")}
+      ${answer("Her work and the skills it's given her", a.occupation)}
       ${answer("Why she wants to host", a.why_host)}
       ${answer("Her relationship with astrology, manifestation and personal development", a.astrology_relationship)}
       ${answer("Her hosting, events, hospitality, customer service or community experience", a.relevant_experience)}
