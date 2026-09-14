@@ -2,7 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { checkAndRecordRate, clientIp } from "@/lib/rate-limit";
 import { sendBrevoEmail } from "@/lib/email/brevo";
+import { IANAZone } from "luxon";
 import { buildReference } from "@/lib/irl";
+import { summariseApplicantChart } from "@/lib/irl-chart";
+import { sendIrlApplicationAlert } from "@/lib/email/admin-notify";
+import { sendApplicationToSheet } from "@/lib/irl-sheet";
 
 export const runtime = "nodejs";
 
@@ -20,8 +24,11 @@ const TEXT_FIELDS: { key: string; min: number; label: string }[] = [
   { key: "why_host", min: 20, label: "Why you'd love to host" },
   { key: "astrology_relationship", min: 20, label: "Your relationship with astrology" },
   { key: "community_means", min: 20, label: "What community means to you" },
+  { key: "people_skills", min: 20, label: "Your people skills" },
+  { key: "customer_service", min: 10, label: "Your customer service experience" },
   { key: "scenario_answer", min: 20, label: "The dinner scenario" },
   { key: "local_ideas", min: 20, label: "Three places in your city" },
+  { key: "availability", min: 5, label: "Your availability" },
   { key: "girls_night", min: 10, label: "The ultimate girls' night" },
 ];
 
@@ -56,6 +63,8 @@ export async function POST(request: NextRequest) {
   if (!fullName) return NextResponse.json({ error: "name_required" }, { status: 400 });
   if (!EMAIL_RE.test(email)) return NextResponse.json({ error: "email_required" }, { status: 400 });
   if (!occupation) return NextResponse.json({ error: "occupation_required" }, { status: 400 });
+  const instagram = str(body.instagram);
+  if (!instagram) return NextResponse.json({ error: "instagram_required" }, { status: 400 });
 
   const admin = createAdminClient();
 
@@ -82,6 +91,36 @@ export async function POST(request: NextRequest) {
   if (!Number.isInteger(speaking) || speaking < 1 || speaking > 5) {
     return NextResponse.json({ error: "missing_choice", field: "speaking_comfort" }, { status: 400 });
   }
+  // Examples are only asked of someone who says she has hosted, which is also when they are required.
+  const hasHosted = str(body.hosting_experience) !== "never_but_keen";
+  const hostingExamples = hasHosted ? str(body.hosting_examples) : "";
+  if (hasHosted && hostingExamples.length < 10) {
+    return NextResponse.json({ error: "too_short", field: "hosting_examples", label: "Examples of events you've hosted" }, { status: 400 });
+  }
+
+  // Birth details, asked the same way the free chart asks: a date, a time with an "approximate" tick
+  // for anyone who is guessing, and a place picked from the list, which is what carries the
+  // coordinates and timezone the chart is calculated from.
+  const birthDate = str(body.birth_date);
+  const born = /^\d{4}-\d{2}-\d{2}$/.test(birthDate) ? new Date(`${birthDate}T00:00:00Z`) : null;
+  if (!born || isNaN(born.getTime()) || born.getUTCFullYear() < 1920 || born > new Date()) {
+    return NextResponse.json({ error: "birth_date_required" }, { status: 400 });
+  }
+  const timeMatch = /^(\d{1,2}):(\d{2})$/.exec(str(body.birth_time));
+  if (!timeMatch || Number(timeMatch[1]) > 23 || Number(timeMatch[2]) > 59) {
+    return NextResponse.json({ error: "birth_time_required" }, { status: 400 });
+  }
+  const birthTime = `${timeMatch[1].padStart(2, "0")}:${timeMatch[2]}`;
+  const birthTimeApproximate = body.birth_time_approximate === true;
+  const birthPlace = str(body.birth_place);
+  const lat = Number(body.birth_lat), lng = Number(body.birth_lng), tz = str(body.birth_tz);
+  const located = typeof body.birth_lat === "number" && typeof body.birth_lng === "number" &&
+    Number.isFinite(lat) && Math.abs(lat) <= 90 && Number.isFinite(lng) && Math.abs(lng) <= 180 &&
+    IANAZone.isValidZone(tz);
+  if (!birthPlace || !located) return NextResponse.json({ error: "birth_place_required" }, { status: 400 });
+  const chartSummary = summariseApplicantChart({
+    name: fullName, birthDate, birthTime, approximate: birthTimeApproximate, place: birthPlace, lat, lng, tz,
+  });
 
   // A public form with no payment behind it is a spam target, so throttle by email and IP the same
   // way the signup routes do.
@@ -105,7 +144,7 @@ export async function POST(request: NextRequest) {
     full_name: fullName,
     email,
     phone: str(body.phone) || null,
-    instagram: str(body.instagram) || null,
+    instagram,
     tiktok: str(body.tiktok) || null,
     linkedin: str(body.linkedin) || null,
     city_slug: citySlug,
@@ -116,11 +155,23 @@ export async function POST(request: NextRequest) {
     astrology_relationship: str(body.astrology_relationship),
     astrology_level: str(body.astrology_level),
     community_means: str(body.community_means),
+    people_skills: str(body.people_skills),
+    customer_service: str(body.customer_service),
+    birth_date: birthDate,
+    birth_time: birthTime,
+    birth_time_approximate: birthTimeApproximate,
+    birth_place: birthPlace,
+    birth_lat: lat,
+    birth_lng: lng,
+    birth_tz: tz,
+    chart_summary: chartSummary,
     speaking_comfort: speaking,
     hosting_experience: str(body.hosting_experience),
+    hosting_examples: hostingExamples || null,
     relevant_experience: str(body.relevant_experience) || null,
     scenario_answer: str(body.scenario_answer),
     local_ideas: str(body.local_ideas),
+    availability: str(body.availability),
     frequency_ok: str(body.frequency_ok),
     evenings_ok: str(body.evenings_ok),
     travel_ok: str(body.travel_ok),
@@ -134,9 +185,11 @@ export async function POST(request: NextRequest) {
   // One live application per email per city, enforced by a unique index. A second submission
   // updates rather than duplicating, which is the real backstop behind the form's double-click
   // guard: a doubled request cannot create a second row even if it beats the button being disabled.
-  const { error } = await admin
+  const { data: saved, error } = await admin
     .from("irl_host_applications")
-    .upsert(row, { onConflict: "email,city_slug", ignoreDuplicates: false });
+    .upsert(row, { onConflict: "email,city_slug", ignoreDuplicates: false })
+    .select("id, submitted_at")
+    .single();
   if (error) {
     console.error("irl/apply: insert failed", error.message);
     return NextResponse.json({ error: "save_failed" }, { status: 500 });
@@ -145,6 +198,10 @@ export async function POST(request: NextRequest) {
   // Confirmation, fire-and-forget: a Brevo hiccup must not tell her the application failed when it
   // is already saved.
   void sendApplicantConfirmation({ email, name: fullName, citySlug, otherCity, reference });
+  // And the whole application, chart included, to the team inbox. Same rule: never fails her.
+  void sendIrlApplicationAlert({ ...row, id: saved.id, city: cityLabel(citySlug, otherCity) });
+  // And a row in Betty's Google Sheet, when one is connected. Same rule again.
+  void sendApplicationToSheet({ ...row, id: saved.id, submitted_at: saved.submitted_at, city: cityLabel(citySlug, otherCity) });
 
   return NextResponse.json({ ok: true, reference });
 }
@@ -152,10 +209,7 @@ export async function POST(request: NextRequest) {
 async function sendApplicantConfirmation(a: {
   email: string; name: string; citySlug: string; otherCity: string; reference: string;
 }) {
-  const cityName =
-    a.citySlug === "london" ? "London" :
-    a.citySlug === "new-york" ? "New York" :
-    a.citySlug === "los-angeles" ? "Los Angeles" : a.otherCity || "your city";
+  const cityName = cityLabel(a.citySlug, a.otherCity) || "your city";
   const first = a.name.split(/\s+/)[0] || "babe";
 
   const html = `
@@ -179,6 +233,11 @@ async function sendApplicantConfirmation(a: {
     htmlContent: html,
   });
   if (!result.ok) console.error("irl/apply: confirmation email failed", result.error);
+}
+
+function cityLabel(slug: string, other: string): string {
+  return slug === "london" ? "London" : slug === "new-york" ? "New York"
+    : slug === "los-angeles" ? "Los Angeles" : other;
 }
 
 function escapeHtml(v: string): string {

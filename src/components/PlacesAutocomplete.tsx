@@ -7,6 +7,7 @@ interface PlacesAutocompleteProps {
   onSelect: (location: BirthLocation) => void;
   value?: string;
   id?: string;
+  style?: React.CSSProperties;
 }
 
 interface GeoNameResult {
@@ -19,7 +20,7 @@ interface GeoNameResult {
   timezone?: { timeZoneId: string };
 }
 
-export default function PlacesAutocomplete({ onSelect, value, id }: PlacesAutocompleteProps) {
+export default function PlacesAutocomplete({ onSelect, value, id, style }: PlacesAutocompleteProps) {
   const [inputValue, setInputValue] = useState(value || "");
   const [results, setResults] = useState<GeoNameResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -98,7 +99,7 @@ export default function PlacesAutocomplete({ onSelect, value, id }: PlacesAutoco
         onFocus={() => results.length > 0 && setShowDropdown(true)}
         name="birthplace-lookup"
         placeholder="City, Country"
-        style={inputStyle}
+        style={{ ...inputStyle, ...style }}
         autoComplete="new-password"
         data-form-type="other"
         data-lpignore="true"

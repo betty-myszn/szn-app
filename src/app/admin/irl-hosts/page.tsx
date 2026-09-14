@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { isAdminMember } from "@/lib/member";
 import {
-  ASTROLOGY_LEVELS, FREQUENCY, HOSTING_EXPERIENCE, PARTNERSHIPS, RATING_FIELDS,
-  STATUSES, STATUS_LABELS, astrologyLabel, frequencyLabel, hostingLabel, partnershipsLabel,
-  type ApplicationStatus,
+  ASTROLOGY_LEVELS, FREQUENCY, HD_TYPES, HOSTING_EXPERIENCE, PARTNERSHIPS, RATING_FIELDS,
+  STATUSES, STATUS_LABELS, astrologyLabel, bigThree, frequencyLabel, hostingLabel, humanDesign,
+  partnershipsLabel, type ApplicationStatus, type ChartSummary,
 } from "@/lib/irl";
+import { ZODIAC_SIGNS } from "@/types/chart";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -26,6 +27,10 @@ interface Application {
   relevant_experience: string | null; scenario_answer: string; local_ideas: string;
   frequency_ok: string; evenings_ok: string; travel_ok: string; side_role_ok: string;
   partnerships_interest: string; girls_night: string;
+  people_skills: string | null;
+  customer_service: string | null; hosting_examples: string | null; availability: string | null;
+  birth_date: string | null; birth_time: string | null; birth_time_approximate: boolean | null;
+  birth_place: string | null; chart_summary: ChartSummary | null;
   status: ApplicationStatus; shortlisted: boolean;
   admin_notes: string | null; red_flags: string | null; things_we_loved: string | null;
   overall_score: number | null;
@@ -49,6 +54,20 @@ const cityName = (slug: string, other?: string | null) =>
   slug === "london" ? "London" : slug === "new-york" ? "New York"
   : slug === "los-angeles" ? "Los Angeles" : other || "Other";
 
+// ── her chart, as the dashboard reads it ─────────────────────────────────────
+// Deliberately no age anywhere. The birth date is here for the chart, and age is a protected
+// characteristic in every city we recruit in, so it is not a column to compare applicants on.
+
+function bornLine(a: Application): string {
+  if (!a.birth_date) return "—";
+  const date = new Date(`${a.birth_date}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const time = a.birth_time
+    ? new Date(`2000-01-01T${a.birth_time.slice(0, 5)}`).toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })
+    : "";
+  const approx = a.birth_time_approximate ? " (approximate)" : "";
+  return `${date}, ${time}${approx} · ${a.birth_place ?? ""}`;
+}
+
 export default function IrlHostsAdminPage() {
   const { member, ready } = useMember();
   const [apps, setApps] = useState<Application[]>([]);
@@ -60,6 +79,8 @@ export default function IrlHostsAdminPage() {
   const [hosting, setHosting] = useState("all");
   const [availability, setAvailability] = useState("all");
   const [partnerships, setPartnerships] = useState("all");
+  const [hd, setHd] = useState("all");
+  const [sun, setSun] = useState("all");
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
   const [sort, setSort] = useState("newest");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -67,7 +88,7 @@ export default function IrlHostsAdminPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const p = new URLSearchParams({ city, status, astrology, hosting, availability, partnerships, sort });
+    const p = new URLSearchParams({ city, status, astrology, hosting, availability, partnerships, hd, sun, sort });
     if (shortlistedOnly) p.set("shortlisted", "1");
     const res = await fetch(`/api/irl/admin?${p}`);
     if (res.ok) {
@@ -76,9 +97,16 @@ export default function IrlHostsAdminPage() {
       setSummary(d.summary);
     }
     setLoading(false);
-  }, [city, status, astrology, hosting, availability, partnerships, shortlistedOnly, sort]);
+  }, [city, status, astrology, hosting, availability, partnerships, hd, sun, shortlistedOnly, sort]);
 
   useEffect(() => { if (ready && isAdminMember(member)) load(); }, [ready, member, load]);
+
+  // ?id= opens that applicant straight away, which is where the Google Sheet's Dashboard column and
+  // the team email point.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("id");
+    if (id) setOpenId(id);
+  }, []);
 
   const patch = useCallback(async (id: string, body: Record<string, unknown>) => {
     const res = await fetch(`/api/irl/admin/${id}`, {
@@ -153,6 +181,8 @@ export default function IrlHostsAdminPage() {
           <Filter label="hosting" value={hosting} onChange={setHosting} options={HOSTING_EXPERIENCE.map((o) => [o.value, o.label])} />
           <Filter label="availability" value={availability} onChange={setAvailability} options={FREQUENCY.map((o) => [o.value, o.label])} />
           <Filter label="partnerships" value={partnerships} onChange={setPartnerships} options={PARTNERSHIPS.map((o) => [o.value, o.label])} />
+          <Filter label="human design" value={hd} onChange={setHd} options={HD_TYPES.map((t) => [t, t])} />
+          <Filter label="sun sign" value={sun} onChange={setSun} options={ZODIAC_SIGNS.map((s) => [s, s])} />
           <Filter label="sort" value={sort} onChange={setSort} noAll options={[["newest","Newest"],["oldest","Oldest"],["city","City"],["status","Status"],["score","Score"]]} />
           <label style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
             <input type="checkbox" checked={shortlistedOnly} onChange={(e) => setShortlistedOnly(e.target.checked)} style={{ width: 18, height: 18 }} />
@@ -170,10 +200,10 @@ export default function IrlHostsAdminPage() {
             : apps.length === 0 ? <p style={{ color: "var(--grey)" }}>No applications match that.</p>
             : (
             <div style={{ overflowX: "auto", border: "var(--border)", background: "#fff" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1040 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1220 }}>
                 <thead>
                   <tr>
-                    {["", "name", "city", "occupation", "applied", "astrology", "hosted before", "availability", "partners", "score", "status", ""].map((h, i) => (
+                    {["", "name", "city", "occupation", "applied", "chart", "astrology", "hosted before", "availability", "partners", "score", "status", ""].map((h, i) => (
                       <th key={i} style={{ textAlign: "left", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey)", padding: "12px 10px", borderBottom: "var(--border)", whiteSpace: "nowrap" }}>{h}</th>
                     ))}
                   </tr>
@@ -192,6 +222,16 @@ export default function IrlHostsAdminPage() {
                       <td style={td}>{cityName(a.city_slug, a.other_city)}</td>
                       <td style={td}>{a.occupation}</td>
                       <td style={{ ...td, whiteSpace: "nowrap" }}>{new Date(a.submitted_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</td>
+                      <td style={{ ...td, minWidth: 170 }}>
+                        {a.chart_summary ? (
+                          <>
+                            <div>☉ {a.chart_summary.sun} · ☽ {a.chart_summary.moon}{a.chart_summary.rising && <> · ↑ {a.chart_summary.rising}</>}</div>
+                            {a.chart_summary.hd_type && (
+                              <div style={{ fontSize: 11.5, color: "var(--grey)" }}>{a.chart_summary.hd_type} {a.chart_summary.hd_profile}</div>
+                            )}
+                          </>
+                        ) : <span style={{ color: "var(--grey)" }}>—</span>}
+                      </td>
                       <td style={td}>{astrologyLabel(a.astrology_level)}</td>
                       <td style={td}>{hostingLabel(a.hosting_experience)}</td>
                       <td style={td}>{frequencyLabel(a.frequency_ok)}</td>
@@ -258,11 +298,15 @@ function StatusChip({ status }: { status: ApplicationStatus }) {
 function Comparison({ apps, onClear }: { apps: Application[]; onClear: () => void }) {
   const rows: [string, (a: Application) => string][] = [
     ["City", (a) => cityName(a.city_slug, a.other_city)],
+    ["Big three", (a) => bigThree(a.chart_summary)],
+    ["Human design", (a) => humanDesign(a.chart_summary)],
     ["Occupation", (a) => a.occupation],
     ["Hosting experience", (a) => hostingLabel(a.hosting_experience)],
     ["Astrology", (a) => astrologyLabel(a.astrology_level)],
     ["Speaking (1-5)", (a) => String(a.speaking_comfort)],
-    ["Availability", (a) => frequencyLabel(a.frequency_ok)],
+    ["People skills", (a) => a.people_skills || "—"],
+    ["Customer service", (a) => a.customer_service || "—"],
+    ["Availability", (a) => [frequencyLabel(a.frequency_ok), a.availability].filter(Boolean).join(" · ")],
     ["Partnerships", (a) => partnershipsLabel(a.partnerships_interest)],
     ["Overall score", (a) => (a.overall_score != null ? String(a.overall_score) : "—")],
     ["Local venue ideas", (a) => a.local_ideas],
@@ -329,15 +373,19 @@ function Profile({ app, onClose, onPatch }: {
             {app.linkedin && <Ext href={app.linkedin.startsWith("http") ? app.linkedin : `https://${app.linkedin}`} label="linkedin" />}
           </div>
 
+          <ChartPanel app={app} />
+
           <Block title="about them" body={app.about_you} />
           <Block title="why she wants it" body={app.why_host} />
           <Block title="work and experience" body={app.relevant_experience || "(none given)"} />
           <Block title="astrology and manifestation" body={app.astrology_relationship} extra={`${astrologyLabel(app.astrology_level)} · speaking confidence ${app.speaking_comfort}/5`} />
           <Block title="community-building" body={app.community_means} />
-          <Block title="hosting experience" body={hostingLabel(app.hosting_experience)} />
+          {app.people_skills && <Block title="people skills" body={app.people_skills} />}
+          {app.customer_service && <Block title="customer service experience" body={app.customer_service} />}
+          <Block title="hosting experience" body={app.hosting_examples || hostingLabel(app.hosting_experience)} extra={app.hosting_examples ? hostingLabel(app.hosting_experience) : undefined} />
           <Block title="the scenario answer" body={app.scenario_answer} />
           <Block title="local venue and brand ideas" body={app.local_ideas} />
-          <Block title="availability" body={`${frequencyLabel(app.frequency_ok)} · evenings: ${app.evenings_ok} · travel: ${app.travel_ok} · side role ok: ${app.side_role_ok}`} />
+          <Block title="availability" body={app.availability || frequencyLabel(app.frequency_ok)} extra={`${frequencyLabel(app.frequency_ok)} · evenings: ${app.evenings_ok} · travel: ${app.travel_ok} · freelance, hourly plus commission ok: ${app.side_role_ok}`} />
           <Block title="partnership interest" body={partnershipsLabel(app.partnerships_interest)} />
           <Block title="the ultimate girls' night" body={app.girls_night} />
 
@@ -399,6 +447,39 @@ function Profile({ app, onClose, onPatch }: {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Her chart and human design, read off the summary stored when she applied. */
+function ChartPanel({ app }: { app: Application }) {
+  const c = app.chart_summary;
+  if (!app.birth_date) return null;
+  const rows: [string, string | null][] = c ? [
+    ["Sun", c.sun], ["Moon", c.moon],
+    ["Rising", c.rising ? `${c.rising}${c.time_approximate ? " (approx.)" : ""}` : null],
+    ["Mercury", c.mercury], ["Venus", c.venus], ["Mars", c.mars],
+    ["HD type", c.hd_type], ["Strategy", c.hd_strategy],
+    ["Authority", c.hd_authority], ["Profile", c.hd_profile], ["Definition", c.hd_definition],
+  ] : [];
+  return (
+    <div style={{ border: "var(--border)", background: "var(--lav-light)", padding: "18px 20px 20px", marginBottom: 18 }}>
+      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", margin: "0 0 6px" }}>birth chart + human design</p>
+      <p style={{ fontSize: 13.5, margin: "0 0 14px" }}>{bornLine(app)}</p>
+      {c ? (
+        <div className="grid gap-x-5 gap-y-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}>
+          {rows.filter(([, v]) => v).map(([k, v]) => (
+            <div key={k}>
+              <span style={{ display: "block", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--grey)" }}>{k}</span>
+              <span style={{ fontSize: 14.5, fontWeight: 700 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p style={{ fontSize: 13, color: "var(--grey)", margin: 0 }}>
+          The chart calculation failed for these details. They are enough to run it by hand.
+        </p>
+      )}
     </div>
   );
 }

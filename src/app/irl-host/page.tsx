@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import BirthDetailsFields, { type BirthDetails } from "@/components/BirthDetailsFields";
 import {
   ASTROLOGY_LEVELS, EVENINGS, FREQUENCY, HOSTING_EXPERIENCE, LAUNCH_CITIES,
   PARTNERSHIPS, SIDE_ROLE, TRAVEL,
 } from "@/lib/irl";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+const INSTAGRAM = "https://instagram.com/itsmyszn";
+const PODCAST = "https://open.spotify.com/show/7Hi3IXajGlE1LuZD5sf08a";
 
 // MY SZN IRL host recruitment. Deliberately built from the site's own visual language rather than a
 // new one: the same black borders, pink CTA, lowercase Poppins headings and lilac panels used
@@ -32,6 +35,12 @@ export default function IrlHostPage() {
           <a href="#apply" className="no-underline inline-block" style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontWeight: 800, fontSize: 14, letterSpacing: "0.05em", textTransform: "uppercase", padding: "17px 34px", border: "2px solid #fff" }}>
             apply to become a host
           </a>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", margin: "22px 0 0" }}>
+            Get a feel for us first:{" "}
+            <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" style={{ color: "#fff", fontWeight: 700 }}>@itsmyszn on instagram</a>
+            {" "}&middot;{" "}
+            <a href={PODCAST} target="_blank" rel="noopener noreferrer" style={{ color: "#fff", fontWeight: 700 }}>the my szn podcast</a>
+          </p>
         </div>
       </section>
 
@@ -135,16 +144,17 @@ export default function IrlHostPage() {
         <div className="max-w-4xl mx-auto">
           <div style={{ border: "var(--border)", background: "var(--lav-light)", padding: "28px 26px" }}>
             <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: "clamp(19px, 3vw, 26px)", textTransform: "uppercase", letterSpacing: "0.04em", margin: "0 0 14px" }}>
-              a flexible paid side role
+              a flexible freelance role
             </p>
             <p style={{ ...body, margin: "0 0 14px" }}>
-              This is for someone who wants extra income alongside existing work, study, freelancing,
-              a business or other projects. It is not a full-time position and it is not trying to be
-              one.
+              This is a freelance role, made for you if you want extra income alongside your existing
+              work, study, freelancing, business or other projects, and it fits around the life you
+              already have.
             </p>
             <p style={{ ...body, margin: 0 }}>
-              Paid per event, with a base payment plus opportunities to earn additional commission or
-              bonuses based on attendance, partnerships, referrals or community growth.
+              You&rsquo;re paid by the hour for the events you host, and on top of that you earn
+              commission on every single person you sign up to MY SZN, so the more your community
+              grows, the more you earn.
             </p>
           </div>
         </div>
@@ -157,7 +167,10 @@ export default function IrlHostPage() {
         <div className="max-w-4xl mx-auto text-center">
           <p style={{ margin: 0, fontSize: 14, color: "rgba(255,255,255,0.7)" }}>
             Not in one of these cities yet? Apply anyway and pick &ldquo;other&rdquo;, and we&rsquo;ll
-            know where to go next. <Link href="/" style={{ color: "var(--lav)" }}>back to my szn</Link>
+            know where to go next.{" "}
+            <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" style={{ color: "var(--lav)" }}>follow @itsmyszn</a>
+            {" "}&middot;{" "}
+            <Link href="/" style={{ color: "var(--lav)" }}>back to my szn</Link>
           </p>
         </div>
       </section>
@@ -193,8 +206,22 @@ const input: React.CSSProperties = {
 };
 const hint: React.CSSProperties = { fontSize: 13.5, color: "var(--grey)", margin: "0 0 8px", fontWeight: 400, lineHeight: 1.55 };
 
+// The route names the blank field, so say which one rather than "something went wrong".
+const FIELD_ERRORS: Record<string, string> = {
+  name_required: "We need your full name.",
+  email_required: "That email doesn't look quite right.",
+  city_required: "Pick your city.",
+  other_city_required: "Tell us which city you're based in.",
+  occupation_required: "Tell us your current occupation.",
+  instagram_required: "We need your Instagram handle.",
+  birth_date_required: "We need your date of birth.",
+  birth_time_required: "We need your time of birth. If you don't know it exactly, put your best guess and tick approximate.",
+  birth_place_required: "Pick your place of birth from the list as you type.",
+};
+
 function HostApplicationForm() {
   const [form, setForm] = useState<Record<string, string>>({ city_slug: "", speaking_comfort: "" });
+  const [birth, setBirth] = useState<BirthDetails>({ dateOfBirth: "", birthTime: "", birthTimeApproximate: false, location: null });
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -212,7 +239,17 @@ function HostApplicationForm() {
       const res = await fetch("/api/irl/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, speaking_comfort: Number(form.speaking_comfort) }),
+        body: JSON.stringify({
+          ...form,
+          speaking_comfort: Number(form.speaking_comfort),
+          birth_date: birth.dateOfBirth,
+          birth_time: birth.birthTime,
+          birth_time_approximate: birth.birthTimeApproximate,
+          birth_place: birth.location?.placeName ?? "",
+          birth_lat: birth.location?.latitude ?? null,
+          birth_lng: birth.location?.longitude ?? null,
+          birth_tz: birth.location?.timezone ?? "",
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -220,7 +257,7 @@ function HostApplicationForm() {
           data.error === "rate_limited" ? "That's a few applications in a short window. Try again shortly."
           : data.error === "too_short" ? `Could you add a bit more to: ${data.label}?`
           : data.error === "missing_choice" ? "Looks like one of the choices further up is still blank."
-          : "Something went wrong sending that. Please try again."
+          : FIELD_ERRORS[data.error] ?? "Something went wrong sending that. Please try again."
         );
         setSending(false);
         return;
@@ -248,6 +285,10 @@ function HostApplicationForm() {
               Your reference is <strong>{done}</strong>. We&rsquo;ve emailed you a copy.
             </p>
           )}
+          <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" className="no-underline inline-block"
+            style={{ marginTop: 26, border: "var(--border)", background: "#fff", color: "var(--dark)", fontFamily: poppins, fontWeight: 800, fontSize: 13, letterSpacing: "0.05em", textTransform: "uppercase", padding: "15px 26px" }}>
+            while you wait, follow @itsmyszn
+          </a>
         </div>
       </section>
     );
@@ -269,7 +310,7 @@ function HostApplicationForm() {
             <Field label="Full name" required><input style={input} value={form.full_name ?? ""} onChange={(e) => set("full_name", e.target.value)} autoComplete="name" /></Field>
             <Field label="Email" required><input type="email" style={input} value={form.email ?? ""} onChange={(e) => set("email", e.target.value)} autoComplete="email" /></Field>
             <Field label="Phone / WhatsApp"><input style={input} value={form.phone ?? ""} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" /></Field>
-            <Field label="Instagram"><input style={input} placeholder="@" value={form.instagram ?? ""} onChange={(e) => set("instagram", e.target.value)} /></Field>
+            <Field label="Instagram" required><input style={input} placeholder="@" value={form.instagram ?? ""} onChange={(e) => set("instagram", e.target.value)} /></Field>
             <Field label="TikTok"><input style={input} placeholder="@" value={form.tiktok ?? ""} onChange={(e) => set("tiktok", e.target.value)} /></Field>
             <Field label="LinkedIn"><input style={input} value={form.linkedin ?? ""} onChange={(e) => set("linkedin", e.target.value)} /></Field>
           </FormBlock>
@@ -290,15 +331,26 @@ function HostApplicationForm() {
             <Field label="Current occupation" required><input style={input} value={form.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)} /></Field>
           </FormBlock>
 
-          <FormBlock n={3} title="about you">
+          {/* The same birth details fields as the free chart. Deliberately no word on what they are
+              for: applicants are never shown their own chart or told it is part of the decision. */}
+          <FormBlock n={3} title="your birth details">
+            <BirthDetailsFields value={birth} onChange={(p) => setBirth((b) => ({ ...b, ...p }))} labelStyle={label} inputStyle={input} />
+          </FormBlock>
+
+          <FormBlock n={4} title="about you">
             <Field label="Tell us a little about yourself" required><textarea rows={5} style={input} value={form.about_you ?? ""} onChange={(e) => set("about_you", e.target.value)} /></Field>
             <Field label="Why would you love to become a MY SZN IRL Host?" required><textarea rows={5} style={input} value={form.why_host ?? ""} onChange={(e) => set("why_host", e.target.value)} /></Field>
             <Field label="What&rsquo;s your relationship with astrology, manifestation and personal development?" required><textarea rows={5} style={input} value={form.astrology_relationship ?? ""} onChange={(e) => set("astrology_relationship", e.target.value)} /></Field>
             <Radios name="astrology_level" label="How would you describe your astrology knowledge?" options={ASTROLOGY_LEVELS} value={form.astrology_level} onChange={set} />
           </FormBlock>
 
-          <FormBlock n={4} title="community + hosting">
+          <FormBlock n={5} title="community + hosting">
             <Field label="What does creating a great community mean to you?" required><textarea rows={5} style={input} value={form.community_means ?? ""} onChange={(e) => set("community_means", e.target.value)} /></Field>
+            <Field label="What are your people skills like? How would your friends describe you in a room full of strangers?" required><textarea rows={5} style={input} value={form.people_skills ?? ""} onChange={(e) => set("people_skills", e.target.value)} /></Field>
+            <Field label="What&rsquo;s your customer service experience?" required>
+              <p style={hint}>Hospitality, retail, salons, events, or anywhere looking after people was part of the job.</p>
+              <textarea rows={4} style={input} value={form.customer_service ?? ""} onChange={(e) => set("customer_service", e.target.value)} />
+            </Field>
             <Field label="How comfortable are you speaking to and leading a group?" required>
               <p style={hint}>1 is not at all, 5 is completely in your element.</p>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -314,10 +366,16 @@ function HostApplicationForm() {
               </div>
             </Field>
             <Radios name="hosting_experience" label="Have you hosted events, groups or communities before?" options={HOSTING_EXPERIENCE} value={form.hosting_experience} onChange={set} />
+            {form.hosting_experience && form.hosting_experience !== "never_but_keen" && (
+              <Field label="Give us some examples of events you&rsquo;ve hosted" required>
+                <p style={hint}>What it was, roughly how many people came, and what you did on the night.</p>
+                <textarea rows={4} style={input} value={form.hosting_examples ?? ""} onChange={(e) => set("hosting_examples", e.target.value)} />
+              </Field>
+            )}
             <Field label="Any relevant experience you&rsquo;d like to tell us about?"><textarea rows={4} style={input} value={form.relevant_experience ?? ""} onChange={(e) => set("relevant_experience", e.target.value)} /></Field>
           </FormBlock>
 
-          <FormBlock n={5} title="the real questions">
+          <FormBlock n={6} title="the real questions">
             <Field label="Imagine you arrive at a MY SZN dinner and one woman is standing alone and looks uncomfortable. What do you do?" required>
               <textarea rows={5} style={input} value={form.scenario_answer ?? ""} onChange={(e) => set("scenario_answer", e.target.value)} />
             </Field>
@@ -326,15 +384,19 @@ function HostApplicationForm() {
             </Field>
           </FormBlock>
 
-          <FormBlock n={6} title="the practical bit">
+          <FormBlock n={7} title="the practical bit">
+            <Field label="What does your availability look like?" required>
+              <p style={hint}>The days and times that usually work for you, and anything coming up we should plan around.</p>
+              <textarea rows={3} style={input} value={form.availability ?? ""} onChange={(e) => set("availability", e.target.value)} />
+            </Field>
             <Radios name="frequency_ok" label="Are you comfortable hosting around 1-2 events per month?" options={FREQUENCY} value={form.frequency_ok} onChange={set} />
             <Radios name="evenings_ok" label="Are evenings and weekends generally possible?" options={EVENINGS} value={form.evenings_ok} onChange={set} />
             <Radios name="travel_ok" label="Are you comfortable travelling around your city for events?" options={TRAVEL} value={form.travel_ok} onChange={set} />
-            <Radios name="side_role_ok" label="Are you comfortable with this being a flexible paid side role rather than a full-time role?" options={SIDE_ROLE} value={form.side_role_ok} onChange={set} />
+            <Radios name="side_role_ok" label="Are you happy with this being a freelance role, paid by the hour plus commission?" options={SIDE_ROLE} value={form.side_role_ok} onChange={set} />
             <Radios name="partnerships_interest" label="Would you be interested in helping find local venues, experiences and potential brand partners?" options={PARTNERSHIPS} value={form.partnerships_interest} onChange={set} />
           </FormBlock>
 
-          <FormBlock n={7} title="last one, promise">
+          <FormBlock n={8} title="last one, promise">
             <Field label="You&rsquo;re planning the ultimate girls&rsquo; night in your city and money isn&rsquo;t an issue. Where are we going and what are we doing?" required>
               <textarea rows={5} style={input} value={form.girls_night ?? ""} onChange={(e) => set("girls_night", e.target.value)} />
             </Field>
@@ -360,8 +422,8 @@ function HostApplicationForm() {
   );
 }
 
-/** A numbered chunk of the form. Seven short sections rather than one intimidating scroll, which is
- *  the difference between a form people finish and a form people abandon on a phone. */
+/** A numbered chunk of the form. Short sections rather than one intimidating scroll, which is the
+ *  difference between a form people finish and a form people abandon on a phone. */
 function FormBlock({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <fieldset style={{ border: "var(--border)", padding: "22px 20px 24px", margin: 0, background: "#fff" }}>

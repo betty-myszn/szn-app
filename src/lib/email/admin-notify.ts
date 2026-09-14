@@ -1,6 +1,11 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail } from "@/lib/email/brevo";
 import { planNameForPrice } from "@/lib/email/welcome";
+import { SITE_URL } from "@/lib/site";
+import {
+  EVENINGS, SIDE_ROLE, TRAVEL, astrologyLabel, frequencyLabel, hostingLabel, partnershipsLabel,
+  type ChartSummary,
+} from "@/lib/irl";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -355,3 +360,127 @@ where fingerprint = '${esc(args.fingerprint)}';</pre>
   }
 }
 
+
+// ── MY SZN IRL host applications ─────────────────────────────────────────────
+
+/** The application exactly as the apply route saved it, plus the display name of her city. */
+export interface IrlApplicationAlertArgs {
+  /** The saved row's id, so the dashboard link opens her profile directly. */
+  id?: string;
+  reference: string; city: string; status: string;
+  full_name: string; email: string; phone: string | null;
+  instagram: string | null; tiktok: string | null; linkedin: string | null;
+  occupation: string;
+  birth_date: string; birth_time: string; birth_time_approximate: boolean; birth_place: string;
+  chart_summary: ChartSummary | null;
+  about_you: string; why_host: string; astrology_relationship: string; astrology_level: string;
+  community_means: string; people_skills: string; customer_service: string; speaking_comfort: number;
+  hosting_experience: string; hosting_examples: string | null; relevant_experience: string | null;
+  scenario_answer: string; local_ideas: string; availability: string;
+  frequency_ok: string; evenings_ok: string; travel_ok: string; side_role_ok: string;
+  partnerships_interest: string; girls_night: string;
+}
+
+const optionLabel = (list: readonly { value: string; label: string }[], v: string) =>
+  list.find((o) => o.value === v)?.label ?? v;
+
+/**
+ * The whole application in one email, chart first, so a decision can be made from the inbox without
+ * opening the dashboard. Separate from the send so it can be rendered and looked at.
+ */
+export function buildIrlApplicationAlert(a: IrlApplicationAlertArgs): { subject: string; htmlContent: string } {
+  const c = a.chart_summary;
+  const name = cleanName(a.full_name) || "(no name given)";
+  const approx = a.birth_time_approximate ? " (approximate)" : "";
+  const handle = (v: string | null) => (v ? v.replace(/^@/, "") : "");
+
+  const table = (rows: [string, string][]) => `
+      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:560px;margin:0 0 22px">
+        ${rows.filter(([, v]) => v).map(([l, v]) => `
+        <tr>
+          <td style="padding:7px 14px 7px 0;border-bottom:1px solid #eee;color:#888;white-space:nowrap;vertical-align:top">${esc(l)}</td>
+          <td style="padding:7px 0;border-bottom:1px solid #eee;font-weight:600;word-break:break-word">${esc(v)}</td>
+        </tr>`).join("")}
+      </table>`;
+  const heading = (t: string) =>
+    `<p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#FF2D87;margin:0 0 8px">${esc(t)}</p>`;
+  const answer = (q: string, text: string | null) => text ? `
+      <p style="margin:0 0 4px;font-weight:700">${esc(q)}</p>
+      <p style="margin:0 0 18px;white-space:pre-wrap">${esc(text)}</p>` : "";
+
+  const chartRows: [string, string][] = [
+    ["Born", `${a.birth_date}, ${a.birth_time.slice(0, 5)}${approx}`],
+    ["Place", a.birth_place],
+    ...(c ? ([
+      ["Sun", c.sun], ["Moon", c.moon], ["Rising", c.rising ? `${c.rising}${approx}` : ""],
+      ["Mercury", c.mercury], ["Venus", c.venus], ["Mars", c.mars],
+      ["Human design", c.hd_type ?? ""], ["Strategy", c.hd_strategy ?? ""], ["Authority", c.hd_authority ?? ""],
+      ["Profile", c.hd_profile ?? ""], ["Definition", c.hd_definition ?? ""],
+    ] as [string, string][]) : ([["Chart", "The calculation failed, run it from the details above"]] as [string, string][])),
+  ];
+
+  const htmlContent = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1a1a1a;line-height:1.6;max-width:600px">
+      <p style="font-size:17px;font-weight:700;margin:0 0 4px">New IRL host application ✦</p>
+      <p style="margin:0 0 20px;color:#666">${esc(name)} · ${esc(a.city)} · ${esc(a.reference)}${a.status === "other_city_waitlist" ? " · not a launch city, parked on the waitlist" : ""}</p>
+
+      ${heading("birth chart + human design")}
+      ${table(chartRows)}
+
+      ${heading("contact")}
+      ${table([
+        ["Email", a.email],
+        ["Phone", a.phone ?? ""],
+        ["Instagram", a.instagram ? `instagram.com/${handle(a.instagram)}` : ""],
+        ["TikTok", a.tiktok ? `tiktok.com/@${handle(a.tiktok)}` : ""],
+        ["LinkedIn", a.linkedin ?? ""],
+        ["Occupation", a.occupation],
+      ])}
+
+      ${heading("at a glance")}
+      ${table([
+        ["Astrology", astrologyLabel(a.astrology_level)],
+        ["Hosted before", hostingLabel(a.hosting_experience)],
+        ["Speaking to a group", `${a.speaking_comfort} out of 5`],
+        ["Availability", a.availability],
+        ["1-2 events a month", frequencyLabel(a.frequency_ok)],
+        ["Evenings and weekends", optionLabel(EVENINGS, a.evenings_ok)],
+        ["Travel around the city", optionLabel(TRAVEL, a.travel_ok)],
+        ["OK as freelance, hourly plus commission", optionLabel(SIDE_ROLE, a.side_role_ok)],
+        ["Finding venues and partners", partnershipsLabel(a.partnerships_interest)],
+      ])}
+
+      ${heading("her answers")}
+      ${answer("About her", a.about_you)}
+      ${answer("Why she wants to host", a.why_host)}
+      ${answer("Her relationship with astrology, manifestation and personal development", a.astrology_relationship)}
+      ${answer("What creating a great community means to her", a.community_means)}
+      ${answer("Her people skills", a.people_skills)}
+      ${answer("Her customer service experience", a.customer_service)}
+      ${answer("Events she's hosted", a.hosting_examples)}
+      ${answer("Relevant experience", a.relevant_experience)}
+      ${answer("The woman standing alone at dinner", a.scenario_answer)}
+      ${answer("Three places, brands or experiences in her city", a.local_ideas)}
+      ${answer("The ultimate girls' night", a.girls_night)}
+
+      <p style="margin:8px 0 0">
+        <a href="${SITE_URL}/admin/irl-hosts${a.id ? `?id=${encodeURIComponent(a.id)}` : ""}" style="color:#FF2D87;font-weight:700">Rate, shortlist and compare in the dashboard</a>
+      </p>
+    </div>`;
+
+  const signs = c ? ` · ${c.sun} sun${c.hd_type ? `, ${c.hd_type}` : ""}` : "";
+  return { subject: `IRL host application: ${name} · ${a.city}${signs}`, htmlContent };
+}
+
+/**
+ * Sends the application to the team inbox. Fire-and-forget like the other alerts: a Brevo problem is
+ * logged and never reaches the applicant, whose application is already saved by the time this runs.
+ */
+export async function sendIrlApplicationAlert(args: IrlApplicationAlertArgs): Promise<void> {
+  const { subject, htmlContent } = buildIrlApplicationAlert(args);
+  for (const to of adminRecipients()) {
+    // Reply-to is her, so answering the email answers the applicant.
+    const result = await sendBrevoEmail({ to: { email: to }, subject, htmlContent, replyTo: { email: args.email, name: args.full_name } });
+    if (!result.ok) console.error("irl application alert failed", { to, reference: args.reference, error: result.error });
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import PlacesAutocomplete from "./PlacesAutocomplete";
+import BirthDetailsFields from "./BirthDetailsFields";
 import type { BirthData, BirthLocation } from "@/types/chart";
 import { encodeBirthData, saveBirthData, getSavedBirthData } from "@/lib/url-params";
 import { loadBirthDataPreferringSupabase, syncBirthDataToSupabase } from "@/lib/chart-sync";
@@ -73,29 +73,13 @@ export default function BirthDataForm({
     };
   }, []);
 
-  // Manual location fields (fallback)
-  const [manualCity, setManualCity] = useState("");
-  const [manualCountry, setManualCountry] = useState("");
-  const [manualLat, setManualLat] = useState("");
-  const [manualLng, setManualLng] = useState("");
-  const [manualTimezone, setManualTimezone] = useState("");
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    let finalLocation = location;
-
-    if (!finalLocation && manualCity && manualLat && manualLng && manualTimezone) {
-      finalLocation = {
-        placeName: `${manualCity}, ${manualCountry}`,
-        city: manualCity,
-        country: manualCountry,
-        latitude: parseFloat(manualLat),
-        longitude: parseFloat(manualLng),
-        timezone: manualTimezone,
-      };
-    }
+    // The manual location fallback now lives in BirthDetailsFields, which reports a location once
+    // all of it has been typed, so there is nothing left to assemble here.
+    const finalLocation = location;
 
     if (!name || !dateOfBirth || !birthTime || !finalLocation) {
       setError("Please fill in all required fields.");
@@ -273,73 +257,17 @@ export default function BirthDataForm({
         />
       </div>
 
-      <div>
-        <label htmlFor="dob" style={labelStyle}>date of birth</label>
-        <input
-          id="dob"
-          type="date"
-          value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
-          required
-          style={inputStyle}
-          className="focus:!border-[var(--pink)]"
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label htmlFor="time" style={labelStyle}>time of birth</label>
-          <input
-            id="time"
-            type="time"
-            value={birthTime}
-            onChange={(e) => setBirthTime(e.target.value)}
-            required
-            style={inputStyle}
-            className="focus:!border-[var(--pink)]"
-          />
-        </div>
-        <div>
-          <label htmlFor="birth-place" style={labelStyle}>place of birth</label>
-          <PlacesAutocomplete id="birth-place" onSelect={setLocation} value={location?.placeName} />
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input
-          id="approximate"
-          type="checkbox"
-          checked={birthTimeApproximate}
-          onChange={(e) => setBirthTimeApproximate(e.target.checked)}
-          className="h-4 w-4"
-          style={{ accentColor: "var(--pink)" }}
-        />
-        <label htmlFor="approximate" style={{ fontSize: 12, color: "var(--grey)" }}>
-          Birth time is approximate / unknown exact time
-        </label>
-      </div>
-
-      {location && (
-        <div style={{ fontSize: 11, color: "var(--grey-light)", padding: "8px 0" }}>
-          <p>📍 {location.placeName}</p>
-          <p>Coordinates: {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)} · Timezone: {location.timezone}</p>
-        </div>
-      )}
-
-      {!location && !process.env.NEXT_PUBLIC_GEONAMES_USERNAME && (
-        <div className="space-y-3 p-4" style={{ border: "1px solid #eee" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)" }}>Manual Location Entry</p>
-          <div className="grid grid-cols-2 gap-3">
-            <input type="text" placeholder="City" value={manualCity} onChange={(e) => setManualCity(e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
-            <input type="text" placeholder="Country" value={manualCountry} onChange={(e) => setManualCountry(e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <input type="number" step="any" placeholder="Latitude" value={manualLat} onChange={(e) => setManualLat(e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
-            <input type="number" step="any" placeholder="Longitude" value={manualLng} onChange={(e) => setManualLng(e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
-          </div>
-          <input type="text" placeholder="IANA Timezone (e.g. Pacific/Honolulu)" value={manualTimezone} onChange={(e) => setManualTimezone(e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
-        </div>
-      )}
+      <BirthDetailsFields
+        value={{ dateOfBirth, birthTime, birthTimeApproximate, location }}
+        onChange={(p) => {
+          if (p.dateOfBirth !== undefined) setDateOfBirth(p.dateOfBirth);
+          if (p.birthTime !== undefined) setBirthTime(p.birthTime);
+          if (p.birthTimeApproximate !== undefined) setBirthTimeApproximate(p.birthTimeApproximate);
+          if ("location" in p) setLocation(p.location ?? null);
+        }}
+        labelStyle={labelStyle}
+        inputStyle={inputStyle}
+      />
 
       <button
         type="submit"

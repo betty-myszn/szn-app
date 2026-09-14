@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/admin-guard";
+import { HD_TYPES } from "@/lib/irl";
+import { ZODIAC_SIGNS } from "@/types/chart";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +32,13 @@ export async function GET(request: NextRequest) {
   if (availability && availability !== "all") q = q.eq("frequency_ok", availability);
   if (partnerships && partnerships !== "all") q = q.eq("partnerships_interest", partnerships);
   if (p.get("shortlisted") === "1") q = q.eq("shortlisted", true);
+  // Chart filters read the summary stored at application time. Both values are checked against the
+  // known lists before they reach the query. The sun is a pattern match because a sun that changed
+  // sign on an unknown-time birthday is stored as "Virgo/Libra" and belongs under either.
+  const hd = p.get("hd");
+  const sun = p.get("sun");
+  if (hd && (HD_TYPES as readonly string[]).includes(hd)) q = q.eq("chart_summary->>hd_type", hd);
+  if (sun && (ZODIAC_SIGNS as readonly string[]).includes(sun)) q = q.ilike("chart_summary->>sun", `%${sun}%`);
 
   const sort = p.get("sort") ?? "newest";
   if (sort === "oldest") q = q.order("submitted_at", { ascending: true });

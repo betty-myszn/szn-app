@@ -15,6 +15,34 @@ export const ASTROLOGY_LEVELS = [
   { value: "new_but_curious", label: "Very new but curious" },
 ] as const;
 
+export const HD_TYPES = [
+  "Generator", "Manifesting Generator", "Projector", "Manifestor", "Reflector",
+] as const;
+
+/** An applicant's chart as the dashboard and the team email show it, worked out once when she
+ *  applies. Never shown to her. */
+export interface ChartSummary {
+  sun: string; moon: string; mercury: string; venus: string; mars: string;
+  rising: string | null;
+  hd_type: string | null; hd_strategy: string | null; hd_authority: string | null;
+  hd_profile: string | null; hd_definition: string | null;
+  /** She ticked "approximate", so the rising and the human design may be off. */
+  time_approximate: boolean;
+}
+
+/** "Sun Libra · Moon Pisces · Rising Leo (approx.)" */
+export function bigThree(c: ChartSummary | null): string {
+  if (!c) return "—";
+  const approx = c.time_approximate ? " (approx.)" : "";
+  return [`Sun ${c.sun}`, `Moon ${c.moon}`, c.rising ? `Rising ${c.rising}${approx}` : null].filter(Boolean).join(" · ");
+}
+
+/** "Generator 2/4, Sacral authority (approx. time)" */
+export function humanDesign(c: ChartSummary | null): string {
+  if (!c?.hd_type) return "—";
+  return `${c.hd_type} ${c.hd_profile}, ${c.hd_authority}${c.time_approximate ? " (approx. time)" : ""}`;
+}
+
 export const HOSTING_EXPERIENCE = [
   { value: "professionally", label: "Yes, professionally" },
   { value: "casually", label: "Yes, casually or socially" },
