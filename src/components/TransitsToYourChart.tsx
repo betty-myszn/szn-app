@@ -1,6 +1,6 @@
 "use client";
 
-import { composeTransitContact } from "@/lib/transit-contact-content";
+import { composeTransitContacts } from "@/lib/transit-contact-content";
 import type { TransitData } from "@/types/chart";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -21,6 +21,12 @@ export default function TransitsToYourChart({ transits }: { transits: TransitDat
     transits?.transitAspects?.find(
       (a) => a.natalPlanet === natalPlanet && a.transitPlanet === activatedBy
     )?.applying;
+
+  // Composed as a set rather than card by card, so the three cards sitting side by side never share
+  // a sentence, an opening move or a closing move. See transit-contact-content.ts.
+  const readings = composeTransitContacts(
+    placements.map((p) => ({ placement: p, applying: applyingFor(p.natalPlanet, p.activatedBy) })),
+  );
 
   return (
     <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
@@ -55,8 +61,8 @@ export default function TransitsToYourChart({ transits }: { transits: TransitDat
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {placements.map((p) => {
-            const r = composeTransitContact(p, applyingFor(p.natalPlanet, p.activatedBy));
+          {placements.map((p, i) => {
+            const r = readings[i];
             const exact = r.orb <= 1;
             return (
               <div
