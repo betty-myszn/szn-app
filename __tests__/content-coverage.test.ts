@@ -20,7 +20,8 @@ import {
   houseForSign,
 } from "@/lib/interpretations";
 import { composeLunation, type CalendarEventInput } from "@/lib/moon-content";
-import { LUNATION_SIGNS } from "@/lib/lunation-signs";
+import { LUNATION_SIGNS, phaseForLunation } from "@/lib/lunation-signs";
+import { longSection } from "@/lib/lunation-long";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { SEASONS } from "@/lib/seasons";
@@ -538,7 +539,7 @@ describe("eclipse readings add the nodal-axis depth", () => {
     for (const { type, extra } of cases) {
       for (const sign of SIGNS) {
         const reading = composeLunation({ type, date: "2026-08-12", sign, degree: 20, ...extra }, makeChart());
-        const prose = [
+        const parts = [
           reading.whatThisIs,
           ...(reading.primer?.map((s) => s.body) ?? []),
           ...(reading.chartParagraphs ?? []),
@@ -548,11 +549,22 @@ describe("eclipse readings add the nodal-axis depth", () => {
           reading.bettysTake,
           reading.exercise?.intro,
           ...(reading.exercise?.steps ?? []),
-        ]
-          .filter(Boolean)
-          .join(" ");
-        expect(prose).not.toMatch(/[—–]/);
-        expect(prose).not.toMatch(/\?/);
+        ].filter(Boolean) as string[];
+
+        // Em dashes are banned everywhere, including in copy written by hand.
+        expect(parts.join(" ")).not.toMatch(/[—–]/);
+
+        // The question rule is about the engine inventing rhetorical questions. Betty's own
+        // per-sign sections in lunation-long.ts land whole and deliberately ask one ("Where am I
+        // ready to choose myself more boldly?"), so they are held to her draft rather than to this
+        // rule, and everything the engine composes is still checked.
+        const phase = phaseForLunation(type);
+        const handWritten = new Set(
+          (["bringsUp", "lookOutFor", "shadow"] as const)
+            .map((section) => longSection(sign, phase, section))
+            .filter(Boolean) as string[],
+        );
+        expect(parts.filter((part) => !handWritten.has(part)).join(" ")).not.toMatch(/\?/);
       }
     }
   });

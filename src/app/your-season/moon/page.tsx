@@ -395,7 +395,7 @@ function MoonPageContent() {
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
             <div className="tag mb-3">what it brings up</div>
             {reading.bringsUp.split("\n\n").map((para, i) => (
-              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{withEmphasis(para)}</p>
             ))}
           </div>
         </section>
@@ -407,7 +407,7 @@ function MoonPageContent() {
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
             <div className="tag mb-3">what to look out for</div>
             {reading.lookOutFor.split("\n\n").map((para, i) => (
-              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>{withEmphasis(para)}</p>
             ))}
           </div>
         </section>
@@ -419,7 +419,7 @@ function MoonPageContent() {
           <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink-light)" }}>
             <div className="tag mb-3" style={{ color: "var(--pink)" }}>the shadow</div>
             {reading.shadow.split("\n\n").map((para, i) => (
-              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>{para}</p>
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>{withEmphasis(para)}</p>
             ))}
           </div>
         </section>
@@ -596,6 +596,16 @@ function MoonPageContent() {
         </div>
       </section>
     </>
+  );
+}
+
+
+// The per-sign section copy carries **bold** runs, which is the only markup any of this text uses.
+// Split on the marker and wrap every second piece, so the emphasis Betty writes into the copy
+// actually lands on the page instead of rendering as asterisks.
+function withEmphasis(text: string): React.ReactNode[] {
+  return text.split("**").map((piece, i) =>
+    i % 2 === 1 ? <strong key={i} style={{ fontWeight: 800 }}>{piece}</strong> : <span key={i}>{piece}</span>,
   );
 }
 
