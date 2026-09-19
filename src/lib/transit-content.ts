@@ -34,6 +34,8 @@ export interface MajorTransitReading {
   chartParagraphs?: string[];
   /** The move broken into actions, preferred by the page over theMove. */
   moveSteps?: string[];
+  /** How this energy distorts, where the guide carries a shadow section. */
+  shadow?: string;
   inYourChart: string;
   bettysTake: string;
   theMove: string;
@@ -85,11 +87,12 @@ export function composeMajorTransit(event: MajorTransitInput, chart: ChartData):
         ...(natalLine ? [natalLine] : []),
         `${houseMeaning.coach}`,
       ],
+      shadow: guide.shadow?.join("\n\n"),
       bettysTake: guide.bettysTake.join("\n\n"),
       theMove: guide.move.intro,
       moveSteps: [...guide.move.steps, guide.move.byHouse[transitHouse]].filter(Boolean),
-      journalPrompt: guide.journalPrompt,
-      affirmation: guide.affirmation,
+      journalPrompt: guide.journalByHouse?.[transitHouse] ?? guide.journalPrompt,
+      affirmation: guide.affirmationByHouse?.[transitHouse] ?? guide.affirmation,
     };
   }
   const body = getBodyMeaning(toId(event.planet));

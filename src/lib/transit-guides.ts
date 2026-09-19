@@ -22,6 +22,8 @@ export interface TransitGuide {
   sections: GuideSection[];
   /** The personalised layer, keyed by the house the transiting sign falls in for this member. */
   house: Record<number, string[]>;
+  /** How this energy distorts. Rendered after the personal layer, before Betty. */
+  shadow?: string[];
   bettysTake: string[];
   move: {
     intro: string;
@@ -30,7 +32,11 @@ export interface TransitGuide {
     byHouse: Record<number, string>;
   };
   journalPrompt: string;
+  /** One prompt per house, where the question genuinely changes with the placement. */
+  journalByHouse?: Record<number, string>;
   affirmation: string;
+  /** One affirmation per house, so it carries that house's actual lesson. */
+  affirmationByHouse?: Record<number, string>;
 }
 
 export const VENUS_RX_SCORPIO: TransitGuide = {
@@ -345,6 +351,382 @@ export const VENUS_RX_SCORPIO: TransitGuide = {
     "I let my wanting change, and I trust what's left once the wanting has quieted down.",
 };
 
+export const PLUTO_DIRECT_AQUARIUS: TransitGuide = {
+  title: "pluto stations direct in aquarius",
+  hero: "Pluto turns direct in Aquarius, which is less a green light than a very large, very slow process changing direction. What you have been working out privately for months starts becoming something you act on, and the chapter it belongs to runs for years rather than weeks.",
+  sections: [
+    {
+      heading: "what a pluto station actually is",
+      body: [
+        `Pluto spends about five months of every year retrograde, which is a lot when you consider it only moves two or three degrees across an entire year. So a Pluto station is not a switch being flipped. It's a very large, very slow process changing direction, the way a tanker changes direction, and the date itself is simply the moment the turn becomes measurable.`,
+
+        `During the retrograde months, Pluto's material tends to run inward. Power dynamics you're inside of, fears you'd rather not name, compulsions, attachments, the things you do automatically when you feel unsafe, all of that gets pulled into review rather than played out in front of anybody. Plenty of it happens without a single external event to point at, which is why Pluto retrograde often feels like nothing and costs so much energy.`,
+
+        `Stationing direct is when that internal material starts becoming actionable. Something you've understood privately over the last few months begins affecting what you'll agree to, what you'll tolerate, who gets access to you and what you're willing to keep participating in. The understanding arrived months ago. This is when it starts having consequences.`,
+
+        `Think in chapters rather than days. You don't need to wake up on the station date and dramatically restructure your life, and if you do, that's usually adrenaline rather than Pluto. The shift tends to show up over the following weeks and months, in decisions that would have been unthinkable a year ago and now feel almost obvious.`,
+      ],
+    },
+    {
+      heading: "what pluto actually governs, without the wellness translation",
+      body: [
+        `Pluto runs power, shadow, transformation, endings, regeneration, obsession, control, survival instinct, buried material and everything that happens to a person after something they cannot undo. It's the planet of what you do when you're genuinely threatened, and what you become on the other side of it.`,
+
+        `The spiritual internet has softened all of this into becoming your highest self, which is a shame, because Pluto is considerably more interesting than that. This planet deals in material you'd rather manage, hide or outrun. The compulsions. The thing you do when somebody pulls away. The specific way you get control back when you feel it slipping.`,
+
+        `Transformation in Pluto's sense is rarely chosen and almost never comfortable. Something ends, sometimes something you built, and the version of you that existed inside it doesn't survive intact. What regenerates afterwards is usually less decorative and considerably harder to knock over.`,
+
+        `Pluto's other specialty is showing you where you gave your power away, often years ago, usually without noticing, generally in exchange for safety, belonging or being loved. That's the bill this planet eventually presents, and it presents it slowly enough that you can't pretend it arrived out of nowhere.`,
+
+        `Scale matters enormously with this planet. Pluto can spend a decade or more crossing a single house of your chart, which makes a Pluto transit a chapter you live inside rather than an event you get through. The version of you at the start and the version at the end are meaningfully different people, and almost all of that change happens too slowly to notice while it is happening, which is why the recognition usually arrives years later while you are looking at an old photograph.`,
+      ],
+    },
+    {
+      heading: "pluto in aquarius, and why this one is different",
+      body: [
+        `Pluto entered Aquarius properly in 2024 and stays until the mid 2040s, so whatever it's doing, it isn't in a rush and neither are you. Aquarius is fixed air, traditionally ruled by Saturn and modernly by Uranus, and it governs community, friendship, networks, systems, technology, innovation, collective identity and the whole question of belonging.`,
+
+        `Put Pluto's obsession with power into that territory and you get a two decade excavation of how power actually moves through groups. Who's included, who's excluded, who decides, who gets platformed, who quietly sets the terms everybody else operates inside, and what belonging costs the people who want it badly enough.`,
+
+        `The previous stretch, Pluto in Capricorn, spent fifteen years taking apart institutions, hierarchies, governments and anything built on the assumption that authority deserves automatic trust. Aquarius takes the same forensic attention and points it at the horizontal version: networks, communities, platforms, movements, group consensus and the strange new power structures that don't have a building or a CEO.`,
+
+        `On a personal level this tends to show up as a slow, thorough reassessment of the groups you belong to. Which communities have genuinely been good for you, which ones you've been editing yourself to stay inside, and which ones defined you at twenty five and have nothing to do with who you are now.`,
+
+        `There is a generational layer and a personal one, and it helps to keep them apart. Everybody alive is having Pluto in Aquarius, which is the collective story of the next two decades. What makes it yours is the house it crosses in your own chart, which decides where in your life all of that pressure actually lands.`,
+      ],
+    },
+    {
+      heading: "power, and what belonging has cost you",
+      body: [
+        `Aquarius holds a real tension that Pluto is very good at exposing: the sign is obsessed with individuality and completely organised around groups. Being yourself and belonging somewhere are both non-negotiable, and they are frequently in direct conflict.`,
+
+        `The most common version is the slow edit. Nobody asks you to change, and over a few years you stop mentioning certain opinions, stop bringing up the thing you're actually into, adjust your politics a quarter turn, and become a slightly flatter version of yourself that the group finds easy. Pluto in Aquarius tends to make that edit visible, usually by making it unbearable.`,
+
+        `The opposite version is just as common and gets discussed much less: staying outside every group on principle, because belonging anywhere would mean caring what they think, and caring what they think is a vulnerability. Permanent outsiderhood can be a genuine identity and it can also be very sophisticated self-protection.`,
+
+        `Power inside communities becomes easier to see under this transit. Who has influence and who merely has visibility, who controls access, who decides which conversations are acceptable, and what happens to somebody who breaks the unspoken rules. Once that architecture becomes obvious to you, participating in it the old way gets difficult.`,
+
+        `Then there's the reckoning nobody enjoys, which is noticing that you've been performing not caring about status inside a group whose approval you very much want. Aquarius is excellent at that particular contradiction, and Pluto has no patience for it whatsoever.`,
+      ],
+    },
+    {
+      heading: "technology, the internet, and who owns the room",
+      body: [
+        `You cannot write about Pluto in Aquarius honestly and skip technology. Aquarius governs networks and systems, Pluto governs concentrated power, and the last few years of AI, platform consolidation, algorithmic gatekeeping and data ownership are a fairly on-the-nose expression of both. This transit runs for two decades and that story is only in its opening chapter.`,
+
+        `For you personally, the interesting part is smaller and much more immediate: your relationship with being online. Pluto tends to intensify things until they become undeniable, so this is the transit where a mild habit becomes a proper compulsion, or where you suddenly cannot stand the version of yourself that exists on a particular app.`,
+
+        `Digital identity gets a thorough interrogation. The persona, the curation, the gap between the account and the actual life, the part of you that checks who viewed something. None of that is shameful and all of it is worth looking at, because Aquarius is where your identity and the collective's opinion of you are most tangled together.`,
+
+        `Privacy becomes a live question too. Who has access to what, what you share automatically, what you've made public about your life without ever deciding to. Pluto rules what stays hidden, and there tends to be a real appetite under this transit for taking some things back offline entirely.`,
+      ],
+    },
+    {
+      heading: "friendships, and the ones you've outgrown",
+      body: [
+        `Friendship is properly Aquarian territory and it gets much less astrological attention than romance, which is ridiculous given how much of your life it accounts for. Pluto here turns the volume up on it for years at a time.`,
+
+        `A friendship can reveal a power dynamic that's been running quietly since the beginning. One of you always initiates. One of you is the entertainment and one is the audience. One has been the reliable one for so long that nobody remembers she's allowed to have a crisis. Pluto tends to surface that rather than let it stay comfortable.`,
+
+        `Outgrowing a community that once defined you is one of the loneliest experiences available, and it's extremely common under this transit. The group was right for the woman you were when you found it, and staying inside it now requires you to keep being her. That's usually what makes it unbearable before it makes it obvious.`,
+
+        `The other direction happens too, and it's the part worth waiting for. Pluto in Aquarius has a habit of delivering a community where you finally don't have to translate yourself. Often it's smaller than the one you left, frequently it's online, and it tends to arrive after you've stopped auditioning for the old one.`,
+
+        `Your relationship with popularity itself can change across this transit. Being liked by many people stops being the metric, and being properly known by a few starts being the thing you'd actually trade for it.`,
+
+        `Worth naming: the endings here are rarely dramatic. Most friendships that finish under this transit simply stop being maintained, by both people, and the realisation arrives months later. That quietness is Pluto in a fixed air sign rather than a lack of significance.`,
+      ],
+    },
+    {
+      heading: "who you are when nobody's watching the group chat",
+      body: [
+        `Aquarius connects your identity to the collective, so Pluto here runs a long excavation of how much of you was shaped by the rooms you've been in. Internet culture, a friendship group, a professional network, a scene, a movement, a fandom, a workplace with strong opinions about what people like you are supposed to think.`,
+
+        `None of that influence is bad, and the point isn't to arrive at some pure uninfluenced self, which doesn't exist. The work is noticing which of your positions you actually arrived at and which you absorbed because everybody around you held them and disagreeing would have been socially expensive.`,
+
+        `This process takes years rather than weeks, and it tends to move in waves that line up with Pluto's stations. Something becomes clear during the retrograde months, and then the direct station is when you start acting differently because of it.`,
+
+        `What usually emerges is a much smaller and much more deliberate set of belongings. Fewer rooms, chosen properly, with a version of yourself in them that doesn't require maintenance.`,
+      ],
+    },
+    {
+      heading: "what stationing direct actually changes",
+      body: [
+        `Here's what I'd have you resist: reading this as a green light. Pluto direct is not Mercury direct, and treating a generational planet like a traffic light will have you forcing a decision that was going to arrive on its own in about four months.`,
+
+        `What genuinely shifts is the direction of travel. The material that's been circulating internally since spring starts finding external expression: in what you say yes to, what you decline, who you stop explaining yourself to, and which arrangement you can no longer participate in with a straight face.`,
+
+        `A power dynamic you finally understood during the retrograde is the clearest example. Understanding it didn't change anything by itself. What changes now is that you can't un-know it, and continuing to play your usual role in it starts costing more than changing it would.`,
+
+        `The pace stays slow and that's a feature. Pluto rewards decisions that hold, and anything you can only do in a burst of intensity tends to get undone by the next station. Something you decide deliberately in the next few months, and then maintain, is how this planet actually works.`,
+
+        `One practical note: the station itself often coincides with a fairly intense fortnight either side, where the themes get loud before they get clear. That intensity is the turn happening, and it settles.`,
+
+        `This rhythm repeats every year, which is the most useful thing to understand about it. Pluto goes retrograde in the spring, spends about five months turning things over internally, and stations direct in the autumn, and each cycle takes the same material one layer deeper. What you are working on now is very likely a further chapter of what surfaced at this point last year.`,
+
+        `Worth saying plainly, because the astrology internet has made Pluto sound like a catastrophe: this planet does not arrive to punish anybody. It removes what was structurally unsound, and a great deal of what it removes was something you had already outgrown and were holding in place out of loyalty, fear or habit. The discomfort usually lives in the holding rather than in the loss.`,
+      ],
+    },
+  ],
+  house: {
+    1: [
+      `Aquarius sits across your first house, so Pluto is working on **you**: your identity, your self-concept, your presence and the way you occupy a room. This is one of the most demanding placements Pluto offers, because there is nowhere external to put it.`,
+
+      `Across this transit people tend to become genuinely unrecognisable to those who knew them a decade ago. Not through a makeover, through a change in what they will and will not carry. The Aquarian flavour makes it specifically about the self you present to groups: the persona, the online version, the character you play in every room.`,
+
+      `The direct station is when what you have worked out about yourself privately starts showing up in how you behave. Less explaining, less adjusting, considerably less interest in being universally palatable.`,
+
+      `Your body and appearance often feature here, since the first house rules both. The urge to change something visible is real, and Pluto rewards the version that reflects who you have become rather than the version designed to signal it.`,
+
+      `The risk with this placement is control over perception: managing how you are read, monitoring the reception, never letting anybody see the draft. That management is exhausting, and it is the exact thing this transit is slowly dismantling.`,
+
+      `One more layer worth knowing: Pluto in the first tends to attract intensity from other people. You become somebody who gets strong reactions, and learning to stop managing those reactions is a large part of what this transit is teaching.`,
+    ],
+    2: [
+      `Aquarius sits across your second house, which puts Pluto into **your money, your possessions and your sense of your own value**. Your resources rather than anybody else's, and this transit runs long enough to genuinely restructure how you earn.`,
+
+      `What Pluto does here is expose the arrangement underneath the income. What you will tolerate for money, what you have priced at nothing, who benefits from your labour, and whether your security depends on somebody else's decisions. Aquarius adds a collective angle: income through networks, community, technology and platforms rather than a single employer.`,
+
+      `Somewhere in this transit the definition of security usually changes. Earning more stops being the whole answer, and control over how you earn starts mattering considerably more than the number attached to it.`,
+
+      `The direct station is where an understanding about your worth starts affecting your actual pricing. A rate, a boundary, an invoice, a no.`,
+
+      `Watch the compulsive edge, because Pluto in the second can turn money into a control mechanism: hoarding it, refusing to look at it, or using it to feel safe in a way no amount will ever satisfy.`,
+
+      `Aquarius in this house also points toward income that comes from many places rather than one. Across this transit, plenty of people move from a single dependable source to a web of them, which feels less secure for about a year and considerably more secure after that.`,
+    ],
+    3: [
+      `Aquarius sits across your third house, so Pluto is transforming **how you think, speak, learn and handle information**, along with siblings, neighbours and the everyday people you deal with without thinking.`,
+
+      `This is a long excavation of your own mind. What you believe and why, where your opinions came from, which thoughts run automatically. Aquarius makes the information layer loud: what you consume, who you follow, and which discourse has quietly been shaping your conclusions.`,
+
+      `Your voice tends to change across this transit. People with this placement often end up writing, speaking or teaching something they would never have touched before, usually the thing they understand from the inside.`,
+
+      `The direct station is when something worked out internally starts getting said out loud. A conversation rehearsed for months, a position held privately, a truth a sibling relationship has needed for years.`,
+
+      `The distortion to watch is obsessive thinking: the loop, the research spiral, the need to make an argument so airtight nobody could possibly disagree. Pluto in the third can turn the mind into a very sophisticated defence system.`,
+
+      `There is a strong research quality to this placement as well. Pluto in the third produces people who go absurdly deep on one subject, and following that instinct properly, rather than treating it as a distraction, is usually where the next chapter comes from.`,
+    ],
+    4: [
+      `Aquarius sits across your fourth house, which puts Pluto at **the foundations: home, family, roots, private life and everything installed in you before you had a vote**.`,
+
+      `This is ancestral territory. Pluto here surfaces the family patterns nobody named, the arrangements everybody worked around, the emotional debts that got passed down. Aquarius brings a detachment that genuinely helps, since you can look at where you come from as a system rather than only as a wound.`,
+
+      `Where you live and who you live with often changes considerably across this transit, sometimes more than once. The private life gets rebuilt to suit who you have become rather than who you were when you signed the lease.`,
+
+      `The direct station is when something you have understood about your family starts changing how you behave with them. Boundaries that were theoretical in June become operational, and they hold better than the ones made in anger.`,
+
+      `Watch for control at home: managing everybody's moods, keeping the peace at your own expense, or cutting family off entirely as the only available way to stop participating. There is usually a version between those two, and Pluto takes years to find it.`,
+
+      `Pluto in the fourth also changes what home means to you. The definition tends to move from a place you were given to a place you built, and the version you build carries noticeably fewer rules that somebody else wrote.`,
+    ],
+    5: [
+      `Aquarius sits across your fifth house, so Pluto is at work in **creativity, romance, pleasure, self-expression and whatever comes out of you**. This is the house of what you make, and Pluto refuses to let it stay decorative.`,
+
+      `Creative work tends to get darker, stranger and more honest across this transit. The safe version stops being satisfying, and what you actually want to make starts being something you would previously have called too much. Aquarius pushes it toward the experimental, the collective and the internet-native.`,
+
+      `Romance under this placement runs intense. Attractions arrive with a magnetic, slightly compulsive quality, and the ones that matter change you rather than simply accompany you.`,
+
+      `The direct station is where a creative truth starts affecting what you make or show. The project you have been privately working out begins to exist somewhere other people can see it.`,
+
+      `The shadow here is making your work a bid for approval, or treating a romance as a transformation programme. Pluto in the fifth can turn play into a proving ground, which takes the pleasure out of the one house that was supposed to have some.`,
+
+      `This placement often changes your relationship with being watched while you create. Sharing the work stops being about approval at some point in this transit, which is the moment the work usually gets good.`,
+    ],
+    6: [
+      `Aquarius sits across your sixth house, putting Pluto into **your daily work, your routines, your health and the people you deal with every day**. Unglamorous, and it accounts for most of your actual life.`,
+
+      `Pluto here rebuilds how you work from the ground up, usually by making the old way untenable. Burnout, a role that outgrew its description, a workplace dynamic you finally see clearly. Aquarius adds the modern version: automation, remote work and technology reshaping what your job even is.`,
+
+      `Health becomes a long-term theme rather than a passing one. Something the body has been signalling asks for a proper answer, and the answer generally involves the daily rather than the dramatic.`,
+
+      `The direct station is when an understanding about your capacity starts changing your actual schedule: what you agree to, what you delegate, what time you stop.`,
+
+      `Watch the control that hides inside routine. Optimising everything, measuring everything, treating your body as a system to be managed rather than lived in. Pluto in the sixth can turn discipline into a cage.`,
+
+      `Colleagues and the everyday people you rely on feature strongly too. A working relationship can reveal a power dynamic that has been running for years, and Pluto in the sixth rarely lets that stay comfortable once it is visible.`,
+    ],
+    7: [
+      `Aquarius sits across your seventh house, so Pluto is working directly on **partnership, agreements and the power between two people**. The most relationally intense placement available, and it runs for years.`,
+
+      `What Pluto exposes here is the actual distribution of power in your closest relationships: who adjusts, who decides, who has to be managed, who carries the emotional weather. Aquarius pushes toward partnerships built on friendship, freedom and equality rather than tradition or need.`,
+
+      `Relationships tend to either transform substantially or end across this transit. That is the nature of Pluto in this house rather than a prediction about yours: the arrangement gets renegotiated at a level most couples never reach.`,
+
+      `The direct station is when something you have understood about a dynamic starts changing how you participate in it. The behaviour shifts first and the conversation usually follows.`,
+
+      `The distortion to watch is the pull to control the other person's freedom, or to hand your own decisions over entirely and call that partnership. Both are Pluto in the seventh, and they can happen inside the same relationship.`,
+
+      `There is also the projection layer, which this house specialises in. Pluto in the seventh slowly hands back the qualities you have been outsourcing to a partner, usually by putting you in a position where you have to use them yourself.`,
+    ],
+    8: [
+      `Aquarius sits across your eighth house, which is Pluto's own house. The planet of power, depth and transformation is transiting the part of your chart that already governs **intimacy, sex, trust, shared money, debt, dependency, receiving and what happens when somebody else holds something you need**.`,
+
+      `This is the most concentrated version of the transit available, and it is slow. The theme is access and control: what you require before you let somebody in, what happens in you when closeness starts to mean surrendering the upper hand, and how you behave when an outcome depends on another person.`,
+
+      `Money and intimacy are the same subject in this house, which is why they surface together. The joint account, the loan, the business you are tied into, the inheritance, the arrangement where one of you has more leverage. Pluto does not let a financial entanglement sit unexamined for twenty years.`,
+
+      `Receiving is the eighth house's hardest lesson and this transit is relentless about it. Being given to creates obligation, and obligation creates exposure, so plenty of people can earn beautifully and cannot accept help at all. Aquarius gives that a specific flavour: support from community and networks rather than from institutions.`,
+
+      `The direct station is where something you have finally understood about trust, dependency or power starts changing what you do. A dynamic you can no longer participate in the same way. A financial arrangement that has to evolve. A fear around betrayal that has become nameable enough to stop running you invisibly.`,
+
+      `Old fears about loss and abandonment get very visible under this placement, often with no current event to attach them to. That is the eighth house doing its job, bringing up what was installed long ago for inspection rather than for crisis.`,
+    ],
+    9: [
+      `Aquarius sits across your ninth house, so Pluto is transforming **what you believe, what you study, where you travel and the framework you use to make sense of things**.`,
+
+      `Belief systems get taken apart under this placement, thoroughly and usually more than once. Religion, politics, the philosophy you built your twenties on, the framework handed to you at home. Aquarius pushes toward the collective and the future-facing: what you think should happen rather than only what you think is true.`,
+
+      `This transit frequently coincides with a long stretch of study, teaching or publishing, particularly about something you understand from the inside rather than from a syllabus.`,
+
+      `The direct station is when a changed belief starts affecting your actual choices: where you go, what you will fund, what you will publicly stand behind.`,
+
+      `The shadow here is conviction hardening into dogma, especially the online kind. Pluto in the ninth can make a person certain in a way that stops her learning anything new, which wastes a genuinely brilliant placement.`,
+
+      `Travel can carry real weight under this placement. A journey somewhere that genuinely changes your framework, rather than a nice holiday, is very characteristic of Pluto in the ninth, and it often arrives at the point where the old worldview has stopped working.`,
+    ],
+    10: [
+      `Aquarius sits across your tenth house, so Pluto is at work on **your career, your reputation, your authority and your relationship with public power**.`,
+
+      `This placement tends to end one professional identity and build another across years. The first half often feels like loss: a role, an industry or a reputation you spent a decade building stops fitting. Aquarius points the rebuild toward the collective, the unconventional and the networked.`,
+
+      `Power dynamics with bosses, clients and institutions become impossible to ignore. Who has authority over your time, what you have agreed to in exchange for status, and whether the ladder leads anywhere you want to arrive.`,
+
+      `The direct station is where an understanding about your ambition starts changing your professional behaviour: what you say yes to, what you stop performing, whose approval you are no longer working for.`,
+
+      `Watch the compulsive version, which is common here. Power pursued as protection, visibility chased as proof, and a career used to settle a question that was never professional in the first place.`,
+
+      `The public element deserves a mention too, since Aquarius rules audiences. Pluto in the tenth can bring visibility you did not fully plan for, along with the accompanying discovery that being known by many people is a considerably stranger experience than wanting to be.`,
+    ],
+    11: [
+      `Aquarius sits across your eleventh house, which is Aquarius in its own house. Everything this transit means collectively lands here personally: **friendship, networks, community, audiences, causes and the future you are building with other people**.`,
+
+      `This is the most intensified version of Pluto in Aquarius available. Friendship groups transform or end. Communities that defined you stop fitting. New networks appear and become central faster than you expect. Your relationship with belonging gets rebuilt from the foundations.`,
+
+      `Power inside groups becomes extremely visible with this placement. Who is included, who quietly sets the terms, who gets frozen out, and what it costs to be the one who names any of it. You will see the architecture, which is a gift and occasionally an inconvenience.`,
+
+      `Online life features heavily: audiences, platforms, digital community, the version of you that exists in other people's feeds, and the particular power dynamics of being perceived by people you have never met.`,
+
+      `The direct station is where something you have understood about a group starts changing your participation in it. Less performance, fewer rooms, and a much clearer sense of who you would choose again from scratch.`,
+
+      `Being the outsider is the other half of this placement. Some people spend this transit finding their community, and others spend it finally making peace with standing slightly outside every one of them, which is its own form of belonging.`,
+    ],
+    12: [
+      `Aquarius sits across your twelfth house, the most private placement Pluto can take. This is **the unconscious, the hidden, solitude, what you keep secret and what you keep secret from yourself**.`,
+
+      `Much of this transit happens where nobody can see it, including you for long stretches. Dreams get vivid and instructive, old material surfaces with no obvious trigger, and a great deal reorganises underneath while the external life looks fairly unchanged.`,
+
+      `Aquarius here can mean a slow withdrawal from the collective: less interest in being perceived, a real need for solitude, and a growing sense that the online version of your life costs more than it returns.`,
+
+      `The direct station is when something worked out in private starts becoming visible in your choices. People often describe this as finally understanding a pattern they have lived inside for years, and the understanding itself changes the behaviour.`,
+
+      `The shadow to watch is hiding: staying unavailable, choosing situations that cannot fully happen, and self-sabotage quiet enough to look like circumstance. Pluto in the twelfth asks you to bring one hidden thing into the light, generally one at a time.`,
+
+      `There is frequently a spiritual or therapeutic thread here as well. Pluto in the twelfth tends to send people toward whatever practice actually reaches the unconscious, and the work done quietly during this transit shows up in the external life years later.`,
+    ],
+  },
+  shadow: [
+    `Pluto's shadow is **control**, and it arrives wearing whatever costume that particular sign supplies. In Aquarius, it tends to look principled, detached and entirely reasonable, which makes it harder to catch than the Scorpio version that at least has the decency to look intense.`,
+
+    `The first form is managing how you're perceived. Curating the version of yourself the group sees, monitoring the reception, adjusting in real time, and calling all of that being self-aware. There's a lot of work involved in never being seen inaccurately, and the exhaustion is the tell.`,
+
+    `Cutting people off pre-emptively is the second. Leaving a group, a friendship or a scene at the first ambiguous signal, before they can exclude you, then experiencing the loneliness as evidence that people are unreliable. The exit protects you from the rejection and also from finding out it wasn't coming.`,
+
+    `Rebellion for its own sake belongs here too. Aquarius can reject the mainstream option purely because it's mainstream, which is still letting the group decide, just backwards. Real independence occasionally chooses the popular thing because it happens to be right.`,
+
+    `Then there's the consumption: getting swallowed by a cause, a community, a discourse or an online world, to the point that your own life quietly stops being the main event. Pluto intensifies whatever it touches, and a movement or a platform can absorb a person entirely while feeling like purpose.`,
+
+    `Groupthink is the flipside, and it's rarely obvious from inside. Holding a position because your people hold it, softening a disagreement into silence, and mistaking consensus for conviction. Aquarius is supposed to be the sign that notices this, which is exactly why it gets caught by it.`,
+
+    `Wanting power while performing indifference to power is the most Aquarian shadow of all. The influence, the platform, the standing in the room, all genuinely wanted, all publicly dismissed as unimportant. Owning the want is usually what stops it running you.`,
+
+    `The useful question, when any of this gets loud: is this change I actually want, or is sitting with the uncertainty simply harder than blowing something up. Pluto's distortion is almost always impatience with not knowing, dressed as decisiveness.`,
+
+    `And a note on proportion, because Pluto gets talked about like a catastrophe. Most of this transit is not drama. It's a slow change in what you'll put up with, and the loudest version usually belongs to whoever is resisting it hardest.`,
+
+    `There is also the version that looks like insight. Pluto gives real psychological sight, and it is entirely possible to use that sight to analyse everybody around you with devastating accuracy while never once turning it on yourself. Being right about other people is the most sophisticated avoidance available under this transit.`,
+
+    `And a word on intensity as a habit. Pluto energy can become something you seek out, because the drama of a crisis is at least legible, while the slow ordinary work of changing a pattern is not. Noticing when you are manufacturing intensity to avoid boredom is genuinely part of this.`,
+  ],
+  bettysTake: [
+    `Everybody wants Pluto to mean their glow-up. I'd like to gently redirect that, because Pluto's version of power has nothing to do with becoming louder, richer or more untouchable, and quite a lot to do with how much you've stopped pretending not to know.`,
+
+    `Here's the pattern I see constantly in shadow work: somebody has known something for eighteen months. About a friendship, a group, a dynamic, an arrangement. They've known it and they've been negotiating with it, finding reasons, waiting for better evidence, hoping the situation resolves itself so they never have to be the one who says it. That negotiation costs more energy than the decision ever would.`,
+
+    `Pluto direct is where the bargaining gets expensive. Once you've genuinely seen the pattern, you can't fully unsee it, and every extra month of participating in it anyway is a slow withdrawal from your own account. The power comes back the moment you stop arguing with something you already know.`,
+
+    `On the Aquarius side, my actual take is about belonging, and it's the theme I'd sit with for the next few years rather than the next few weeks: you can belong somewhere without editing yourself down to fit it. Most women I work with have never tested that, because the edit happened so gradually that there was never a moment to object to.`,
+
+    `Try it in one room this year. Say the unpopular thing in the group chat, admit you've changed your mind in public, mention the interest you've been keeping quiet because it doesn't fit the brand. Then notice who's still there. That's your actual community, and it's usually smaller and significantly better than the one you've been maintaining.`,
+
+    `Witchy note, because Pluto genuinely deserves one: this is deeeep shadow work territory, and it works best done in the dark, slowly, without an audience. No announcement post about your transformation. Pluto does its best work unwitnessed and shows the results later, which is very annoying for those of us who like credit.`,
+  ],
+  move: {
+    intro: `Pluto is slow, so this one is deliberate rather than urgent. The work is turning what became clear during the retrograde into something that actually changes your behaviour, and you have months rather than days.`,
+    steps: [
+      `Name the thing you've known since spring and have been negotiating with. One sentence, written down, no softening clause on the end. That sentence is the whole transit.`,
+
+      `Work out what participating as usual now costs you, in energy rather than morality. Pluto responds to honest accounting and completely ignores good intentions.`,
+
+      `Change one behaviour rather than one circumstance. What you agree to, what you answer, what you explain, what you no longer justify. Circumstances follow behaviour with this planet, rarely the other way round.`,
+
+      `Audit the rooms. Which communities, chats and platforms you're in out of genuine choice, and which out of a decade of momentum. Leave nothing this week, just be honest about the list.`,
+
+      `Say one true thing in a room where you've been softening yourself, and watch what survives it. Best experiment available under this transit.`,
+
+      `Take something back offline or back into private. Pluto rules what stays hidden, and reclaiming a piece of your life from public consumption tends to return more power than any amount of posting.`,
+
+      `Hold the irreversible decisions loosely for a few months. What's genuinely true now will still be true in February, and you'll be acting on it with considerably better information.`,
+    ],
+    byHouse: {
+      1: `Change one visible thing about how you show up, chosen because it is true rather than because it signals something.`,
+      2: `Reprice one thing: the rate, the retainer, or the arrangement you agreed to when your circumstances were completely different.`,
+      3: `Say the thing you have been rehearsing, to the person it concerns, in the plainest available words.`,
+      4: `Make one change to a family or household arrangement that has been running on inherited terms.`,
+      5: `Put the version of your creative work you have been protecting somewhere at least one person can see it.`,
+      6: `Change one daily arrangement that has been running on your goodwill rather than on anything mutual.`,
+      7: `Put the real terms of your closest partnership into words, including the ones you have both been operating on silently.`,
+      8: `Address one arrangement where money and closeness are tangled together, and one place where being given to makes you flinch.`,
+      9: `Act on one belief that has genuinely changed: where your money goes, where you go, or what you will publicly back.`,
+      10: `Decline one thing you would previously have accepted for the status attached to it.`,
+      11: `Say one true thing in a group you have been performing for, and notice who is still there afterwards.`,
+      12: `Give one hidden thing a witness: a person, a page, a professional, something outside your own head.`,
+    },
+  },
+  journalPrompt:
+    `What have I understood over the last few months that I can no longer pretend I do not know?`,
+  journalByHouse: {
+    1: `What have I outgrown about the version of myself that other people still expect?`,
+    2: `What have I been accepting for money that I already know is below my rate?`,
+    3: `Which of my strongest opinions did I actually arrive at, and which did I absorb?`,
+    4: `Which pattern from home have I been carrying as though it were my personality?`,
+    5: `What do I actually want to make, before I consider who it is for?`,
+    6: `What is my daily life currently costing me, and what has it been buying?`,
+    7: `What am I still doing in this relationship that I already know I cannot keep doing?`,
+    8: `What have I learned about trust, intimacy, money or power that I can no longer pretend I do not know?`,
+    9: `Which belief have I outgrown while continuing to live as though I still hold it?`,
+    10: `Whose approval is my career currently organised around, and is that still somebody I respect?`,
+    11: `Which of my communities would I choose again from scratch, and which am I in out of momentum?`,
+    12: `What have I been keeping hidden, including from myself, that is ready to be looked at directly?`,
+  },
+  affirmation: `What I have seen clearly, I get to act on in my own time.`,
+  affirmationByHouse: {
+    1: `I get to be recognisably different from who I was, and nobody is owed the old version.`,
+    2: `My security comes from what I can build and hold, and I decide what my work is worth.`,
+    3: `My mind is mine to change, and saying what I think out loud is how I find out what I mean.`,
+    4: `I choose what I keep from where I come from, and the rest can stay behind me.`,
+    5: `What I create is mine first, and it is allowed to be strange.`,
+    6: `My energy is a resource I allocate, and I stop spending it where it does not come back.`,
+    7: `I can be close to someone without either of us holding the other in place.`,
+    8: `I can let someone close without handing over the parts of me that keep me standing.`,
+    9: `My worldview is allowed to change as I do, and certainty is not the same as understanding.`,
+    10: `I build authority on what I actually know, and I stop auditioning for rooms I have outgrown.`,
+    11: `I belong somewhere without editing myself down to fit it.`,
+    12: `What I have carried privately does not have to stay private to stay mine.`,
+  },
+};
+
 /** The written guide for a transit, or null where there isn't one and the composer takes over. */
 export function guideFor(
   type: string,
@@ -352,5 +734,6 @@ export function guideFor(
   sign: string | undefined,
 ): TransitGuide | null {
   if (type === "retrograde_start" && planet === "Venus" && sign === "Scorpio") return VENUS_RX_SCORPIO;
+  if (type === "retrograde_end" && planet === "Pluto" && sign === "Aquarius") return PLUTO_DIRECT_AQUARIUS;
   return null;
 }

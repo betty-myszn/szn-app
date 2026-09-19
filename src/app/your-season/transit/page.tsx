@@ -160,6 +160,19 @@ function TransitPageContent() {
         </div>
       </section>
 
+      {reading.shadow && (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--pink-light)" }}>
+            <div className="tag mb-3" style={{ color: "var(--pink)" }}>the shadow</div>
+            {reading.shadow.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize: 14.5, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>
+                {withEmphasis(para)}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
           <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
