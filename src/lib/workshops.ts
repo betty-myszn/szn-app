@@ -195,7 +195,7 @@ export const WORKSHOPS: Workshop[] = [
     // Same 11:30am LA / 7:30pm UK slot as the Venus Era class. The new moon is exact at 8:50am LA,
     // so day one of the 30 day experiment starts a few hours into the new cycle.
     meta: "10 october · 11:30am la time · libra new moon",
-    title: "Libra New Moon: The Glow Up Lab",
+    title: "Libra New Moon: The Glow Up Guide",
     dark: false,
     startIso: "2026-10-10T11:30:00-07:00",
     durationMinutes: 75,
