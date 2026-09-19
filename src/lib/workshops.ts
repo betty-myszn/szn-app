@@ -164,6 +164,7 @@ export const WORKSHOPS: Workshop[] = [
     // already full rather than one still on its way.
     meta: "26 september · 11:30am la time · aries full moon",
     title: "Libra SZN/Aries Full Moon: Call In Your Venus Era",
+    coverImage: "/venus-era-cover.jpg",
     dark: true,
     startIso: "2026-09-26T11:30:00-07:00",
     durationMinutes: 75,
