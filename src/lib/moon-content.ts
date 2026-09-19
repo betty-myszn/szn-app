@@ -13,7 +13,7 @@ import {
   type SignTraits,
   type HouseMeaning,
 } from "@/lib/interpretations";
-import { longSection, phaseForLunation } from "@/lib/lunation-long";
+import { longSection, longTake, longMove, phaseForLunation } from "@/lib/lunation-long";
 import { composeNodeIngress } from "@/lib/nodal-content";
 import { composeEclipse } from "@/lib/eclipse-content";
 
@@ -493,7 +493,13 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData, now
 
   const inYourChart = chartParagraphs.join(" ");
 
-  const bettysTake = `${meta.bettysTakeGeneric} With this one landing in your ${event.sign.toLowerCase()} ${ordinalHouse(house)} house, that plays out through ${houseArea}: expect this to move through ${traits.essence}, not through anyone else's version of it.`;
+  // Betty's take is hers per moon where it has been written, since the brief is explicit that it
+  // should never read as the general interpretation with swearing added. The composed line stays as
+  // the guard for anything that has not been written yet.
+  const phase = phaseForLunation(event.type);
+  const bettysTake =
+    longTake(event.sign, phase) ??
+    `${meta.bettysTakeGeneric} With this one landing in your ${event.sign.toLowerCase()} ${ordinalHouse(house)} house, that plays out through ${houseArea}: expect this to move through ${traits.essence}, not through anyone else's version of it.`;
 
   // The four personalised sections Betty asked every reading to carry, plus the exercise that
   // replaces the old one-line "move". The chart breakdown above is section one (what it lights up).
@@ -519,7 +525,7 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData, now
     lookOutFor: meta.lookOutFor(ctx),
     shadow: meta.shadowLine(ctx),
     bettysTake,
-    exercise: meta.exercise(ctx),
+    exercise: longMove(event.sign, phase) ?? meta.exercise(ctx),
     journalPrompt: `${meta.promptFraming} (Think specifically about your ${houseArea}.)`,
     affirmation: meta.affirmationFrame(houseArea),
     affirmations: meta.affirmationSet(houseArea, event.sign.toLowerCase()),

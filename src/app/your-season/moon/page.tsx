@@ -429,7 +429,11 @@ function MoonPageContent() {
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
           <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
-          <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.bettysTake}</p>
+          {reading.bettysTake.split("\n\n").map((para, i) => (
+            <p key={i} style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500, marginTop: i === 0 ? 0 : 16 }}>
+              {withEmphasis(para)}
+            </p>
+          ))}
         </div>
       </section>
 

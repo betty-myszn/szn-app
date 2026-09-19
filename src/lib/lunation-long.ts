@@ -14,10 +14,23 @@
 
 export type LunationPhase = "seed" | "peak";
 
+/** The sections of a reading that are plain paragraphs, as opposed to the structured move. */
+export type LongProse = "bringsUp" | "lookOutFor" | "shadow" | "bettysTake";
+
+export interface LongMove {
+  title: string;
+  intro: string;
+  steps: string[];
+}
+
 export interface LongSection {
   bringsUp: string[];
   lookOutFor: string[];
   shadow?: string[];
+  /** Betty herself, with an actual take on this specific moon rather than a house style opinion. */
+  bettysTake?: string[];
+  /** What she does with it, following from what she just read, and not journaling every time. */
+  theMove?: LongMove;
 }
 
 export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSection>>> = {
@@ -86,6 +99,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     peak: {
+      bettysTake: [
+        `Every Aries Full Moon I watch the same thing happen to my clients, and honestly to me: the hair. Suddenly the fringe is a personal insult, the colour is wrong, and there are scissors within reach. Aries rules the head and the face, so when this Moon wants change and can't get it anywhere else, it'll settle for your eyebrows. Book the appointment. Don't freelance.`,
+
+        `The other thing I watch for is the 11pm certainty. An Aries Full Moon manufactures a feeling of absolute clarity that's roughly eighty percent adrenaline, and the decisions made inside it are usually right about the problem and completely wrong about the solution. The thing you want to quit might genuinely need to go. The way you're about to quit it will cost you a reference, a friendship or six months.`,
+
+        `Here's my real take on the anger, because astrologers get soft about this: your rage under an Aries Moon is the most accurate information in your chart. It knows exactly where you've been overriding yourself. Let it talk. Don't let it hold the phone.`,
+      ],
+      theMove: {
+        title: `burn it off, then decide`,
+        intro: `Mars rules this Moon and Mars lives in the body, so this one is physical first and cerebral second. Tonight if you can.`,
+        steps: [
+          `Move hard for twenty minutes before you make a single decision. Run, dance, lift, stairs, anything that makes you breathe properly. The clarity on the other side of that is the clarity worth trusting.`,
+          `Write the message you desperately want to send. All of it, every name, unfiltered. Then don't send it. Get it out of your body and onto a page where it can't do any damage.`,
+          `Pick the one place you've been overriding yourself and take the smallest brave action this week: the ask, the no, the rate, the conversation. Courage in a small correct direction beats fury in a big wrong one.`,
+        ],
+      },
       bringsUp: [
         `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
 
@@ -216,6 +245,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     seed: {
+      bettysTake: [
+        `I'll be direct, because Libra season makes everybody soft focus. The reason you're exhausted is not that you're busy, you're running a full-time diplomatic service nobody asked you to open. Being the easy one has a salary, and the salary is resentment.`,
+
+        `What I actually watch at a Libra New Moon is whether somebody can name a want without immediately attaching a reason to it. Try it now. Say what you want and then stop talking. If you caught yourself explaining, justifying or checking it against somebody else's convenience within four seconds, there's your whole cycle.`,
+
+        `There's a manifestation angle here I loooove. Venus rules this Moon and Venus responds to what you genuinely value rather than what you've politely agreed to accept. Every time you take the smaller option to keep things smooth, you're quoting your rate. Set it properly this month and watch what starts turning up.`,
+      ],
+      theMove: {
+        title: `state the price`,
+        intro: `A Venus New Moon, so this is half boundary work and half pleasure. Twenty minutes and one conversation.`,
+        steps: [
+          `Write what you want before consulting a single person. No compromise version, no group consensus. Keep the page somewhere you'll see it when the negotiating starts.`,
+          `Say one preference out loud this week with no reason attached. One sentence, full stop, no charming explanation, then let the silence be theirs to fill.`,
+          `Do one thing purely because it's beautiful and you like it: the flowers, the good perfume, the table set for yourself. Venus works through pleasure and this sign forgets its own taste counts.`,
+        ],
+      },
       bringsUp: [
         `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
@@ -346,6 +391,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     peak: {
+      bettysTake: [
+        `This is the Moon where I go through my clients' numbers with them, and I'd suggest you do the same, because Taurus Full Moons are allergic to vague. What are you actually paid. What actually leaves your account each month. What is that arrangement really costing you in hours. Feelings are welcome and the spreadsheet is the oracle this week.`,
+
+        `The pattern I see most is the rate that hasn't moved in three years while the work quietly doubled. You'll tell me the timing isn't right. The timing is never right for a Taurus, that's the condition. Send the new number and let it be awkward for the four minutes it takes them to say fine.`,
+
+        `On the softer side, this sign rules the body and it's worth listening to yours rather than negotiating with it this week. Taurus holds everything in the neck, jaw and shoulders, and the thing you're refusing to say out loud is usually in there waiting for a massage to find it.`,
+      ],
+      theMove: {
+        title: `check the actual numbers`,
+        intro: `Taurus only believes evidence, so this week is maths and sensation rather than reflection.`,
+        steps: [
+          `Open the accounts and look properly. What's coming in, what's going out, what you're charging, what you're tolerating. Write down one number you want different by the next Full Moon.`,
+          `Do the concrete version this week: send the rate, cancel the thing, move the money, ask for the review. One act, finished, rather than a plan you'll refine forever.`,
+          `Then get in your body somewhere slow. A bath, a long walk, hands in dough or soil, a proper meal without your phone. This sign resets through the senses and the answer usually arrives about ten minutes in.`,
+        ],
+      },
       bringsUp: [
         `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
 
@@ -476,6 +537,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     seed: {
+      bettysTake: [
+        `Scorpio New Moons are my favourite to work with and the hardest to sell, because nobody wants to hear that the reset involves telling the truth about something. This is the one lunation of the year where the beginning genuinely requires an ending first, and you already know which one. You've known since roughly March.`,
+
+        `What I watch here is the secrecy. Scorpio will start something completely alone, tell nobody, then wonder why it's so heavy. Being unwitnessed and being protected are two different things, and whatever you're keeping quiet is usually the thing that most needs one other person in it.`,
+
+        `For the witchier among you, this is an exceptional Moon for shadow work, cord cutting and anything involving fire. Scorpio rules what's buried, so working with it deliberately beats waiting for it to surface on its own schedule, which it will, usually at a family gathering.`,
+      ],
+      theMove: {
+        title: `say the unsayable thing`,
+        intro: `Scorpio begins by finishing something. Private, intense, and worth doing properly.`,
+        steps: [
+          `Write the whole truth about the situation you've been managing. Names, money, resentment, the version you'd never say out loud. Then burn it, delete it or seal it, and notice how much lighter the week gets.`,
+          `Tell one trusted person the real thing you're starting, while it could still fail. Not the polished version you'd post. The actual one.`,
+          `Look at one place where money and power are tangled with somebody else: the joint account, the unpaid invoice, the loan nobody mentions. Scorpio rules shared resources and wants clarity there this month.`,
+        ],
+      },
       bringsUp: [
         `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
@@ -604,6 +681,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     peak: {
+      bettysTake: [
+        `Gemini Full Moons are where I watch people have the entire argument in their head, win it decisively, and go to bed furious with somebody who has no idea any of it happened. If that's you this week, the conversation you're rehearsing is the one you need to actually have, and it'll be about ninety percent shorter in real life.`,
+
+        `My genuine take on this Moon is that the information arriving now is almost never new. It's the thing you already suspected finally getting said out loud, which is why it feels like a shock and lands like a confirmation. Trust the read you had before anybody confirmed it.`,
+
+        `Also, and I say this with loooove: put the phone down at 11pm. Gemini rules the nervous system and this Moon will have you drafting, deleting, rereading and spiralling across fourteen open tabs. Nothing written after midnight under a Gemini Moon has ever improved anybody's life.`,
+      ],
+      theMove: {
+        title: `send one thing, close the tabs`,
+        intro: `Mercury runs this Moon, so the work is verbal and the discipline is choosing one message rather than nine.`,
+        steps: [
+          `Write the whole thing out first, unedited and far too long, then find the sentence you wrote quickly and immediately wanted to soften. That's the message.`,
+          `Say it once, to the one person it concerns, then leave the silence alone. No clarifying follow-up, no softening voice note twenty minutes later.`,
+          `Close the loop physically: walk without a podcast, breathe properly for four minutes, put the phone in another room for an hour. This sign settles through the body much faster than through more thinking.`,
+        ],
+      },
       bringsUp: [
         `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
 
@@ -732,6 +825,22 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
     seed: {
+      bettysTake: [
+        `Sagittarius New Moons make everybody want to move countries, and I'd gently ask whether you want the new life or you want out of a conversation. Both are valid. They need completely different plans, and only one of them involves packing.`,
+
+        `What I love about this Moon is that it's the best manifestation window of the year for anything that requires faith before evidence. Jupiter rules it, Jupiter expands whatever you point it at, and this sign starts things that have no business working and then they work. Aim carefully, because it'll expand a bad idea with exactly the same enthusiasm.`,
+
+        `My one instruction: put money or a date on it this week. Sagittarius commits out loud or not at all, and an intention with nothing staked on it will be a lovely memory by the second week of next month.`,
+      ],
+      theMove: {
+        title: `stake something on it`,
+        intro: `Jupiter energy needs a real commitment and a boring middle section. Both, this week.`,
+        steps: [
+          `Book it, pay the deposit or tell the person. Something genuinely embarrassing to quietly abandon, done within seven days.`,
+          `Write the belief you're building on, write what would have to be true for it to be wrong, and go and find out which one the evidence supports before you bet the year on it.`,
+          `Plan three unglamorous steps in the middle. Jupiter hands you the vision and has no interest whatsoever in logistics, which is the only reason these things fall over.`,
+        ],
+      },
       bringsUp: [
         `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
@@ -1581,6 +1690,19 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
 
 };
 
+/** Betty's own take on this moon, or null while a sign is still waiting for hers. */
+export function longTake(sign: string, phase: LunationPhase | null): string | null {
+  if (!phase) return null;
+  const paragraphs = LUNATION_LONG[sign]?.[phase]?.bettysTake;
+  return paragraphs && paragraphs.length ? paragraphs.join("\n\n") : null;
+}
+
+/** The move for this moon, or null while a sign is still waiting for one. */
+export function longMove(sign: string, phase: LunationPhase | null): LongMove | null {
+  if (!phase) return null;
+  return LUNATION_LONG[sign]?.[phase]?.theMove ?? null;
+}
+
 /** The half of the cycle a lunation belongs to: planting, or culminating. */
 export function phaseForLunation(type: string): LunationPhase | null {
   if (type === "new_moon" || type === "solar_eclipse") return "seed";
@@ -1592,7 +1714,7 @@ export function phaseForLunation(type: string): LunationPhase | null {
 export function longSection(
   sign: string,
   phase: LunationPhase | null,
-  section: keyof LongSection,
+  section: LongProse,
 ): string | null {
   if (!phase) return null;
   const paragraphs = LUNATION_LONG[sign]?.[phase]?.[section];
@@ -1608,7 +1730,7 @@ export function longSection(
 export function longExcerpt(
   sign: string,
   phase: LunationPhase | null,
-  section: keyof LongSection,
+  section: LongProse,
   paragraphs = 2,
 ): string | null {
   if (!phase) return null;
