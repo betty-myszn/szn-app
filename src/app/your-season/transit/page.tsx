@@ -12,6 +12,13 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 const VALID_TYPES: MajorTransitType[] = ["ingress", "retrograde_start", "retrograde_end", "aspect"];
 
+// The written guides carry **bold** runs, the only markup any of this copy uses.
+function withEmphasis(text: string): React.ReactNode[] {
+  return text.split("**").map((piece, i) =>
+    i % 2 === 1 ? <strong key={i} style={{ fontWeight: 800 }}>{piece}</strong> : <span key={i}>{piece}</span>,
+  );
+}
+
 function TransitPageContent() {
   const params = useSearchParams();
   const { member, ready } = useMember();
@@ -113,24 +120,84 @@ function TransitPageContent() {
         </div>
       </section>
 
+      {reading.sections && reading.sections.length > 0 && (
+        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-4xl mx-auto">
+            {reading.sections.map((section) => (
+              <div key={section.heading} style={{ marginBottom: 40 }}>
+                <h2
+                  style={{
+                    fontFamily: poppins,
+                    fontSize: "clamp(20px, 3vw, 28px)",
+                    fontWeight: 800,
+                    letterSpacing: "-0.6px",
+                    textTransform: "lowercase",
+                    color: "var(--dark)",
+                    marginBottom: 14,
+                  }}
+                >
+                  {section.heading}
+                </h2>
+                {section.body.map((para, i) => (
+                  <p key={i} style={{ fontSize: 15, lineHeight: 1.85, color: "var(--grey)", marginTop: i === 0 ? 0 : 14 }}>
+                    {withEmphasis(para)}
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
           <div className="tag mb-3">what this means in your chart</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{reading.inYourChart}</p>
+          {(reading.chartParagraphs ?? [reading.inYourChart]).map((para, i) => (
+            <p key={i} style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70", marginTop: i === 0 ? 0 : 14 }}>
+              {withEmphasis(para)}
+            </p>
+          ))}
         </div>
       </section>
 
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
           <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
-          <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{reading.bettysTake}</p>
+          {reading.bettysTake.split("\n\n").map((para, i) => (
+            <p key={i} style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500, marginTop: i === 0 ? 0 : 16 }}>
+              {withEmphasis(para)}
+            </p>
+          ))}
         </div>
       </section>
 
       <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
           <div className="tag mb-3">the move</div>
-          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{reading.theMove}</p>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{withEmphasis(reading.theMove)}</p>
+          {reading.moveSteps && reading.moveSteps.length > 0 && (
+            <ol style={{ marginTop: 18, paddingLeft: 0, listStyle: "none" }}>
+              {reading.moveSteps.map((step, i) => (
+                <li key={i} style={{ display: "flex", gap: 12, marginTop: i === 0 ? 0 : 14 }}>
+                  <span
+                    style={{
+                      fontFamily: poppins,
+                      fontSize: 13,
+                      fontWeight: 800,
+                      color: "#3C2A70",
+                      opacity: 0.55,
+                      minWidth: 18,
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span style={{ fontSize: 14.5, lineHeight: 1.75, color: "#3C2A70", fontWeight: 500 }}>
+                    {withEmphasis(step)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
         </div>
       </section>
 

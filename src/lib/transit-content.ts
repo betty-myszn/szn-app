@@ -1,6 +1,8 @@
 import type { ChartData } from "@/types/chart";
+import { guideFor, type GuideSection } from "@/lib/transit-guides";
 import {
   SIGN_OVERVIEWS,
+  SIGN_TRAITS,
   HOUSE_MEANINGS,
   getBodyMeaning,
   interpretAspect,
@@ -26,6 +28,12 @@ export interface MajorTransitReading {
   dateLabel: string;
   emoji: string;
   whatThisIs: string;
+  /** The written general astrology, in headed sections, where this transit has a guide. */
+  sections?: GuideSection[];
+  /** The personalised layer as paragraphs, preferred by the page over inYourChart. */
+  chartParagraphs?: string[];
+  /** The move broken into actions, preferred by the page over theMove. */
+  moveSteps?: string[];
   inYourChart: string;
   bettysTake: string;
   theMove: string;
@@ -49,6 +57,41 @@ function dateLabelFor(date: string): string {
 
 export function composeMajorTransit(event: MajorTransitInput, chart: ChartData): MajorTransitReading {
   const dateLabel = dateLabelFor(event.date);
+
+  // A written guide takes the page over completely. The chart still drives it: the house the
+  // transiting sign falls in picks the personalised layer and the extra action, and her natal
+  // placement of the transiting planet opens that section, so two members reading the same guide
+  // are genuinely reading different pages.
+  const guide = event.sign ? guideFor(event.type, event.planet, event.sign) : null;
+  if (guide) {
+    const cusps = chart.houses.map((h) => h.longitude);
+    const transitHouse = houseForSign(event.sign!, cusps);
+    const houseMeaning = HOUSE_MEANINGS[transitHouse - 1];
+    const natal = chart.planets.find((p) => p.name === event.planet);
+    const natalLine = natal
+      ? `Your own ${event.planet.toLowerCase()} sits in ${natal.sign.toLowerCase()} in your ${ordinalHouse(natal.house)} house, which is the register all of this arrives in for you: ${SIGN_TRAITS[natal.sign]?.love ?? "your own particular way of loving and valuing"}.`
+      : null;
+    const houseParagraphs = guide.house[transitHouse] ?? [];
+
+    return {
+      title: guide.title,
+      dateLabel,
+      emoji: "\u2640",
+      whatThisIs: guide.hero,
+      sections: guide.sections,
+      inYourChart: houseParagraphs.join(" "),
+      chartParagraphs: [
+        ...houseParagraphs,
+        ...(natalLine ? [natalLine] : []),
+        `${houseMeaning.coach}`,
+      ],
+      bettysTake: guide.bettysTake.join("\n\n"),
+      theMove: guide.move.intro,
+      moveSteps: [...guide.move.steps, guide.move.byHouse[transitHouse]].filter(Boolean),
+      journalPrompt: guide.journalPrompt,
+      affirmation: guide.affirmation,
+    };
+  }
   const body = getBodyMeaning(toId(event.planet));
   const bodyLabel = body?.name ?? event.planet;
   const bodyDomain = body?.domain ?? "this part of life";
