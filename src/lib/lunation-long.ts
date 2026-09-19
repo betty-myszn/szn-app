@@ -413,6 +413,410 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       ],
     },
   },
+  Cancer: {
+    peak: {
+      bringsUp: [
+        `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
+
+        `A **Full Moon in Cancer** brings it to a head **in your feelings, usually all of them at once**. Cardinal water ruled by the Moon herself, Cancer governs home, family, memory, safety, mothering and being mothered, so this is the lunation with the least interest in your composure.`,
+
+        `Expect the volume up on everything domestic and emotional: the family group chat, the state of your flat, who remembered your birthday and who didn't, the conversation with your mother you've been having in your head since 2019. Crying at an advert is a legitimate Full Moon in Cancer activity and I won't hear otherwise.`,
+
+        `Because the Moon rules this sign, she's at full strength here, which means feelings arrive at their actual size rather than the manageable version you usually run. Something from years ago often attaches itself to something small from this week, and that's precisely why the intensity can seem waaaay out of proportion to what's actually going on.`,
+
+        `Cancer's genius is that it remembers. You know who has shown up for you, who went quiet when things got hard, and exactly what safety feels like in your body, which makes you very difficult to fool about people.`,
+
+        `The energy asks: **Who is holding me while I hold everybody else?**`,
+      ],
+      lookOutFor: [
+        `The shell is the signature move. You go quiet, you say you're fine, and a decision gets made about somebody who never knew a conversation was on the table.`,
+
+        `Hinting is the Cancer love language and it does not work. Going slightly cold, doing the thing pointedly so they notice, mentioning it sideways to a third party, all of it is a request written in a code nobody else has been given.`,
+
+        `Old feelings love this Moon. When the reaction is at nine and the situation is at four, the missing five usually belongs to something much older, and the person in front of you is being charged for it.`,
+
+        `Over-functioning creeps in fast. Caring turns into managing everybody's moods, pre-empting needs nobody voiced and taking responsibility for a room full of feelings that were never yours to fix.`,
+
+        `Resentment follows, as it always does when you've given past your own limit for months. It arrives sideways, because saying it directly would mean admitting you needed something, which this sign finds genuinely harder than carrying it.`,
+
+        `Nostalgia gets seductive here too. Cancer remembers everything, including a gently edited version of the past, and going back over it can feel like processing while it's really just aching in higher definition.`,
+
+        `Guilt turns up at the door the moment you rest, say no or put yourself first. It shows up automatically, and its appearance is not evidence that you've done something wrong.`,
+
+        `Snapping at somebody who came close to a soft spot is the other tell. Defensiveness is quicker than saying that one hurt, and considerably less effective.`,
+
+        `**You're allowed to be the one who gets looked after this week.**`,
+      ],
+      shadow: [
+        `The shadow of a Full Moon in Cancer is **the wound doing the talking**, and it's convincing because it isn't lying. The feeling is real. The hurt is real. What's skewed is the scale, because most of it belongs to something that happened long before this week.`,
+
+        `Here's the mechanism. Something lands at a five, it hits a nerve that's been tender since you were small, and suddenly you're at a nine, making decisions at nine, about a five, involving somebody with no idea what they just stepped on.`,
+
+        `Retreat is where it goes next. The shell closes, messages get shorter, the warmth drains out, and it feels like self-protection while functioning as punishment.`,
+
+        `Withdrawal is also a test, if you're honest. Part of you is waiting to see whether they come and find you, and either outcome gets filed as evidence about whether you're actually loved, which is an enormous amount of weight to put on somebody who wasn't told an exam was in progress.`,
+
+        `Care can become leverage without anybody deciding to make it so. Giving and giving builds a balance, and a balance nobody knows about eventually gets collected in a tone rather than a sentence.`,
+
+        `The martyr line lives here too: I'll just do it myself, it's fine, don't worry about me. Said often enough, that stops being generous and becomes a very effective way of never having to ask for anything.`,
+
+        `Smothering deserves a gentle mention. When you're frightened of losing somebody, love tips into monitoring, over-involvement and doing things for people who never asked, which pushes away the exact closeness you were reaching for.`,
+
+        `Underneath all of it sits one fear worth naming: that if you stopped holding everything together, you'd discover how little would be held for you.`,
+
+        `That fear has never actually been tested, because you've never stopped long enough to run the experiment.`,
+
+        `Start by separating the eras. Write what happened this week, then write the earliest version of the same feeling you can find, and look at how much of the intensity belongs to page two. That part isn't for the person in front of you.`,
+
+        `Do one thing that comforts you without proving anything to anybody. A bath, clean sheets, food you actually like, your own bed at nine, the phone in another room. Cancer regulates through care, and some of the care has to point at you or the whole system runs dry.`,
+
+        `Then ask for one thing directly. Out loud, no cushioning, no lengthy justification of why it's a reasonable request, to the person who can actually answer it.`,
+
+        `That's the entire practice, because this sign will hint for a year rather than risk a no, and the hinting is precisely what keeps you unmet.`,
+
+        `Water helps, predictably. Sea, bath, shower, rain, a long swim. Cancer is ruled by the tides and the body settles faster in water than it does in analysis.`,
+
+        `**Being needed feels like love and doesn't nourish like it. Let somebody feed you this week.**`,
+      ],
+    },
+  },
+
+  Capricorn: {
+    seed: {
+      bringsUp: [
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
+
+        `A **New Moon in Capricorn** aims the reset at **the long game**. Cardinal earth ruled by Saturn, Capricorn governs ambition, structure, authority, reputation, mastery and the architecture of an actual life, which makes this the most strategic Moon of the year and the least interested in vibes.`,
+
+        `What surfaces tends to be sobering in a useful way. Where you've been working extremely hard on something that isn't going where you want. Where you've been waiting to be chosen instead of building the thing. Where next year has been the answer for three consecutive years, and where busy has been standing in for progress.`,
+
+        `Saturn is the planet of time, structure and consequences, which sounds grim and is actually the whole gift. This Moon will show you what compounds. Small, boring, repeatable things done for twelve months build something nobody can take off you, and Capricorn is the only sign that finds that genuinely exciting.`,
+
+        `There's a lot to respect in what you've already built brick by brick with nobody clapping: the standards you hold when it would be easier not to, the promises you keep, the fact that people can rely on your word.`,
+
+        `The energy asks: **What am I building, and is my effort actually pointed at it?**`,
+      ],
+      lookOutFor: [
+        `Capricorn starts with the entire staircase. A plan gets designed so demanding that it assumes you'll never have a bad week, and then the first missed Tuesday reads as total failure.`,
+
+        `Borrowed goals are the expensive one. This sign will work extremely hard for a prize it doesn't want purely because the prize is respectable, and you can lose years being excellent at something that was never yours.`,
+
+        `Worth quietly becomes conditional on output. If the plan leaves no room in it for being a person, you've designed a machine for proving something rather than a route to anywhere.`,
+
+        `Pessimism does a convincing impression of realism. Deciding upfront how hard it'll be, how unlikely it is and how long it'll take sounds grounded while functioning perfectly as a reason to not begin.`,
+
+        `The long view can become a way of endlessly deferring the life you're saving up for. Playing the long game is Capricorn's genius, and someone has to actually live in the meantime.`,
+
+        `Doing it alone is the default setting, and it'll make this cycle twice as heavy as it needs to be. Handle it yourself, ask nobody, mention nothing, collapse privately in March.`,
+
+        `Measuring yourself against people at a completely different stage is the fastest way to discount everything you've already done, and this sign measures constantly.`,
+
+        `Rest keeps getting scheduled for after, and after keeps moving. A structure with no recovery built into it does not survive contact with a real year.`,
+
+        `**Build the thing you'd still want if nobody was watching. That one survives the years.**`,
+      ],
+      shadow: [
+        `The shadow of a New Moon in Capricorn is **worth earned through output**, and it's the hardest one to spot, because the world applauds it. You get promoted for it. It looks like discipline from every angle apart from the inside.`,
+
+        `The equation underneath was usually learned young: I'm acceptable when I'm useful. Produce, achieve, hold it all together, be the reliable one, and you get to feel alright about yourself for approximately one afternoon.`,
+
+        `Then the bar moves, which is the part that gives the whole thing away. No achievement settles it, because the achievement was never what you were chasing. Reassurance was, and reassurance has a shelf life measured in hours.`,
+
+        `Rest has to be earned before it's allowed, so it never quite is, and the resulting exhaustion gets filed under discipline rather than under warning sign.`,
+
+        `Self-criticism turns up in the costume of high standards. That voice would be considered cruel if you aimed it at a friend, and you'd never let anybody speak to somebody you love that way.`,
+
+        `Control has a hand in it too. Handling everything yourself feels safest, and it constructs a life where nobody helps because nobody was ever let in, and then the loneliness gets read as further proof that it all has to be done alone.`,
+
+        `Resentment pools underneath, aimed at people who were genuinely never given the chance to show up, which isn't really their crime.`,
+
+        `Coldness is the pressure release. Capricorn under strain cuts efficiently, ends things cleanly and goes businesslike with people who needed a human, then feels the cost months later when it's awkward to walk it back.`,
+
+        `Somewhere under all of it is a quiet fear of being found out, and working harder is the most socially rewarded way to keep that fear quiet.`,
+
+        `The way through is structural, because this sign keeps promises that have been built rather than intended. Put the rest into the plan first, in the diary, protected, where a busy fortnight can't negotiate it away.`,
+
+        `Write why you want this in one sentence with no mention of anybody else's approval. If it doesn't survive that edit, change the goal rather than the effort, because effort was never what was missing.`,
+
+        `Hand one thing over this cycle. One task, one responsibility, one piece somebody else could genuinely carry, chosen specifically because doing everything is the pattern rather than the strength.`,
+
+        `Then write what you'd say to somebody else in exactly your position. That's the fair standard, and it's the one you apply to everybody except yourself.`,
+
+        `Saturn rewards the unglamorous and repeatable, so pick something small enough to do on your worst week and do it for the whole cycle. That's the actual magic of this sign.`,
+
+        `**You were worth this before you built anything, and the building goes considerably better once it stops being evidence.**`,
+      ],
+    },
+  },
+
+  Leo: {
+    peak: {
+      bringsUp: [
+        `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
+
+        `A **Full Moon in Leo** brings it to a head **out loud, and usually in front of somebody**. Fixed fire ruled by the Sun, Leo governs self-expression, creativity, recognition, romance, play and pride, so this Moon wants to know how much of you has been kept offstage.`,
+
+        `What surfaces is anything you've been dimming. The work you stopped making because nobody responded last time, the thing you post and delete, the friendship where you're the entertainment and nobody asks how you are, the relationship where you've been performing low maintenance for somebody who'd have coped fine with the real thing.`,
+
+        `The Sun rules this sign, and the Sun doesn't share. Wanting to be seen, chosen and acknowledged gets loud this week, including the parts you'd never say out loud, and pride flares anywhere you've given generously and felt invisible for it.`,
+
+        `Leo is also the sign of play, which gets lost in all the talk about ego. Somewhere in there is a version of you that made things purely because it was funnnn, and this Moon tends to remind you she existed.`,
+
+        `The energy asks: **Where am I ready to stop auditioning for my own life?**`,
+      ],
+      lookOutFor: [
+        `Leo makes a scene where a conversation would do. Wounded pride arrives beautifully dressed as principle, and the grand gesture, the ultimatum, the very public exit all feel enormously justified at the time.`,
+
+        `The cold regal version costs exactly the same and takes longer. Going silent and waiting to be chased is still a performance, just one with worse odds.`,
+
+        `Applause becomes the measuring stick. When something only feels worth doing if somebody responds to it, you've handed the steering wheel to an audience that's mostly looking at its own phone.`,
+
+        `Looking unbothered is exhausting to maintain and stops anybody reaching you. This sign would frequently rather seem fine than admit to feeling small.`,
+
+        `Taking things personally is the occupational hazard. Somebody's bad week, slow reply or distraction lands as a verdict on your worth, when most of the time it's a verdict on their week.`,
+
+        `Other people's wins can sting under this Moon, and that sting is information. It's usually pointing directly at something you want and haven't let yourself say out loud.`,
+
+        `Generosity with strings attached is very Leo and rarely intentional. You give enormously, quietly expect to be adored for it, and the disappointment when that doesn't arrive turns into a resentment nobody saw coming.`,
+
+        `The apology you're refusing to make is probably one sentence long. Pride can hold a position for three weeks over something that would take thirty seconds to resolve.`,
+
+        `**Be seen doing the actual thing, not the version you think will be applauded.**`,
+      ],
+      shadow: [
+        `The shadow of a Full Moon in Leo is **pride guarding a very soft centre**, and the softness is the part nobody gets to see, which is exactly why the guarding gets so elaborate.`,
+
+        `Underneath the confidence sits an old question: am I genuinely special, or have I just been performing well? A bright sky makes that question loud, and everything you do next becomes an attempt to answer it.`,
+
+        `Performance is the obvious symptom. Bigger, funnier, more impressive, more generous, more ON, all of it running on the hope that enough response will settle something that response has never once settled.`,
+
+        `Making a shared situation about your part in it happens fast and usually without noticing. Being central feels considerably better than being overlooked, and that trade gets made in about four seconds.`,
+
+        `Needing to be right is the same fear wearing a suit. Backing down feels like being diminished in front of somebody, so the position gets defended long past the point of caring about it.`,
+
+        `Going first with an apology becomes almost impossible, because admitting fault feels like confirming the thing you're most afraid is true.`,
+
+        `There's shadow in the generosity too. Giving can turn into a way of purchasing love, and when the return doesn't come you're left with an invoice nobody agreed to and a feeling you can't name.`,
+
+        `Jealousy in Leo is really grief. Somebody got the thing, it stings, and underneath the sting is a want you haven't let yourself admit to, because admitting it means risking being seen not getting it.`,
+
+        `Dimming is the least obvious version and by far the most common. Shrinking preemptively so nobody can accuse you of thinking too much of yourself, then quietly resenting the room for not noticing you.`,
+
+        `Start by finding the hurt underneath the outrage and naming it privately in one sentence. Not the argument, not the principle, the wound, which is almost always some version of I felt unimportant.`,
+
+        `Then go and make something for nobody. Badly, unposted, unshared, no outcome attached. Leo shadow dissolves the moment you rediscover that you enjoy this without an audience, and that's the only reliable route back to actual confidence.`,
+
+        `Say the want out loud at full size to one person who loves you, skipping the modest version. A desire said out loud stops being something you can quietly downgrade at the first sign of difficulty.`,
+
+        `If there's an apology sitting there, go first. It costs nothing real and usually returns the exact closeness you were trying to force with a performance.`,
+
+        `Then do something purely for the pleasure of it, since the Sun rules vitality and this sign runs on joy rather than approval. Dance, dress up for the corner shop, sing in the car, flirt with your own life a bit.`,
+
+        `**You don't have to be the most impressive person in the room to deserve the room.**`,
+      ],
+    },
+  },
+
+  Aquarius: {
+    seed: {
+      bringsUp: [
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
+
+        `A **New Moon in Aquarius** aims the reset at **the future, and at who you are when nobody's supervising**. Fixed air ruled by Saturn traditionally and Uranus in the modern reading, Aquarius governs community, friendship, innovation, rebellion and the long view of where the whole thing is heading.`,
+
+        `Uranus is the planet of sudden change and unapologetic individuality, so this Moon tends to arrive with the urge to do it completely differently. Leave the group that stopped fitting, build the weird version of the business, stop attending the thing you've been attending out of habit since 2022, opt out of a norm you never actually agreed to.`,
+
+        `Friendship and belonging come into focus too, which surprises people who expect Aquarius to be all robots and revolution. Who your people are, which rooms you perform in, where you've been the slightly edited version of yourself to stay included.`,
+
+        `Aquarius sees the system rather than the individual scene, which is genuinely a superpower. You can usually spot the dynamic everybody else is inside of, and this Moon is a good moment to apply that clarity to your own life rather than everybody else's.`,
+
+        `The energy asks: **What would I build if I stopped waiting for it to be normal?**`,
+      ],
+      lookOutFor: [
+        `Aquarius can design an entire system and never once live inside it. The plan ends up elegant on paper, philosophically sound and completely abstracted from your actual Tuesday.`,
+
+        `Being different for its own sake is the other trap. Rejecting the ordinary option because it's ordinary rather than because it's wrong for you is still letting other people's choices set yours, just in reverse.`,
+
+        `Detachment arrives dressed as perspective. Rising above a feeling, analysing it beautifully and never actually having it is a very sophisticated way of not being in your own life.`,
+
+        `The group can quietly become the identity. Check whether the community you're in was chosen or simply inherited, and whether you'd pick these rooms again from scratch today.`,
+
+        `Independence is a superpower until it turns into never needing anybody, at which point it starts functioning as insurance against being disappointed.`,
+
+        `Ideas outnumbering execution is verrrry on brand. Fifteen brilliant concepts and no first step is a cycle spent thinking rather than building.`,
+
+        `Going remote is this sign's exit. When things get emotionally complicated, Aquarius can leave the room while still physically sitting in it.`,
+
+        `The future can swallow the present whole. Planning a life five years out is useful, and it makes a fantastic hiding place from a conversation that needs having on Thursday.`,
+
+        `**Build it with one actual human in it. Aquarius is a social sign, whatever the aloofness suggests.**`,
+      ],
+      shadow: [
+        `The shadow of a New Moon in Aquarius is **distance used as safety**, and it disguises itself brilliantly, because from the outside it reads as calm, rational and remarkably self-sufficient.`,
+
+        `Being the observer means never being the one who needs anything, and somewhere early on that probably kept you safe. Watching from slightly outside the group is a skill built by somebody who once didn't feel welcome inside it.`,
+
+        `It runs now as an independence so complete that nobody gets close enough to disappoint you, which also means nobody gets close enough to be much good to you either.`,
+
+        `Feelings get converted into analysis at speed. You can explain your own attachment style, name the dynamic, diagnose the pattern, and feel absolutely none of it, which the mind experiences as being on top of things.`,
+
+        `The personal keeps getting converted into a principle too, so the people involved end up dealing with your conclusion rather than with you.`,
+
+        `Contrarianism is the noisier version of the same defence. Arguing the other side is much safer than admitting you wanted to be included.`,
+
+        `Underneath sits an old certainty that you don't really belong anywhere, usually formed young, filed permanently, and never once updated with current evidence.`,
+
+        `That belief makes leaving feel clean and staying feel risky, which is why the clean cut can arrive looking like a boundary while behaving like an escape.`,
+
+        `There's also the quiet superiority that creeps in when you've spent years seeing what other people can't. Being right about the system is cold comfort if it keeps you outside every room in it.`,
+
+        `Put one actual person inside the plan this cycle. Aquarius builds best in company, and a beginning that exists only in your head has nobody to keep it honest or interesting.`,
+
+        `Name the feeling underneath the idea, plainly and in ordinary words. This sign will present a want as a principle, and a principle is waaaay harder to actually get.`,
+
+        `Stay in the room for one uncomfortable conversation you'd normally intellectualise your way out of. You can describe a dynamic brilliantly and still never say the sentence that matters, which is usually something as simple as that hurt my feelings.`,
+
+        `Then do something gloriously unstrategic with people. Aquarius rules the eleventh house of friendship for a reason, and community is the medicine as well as the theme.`,
+
+        `**Being understood requires being in the room, which is the one part this sign keeps trying to skip.**`,
+      ],
+    },
+  },
+
+  Virgo: {
+    peak: {
+      bringsUp: [
+        `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
+
+        `A **Full Moon in Virgo** brings it to a head **in the details, the routine and the body**. Mutable earth ruled by Mercury, Virgo governs work, health, systems, service, craft and the daily mechanics of a life, so this Moon tends to arrive as an accumulation rather than a bombshell.`,
+
+        `What surfaces is everything that's been quietly not working. The schedule that only functions if you never get ill, the job where you're doing two roles for one salary, the ache you've been ignoring since spring, the admin pile with genuine consequences in it, the habit you know is costing you and keep booking in for anyway.`,
+
+        `Mercury runs this sign, so the mind gets precise and slightly relentless. Clarity arrives about exactly what needs fixing and exactly whose job each piece is, which is enormously useful right up until the same sharpness turns inward at 2am.`,
+
+        `Virgo is the sign of genuine craft, and that's the part the memes miss. You care about doing things properly, and there's real satisfaction available this week in fixing one small thing with your own hands.`,
+
+        `The energy asks: **What have I been putting up with because sorting it felt like admitting it was a problem?**`,
+      ],
+      lookOutFor: [
+        `Clarity curdles into criticism fast under this Moon, aimed at yourself first and then at whoever is nearest and least deserving.`,
+
+        `One flaw can become the whole picture. Virgo will take a fixable situation, zoom in at maximum magnification and conclude the entire thing is fundamentally broken.`,
+
+        `Anxiety does an excellent impression of diligence. The 2am list, the rehearsed worst case, the ninth reread of a message, all of it presenting as responsibility while achieving nothing.`,
+
+        `Control turns up as helpfulness. Managing the details so tightly that nobody, including you, gets to be a human being in the process is exhausting for everybody involved.`,
+
+        `The perfectionism will stall the actual repair. Researching the ideal system for four days means four more days of the current one, which is not what the research was for.`,
+
+        `Martyrdom is the Virgo flavour of service. Doing everybody's unglamorous jobs without mentioning it, then feeling quietly furious that nobody noticed the invisible labour you deliberately kept invisible.`,
+
+        `Body stuff can get obsessive rather than caring under this Moon. There's a difference between listening to your body and putting it on trial.`,
+
+        `Comparison gets forensic. Virgo doesn't just notice somebody's doing better, it audits precisely how and by what margin, which is a brutal way to spend a Thursday.`,
+
+        `**Pick one small thing and actually fix it. This sign gets peace from doing, never from analysing.**`,
+      ],
+      shadow: [
+        `The shadow of a Full Moon in Virgo is **contempt with a clipboard**. The eye that finds what's wrong is a genuine gift, and under pressure it stops being in service of anything and becomes a running commentary on your own inadequacy with everybody else's as a supporting feature.`,
+
+        `It always sounds reasonable, which is the problem. Every individual criticism is technically accurate, and accuracy is how this shadow gets past security.`,
+
+        `The standard rises to meet whatever you achieve, so arrival never happens. Get the thing done, and the bar is already somewhere else, looking disappointed.`,
+
+        `Underneath is usually the belief that you're acceptable when useful, so rest requires justification and needing help feels like a design fault rather than a Tuesday.`,
+
+        `Control is the other face of it. If everything is managed tightly enough, nothing can go wrong, and the exhaustion of running that system gets filed as conscientiousness.`,
+
+        `Perfectionism protects you from being seen trying. A thing that isn't finished can't be judged, so the endless improving is a genuinely clever way of never submitting anything.`,
+
+        `Then there's the tidying that isn't change. Reorganising the drawer, colour-coding the tracker, rewriting the plan, all while the actual difficult thing sits exactly where it was.`,
+
+        `The criticism leaks outward eventually, usually at the people closest to you, and usually in the form of a small correction that wasn't necessary.`,
+
+        `Somewhere in it is a fear of being the one who got it wrong, which is why the double-checking never quite finishes.`,
+
+        `Separate what's yours to fix from what you're simply carrying. Two honest columns, and hand the second list back in your own head before you try to act on any of it.`,
+
+        `Then repair one thing today, small and concrete. Virgo shadow dissolves in useful action and absolutely thrives on lists that never get touched.`,
+
+        `Set a done line before you start the next thing, deliberately modest, decided in advance, so the goalposts can't quietly relocate while you're working.`,
+
+        `Give the body something kind rather than corrective: a walk without tracking it, an early night, actual food, hands in something physical. This sign holds stress in the gut, and the nervous system needs the message that it isn't being assessed.`,
+
+        `Then leave one thing imperfect on purpose and let it be fine. That's the whole practice, and it will feel deranged for about three days.`,
+
+        `**Your standards are a gift when they're pointed at the work. Pointed at you, they just slow the work down.**`,
+      ],
+    },
+  },
+
+  Pisces: {
+    seed: {
+      bringsUp: [
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
+
+        `A **New Moon in Pisces** starts things **without edges**. Mutable water ruled by Jupiter traditionally and Neptune in the modern reading, Pisces governs dreams, imagination, spirituality, compassion, art, escape and everything that refuses to be measured.`,
+
+        `This reset rarely arrives as a plan. It turns up as a pull: toward making something, resting properly, praying or meditating or whatever your version of that is, forgiving somebody, or finally admitting you're exhausted in a way sleep hasn't touched.`,
+
+        `Neptune dissolves boundaries, which is the gift and the whole warning. Intuition runs unusually high, dreams get vivid and strange, and other people's moods come in through the walls, so it's often hard to work out which feelings in the room are actually yours.`,
+
+        `Pisces holds the end of the zodiac, so there's a completion flavour to it too. Something usually wants finishing or forgiving before the next cycle can properly begin, and this Moon is unusually good at that kind of soft ending.`,
+
+        `The energy asks: **What am I being called toward that doesn't make practical sense yet?**`,
+      ],
+      lookOutFor: [
+        `Pisces beginnings dissolve if nothing holds them. A whole cycle can disappear into the beautiful version of the idea while the first practical step never gets a date in the diary.`,
+
+        `Vagueness is the disguise. When the intention is unformed enough, anything counts as progress, which means nothing does and nobody can measure the disappointment.`,
+
+        `Saying yes to everybody else's beginning is the quickest way to lose your own. This sign will pour a whole month into somebody else's crisis and call it kindness.`,
+
+        `Escape gets creative under this Moon: the wine, the scroll, the nap, the situationship, the fantasy of a completely different life in a completely different country. All soothing, all extremely effective at postponing the concrete thing.`,
+
+        `Rescuing somebody who hasn't asked to be rescued is very Pisces and rarely ends in gratitude. It also conveniently keeps you busy with a problem that isn't yours.`,
+
+        `Boundaries go soft precisely when you need them, so this is the fortnight where you agree to things at nine in the evening that horrify you at nine in the morning.`,
+
+        `Idealising people is the other hazard. Neptune makes it easy to fall for potential, then spend months negotiating with somebody who was never actually offering it.`,
+
+        `Exhaustion arrives sideways too. A sensitive system picking up a whole room's worth of emotional weather gets tired in a way that looks like laziness from the outside and isn't.`,
+
+        `**Give the dream one hard edge this week, or the water goes everywhere.**`,
+      ],
+      shadow: [
+        `The shadow of a New Moon in Pisces is **escape that looks like softness**, and it's the gentlest, most forgivable shadow in the zodiac, which is exactly why it runs for years without being challenged.`,
+
+        `When the beginning asks for something concrete, Pisces drifts: back to the dream, the distraction, the substance, the rescue mission, the long bath of imagining it rather than doing it.`,
+
+        `The fantasy quietly replaces the pursuit. Imagining the finished thing delivers a version of the same feeling, at zero risk, which makes it very hard to give up.`,
+
+        `Martyrdom is the other route out. Giving away so much of yourself that there's nothing left to begin with is a socially applauded way of never having to try for your own thing.`,
+
+        `Then comes the story where you had no power at all. Sometimes that's true, and Pisces will reach for it even when it isn't, because being swept along hurts less than having chosen.`,
+
+        `Boundaries are the practical shadow. Without them you absorb moods that aren't yours, take responsibility for feelings you didn't cause and end up resentful about things you volunteered for.`,
+
+        `Vagueness protects you from failure. A goal nobody can measure is a goal nobody can watch you miss, including you.`,
+
+        `There's often real grief underneath, unprocessed and old, and the numbing exists to keep it at a workable distance. Naming that is kinder and more accurate than calling yourself lazy.`,
+
+        `Start by giving the dream one hard edge: a date, an hour in the diary, one person who expects it. This sign needs a container or the whole thing pools on the floor.`,
+
+        `Write down what you feel before deciding what it means, then split the page into what's yours and what you absorbed. Pisces will not find that line on its own and it changes everything once drawn.`,
+
+        `Name what you're avoiding by keeping this vague. One sentence, no poetry, and it'll usually be embarrassingly obvious once it's written.`,
+
+        `Protect one piece of this week for yourself before giving the rest away, because the giving is automatic and the keeping has to be deliberate.`,
+
+        `Make something physical with the feeling: paint, write, sing, swim, dance, cook, get it out of the mist and into an object. Neptune energy needs a form or it becomes fog and then it becomes a nap.`,
+
+        `**You're allowed to want something specific. Wanting it precisely doesn't make you less soft.**`,
+      ],
+    },
+  },
+
 };
 
 /** The whole section, opener included, for the moon page. Null when this sign is not written yet. */
