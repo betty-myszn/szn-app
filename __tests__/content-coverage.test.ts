@@ -20,6 +20,7 @@ import {
   houseForSign,
 } from "@/lib/interpretations";
 import { composeLunation, type CalendarEventInput } from "@/lib/moon-content";
+import { LUNATION_SIGNS } from "@/lib/lunation-signs";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { SEASONS } from "@/lib/seasons";
@@ -555,4 +556,27 @@ describe("eclipse readings add the nodal-axis depth", () => {
       }
     }
   });
+});
+
+// Every lunation reading now leans on per-sign copy for what it brings up, what to watch, the
+// shadow and how to work it. A sign missing from that table silently falls back to the old generic
+// trait line, which is exactly the thinness this audit exists to catch, so check all twelve.
+describe("lunation sign copy", () => {
+  for (const sign of SIGNS) {
+    for (const phase of ["seed", "peak"] as const) {
+      for (const field of ["brings", "watch", "shadow", "work"] as const) {
+        it(`${sign} ${phase} ${field} is real, sign-specific copy`, () => {
+          const entry = LUNATION_SIGNS[sign];
+          expect(entry).toBeDefined();
+          const line = entry[phase][field]("identity");
+          expect(line.length).toBeGreaterThan(200);
+          expect(line.toLowerCase()).toContain(sign.toLowerCase());
+          expect(line).toContain("identity");
+          for (const marker of PLACEHOLDER_MARKERS) {
+            expect(line).not.toContain(marker);
+          }
+        });
+      }
+    }
+  }
 });

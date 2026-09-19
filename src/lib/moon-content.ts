@@ -13,6 +13,7 @@ import {
   type SignTraits,
   type HouseMeaning,
 } from "@/lib/interpretations";
+import { signLine } from "@/lib/lunation-signs";
 import { composeNodeIngress } from "@/lib/nodal-content";
 import { composeEclipse } from "@/lib/eclipse-content";
 
@@ -42,9 +43,23 @@ export interface CalendarEventInput {
 interface SectionCtx {
   area: string;
   sign: string; // lowercased, for prose
+  signKey: string; // capitalised, for looking the sign's own lunation copy up
+  type: LunationType;
   traits: SignTraits;
   houseMeaning: HouseMeaning;
 }
+
+// Sections are written as paragraphs joined by a blank line, which the page splits and renders as
+// separate <p>s. Nulls drop out, so an event with no sign-specific material behind it still gets a
+// complete section rather than a gap.
+function paras(...parts: (string | null | undefined)[]): string {
+  return parts.filter((part): part is string => !!part).join("\n\n");
+}
+
+// What this sign does at this end of the lunar cycle, from lunation-signs.ts. A full moon in aries
+// and a full moon in pisces are genuinely different weeks, and these are the paragraphs that say so.
+const ofSign = (c: SectionCtx, field: "brings" | "watch" | "shadow" | "work") =>
+  signLine(c.signKey, c.type, field, c.area);
 
 // A distinct, do-it-this-week practice built from the reading, not a reused prompt. Each event type
 // supplies its own, personalised to the house the event lands in.
@@ -95,11 +110,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
       `What I start now has the whole cycle to become something.`,
     ],
     bringsUp: (c) =>
-      `A new moon rarely lands as an event. It tends to show up as a quiet restlessness around your ${c.area}, a fresh idea you cannot quite put down, a sense that a chapter could begin here if you let it. What surfaces now is possibility with nowhere to go yet, so the thing worth watching is whatever you keep almost letting yourself want.`,
+      paras(
+        `A new moon rarely lands as an event. It tends to show up as a quiet restlessness around your ${c.area}, a fresh idea you cannot quite put down, a sense that a chapter could begin here if you let it. What surfaces now is possibility with nowhere to go yet, so the thing worth watching is whatever you keep almost letting yourself want.`,
+        ofSign(c, "brings"),
+      ),
     lookOutFor: (c) =>
-      `The classic misfire here is treating a new moon as a wish instead of a decision. A woolly intention gives you a woolly result, and nothing you plant tonight shows a harvest by the weekend, so notice the impatience that wants proof immediately. When this energy tips, your ${c.sign} side reaches for ${c.traits.shadow}, and around your ${c.area} that is usually the exact voice that talks you out of beginning.`,
+      paras(
+        `The classic misfire here is treating a new moon as a wish instead of a decision. A woolly intention gives you a woolly result, and nothing you plant tonight shows a harvest by the weekend, so notice the impatience that wants proof immediately.`,
+        ofSign(c, "watch"),
+      ),
     shadowLine: (c) =>
-      `The shadow a new moon tends to expose is ${c.traits.shadow}. It shows up here as the reason not to start: the plan quietly shelved, the intention softened until it asks nothing of you, the fresh page left blank because a blank page cannot fail. Around your ${c.area}, catching that reflex as it happens is most of the work.`,
+      paras(
+        ofSign(c, "shadow") ??
+          `The shadow a new moon tends to expose is ${c.traits.shadow}. It shows up here as the reason not to start: the plan quietly shelved, the intention softened until it asks nothing of you, the fresh page left blank because a blank page cannot fail.`,
+        ofSign(c, "work"),
+      ),
     exercise: (c) => ({
       title: "the new moon intention",
       intro: `Give the next cycle something specific to grow. Ten quiet minutes, tonight or tomorrow.`,
@@ -127,11 +152,21 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
       `What is complete in my ${area} is allowed to be complete.`,
     ],
     bringsUp: (c) =>
-      `A full moon brings things to a head. Something that has been building quietly for the last fortnight around your ${c.area} tends to become impossible to ignore now, emotionally, practically, or both at once. Feelings run higher and clarity arrives whether or not you asked for it, and what you have been half-avoiding usually chooses this week to make itself plain.`,
+      paras(
+        `A full moon brings things to a head. Something that has been building quietly for the last fortnight around your ${c.area} tends to become impossible to ignore now, emotionally, practically, or both at once. Feelings run higher and clarity arrives whether or not you asked for it, and what you have been half-avoiding usually chooses this week to make itself plain.`,
+        ofSign(c, "brings"),
+      ),
     lookOutFor: (c) =>
-      `The danger of a full moon is mistaking a strong feeling for a mandate to burn something down. The information surfacing now is real, but the middle of a culmination is the worst possible moment to make an irreversible decision about it. When the pressure peaks your ${c.sign} wiring can tip into ${c.traits.shadow}, and around your ${c.area} that is what turns a moment of clarity into a mess you spend a month clearing up.`,
+      paras(
+        `The danger of a full moon is mistaking a strong feeling for a mandate to burn something down. The information surfacing now is real, but the middle of a culmination is the worst possible moment to make an irreversible decision about it.`,
+        ofSign(c, "watch"),
+      ),
     shadowLine: (c) =>
-      `The shadow a full moon lights up is ${c.traits.shadow}. Under a bright sky it stops being subtle: it is the thing you do around your ${c.area} when you feel exposed and want the discomfort to stop. Seeing it clearly, without acting on it in the same breath, is the whole point of the light.`,
+      paras(
+        ofSign(c, "shadow") ??
+          `The shadow a full moon lights up is ${c.traits.shadow}. Under a bright sky it stops being subtle: it is the thing you do around your ${c.area} when you feel exposed and want the discomfort to stop.`,
+        ofSign(c, "work"),
+      ),
     exercise: (c) => ({
       title: "the full moon release",
       intro: `Work with what this has surfaced instead of reacting to it. Fifteen minutes, ideally once the feeling has peaked rather than during it.`,
@@ -159,11 +194,22 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
       `I do not need to earn the opportunity that is already reaching me.`,
     ],
     bringsUp: (c) =>
-      `This one sits on the fated axis, so it is a redirection rather than a seed you plant. Expect something around your ${c.area} to actually move: an opening, an offer, a beginning that arrives on its own timeline rather than the one you planned. Eclipses do not wait to be tended, so what would normally take a season can land in a fortnight.`,
+      paras(
+        `This one sits on the fated axis, so it is a redirection rather than a seed you plant. Expect something around your ${c.area} to actually move: an opening, an offer, a beginning that arrives on its own timeline rather than the one you planned. Eclipses do not wait to be tended, so what would normally take a season can land in a fortnight.`,
+        ofSign(c, "brings"),
+      ),
     lookOutFor: (c) =>
-      `The trap is forcing a decision to match the intensity. Eclipses reveal the choice already being made underneath the surface, so manufacturing a dramatic move to feel in control usually backfires. When the pressure spikes your ${c.sign} wiring can tip into ${c.traits.shadow}, and around your ${c.area} that is what pushes you to grab at something before it is ready.`,
+      paras(
+        `The trap is forcing a decision to match the intensity. Eclipses reveal the choice already being made underneath the surface, so manufacturing a dramatic move to feel in control usually backfires.`,
+        ofSign(c, "watch"),
+      ),
     shadowLine: (c) =>
-      `The shadow an eclipse exposes is ${c.traits.shadow}, and an eclipse does not do subtle. Around your ${c.area} it surfaces fast and often in public, which is uncomfortable and also the most honest information this window gives you.`,
+      paras(
+        ofSign(c, "shadow") ??
+          `The shadow an eclipse exposes is ${c.traits.shadow}, and an eclipse does not do subtle.`,
+        ofSign(c, "work"),
+        `An eclipse runs all of that at double speed and often in front of other people, which stings around your ${c.area} and is also the most honest information this whole window hands you.`,
+      ),
     exercise: (c) => ({
       title: "the eclipse watch",
       intro: `Eclipses are for noticing, not forcing. Keep this light and observational across the fortnight after it.`,
@@ -191,11 +237,22 @@ const EVENT_TYPE_META: Record<Exclude<LunationType, "node_ingress">, EventTypeMe
       `I am allowed to rest while this settles.`,
     ],
     bringsUp: (c) =>
-      `This one sits on the fated axis, so it closes rather than merely illuminates. Something around your ${c.area} that has been building is completed for you rather than by you: an ending arrives, a truth becomes undeniable, a chapter shuts on a timeline that is not yours to negotiate.`,
+      paras(
+        `This one sits on the fated axis, so it closes rather than merely illuminates. Something around your ${c.area} that has been building is completed for you rather than by you: an ending arrives, a truth becomes undeniable, a chapter shuts on a timeline that is not yours to negotiate.`,
+        ofSign(c, "brings"),
+      ),
     lookOutFor: (c) =>
-      `The trap is trying to keep alive something that is genuinely ending. Eclipses complete things you have been extending past their expiry, and clutching harder now usually just makes the closure louder. If your ${c.sign} side tips into ${c.traits.shadow}, around your ${c.area} it will dress avoidance up as loyalty.`,
+      paras(
+        `The trap is trying to keep alive something that is genuinely ending. Eclipses complete things you have been extending past their expiry, and clutching harder now usually just makes the closure louder.`,
+        ofSign(c, "watch"),
+      ),
     shadowLine: (c) =>
-      `The shadow a lunar eclipse reveals is ${c.traits.shadow}, and it tends to be whatever you have been doing to avoid an ending around your ${c.area}. The eclipse takes the choice out of your hands, which is the hard mercy of it.`,
+      paras(
+        ofSign(c, "shadow") ??
+          `The shadow a lunar eclipse reveals is ${c.traits.shadow}, and it tends to be whatever you have been doing to avoid an ending around your ${c.area}.`,
+        ofSign(c, "work"),
+        `The eclipse takes the choice out of your hands rather than waiting for you to make it, which is the hard mercy of this one.`,
+      ),
     exercise: (c) => ({
       title: "the eclipse release",
       intro: `Work with the ending instead of against it. Twenty minutes, gently.`,
@@ -461,7 +518,14 @@ export function composeLunation(event: CalendarEventInput, chart: ChartData, now
 
   // The four personalised sections Betty asked every reading to carry, plus the exercise that
   // replaces the old one-line "move". The chart breakdown above is section one (what it lights up).
-  const ctx: SectionCtx = { area: houseArea, sign: event.sign.toLowerCase(), traits, houseMeaning };
+  const ctx: SectionCtx = {
+    area: houseArea,
+    sign: event.sign.toLowerCase(),
+    signKey: event.sign,
+    type: event.type,
+    traits,
+    houseMeaning,
+  };
 
   return {
     title: `${meta.label} in ${event.sign.toLowerCase()}`,

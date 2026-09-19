@@ -33,8 +33,9 @@ interface MajorTransit {
   type: "ingress" | "retrograde_start" | "retrograde_end" | "aspect";
   date: string;
   planet: string;
-  sign?: string; // for ingress, and the sign the planet is standing in for retrograde events
+  sign?: string; // for ingress, the sign the planet stations in for retrograde events, and the first planet's sign for an aspect
   otherPlanet?: string; // for aspect
+  otherSign?: string; // for aspect: the sign the second planet is standing in
   aspectType?: "conjunction" | "sextile" | "square" | "trine" | "opposition";
 }
 
@@ -125,6 +126,21 @@ function angularSeparation(jd: number, idA: number, idB: number): number {
   return diff > 180 ? 360 - diff : diff;
 }
 
+// A station is the moment a planet's apparent speed crosses zero. The scan below steps two days at
+// a time, which on its own announces a station up to two days after it happened and reads the sign
+// off the wrong day, so each crossing is bisected to the moment itself. That matters more than it
+// sounds: the cards now name the sign a planet stations in, and a planet stationing within a couple
+// of degrees of a cusp would otherwise be reported in the sign it had already left.
+function refineStation(bodyId: number, lo: number, hi: number): number {
+  const wasRetro = calcAt(lo, bodyId).speed < 0;
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2;
+    if ((calcAt(mid, bodyId).speed < 0) === wasRetro) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
 function refineSeparation(idA: number, idB: number, lo: number, hi: number, target: number): number {
   const f = (jd: number) => angularSeparation(jd, idA, idB) - target;
   const signLo = f(lo) < 0;
@@ -172,12 +188,14 @@ function scanMajorTransits(startJd: number): MajorTransit[] {
 
     for (const body of OUTER_BODIES) {
       const point = calcAt(jd, body.id);
-      const { sign } = signAt(point.longitude);
-      if (prevRetroSpeed[body.name] >= 0 && point.speed < 0) {
-        events.push({ type: "retrograde_start", date: jdToIso(jd), planet: body.name, sign });
-      }
-      if (prevRetroSpeed[body.name] < 0 && point.speed >= 0) {
-        events.push({ type: "retrograde_end", date: jdToIso(jd), planet: body.name, sign });
+      const turned =
+        prevRetroSpeed[body.name] >= 0 && point.speed < 0 ? "retrograde_start" as const
+        : prevRetroSpeed[body.name] < 0 && point.speed >= 0 ? "retrograde_end" as const
+        : null;
+      if (turned) {
+        const exact = refineStation(body.id, jd - step, jd);
+        const { sign } = signAt(calcAt(exact, body.id).longitude);
+        events.push({ type: turned, date: jdToIso(exact), planet: body.name, sign });
       }
       prevRetroSpeed[body.name] = point.speed;
     }
@@ -190,7 +208,15 @@ function scanMajorTransits(startJd: number): MajorTransit[] {
         const isBelow = sep < angle;
         if (wasBelow !== isBelow) {
           const exact = refineSeparation(idA, idB, jd - step, jd, angle);
-          events.push({ type: "aspect", date: jdToIso(exact), planet: nameA, otherPlanet: nameB, aspectType: type });
+          events.push({
+            type: "aspect",
+            date: jdToIso(exact),
+            planet: nameA,
+            sign: signAt(calcAt(exact, idA).longitude).sign,
+            otherPlanet: nameB,
+            otherSign: signAt(calcAt(exact, idB).longitude).sign,
+            aspectType: type,
+          });
         }
       }
       prevSep[key] = sep;

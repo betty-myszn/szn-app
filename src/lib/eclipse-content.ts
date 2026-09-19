@@ -7,6 +7,7 @@
 // cosmic coach, British spellings, no jargon left unexplained.
 
 import type { ChartData } from "@/types/chart";
+import { signLine } from "@/lib/lunation-signs";
 import {
   SIGN_TRAITS,
   HOUSE_MEANINGS,
@@ -329,6 +330,12 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
   // not just charts with planets in the eclipse house: the house's own life areas, the axis, the
   // sign and the node end give enough real material to say something specific to her the whole way
   // down, which is the difference between a reading and a horoscope.
+  // What this eclipse's sign actually does at this end of the cycle, written per sign in
+  // lunation-signs.ts, so a lunar eclipse in aries and one in pisces are not the same paragraph with
+  // one phrase changed. Falls back to the trait line if a sign is ever missing from that table.
+  const signOf = (field: "brings" | "watch" | "shadow" | "work") =>
+    signLine(event.sign, event.type, field, eclipseArea);
+
   const areasLong = eh.lifeAreas.slice(0, 3).join(", ");
   const farAreas = fh.lifeAreas.slice(0, 2).join(" and ");
 
@@ -338,7 +345,8 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
 
         `Because this lands in your ${ordinalHouse(eclipseHouse)} house of ${eh.title}, it will show up through ${areasLong} rather than as a vague mood. Watch for it arriving through other people: a conversation you did not schedule, a decision someone else makes, a situation that resolves itself without asking your permission. That is characteristic of a lunar eclipse. It tends to deliver the news through the outside world rather than through a quiet inner realisation, which is exactly why it can feel like it came out of nowhere when in truth it has been building for months.`,
 
-        `It will move in a ${eSign} way, not a tidy one, because ${traits.essence} is the flavour this eclipse is working through. So the ending, the reveal or the reckoning is likely to carry that signature: the pace of it, the tone of it, the way it asks to be handled. If you have been expecting this area of your life to change politely and gradually, ${eSign} is not the sign that does that.`,
+        signOf("brings") ??
+          `It will move in a ${eSign} way, not a tidy one, because ${traits.essence} is the flavour this eclipse is working through. So the ending, the reveal or the reckoning is likely to carry that signature: the pace of it, the tone of it, the way it asks to be handled.`,
 
         `The other end of the axis is involved too, even though the spotlight is here. Your ${ordinalHouse(farHouse)} house of ${fh.title} holds the counterweight, so what gets forced around your ${eclipseArea} will almost certainly have consequences for ${farAreas}. Eclipses rebalance a whole axis rather than a single room, and the pressure you feel is usually the two ends being pulled into a truer proportion with each other.`,
 
@@ -353,7 +361,8 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
 
         `Because this lands in your ${ordinalHouse(eclipseHouse)} house of ${eh.title}, it will show up through ${areasLong} specifically. The shift is often visible to other people before it is fully clear to you, so do not be surprised if someone comments on the change while you are still deciding whether anything has actually happened. That lag between the outside world noticing and you catching up is one of the most reliable signatures of a solar eclipse in a house.`,
 
-        `It will arrive in a ${eSign} way, because ${traits.essence} is the register this eclipse is operating in. That shapes what the opening looks like and how it wants to be answered, and it is worth naming, because an opportunity that arrives in a ${eSign} tone can be easy to misread if you were waiting for it to look like something more familiar.`,
+        signOf("brings") ??
+          `It will arrive in a ${eSign} way, because ${traits.essence} is the register this eclipse is operating in. That shapes what the opening looks like and how it wants to be answered, and an opportunity arriving in a ${eSign} tone is easy to misread if you were waiting for it to look like something more familiar.`,
 
         `The far end of the axis carries this too. Your ${ordinalHouse(farHouse)} house of ${fh.title} is the counterweight, so anything beginning around your ${eclipseArea} will ask something of ${farAreas} in return. Time, attention, priority, or a rebalancing you have been putting off. New things are rarely free of consequence elsewhere, and knowing which room pays the cost lets you choose deliberately rather than discover it later.`,
 
@@ -367,7 +376,10 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
   const lookOutFor = [
     `The eclipse trap is forcing a decision to match the intensity. What is genuinely shifting is already in motion, and manufacturing drama so you feel in control of it tends to make the whole thing louder and messier than it needed to be. The urge to act is not evidence that acting is right. Very often it is just the discomfort of not yet knowing.`,
 
-    `When the pressure spikes, your ${eSign} wiring can tip into ${traits.shadow}, and around your ${eclipseArea} that is exactly the reflex that will push you to grab, cling or blow something up before the picture is clear. Knowing your own tell here is most of the defence. The moment you catch that specific flavour of urgency rising, you can name it as the eclipse rather than as instruction.`,
+    signOf("watch") ??
+      `When the pressure spikes, your ${eSign} wiring can tip into ${traits.shadow}, and around your ${eclipseArea} that is exactly the reflex that will push you to grab, cling or blow something up before the picture is clear.`,
+
+    `Knowing your own tell here is most of the defence, because the moment you catch that specific flavour of urgency rising you can name it as the eclipse rather than take it as instruction.`,
 
     `Concretely, watch for the urge to send the message at midnight, to demand a definite answer from someone who has not finished thinking, to quit or confess or commit purely because the tension has become unbearable to sit inside. Watch too for the quieter version: going cold, withdrawing without explanation, or deciding something about ${farAreas} in your head and acting on it before anyone else knows there was a conversation to have.`,
 
@@ -379,7 +391,11 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
   ].join("\n\n");
 
   const shadow = [
-    `The shadow this eclipse exposes is ${traits.shadow}, and an eclipse does not do subtle. Around your ${eclipseArea} it surfaces fast and often in front of other people, which stings and is also the most honest information this whole window hands you.`,
+    signOf("shadow") ??
+      `The shadow this eclipse exposes is ${traits.shadow}, and an eclipse does not do subtle. Around your ${eclipseArea} it surfaces fast and often in front of other people, which stings and is also the most honest information this whole window hands you.`,
+
+    signOf("work") ??
+      `Eclipse pressure runs all of that at speed, so the practice is to catch it in the moment rather than to solve it this week.`,
 
     `Shadow here means the part of the pattern that runs automatically, usually because it protected you at some point and was never consciously retired. Under eclipse pressure it fires before you can choose, which is precisely why an eclipse is such an efficient way to see it. You get to watch your own default in real time, while it is happening.`,
 

@@ -35,6 +35,7 @@ interface MajorTransit {
   planet: string;
   sign?: string;
   otherPlanet?: string;
+  otherSign?: string;
   aspectType?: "conjunction" | "sextile" | "square" | "trine" | "opposition";
 }
 
@@ -152,11 +153,18 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
         : t.type === "aspect" ? `${t.planet} ${t.aspectType} ${t.otherPlanet}`
         : t.type === "retrograde_start" ? `${t.planet} retrograde`
         : `${t.planet} direct`;
+      // Every card names the sign the event happens in, the same way the lunations do, because "venus
+      // retrograde" and "venus retrograde in scorpio" are not the same transit to read.
+      const inSign = t.sign ? ` in ${t.sign.toLowerCase()}` : "";
+      const between =
+        t.sign && t.otherSign
+          ? `${t.planet} in ${t.sign.toLowerCase()} and ${t.otherPlanet} in ${t.otherSign.toLowerCase()}`
+          : `${t.planet} and ${t.otherPlanet}`;
       const body =
         t.type === "ingress" ? `${t.planet} moves into ${t.sign?.toLowerCase()}. A slow, whole-era shift, not a today thing.`
-        : t.type === "aspect" ? `A rare ${t.aspectType} between ${t.planet} and ${t.otherPlanet}, the backdrop the collective is working with.`
-        : t.type === "retrograde_start" ? `${t.planet} turns retrograde, its domain turns inward for review.`
-        : `${t.planet} turns direct, the review clears and forward motion gets reliable again.`;
+        : t.type === "aspect" ? `A rare ${t.aspectType} between ${between}, the backdrop the collective is working with.`
+        : t.type === "retrograde_start" ? `${t.planet} turns retrograde${inSign}, its domain turns inward for review.`
+        : `${t.planet} turns direct${inSign}, the review clears and forward motion gets reliable again.`;
       cards.push({
         key: `${t.type}-${t.date}-${t.planet}`,
         date: t.date,
@@ -168,6 +176,7 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
           `/your-season/transit?type=${t.type}&date=${t.date}&planet=${encodeURIComponent(t.planet)}` +
           (t.sign ? `&sign=${encodeURIComponent(t.sign)}` : "") +
           (t.otherPlanet ? `&otherPlanet=${encodeURIComponent(t.otherPlanet)}` : "") +
+          (t.otherSign ? `&otherSign=${encodeURIComponent(t.otherSign)}` : "") +
           (t.aspectType ? `&aspectType=${t.aspectType}` : ""),
       });
     }
