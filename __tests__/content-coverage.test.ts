@@ -20,13 +20,19 @@ import {
   houseForSign,
 } from "@/lib/interpretations";
 import { composeLunation, type CalendarEventInput } from "@/lib/moon-content";
-import { LUNATION_SIGNS, phaseForLunation } from "@/lib/lunation-signs";
-import { longSection } from "@/lib/lunation-long";
+import { LUNATION_LONG, longSection, phaseForLunation } from "@/lib/lunation-long";
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { composeLifeArea, LIFE_AREAS } from "@/lib/life-areas";
 import { SEASONS } from "@/lib/seasons";
 
 const SIGNS: string[] = [...ZODIAC_SIGNS];
+
+// Every paragraph Betty's per-sign copy contributes, longest first so a paragraph that contains
+// another one is removed before its substring is.
+const ALL_LONG_PARAGRAPHS: string[] = Object.values(LUNATION_LONG)
+  .flatMap((phases) => Object.values(phases))
+  .flatMap((sections) => [...sections.bringsUp, ...sections.lookOutFor, ...(sections.shadow ?? [])])
+  .sort((a, b) => b.length - a.length);
 const HOUSES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 // Every planet id the composition layer can read a ruler or life-area body through.
@@ -558,37 +564,62 @@ describe("eclipse readings add the nodal-axis depth", () => {
         // per-sign sections in lunation-long.ts land whole and deliberately ask one ("Where am I
         // ready to choose myself more boldly?"), so they are held to her draft rather than to this
         // rule, and everything the engine composes is still checked.
-        const phase = phaseForLunation(type);
-        const handWritten = new Set(
-          (["bringsUp", "lookOutFor", "shadow"] as const)
-            .map((section) => longSection(sign, phase, section))
-            .filter(Boolean) as string[],
-        );
-        expect(parts.filter((part) => !handWritten.has(part)).join(" ")).not.toMatch(/\?/);
+        // Hand-written sign copy lands whole in a lunation reading and in excerpts inside an
+        // eclipse one, so it is stripped out by text rather than by identity before the check.
+        let composed = parts.join(" ");
+        for (const written of ALL_LONG_PARAGRAPHS) composed = composed.split(written).join(" ");
+        expect(composed).not.toMatch(/\?/);
       }
     }
   });
 });
 
-// Every lunation reading now leans on per-sign copy for what it brings up, what to watch, the
-// shadow and how to work it. A sign missing from that table silently falls back to the old generic
-// trait line, which is exactly the thinness this audit exists to catch, so check all twelve.
+// Every lunation reading is the sign's own copy now, written per sign and per end of the cycle in
+// lunation-long.ts. A missing sign falls back to a single generic guard paragraph, which is exactly
+// the thinness this audit exists to catch, so all twenty four combinations are checked here.
 describe("lunation sign copy", () => {
+  const PHASES = ["seed", "peak"] as const;
+  const SECTIONS = ["bringsUp", "lookOutFor", "shadow"] as const;
+  const MIN_PARAGRAPHS: Record<(typeof SECTIONS)[number], number> = {
+    bringsUp: 5,
+    lookOutFor: 8,
+    shadow: 12,
+  };
+
   for (const sign of SIGNS) {
-    for (const phase of ["seed", "peak"] as const) {
-      for (const field of ["brings", "watch", "shadow", "work"] as const) {
-        it(`${sign} ${phase} ${field} is real, sign-specific copy`, () => {
-          const entry = LUNATION_SIGNS[sign];
-          expect(entry).toBeDefined();
-          const line = entry[phase][field]("identity");
-          expect(line.length).toBeGreaterThan(200);
-          expect(line.toLowerCase()).toContain(sign.toLowerCase());
-          expect(line).toContain("identity");
-          for (const marker of PLACEHOLDER_MARKERS) {
-            expect(line).not.toContain(marker);
+    for (const phase of PHASES) {
+      for (const section of SECTIONS) {
+        it(`${sign} ${phase} ${section} is written at full length`, () => {
+          const paragraphs = LUNATION_LONG[sign]?.[phase]?.[section];
+          expect(paragraphs).toBeDefined();
+          expect(paragraphs!.length).toBeGreaterThanOrEqual(MIN_PARAGRAPHS[section]);
+          for (const paragraph of paragraphs!) {
+            expect(paragraph.length).toBeGreaterThan(40);
+            for (const marker of PLACEHOLDER_MARKERS) {
+              expect(paragraph).not.toContain(marker);
+            }
+            // The bold marker has to come in pairs or the page renders a stray asterisk.
+            expect(paragraph.split("**").length % 2).toBe(1);
           }
+          // The sign has to be named in its own section rather than left generic.
+          expect(paragraphs!.join(" ").toLowerCase()).toContain(sign.toLowerCase());
         });
       }
     }
   }
+
+  it("holds the brief's bans across every sign", () => {
+    const all = SIGNS.flatMap((sign) =>
+      PHASES.flatMap((phase) => SECTIONS.flatMap((section) => LUNATION_LONG[sign]?.[phase]?.[section] ?? [])),
+    );
+    expect(all.length).toBeGreaterThan(300);
+    for (const paragraph of all) {
+      expect(paragraph).not.toMatch(/[\u2014\u2013]/); // em and en dashes
+      expect(paragraph.toLowerCase()).not.toContain("oooof");
+      // "it's not X, it's Y" and its variants, the formula the brief rules out
+      expect(paragraph).not.toMatch(
+        /\b(isn't|is not|aren't|are not|wasn't|was not)\b[^.]{0,70}?,\s*(it's|it is|they're|you're|that's)\b/,
+      );
+    }
+  });
 });
