@@ -89,65 +89,67 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
   Libra: {
     seed: {
       bringsUp: [
-        `A New Moon resets the whole cycle. The sky goes dark, nothing is visible yet and the next twenty nine days effectively start from zero, which makes this the seeding end of the cycle rather than the harvest. What you decide here has the entire month ahead of it to grow, and what you leave undecided has a habit of staying undecided for exactly as long.`,
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
-        `A **New Moon in Libra** turns that energy toward **you and everybody else**. Libra rules partnership, fairness, attraction, diplomacy, beauty, negotiation and the whole space between what you want and what keeps the peace, which makes this Moon a reset on how much of yourself you've been quietly trading to keep things pleasant.`,
+        `A **New Moon in Libra** aims all of that at **other people, and specifically at your side of the arrangement**. Libra is cardinal air ruled by Venus, the sign of partnership, fairness, attraction, taste and negotiation, and it governs the invisible space between what you actually want and what keeps everybody else comfortable.`,
 
-        `This Moon can expose where you've been agreeing before you've decided, softening what you actually think so it lands more nicely, waiting to hear what everybody else wants before you dare name your own, or staying in an arrangement that only works because you never mention that it doesn't. Libra doesn't want you endlessly negotiating your way down to something everyone can tolerate, because **fair includes you.**`,
+        `You know the energy. Agreeing to the restaurant you didn't want, saying you don't mind twice in one conversation while minding enormously, rewriting a text four times so it lands nicely, keeping a friendship on life support out of sheer politeness months after it stopped being funnnn. A Libra New Moon has a habit of showing you the running total.`,
 
-        `You may feel a fresh appetite for something more mutual, more beautiful, more honest or simply more equal. Some of that arrives as clarity about who gets your energy, and some of it arrives as the uncomfortable realisation that you've been the one doing most of the adjusting. Both are useful, and neither of them requires you to stay quiet about it.`,
+        `Because Venus is running this one, it also resets taste, pleasure and standards, which is far more useful than it sounds. What you'll accept, what you want your life to look and feel like, who gets your Sunday. Libra initiates, and what it likes starting is a more mutual version of whatever you've been half-carrying.`,
 
-        `There's a lovely, creative side to this Moon too. Libra is ruled by Venus, so this is also a reset on pleasure, style, taste and what you let yourself find beautiful. Look at where you've already built something genuinely reciprocal, where you've left a dynamic that ran on your silence, or where you've started asking for things that used to feel too much to ask for.`,
+        `Somewhere in the past year you've already done a small version of this: left a dynamic that ran on your silence, asked for something you'd normally hint at, let somebody be mildly disappointed in you and lived. That's the direction this Moon wants more of, with less negotiating on the way.`,
 
-        `The energy asks: **What would I choose if being easy to be around wasn't the priority?**`,
+        `The energy asks: **What would I pick if being easy to be around wasn't the whole personality?**`,
       ],
       lookOutFor: [
-        `Libra loves options, and a New Moon full of them can keep you weighing forever. You might spend the entire cycle researching, comparing, consulting, drafting the message and rewriting it, then arrive at the next Moon having made no actual decision, which is still a decision and simply lets you avoid owning it.`,
+        `Libra's favourite way to avoid a decision is to keep researching it. You'll compare, consult, sleep on it, ask three friends, draft the message, rewrite the message, and arrive at the next New Moon having chosen nothing, which is still a choice and simply means the circumstances made it for you.`,
 
-        `Watch the difference between **collaboration and outsourcing**. Asking somebody's opinion is smart, arranging your whole life around whichever answer causes the least friction is not. If you can't name what you want before the conversation starts, you'll end up agreeing to their version and calling it compromise.`,
+        `Collaborating and outsourcing look alarmingly similar from the inside. Asking somebody's opinion is smart; arranging your whole cycle around whichever answer causes the least friction means you've handed the pen over and called it teamwork.`,
 
-        `Notice the reflex to make the beginning pretty rather than real. Libra can build a plan that looks beautiful, sounds reasonable and asks nothing difficult of anybody, which is the most elegant way there is to not start. Aesthetics are not a strategy, and a lovely intention that requires nothing from you delivers exactly nothing back.`,
+        `The prettier the plan, the more suspicious I'd be of it. Libra can build something that looks gorgeous, sounds reasonable and asks nothing difficult of anybody, which is the most elegant procrastination on the market.`,
 
-        `Keep an eye on peacekeeping dressed as maturity. Letting something slide once is generosity, letting it slide for two years while the resentment quietly compounds is not, and by the time it comes out it will arrive at three times the size and land on somebody who genuinely didn't know there was a problem.`,
+        `Peacekeeping gets expensive. Letting something slide once is generous. Letting it slide for two years while the tally quietly compounds means it eventually arrives at somebody who had no idea there was a problem, at roughly triple the volume, on a random Tuesday.`,
 
-        `There can be a swing in the other direction too, where you've absorbed so much that you skip the conversation altogether and go straight to **cold, fair and finished**. Cutting someone off can feel like a boundary when it's really the version of the conversation that doesn't require you to be disagreed with.`,
+        `The opposite swing is just as Libra: skipping the conversation entirely and going straight to cold, fair and finished. Cutting somebody off can feel deliciously boundaried while functioning as the version of the discussion where nobody gets to disagree with you.`,
 
-        `Comparison gets loud under a Libra Moon, especially around other people's relationships. Somebody else's partnership, ease, taste or apparent effortlessness can make your own feel lacking, but you're comparing your whole messy inside to the outside of theirs, which is never a fair trade and never once made anybody feel better.`,
+        `Comparison hits differently under this Moon, particularly around other people's relationships. Their ease, their partner, their apparent effortlessness, all measured against your own inside knowledge of your own. That maths has never once made anybody feel better.`,
 
-        `Be careful of confusing being wanted with being chosen. Attention is easy to collect, and Libra can enjoy the collecting, but a cycle spent being admired by people you don't actually want is a cycle you didn't spend on the thing you do want.`,
+        `Being wanted is easy to collect, and Libra does enjoy collecting it. A cycle spent being admired by people you don't actually want is a cycle you didn't spend on the person or project you do.`,
 
-        `Most importantly, notice where you're waiting for someone to give you permission. Nobody is going to arrive and formally declare that your preference is reasonable. You get to state it, hold it, and let the people around you adjust to a version of you that has one.`,
+        `Nobody is turning up to officially confirm that your preference is allowed, by the way. There's no committee. You state it, you hold it, everybody adjusts.`,
 
-        `Harmony you build by disappearing isn't harmony. **Peace that requires your silence is just a quieter version of the problem.**`,
+        `**Peace that runs on your silence is a quieter version of the same problem.**`,
       ],
       shadow: [
-        `The shadow of a New Moon in Libra is **self-erasure with excellent manners**. It rarely looks like a problem from the outside, because it comes across as easy-going, accommodating, generous and lovely to deal with, and that is exactly why it can run for years without anybody, including you, calling it what it is.`,
+        `The shadow of a New Moon in Libra is **self-erasure with immaculate manners**, and it's sneaky as hell, because from the outside it reads as easy-going, generous and lovely to deal with.`,
 
-        `It starts small. You don't mention the preference because it's not a big deal. You pick the place they'd prefer. You laugh it off. You let the comment go. Each individual instance is genuinely fine, and the accumulation of them is a life arranged around somebody else's comfort.`,
+        `It builds in tiny increments. You don't mention the preference because it genuinely isn't a big deal. You pick the option they'd prefer. You laugh off the comment. Each one is fine on its own, and two hundred of them is a life arranged entirely around somebody else's comfort.`,
 
-        `Watch where you confuse **being agreeable with being safe**. Somewhere along the line you learned that having a strong preference risks the relationship, so you developed a talent for not having one, and now the fear shows up as indecision that you experience as open-mindedness.`,
+        `Somewhere early on you worked out that having a strong preference put the relationship at risk, so you got verrrry good at not having one, and these days that skill introduces itself as being open-minded.`,
 
-        `Indecision is the other face of it. Holding a choice long enough for circumstances to decide it for you feels neutral, and it isn't, it's a way of never being the one responsible for the outcome. If it goes badly you didn't choose it, which is comfortable and also means you're not driving.`,
+        `Indecision is the same fear in a different outfit. Hold a choice long enough and circumstances decide it for you, which feels neutral and conveniently means the outcome was never yours to own.`,
 
-        `Then there's the ledger. Libra keeps one, quietly and very accurately, of every accommodation made and never mentioned, and because none of it was said out loud the other person has no idea they're in debt. When the bill finally arrives it lands as coldness they can't account for or as a list delivered all at once, and neither is really fair on them.`,
+        `Libra also keeps a ledger, and it is scarily accurate. Every accommodation made and never mentioned goes in with a date, and because none of it was said out loud, the other person has been running up a debt they don't know exists.`,
 
-        `Resentment is the tell. If you can feel it, you have been saying yes past your own limit for a while, and the resentment is not a character flaw, **it's the receipt for everything you agreed to and didn't want**.`,
+        `When the bill finally lands, it arrives as a coldness they can't account for or as an entire list delivered in one breath. Neither is especially fair on somebody who was never told there was an account open.`,
 
-        `Libra shadow can also turn conflict into catastrophe. One difficult conversation gets rehearsed until it feels like a relationship-ending event, which guarantees it keeps getting postponed, and the postponement is what actually erodes the thing you're protecting.`,
+        `Resentment is the tell here, and it's worth reading as data. Feel it, and you've been saying yes past your own limit for a good while.`,
 
-        `There's a vanity thread in here too, and it's worth being honest about. Part of the accommodating is wanting to be seen as the reasonable one, the easy one, the one nobody could possibly complain about, and that reputation can cost you more than it ever returns.`,
+        `One difficult conversation gets rehearsed in the shower until it has grown into a relationship-ending event, which guarantees it stays postponed, and the postponing is what actually erodes the thing you were trying to protect.`,
 
-        `Notice where you're performing balance instead of having it. Looking calm while quietly furious is not equanimity, it's a very well-lit version of avoidance.`,
+        `There's some vanity threaded through it too, and honesty helps. Part of the accommodating is wanting to be known as the reasonable one, the easy one, the one nobody could possibly complain about. That reputation costs considerably more than it pays.`,
 
-        `The work starts before any conversation does. Write what you actually want, unconsulted and unsoftened, and keep the page. Libra thinks best in dialogue, which is precisely why the version that exists before the dialogue has to be written down, or it gets negotiated away before you've noticed it's gone.`,
+        `Looking calm while quietly furious is avoidance with excellent lighting.`,
 
-        `Then say one preference out loud this cycle. Not a case, not a justification, not a three-part explanation of why it's reasonable. One sentence, no apology attached, to the person it concerns.`,
+        `The way through starts before anybody else is in the room. Write what you want, unconsulted and unsoftened, and keep the page. Libra thinks best in dialogue, which is exactly why the pre-dialogue version has to exist somewhere in writing, or it gets negotiated away before you notice it's gone.`,
 
-        `Watch what happens next, because this is the whole experiment: the relationship survives it. The friendship survives it. The dinner survives it. The fear that stating a preference costs you people is the engine of the entire pattern, and the only thing that dismantles it is evidence.`,
+        `Then say one preference out loud this cycle. No case, no three-part justification, no charming preamble. One sentence, no apology stapled to the end of it, to the person it actually concerns.`,
 
-        `And if something genuinely can't survive you having a preference, you've learned something this cycle that was going to cost you a lot more to find out later.`,
+        `Then watch what happens, because that's the whole experiment: the dinner survives, the friendship survives, the relationship survives. The belief that wanting something costs you people is the engine of all of this, and evidence is the only thing that dismantles an old belief.`,
 
-        `**Being chosen for the version of you that never wanted anything isn't being chosen.**`,
+        `And if something genuinely can't survive you having a preference, this Moon has handed you information that was going to get a lot more expensive to find out in two years' time.`,
+
+        `**You can be adored and inconvenient at the same time. People do it constantly.**`,
       ],
     },
   },
@@ -156,128 +158,128 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       bringsUp: [
         `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
 
-        `A **Full Moon in Taurus** brings it all the way down into **your body, your money and your actual life**. Taurus rules worth, security, comfort, pleasure, stability, self-value, the physical world and what you're willing to build slowly, which makes this Moon a reckoning with what your life feels like rather than how it looks on paper.`,
+        `A **Full Moon in Taurus** brings all of that down into **your body, your bank account and the actual texture of your days**. Fixed earth, ruled by Venus, Taurus governs worth, security, pleasure, ownership and whatever you're willing to build slowly, so this Moon wants to know what your life genuinely feels like rather than how it photographs.`,
 
-        `This Moon can expose where you've been calling something stable that's really just familiar, tolerating a situation because leaving it feels expensive, undercharging, over-giving, or staying in an arrangement that drains you because the devil you know is at least the devil you've furnished. Taurus is not interested in your explanation, it wants to know whether this actually feels good in your body, **and your body has been answering that question for months.**`,
+        `This is where you discover that the thing you've been calling stable is mostly just familiar. The rate you haven't raised in three years. The subscription you're weirdly loyal to. The arrangement you stay inside because leaving would be expensive, and expensive has been doing a LOT of heavy lifting in that sentence.`,
 
-        `You may notice money, worth and value arriving as the theme: what you're paid, what you charge, what you spend to feel better, what you've been putting off, what you own and what owns you. Feelings about security can run higher than usual, and so can the very Taurus urge to make everything comfortable immediately rather than let the discomfort finish telling you something.`,
+        `Taurus runs on the senses, so the information usually arrives physically before it arrives in words: the jaw, the shoulders, the specific sigh that happens when a certain name comes up. Your body has been filing reports for months, and a Full Moon here is roughly when one lands on your desk with the volume turned up.`,
 
-        `There's real pleasure available here too, and that's half the point. Look at what you've built that's genuinely solid, what you've stuck with long after the excitement wore off, where your standards have risen, and where you now refuse to accept things you used to put up with because you thought that was the going rate.`,
+        `Pleasure is half the point of this sign, which is why it's such a good Moon to work with. Taurus wants you fed, rested, warm, touched and paid properly, and it has excellent taste in all five. Anywhere you've raised your standards this year, it wants to know why you haven't done it everywhere else.`,
 
-        `The energy asks: **What is this actually costing me, and is it still worth the price?**`,
+        `The energy asks: **What is this costing me, and am I still getting my money's worth?**`,
       ],
       lookOutFor: [
-        `Taurus doesn't react fast, it accumulates, so the trap under this Moon is sitting on the truth until it hardens. You can feel something for weeks, say nothing, and then discover you've quietly reached a verdict nobody else knew was being reached, which is not the same as a conversation.`,
+        `Taurus doesn't react, it accumulates. You can feel something for six weeks, say nothing at all, and quietly arrive at a verdict nobody else knew was being reached, which is a very tidy way to end something without ever holding the conversation.`,
 
-        `Watch the soothing. Taurus is a genius at making discomfort comfortable, so the feeling arrives and immediately gets fed, spent, poured, scrolled or slept off. None of that is a crime, and all of it will stop the Moon finishing its sentence if you reach for it before you've heard the message.`,
+        `Soothing is the big one. The feeling comes up and gets fed, poured, scrolled or slept off within about nine minutes. None of that is a crime, and all of it will stop this Moon finishing its sentence if you reach for it before you've heard the message.`,
 
-        `Then there's the immovable position. Once Taurus decides how things are, it can defend that position for a year, and under a Full Moon you can make that decision at peak intensity and then treat changing your mind as losing. **Being sure and being right are not the same thing.**`,
+        `Once Taurus has decided how things are, moving becomes personally offensive. Making that decision at peak intensity and then defending it for a year, because changing your mind feels like losing, is verrrry on brand for this Moon.`,
 
-        `Keep an eye on money making decisions for you. Staying because leaving is expensive, accepting because asking for more feels risky, tolerating because the security is real, these are all legitimate considerations and they become a cage the moment you stop admitting they're the reason.`,
+        `Money makes a lot of decisions quietly. Staying because leaving costs, accepting because asking feels risky, tolerating because the security is genuinely real. All legitimate, all a cage the moment you stop admitting they're the reason.`,
 
-        `Notice where comfort has quietly become the whole plan. Taurus can build a life so cushioned that growth starts to register as a threat, and this Moon has a way of showing you exactly which comforts you're protecting and what they've been protecting you from doing.`,
+        `Comfort can become the entire strategy. Build a life cushioned enough and growth starts registering as a threat, which is why this Moon is so good at showing you exactly which comforts you've been guarding and what they've been guarding you from doing.`,
 
-        `Be careful with stubbornness disguised as loyalty. Staying is not automatically integrity, and commitment to something that stopped working is not the same as being a person who honours their word. You're allowed to have been right to start it and right to end it.`,
+        `Loyalty and stubbornness look identical from where you're sitting. You're allowed to have been right to start something and right to finish it, and the second one doesn't cancel the first.`,
 
-        `Worth is the soft centre of this one, so watch where you've decided your rate, your standards or your needs are what they are because that's what you've been getting. A price you accepted once is not evidence of what you're worth, it's evidence of what you agreed to on a day you had less information.`,
+        `Worth is the soft centre of this one. A price you accepted once is evidence of what you agreed to on a day when you had less information and fewer options, which this Moon will demonstrate at some length.`,
 
-        `Also watch the flip, where the realisation arrives and you overcorrect with a sudden expensive gesture. Buying your way out of a feeling is still the feeling, just with a receipt.`,
+        `The overcorrection is its own trap: the realisation lands, and forty minutes later there's a full basket at checkout. Buying your way out of a feeling is still the feeling, now with delivery tracking.`,
 
-        `Slow is Taurus' superpower, so use it. **Let the truth land in your body before you let it write the email.**`,
+        `**Let it land in your body before you let it write the email.**`,
       ],
       shadow: [
-        `The shadow of a Full Moon in Taurus is **comfort defending itself**, and it is unbelievably good at its job, because it never shows up as fear. It shows up as sensible. Not the right time, not the right month, not the right money, not quite yet, and every single one of those sentences is plausible enough to survive inspection.`,
+        `The shadow of a Full Moon in Taurus is **comfort defending itself**, and it's world-class at the job, because it never once shows up as fear. It shows up as sensible. Not the right month, not the right money, not quite yet, and every single one of those sentences survives inspection.`,
 
-        `Underneath it sits something simple: if you let anything change, you might lose what you built. So the reflex is to hold everything in place, including the parts that are quietly costing you, because dismantling one piece feels like risking the lot.`,
+        `Underneath sits something simple: if anything moves, you might lose what you built. So the whole arrangement gets held in place, including the parts that are quietly costing you, because dismantling one bit feels like gambling the lot.`,
 
-        `That's how a life gets slightly too small. Nothing dramatic happens, you just stop moving, and then you call the not-moving stability and the years do what years do.`,
+        `That's how a life gets slightly too small with nothing dramatic ever happening. Movement stops, the stillness gets called stability, and the years do what years do.`,
 
-        `Taurus shadow also numbs. The feeling comes up, and something reaches for the food, the wine, the trolley, the four hours of nothing, the second glass, the thing that makes the edge go away. There is nothing wrong with any of that, and it becomes shadow when it consistently arrives **before** the feeling has had a chance to tell you what it came to say.`,
+        `The numbing deserves a proper look, since Taurus rules the senses and knows exactly which one to reach for. Nothing wrong with the wine, the delivery, the four hours of nothing. It turns shadow when it consistently arrives **before** the feeling has had a chance to say what it came to say.`,
 
-        `Watch for possessiveness too, because Taurus holds, and holding can turn into gripping. It can be a person, a role, a title, a client, a version of your life you've outgrown. The tighter the grip, the more you find yourself managing the thing instead of enjoying it.`,
+        `Holding can also slide into gripping: the role, the client, the person, the version of your life you technically outgrew in March. The tighter the grip, the more you find yourself managing something rather than enjoying it.`,
 
-        `There's a worth wound in here, and this Moon tends to find it. Somewhere you learned that what you have is what you're worth, or that security is earned by making yourself useful, and that belief has been quietly negotiating on your behalf ever since.`,
+        `There's a worth wound in here, and this Moon locates it every time. At some point you learned that what you have is what you're worth, or that security gets earned by being useful, and that belief has been negotiating on your behalf ever since without checking in.`,
 
-        `It shows up as undercharging. As not asking. As accepting the first number. As doing the extra thing for free because charging for it felt greedy. **You are allowed to cost money.**`,
+        `It shows up as undercharging, as the extra thing thrown in free because invoicing for it felt greedy, as accepting the first number offered, as a favour that quietly became a job. **You are allowed to cost money.**`,
 
-        `It also shows up as the resentment that builds when you've been the reliable one for so long that nobody thinks to ask whether it suits you anymore.`,
+        `Then comes the resentment of having been the reliable one for so long that nobody thinks to ask whether it still suits you.`,
 
-        `And watch the stubbornness, because it is the part that will fight this whole section. Taurus can dig in precisely when something true is being said, not because the thing is wrong, but because moving feels worse than being wrong.`,
+        `Stubbornness is the part that will argue with this entire section, and not because any of it is wrong. Moving simply feels worse than being wrong.`,
 
-        `The way through starts in the body, not the analysis. Something physical and slow: a bath, a long walk, hands in soil or dough or water, a proper stretch, an hour with your phone in another room. Taurus shadow dissolves through the senses far faster than through thinking, and the point is to let the sensation move rather than flatten it.`,
+        `The way out runs through the body rather than the analysis. A bath, a long walk, hands in dough or soil or hot water, an hour with your phone in a different room. Taurus shadow dissolves through the senses and shrugs off a spreadsheet entirely.`,
 
-        `Then get concrete, because Taurus only believes evidence. Look at the actual numbers, the actual hours, the actual energy going out and coming back. Write down what this situation costs you weekly, in money and in life, and let the arithmetic be as unromantic as it wants to be.`,
+        `Then get concrete, because this sign only believes evidence. Real numbers, real hours, real energy going out against what comes back. Write down what this situation costs you weekly, in money and in life, and let the maths be as unromantic as it likes.`,
 
-        `Then write this sentence and finish it honestly: what I'd change about this if I knew I wouldn't lose my security. Whatever comes out is usually the entire message of the Moon, and the reason it's taken months to surface is that the first half of the sentence is the bit you've been negotiating with.`,
+        `Then finish this sentence honestly: what I'd change about this if I knew I wouldn't lose my security. Whatever falls out is the message, and the reason it's taken months to surface is that the second half is the part you've been quietly negotiating with.`,
 
-        `Change one thing this week rather than everything. Move the money, send the rate, book the appointment, clear the cupboard, cancel the thing. Taurus builds by increment and keeps what it builds, so one real act now outperforms an enormous plan you'll be too tired to start.`,
+        `Change one thing this week rather than all of it. Move the money, send the new rate, cancel the thing, clear the cupboard, book the appointment you've rescheduled twice. Taurus builds by increment and keeps what it builds, so one real act beats a magnificent plan you'll be too tired to start.`,
 
-        `**Comfortable and alive are not the same thing, and you can tell the difference in your body.**`,
+        `**Your body has been saying this for months. The Moon just turned the volume up.**`,
       ],
     },
   },
   Scorpio: {
     seed: {
       bringsUp: [
-        `A New Moon resets the whole cycle. The sky goes dark, nothing is visible yet and the next twenty nine days effectively start from zero, which makes this the seeding end of the cycle rather than the harvest. What you decide here has the entire month ahead of it to grow, and what you leave undecided has a habit of staying undecided for exactly as long.`,
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
-        `A **New Moon in Scorpio** turns that energy toward **whatever is underneath**. Scorpio rules intimacy, power, sex, grief, secrets, money that's tangled up with somebody else's, obsession, privacy and transformation, which makes this Moon a reset on the parts of your life you've been managing rather than facing.`,
+        `A **New Moon in Scorpio** points the reset at **everything happening underneath**. Fixed water, traditionally ruled by Mars and modernly by Pluto, Scorpio governs intimacy, power, sex, grief, secrets, other people's money and the whole machinery of transformation, which makes this the least small-talk Moon of the entire year.`,
 
-        `This Moon can expose where you've been holding back the real version of yourself so it can't be used against you, staying in something because the intensity felt like closeness, testing people instead of telling them, keeping a situation slightly unresolved so you never have to find out, or calling it privacy when it's closer to hiding. Scorpio doesn't want the edited version, **it wants the truth you only say at 2am.**`,
+        `The energy runs deeeep and is unsubtle about it. Whatever you've been managing rather than facing starts pressing on the glass: the conversation you've been rehearsing for eight months, the account you haven't looked at properly, the dynamic where you hold all the information so nobody can surprise you, the situation you've kept slightly unresolved so you never have to find out where you stand.`,
 
-        `You may feel a pull to end something properly, go all in on something you've been circling, say the thing you've been sitting on for months, or find out what's actually going on rather than live one more week in the not-knowing. Feelings can arrive at full strength rather than in manageable doses, and something you thought you'd dealt with can resurface asking to be finished for real.`,
+        `Scorpio doesn't begin things the way Aries does, all sparks and sprinting. It starts by ending something, so the seed planted here is usually a decision to stop pretending about one specific situation, and the month that follows is what grows in the space that clears.`,
 
-        `There's a genuinely powerful side to this Moon. Look at what you've already survived and metabolised, where you've rebuilt yourself after something ended, where you've stopped performing for people who only liked the palatable version, and where you now let somebody close enough to actually see you.`,
+        `The genuine gift of this sign is that very little shocks it. You've already metabolised things that would have flattened somebody with a gentler chart, rebuilt yourself after endings you didn't choose, and worked out that being liked by everybody was never on the cards anyway.`,
 
-        `The energy asks: **What would I begin if I wasn't protecting myself from being seen doing it?**`,
+        `The energy asks: **What would I start if I wasn't protecting myself from being seen doing it?**`,
       ],
       lookOutFor: [
-        `Scorpio keeps things to itself, so the trap at this New Moon is starting something so privately that it never gets any support. Saying nothing until it's done feels safe and looks strong, and it also leaves you alone with the exact thing that needed one other person in it.`,
+        `Scorpio keeps its cards face down, so the classic misfire at this Moon is starting something so privately that it never gets any help. Saying nothing until it's finished feels powerful and looks impressive, and it leaves you alone with the exact thing that needed one other person in the room.`,
 
-        `Watch strategy replacing action. You can spend a whole cycle reading the situation, gathering information, working out everybody's motives and positioning yourself perfectly, and never once do the plain obvious thing that would have moved it forward in a week.`,
+        `Strategy can quietly replace action. A whole cycle disappears into reading the situation, working out everybody's motives and positioning yourself immaculately, while the plain obvious move that would have shifted it in a week sits there untouched.`,
 
-        `Notice the testing. Scorpio would often rather set a quiet test and watch how somebody handles it than ask a direct question, and the problem with tests is that people fail them without ever knowing they were sitting one.`,
+        `Testing is the other one. Scorpio would often rather set a quiet exam and observe how somebody handles it than ask a direct question, which means people fail tests they never knew they were sitting.`,
 
-        `Keep an eye on suspicion doing the driving. Under this Moon it's easy to read motive into ordinary behaviour, build a case out of three small things, and reach a conclusion about somebody that they've had no opportunity to answer.`,
+        `Suspicion gets very convincing under this Moon. Three small things become a case, a slow reply becomes a verdict, and somebody ends up convicted in a trial they weren't invited to.`,
 
-        `There's a checking impulse here too, the looking, the scrolling, the finding out. It always promises relief and it never delivers it, because the thing you actually want is certainty and no amount of information will hand you that.`,
+        `The checking impulse promises relief and never delivers it. What you actually want is certainty, and no amount of scrolling, searching or rereading has ever produced that for anyone.`,
 
-        `Be careful with all-or-nothing. Scorpio does depth brilliantly and moderation badly, so a new beginning can arrive as total commitment before you've established whether the thing deserves it, and the same energy can end something entirely at the first sign it might disappoint you.`,
+        `Moderation is not this sign's strength. A beginning can arrive as total commitment before you've established whether the thing deserves it, and the same energy will end it entirely at the first hint of disappointment.`,
 
-        `Watch where intensity is standing in for intimacy. Drama, secrecy, jealousy and the constant hum of a situation that never quite resolves can feel like closeness, and closeness is actually much quieter than that.`,
+        `Intensity does a very good impression of intimacy. Drama, secrecy, jealousy and a situation that never quite resolves can feel like closeness, when real closeness is embarrassingly quiet by comparison.`,
 
-        `Power struggles are the other tell. If you find yourself needing to win a conversation, hold something back to stay in control, or make somebody feel the loss of you, you've stopped wanting the outcome and started wanting the upper hand.`,
+        `Power struggles are the clearest tell. Needing to win the conversation, holding something back to stay in control, wanting them to feel the loss of you, all of it means you've swapped the outcome you wanted for the upper hand.`,
 
-        `**Control is what you reach for when you don't believe you'd survive being let down. You would. You have.**`,
+        `**Control is what you reach for when you don't believe you'd survive being let down. You have, repeatedly, and you're still here.**`,
       ],
       shadow: [
-        `The shadow of a New Moon in Scorpio is **control dressed up as caution**, and it is very persuasive, because most of it is genuinely smart. Keeping your cards close. Not announcing it yet. Seeing how they behave first. Every one of those is reasonable, and together they build a beginning so guarded that nothing can reach it, including luck.`,
+        `The shadow of a New Moon in Scorpio is **control dressed up as caution**, and it's persuasive because most of it is genuinely clever. Keep your cards close. Don't announce it yet. See how they behave first. Individually reasonable, collectively a beginning so guarded that nothing can reach it, including luck.`,
 
-        `Underneath sits a fear with receipts: at some point being open cost you something, and you decided, quite sensibly at the time, never to be caught that unprotected again.`,
+        `Underneath sits a fear with receipts. At some point being open cost you something, and you decided, very sensibly at the time, never to be caught that unprotected again.`,
 
-        `So the reflex became managing information. What you tell, who you tell, how much, in what order, and what you keep back so you're never the one holding less power in the room.`,
+        `So the reflex became information management. What you tell, who you tell, how much, in what order, and what you keep back so you're never the one holding less power in the room.`,
 
-        `It shows up as the private plan nobody knows about, so nobody can ask how it's going. As the feeling you've had for six weeks and never mentioned. As the decision you've already made while the other person still thinks it's a conversation.`,
+        `It looks like the plan nobody knows about, so nobody can ask how it's going. The feeling you've had for six weeks and never mentioned. The decision you made privately while the other person still thought a conversation was happening.`,
 
-        `Scorpio shadow also keeps a ledger, and unlike Libra's it isn't polite about it. Every slight, every disappointment, every time somebody showed you who they were gets filed with the date, and the file is admissible years later.`,
+        `Scorpio's ledger is nothing like Libra's polite one. Every slight, every disappointment, every moment somebody showed you who they were gets filed with the date, and the file remains admissible four years later.`,
 
-        `Withdrawal becomes the weapon. Not a fight, not an explanation, just the temperature dropping and the access quietly closing, which is an extremely effective way to make somebody feel the loss of you and an extremely ineffective way to be known.`,
+        `Withdrawal becomes the weapon of choice. No fight, no explanation, just the temperature dropping and the access quietly closing, which is an extremely effective way to make somebody feel your absence and an extremely poor way to be known.`,
 
-        `And there's the sting. Scorpio usually knows the one accurate sentence that would genuinely wound somebody, and under pressure the temptation to use it is real. Accuracy is not the same as fairness, and you can't take it back once it's out.`,
+        `Then there's the sting. You usually know the one sentence that would genuinely wound a person, and under pressure the temptation to use it is real. Accuracy and fairness are different sports, and that one can't be taken back.`,
 
-        `Watch obsession too, because it's the same instinct pointed at a loop. The replaying, the analysing, the reconstructing of what they meant, the imagined conversation you keep having in the shower. It feels like processing and it's usually just pain going round.`,
+        `Obsession is the same instinct pointed at a loop: the replaying, the reconstructing of what they meant, the imagined confrontation you keep staging in the shower. It feels like processing while functioning as pain on a spin cycle.`,
 
-        `The deepest layer is the vow. Somewhere you promised yourself you'd never need anyone that much again, and the promise has been quietly declining things on your behalf ever since.`,
+        `The deepest layer is the vow. Somewhere you promised yourself you'd never need anybody that much again, and it has been quietly declining things on your behalf ever since.`,
 
-        `The way through is being witnessed on purpose, before it feels safe. Tell one trusted person the real thing you're starting, at the stage where it could still fail. Scorpio's shadow loses most of its power the moment something hidden is seen and nothing bad happens.`,
+        `Getting through it means being witnessed on purpose, before it feels safe. Tell one trusted person the real thing you're starting while it could still fail. Scorpio's shadow loses most of its power the moment something hidden gets seen and nothing terrible happens.`,
 
-        `Then write the unedited version. Everything you actually feel, no management, no strategy, nobody's eyes on it. Get it out of the loop and onto a page, because what stays inside your head gets rehearsed and what gets written down gets finished.`,
+        `Write the unedited version somewhere nobody will read it. Everything you actually feel, no management, no strategy, no audience. What stays in your head gets rehearsed; what gets written down gets finished.`,
 
-        `Name the fear directly: what you think would happen if you lost control of this. Written down it tends to look smaller and older than it feels, and it stops running the operation from underneath.`,
+        `Name the fear directly, in one sentence: what you think would happen if you lost control of this. On paper it usually looks smaller and considerably older than it feels in your chest, and naming it stops it running the operation from underneath.`,
 
-        `Then pick one thing to do openly this cycle. Say the want out loud. Ask the actual question. Let somebody help with the part you'd normally handle alone. One act of not hiding is worth a month of strategy.`,
+        `Then do one thing openly this cycle. Ask the actual question, say the want out loud, let somebody help with the part you'd normally handle alone. A single act of not hiding outperforms a month of brilliant strategy.`,
 
-        `**You do not have to keep proving you can survive alone. You already did that. This cycle is for something else.**`,
+        `**You've already proved you can survive on your own. This cycle is for finding out what happens when you don't have to.**`,
       ],
     },
   },
@@ -286,128 +288,128 @@ export const LUNATION_LONG: Record<string, Partial<Record<LunationPhase, LongSec
       bringsUp: [
         `A Full Moon brings things into full view, making it harder to ignore what you want, what you've outgrown and what you're finally ready to do something about. It's a culmination point, so emotions can feel louder, truths can become clearer and situations that have been sitting in the background can suddenly demand your attention.`,
 
-        `A **Full Moon in Gemini** brings it to a head **through words**. Gemini rules communication, curiosity, information, the daily back and forth, siblings and neighbours, what gets said, what gets left out and the story you've been telling yourself, which makes this Moon a reckoning with what's actually true versus what you've been explaining.`,
+        `A **Full Moon in Gemini** brings it to a head **through words**. Mutable air ruled by Mercury, Gemini governs communication, curiosity, information, siblings, neighbours, the daily back and forth and the story you've been telling yourself, so this Moon is where the talking finally catches up with the truth.`,
 
-        `This Moon can expose the thing that's been managed by not being said. A conversation you've avoided, a message you've reread and never sent, a version of events you've been repeating until it started to sound true, or a situation you've been handling by staying vague about it. Gemini brings the information out, and it often arrives through somebody else's mouth rather than your own.`,
+        `What surfaces is usually the thing that was being managed by not being said. The message you've drafted and never sent, the conversation everybody's avoiding, the vague answer you've been giving for months, the version of events you've repeated so often it started to sound like fact. Information has a way of arriving this week, frequently through somebody else's mouth.`,
 
-        `You may notice everything speeding up: more messages, more input, more opinions, more noise in your own head at midnight. Something you find out this week can genuinely rearrange the picture, and something you finally say out loud can do the same thing in the other direction.`,
+        `Everything speeds up too: more notifications, more opinions, more input, more thoughts at 1am, and a brain that will not shut up about a thirty second exchange from Tuesday. Something you find out can genuinely rearrange the picture, and something you finally say can do exactly the same in the other direction.`,
 
-        `There's real brightness to this Moon too. Look at how much better you've got at saying the hard thing, at asking instead of assuming, at changing your mind in public when new information arrives, and at being curious about people rather than certain about them.`,
+        `Gemini's brilliance is real, though, and it's worth clocking. You've got much better at asking instead of assuming, changing your mind in public when new information turns up, and saying the awkward sentence at the moment it needed saying rather than three weeks later.`,
 
         `The energy asks: **What have I been avoiding saying plainly?**`,
       ],
       lookOutFor: [
-        `Gemini moves fast and talks faster, so the trap under this Moon is saying all of it at once, at speed, to whoever happens to be nearest. You can talk yourself into three separate certainties before lunch and send messages from at least two of them.`,
+        `Gemini talks fast and this Moon talks faster, so the trap is saying all of it at once to whoever happens to be nearest. You can arrive at three separate certainties before lunch and send messages from at least two of them.`,
 
-        `Watch the urge to explain until you're agreed with. Repeating your position more thoroughly is not the same as being heard, and a conversation where you're building a case has usually stopped being a conversation.`,
+        `Explaining until you're agreed with is the other one. Restating your position more thoroughly never turns into being understood, and once you're building a case, the conversation stopped being a conversation a while ago.`,
 
-        `Notice where the mind is being used as an escape hatch. When the feeling gets big, Gemini goes up into analysis, jokes, research and other people's takes, and you can end up knowing absolutely everything about a situation while feeling almost none of it.`,
+        `The mind makes an excellent escape hatch. When the feeling gets big, Gemini goes up into analysis, jokes, research and other people's takes, which means you can know absolutely everything about a situation while feeling none of it.`,
 
-        `Be careful with the half-truth. Gemini is brilliant at the version that keeps things comfortable, slightly edited, technically accurate, missing the one sentence that actually matters. **The edit is the thing to watch, not the lie.**`,
+        `Half-truths are the real hazard here, and they're rarely lies. Technically accurate, slightly edited, missing the one sentence that matters. The edit is the thing worth catching.`,
 
-        `Keep an eye on overthinking dressed as due diligence. Another opinion, another article, another friend consulted, and by the end you've collected so many perspectives that your own is nowhere to be found.`,
+        `Research can pass as due diligence for weeks. Another article, another opinion, another friend consulted, and by the end there are so many perspectives in the room that yours has quietly left.`,
 
-        `Gossip gets tempting under this Moon, and so does telling the story to everybody except the person it concerns. It's a very effective way of discharging the feeling without ever risking the conversation.`,
+        `Telling everybody except the person concerned is very Gemini and very tempting under this Moon. It discharges the feeling without any of the risk, and guarantees nothing changes.`,
 
-        `Watch the restlessness too. When things feel stuck, Gemini reaches for novelty, and a new idea can arrive at exactly the moment the current one asks for follow-through, which conveniently relieves you of having to finish anything.`,
+        `Novelty turns up at suspiciously convenient moments too. A new idea arrives exactly when the current one starts asking for follow-through, and it feels like inspiration rather than an exit.`,
 
-        `Also notice how quickly you move on. Something lands, you process it out loud for an hour, you crack a joke about it, and it's filed. Processed is not the same as felt, and this Moon will bring it back if you file it too early.`,
+        `Speed of processing is its own problem. Something lands, you talk it through for an hour, you make it funny, it's filed. Filed and felt are two different things, and this Moon will bring it back if you file too fast.`,
 
-        `**Say one true sentence to the right person and you'll do more with this Moon than a week of talking to everybody else.**`,
+        `**One true sentence to the right person will do more this week than nine hours of talking to everybody else.**`,
       ],
       shadow: [
-        `The shadow of a Full Moon in Gemini is **thinking used as a way not to feel**. It's fast, it's articulate, it can explain the entire situation including its own defence mechanisms, and it will keep you two safe inches above the actual emotion for as long as you let it.`,
+        `The shadow of a Full Moon in Gemini is **thinking used as a way not to feel**. It's fast, it's articulate, it can explain the entire situation including its own defence mechanisms, and it will keep you two safe inches above the actual emotion for as long as you allow it.`,
 
-        `You'll recognise it by how well you're narrating. When you can describe exactly what's happening, in a slightly amused register, while noticing nothing in your body, that's not insight, that's altitude.`,
+        `You'll recognise it by how well you're narrating. Describing exactly what's happening, in a slightly amused tone, while noticing nothing whatsoever in your body, is altitude rather than insight.`,
 
-        `Distraction is the second layer. The mind offers something more interesting the moment the current thing requires depth, and Gemini reads that as curiosity rather than as avoidance with excellent PR.`,
+        `Distraction arrives next, right on cue. The mind offers something more interesting the second the current thing requires depth, and Gemini files that as curiosity instead of avoidance with excellent PR.`,
 
-        `It shows up as five tabs, four conversations, three plans and nothing finished. Enough going on that nothing can be measured, which means nothing can be failed either.`,
+        `The result is five tabs, four conversations, three plans and nothing finished. Enough in the air that nothing can be measured, which conveniently means nothing can be failed either.`,
 
-        `Watch the story you've built. Gemini's real power is narrative, and under a Full Moon you can construct a version of events so coherent and well-argued that you never notice it's a draft rather than the truth.`,
+        `Story is this sign's real superpower, and under a Full Moon it can build a version of events so coherent and well-argued that you never think to check whether it's true. The most comfortable draft is usually the one where you're the reasonable party.`,
 
-        `Especially watch the version where you're the reasonable one. It's the most comfortable story available and it's rarely the complete one.`,
+        `Anxiety is the same engine pointed backwards: the looping, the rehearsing, the imagined conversations at 3am, twelve possible outcomes considered in forensic detail. Your mind is trying to think its way to safety, and safety was never available that way.`,
 
-        `There's anxiety in here too, and it's the same engine pointed the wrong way. The looping, the rehearsing, the imagined conversations at 3am, the twelve possible outcomes considered in detail. Your mind is trying to think its way to safety, and it cannot get there, because the thing you want is certainty and thinking doesn't produce it.`,
+        `Deflection through humour deserves a mention, because you're good at it. The funnier you are about something, the higher the chance you haven't touched it yet.`,
 
-        `Notice where you talk to everyone but the person concerned. It gives you the relief of having said it without any of the risk of having said it to them, and it quietly ensures nothing changes.`,
+        `Then there's the exhaustion nobody warns you about, where the brain has been at full volume for days and you mistake mental noise for actually dealing with something.`,
 
-        `And notice the joke. Gemini can deflect anything with timing, and the funnier you are about something, the more likely it is you haven't touched it yet.`,
+        `Getting through it starts by putting the words somewhere that can't answer back. Write the whole thing out, unedited and far too long, before any of it reaches a human. Gemini thinks by expressing, so let the page take the first three versions.`,
 
-        `The way through is to put the words somewhere that can't answer back. Write the whole thing out, unedited, ugly, longer than it needs to be, before any of it reaches a person. Gemini thinks by expressing, and the first version is almost never the true one, so let the page take the first three.`,
+        `Read it back and find the sentence you wrote quickly and immediately wanted to soften. That's the message. It always is.`,
 
-        `Then read it back and find the one sentence you've been circling. It'll be the one you wrote quickly and want to soften. That's the message.`,
+        `Stop researching after that. No more opinions, no more tabs, no more asking one last friend. The information isn't what's missing, the willingness to act while it's still uncomfortable is.`,
 
-        `Then stop researching. No more opinions, no more tabs, no more asking one more friend. You already have the information. What you don't have is the willingness to act on it while it's still uncomfortable.`,
+        `Say it once, plainly, to the one person it concerns, and then leave the silence alone instead of filling it with six clarifying paragraphs and a voice note.`,
 
-        `Then say the sentence, once, plainly, to the one person it actually concerns, and let the silence afterwards be silence rather than filling it with six clarifying paragraphs.`,
+        `Give the nervous system somewhere to go as well, because Gemini rules the hands, lungs and everything jittery. Walk, swim, sing badly in the car, breathe on purpose for four minutes. The body settles the mind far quicker than the mind settles the mind.`,
 
-        `**You are not confused. You are informed and avoiding it, and those two things feel almost identical from the inside.**`,
+        `**You're not confused, you're informed and avoiding it, and those two states feel identical from the inside.**`,
       ],
     },
   },
   Sagittarius: {
     seed: {
       bringsUp: [
-        `A New Moon resets the whole cycle. The sky goes dark, nothing is visible yet and the next twenty nine days effectively start from zero, which makes this the seeding end of the cycle rather than the harvest. What you decide here has the entire month ahead of it to grow, and what you leave undecided has a habit of staying undecided for exactly as long.`,
+        `A New Moon is the reset. The Sun and Moon meet in the same degree, the sky goes properly dark, and the next twenty nine days start from scratch, which makes this the planting end of the cycle. Nothing is visible yet, and whatever you decide now gets the whole month to grow into something, while whatever you leave hovering tends to still be hovering when the next one comes round.`,
 
-        `A **New Moon in Sagittarius** turns that energy toward **the horizon**. Sagittarius rules belief, meaning, travel, study, risk, faith, publishing, adventure and the size of the life you think you're allowed, which makes this Moon a reset on how big you're willing to let things get.`,
+        `A **New Moon in Sagittarius** aims the reset at **the horizon**. Mutable fire ruled by Jupiter, Sagittarius governs belief, meaning, study, travel, risk, publishing and faith, and it quietly decides how big a life you think you're allowed to have.`,
 
-        `This Moon can expose where your life has quietly shrunk to fit your schedule, where you've been calling something realistic when it's really just small, where you stopped believing in the bigger version because disappointment was expensive last time, or where you've been waiting until you're more qualified, more ready, more sure. Sagittarius is not interested in your credentials, **it wants to know what you'd go after if you believed it could work.**`,
+        `What tends to surface is the size of things. Where your world has shrunk to fit your calendar, where realistic became the polite word for small, where you've been waiting to feel qualified before you start, and where you stopped believing in the bigger version because the last disappointment was pricey.`,
 
-        `You may feel restless, itchy, ready to book something, start something, learn something or leave something. Meaning becomes the question: not just whether this works, but whether it's worth your one life, which is a much more inconvenient question and a far better one.`,
+        `Jupiter makes this one of the more optimistic Moons of the year, and that optimism is functional rather than decorative. Sagittarius seeds things that require faith before evidence: the course, the move, the business, the book, the flight you've had in a browser tab since June.`,
 
-        `There's a genuinely expansive side to this Moon. Look at how far your world has already stretched, the risks that paid off, the things you believed in before there was evidence, and the places where you've replaced somebody else's rulebook with your own.`,
+        `Meaning is the real question underneath, which is far more inconvenient than whether something works. Sagittarius wants to know whether it's worth one of your actual years, and it will not accept busy as an answer.`,
 
-        `The energy asks: **What would I go for if I stopped waiting to be qualified?**`,
+        `The energy asks: **What would I go after if I stopped waiting to be qualified?**`,
       ],
       lookOutFor: [
-        `Sagittarius overshoots. The plan arrives at maximum scale, immediately, and completely without the boring middle section that would make it possible, so the trap this cycle is mistaking the size of the vision for progress on it.`,
+        `Sagittarius overshoots by design. The plan arrives at maximum scale, immediately, with the boring middle section missing entirely, so the trap is treating the size of the vision as evidence of progress on it.`,
 
-        `Watch the escape route. A fresh start somewhere else is sometimes real expansion and sometimes just leaving, and the two feel identical in week one. The difference shows up in what you're running toward versus what you'd rather not finish.`,
+        `Leaving and expanding look identical in week one. Both feel like freedom, both involve packing, and the difference only shows up in whether you're moving toward something or away from something you'd rather not finish.`,
 
-        `Notice the certainty. Under this Moon a belief can feel so obviously true that you stop checking it against what's in front of you, and Sagittarius holds convictions much more confidently than the evidence usually supports.`,
+        `Certainty gets dangerous under this Moon. A belief can feel so obviously true that you stop checking it against reality, and this sign holds convictions waaaay more confidently than the available evidence supports.`,
 
-        `Keep an eye on the tact. The truth feels so clear that it seems unkind not to say it, at volume, immediately, and you can be completely right in a way that costs you the person you were being right at.`,
+        `Tact is the first casualty. The truth feels so clear that saying it immediately, at volume, seems like honesty, and you can be entirely right in a way that costs you the person you were right at.`,
 
-        `Be careful with the next thing as an anaesthetic. There's always a bigger idea available, and its arrival conveniently relieves you of finishing the current one, which is how ten exciting beginnings turn into nothing you can point at.`,
+        `Next big idea syndrome is real. There's always a shinier one available, and its arrival conveniently relieves you of finishing the current one, which is how ten exciting beginnings become nothing you can point at.`,
 
-        `Watch overcommitting. Sagittarius says yes generously, to the trip, the project, the favour, the plan, and then spends the next month resenting a calendar it built itself.`,
+        `Overcommitting is the very Jupiter version of generosity. Yes to the trip, the project, the favour, the plan, followed by a month of quietly resenting a calendar you built with your own hands.`,
 
-        `There's a restlessness that reads as intuition too. Feeling trapped is information, and it's not automatically instruction, because sometimes the thing asking for endurance is the thing that was going to work.`,
+        `Restlessness can do a convincing impression of intuition. Feeling trapped is information worth having, and it isn't automatically instruction, because sometimes the thing asking for endurance was the thing about to work.`,
 
-        `And watch the preaching. When conviction gets loud it usually means it's being used to avoid a feeling, and the volume is doing a job the belief can't do on its own.`,
+        `Preaching is the tell that conviction has started doing a job it can't do. When the volume goes up, there's usually a feeling underneath that isn't being felt.`,
 
-        `**Book the thing, then build the middle. Vision without logistics is just a nice evening.**`,
+        `**Book the thing, then build the middle. A vision with no logistics is just a nice evening.**`,
       ],
       shadow: [
-        `The shadow of a New Moon in Sagittarius is **restlessness that calls itself freedom**, and it's the most charming shadow in the zodiac, because it always arrives dressed as growth.`,
+        `The shadow of a New Moon in Sagittarius is **restlessness that calls itself freedom**, and it's the most charming shadow going, because it always turns up dressed as growth.`,
 
-        `It works like this: something gets difficult, or ordinary, or requires you to stay when staying isn't fun, and a bigger, brighter, more meaningful option appears right on cue. You follow it, honestly believing you're expanding, and you leave the unfinished thing behind you without ever calling it that.`,
+        `The mechanism is elegant. Something gets difficult, or ordinary, or requires you to stay when staying isn't fun, and a bigger, brighter, more meaningful option appears bang on cue. You follow it believing you're expanding, and the unfinished thing gets left behind without ever being called that.`,
 
-        `Over time you end up with a very interesting life and a trail of things that almost happened.`,
+        `Give it a decade and you end up with a genuinely interesting life and a trail of things that almost happened.`,
 
-        `Watch where you use philosophy to get out of specifics. Sagittarius can reframe anything into a lesson, a season, a chapter, a sign, and a beautiful reframe can quietly excuse you from a conversation you owed somebody.`,
+        `Philosophy makes a great escape hatch too. This sign can reframe anything into a lesson, a season, a chapter or a sign from the universe, and a beautiful reframe will quietly excuse you from a conversation you owed somebody.`,
 
-        `There's avoidance in the optimism too. Deciding it'll all work out is sometimes faith and sometimes a way of not looking at the numbers, the timeline or the thing you already know isn't working.`,
+        `Optimism has an avoidance setting as well. Deciding it'll all work out is sometimes faith and sometimes a way of not looking at the numbers, the timeline or the thing you already know isn't working.`,
 
-        `Notice the promises. Sagittarius means every word when it says yes, and means it slightly less by Thursday, and the gap between those two moments is where other people learn what your word is worth.`,
+        `Promises are where other people feel it. Sagittarius means every word on Monday and means it slightly less by Thursday, and the gap between those two moments teaches everybody what your word is worth.`,
 
-        `Watch the certainty again, because it's the sharpest edge here. Believing something strongly can feel indistinguishable from knowing it, and this sign will build a whole life on a conviction it never stress-tested.`,
+        `Boredom is the engine underneath the whole pattern. It gets treated as proof that something is wrong, when most of the time it's simply the part where the novelty ended and the work began.`,
 
-        `And watch the boredom, which is the engine underneath all of it. Boredom gets treated as evidence that something is wrong, when very often it's just the part where the novelty ended and the actual work began.`,
+        `There's a loneliness inside the freedom that rarely gets discussed. Keeping every option open means never being fully in anything, and eventually that costs more than it protects.`,
 
-        `There's a loneliness under the freedom too, and it doesn't get talked about much. Keeping every option open means never being fully in anything, and eventually that costs more than it protects.`,
+        `Getting through it starts by making something real this week: a date, a deposit, a booking, a person told. This sign commits out loud, so put something into the world that would be embarrassing to quietly abandon.`,
 
-        `The way through starts by making it real this week. A date, a deposit, a booking, a person told. Sagittarius commits out loud, so put something in the world that would be embarrassing to quietly abandon.`,
+        `Write down what you're leaving unfinished and be honest about whether this beginning is expansion or exit. Both are allowed. They need completely different plans, and one of them requires going back to close something first.`,
 
-        `Then write down what you're leaving unfinished, honestly, and decide whether this beginning is expansion or exit. Both are allowed. They need completely different plans, and only one of them requires you to go back and close something first.`,
+        `Stress-test the belief before you bet a year on it. Write the sentence you're treating as fact, write what would have to be true for it to be wrong, then go and find out which one the evidence actually supports.`,
 
-        `Then test the belief you're building on. Write the sentence you're treating as fact, write what would have to be true for it to be wrong, and go and find out which one the evidence supports before you bet the year on it.`,
+        `Give the restlessness somewhere physical to go, because it will not be reasoned with. Distance, movement, a day somewhere else, a proper change of scenery. Let the body have some freedom so the urge to leave doesn't get to make your decisions.`,
 
-        `Then give the restlessness somewhere physical to go, because it will not be reasoned with. Distance, movement, a day somewhere else, a proper change of scene. Let the body have the freedom so the urge to leave doesn't get to make the decision for you.`,
+        `And build the middle bit. Jupiter expands whatever it touches, including chaos, so a plan with three real steps in it will take you further this cycle than a vision with none.`,
 
-        `**Wanting more is not the problem. Leaving every time it gets ordinary is what keeps the more out of reach.**`,
+        `**Wanting more was never the problem. Leaving every time it gets ordinary is what keeps the more out of reach.**`,
       ],
     },
   },
