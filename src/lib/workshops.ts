@@ -196,6 +196,7 @@ export const WORKSHOPS: Workshop[] = [
     // so day one of the 30 day experiment starts a few hours into the new cycle.
     meta: "10 october · 11:30am la time · libra new moon",
     title: "Libra New Moon: The Glow Up Guide",
+    coverImage: "/glow-up-guide-cover.jpg",
     dark: false,
     startIso: "2026-10-10T11:30:00-07:00",
     durationMinutes: 75,
