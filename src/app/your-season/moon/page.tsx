@@ -175,14 +175,19 @@ function MoonPageContent() {
       {/* The circle for THIS lunation, sitting right under the hero where she has just read what the
           moon is doing and is most likely to want to do something about it.
           The day, date and time are read from the workshop entry rather than written here, so a
-          banner can never tell her a different day from the event it is selling. It only appears
-          when there is an upcoming workshop whose season matches the sign of the moon she is
-          reading, so it disappears on its own after the night and never fires on the wrong page. */}
+          banner can never tell her a different day from the event it is selling.
+          It matches on the night rather than on the season, because a class is often held under a
+          moon from a different sign than the season it belongs to: the Venus Era class is a Libra
+          season workshop held under the Aries full moon, and matching by season would have kept it
+          off the page it was built for. An upcoming class within about a day of the lunation is
+          the one being sold here, so this disappears on its own after the night. */}
       {(() => {
-        if (!sign) return null;
-        const circle = upcomingWorkshops(now ? now.getTime() : Date.now()).find(
-          (w) => w.season?.toLowerCase() === sign.toLowerCase() && w.label.includes("moon")
-        );
+        if (!sign || !date) return null;
+        const lunationMs = new Date(`${date}T12:00:00Z`).getTime();
+        const circle = upcomingWorkshops(now ? now.getTime() : Date.now()).find((w) => {
+          if (!w.startIso) return false;
+          return Math.abs(new Date(w.startIso).getTime() - lunationMs) <= 30 * 60 * 60 * 1000;
+        });
         if (!circle) return null;
         return (
           <section className="px-5 md:px-8 py-8" style={{ borderBottom: "var(--border)", background: "var(--lav-light)" }}>

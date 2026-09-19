@@ -63,11 +63,20 @@ describe("season content", () => {
 
 describe("the workshop card row", () => {
   it("leads with what is still to come and fills the row out with replays", () => {
-    const row = workshopCardRow(at("2026-08-23").getTime(), 4);
+    const nowMs = at("2026-08-23").getTime();
+    const row = workshopCardRow(nowMs, 4);
     expect(row).toHaveLength(4);
-    expect(row.slice(0, 2).map((w) => w.id)).toEqual(["virgo-szn-workshop-1", "virgo-szn-workshop-2"]);
-    expect(shortWorkshopMeta(row[0], at("2026-08-23").getTime())).toBe("26 aug · working session");
-    expect(shortWorkshopMeta(row[2], at("2026-08-23").getTime())).toMatch(/· replay$/);
+
+    // The rule, rather than the schedule: everything still to come leads, in date order, and any
+    // slot left over is filled with a replay. Asserting the fixture broke this test every time a
+    // class was added to the calendar, which is the one thing that is supposed to keep happening.
+    const stillToCome = row.filter((w) => w.startIso && new Date(w.startIso).getTime() >= nowMs);
+    expect(row.slice(0, stillToCome.length)).toEqual(stillToCome);
+    expect(stillToCome.slice(0, 2).map((w) => w.id)).toEqual(["virgo-szn-workshop-1", "virgo-szn-workshop-2"]);
+    expect(shortWorkshopMeta(row[0], nowMs)).toBe("26 aug · working session");
+    for (const filler of row.slice(stillToCome.length)) {
+      expect(shortWorkshopMeta(filler, nowMs)).toMatch(/· replay$/);
+    }
   });
 
   it("gives every workshop the fields the cards render", () => {
