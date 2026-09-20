@@ -50,6 +50,7 @@ interface CalendarResponse {
   events: CalendarEvent[];
   majorTransits: MajorTransit[];
   mercuryRetrogradeNow: boolean;
+  mercurySignNow?: string;
   mercuryShadow: MercuryShadow | null;
   northNodeNow: string;
   eclipseSeason: boolean;
@@ -129,12 +130,15 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
     const timing = isNow ? "now" : until === 1 ? "tomorrow" : `in ${until} days`;
     if (item.kind === "big") {
       const event = item.event;
+      // Every label carries its sign, so the card answers "new moon in what" at a glance rather
+      // than making her read the body for it.
+      const sign = event.sign.toLowerCase();
       const copy = {
-        solar_eclipse: { label: "solar eclipse", body: `Lands in ${event.sign.toLowerCase()}. Something opens or closes fast, on its own timeline.` },
-        lunar_eclipse: { label: "lunar eclipse", body: `Lands in ${event.sign.toLowerCase()}. Endings land harder, what's overdue to close finally does.` },
-        node_ingress: { label: "nodal axis shifts", body: `The north node moves into ${event.sign.toLowerCase()}, resetting the collective's direction for ~18 months.` },
-        full_moon: { label: "full moon", body: `Peak of the cycle in ${event.sign.toLowerCase()}. Things get visible. Good for finishing and releasing.` },
-        new_moon: { label: "new moon", body: `Fresh start in ${event.sign.toLowerCase()}. The moment to begin, not to keep planning.` },
+        solar_eclipse: { label: `solar eclipse in ${sign}`, body: `Lands in ${sign}. Something opens or closes fast, on its own timeline.` },
+        lunar_eclipse: { label: `lunar eclipse in ${sign}`, body: `Lands in ${sign}. Endings land harder, what's overdue to close finally does.` },
+        node_ingress: { label: `nodal axis into ${sign}`, body: `The north node moves into ${sign}, resetting the collective's direction for ~18 months.` },
+        full_moon: { label: `full moon in ${sign}`, body: `Peak of the cycle in ${sign}. Things get visible. Good for finishing and releasing.` },
+        new_moon: { label: `new moon in ${sign}`, body: `Fresh start in ${sign}. The moment to begin, not to keep planning.` },
       }[event.type as "solar_eclipse" | "lunar_eclipse" | "node_ingress" | "full_moon" | "new_moon"];
       cards.push({
         key: `${event.type}-${event.date}`,
@@ -148,14 +152,20 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
       });
     } else {
       const t = item.transit;
-      const label =
-        t.type === "ingress" ? `${t.planet} shifts era`
-        : t.type === "aspect" ? `${t.planet} ${t.aspectType} ${t.otherPlanet}`
-        : t.type === "retrograde_start" ? `${t.planet} retrograde`
-        : `${t.planet} direct`;
       // Every card names the sign the event happens in, the same way the lunations do, because "venus
       // retrograde" and "venus retrograde in scorpio" are not the same transit to read.
       const inSign = t.sign ? ` in ${t.sign.toLowerCase()}` : "";
+      // An aspect happens in two places at once, so it names both signs, and only once when the
+      // two planets share one.
+      const aspectLabel =
+        t.sign && t.otherSign && t.sign !== t.otherSign
+          ? `${t.planet} in ${t.sign.toLowerCase()} ${t.aspectType} ${t.otherPlanet} in ${t.otherSign.toLowerCase()}`
+          : `${t.planet} ${t.aspectType} ${t.otherPlanet}${inSign}`;
+      const label =
+        t.type === "ingress" ? `${t.planet}${inSign ? ` into ${t.sign!.toLowerCase()}` : " shifts era"}`
+        : t.type === "aspect" ? aspectLabel
+        : t.type === "retrograde_start" ? `${t.planet} retrograde${inSign}`
+        : `${t.planet} direct${inSign}`;
       const between =
         t.sign && t.otherSign
           ? `${t.planet} in ${t.sign.toLowerCase()} and ${t.otherPlanet} in ${t.otherSign.toLowerCase()}`
@@ -189,7 +199,7 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
       timing: "right now",
       hot: false,
       gold: true,
-      label: "mercury retrograde",
+      label: `mercury retrograde${data.mercurySignNow ? ` in ${data.mercurySignNow.toLowerCase()}` : ""}`,
       body: "Reread before you send, review before you sign. This window is for revisiting, not launching.",
       href: null,
     });
@@ -201,7 +211,7 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
       hot: false,
       gold: true,
       href: null,
-      label: "mercury shadow",
+      label: `mercury shadow in ${data.mercuryShadow.sign.toLowerCase()}`,
       body:
         data.mercuryShadow.phase === "post"
           ? `Mercury is direct but still in its post-retrograde shadow until about two weeks after ${formatDate(data.mercuryShadow.date)}. Clear the backlog, don't launch yet.`

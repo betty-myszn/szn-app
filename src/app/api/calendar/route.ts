@@ -404,6 +404,8 @@ export async function GET() {
       events,
       majorTransits,
       mercuryRetrogradeNow: mercuryNow.speed < 0,
+      // Where Mercury is right now, so the "retrograde right now" card can name its sign too.
+      mercurySignNow: signAt(mercuryNow.longitude).sign,
       mercuryShadow,
       northNodeNow: nodeNow.sign,
       eclipseSeason,
