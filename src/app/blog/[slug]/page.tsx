@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { WORKSHOPS } from "@/lib/workshops";
 import {
   BLOG_POSTS,
   postBySlug,
@@ -47,6 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = postBySlug(slug);
   if (!post) return { title: "Not found" };
+  const ogImage = post.ogImage ? { url: post.ogImage.src, width: post.ogImage.width, height: post.ogImage.height, alt: post.ogImage.alt } : OG_IMAGE;
 
   return {
     title: post.metaTitle,
@@ -59,9 +62,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
-    twitter: { card: "summary_large_image", images: [OG_IMAGE.url] },
+    twitter: { card: "summary_large_image", images: [ogImage.url] },
   };
 }
 
@@ -72,6 +75,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const category = categoryBySlug(post.category);
   const related = relatedPosts(post);
+  const workshops = (post.workshops ?? [])
+    .map((id) => WORKSHOPS.find((w) => w.id === id))
+    .filter((w): w is (typeof WORKSHOPS)[number] => Boolean(w));
+  const closing = post.closing ?? {
+    heading: "want this read for",
+    pink: "your chart?",
+    body: "Calculate your free birth chart and see your own placements interpreted in full.",
+    label: "get your free chart",
+    href: "/chart",
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -87,7 +100,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
         mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${post.slug}` },
         articleSection: category?.name,
-        image: `${SITE_URL}${OG_IMAGE.url}`,
+        image: `${SITE_URL}${post.ogImage?.src ?? OG_IMAGE.url}`,
       },
       {
         "@type": "BreadcrumbList",
@@ -119,36 +132,53 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Hero */}
       <section className="px-5 md:px-8 py-14" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-        <div className="max-w-3xl mx-auto">
-          <nav aria-label="Breadcrumb" style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--lav)" }}>
-            <Link href="/blog" className="no-underline" style={{ color: "var(--lav)" }}>blog</Link>
-            {category && (
-              <>
-                <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-                <Link href={`/blog/category/${category.slug}`} className="no-underline" style={{ color: "var(--lav)" }}>
-                  {category.name}
-                </Link>
-              </>
-            )}
-          </nav>
+        <div className={post.heroImage ? "max-w-3xl mx-auto grid gap-8 items-center md:grid-cols-[1fr_280px]" : "max-w-3xl mx-auto"}>
+          <div>
+            <nav aria-label="Breadcrumb" style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--lav)" }}>
+              <Link href="/blog" className="no-underline" style={{ color: "var(--lav)" }}>blog</Link>
+              {category && (
+                <>
+                  <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
+                  <Link href={`/blog/category/${category.slug}`} className="no-underline" style={{ color: "var(--lav)" }}>
+                    {category.name}
+                  </Link>
+                </>
+              )}
+            </nav>
 
-          <h1
-            style={{
-              fontFamily: pp,
-              fontSize: "clamp(30px, 4.8vw, 46px)",
-              fontWeight: 800,
-              letterSpacing: "-1.3px",
-              lineHeight: 1.1,
-              color: "#fff",
-              margin: "18px 0 14px",
-            }}
-          >
-            {post.title}
-          </h1>
+            <h1
+              style={{
+                fontFamily: pp,
+                fontSize: "clamp(30px, 4.8vw, 46px)",
+                fontWeight: 800,
+                letterSpacing: "-1.3px",
+                lineHeight: 1.1,
+                color: "#fff",
+                margin: "18px 0 14px",
+              }}
+            >
+              {post.title}
+            </h1>
 
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
-            {formatPostDate(post.publishedAt)} · {post.readingMinutes} min read
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
+              {formatPostDate(post.publishedAt)} · {post.readingMinutes} min read
+            </div>
           </div>
+
+          {/* Under the title on phones so the H1 stays the first thing on the page. */}
+          {post.heroImage && (
+            <Image
+              src={post.heroImage.src}
+              alt={post.heroImage.alt}
+              width={post.heroImage.width}
+              height={post.heroImage.height}
+              loading="eager"
+              fetchPriority="high"
+              sizes="(min-width: 768px) 280px, 260px"
+              className="w-full max-w-[260px] md:max-w-none mx-auto"
+              style={{ height: "auto" }}
+            />
+          )}
         </div>
       </section>
 
@@ -240,6 +270,41 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               )}
             </div>
           ))}
+
+          {/* The season's live classes, straight after the section that sells them. */}
+          {workshops.length > 0 && (
+            <div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {workshops.map((w) => (
+                  <div key={w.id} style={{ border: "var(--border)", background: "#fff" }}>
+                    {w.coverImage && (
+                      <Image
+                        src={w.coverImage}
+                        alt={`${w.title} workshop cover`}
+                        width={1920}
+                        height={1080}
+                        sizes="(min-width: 640px) 370px, 100vw"
+                        style={{ width: "100%", height: "auto", display: "block", borderBottom: "var(--border)" }}
+                      />
+                    )}
+                    <div className="p-5">
+                      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 8 }}>
+                        {w.meta}
+                      </div>
+                      <h3 style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, letterSpacing: "-0.2px", lineHeight: 1.3, color: "var(--dark)", marginBottom: 6 }}>
+                        {w.title}
+                      </h3>
+                      <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--grey)" }}>live on zoom · replay saved inside</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-4 flex-wrap" style={{ marginTop: 22 }}>
+                <Link href={closing.href} className="btn-pink">{closing.label}</Link>
+                <span style={{ fontSize: 12, lineHeight: 1.6, color: "var(--grey)" }}>no card required · $88 a month after, only if you say so</span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -298,13 +363,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               marginBottom: 12,
             }}
           >
-            want this read for <span className="pk">your chart?</span>
+            {closing.heading} <span className="pk">{closing.pink}</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.65)", maxWidth: 460, margin: "0 auto 24px" }}>
-            Calculate your free birth chart and see your own placements interpreted in full.
+            {closing.body}
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/chart" className="btn-pink">get your free chart</Link>
+            <Link href={closing.href} className="btn-pink">{closing.label}</Link>
             <Link href="/blog" className="btn-outline btn-outline--white">more guides</Link>
           </div>
         </div>

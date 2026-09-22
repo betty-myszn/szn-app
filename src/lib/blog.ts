@@ -33,6 +33,24 @@ export interface BlogCta {
   href: string;
 }
 
+export interface BlogImage {
+  /** Path under /public. */
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+// The closing band's copy. Posts without one get the default free chart pitch.
+export interface BlogClosing {
+  heading: string;
+  /** Tail of the heading, rendered in pink. */
+  pink: string;
+  body: string;
+  label: string;
+  href: string;
+}
+
 export interface BlogPost {
   slug: string;
   /** H1 on the page. Written for a human. */
@@ -54,6 +72,14 @@ export interface BlogPost {
   faqs: BlogFaq[];
   /** Slugs of related posts, rendered as internal links. Internal linking is the whole game. */
   related: string[];
+  /** Art beside the H1. Season posts reuse the season's dashboard hero so the two feel like one world. */
+  heroImage?: BlogImage;
+  /** 1200x630 share card. Falls back to the site card, which says nothing about the post. */
+  ogImage?: BlogImage;
+  /** Workshop ids from lib/workshops.ts, rendered as cards after the last section so the dates and
+   *  titles come from the same schedule as /events rather than being retyped here. */
+  workshops?: string[];
+  closing?: BlogClosing;
 }
 
 export type CategorySlug =
@@ -128,6 +154,257 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
+  // Every date and degree below comes from the app's own Swiss Ephemeris (lib/sky-bank.ts for the
+  // lunations and stations, ingresses computed the same way), in New York time to match the calendar.
+  {
+    slug: "libra-season-2026",
+    title: "It's Libra Season, Baby: Your Libra Season 2026 Guide",
+    metaTitle: "Libra Season 2026: Dates, Themes & Venus Retrograde",
+    description:
+      "Libra Season 2026 runs 22 September to 23 October. The key dates, the Aries full moon, Venus retrograde, the themes to work with and Libra's shadow side.",
+    category: "zodiac-signs",
+    publishedAt: "2026-09-22",
+    updatedAt: "2026-09-22",
+    readingMinutes: 15,
+    excerpt:
+      "Venus, Libra's own ruler, stations retrograde halfway through the season. The dates, the themes, the shadow side and how to make this your Venus era.",
+    heroImage: {
+      src: "/libra-moon-full.png",
+      alt: "A woman in pink heart shaped sunglasses laughing in front of a full moon, surrounded by pink orchids, with the Libra scales glyph",
+      width: 998,
+      height: 994,
+    },
+    ogImage: {
+      src: "/libra-season-2026-og.jpg",
+      alt: "It's Libra szn, baby: the Libra Season 2026 guide from MY SZN",
+      width: 1200,
+      height: 630,
+    },
+    intro: [
+      "It's Libra season, baby, and the sky is about to get verrrry interested in your relationships, your standards, your aesthetic and exactly what you think you deserve. Libra Season 2026 begins when the Sun enters Libra at 8:05pm New York time on Tuesday 22 September, right on the September equinox, and it runs until the Sun moves into Scorpio at 5:37am on Friday 23 October. In between there is an Aries full moon on 26 September, Venus stationing retrograde on 3 October, a Libra new moon on 10 October and Pluto turning direct on 15 October, so this is a Libra season with a LOT going on.",
+      "Libra is the cardinal air sign ruled by Venus, the planet of love, money, beauty, pleasure and value, which is why every Libra season moves the collective attention onto the space between you and other people. This year Venus herself turns retrograde halfway through, the first Venus retrograde to begin in Libra season since October 2018, and that turns the whole month into a deeeep review of what you value, who you value, and whether the life you are living is priced at what you are actually worth.",
+    ],
+    sections: [
+      {
+        heading: "When is Libra Season 2026?",
+        body: [
+          "The Sun enters Libra at 8:05pm Eastern on Tuesday 22 September 2026, which is 5:05pm in Los Angeles and already 1:05am on Wednesday 23 September in London, and that is why you will see both dates floating around online. Libra season then runs for just over a month, until the Sun crosses into Scorpio at 5:37am Eastern on Friday 23 October.",
+          "That first moment is also the September equinox, when day and night are almost exactly the same length all over the world. Autumn begins in the northern hemisphere and spring in the southern, and the sky hands us a literal balance point at the very moment the sign of the scales begins. Astrologers call Libra a cardinal sign because it opens a season of the year, and cardinal signs are the initiators of the zodiac, so Libra's balance is an active one: she starts the conversation, makes the ask, sets the table and creates the harmony she wants to live in.",
+        ],
+      },
+      {
+        heading: "What Libra season is about: love, money, beauty and the ask",
+        body: [
+          "Libra is ruled by Venus, and Venus is the planet of attraction in every sense: who you are drawn to, what you find beautiful, what you will pay for, what you think you are worth and how much pleasure you allow yourself to have. In the earth sign Taurus, Venus is sensual and material, all silk sheets and savings accounts. In Libra, an air sign, she becomes social, relational and aesthetic, so this is the season where love, taste and fairness get talked about, negotiated and decided between people.",
+          "Libra is also the natural ruler of the seventh house, the part of the chart that describes committed partnerships of every kind: lovers, spouses, business partners, clients, collaborators and the contracts that hold them together. The themes that come up for all of us this month are relationships, agreements, standards, beauty, balance and fairness, and the quiet question running underneath every one of them is whether the deals you are living inside still feel fair to you.",
+          "The energy is gorgeous when you work with it. Libra season loves a date, a dinner party, a new perfume, a gallery on a Sunday, a hard conversation handled with grace and an agreement that finally reflects what you want. It rewards the woman who says what she wants early and kindly, and it gets reaaally uncomfortable for the woman who keeps editing her wants down so that everyone else can stay comfortable.",
+        ],
+      },
+      {
+        heading: "Libra Season 2026 key dates",
+        body: [
+          "Every date and time below is in New York time, calculated from the same Swiss Ephemeris that powers every chart inside MY SZN, so you can put them straight into your calendar.",
+        ],
+        items: [
+          {
+            name: "22 September: the Sun enters Libra on the equinox",
+            body: "At 8:05pm the Sun crosses into Libra and the equinox marks the balance point of the year. A beautiful night to reset your space, light a candle and decide what balance would genuinely look like in your life for the next month, because Libra likes her intentions pretty AND specific.",
+          },
+          {
+            name: "26 September: full moon in Aries",
+            body: "The full moon lands at 3°37' Aries at 12:48pm, within a degree of Neptune, with the Sun trining Pluto a few hours earlier. It is the moment of the season where the ME energy of Aries lights up the WE energy of Libra, so the desires you have been quietly editing down come up to the surface, loudly.",
+          },
+          {
+            name: "27 September: Mars enters Leo",
+            body: "Mars joins Jupiter in Leo at 10:48pm and stays until 25 November. Romance, creative projects and anything that puts you on a stage get a huge shot of fire, and your tolerance for being overlooked drops to roughly zero, bb.",
+          },
+          {
+            name: "30 September and 4 October: Mercury moves into Scorpio, then into its shadow",
+            body: "Mercury enters Scorpio at 7:44am on 30 September and conversations get deeper, more private and a little more suspicious. From 4 October he is walking over the exact degrees he will retrace when he stations retrograde on 24 October, so read the contract properly, back up your files and say the thing clearly the first time.",
+          },
+          {
+            name: "3 October: Venus stations retrograde in Scorpio",
+            body: "Venus turns retrograde at 8°29' Scorpio at 3:15am and stays retrograde until 13 November, sliding back into Libra on 25 October along the way. This is the headline of the whole season, so it gets its own section below.",
+          },
+          {
+            name: "10 October: new moon in Libra",
+            body: "The only new moon in Libra this year lands at 17°21' Libra at 11:50am, applying to a sextile with Jupiter in Leo. Later that evening Venus squares Mars, which puts a little heat and friction under whatever you decide to begin.",
+          },
+          {
+            name: "15 October: Sun sextile Jupiter and Pluto stations direct",
+            body: "One of the luckiest days of the season, with the Sun and Jupiter in an easy, generous sextile in the early hours. Pluto then stations direct at 3°04' Aquarius at 10:40pm after five months of retrograde, and whatever has felt stuck around power, control or reinvention starts moving forward again. Mars trines Saturn the next morning too, which is excellent for doing the brave thing in a way that lasts.",
+          },
+          {
+            name: "21 October: Sun trine the North Node",
+            body: "The Sun trines [the North Node](/blog/north-node-and-life-purpose) in Aquarius, the direction the collective is growing towards for the next eighteen months or so: community, the future, your people and ideas bigger than any single relationship. A gorgeous day for anything that links your love life, your friendships or your work to a larger vision.",
+          },
+          {
+            name: "23 October: the Sun enters Scorpio",
+            body: "Libra season closes at 5:37am and Scorpio season begins, with Mercury stationing retrograde the next day, Venus backing into Libra on 25 October and a Taurus full moon on 26 October. The review that Libra season starts keeps rolling well into November.",
+          },
+        ],
+      },
+      {
+        heading: "Venus retrograde 2026: the big story of this Libra season",
+        body: [
+          "Venus rules Libra, so when she stations retrograde in the middle of Libra season the whole month takes on her agenda. A retrograde is the apparent backwards motion a planet makes from our point of view on Earth, and Venus does it less often than any other personal planet, roughly once every eighteen months for about six weeks. This one runs from 3 October to 13 November 2026, beginning at 8°29' Scorpio, where Venus is at her most intense and least comfortable, and ending at 22°51' Libra, the sign she rules.",
+          "While Venus is retrograde in Scorpio, love and money get deeeep. Scorpio rules intimacy, trust, shared resources, debt, power and everything you would rather not say out loud at brunch, so this is the part of the retrograde where you might get the ick from somebody who had you feral six months ago, realise that chemistry has kept you attached waaaay longer than the relationship deserved, or find that shared money (the joint account, the business split, the thing you lent a friend in 2024) needs an honest conversation.",
+          "Venus also moves in an eight year rhythm, so this retrograde is a near perfect repeat of the one that began on 5 October 2018. Cast your mind back to autumn 2018, to who you were dating, what you were earning, what you thought you deserved and what you found beautiful, and you will often find the storyline this retrograde has come back to finish.",
+          "Venus retrograde has a reputation for bringing exes back, and while nobody can promise you that (or threaten you with it), what it reliably brings back is your own pattern: the type you keep choosing, the price you keep charging, the version of love you keep accepting as the best on offer. That is the gold, because once you can see the pattern clearly you get to make a different choice, and your own [Venus sign](/blog/venus-sign-and-how-you-love) tells you a lot about which pattern is yours.",
+          "The move during a Venus retrograde is to re-value. Go through your prices, your subscriptions and the places your money quietly leaks out each month. Pull out the clothes, the music, the perfume and the style you loved before you started dressing for somebody else's approval. Return to the creative project you abandoned, and say the thing in the relationship you have been avoiding, gently and clearly, then let the answer tell you what you need to know.",
+        ],
+      },
+      {
+        heading: "The Aries full moon on 26 September",
+        body: [
+          "Any full moon in Libra season falls in Aries, the opposite sign, and it lights up the axis between me and we. The Sun in Libra is focused on the relationship, the harmony and the other person, while the Moon in Aries is fiery, impatient, ballsy and entirely focused on what SHE wants, so this is the moment where the needs you have been politely postponing demand a seat at the table.",
+          "This year it lands at 3°37' Aries at 12:48pm New York time, within a degree of Neptune, with the Sun trining Pluto. Neptune dissolves boundaries and illusions, so this moon can show you where you have been living inside a fantasy about a person, a plan or your own limits, and just as often it gives you a dreamy, spiritual clarity about what you desire. Pluto backs the whole thing with power, which makes it a potent full moon for reclaiming the wants you watered down to make yourself easier to choose.",
+          "It is also the day we are doing Call In Your Venus Era live inside MY SZN, at 11:30am Los Angeles time, under a moon that is already full. More on that at the end.",
+        ],
+      },
+      {
+        heading: "The Libra new moon on 10 October",
+        body: [
+          "The new moon in Libra lands at 17°21' Libra at 11:50am New York time on Saturday 10 October, the only new moon of 2026 in the sign of the scales. [New moons are for beginnings](/blog/new-moon-vs-full-moon), and a Libra new moon opens a fresh chapter in how you love, how you partner, what you find beautiful and what you allow yourself to receive.",
+          "This one comes with a twist, because its ruler, Venus, is retrograde in Scorpio and squares Mars in Leo later that evening. The intentions that land best under it bring something back to you: your standards, your style, your pleasure, your self-respect, the version of you who got a little lost keeping everyone else comfortable. With the new moon applying to a sextile with Jupiter in Leo, the glow up you commit to here has real room to grow over the following month.",
+        ],
+      },
+      {
+        heading: "What to look forward to this Libra season",
+        body: [
+          "For all the review energy, this is a genuinely funnnnn month. Mars joins Jupiter in Leo from 27 September, and with two of the boldest planets in the sign of the heart, romance, creativity, play and self-expression all get turned up. Dates feel like events again, getting dressed feels like a creative act, and the flirting is BACK.",
+          "The Sun's trine to Uranus on 28 September brings the kind of unexpected invitation or idea that changes your plans in the best way, and the Sun's sextile to Jupiter on 15 October is one of the most generous days of the season for asking, pitching, celebrating and saying yes to something that feels bigger than you. The same day Pluto stations direct, handing back a sense of personal power that has been on hold since it turned retrograde in May.",
+          "And then there is Libra's own gift, which is beauty. This is the season to make your home feel incredible, buy the flowers, book the facial, host the dinner, play the record and wear the lipstick to the supermarket, because beauty works best as a daily practice. Venus retrograde also makes it a brilliant time to fall back in loooove with what you already own, which your bank account will appreciate.",
+        ],
+      },
+      {
+        heading: "The shadow side of Libra season",
+        body: [
+          "Every sign has a shadow, and Libra's is sneaky because it looks so nice. The shadow side of Libra season is keeping the peace at your own expense, agreeing your way out of your own needs so that nobody has to feel any friction except you. It shows up as people pleasing, as saying yes when your whole body said no, and as the \"I don't mind, you choose\" that you absolutely do mind about.",
+          "Indecision is the other classic. Libra can see every side of everything, and when that gift runs on fear it turns into fence sitting, where every choice gets delayed because every choice might disappoint somebody. Then there is mirroring, where you slowly become whoever the person across from you wants you to be, the scorekeeping that happens when fairness becomes a ledger, and the perfectionism that uses beauty as armour so nobody gets close enough to see the mess.",
+          "With Venus retrograde in Scorpio this year, the shadow gets a little darker and more psychological. Jealousy, comparison, possessiveness and power games around love and money can flare up, especially wherever you have been giving more than you get and resenting it quietly. That resentment is information. It shows you exactly which deal needs renegotiating.",
+          "The medicine is simple and uncomfortable in equal measure. Say your real preference out loud at least once this season, in a room where you would usually default to whatever keeps things smooth, and watch the room survive it. Every honest preference you voice teaches your nervous system that you can be loved and have an opinion at the same time.",
+        ],
+      },
+      {
+        heading: "How Libra Season 2026 lands in your chart",
+        body: [
+          "The collective sky gives everyone the same weather, and your birth chart decides which room of your life it rains in. Libra season lights up whichever house Libra occupies in your chart, and Venus retrograde plays out mainly through the house holding Scorpio, which is where love, money and value get their review. Venus retrograde in your eighth house is intimacy, trust, shared money and power, while the same retrograde in your tenth is career, reputation and public image, a completely different story.",
+          "Use your rising sign for the quick version below (your sun sign works as a rough guide if you do not know your rising), then [calculate your full chart](/chart) to see the exact houses, your own Venus sign and every planet this season touches. If houses are new to you, [the 12 houses guide](/blog/12-houses-in-astrology) walks through each one.",
+        ],
+        items: [
+          {
+            name: "Aries rising",
+            body: "Relationships are the whole story for you this month, with Libra moving through your seventh house of partnership and the Aries full moon landing in your first. Venus retrograde then moves through your eighth house, bringing intimacy, trust and shared money in for a proper review.",
+          },
+          {
+            name: "Taurus rising",
+            body: "Venus rules your chart, so her retrograde is personal: your body, your pleasure and what you are willing to settle for all get re-evaluated. Libra lights your sixth house of routines, health and daily work, and the retrograde itself runs through your seventh, putting a committed relationship or business partnership under the microscope.",
+          },
+          {
+            name: "Gemini rising",
+            body: "Flirting is back on the menu, as Libra lights your fifth house of romance, creativity and pleasure and makes this one of your most playful seasons of the year. With Venus retrograde in your sixth, the review happens in your workload, your daily habits and the routines that either nourish your body or drain it.",
+          },
+          {
+            name: "Cancer rising",
+            body: "Home is where the Libra energy lands for you, in your fourth house, so your space, your family and the emotional foundations of your life want to feel more beautiful and more balanced. Venus retrograde in your fifth brings an old creative passion, a past romance or a forgotten source of joy back for a second look.",
+          },
+          {
+            name: "Leo rising",
+            body: "Mars and Jupiter are both in your first house now, so you walk into this season with serious main character energy. Libra lights your third house of conversations and ideas, while Venus retrograde in your fourth turns the review inward, towards home, family and where you feel safe enough to soften.",
+          },
+          {
+            name: "Virgo rising",
+            body: "Libra season is money season for you, moving through your second house of income, self-worth and what you value. Venus retrograde in your third reviews the way you talk about yourself, which makes it a powerful time to rewrite the scripts you use about your prices and your needs.",
+          },
+          {
+            name: "Libra rising",
+            body: "Happy season to YOU, bb. The Sun moves through your first house, the Libra new moon on 10 October is your personal new year, and Venus is your chart ruler, so her retrograde through your second house of money and self-worth is a deep review of what you believe you deserve to earn and receive.",
+          },
+          {
+            name: "Scorpio rising",
+            body: "Rest is part of your glow up this month, because Libra moves through your twelfth house of dreams, solitude and everything happening behind the scenes. The retrograde itself sits in your first house, making your appearance, your self-image and the way you present yourself to the world the focus of the review.",
+          },
+          {
+            name: "Sagittarius rising",
+            body: "The season shows you who your people really are, with Libra lighting your eleventh house of friends, community and future plans. Venus retrograde in your twelfth brings up old feelings, private longings and patterns in love you would usually rather leave alone, which is exactly why they are worth the time.",
+          },
+          {
+            name: "Capricorn rising",
+            body: "Career is in the spotlight, with Libra lighting your tenth house of reputation, ambition and professional partnerships. Venus retrograde in your eleventh reviews your friendships, networks and the communities you belong to, a good time to invest in the connections that feed you.",
+          },
+          {
+            name: "Aquarius rising",
+            body: "The North Node sits in your first house for the next eighteen months or so, and Libra season moves through your ninth house of travel, study and big beliefs. Your tenth house holds the retrograde, so career, reputation and what you want to be known for get the review.",
+          },
+          {
+            name: "Pisces rising",
+            body: "Things get deep and magnetic for you, with Libra season in your eighth house of intimacy, shared money and transformation. Venus retrograde moves through your ninth, reviewing your beliefs about love and money, what you are studying and the bigger adventures you keep putting off.",
+          },
+        ],
+      },
+      {
+        heading: "Your Libra season workshops inside MY SZN",
+        body: [
+          "Reading about Libra season is lovely. Living it with your own chart open in front of you, in a room full of women doing the same work, is where things ACTUALLY change, and that is what MY SZN is for. It is the astrology-led membership that reads every season, every moon and every retrograde against your own birth chart and your Human Design, with live coaching workshops, astrotapping™ (our blend of journaling, EFT tapping and somatic work, layered over your chart), community chat rooms and a personalised season guide waiting for you every time the Sun changes sign.",
+          "This Libra season we are meeting live twice, on the two moons that matter most. Call In Your Venus Era, on Saturday 26 September at 11:30am Los Angeles time, is a manifestation workshop under the Aries full moon for calling in more money, love, pleasure and everything you actually f*cking want. We dive into your personal Venus placement and what it reveals about your relationship with money, attraction and desire, then use Future Self work and embodiment to start becoming the version of you who gets to have it.",
+          "The Glow Up Guide, on Saturday 10 October at 11:30am Los Angeles time, opens the Libra new moon with a working session that kicks off our 30-Day Glow Up Experiment. You choose your own changes and little acts of rebellion across money, beauty, pleasure, relationships, confidence and your environment, and then we spend a month finding out just how good life can get.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where Libra season lands in YOUR chart",
+      body: "Inside MY SZN, Libra season, Venus retrograde and both moons are read against your own placements, so you know which part of your life is getting the glow up and which part is getting the review. Your first 7 days are free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    workshops: ["libra-szn-workshop-1", "libra-szn-workshop-2"],
+    closing: {
+      heading: "your libra season, read for",
+      pink: "your chart",
+      body: "Your full chart, your personalised Libra season guide, Venus retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    faqs: [
+      {
+        question: "When does Libra season 2026 start and end?",
+        answer:
+          "Libra season 2026 starts when the Sun enters Libra at 8:05pm New York time on 22 September, which is 1:05am on 23 September in the UK, and ends when the Sun moves into Scorpio at 5:37am New York time on 23 October 2026.",
+      },
+      {
+        question: "What is Libra season about?",
+        answer:
+          "Libra is the cardinal air sign ruled by Venus, so Libra season focuses on relationships, partnerships, beauty, balance, fairness and self-worth. It asks whether the agreements you live inside still reflect what you want and what you are worth.",
+      },
+      {
+        question: "When is Venus retrograde in 2026?",
+        answer:
+          "Venus stations retrograde at 8°29' Scorpio on 3 October 2026 and turns direct at 22°51' Libra on 13 November 2026, moving back into Libra on 25 October along the way. It is a review of love, money, beauty and what you value.",
+      },
+      {
+        question: "When is the full moon in Aries in 2026?",
+        answer:
+          "The Aries full moon is on 26 September 2026 at 3°37' Aries, exact at 12:48pm New York time. It sits within a degree of Neptune, with the Sun trine Pluto, and it lights up the balance between your own desires and your relationships.",
+      },
+      {
+        question: "When is the new moon in Libra in 2026?",
+        answer:
+          "The Libra new moon is on 10 October 2026 at 17°21' Libra, exact at 11:50am New York time. With Libra's ruler Venus retrograde, it is a powerful new moon for re-committing to your standards, your style and your pleasure.",
+      },
+      {
+        question: "What is the shadow side of Libra season?",
+        answer:
+          "People pleasing, indecision, conflict avoidance, mirroring other people and keeping the peace at your own expense. With Venus retrograde in Scorpio in 2026, jealousy, comparison and power struggles around love and money can surface too.",
+      },
+      {
+        question: "How will Libra season affect me personally?",
+        answer:
+          "It depends on your birth chart. Libra season activates the house Libra occupies in your chart, and Venus retrograde plays out mainly through the house holding Scorpio, so the same season can focus one person on relationships and another on career, money or home.",
+      },
+    ],
+    related: ["venus-sign-and-how-you-love", "new-moon-vs-full-moon", "12-houses-in-astrology"],
+  },
   {
     slug: "12-houses-in-astrology",
     title: "The 12 Houses in Astrology and What Each One Means",
