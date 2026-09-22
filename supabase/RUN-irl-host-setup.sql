@@ -1,3 +1,7 @@
+-- MY SZN IRL host applications: all five setup files in order, for one paste into the Supabase SQL editor.
+-- Safe to run more than once.
+
+-- ===== 2026-09-06-irl-host-applications.sql
 -- MY SZN IRL host applications.
 --
 -- Three tables rather than one, because they answer different questions and have different
@@ -147,3 +151,73 @@ revoke all on irl_host_applications, irl_interview_notes, irl_hosts from anon, a
 
 drop policy if exists irl_cities_public_read on irl_cities;
 create policy irl_cities_public_read on irl_cities for select using (recruiting);
+
+-- ===== 2026-09-11-irl-host-birth-chart.sql
+-- MY SZN IRL host applications: birth details, so every applicant's chart and human design reach the
+-- dashboard and the team email, and a direct question about her people skills.
+--
+-- Run after 2026-09-06-irl-host-applications.sql. Additive only, so it is safe whether or not that
+-- one has taken applications yet. The columns are nullable because a NOT NULL column cannot be
+-- added to a table that already has rows; the apply route is what makes them required.
+
+alter table irl_host_applications
+  add column if not exists birth_date             date,
+  add column if not exists birth_time             time,
+  -- The same "approximate / unknown exact time" tick the free chart form has.
+  add column if not exists birth_time_approximate boolean not null default false,
+  -- The place she picked from the list, with the coordinates and timezone the chart is worked
+  -- out from.
+  add column if not exists birth_place            text,
+  add column if not exists birth_lat              double precision,
+  add column if not exists birth_lng              double precision,
+  add column if not exists birth_tz               text,
+  add column if not exists people_skills          text,
+  -- Big three, personal planets and human design, worked out once when she applies (see
+  -- src/lib/irl-chart.ts), so the dashboard can filter on them without running the ephemeris.
+  add column if not exists chart_summary          jsonb;
+
+-- ===== 2026-09-14-irl-host-questions.sql
+-- MY SZN IRL host applications: the three questions Betty added on 14 Sep 2026, her customer
+-- service experience, examples of events she has hosted, and what her availability looks like.
+--
+-- Run after 2026-09-11-irl-host-birth-chart.sql. Additive and nullable like that one, so it is safe
+-- on a table that already has rows; the apply route is what makes them required.
+
+alter table irl_host_applications
+  add column if not exists customer_service text,
+  -- Only asked when she says she has hosted before, so it stays empty for "never, but I'd love to".
+  add column if not exists hosting_examples text,
+  add column if not exists availability     text;
+
+-- ===== 2026-09-14-irl-host-shorter-form.sql
+-- MY SZN IRL host applications: the shorter form of 14 Sep 2026. Six questions came off the form
+-- (about you, astrology level, what community means, hosted before, evenings and weekends, venues
+-- and partners), so their columns stop being required, and the new scenario, two women who only
+-- talk to each other all night, gets a column of its own.
+--
+-- Run after 2026-09-14-irl-host-questions.sql. The old answers stay where they are; the check
+-- constraints on those columns already allow an empty value.
+
+alter table irl_host_applications
+  alter column about_you             drop not null,
+  alter column astrology_level       drop not null,
+  alter column community_means       drop not null,
+  alter column hosting_experience    drop not null,
+  alter column evenings_ok           drop not null,
+  alter column partnerships_interest drop not null,
+  add column if not exists second_scenario text;
+
+-- ===== 2026-09-14-irl-host-shorter-still.sql
+-- MY SZN IRL host applications: fourteen answers, 14 Sep 2026. Leading a room 1-5, the three
+-- places, travel and freelance pay came off the form, and the separate experience question folded
+-- into the work one. The single practical question left is stored in frequency_ok, which stays
+-- required. The rest stop being required; their check constraints already allow an empty value.
+--
+-- Run after 2026-09-14-irl-host-shorter-form.sql.
+
+alter table irl_host_applications
+  alter column speaking_comfort drop not null,
+  alter column local_ideas      drop not null,
+  alter column travel_ok        drop not null,
+  alter column side_role_ok     drop not null;
+
