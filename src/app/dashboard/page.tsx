@@ -44,10 +44,12 @@ import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // Per-season hero cut-out. A season with no art falls back to no image and the pastel card stands
-// on its own, so adding a new season's hero is one line here plus the file in /public.
+// on its own, so adding a new season's hero is one line here plus the file in /public. The art
+// fills the card's right column with its top against the card's top edge, so crop each file to
+// the artwork itself: any transparent margin left in the file shows up as empty card.
 const HERO_ART: Record<string, string> = {
   Leo: "/leo-lion.png",
-  Libra: "/libra-moon.png",
+  Libra: "/libra-moon-full.png",
 };
 
 function heroImageForSign(sign: string): string | null {
@@ -375,7 +377,7 @@ export default function DashboardPage() {
             </div>
             <div style={{ position: "relative", minHeight: 300, display: "grid", placeItems: "end center" }}>
               {heroImg ? (
-                <Image src={heroImg} alt="" aria-hidden width={560} height={700} priority style={{ width: "auto", height: "100%", maxHeight: 380, objectFit: "contain", objectPosition: "bottom" }} />
+                <Image src={heroImg} alt="" aria-hidden fill priority sizes="(min-width: 768px) 500px, 100vw" style={{ objectFit: "contain", objectPosition: "center top" }} />
               ) : (
                 <div style={{ fontSize: 150, alignSelf: "center", opacity: 0.9 }}>{season.symbol}</div>
               )}
