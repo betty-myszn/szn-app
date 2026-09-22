@@ -37,9 +37,8 @@ import DeepLinkScroll from "@/components/DeepLinkScroll";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
-// top band (today + cosmic weather + a "what do you need right now" router + a personalised "for
-// you" block), then the rich reading components wired to real data, then the toolkit, community and
-// the vault. The heavy reading sections in the middle are reused as-is for now and get restyled to
+// top band (today + cosmic weather + the sky on her chart), then her personalised season guide and
+// the rich reading components wired to real data, then the toolkit, community and the vault. The heavy reading sections in the middle are reused as-is for now and get restyled to
 // match the new look next.
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -278,16 +277,6 @@ export default function DashboardPage() {
   })();
   const pad2 = (n: number) => String(n).padStart(2, "0");
 
-  // "what do you need right now" routes to real destinations.
-  const NEEDS = [
-    { lab: "i want more confidence", sub: "your main character energy", href: "/my-chart/main-character" },
-    { lab: "i want more money", sub: "your money goal + astrology", href: "/goals" },
-    { lab: "i want to be more visible", sub: "the visible af workshop", href: "/events" },
-    { lab: "i need direction", sub: "your full season guide", href: "#season-guide" },
-    { lab: "work with my astrology", sub: "your birth chart", href: "/my-chart" },
-    { lab: "i need a f*cking reset", sub: "shadow work + journal", href: "/journal" },
-  ];
-
   const ROOMS = [
     { lab: "general chat", href: "/community" },
     { lab: `${sign} chat`, href: "/community" },
@@ -473,22 +462,10 @@ export default function DashboardPage() {
              data was already being computed by /api/your-szn and thrown away; this renders it. ── */}
       <TransitsToYourChart transits={szn?.transits} />
 
-      {/* ── WHAT DO YOU NEED RIGHT NOW: the router ── */}
-      <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={eyebrow}>start here</div>
-          <h2 style={{ ...sectionHead, marginBottom: 26 }}>what do you need <span className="pk">right now?</span></h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-            {NEEDS.map((n, i) => (
-              <Link key={n.lab} href={n.href} className="no-underline flex flex-col" style={{ borderRadius: 14, background: i % 3 === 1 ? "var(--lav-light)" : "var(--pink-bg)", border: `2px solid ${i % 3 === 1 ? "var(--lav)" : "#FFC2DE"}`, padding: 26, minHeight: 148 }}>
-                <span style={{ fontFamily: poppins, fontSize: "clamp(19px, 2.3vw, 25px)", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--dark)", lineHeight: 1.1, textTransform: "lowercase" }}>{n.lab}</span>
-                <span style={{ fontSize: 12, color: "var(--grey)", marginTop: 8 }}>{n.sub}</span>
-                <span style={{ marginTop: "auto", paddingTop: 16, fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>take me there →</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── her personalised season guide, straight after the sky: the season is the reason she's
+             here, so her read of it comes before anything that routes her elsewhere ── */}
+      <div id="season-guide" />
+      <SeasonPersonalised />
 
       {/* ── your leo szn, area by area (reused) ── */}
       <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
@@ -543,10 +520,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
-
-      {/* ── your full personalised season guide (reused) ── */}
-      <div id="season-guide" />
-      <SeasonPersonalised />
 
       {/* ── human design × season (reused) ── */}
       <SeasonDesignInline />
