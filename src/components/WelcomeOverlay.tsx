@@ -55,8 +55,8 @@ const PANELS: Panel[] = [
     heading: (firstName) => `hey ${firstName}, your chart is the guide to you.`,
     body: (season, sun) =>
       sun
-        ? `Your birth chart is the map of how you're built: what you came here for, where you shine, and where you keep getting in your own way. Everything on this page is built from yours, so what you're looking at is ${season} szn through your ${sun} placements rather than a horoscope written for everybody.`
-        : `Your birth chart is the map of how you're built: what you came here for, where you shine, and where you keep getting in your own way. Everything on this page is built from yours, so what you're looking at is ${season} szn through your own placements rather than a horoscope written for everybody.`,
+        ? `Your birth chart is the map of how you're built: what you came here for, where you shine, and where you keep getting in your own way. Everything on this page is built from yours, so what you're looking at is ${season} szn read through your ${sun} placements.`
+        : `Your birth chart is the map of how you're built: what you came here for, where you shine, and where you keep getting in your own way. Everything on this page is built from yours, so what you're looking at is ${season} szn read through your own placements.`,
     cta: "next",
   },
   {

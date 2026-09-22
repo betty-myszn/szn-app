@@ -458,7 +458,7 @@ export function composeEclipse(event: CalendarEventInput, chart: ChartData, now?
 
   const watchNow = watchNowFor(event.date, eclipseArea, isLunar, now ?? new Date());
 
-  const bettysTake = `I tell my girls to treat eclipse season differently to a normal moon. Less setting a neat intention, more expecting a door to open or close on its own timeline. This one is landing in your ${eSign} ${ordinalHouse(eclipseHouse)} house, so it plays out through your ${eclipseArea}, and it will move through ${traits.essence}, not through anyone else's version of it. Don't force a decision to prove you are in control. Notice what is already shifting, respond to it like an adult, and let the eclipse do the part that was never yours to do.`;
+  const bettysTake = `I tell my girls to treat eclipse season differently to a normal moon. Less setting a neat intention, more expecting a door to open or close on its own timeline. This one is landing in your ${eSign} ${ordinalHouse(eclipseHouse)} house, so it plays out through your ${eclipseArea}, and it will move through ${traits.essence}. Don't force a decision to prove you are in control. Notice what is already shifting, respond to it like an adult, and let the eclipse do the part that was never yours to do.`;
 
   return {
     title: `${label} in ${eSign}`,

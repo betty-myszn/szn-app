@@ -312,9 +312,9 @@ export function composeSectionDeepDive(
     ? ` It also sits in your ${ordinalHouse(house!)} house of ${houseMeaning.title}, ${houseMeaning.rules}, so this plays out most visibly through ${houseMeaning.lifeAreas.slice(0, 2).join(" and ")}.`
     : "";
 
-  const inYourChart = `${content.chartFrame(bodyLower, signLower, traitLine)}${houseLine} That's not generic sign advice, that's what your chart specifically hands you here.`;
+  const inYourChart = `${content.chartFrame(bodyLower, signLower, traitLine)}${houseLine}`;
 
-  const bettysTake = `${content.bettysTakeGeneric} With your ${signLower} ${bodyLower}, that plays out through ${traits.essence}, so expect this section of your chart to move at that pace and in that flavour, not anyone else's version of it.`;
+  const bettysTake = `${content.bettysTakeGeneric} With your ${signLower} ${bodyLower}, that plays out through ${traits.essence}, so expect this section of your chart to move at that pace and in that flavour.`;
 
   const rootPattern = findRootBlock(chart, bodyId, sign);
 

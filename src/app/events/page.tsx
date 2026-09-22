@@ -428,7 +428,7 @@ export default function EventsPage() {
             <div className="tag mb-5">and that&apos;s just the events</div>
             <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
               {[
-                { title: "your personalised portal", body: "Horoscopes, affirmations and style codes built from your birth chart, not your sun sign alone." },
+                { title: "your personalised portal", body: "Horoscopes, affirmations and style codes built from your whole birth chart." },
                 { title: "shadow work journal", body: "Prompts that shift with every szn, designed to move you from hiding to whole." },
                 { title: "the community", body: "A room full of women becoming her, together. Wins, questions, support, all of it." },
               ].map((item, i) => (

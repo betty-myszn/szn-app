@@ -375,7 +375,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where this full moon lands in your chart",
-      body: "Reading for your sign is the general version. Your birth chart shows the exact house this full moon is lighting up, which is what turns a horoscope into something you can actually act on.",
+      body: "Your birth chart shows the exact house this full moon is lighting up, which tells you the part of your life to act on while it's here.",
       label: "get your free birth chart",
       href: "/chart",
     },
@@ -484,7 +484,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Ready to stop reading about your astrology and actually start living it?",
         body: [
           "Knowing that Leo Season is all about confidence, visibility and becoming the main character is one thing. Knowing exactly how that shows up in your birth chart, where you're being asked to take bigger risks, where your next opportunities are hiding and what this season is actually trying to teach you is something completely different. That's exactly why I created MY SZN.",
-          "Inside MY SZN, you'll receive a personalised astrology platform built around your unique birth chart, so every season, every major transit and every piece of guidance is tailored specifically to you. Instead of trying to squeeze yourself into generic astrology that speaks to millions of people at once, you'll understand how the current astrology is influencing your career, confidence, relationships, money, purpose and personal growth.",
+          "Inside MY SZN, you'll receive a personalised astrology platform built around your unique birth chart, so every season, every major transit and every piece of guidance is tailored specifically to you, and you'll understand exactly how the current astrology is influencing your career, confidence, relationships, money, purpose and personal growth.",
           "Alongside your personalised portal, you'll also become part of a private community of women who are committed to becoming the highest version of themselves, with live coaching, astrology workshops, community chat rooms, personalised seasonal guidance and practical tools that help you actually apply your chart to your everyday life instead of simply reading about it.",
         ],
       },
@@ -791,7 +791,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Read your chart inside MY SZN",
         body: [
-          "Learning to read your own chart can change how you understand your personality, relationships, money, career and emotional patterns, but most people still reach a point where they know the individual meanings and cannot see how it all fits together. That is where personalised astrology becomes far more useful than another generic list of placements.",
+          "Learning to read your own chart can change how you understand your personality, relationships, money, career and emotional patterns, but most people still reach a point where they know the individual meanings and cannot see how it all fits together. That is where personalised astrology comes in, because it reads your placements together as one chart and shows you how each one works on the others.",
           "Inside [MY SZN](/membership), the platform is built around your own birth chart, helping you understand your big three, house placements, money patterns, relationships, confidence, purpose and current transits without decoding the whole thing alone. You also get seasonal guidance, live coaching workshops and practical support for using your chart when you make decisions and build your future. Your chart is not a collection of random labels, it is a complete system, and once you can read the pattern you start seeing yourself with a clarity that changes everything.",
         ],
       },

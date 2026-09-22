@@ -134,7 +134,7 @@ export function composeMajorTransit(event: MajorTransitInput, chart: ChartData):
         ? `${bodyLabel} appears to slow down and move backward from Earth's vantage point. Nothing has actually reversed, but ${bodyLabel.toLowerCase()}'s domain turns inward for the next few months, review instead of launch. ${body?.deepDive ?? ""}`
         : `${bodyLabel} stations direct again${signLine}, its domain gets the green light after weeks of turned-inward review. ${body?.deepDive ?? ""}`,
       inYourChart: houseMeaning
-        ? `In your chart, ${bodyLabel.toLowerCase()} natally sits in your ${ordinalHouse(house!)} house of ${houseMeaning.title}, ${houseMeaning.rules}. This retrograde window ${isStart ? "turns the spotlight onto" : "clears the backlog in"} ${houseArea} specifically, not a generic slowdown, yours.`
+        ? `In your chart, ${bodyLabel.toLowerCase()} natally sits in your ${ordinalHouse(house!)} house of ${houseMeaning.title}, ${houseMeaning.rules}. This retrograde window ${isStart ? "turns the spotlight onto" : "clears the backlog in"} ${houseArea}.`
         : `${bodyLabel} isn't a placement in your own chart, so this transit plays out more collectively, but its themes, ${bodyDomain}, are still worth tracking over the coming weeks.`,
       bettysTake: isStart
         ? `I don't tell clients to panic during an outer-planet retrograde, I tell them to expect ${houseArea} specifically to feel stuck, delayed or in need of a rework. That's the retrograde doing its job, not a sign something's broken.`

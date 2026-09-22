@@ -140,7 +140,7 @@ export default function SeasonPersonalised() {
               {season.sign.toLowerCase()} activates your {ordinalHouse(activatedHouse)} house of {houseMeaning.title}.
             </h3>
             <p style={{ fontSize: 15, color: "#3C2A70", lineHeight: 1.8, marginBottom: 16, maxWidth: 680 }}>
-              While everyone else gets generic {season.sign.toLowerCase()} szn advice, yours is specific: this energy is lighting up {houseMeaning.rules}. That makes this an incredible szn for {houseMeaning.lifeAreas.slice(0, 3).join(", ")}.{placement.short}
+              In your chart, {season.sign.toLowerCase()} szn is lighting up {houseMeaning.rules}, so that&apos;s exactly where your energy goes these next few weeks.{placement.short}
             </p>
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3C2A70", borderBottom: "1.5px solid #3C2A70", paddingBottom: 2 }}>
               see your full {ordinalHouse(activatedHouse)} house breakdown &rarr;

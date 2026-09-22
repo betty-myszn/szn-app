@@ -174,7 +174,7 @@ export function buildSynthesis(slug: string, chart: ChartData): SynthesisReading
         slug,
         title: "love & relationships",
         heroLine: "how you love, and what you need back.",
-        intro: "Not a horoscope-style skim, this is your actual relationship architecture: the house partnership lives in, how you communicate inside it, what you need to feel safe, how attraction and commitment work differently for you, and the growth that makes love easier instead of harder.",
+        intro: "This is your relationship architecture: the house partnership lives in, how you communicate inside it, what you need to feel safe, how attraction and commitment work differently for you, and the growth that makes love easier instead of harder.",
         sections: [
           { title: "what the 7th house actually is", bg: "var(--dark)", light: true, href: "/my-chart/house/7", body: `Before any placement, start with the house itself. ${seventh.deepDive}` },
           { title: "your 7th house, specifically", bg: "var(--gold)", body: `Your 7th house of partnership sits in ${lower(s.seventhHouseSign)}, which means the committed relationships and business partnerships you attract carry a ${lower(s.seventhHouseSign)} flavour whether you planned that or not: ${(seventhOverview ? seventhOverview.archetype : `${t(s.seventhHouseSign).essence}.`).replace(/\.?$/, "")}. ${inhabitantsLine}` },

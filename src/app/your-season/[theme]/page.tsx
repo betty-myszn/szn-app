@@ -107,7 +107,7 @@ export default function ThemePage() {
             <span className="pk">{reading.title}.</span>
           </h1>
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.8, maxWidth: 560 }}>
-            One of this szn&apos;s core themes, decoded for your chart specifically, not for everyone born under {season.sign.toLowerCase()}.
+            One of this szn&apos;s core themes, read through your chart.
           </p>
         </div>
       </section>

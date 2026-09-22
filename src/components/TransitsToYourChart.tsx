@@ -56,8 +56,8 @@ export default function TransitsToYourChart({ transits }: { transits: TransitDat
           what&apos;s actually touching <span className="pk">your placements</span> right now.
         </h2>
         <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, maxWidth: 620, marginBottom: 26 }}>
-          Not the general forecast. These are live contacts between where the planets are today and
-          the exact degrees you were born with, so this list is yours and nobody else&apos;s.
+          These are live contacts between where the planets are today and the exact degrees you were
+          born with, so each one is the sky touching your chart right now.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -67,7 +67,7 @@ export default function SeasonWrappedPage() {
   // to surface, so it counts as "data to wrap up" even when the journal and challenges are empty.
   const hasAnyData = seasonEntries.length > 0 || missionsDone > 0 || goalVerdict !== null;
 
-  const shareText = `my ${season.sign.toLowerCase()} szn, wrapped: ${seasonWritten.length} journal entries, ${seasonWins.length} wins logged, ${missionsDone}/${missions.length} challenges done. receipts, not a horoscope. ✨`;
+  const shareText = `my ${season.sign.toLowerCase()} szn, wrapped: ${seasonWritten.length} journal entries, ${seasonWins.length} wins logged, ${missionsDone}/${missions.length} challenges done. the receipts ✨`;
 
   const stats = [
     { value: seasonWritten.length, label: "journal entries", bg: "var(--pink)", light: true },
@@ -99,7 +99,7 @@ export default function SeasonWrappedPage() {
             {member.name.toLowerCase()}&apos;s <span className="pk">{season.sign.toLowerCase()} szn</span>, in review.
           </h1>
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: 520, margin: "0 auto" }}>
-            Not a horoscope, receipts. This is everything you actually did this szn, pulled straight from your own journal, wins and challenges.
+            Your receipts: everything you actually did this szn, pulled straight from your own journal, wins and challenges.
           </p>
         </div>
       </section>

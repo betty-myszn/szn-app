@@ -186,7 +186,7 @@ export default function SoulBlueprint({
               fontWeight: 600,
             }}
           >
-            This is conscious identity work, not another horoscope. You can have a big life and anything
+            This is conscious identity work. You can have a big life and anything
             you truly want, and it looks different for every woman who walks in: for one it&apos;s a
             global company, for another it&apos;s the ocean, three days a week and time with her kids.
             The size was never the point. Choosing it is.

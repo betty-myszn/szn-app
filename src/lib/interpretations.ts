@@ -1011,7 +1011,7 @@ export function composePlacement(bodyId: string, sign: string, house?: number): 
       `My ${signLower} ${bodyLower} is a gift. I don't tone it down for anyone.`,
       `I am ${traits.flavour.slice(0, 2).join(" and ")}, and that is exactly my power.`,
     ],
-    bettysTake: `${BETTY_OPENERS[bodyId] || "This placement matters more than most people give it credit for."} With your ${signLower} ${bodyLower} specifically, that plays out through ${traits.essence}. That's not a coincidence, it's the pattern your whole chart is pointing at.`,
+    bettysTake: `${BETTY_OPENERS[bodyId] || "This placement matters more than most people give it credit for."} With your ${signLower} ${bodyLower} specifically, that plays out through ${traits.essence}. That's the pattern your whole chart is pointing at.`,
     blindSpot: `You probably call it ${PROTECTIVE_LABELS[bodyId] || "being sensible"}. The chart says it's actually ${traits.shadow}. That gap, between what you call it and what it actually is, is exactly why it's still running the show.`,
     whyItRepeats: repeatLine,
     thisWeeksMove: WEEK_MOVES[bodyId] || `do one small, visible action this week that your ${signLower} ${bodyLower} has been quietly asking for`,
