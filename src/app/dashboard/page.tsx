@@ -30,6 +30,7 @@ import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import TrialKeepPanel from "@/components/TrialKeepPanel";
+import YourSeasonBanner from "@/components/YourSeasonBanner";
 import ActivationStrip from "@/components/ActivationStrip";
 import WelcomeOverlay from "@/components/WelcomeOverlay";
 import DeepLinkScroll from "@/components/DeepLinkScroll";
@@ -327,6 +328,9 @@ export default function DashboardPage() {
       {/* ── HERO: light pastel card, per-season cut-out on the right ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>
         <div className="max-w-6xl mx-auto">
+          {/* Her own season gets celebrated before anything else: only shows when her Sun is in the
+              sign the season is in. */}
+          <YourSeasonBanner name={member.name} sunSign={placements?.sun} season={season} dateOfBirth={chart?.birthData?.dateOfBirth} />
           <div className="flex items-center justify-between gap-4 flex-wrap" style={{ marginBottom: 20 }}>
             <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey)" }}>
               welcome back, {member.name.toLowerCase()} ✦ {sign} szn hq
