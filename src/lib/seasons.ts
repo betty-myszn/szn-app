@@ -178,7 +178,7 @@ export const SEASONS: SeasonInfo[] = [
   },
   {
     sign: "Virgo", symbol: "♍", element: "earth",
-    startMonth: 8, startDay: 23, endMonth: 9, endDay: 22,
+    startMonth: 8, startDay: 23, endMonth: 9, endDay: 21,
     tagline: "the season of getting your life together.",
     description: "Virgo season is the glow-up in the details. This is the energy of refining your routines, upgrading your standards, and treating your daily habits as sacred.",
     themes: ["routines", "wellness", "refinement", "devotion"],
@@ -209,7 +209,9 @@ export const SEASONS: SeasonInfo[] = [
   },
   {
     sign: "Libra", symbol: "♎", element: "air",
-    startMonth: 9, startDay: 23, endMonth: 10, endDay: 22,
+    // The Sun reaches Libra at 8:05pm New York time on 22 September 2026, and the UK and
+    // everywhere east are already on the 22nd, so the szn opens on the 22nd rather than the 23rd.
+    startMonth: 9, startDay: 22, endMonth: 10, endDay: 22,
     tagline: "the season of beautiful balance.",
     description: "Libra season is the art of the both/and. This is the energy of magnetic relationships, aesthetic upgrades, and asking for exactly what you want.",
     themes: ["relationships", "beauty", "balance", "harmony"],

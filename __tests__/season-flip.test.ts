@@ -12,8 +12,8 @@ describe("the season the app thinks it is", () => {
   it("hands over from Leo to Virgo on 23 August", () => {
     expect(getCurrentSeason(at("2026-08-22")).sign).toBe("Leo");
     expect(getCurrentSeason(at("2026-08-23")).sign).toBe("Virgo");
-    expect(getCurrentSeason(at("2026-09-22")).sign).toBe("Virgo");
-    expect(getCurrentSeason(at("2026-09-23")).sign).toBe("Libra");
+    expect(getCurrentSeason(at("2026-09-21")).sign).toBe("Virgo");
+    expect(getCurrentSeason(at("2026-09-22")).sign).toBe("Libra");
   });
 
   it("covers every day of the year with exactly one season", () => {
