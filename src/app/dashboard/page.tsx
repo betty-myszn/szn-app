@@ -36,10 +36,11 @@ import WelcomeOverlay from "@/components/WelcomeOverlay";
 import DeepLinkScroll from "@/components/DeepLinkScroll";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
-// The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, a scannable
-// top band (today + cosmic weather + the sky on her chart), then her personalised season guide and
-// the rich reading components wired to real data, then the toolkit, community and the vault. The heavy reading sections in the middle are reused as-is for now and get restyled to
-// match the new look next.
+// The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, then her
+// szn area by area, the replay band, and a scannable top band (today + cosmic weather + the sky on
+// her chart), then her personalised season guide and the rich reading components wired to real
+// data, then the toolkit, community and the vault. The heavy reading sections in the middle are
+// reused as-is for now and get restyled to match the new look next.
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -427,6 +428,10 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      {/* ── her szn area by area: the tappable grid sits straight under the hero, above the replay
+             band, because it is the thing she comes here to poke at ── */}
+      <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
+
       {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
            class that just landed is the most time-sensitive thing on the page. Self-hides once the
            replay is a few days old, and falls back to the slim vault banner. ── */}
@@ -466,9 +471,6 @@ export default function DashboardPage() {
              here, so her read of it comes before anything that routes her elsewhere ── */}
       <div id="season-guide" />
       <SeasonPersonalised />
-
-      {/* ── your leo szn, area by area (reused) ── */}
-      <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
 
       {/* ── UPCOMING MASTERCLASSES: workshops carousel with cover images. Titled by what it is, not
           by season, because the list runs across seasons (Leo into Virgo), not just this szn. ── */}
