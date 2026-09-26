@@ -170,8 +170,8 @@ export const WORKSHOPS: Workshop[] = [
     durationMinutes: 75,
     location: "live on zoom, join from here or from the link in your email",
     hasJoinLink: true,
-    hasReplay: false,
-    replayPublishedAt: null,
+    hasReplay: true,
+    replayPublishedAt: "2026-09-26",
     paragraphs: [
       "A manifestation workshop for calling in more money, love, pleasure + everything you actually f*cking want.",
       "Welcome to your Venus eraaaaa. More money. More love. More pleasure. More beauty. Better relationships. Bigger desires. A life that feels as good as it looks.",

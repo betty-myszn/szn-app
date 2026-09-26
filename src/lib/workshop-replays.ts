@@ -14,6 +14,7 @@ const REPLAYS: Record<string, string> = {
   "leo-szn-workshop-2": "FfdDrqfZ4ic",
   "virgo-szn-workshop-1": "NgKBnHmj7K8",
   "virgo-szn-workshop-2": "xNKJsqbjgI4",
+  "libra-szn-workshop-1": "_DNo4IuL19k",
 };
 
 export function replayFor(workshopId: string): string | null {

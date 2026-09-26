@@ -139,7 +139,7 @@ export default function ReplayVaultPage() {
 
                   {workshop.hasReplay ? (
                     hasActiveAccess(member) ? (
-                      <ReplayPlayer workshopId={workshop.id} title={workshop.title} />
+                      <ReplayPlayer workshopId={workshop.id} title={workshop.title} poster={workshop.coverImage} />
                     ) : (
                       <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.8, marginTop: 12 }}>
                         The replay unlocks with an active membership.{" "}
