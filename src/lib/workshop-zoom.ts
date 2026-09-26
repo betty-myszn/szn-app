@@ -25,6 +25,12 @@ const ZOOM: Record<string, ZoomDetails> = {
     meetingId: "878 9412 7791",
     passcode: "028236",
   },
+  // Aries Full Moon: Call In Your Venus Era, Sat 26 Sep 11:30am LA = 7:30pm UK.
+  "libra-szn-workshop-1": {
+    url: "https://us06web.zoom.us/j/84119294738?pwd=Gd5kHd3QoHyIMNu0AcFMgbajFUSZIw.1",
+    meetingId: "841 1929 4738",
+    passcode: "976617",
+  },
 };
 
 export function zoomFor(workshopId: string): ZoomDetails | null {
