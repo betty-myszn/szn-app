@@ -22,7 +22,12 @@ export async function hydrateSessionOnce(): Promise<void> {
     // sessionStorage unavailable, just proceed without the once-per-session guard
   }
 
-  await Promise.all([
+  // allSettled, not all: these are eight independent pulls, and one failing (a journal or referral
+  // query blip) must not reject the whole batch, because the caller only re-reads the member once
+  // this settles. Under Promise.all one unrelated failure left her on "setting up your season" with
+  // her chart already downloaded. If the chart pull itself failed, clear the flag so the next page
+  // in this tab tries again rather than never retrying.
+  const [chart] = await Promise.allSettled([
     hydrateMemberDataFromSupabase(),
     hydrateGoalsFromSupabase(),
     hydrateJournalFromSupabase(),
@@ -32,4 +37,11 @@ export async function hydrateSessionOnce(): Promise<void> {
     hydrateEmailPrefsFromSupabase(),
     claimStoredReferralIfAny(),
   ]);
+  if (chart.status === "rejected") {
+    try {
+      sessionStorage.removeItem(HYDRATED_FLAG);
+    } catch {
+      // nothing to clear
+    }
+  }
 }

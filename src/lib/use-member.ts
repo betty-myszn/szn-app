@@ -47,7 +47,10 @@ export function useMember(): { member: Member | null; ready: boolean; error: boo
       // brief empty state fill in, which is far better than a five-second white screen.
       setMember(m);
       if (m) {
+        // Re-read her whatever happened: a failed pull must never leave the first, pre-hydration
+        // member (no placements yet) on screen when the chart did in fact land.
         hydrateSessionOnce()
+          .catch(() => {})
           .then(async () => {
             if (!active) return;
             try {
