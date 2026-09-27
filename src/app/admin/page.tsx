@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import * as Sentry from "@sentry/nextjs";
 import { useMember } from "@/lib/use-member";
 import { isAdminMember, getMemberBreakdown, getTrialStats, listMembers, type MemberRow, type MembershipLevel } from "@/lib/member";
 import { ALL_ROOMS, loadPosts, deletePost, deleteComment, type Post } from "@/lib/community-store";
@@ -79,6 +80,7 @@ function chipFor(m: MemberRow): { label: string; bg: string; fg: string } {
 export default function AdminPage() {
   const { member, ready } = useMember();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [sentryTest, setSentryTest] = useState<string | null>(null);
   const [expandedPost, setExpandedPost] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState("general");
   const [roomMessages, setRoomMessages] = useState<ChatMessage[]>([]);
@@ -262,18 +264,35 @@ export default function AdminPage() {
             💌 member messages
           </Link>
           {/* Checks the error reporting end to end: one browser error and one server error, both
-              labelled as tests, should arrive in Sentry within a minute. */}
+              labelled as tests, should arrive in Sentry within a minute. It says what happened, because
+              a button that throws quietly in the background looks like it does nothing. */}
           <button
-            onClick={() => {
-              fetch("/api/admin/sentry-test", { method: "POST" }).catch(() => {});
-              setTimeout(() => {
-                throw new Error(`Sentry test from the control room (browser), ${new Date().toISOString()}`);
-              }, 0);
+            disabled={sentryTest === "sending"}
+            onClick={async () => {
+              setSentryTest("sending");
+              const stamp = new Date().toISOString();
+              Sentry.captureException(new Error(`Sentry test from the control room (browser), ${stamp}`));
+              const [browserSent, serverRes] = await Promise.all([
+                Sentry.flush(5000).catch(() => false),
+                fetch("/api/admin/sentry-test", { method: "POST" }).catch(() => null),
+              ]);
+              // The server route throws on purpose, so a 500 is the success case here.
+              const serverSent = serverRes?.status === 500;
+              setSentryTest(
+                browserSent && serverSent
+                  ? "✓ sent, 2 test errors. In Sentry, open Issues: they appear within a minute."
+                  : browserSent
+                    ? "✓ browser test sent. The server test didn't go, try again in a minute."
+                    : "Couldn't reach Sentry from this browser. An ad blocker is the usual reason, try another browser."
+              );
             }}
-            style={{ display: "inline-block", marginTop: 18, marginLeft: 12, background: "transparent", color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", padding: "12px 20px", fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", cursor: "pointer" }}
+            style={{ display: "inline-block", marginTop: 18, marginLeft: 12, background: "transparent", color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", padding: "12px 20px", fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", cursor: sentryTest === "sending" ? "default" : "pointer", opacity: sentryTest === "sending" ? 0.6 : 1 }}
           >
-            send a test error to sentry
+            {sentryTest === "sending" ? "sending..." : "send a test error to sentry"}
           </button>
+          {sentryTest && sentryTest !== "sending" && (
+            <p style={{ fontSize: 13, color: "#fff", marginTop: 12, fontWeight: 600 }}>{sentryTest}</p>
+          )}
         </div>
       </section>
 
