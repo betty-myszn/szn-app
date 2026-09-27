@@ -13,6 +13,7 @@ import {
   pickRecommendedExperiment,
 } from "@/lib/season-coaching";
 import { addJournalEntry } from "@/lib/journal-store";
+import { getSeasonEmbodiment } from "@/lib/season-embodiment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -65,6 +66,7 @@ function findLifeAreaForHouse(house: number): string | null {
 export default function SeasonPersonalised() {
   const { chart, loading } = useChart();
   const season = useSeason();
+  const embodiment = getSeasonEmbodiment(season.sign);
   const [activeExperiment, setActiveExperiment] = useState<string | null>(null);
   const [experimentReflection, setExperimentReflection] = useState("");
   const [experimentSaved, setExperimentSaved] = useState(false);
@@ -247,6 +249,25 @@ export default function SeasonPersonalised() {
             </p>
           </div>
         </div>
+          {embodiment && (
+            <Link href="/your-season/embody" className="no-underline block hover:opacity-95 transition-opacity" style={{ border: "var(--border)", background: "var(--dark)" }}>
+              <div style={{ background: "var(--pink)", color: "#fff", fontSize: 10, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", textAlign: "center", padding: "8px 16px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {["embody it", ...embodiment.ticker].join("\u00a0\u00a0·\u00a0\u00a0")}
+              </div>
+              <div className="p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div>
+                  <div className="tag mb-3">embody your szn</div>
+                  <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.25, color: "#fff", textTransform: "uppercase", marginBottom: 10 }}>
+                    {embodiment.title[0]} <span className="pk">{embodiment.title[1]}</span>
+                  </p>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.7, maxWidth: 560 }}>
+                    {embodiment.exercises.length} exercises from the {embodiment.source.title} workshop, made interactive so you can do them in your body any day of the szn: {embodiment.exercises.map((e) => e.label).join(", ")}.
+                  </p>
+                </div>
+                <span className="btn-pink" style={{ whiteSpace: "nowrap" }}>open the exercises &rarr;</span>
+              </div>
+            </Link>
+          )}
         </div>
       </section>
 
