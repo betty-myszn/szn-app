@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendMemberNotifications } from "@/lib/notify/send";
 import { findRoom } from "@/lib/community-store";
 import { resolveMentionedUserIds } from "@/lib/notify/mentions";
+import { mentionsAll } from "@/lib/community/mention-tokens";
 
 export const runtime = "nodejs";
 
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
   if (!findRoom(spaceId)) return NextResponse.json({ error: "unknown_room" }, { status: 400 });
   if (content.length > 4000) return NextResponse.json({ error: "too_long" }, { status: 400 });
 
-  const { data: me } = await supabase.from("profiles").select("name").eq("id", user.id).maybeSingle();
+  const { data: me } = await supabase.from("profiles").select("name, is_admin").eq("id", user.id).maybeSingle();
   const author = ((me?.name as string | null) ?? "").trim() || "babe";
 
   const id = `${Date.now()}-${user.id.slice(0, 8)}`;
@@ -60,6 +61,34 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = createAdminClient();
+
+  // "@all" tells every member, and only an admin can send it, otherwise any member could ping the
+  // whole community. It goes to the bell only: an email to everyone for every @all would read as
+  // spam and bury the emails that matter. Named mentions in the same message still get their email.
+  let everyone = 0;
+  if (me?.is_admin && mentionsAll(content)) {
+    const { data: all, error: allError } = await admin.from("profiles").select("id, blocked");
+    if (allError) {
+      console.error("chat/send: could not read members for @all", allError.message);
+    } else {
+      const ids = (all ?? []).filter((r) => r.id !== user.id && !r.blocked).map((r) => r.id as string);
+      if (ids.length > 0) {
+        const { error: bellError } = await admin.from("notifications").insert(
+          ids.map((userId) => ({
+            user_id: userId,
+            type: "mention",
+            title: `${author} tagged everyone in the chat`,
+            body: content.slice(0, 140),
+            link: `/community/room/${spaceId}`,
+            actor: author,
+          }))
+        );
+        if (bellError) console.error("chat/send: @all notifications failed", bellError.message);
+        else everyone = ids.length;
+      }
+    }
+  }
+
   const recipients = await resolveMentionedUserIds(admin, content, user.id);
   if (recipients.length > 0) {
     await sendMemberNotifications(
@@ -78,5 +107,5 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ ok: true, id, mentioned: recipients.length });
+  return NextResponse.json({ ok: true, id, mentioned: recipients.length, everyone });
 }

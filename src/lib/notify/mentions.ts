@@ -18,7 +18,8 @@ export async function resolveMentionedUserIds(
   content: string,
   senderId: string
 ): Promise<string[]> {
-  const tokens = new Set([...content.matchAll(/@([A-Za-z0-9_]+)/g)].map((m) => m[1].toLowerCase()));
+  // "@all" is handled by the send route as its own thing, never as a member called All.
+  const tokens = new Set([...content.matchAll(/@([A-Za-z0-9_]+)/g)].map((m) => m[1].toLowerCase()).filter((t) => t !== "all"));
   if (tokens.size === 0) return [];
 
   const { data: profiles, error } = await admin.from("profiles").select("id, name");

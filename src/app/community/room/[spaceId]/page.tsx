@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { ALL_MENTION } from "@/lib/community/mention-tokens";
 import { useMember } from "@/lib/use-member";
 import { hasRoomAccess, hasPaidCommunityAccess } from "@/lib/membership-access";
 import { listedRooms, findRoom, isRitualSpace } from "@/lib/community-store";
@@ -27,25 +28,33 @@ const COMPOSE_EMOJIS = [
   "🐍", "🐐", "🦂", "🌸",
 ];
 
-// Render @mentions in brand pink, and as a link to that member's profile. Being tagged now also
-// raises a notification (notify_on_chat_mention), so a mention is a real thing that happens to
-// someone rather than pink text they had to be in the room to see.
-function renderContent(text: string) {
+// Render @mentions as a link to that member's profile. Being tagged also raises a notification, so a
+// mention is a real thing that happens to someone rather than text they had to be in the room to see.
+//
+// Colour follows the bubble. Her own messages sit on the brand pink, and a pink mention there was
+// pink on pink: the welcome posts, which go out in Betty's name, showed her an empty gap where every
+// new member's name should have been. On pink the mention is white and underlined instead.
+// "@all" is not a person, so it is highlighted but not linked.
+function renderContent(text: string, onPink: boolean) {
   const parts = text.split(/(@[a-z0-9_]+)/gi);
-  return parts.map((part, i) =>
-    part.startsWith("@") ? (
-      <Link
-        key={i}
-        href={`/community/profile/${part.slice(1).toLowerCase()}`}
-        className="no-underline"
-        style={{ color: "var(--pink)", fontWeight: 700 }}
-      >
+  const mentionStyle = onPink
+    ? { color: "#fff", fontWeight: 800, textDecoration: "underline", textUnderlineOffset: 3 }
+    : { color: "var(--pink)", fontWeight: 700 };
+  return parts.map((part, i) => {
+    if (!part.startsWith("@")) return <span key={i}>{part}</span>;
+    if (part.slice(1).toLowerCase() === ALL_MENTION) {
+      return (
+        <span key={i} style={{ ...mentionStyle, textDecoration: "none", background: onPink ? "rgba(255,255,255,0.22)" : "var(--pink-bg)", borderRadius: 6, padding: "0 5px" }}>
+          {part}
+        </span>
+      );
+    }
+    return (
+      <Link key={i} href={`/community/profile/${part.slice(1).toLowerCase()}`} className="no-underline" style={mentionStyle}>
         {part}
       </Link>
-    ) : (
-      <span key={i}>{part}</span>
-    )
-  );
+    );
+  });
 }
 
 export default function ChatRoomPage() {
@@ -86,8 +95,10 @@ export default function ChatRoomPage() {
   // @mention autocomplete: matches a trailing "@partial" at the end of the draft
   const mentionMatch = draft.match(/@(\w*)$/);
   const roomMembers = useMemo(() => getRoomMembers(messages), [messages]);
+  // Admins also get "all", which tells every member (see /api/chat/send). Nobody else is offered it.
+  const mentionPool = member?.isAdmin ? [ALL_MENTION, ...roomMembers] : roomMembers;
   const mentionCandidates = mentionMatch
-    ? roomMembers.filter((m) => m.toLowerCase().startsWith(mentionMatch[1].toLowerCase())).slice(0, 5)
+    ? mentionPool.filter((m) => m.toLowerCase().startsWith(mentionMatch[1].toLowerCase())).slice(0, 5)
     : [];
 
   if (!ready) return null;
@@ -245,7 +256,7 @@ export default function ChatRoomPage() {
                           lineHeight: 1.6,
                         }}
                       >
-                        {renderContent(msg.content)}
+                        {renderContent(msg.content, isMe)}
                       </div>
 
                       {/* Reactions */}

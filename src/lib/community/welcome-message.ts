@@ -1,5 +1,9 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendMemberNotifications } from "@/lib/notify/send";
+import { mentionTokenFor, fullMentionTokenFor } from "@/lib/community/mention-tokens";
+
+// Re-exported so existing imports of these from here keep working.
+export { mentionTokenFor, fullMentionTokenFor };
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -33,43 +37,6 @@ export const WELCOME_MAX_AGE_HOURS = 48;
  *  anyone, because a member who was silently skipped is never coming back round. */
 export const WELCOME_NAMES_PER_MESSAGE = 15;
 
-/**
- * The mention token for a member. Chat mentions are matched as @[A-Za-z0-9_]+ by both the room's
- * renderer and the notification trigger, so anything else in a name (spaces, apostrophes, accents)
- * has to come off or the mention silently stops being a mention. First name only: "@Sarah" is how
- * a person greets someone, "@sarah.jones-smith" is how a database does.
- *
- * Returns null when nothing usable is left, e.g. a name that is entirely emoji, which is the cue
- * to skip the welcome rather than post "Hey @ 💜".
- */
-export function mentionTokenFor(name: string | null | undefined): string | null {
-  const firstWord = (name ?? "").trim().split(/\s+/)[0] ?? "";
-  // Strip accents to their base letters first, so "Renée" mentions as "@Renee" rather than "@Ren".
-  const cleaned = firstWord
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^A-Za-z0-9_]/g, "");
-  return cleaned.length > 0 ? cleaned : null;
-}
-
-/**
- * The mention token for a member when other members share her first name.
- *
- * "@Sarah" is the right way to greet a Sarah, right up until there are three of them and the room
- * cannot tell which one was welcomed, and the mention links to somebody else's profile. In that
- * case her whole name is used instead, joined up because a mention cannot contain a space.
- */
-export function fullMentionTokenFor(name: string | null | undefined): string | null {
-  const cleaned = (name ?? "")
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^A-Za-z0-9_\s]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .join("");
-  return cleaned.length > 0 ? cleaned : null;
-}
 
 /**
  * Picks each member's mention, using her first name where that is unambiguous and her full name

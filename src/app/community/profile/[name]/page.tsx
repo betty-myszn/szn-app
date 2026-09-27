@@ -5,21 +5,45 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { loadPosts, type Post } from "@/lib/community-store";
-import { getFallbackProfile, type MockProfile } from "@/lib/mock-profiles";
 import { getSymbol } from "@/lib/style-data";
+import { handleMatchesName } from "@/lib/community/mention-tokens";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
+interface FoundMember {
+  name: string;
+  since: string;
+}
+
+// A member's page, reached from an @mention or a name in the feed. The handle is whatever the link
+// carried: "sarah" from "@Sarah", "sarahjones" from a full-name mention, or a feed author's name.
+//
+// Only real information about another member is shown: her name, when she joined, her posts, and
+// any sign she chose to put on those posts herself. This page used to invent a Leo sun, Cancer moon
+// and Aquarius rising for anyone it knew nothing about and show them as her chart.
 export default function ProfilePage() {
   const params = useParams<{ name: string }>();
   const { member, ready } = useMember();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [found, setFound] = useState<FoundMember[] | null>(null);
 
-  const profileName = decodeURIComponent(params.name).toLowerCase();
+  const handle = decodeURIComponent(params.name).toLowerCase();
 
   useEffect(() => {
     loadPosts().then(setPosts);
   }, []);
+
+  useEffect(() => {
+    if (!member) return;
+    let active = true;
+    fetch(`/api/community/member?handle=${encodeURIComponent(handle)}`)
+      .then((r) => (r.ok ? r.json() : { members: [] }))
+      .then((d: { members?: FoundMember[] }) => active && setFound(d.members ?? []))
+      .catch(() => active && setFound([]));
+    return () => {
+      active = false;
+    };
+  }, [handle, member]);
 
   if (!ready) return null;
 
@@ -36,39 +60,34 @@ export default function ProfilePage() {
     );
   }
 
-  const isMe = profileName === member.name.toLowerCase();
+  const isMe = handleMatchesName(handle, member.name);
+  const theirPosts = posts.filter((p) => handleMatchesName(handle, p.author));
 
-  let profile: MockProfile;
-  if (isMe) {
-    profile = {
-      name: member.name.toLowerCase(),
-      bio: "this is you. edit your bio and details any time from settings.",
-      sun: member.placements.sun,
-      moon: member.placements.moon,
-      rising: member.placements.rising,
-    };
-  } else {
-    const theirPost = posts.find((p) => p.author.toLowerCase() === profileName);
-    if (!theirPost) {
-      return (
-        <section className="min-h-[60vh] flex items-center justify-center px-5">
-          <div className="text-center">
-            <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>
-              we couldn&apos;t find that member.
-            </h1>
-            <Link href="/community" className="btn-pink">back to community</Link>
-          </div>
-        </section>
-      );
-    }
-    profile = getFallbackProfile(profileName, theirPost.sign);
+  // Still asking the server who this is: hold the page rather than flash "couldn't find".
+  if (!isMe && found === null && theirPosts.length === 0) {
+    return <section className="min-h-[60vh]" aria-busy="true" />;
   }
 
-  const theirPosts = posts.filter((p) => p.author.toLowerCase() === profileName);
+  const displayName = isMe ? member.name : found?.[0]?.name ?? theirPosts[0]?.author ?? null;
 
-  const sharedPlacements = (["sun", "moon", "rising"] as const).filter(
-    (key) => !isMe && member.placements[key].toLowerCase() === profile[key].toLowerCase()
-  );
+  if (!displayName) {
+    return (
+      <section className="min-h-[60vh] flex items-center justify-center px-5">
+        <div className="text-center">
+          <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>
+            we couldn&apos;t find that member.
+          </h1>
+          <Link href="/community" className="btn-pink">back to community</Link>
+        </div>
+      </section>
+    );
+  }
+
+  const since = isMe ? member.memberSince : found?.[0]?.since ?? null;
+  const sinceLabel = since ? new Date(since).toLocaleDateString("en-GB", { month: "long", year: "numeric" }) : null;
+  const namesakes = !isMe && found && found.length > 1 ? found.map((m) => m.name) : [];
+  // Signs she put on her own posts, e.g. "Leo sun". Real, and hers to share.
+  const sharedSigns = isMe ? [] : [...new Set(theirPosts.map((p) => p.sign).filter((s): s is string => !!s && s.trim().length > 0))];
 
   return (
     <>
@@ -87,58 +106,64 @@ export default function ProfilePage() {
               style={{ width: 72, height: 72, background: "var(--pink)", border: "2px solid #fff" }}
             >
               <span style={{ fontFamily: poppins, fontSize: 30, fontWeight: 800, color: "#fff" }}>
-                {profile.name.charAt(0).toUpperCase()}
+                {displayName.charAt(0).toUpperCase()}
               </span>
             </div>
             <div>
-              <h1 style={{ fontFamily: poppins, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 800, letterSpacing: "-0.6px", color: "#fff" }}>
-                {profile.name}{isMe ? " (you)" : ""}
+              <h1 style={{ fontFamily: poppins, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 800, letterSpacing: "-0.6px", color: "#fff", textTransform: "lowercase" }}>
+                {displayName}{isMe ? " (you)" : ""}
               </h1>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6, maxWidth: 480, marginTop: 6 }}>
-                {profile.bio}
+                {isMe
+                  ? "this is you. edit your bio and details any time from settings."
+                  : sinceLabel
+                    ? `part of MY SZN since ${sinceLabel}.`
+                    : "part of the MY SZN community."}
               </p>
             </div>
           </div>
+          {namesakes.length > 0 && (
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 16, lineHeight: 1.6 }}>
+              More than one member goes by that name: {namesakes.join(", ")}.
+            </p>
+          )}
         </div>
       </section>
 
-      {/* Sign lineup */}
-      <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-3xl mx-auto">
-          {sharedPlacements.length > 0 && (
-            <div className="p-4 mb-6" style={{ background: "var(--mint)", border: "1px solid #0F6E56" }}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: "#0F6E56" }}>
-                ✦ chart twins: you share {sharedPlacements.map((k) => `${profile[k].toLowerCase()} ${k}`).join(" and ")} with {profile.name}
-              </p>
+      {isMe ? (
+        <section className="px-5 md:px-8 py-10" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-3xl mx-auto">
+            <div className="grid grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
+              {(["sun", "moon", "rising"] as const).map((key, i) => (
+                <div key={key} className="p-6 text-center" style={{ borderRight: i < 2 ? "var(--border)" : undefined, background: "#fff" }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 6 }}>
+                    {key}
+                  </div>
+                  <div style={{ fontSize: 20, marginBottom: 4 }}>{getSymbol(member.placements[key])}</div>
+                  <div style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, color: "var(--dark)" }}>
+                    {member.placements[key].toLowerCase()}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-          <div className="grid grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
-            {(["sun", "moon", "rising"] as const).map((key, i) => (
-              <div
-                key={key}
-                className="p-6 text-center"
-                style={{
-                  borderRight: i < 2 ? "var(--border)" : undefined,
-                  background: sharedPlacements.includes(key) ? "var(--mint)" : "#fff",
-                }}
-              >
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: sharedPlacements.includes(key) ? "#0F6E56" : "var(--grey-light)", marginBottom: 6 }}>
-                  {key}
-                </div>
-                <div style={{ fontSize: 20, marginBottom: 4 }}>{getSymbol(profile[key])}</div>
-                <div style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, color: "var(--dark)" }}>
-                  {profile[key].toLowerCase()}
-                </div>
-              </div>
+          </div>
+        </section>
+      ) : sharedSigns.length > 0 ? (
+        <section className="px-5 md:px-8 py-8" style={{ borderBottom: "var(--border)" }}>
+          <div className="max-w-3xl mx-auto flex flex-wrap gap-2">
+            {sharedSigns.map((s) => (
+              <span key={s} style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "#3C2A70", background: "var(--lav-light)", borderRadius: 40, padding: "7px 14px" }}>
+                {getSymbol(s.split(" ")[0])} {s.toLowerCase()}
+              </span>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {/* Their posts */}
       <section className="px-5 md:px-8 py-12">
         <div className="max-w-3xl mx-auto">
-          <div className="tag mb-5">{isMe ? "your posts" : `${profile.name}'s posts`} · {theirPosts.length}</div>
+          <div className="tag mb-5">{isMe ? "your posts" : `${displayName.toLowerCase()}'s posts`} · {theirPosts.length}</div>
           {theirPosts.length === 0 ? (
             <p style={{ fontSize: 14, color: "var(--grey-light)" }}>Nothing posted yet.</p>
           ) : (
@@ -147,15 +172,7 @@ export default function ProfilePage() {
                 <div key={post.id} className="p-6" style={{ borderBottom: i < theirPosts.length - 1 ? "var(--border)" : undefined }}>
                   <div className="flex items-center gap-3 mb-2">
                     <span style={{ fontSize: 11, color: "var(--grey-light)" }}>{post.timeAgo}</span>
-                    <span
-                      style={{
-                        fontSize: 9,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "var(--pink)",
-                      }}
-                    >
+                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
                       {post.space}
                     </span>
                   </div>
