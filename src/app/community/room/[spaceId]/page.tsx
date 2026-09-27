@@ -218,6 +218,14 @@ export default function ChatRoomPage() {
               <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{space.desc} · live room</p>
             </div>
           </div>
+          {/* The rooms are public to members, so the private line is signposted from every one of them. */}
+          <Link
+            href={member?.isAdmin ? "/admin/messages" : "/messages"}
+            className="no-underline"
+            style={{ display: "inline-block", marginTop: 14, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}
+          >
+            {member?.isAdmin ? "💌 member messages →" : "💌 for anything private, message betty directly →"}
+          </Link>
         </div>
       </section>
 

@@ -473,8 +473,21 @@ export default function NavBar() {
                     zIndex: 200,
                   }}
                 >
+                  {/* The private line to Betty sits at the top of the envelope, where a member looks for
+                      messages. Betty gets her inbox here instead. */}
+                  <Link
+                    href={admin ? "/admin/messages" : "/messages"}
+                    onClick={() => setBellOpen(false)}
+                    className="no-underline"
+                    style={{ display: "block", padding: "14px", background: "var(--pink)", color: "#fff", borderBottom: "var(--border)" }}
+                  >
+                    <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 800 }}>
+                      {admin ? "💌 member messages →" : "💌 message betty directly →"}
+                    </div>
+                    {!admin && <p style={{ fontSize: 11, lineHeight: 1.5, marginTop: 3, opacity: 0.9 }}>Straight to me, privately. I read every one.</p>}
+                  </Link>
                   {broadcasts.length === 0 ? (
-                    <p style={{ fontSize: 12, color: "var(--grey-light)", padding: "16px 14px" }}>No messages yet.</p>
+                    <p style={{ fontSize: 12, color: "var(--grey-light)", padding: "16px 14px" }}>No announcements yet.</p>
                   ) : (
                     broadcasts.slice(0, 8).map((b) => (
                       <div key={b.id} className="p-4" style={{ borderBottom: "1px solid #eee" }}>

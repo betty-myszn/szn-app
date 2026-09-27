@@ -612,6 +612,25 @@ export default function DashboardPage() {
         </div>
       </section>
 
+      {/* ── MESSAGE BETTY: the private line, straight after the rooms, so the community and the one to
+             one sit together. Same slim band as the replay vault. ── */}
+      <section className="px-5 md:px-8 py-6" style={{ borderBottom: "var(--border)" }}>
+        <div className="max-w-6xl mx-auto">
+          <Link
+            href="/messages"
+            className="flex items-center justify-between gap-4 flex-wrap p-5 md:px-7"
+            style={{ border: "var(--border)", background: "var(--pink-bg)", textDecoration: "none" }}
+          >
+            <span style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, letterSpacing: "-0.4px", color: "var(--dark)" }}>
+              💌 you can message me directly now, I read every single one
+            </span>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
+              message betty →
+            </span>
+          </Link>
+        </div>
+      </section>
+
       {/* ── SEASON PROGRESS ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

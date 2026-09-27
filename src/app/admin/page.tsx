@@ -258,6 +258,9 @@ export default function AdminPage() {
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: 620 }}>
             Stats and moderation tools for the platform, visible only to your account.
           </p>
+          <Link href="/admin/messages" className="btn-pink" style={{ display: "inline-block", marginTop: 18 }}>
+            💌 member messages
+          </Link>
         </div>
       </section>
 

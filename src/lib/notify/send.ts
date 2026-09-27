@@ -20,7 +20,7 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // configuration look identical to a working one, so a failure here is logged loudly and reported
 // back to the caller instead.
 
-export type NotificationKind = "welcome" | "mention" | "reply" | "admin";
+export type NotificationKind = "welcome" | "mention" | "reply" | "admin" | "message";
 
 export interface MemberNotification {
   /** Who is being told. The source of truth, always. */
