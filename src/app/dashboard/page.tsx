@@ -34,6 +34,7 @@ import YourSeasonBanner from "@/components/YourSeasonBanner";
 import ActivationStrip from "@/components/ActivationStrip";
 import WelcomeOverlay from "@/components/WelcomeOverlay";
 import DeepLinkScroll from "@/components/DeepLinkScroll";
+import SectionBoundary from "@/components/SectionBoundary";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, then her
@@ -320,7 +321,9 @@ export default function DashboardPage() {
         <div className="max-w-6xl mx-auto">
           {/* Her own season gets celebrated before anything else: only shows when her Sun is in the
               sign the season is in. */}
-          <YourSeasonBanner name={member.name} sunSign={placements?.sun} season={season} dateOfBirth={chart?.birthData?.dateOfBirth} />
+          <SectionBoundary name="your-season-banner">
+            <YourSeasonBanner name={member.name} sunSign={placements?.sun} season={season} dateOfBirth={chart?.birthData?.dateOfBirth} />
+          </SectionBoundary>
           <div className="flex items-center justify-between gap-4 flex-wrap" style={{ marginBottom: 20 }}>
             <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey)" }}>
               welcome back, {member.name.toLowerCase()} ✦ {sign} szn hq
@@ -430,12 +433,16 @@ export default function DashboardPage() {
 
       {/* ── her szn area by area: the tappable grid sits straight under the hero, above the replay
              band, because it is the thing she comes here to poke at ── */}
-      <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
+      <SectionBoundary name="life-areas">
+        <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
+      </SectionBoundary>
 
       {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
            class that just landed is the most time-sensitive thing on the page. Self-hides once the
            replay is a few days old, and falls back to the slim vault banner. ── */}
-      <ReplayHighlight />
+      <SectionBoundary name="replay-highlight">
+        <ReplayHighlight />
+      </SectionBoundary>
 
       {/* ── TODAY: the daily hook ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>
@@ -460,17 +467,23 @@ export default function DashboardPage() {
       </section>
 
       {/* ── COSMIC WEATHER: high up, live transits ── */}
-      <SkyAlert chart={chart} />
+      <SectionBoundary name="sky-alert">
+        <SkyAlert chart={chart} />
+      </SectionBoundary>
 
       {/* ── THE SKY ON HER CHART: live transit-to-natal contacts. Sits directly under the collective
              weather so the page goes "here is the sky" then "here is what it is doing to YOU". The
              data was already being computed by /api/your-szn and thrown away; this renders it. ── */}
-      <TransitsToYourChart transits={szn?.transits} />
+      <SectionBoundary name="transits-to-your-chart">
+        <TransitsToYourChart transits={szn?.transits} />
+      </SectionBoundary>
 
       {/* ── her personalised season guide, straight after the sky: the season is the reason she's
              here, so her read of it comes before anything that routes her elsewhere ── */}
       <div id="season-guide" />
-      <SeasonPersonalised />
+      <SectionBoundary name="season-personalised">
+        <SeasonPersonalised />
+      </SectionBoundary>
 
       {/* ── UPCOMING MASTERCLASSES: workshops carousel with cover images. Titled by what it is, not
           by season, because the list runs across seasons (Leo into Virgo), not just this szn. ── */}
@@ -524,10 +537,14 @@ export default function DashboardPage() {
       </section>
 
       {/* ── human design × season (reused) ── */}
-      <SeasonDesignInline />
+      <SectionBoundary name="season-design">
+        <SeasonDesignInline />
+      </SectionBoundary>
 
       {/* ── this szn's meditation (reused) ── */}
-      <SeasonMeditation sign={season.sign} />
+      <SectionBoundary name="season-meditation">
+        <SeasonMeditation sign={season.sign} />
+      </SectionBoundary>
 
       {/* ── TOOLKIT ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>

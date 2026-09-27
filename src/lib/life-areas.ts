@@ -721,7 +721,10 @@ export interface LifeAreaReading {
 // Trait fields are authored inconsistently, some end with a full stop, some don't. When one is
 // spliced mid-sentence (e.g. "it tips into <shadow>."), strip any trailing punctuation/space so
 // the composed sentence doesn't run on or double up its period.
-function cleanClause(s: string): string {
+function cleanClause(s: unknown): string {
+  // Defensive on purpose: one non-string reaching here used to throw inside the life-area guide and
+  // take the whole dashboard down with it, for every member with a stellium in the right house.
+  if (typeof s !== "string") return "";
   return s.trim().replace(/[.\s]+$/, "");
 }
 
@@ -778,7 +781,10 @@ function describeOccupants(tenants: { id?: string; name: string; sign: string }[
     const names = tenants.map((p) => p.name.toLowerCase());
     const loud = tenants.find((p) => p.name === "Sun") || tenants[0];
     const loudTraits = SIGN_TRAITS[loud.sign];
-    const loudClause = loudTraits ? cleanClause((loudTraits[traitKey] as string) || loudTraits.essence) : "";
+    // `flavour` is a list of adjectives rather than a clause, so an area keyed to it (style & fashion)
+    // reads the sign's essence here instead. A list used to reach cleanClause and crash the page.
+    const trait = loudTraits?.[traitKey];
+    const loudClause = loudTraits ? cleanClause(typeof trait === "string" && trait ? trait : loudTraits.essence) : "";
     return `that's a genuine stellium, ${tenants.length} placements stacked in one house: ${names.join(", ")}. The concentration is the headline on its own, this isn't a quiet corner of your chart, it's one of the most loaded rooms in it${
       loudClause ? `, and with your ${loud.sign.toLowerCase()} ${loud.name.toLowerCase()} the loudest voice among them, that means ${loudClause}` : ""
     }`;
