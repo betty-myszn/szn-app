@@ -88,6 +88,14 @@ export function hasAccessFromRow(row: MembershipRow | null | undefined): boolean
   const grantsByStatus = ACCESS_GRANTING_STATUSES.has(status) && (row.membership_level ?? "none") !== "none";
   if (!grantsByStatus) return false;
 
+  // A cancelled TRIAL ends the moment she cancels, not at the end of the week. Stripe leaves a
+  // cancelled trial as 'trialing' with cancel_at_period_end set and the period end still in the
+  // future, which the paid-through net below would happily honour: that handed anyone who cancelled
+  // on minute one the whole seven days for free, and most of September's trials did exactly that.
+  // Scoped deliberately to 'trialing': a member who has actually PAID for the current period keeps
+  // it to the end of what she bought, because cutting that short is a refund we owe her.
+  if (status === "trialing" && row.subscription_cancel_at_period_end) return false;
+
   // Paid-through safety net, applied only to non-renewing access: the one-time "3 months upfront"
   // plan (no subscription, so no Stripe expiry event ever comes) and any subscription the member
   // has set to cancel at period end. Once that paid-through date passes, revoke here rather than

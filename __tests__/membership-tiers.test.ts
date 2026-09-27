@@ -1,5 +1,5 @@
 import { tierForPriceId } from "@/lib/stripe-tiers";
-import { hasAccessFromRow, hasFullAccessFromRow, postAuthDestination, type MembershipRow } from "@/lib/membership-gate";
+import { hasAccessFromRow, hasFullAccessFromRow, hasRoomAccessFromRow, postAuthDestination, type MembershipRow } from "@/lib/membership-gate";
 
 const active = (level: string): MembershipRow => ({
   membership_level: level,
@@ -47,6 +47,41 @@ describe("membership tier access gates", () => {
       subscription_current_period_end: new Date(Date.now() - 864e5).toISOString(),
     };
     expect(hasAccessFromRow(row)).toBe(false);
+  });
+
+  // The seven days are there to be tried, not taken. Cancelling during the trial used to leave the
+  // week running for free, which is what September's trials were doing: cancel on minute one, then
+  // use the platform all week.
+  it("a cancelled trial loses access at once, even with days left on the clock", () => {
+    const row: MembershipRow = {
+      ...active("monthly"),
+      subscription_status: "trialing",
+      subscription_cancel_at_period_end: true,
+      subscription_current_period_end: new Date(Date.now() + 5 * 864e5).toISOString(),
+    };
+    expect(hasAccessFromRow(row)).toBe(false);
+    expect(hasFullAccessFromRow(row)).toBe(false);
+    expect(hasRoomAccessFromRow(row)).toBe(false);
+  });
+
+  it("a trial still running keeps the full platform", () => {
+    const row: MembershipRow = {
+      ...active("monthly"),
+      subscription_status: "trialing",
+      subscription_current_period_end: new Date(Date.now() + 5 * 864e5).toISOString(),
+    };
+    expect(hasAccessFromRow(row)).toBe(true);
+    expect(hasFullAccessFromRow(row)).toBe(true);
+  });
+
+  it("a PAID member who cancels keeps the period she paid for", () => {
+    const row: MembershipRow = {
+      ...active("monthly"),
+      subscription_cancel_at_period_end: true,
+      subscription_current_period_end: new Date(Date.now() + 20 * 864e5).toISOString(),
+    };
+    expect(hasAccessFromRow(row)).toBe(true);
+    expect(hasFullAccessFromRow(row)).toBe(true);
   });
 
   describe("post-auth routing per tier", () => {
