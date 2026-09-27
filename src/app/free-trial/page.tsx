@@ -475,8 +475,8 @@ export default function FreeTrialPage() {
               <p style={{ fontSize: 17, lineHeight: 1.7, margin: "0 0 20px" }}>
                 Your card goes in through Stripe, and <strong>you are charged $0 today</strong>. You get
                 the whole of MY SZN for seven days, and on day eight it becomes $88 a month unless you
-                cancel first. Cancelling takes about ten seconds and you can do it from inside your
-                account the moment you are in.
+                cancel first. Cancelling takes about ten seconds from inside your account, and your seven
+                days end when you do, so the week runs for exactly as long as you stay.
               </p>
               <a
                 href={MONTHLY_CHECKOUT_URL}

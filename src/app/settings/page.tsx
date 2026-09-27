@@ -286,7 +286,7 @@ export default function SettingsPage() {
                             </strong>
                           </>
                         )}
-                        {" "}unless you cancel before then.
+                        {" "}unless you cancel before then. Cancelling ends your access straight away.
                       </p>
                     </div>
                   )}
@@ -300,9 +300,14 @@ export default function SettingsPage() {
                     </p>
                   )}
 
+                  {/* A cancelled TRIAL is already over, so it must not be told it has time left. A
+                      cancelled paid month genuinely does keep running to the date she paid through,
+                      which is a different sentence and the only one that was here before. */}
                   {isCancellationScheduled(member) && (
                     <p style={{ fontSize: 12, color: "var(--grey-light)", marginBottom: 20 }}>
-                      Cancellation scheduled. You&apos;ll keep full access until then and you won&apos;t be billed again.
+                      {member.subscriptionStatus === "trialing"
+                        ? "Your free trial is cancelled, so your access has ended. You haven't been charged and you won't be."
+                        : "Cancellation scheduled. You'll keep full access until then and you won't be billed again."}
                     </p>
                   )}
 
@@ -364,8 +369,8 @@ export default function SettingsPage() {
                       You can cancel yourself in there any time, no asking me first.
                       {member.subscriptionStatus === "trialing" ? (
                         <>
-                          {" "}Cancel before your seven days are up and you won&apos;t be charged at all, and you keep your
-                          access right until the trial ends.
+                          {" "}Cancel before your seven days are up and you won&apos;t be charged anything. Your access
+                          ends the moment you cancel, so the seven days run for as long as you stay.
                         </>
                       ) : (
                         <>

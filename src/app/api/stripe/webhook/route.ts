@@ -163,6 +163,27 @@ async function parkPendingMembership(
 // subscription is actually on, never from anything a client passed in. If no profile exists yet
 // (a subscription event that arrived before, or without, an activated account) the state is
 // parked in pending_memberships against the customer's email instead of being lost.
+// A trial that gets cancelled is over there and then, not at the end of the week. Stripe's portal
+// only SCHEDULES the cancellation (status stays 'trialing' with cancel_at set to the trial end), so
+// left alone it hands anyone who cancels on day one the remaining six days for free, which is what
+// September's trials were doing. Cancelling the subscription outright here makes Stripe agree with
+// the app: the deleted event follows immediately and drops her to membership_level 'none'.
+//
+// Only trials. A member who has actually PAID for the current period keeps it to the end of what
+// she bought, so her scheduled cancellation is left exactly as Stripe scheduled it. There is no
+// charge to worry about either way: cancelling during a trial bills nothing.
+async function endCancelledTrialNow(stripe: Stripe, subscription: Stripe.Subscription): Promise<void> {
+  const scheduledToCancel = subscription.cancel_at_period_end || subscription.cancel_at != null;
+  if (subscription.status !== "trialing" || !scheduledToCancel) return;
+  try {
+    await stripe.subscriptions.cancel(subscription.id);
+  } catch (e) {
+    // Non-fatal on purpose. The access gate already refuses a trialing row that is set to cancel,
+    // so she is out of the platform either way; this only keeps Stripe's own records in step.
+    console.error("stripe webhook: could not end a cancelled trial immediately", subscription.id, e instanceof Error ? e.message : e);
+  }
+}
+
 async function syncSubscriptionOntoProfile(
   admin: SupabaseAdmin,
   stripe: Stripe,
@@ -434,7 +455,9 @@ export async function POST(request: Request) {
 
       case "customer.subscription.created":
       case "customer.subscription.updated": {
-        await syncSubscriptionOntoProfile(admin, stripe, event.data.object as Stripe.Subscription);
+        const subscription = event.data.object as Stripe.Subscription;
+        await syncSubscriptionOntoProfile(admin, stripe, subscription);
+        await endCancelledTrialNow(stripe, subscription);
         break;
       }
 
