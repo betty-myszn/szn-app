@@ -230,13 +230,13 @@ export default function FreeTrialPage() {
             <div className="hero-cta">
               <a href="#ft-signup" className="cta">start my free 7 days</a>
               <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
-                {"no card required. your full access ends automatically after 7 days."}
+                {"your card goes in through stripe and you are charged $0 today."}
               </p>
               <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
-                {"membership is $88 a month if you decide to stay, and only ever if you choose it."}
+                {"it becomes $88 a month on day 8, and you can cancel before then and pay nothing."}
               </p>
               <p className="micro" style={{ color: "rgba(255,255,255,.6)" }}>
-                {"and after your week, the chat rooms and your charts stay yours, free."}
+                {"cancelling takes ten seconds and ends your week there and then, so the 7 days run for as long as you stay."}
               </p>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function FreeTrialPage() {
               <span className="big">7</span>
               <span className="l">days</span>
             </div>
-            <p className="stamp-note">no card · no charge</p>
+            <p className="stamp-note">$0 today · cancel any time</p>
           </div>
         </div>
       </header>
@@ -254,7 +254,7 @@ export default function FreeTrialPage() {
       {/* STRIP */}
       <section className="strip">
         <div className="wrap">
-          <p>{"7 days. the full membership. no card, no auto-charge, nothing to cancel. $88 a month after, only if you say so."}</p>
+          <p>{"7 days. the full membership. nothing charged today, then $88 a month from day 8 unless you cancel before it."}</p>
         </div>
       </section>
 
@@ -414,13 +414,13 @@ export default function FreeTrialPage() {
         <div className="wrap">
           <div className="rl">how your 7 days work</div>
           <h2 className="disp" style={{ fontSize: "clamp(26px,4.6vw,44px)", textTransform: "lowercase", marginTop: 18 }}>
-            no card, no catch, no surprises.
+            no catch, no surprises, nothing charged today.
           </h2>
           <div className="timeline">
-            <div className="tl"><div className="d">day 1</div><b>you&apos;re in</b><p>{"sign up in under a minute with no card. you're logged straight in as a full member, chart already built."}</p></div>
+            <div className="tl"><div className="d">day 1</div><b>you&apos;re in</b><p>{"sign up in under a minute through stripe, charged $0 today. you're logged straight in as a full member, chart already built."}</p></div>
             <div className="tl"><div className="d">days 1 to 7</div><b>live in it</b><p>{"your platform, the live workshops and replays, the astrotapping, the vault and the member rooms. all of it."}</p></div>
-            <div className="tl"><div className="d">day 6</div><b>a gentle heads up</b><p>{"we'll remind you your free week is nearly up, so the end never catches you by surprise."}</p></div>
-            <div className="tl"><div className="d">day 7</div><b>it winds down on its own</b><p>{"your personalised platform, workshops and meditations close. you keep the chat rooms and your chart. no charge, nothing to cancel, and staying on is $88 a month whenever you want it back."}</p></div>
+            <div className="tl"><div className="d">day 6</div><b>a gentle heads up</b><p>{"we'll email you before your free week is up, so day 8 never catches you by surprise."}</p></div>
+            <div className="tl"><div className="d">day 8</div><b>it becomes your membership</b><p>{"your card is charged $88 and nothing changes, you carry straight on. if you\'d rather not, cancel any time before then and you pay nothing, and your week ends the moment you cancel."}</p></div>
           </div>
         </div>
       </section>
@@ -432,19 +432,19 @@ export default function FreeTrialPage() {
           <div className="faq">
             <details open>
               <summary>Do I need to enter card details?</summary>
-              <div className="a">{"No. There's no card, no checkout and no payment screen anywhere in the signup. You give your name, email, a password and your birth details, and you're in."}</div>
+              <div className="a">{"Yes. You go through Stripe's checkout and it charges you $0 today, which is what holds your place and becomes your membership on day 8 if you stay. Your card details sit with Stripe, never with me."}</div>
             </details>
             <details>
               <summary>Will I be charged when the 7 days end?</summary>
-              <div className="a">{"No. Because we never take a card, there's nothing to charge. Your access simply ends on its own after 7 days. If you want to stay, membership is $88 a month and you choose it yourself. Nothing happens automatically."}</div>
+              <div className="a">{"Yes, $88 on day 8, unless you cancel before then. Cancelling takes about ten seconds from your settings and you pay nothing at all. It does end your access there and then, so the free week lasts for as long as you stay on it."}</div>
             </details>
             <details>
               <summary>What does it cost if I want to stay?</summary>
               <div className="a">{"MY SZN is $88 a month, billed monthly, and you can cancel anytime from your settings. That's the whole membership, everything you had during your free week. There's also a VIP tier at $555 a month if you want direct 1:1 coaching with me, and $88 is the one almost everyone is on."}</div>
             </details>
             <details>
-              <summary>What happens on day 7?</summary>
-              <div className="a">{"Your personalised platform, the workshops and the meditations close, but you keep the chat rooms and your chart. Everything you started stays saved, so if you become a member you pick up exactly where you left off."}</div>
+              <summary>What happens on day 8?</summary>
+              <div className="a">{"If you stay, your $88 goes through and nothing else changes, the platform, the workshops, the rooms and your chart all carry on exactly as they were. If you cancelled during the week, that is where it stops, and everything you started stays saved for whenever you come back."}</div>
             </details>
             <details>
               <summary>Do I really get everything a paying member gets?</summary>
@@ -506,7 +506,7 @@ export default function FreeTrialPage() {
 
       <div className="sticky-cta">
         <a href="#ft-signup">start my free 7 days</a>
-        <div className="sn">no card today · $88 a month only if you stay</div>
+        <div className="sn">$0 today · $88 a month from day 8</div>
       </div>
     </div>
   );
