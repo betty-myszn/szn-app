@@ -4,6 +4,7 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import TrialBar from "@/components/TrialBar";
 import Analytics from "@/components/Analytics";
+import ActivityLogger from "@/components/ActivityLogger";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
 import CookieConsent from "@/components/CookieConsent";
@@ -117,6 +118,7 @@ export default function RootLayout({
         />
 
         <Analytics />
+        <ActivityLogger />
         <ServiceWorkerRegistrar />
         <InstallPrompt />
 
