@@ -1,6 +1,7 @@
 "use client";
 
 import { Component, type ReactNode } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 // Keeps one broken dashboard section from taking the whole page down with it. Without this, a
 // throw anywhere inside a section reaches the page's error boundary and the member sees "this page
@@ -16,6 +17,8 @@ export default class SectionBoundary extends Component<{ name: string; children:
 
   componentDidCatch(error: unknown) {
     console.error(`dashboard section "${this.props.name}" failed and was hidden`, error);
+    // The page carries on, so without this nobody would ever hear a section had broken.
+    Sentry.captureException(error, { tags: { section: this.props.name } });
   }
 
   render() {

@@ -261,6 +261,19 @@ export default function AdminPage() {
           <Link href="/admin/messages" className="btn-pink" style={{ display: "inline-block", marginTop: 18 }}>
             💌 member messages
           </Link>
+          {/* Checks the error reporting end to end: one browser error and one server error, both
+              labelled as tests, should arrive in Sentry within a minute. */}
+          <button
+            onClick={() => {
+              fetch("/api/admin/sentry-test", { method: "POST" }).catch(() => {});
+              setTimeout(() => {
+                throw new Error(`Sentry test from the control room (browser), ${new Date().toISOString()}`);
+              }, 0);
+            }}
+            style={{ display: "inline-block", marginTop: 18, marginLeft: 12, background: "transparent", color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", padding: "12px 20px", fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", cursor: "pointer" }}
+          >
+            send a test error to sentry
+          </button>
         </div>
       </section>
 

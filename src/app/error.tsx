@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -13,6 +14,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error("page error boundary caught:", error);
+    Sentry.captureException(error, { tags: { boundary: "page" } });
   }, [error]);
 
   return (

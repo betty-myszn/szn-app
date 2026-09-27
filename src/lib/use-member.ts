@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getCurrentMember, type Member } from "@/lib/member";
 import { createClient } from "@/lib/supabase/client";
 import { hydrateSessionOnce } from "@/lib/hydrate-session";
+import * as Sentry from "@sentry/nextjs";
 
 // Returns the real Supabase-authenticated member once mounted (null while loading or logged
 // out). `ready` distinguishes "still checking" from "definitely logged out". `error` is true when
@@ -46,6 +47,8 @@ export function useMember(): { member: Member | null; ready: boolean; error: boo
       // the local data is already there, so nothing visibly changes; only a brand-new device sees a
       // brief empty state fill in, which is far better than a five-second white screen.
       setMember(m);
+      // Error reports name the member by id and first name only, so a crash reads "broke for Jessica".
+      Sentry.setUser(m ? { id: m.id, username: m.name.trim().split(/\s+/)[0] || undefined } : null);
       if (m) {
         // Re-read her whatever happened: a failed pull must never leave the first, pre-hydration
         // member (no placements yet) on screen when the chart did in fact land.

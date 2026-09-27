@@ -13,6 +13,7 @@
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0",
     "@googlemaps/js-api-loader": "^2.1.0",
+    "@sentry/nextjs": "^11.0.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.7",
     "luxon": "^3.7.2",
