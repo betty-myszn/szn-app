@@ -21,6 +21,7 @@ export default function robots(): MetadataRoute.Robots {
         "/challenges",
         "/affirmations",
         "/style",
+        "/meditations",
         "/onboarding",
         "/settings",
         "/checkout",

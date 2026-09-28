@@ -12,6 +12,7 @@ import { loadNotifications, unreadCount as notifUnreadCount, markAllNotification
 
 const memberLinks = [
   { href: "/journal", label: "journal" },
+  { href: "/meditations", label: "meditations" },
   // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
   // lands on a post from search should still see where she is in the site.
   { href: "/blog", label: "blog" },

@@ -292,6 +292,7 @@ export default function DashboardPage() {
     { glyph: "♀", t: "style codes", b: "Dress like the woman you're becoming.", href: "/style" },
     { glyph: "✦", t: "affirmations", b: "Said in your voice, for your szn.", href: "/affirmations" },
     { glyph: "★", t: "challenges", b: challengeStreak.current > 0 ? `${challengeStreak.current} day streak, keep it.` : "Missions, xp and a streak.", href: "/challenges" },
+    { glyph: "◌", t: "meditations", b: "Your library, from Venus money to this szn.", href: "/meditations" },
     { glyph: "▷", t: "replays", b: "Every class, saved forever.", href: "/events" },
   ];
 

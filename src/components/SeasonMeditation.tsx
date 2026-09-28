@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { meditationForSign } from "@/lib/meditations";
+import { meditationBySlug, meditationForSign } from "@/lib/meditations";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // The season's meditation, on the dashboard for every member. Renders nothing at all for a season
-// that has no meditation yet, so a quiet season never shows an empty player.
+// that has no meditation yet, so a quiet season never shows an empty player. Also the player on
+// each /meditations/[slug] page, where it's picked by slug instead of by sign. YouTube-hosted
+// meditations swap the audio player for an embed; everything around it stays the same.
 //
 // Duration and progress come from the audio element itself rather than from stored metadata, so
 // they can never disagree with the actual file.
@@ -17,8 +19,8 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export default function SeasonMeditation({ sign }: { sign: string }) {
-  const meditation = meditationForSign(sign);
+export default function SeasonMeditation({ sign, slug, tag = "this szn's meditation" }: { sign?: string; slug?: string; tag?: string }) {
+  const meditation = slug ? meditationBySlug(slug) : sign ? meditationForSign(sign) : undefined;
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -88,7 +90,7 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
     <section className="px-5 md:px-8 py-12" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
       <div className="max-w-4xl mx-auto">
         <div className="tag mb-3" style={{ color: "var(--pink)" }}>
-          this szn&apos;s meditation
+          {tag}
         </div>
 
         <h2
@@ -118,6 +120,33 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
           ))}
         </div>
 
+        {meditation.workingWith && (
+          <div style={{ maxWidth: 620, marginBottom: 26 }}>
+            <div className="tag mb-3" style={{ color: "rgba(255,255,255,0.45)" }}>
+              inside this meditation
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {meditation.workingWith.map((line) => (
+                <li key={line} style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.75)", marginBottom: 4 }}>
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {meditation.youtubeId ? (
+          <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", border: "1px solid rgba(255,255,255,0.15)" }}>
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${meditation.youtubeId}?rel=0&modestbranding=1`}
+              title={meditation.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
+            />
+          </div>
+        ) : (
+        <>
         {/* Player */}
         <div className="p-6" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)" }}>
           <audio
@@ -218,6 +247,9 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
           </div>
         </div>
 
+        </>
+        )}
+
         {/* How to use it, short on purpose */}
         <ul style={{ listStyle: "none", padding: 0, margin: "20px 0 0", maxWidth: 620 }}>
           {meditation.howTo.map((line) => (
@@ -231,6 +263,7 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
           ))}
         </ul>
 
+        {meditation.src && (
         <a
           href={meditation.src}
           download
@@ -247,6 +280,7 @@ export default function SeasonMeditation({ sign }: { sign: string }) {
         >
           download for offline →
         </a>
+        )}
       </div>
     </section>
   );
