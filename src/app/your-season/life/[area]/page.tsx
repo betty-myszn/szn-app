@@ -11,6 +11,7 @@ import { composeLifeArea, LIFE_AREAS, resolveAreaId } from "@/lib/life-areas";
 import { useHumanDesign } from "@/lib/use-human-design";
 import { composeAreaDesign } from "@/lib/life-area-design";
 import WovenAreaRead from "@/components/WovenAreaRead";
+import MoneyMeditationBand from "@/components/MoneyMeditationBand";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -126,6 +127,7 @@ export default function LifeAreaPage() {
           <Link href="/journal" className="btn-pink" style={{ display: "inline-block" }}>journal on this area</Link>
         </div>
       </section>
+      {areaId === "money" && <MoneyMeditationBand />}
       <section className="px-5 md:px-8 py-12" style={{ borderTop: "var(--border)" }}>
         <div className="max-w-4xl mx-auto">
           <div className="tag mb-5">explore another area of your szn</div>

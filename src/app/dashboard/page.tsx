@@ -26,6 +26,7 @@ import LifeAreasGuide from "@/components/LifeAreasGuide";
 import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
+import MoneyMeditationBand from "@/components/MoneyMeditationBand";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
@@ -437,6 +438,9 @@ export default function DashboardPage() {
       <SectionBoundary name="life-areas">
         <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
       </SectionBoundary>
+
+      {/* ── new: the Venus Money meditation, straight under the area grid where money lives ── */}
+      <MoneyMeditationBand />
 
       {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
            class that just landed is the most time-sensitive thing on the page. Self-hides once the
