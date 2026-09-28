@@ -25,6 +25,8 @@ export interface Meditation {
   theme: string;
   /** Path under /public, for self-hosted audio. */
   src?: string;
+  /** Cover picture for the library card, path under /public. */
+  image?: string;
   /** YouTube video id, for meditations hosted there. */
   youtubeId?: string;
   /** Longer framing, shown on the player. */
@@ -43,6 +45,7 @@ export const MEDITATIONS: Meditation[] = [
     purpose: "A Leo season meditation for stepping out of the background of your own life.",
     sign: "Leo",
     theme: "leo szn",
+    image: "/leo-lion.png",
     src: "/meditations/leo-season-main-character.mp3",
     intro: [
       "Leo season asks one thing of you: stop shrinking. This meditation is for the part of you that already knows what she wants and has been waiting for permission that was never going to arrive from anyone else.",
@@ -60,6 +63,7 @@ export const MEDITATIONS: Meditation[] = [
     title: "Venus Money",
     purpose: "Work with Venus around money, receiving, self-worth, pleasure, desire, standards and the way you relate to wealth.",
     theme: "money",
+    image: "/meditations/venus-money.jpg",
     youtubeId: "4qC3CrVwaEU",
     intro: [
       "Venus rules value, beauty, attraction, pleasure, relationships and receiving, so we're bringing all of that into your money work and looking at what happens when you feel safer having more, holding more and asking for more.",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { allMeditations } from "@/lib/meditations";
 
@@ -47,8 +48,20 @@ export default function MeditationsPage() {
               key={m.slug}
               href={`/meditations/${m.slug}`}
               className="no-underline flex flex-col"
-              style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", padding: 24, minHeight: 170, color: "#3C2A70" }}
+              style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", overflow: "hidden", color: "#3C2A70" }}
             >
+              {m.image && (
+                <div style={{ position: "relative", aspectRatio: "16 / 9", background: "var(--dark)" }}>
+                  <Image
+                    src={m.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    style={{ objectFit: m.image.endsWith(".png") ? "contain" : "cover" }}
+                  />
+                </div>
+              )}
+              <div className="flex flex-col" style={{ padding: 24, flex: 1 }}>
               <div className="tag mb-3" style={{ color: "var(--pink)" }}>
                 {m.theme}
               </div>
@@ -57,6 +70,7 @@ export default function MeditationsPage() {
               <span style={{ marginTop: 16, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)" }}>
                 listen →
               </span>
+              </div>
             </Link>
           ))}
         </div>
