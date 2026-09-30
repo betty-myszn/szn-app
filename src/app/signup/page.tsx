@@ -70,7 +70,7 @@ export default function SignupPage() {
         {plan === "trial" ? (
           <div>
             <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 20 }}>
-              Come inside the whole of MY SZN free for 7 days: your personalised platform, the workshops, the meditations and the community. No card needed, and when the week is up the chat rooms and your charts stay yours, free.
+              Come inside the whole of MY SZN free for 7 days: your personalised platform, the workshops, the meditations and the community. You pay $0 today and can cancel anytime, and when the week is up the chat rooms and your charts stay yours, free.
             </p>
             <Link
               href="/free-trial"

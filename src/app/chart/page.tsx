@@ -33,7 +33,7 @@ const FAQS = [
   },
   {
     q: "Is this birth chart calculator really free?",
-    a: "Yes. The full chart, every placement and the written breakdown are free, and there is no signup or card required to see them.",
+    a: "Yes. The full chart, every placement and the written breakdown are free, and there is no signup required to see them.",
   },
   {
     q: "What is the difference between my sun, moon and rising sign?",

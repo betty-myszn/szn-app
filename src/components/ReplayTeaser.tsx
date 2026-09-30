@@ -102,7 +102,7 @@ export default function ReplayTeaser({ background = "var(--cream)" }: { backgrou
             {FREE_TRIAL_CTA.label}
           </Link>
           <p style={{ fontSize: 12.5, color: "var(--grey-light)", marginTop: 14 }}>
-            No card needed. Watch it back as many times as you like.
+            $0 today. Watch it back as many times as you like.
           </p>
         </div>
       </div>

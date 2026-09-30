@@ -33,7 +33,7 @@ export default function FreeChartReadingPage() {
             we need your birth details first.
           </h1>
           <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-            Pop them in and your chart calculates instantly, no signup and no card.
+            Pop them in and your chart calculates instantly, with no signup.
           </p>
           <Link href="/chart" className="btn-pink">get my free chart</Link>
         </div>

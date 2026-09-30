@@ -33,7 +33,7 @@ const FAQS = [
   },
   {
     q: "Is this Human Design calculator really free?",
-    a: "Yes. Your Type, Strategy, Authority, Profile and bodygraph are free, with no signup or card required to see them. The deeper reading, your centres, channels, every gate and how your design plays out across money, love, business and confidence, lives inside the MY SZN membership.",
+    a: "Yes. Your Type, Strategy, Authority, Profile and bodygraph are free, with no signup required to see them. The deeper reading, your centres, channels, every gate and how your design plays out across money, love, business and confidence, lives inside the MY SZN membership.",
   },
   {
     q: "What are the five Human Design Types?",

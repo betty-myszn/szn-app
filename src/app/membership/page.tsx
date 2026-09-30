@@ -934,7 +934,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start with a free 7-day trial of the whole platform, no card needed. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astrotapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
+                a: "Anytime. Start with a free 7-day trial of the whole platform, which is $0 today and yours to cancel anytime. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astrotapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
               },
               {
                 q: "How much time do I need to commit each week?",
@@ -1050,13 +1050,13 @@ export default function MembershipPage() {
                   <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
                     {member
                       ? "Membership is $88 a month, cancel anytime, and it keeps everything open on the account you already have."
-                      : "Full access for 7 days, no card needed. You'll be inside and using your portal before the paid doors reopen."}
+                      : "Full access for 7 days, $0 today. You'll be inside and using your portal before the paid doors reopen."}
                   </p>
                   <Link href={member ? "#pricing" : FREE_TRIAL_CTA.href} className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
                     {member ? "become a member" : FREE_TRIAL_CTA.label}
                   </Link>
                   <div className="flex flex-wrap gap-2 mt-6">
-                    {["No card needed", "Full access", "Cancel anytime"].map((b) => (
+                    {["$0 today", "Full access", "Cancel anytime"].map((b) => (
                       <span key={b} style={{
                         fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
                         color: "var(--dark)", padding: "6px 12px",

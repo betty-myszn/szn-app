@@ -195,7 +195,7 @@ export default function Home() {
           "a live masterclass every month",
           "live astrotapping™ with betty",
           "the community rooms",
-          "no card to start",
+          "$0 today, cancel anytime",
         ]}
       />
 
@@ -671,7 +671,7 @@ export default function Home() {
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            No card. No commitment. $88/month only if you decide to stay.
+            No commitment. Cancel anytime. $88/month only if you decide to stay.
           </p>
           <div className="mt-10">
             <Link
