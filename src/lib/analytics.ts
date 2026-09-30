@@ -146,4 +146,7 @@ export const EVENTS = {
   /** The welcome closed, carrying the panel she was on and whether she finished it. Tells you which
    *  panel loses people, rather than only how many saw it. */
   WELCOME_CLOSED: "welcome_closed",
+  /** She saved her "customise my szn" picks, carrying where from (welcome / edit / dashboard) and
+   *  the areas in order, so we can see what members actually come here for. */
+  SZN_PICKS_SAVED: "szn_picks_saved",
 } as const;

@@ -13,12 +13,15 @@ import { SIGN_OVERVIEWS } from "@/lib/interpretations";
 import { RISING_VIBES } from "@/lib/style-data";
 import { getTarotOfDay } from "@/lib/tarot";
 import { upcomingWorkshops, pastWorkshops, type Workshop } from "@/lib/workshops";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { loadJournalEntries } from "@/lib/journal-store";
 import { computeJournalStreak } from "@/lib/streaks";
 import { getPrimaryGoal, type Goal } from "@/lib/goals-store";
 import { loadChallengeProgress, computeChallengeStreak } from "@/lib/challenge-progress";
-import { loadDashboardPrefs, toggleDashboardSection, DASHBOARD_SECTIONS, type DashboardPrefs } from "@/lib/dashboard-preferences";
+import { loadSznPicks, saveSznPicks, dismissSznPrompt, type SznPicksState } from "@/lib/szn-picks-store";
+import { isFirstRunAccount, shortLabel, SAVED_FLAG } from "@/lib/szn-picks";
+import { track, EVENTS } from "@/lib/analytics";
+import SznPicker from "@/components/SznPicker";
 import { loadPolls, loadResponses, getActivePollFor, submitResponse, type Poll } from "@/lib/polls";
 import Ticker from "@/components/Ticker";
 import SeasonPersonalised from "@/components/SeasonPersonalised";
@@ -87,8 +90,9 @@ export default function DashboardPage() {
   const [streak, setStreak] = useState<{ current: number; longest: number } | null>(null);
   const [primaryGoal, setPrimaryGoal] = useState<Goal | null | undefined>(undefined);
   const [challengeStreak, setChallengeStreak] = useState({ current: 0, longest: 0, activeToday: false });
-  const [prefs, setPrefs] = useState<DashboardPrefs | null>(null);
-  const [customizing, setCustomizing] = useState(false);
+  // "customise my szn" picks. undefined while the session is read (a few ms, local only).
+  const [sznPicks, setSznPicks] = useState<SznPicksState | undefined>(undefined);
+  const [sznToast, setSznToast] = useState("");
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
   const [pollDraft, setPollDraft] = useState("");
   const [pollSubmitted, setPollSubmitted] = useState(false);
@@ -104,8 +108,68 @@ export default function DashboardPage() {
     setStreak(computeJournalStreak(loadJournalEntries()));
     setPrimaryGoal(getPrimaryGoal());
     setChallengeStreak(computeChallengeStreak(loadChallengeProgress()));
-    setPrefs(loadDashboardPrefs());
+    loadSznPicks().then(setSznPicks);
+    try {
+      if (sessionStorage.getItem(SAVED_FLAG)) {
+        sessionStorage.removeItem(SAVED_FLAG);
+        setSznToast("saved! your dashboard's been reshuffled ✦");
+      }
+    } catch {
+      // No toast, the reshuffled page says it anyway.
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!sznToast) return;
+    const t = setTimeout(() => setSznToast(""), 2600);
+    return () => clearTimeout(t);
+  }, [sznToast]);
+
+  // Tuning straight from the dashboard cards (＋ more / less / keep them for a new season). The
+  // page updates first and the save follows, rolled back with a message if it does not land.
+  const changeSznPicks = useCallback(
+    async (next: string[]) => {
+      const before = sznPicks;
+      const prev = before?.picks ?? [];
+      const added = next.find((id) => !prev.includes(id));
+      const removed = prev.find((id) => !next.includes(id));
+      setSznPicks({ picks: next, season: season.sign, dismissed: before?.dismissed ?? false });
+      const saved = await saveSznPicks(next, season.sign);
+      if (!saved) {
+        setSznPicks(before);
+        setSznToast("that didn't save, give it another tap");
+        return;
+      }
+      track(EVENTS.SZN_PICKS_SAVED, { from: "dashboard", picks: next.join(","), count: next.length });
+      setSznToast(
+        added
+          ? `${shortLabel(added)} added to your picks ✦`
+          : removed
+            ? `${shortLabel(removed)} moved down, still here when you want it`
+            : `keeping your picks for ${season.sign.toLowerCase()} szn ✦`,
+      );
+    },
+    [sznPicks, season.sign],
+  );
+
+  const finishWelcomePicks = useCallback(
+    (picks: string[]) => {
+      setSznPicks({ picks, season: season.sign, dismissed: false });
+      window.scrollTo(0, 0);
+    },
+    [season.sign],
+  );
+
+  const skipWelcomePicks = useCallback(() => {
+    setSznPicks({ picks: [], season: season.sign, dismissed: false });
+    saveSznPicks([], season.sign);
+    window.scrollTo(0, 0);
+  }, [season.sign]);
+
+  const dismissSznInvite = useCallback(() => {
+    setSznPicks((s) => ({ picks: s?.picks ?? null, season: s?.season ?? null, dismissed: true }));
+    dismissSznPrompt();
   }, []);
 
   useEffect(() => {
@@ -127,10 +191,6 @@ export default function DashboardPage() {
       setPollDraft("");
       setPollSubmitted(false);
     }, 1600);
-  };
-
-  const handleToggleSection = (id: (typeof DASHBOARD_SECTIONS)[number]["id"]) => {
-    setPrefs(toggleDashboardSection(id));
   };
 
   // Never return null here: a bare null is a blank white screen, and `ready` used to be able to
@@ -232,6 +292,17 @@ export default function DashboardPage() {
         </div>
       </section>
     );
+  }
+
+  // A new member picks what she wants MORE of before her first dashboard: one full screen, then a
+  // short reveal, then the page built around her picks. Members who were already here get an
+  // invitation card in the area guide instead (see LifeAreasGuide), never this screen.
+  const firstRun = isFirstRunAccount(member.memberSince);
+  if (firstRun && sznPicks === undefined) {
+    return <div className="szn-page" aria-busy="true" />;
+  }
+  if (firstRun && sznPicks && sznPicks.picks === null) {
+    return <SznPicker mode="welcome" season={season} initial={[]} onDone={finishWelcomePicks} onSkip={skipWelcomePicks} />;
   }
 
   // Placements are real and present from here (hasRealChart gate above). Reads stay defensively
@@ -436,7 +507,19 @@ export default function DashboardPage() {
       {/* ── her szn area by area: the tappable grid sits straight under the hero, above the replay
              band, because it is the thing she comes here to poke at ── */}
       <SectionBoundary name="life-areas">
-        <LifeAreasGuide season={season} chart={chart} goal={primaryGoal ?? null} />
+        <LifeAreasGuide
+          season={season}
+          chart={chart}
+          goal={primaryGoal ?? null}
+          transits={szn?.transits}
+          picks={sznPicks?.picks ?? null}
+          pickSeason={sznPicks?.season ?? null}
+          // Until the session is read, treat it as answered so the invitation never flashes up for
+          // a member who has already chosen.
+          dismissed={sznPicks ? sznPicks.dismissed : true}
+          onPicksChange={changeSznPicks}
+          onDismiss={dismissSznInvite}
+        />
       </SectionBoundary>
 
       {/* ── new: the Venus Money meditation, straight under the area grid where money lives ── */}
@@ -696,27 +779,21 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── customise: what she reads, moved to the foot ── */}
+      {/* ── customise: the old per-section checkboxes toggled sections the HQ redesign no longer
+             renders, so the foot now points at the real thing. ── */}
       <section className="px-5 md:px-8 py-4" style={{ borderBottom: "var(--border)", background: "#fafafa" }}>
         <div className="max-w-6xl mx-auto">
-          <button onClick={() => setCustomizing((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--grey-light)" }}>
-            {customizing ? "done customising ✓" : "customise this dashboard ✎"}
-          </button>
-          {customizing && (
-            <div className="flex flex-wrap gap-3 mt-4">
-              {DASHBOARD_SECTIONS.map((s) => {
-                const on = prefs ? prefs[s.id] : true;
-                return (
-                  <label key={s.id} title={s.desc} className="flex items-center gap-2" style={{ border: "1.5px solid " + (on ? "var(--pink)" : "#ddd"), padding: "8px 14px", cursor: "pointer", background: on ? "rgba(255,45,135,0.06)" : "#fff" }}>
-                    <input type="checkbox" checked={on} onChange={() => handleToggleSection(s.id)} style={{ accentColor: "var(--pink)" }} />
-                    <span style={{ fontSize: 12, fontWeight: 700 }}>{s.label}</span>
-                  </label>
-                );
-              })}
-            </div>
-          )}
+          <Link href="/your-season/customise" className="no-underline" style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--grey-light)" }}>
+            customise my szn ✎
+          </Link>
         </div>
       </section>
+
+      {sznToast && (
+        <div className="szn-toast" role="status">
+          {sznToast}
+        </div>
+      )}
 
       {/* signOverview is intentionally read to keep the season meta available for the next pass
           (element / modality / ruler chips + the archetype line go into the hero once finalised). */}

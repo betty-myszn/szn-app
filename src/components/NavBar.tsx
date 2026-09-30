@@ -74,6 +74,32 @@ const exploreMenu = [
  *  the opened page a handle back to this one. */
 const COACHING_URL = "https://thecosmicco.com";
 
+// "customise my szn" launched 30 Sep 2026. The NEW sticker runs until Scorpio szn is well under
+// way, long enough for every regular member to have seen it, then drops off by itself.
+const CUSTOMISE_NEW_UNTIL = Date.parse("2026-10-28T00:00:00Z");
+
+function NewSticker() {
+  return (
+    <span
+      style={{
+        fontSize: 9,
+        fontWeight: 800,
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        background: "var(--pink)",
+        color: "#fff",
+        padding: "3px 7px",
+        borderRadius: 999,
+        transform: "rotate(-4deg)",
+        display: "inline-block",
+        lineHeight: 1.2,
+      }}
+    >
+      new
+    </span>
+  );
+}
+
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -100,6 +126,7 @@ export default function NavBar() {
   // she can't open.
   const freeMember = isFreeMember(member);
   const paidMember = !!member && !freeMember;
+  const [customiseIsNew] = useState(() => Date.now() < CUSTOMISE_NEW_UNTIL);
   const links = member ? (freeMember ? freeLinks : memberLinks) : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
@@ -640,10 +667,11 @@ export default function NavBar() {
                     // Goals are part of the paid platform, so the free tier's account menu is just
                     // settings (and admin, for Betty's own account).
                     ...(paidMember ? [{ href: "/goals", label: "my goals" }] : []),
+                    ...(paidMember ? [{ href: "/your-season/customise", label: "customise my szn", isNew: customiseIsNew }] : []),
                     ...(paidMember ? [{ href: "/settings#membership", label: "membership & billing" }] : []),
                     { href: "/settings", label: "settings" },
                     ...(admin ? [{ href: "/admin", label: "admin" }] : []),
-                  ].map((item) => (
+                  ].map((item: { href: string; label: string; isNew?: boolean }) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -656,9 +684,12 @@ export default function NavBar() {
                         textTransform: "uppercase",
                         padding: "10px 14px",
                         borderBottom: "1px solid #eee",
+                        whiteSpace: "nowrap",
+                        ...(item.isNew ? { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, background: "var(--pink-bg)" } : {}),
                       }}
                     >
                       {item.label}
+                      {item.isNew && <NewSticker />}
                     </Link>
                   ))}
                   <button
@@ -942,6 +973,12 @@ export default function NavBar() {
                 notifications{notifUnread > 0 ? ` (${notifUnread})` : ""}
               </Link>
               {/* Events comes through the shared `links` list above now, no separate entry. */}
+              {paidMember && (
+                <Link href="/your-season/customise" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  customise my szn
+                  {customiseIsNew && <NewSticker />}
+                </Link>
+              )}
               <Link href="/settings" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
                 settings
               </Link>
