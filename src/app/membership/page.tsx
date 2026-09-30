@@ -934,7 +934,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start with a free 7-day trial of the whole platform, which is $0 today and yours to cancel anytime. When the week is up you keep the community chat rooms and your charts for free, and you can become a member for the full personalised platform and the monthly masterclass and astrotapping whenever you're ready. You manage it all from your settings, and your upgrade takes effect straight away.",
+                a: "Anytime. Start with a free 7-day trial of the whole platform, which is $0 today and yours to cancel anytime. If you stay, it carries on as your $88 a month membership from day 8 with nothing for you to do, and if you cancel before then you pay nothing and your access ends there. You manage it all from your settings.",
               },
               {
                 q: "How much time do I need to commit each week?",

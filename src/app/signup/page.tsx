@@ -18,7 +18,7 @@ type PlanId = "trial" | "monthly" | "vip";
 // email, claimed when she sets her password after checkout. The old create-free route still exists
 // (expired trials converge onto that same free tier) but is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
-  { id: "trial", name: "Free 7-day trial", tagline: "the full experience for 7 days, then keep the chat rooms and your charts, free", price: "$0" },
+  { id: "trial", name: "Free 7-day trial", tagline: "the full experience for 7 days, then $88 a month unless you cancel", price: "$0" },
   { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astrotapping every month", price: "$88/mo" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
@@ -70,7 +70,7 @@ export default function SignupPage() {
         {plan === "trial" ? (
           <div>
             <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 20 }}>
-              Come inside the whole of MY SZN free for 7 days: your personalised platform, the workshops, the meditations and the community. You pay $0 today and can cancel anytime, and when the week is up the chat rooms and your charts stay yours, free.
+              Come inside the whole of MY SZN free for 7 days: your personalised platform, the workshops, the meditations and the community. You pay $0 today, and on day 8 it carries on as your $88 a month membership unless you cancel before then.
             </p>
             <Link
               href="/free-trial"

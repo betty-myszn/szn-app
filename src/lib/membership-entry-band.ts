@@ -41,7 +41,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
       heading: "Free trial",
       sub: "full access for 7 days · $0 today",
       body:
-        "Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astrotapping, the meditations and the community rooms. You pay $0 today and can cancel anytime, and when the week is up the chat rooms and your charts stay yours, free, for whenever you want to come back.",
+        "Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astrotapping, the meditations and the community rooms. You pay $0 today, and on day 8 it carries on as your $88 a month membership unless you cancel before then.",
       cta: "start my free 7 days",
       href: "/free-trial",
     };
