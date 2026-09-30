@@ -10,6 +10,12 @@ import { saveBirthData, savePlacements, placementsFromChart, getSavedBirthData, 
 import { syncBirthDataToSupabase, syncChartToSupabase, markOnboarded, hydrateMemberDataFromSupabase } from "@/lib/chart-sync";
 import { createClient } from "@/lib/supabase/client";
 import { addGoal, CATEGORY_STYLES, type GoalCategory } from "@/lib/goals-store";
+import { SUN_FIRST_LOOK, MOON_FIRST_LOOK, RISING_FIRST_LOOK, VENUS_FIRST_LOOK, composeIntroPost } from "@/lib/first-look";
+import { postToRoom } from "@/lib/chat-rooms";
+
+// The general chat, where Betty's daily welcome lands too. A literal rather than WELCOME_SPACE_ID
+// because that module pulls in the server-side notification sender.
+const INTRO_ROOM_ID = "general";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -47,6 +53,7 @@ export default function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [justUpdated, setJustUpdated] = useState(false);
   const [revealPlacements, setRevealPlacements] = useState<SavedPlacements | null>(null);
+  const [intro, setIntro] = useState("");
 
   // Pre-fill from an existing chart so editing corrects a mistake instead of starting over. A
   // brand new member has no birth data yet, so seed just the name from the first name she gave at
@@ -188,6 +195,44 @@ export default function OnboardingPage() {
       setLoading(false);
       return;
     }
+    // Portal unlocked. One more screen before it: her first hello in the chat, pre-written from her
+    // chart and the goal she just typed, because the only members who stay are the ones who talk.
+    // Without a revealed chart there is nothing to write it from, so go straight in.
+    if (!revealPlacements) {
+      window.location.href = "/dashboard";
+      return;
+    }
+    setIntro(
+      composeIntroPost({
+        name,
+        sun: revealPlacements.sun,
+        moon: revealPlacements.moon,
+        rising: revealPlacements.rising,
+        goal,
+        seed: `${name}|${dob}`,
+      })
+    );
+    setLoading(false);
+    setStep(3);
+  };
+
+  const handleIntroStep = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loading) return;
+    setLoading(true);
+    // A failed post must never strand her here: she is already onboarded, so whatever happens she
+    // goes into her portal. postToRoom logs a failure and marks the room activation step on success.
+    // Capped at eight seconds too, so a stalled connection cannot hold her on "posting your hello".
+    if (intro.trim()) {
+      try {
+        await Promise.race([
+          postToRoom(INTRO_ROOM_ID, intro.trim()),
+          new Promise((resolve) => setTimeout(resolve, 8000)),
+        ]);
+      } catch {
+        // Offline or the request threw. Nothing to show her, the portal is the next screen anyway.
+      }
+    }
     window.location.href = "/dashboard";
   };
 
@@ -221,7 +266,13 @@ export default function OnboardingPage() {
         ) : (
           <>
             <div className="tag mb-3">
-              {isEditing ? "edit your birth details" : step === 1 ? "your chart is ready" : `step ${step === 0 ? 1 : 2} of 2`}
+              {isEditing
+                ? "edit your birth details"
+                : step === 1
+                  ? "your chart is ready"
+                  : step === 3
+                    ? "last thing, promise"
+                    : `step ${step === 0 ? 1 : 2} of 2`}
             </div>
 
             {step === 0 ? (
@@ -311,20 +362,20 @@ export default function OnboardingPage() {
                 <div className="flex flex-col gap-3 mb-8">
                   {(
                     [
-                      { label: "sun", sign: revealPlacements.sun, blurb: "your core identity" },
-                      { label: "moon", sign: revealPlacements.moon, blurb: "your emotional world" },
-                      { label: "rising", sign: revealPlacements.rising, blurb: "how you come across" },
-                      { label: "venus", sign: revealPlacements.venus, blurb: "how you love" },
+                      { label: "sun", sign: revealPlacements.sun, blurb: "your core identity", look: SUN_FIRST_LOOK[revealPlacements.sun] },
+                      { label: "moon", sign: revealPlacements.moon, blurb: "your emotional world", look: MOON_FIRST_LOOK[revealPlacements.moon] },
+                      { label: "rising", sign: revealPlacements.rising, blurb: "how you come across", look: RISING_FIRST_LOOK[revealPlacements.rising] },
+                      { label: "venus", sign: revealPlacements.venus, blurb: "how you love", look: VENUS_FIRST_LOOK[revealPlacements.venus] },
                     ] as const
                   ).map((p, i) => {
                     const symbolIndex = ZODIAC_SIGNS.indexOf(p.sign as (typeof ZODIAC_SIGNS)[number]);
                     return (
                       <div
                         key={p.label}
-                        className="myszn-reveal-item flex items-center gap-4 p-4"
+                        className="myszn-reveal-item flex items-start gap-4 p-4"
                         style={{ border: "var(--border)", background: "var(--lav-light)", animationDelay: `${i * 0.35}s` }}
                       >
-                        <div style={{ fontSize: 26 }}>{symbolIndex >= 0 ? ZODIAC_SYMBOLS[symbolIndex] : "✦"}</div>
+                        <div style={{ fontSize: 26, lineHeight: 1.2 }}>{symbolIndex >= 0 ? ZODIAC_SYMBOLS[symbolIndex] : "✦"}</div>
                         <div>
                           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--grey-light)" }}>
                             {p.label}
@@ -332,6 +383,9 @@ export default function OnboardingPage() {
                           <div style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, color: "var(--dark)" }}>
                             {p.sign} <span style={{ fontFamily: "inherit", fontSize: 12, fontWeight: 500, color: "var(--grey)" }}>· {p.blurb}</span>
                           </div>
+                          {p.look && (
+                            <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.55, margin: "6px 0 0" }}>{p.look}</p>
+                          )}
                         </div>
                       </div>
                     );
@@ -343,6 +397,62 @@ export default function OnboardingPage() {
                 <button type="button" onClick={() => setStep(2)} className="btn-pink w-full" style={{ cursor: "pointer" }}>
                   keep going
                 </button>
+              </>
+            ) : step === 3 ? (
+              <>
+                <h1
+                  style={{
+                    fontFamily: poppins,
+                    fontSize: 30,
+                    fontWeight: 800,
+                    letterSpacing: "-1px",
+                    lineHeight: 1.15,
+                    marginBottom: 12,
+                  }}
+                >
+                  now come say hiiii to <span className="pk">your new besties 💜</span>
+                </h1>
+                <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 24 }}>
+                  The chat is where MY SZN really comes alive, and the second the girls see your Big 3 they are going to have THOUGHTS, so we wrote your hello for you. Change anything you like, then post it and walk in like you own the place.
+                </p>
+                <form onSubmit={handleIntroStep} className="flex flex-col gap-5">
+                  <div>
+                    <label htmlFor="onboarding-intro" style={labelStyle}>your hello, straight into the general chat</label>
+                    <textarea
+                      id="onboarding-intro"
+                      value={intro}
+                      onChange={(e) => setIntro(e.target.value)}
+                      rows={6}
+                      maxLength={4000}
+                      style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit", lineHeight: 1.6 }}
+                    />
+                  </div>
+                  <p style={{ fontSize: 12, color: "var(--grey)", lineHeight: 1.6, margin: 0 }}>
+                    Betty greets every new member by name in there within a day, so keep an eye on your notifications 👀
+                  </p>
+                  <button type="submit" disabled={loading} className="btn-pink w-full disabled:opacity-50" style={{ cursor: "pointer" }}>
+                    {loading ? "posting your hello..." : "post it + take me to my portal"}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => {
+                      window.location.href = "/dashboard";
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--grey-light)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    skip for now
+                  </button>
+                </form>
               </>
             ) : (
               <>
@@ -405,7 +515,7 @@ export default function OnboardingPage() {
                     </div>
                   )}
                   <button type="submit" disabled={loading} className="btn-pink w-full disabled:opacity-50" style={{ cursor: "pointer" }}>
-                    {loading ? "unlocking your portal..." : "enter my portal"}
+                    {loading ? "unlocking your portal..." : "lock it in 💜"}
                   </button>
                   <button
                     type="button"

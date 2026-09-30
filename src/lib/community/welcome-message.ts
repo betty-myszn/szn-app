@@ -97,6 +97,26 @@ export const WELCOME_GROUP_VARIANTS: readonly string[] = [
 ];
 
 /**
+ * For days when everyone being welcomed has already posted their own hello, which onboarding now
+ * pre-writes for them with their Big 3 in it. Asking for a Big 3 directly under a message that
+ * lists it is the one thing that gives away that nobody read it, so these react to the intro
+ * instead and ask the next easy question: the first move on the goal she named in it.
+ */
+export const INTRODUCED_VARIANTS: readonly string[] = [
+  "@{name} welcome to MY SZN 💜 loooved reading your intro, that chart is doing a LOT. What's the first move you're making on that goal? 👀🪩",
+  "Everyone go say hiiii to @{name} 🪩 intro read, obsessed already. Tell us the tiniest first step you're taking on your szn goal this week 💜",
+  "@{name} is officially in the chat 💜 welcome babe, soooo glad you introduced yourself. What are you most excited to dive into first? 👀",
+  "Welcome welcome @{name} 🪩 that intro was everything. What do you want this szn to FEEL like for you? 💜",
+];
+
+export const INTRODUCED_GROUP_VARIANTS: readonly string[] = [
+  "Look who joined MY SZN today 💜 {names} loooved your intros, these charts are doing a LOT. What's the first move you're each making on your szn goal? 👀🪩",
+  "{names} welcome babes 🪩 intros read, obsessed with all of you already. Tell us the tiniest first step you're taking this week 💜",
+  "New besties in the chat 💜 {names} soooo glad you introduced yourselves. What are you most excited to dive into first? 👀",
+  "Everyone say hiiii to {names} 🪩 those intros were everything. What do you want this szn to FEEL like? 💜",
+];
+
+/**
  * Which variant a given post gets. Derived from a seed rather than picked at random, so a retry
  * posts the message it was always going to post and the choice can actually be tested. The seed is
  * the day for a group post and the member's id for a solo one, so consecutive days and consecutive
@@ -136,15 +156,15 @@ export function welcomeMessageFor(name: string | null | undefined, seed?: string
  * Tokens are de-duplicated: two members both called Sarah would otherwise render "@Sarah and
  * @Sarah", and the notification trigger reaches both of them from the single mention anyway.
  */
-export function groupWelcomeMessage(tokens: readonly string[], seed: string): string | null {
+export function groupWelcomeMessage(tokens: readonly string[], seed: string, introduced = false): string | null {
   const unique = [...new Set(tokens)];
   if (unique.length === 0) return null;
   if (unique.length === 1) {
-    const template = WELCOME_VARIANTS[welcomeVariantIndex(seed)];
-    return template.replace("{name}", unique[0]);
+    const pool = introduced ? INTRODUCED_VARIANTS : WELCOME_VARIANTS;
+    return pool[welcomeVariantIndex(seed, pool.length)].replace("{name}", unique[0]);
   }
-  const template = WELCOME_GROUP_VARIANTS[welcomeVariantIndex(seed, WELCOME_GROUP_VARIANTS.length)];
-  return template.replace("{names}", formatMentionList(unique));
+  const pool = introduced ? INTRODUCED_GROUP_VARIANTS : WELCOME_GROUP_VARIANTS;
+  return pool[welcomeVariantIndex(seed, pool.length)].replace("{names}", formatMentionList(unique));
 }
 
 export interface WelcomeSender {
@@ -215,7 +235,8 @@ export async function postWelcomeBatch(
   admin: SupabaseAdmin,
   sender: WelcomeSender,
   members: readonly WelcomeCandidate[],
-  seed: string
+  seed: string,
+  introduced = false
 ): Promise<WelcomeOutcome> {
   if (members.length === 0) return { status: "skipped", reason: "nobody_due" };
 
@@ -230,7 +251,7 @@ export async function postWelcomeBatch(
 
   const named = members.filter((m) => tokenById.has(m.id));
   const tokens = named.map((m) => tokenById.get(m.id) as string);
-  const content = groupWelcomeMessage(tokens, seed);
+  const content = groupWelcomeMessage(tokens, seed, introduced);
 
   if (!content) {
     // Everyone in this group had an unusable name. Nothing worth posting, but they must still be

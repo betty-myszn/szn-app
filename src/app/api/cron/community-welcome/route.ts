@@ -9,6 +9,7 @@ import {
   postWelcomeBatch,
   WELCOME_DELAY_MINUTES,
   WELCOME_MAX_AGE_HOURS,
+  WELCOME_SPACE_ID,
   type WelcomeCandidate,
 } from "@/lib/community/welcome-message";
 
@@ -139,6 +140,24 @@ export async function POST(request: NextRequest) {
   }));
   const groups = chunkForMessages(candidates);
 
+  // Who has already said hello in the general chat, which onboarding now invites every new member to
+  // do with her Big 3 pre-written. A welcome that asks for her Big 3 right under the message where
+  // she gave it reads as a bot, so a group where everyone has introduced themselves gets the variants
+  // that react to the intros instead. A mixed group keeps the Big 3 ask, since somebody in it still
+  // owes one. A failed lookup just means the classic welcome, never a skipped one.
+  const introducedIds = new Set<string>();
+  if (candidates.length > 0) {
+    const { data: intros, error: introError } = await admin
+      .from("chat_messages")
+      .select("user_id")
+      .eq("space_id", WELCOME_SPACE_ID)
+      .in("user_id", candidates.map((c) => c.id));
+    if (introError) console.error("cron/community-welcome: intro lookup failed", introError.message);
+    for (const row of intros ?? []) introducedIds.add(row.user_id as string);
+  }
+  const allIntroduced = (group: readonly WelcomeCandidate[]) =>
+    group.length > 0 && group.every((m) => introducedIds.has(m.id));
+
   if (dryRun) {
     // Resolved the same way the real post resolves them, so a preview can never show "@Sarah" for
     // a message that will actually say "@SarahElizabeth".
@@ -148,9 +167,11 @@ export async function POST(request: NextRequest) {
       const tokenById = resolveMentionTokens(group, allNames);
       return {
         names: group.length,
+        introduced: allIntroduced(group),
         message: groupWelcomeMessage(
           group.filter((m) => tokenById.has(m.id)).map((m) => tokenById.get(m.id) as string),
-          seed
+          seed,
+          allIntroduced(group)
         ),
       };
     });
@@ -170,7 +191,7 @@ export async function POST(request: NextRequest) {
   let skipped = 0;
   let failed = 0;
   for (const group of groups) {
-    const outcome = await postWelcomeBatch(admin, sender, group, seed);
+    const outcome = await postWelcomeBatch(admin, sender, group, seed, allIntroduced(group));
     if (outcome.status === "posted") {
       posted += 1;
       named += outcome.named;

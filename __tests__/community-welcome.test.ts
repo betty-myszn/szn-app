@@ -11,6 +11,8 @@ import {
   resolveMentionTokens,
   welcomeMessageFor,
   welcomeVariantIndex,
+  INTRODUCED_GROUP_VARIANTS,
+  INTRODUCED_VARIANTS,
   WELCOME_GROUP_VARIANTS,
   WELCOME_NAMES_PER_MESSAGE,
   WELCOME_SPACE_ID,
@@ -142,6 +144,21 @@ describe("the daily group welcome", () => {
     const days = ["2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-05", "2026-09-06"];
     const seen = new Set(days.map((d) => groupWelcomeMessage(["Sarah", "Jo"], d)));
     expect(seen.size).toBeGreaterThan(1);
+  });
+
+  it("never asks for a Big 3 once she has already posted one in her intro", () => {
+    for (const template of [...INTRODUCED_VARIANTS, ...INTRODUCED_GROUP_VARIANTS]) {
+      expect(template).not.toContain("Big 3");
+    }
+    const solo = groupWelcomeMessage(["Sarah"], DAY, true)!;
+    expect(INTRODUCED_VARIANTS.some((t) => solo === t.replace("{name}", "Sarah"))).toBe(true);
+    const group = groupWelcomeMessage(["Sarah", "Jo"], DAY, true)!;
+    expect(INTRODUCED_GROUP_VARIANTS.some((t) => group === t.replace("{names}", "@Sarah and @Jo"))).toBe(true);
+  });
+
+  it("still mentions everyone in the intro-aware welcomes", () => {
+    for (const template of INTRODUCED_VARIANTS) expect(template).toContain("@{name}");
+    for (const template of INTRODUCED_GROUP_VARIANTS) expect(template).toContain("{names}");
   });
 
   it("posts nothing when nobody has a usable name", () => {
