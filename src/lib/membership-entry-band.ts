@@ -26,26 +26,17 @@ export interface EntryBand {
 }
 
 /**
- * The band for this reader, or null for no band at all. Null covers two cases: we don't yet know who
- * she is (better a moment of empty space than a moment of the wrong offer), and she's already paying,
- * so there's no entry offer left to make her.
+ * The band for this reader, or null for no band at all. Null covers three cases: we don't yet know
+ * who she is (better a moment of empty space than a moment of the wrong offer), she's a stranger
+ * (the paid cards are the whole offer now the trial is gone), and she's already paying, so there's
+ * no entry offer left to make her.
  */
 export function entryBandFor(member: Member | null, nowMs: number | null, ready: boolean): EntryBand | null {
   if (!ready || nowMs === null) return null;
 
-  // Not logged in: the free week, exactly as it always was.
-  if (!member) {
-    return {
-      mine: false,
-      eyebrow: "start here · free",
-      heading: "Free trial",
-      sub: "full access for 7 days · $0 today",
-      body:
-        "Come inside the whole of MY SZN free for 7 days: the personalised platform, the live monthly masterclass and astrotapping, the meditations and the community rooms. You pay $0 today, and on day 8 it carries on as your $88 a month membership unless you cancel before then.",
-      cta: "start my free 7 days",
-      href: "/free-trial",
-    };
-  }
+  // Not logged in: no band. The free trial it used to offer here was retired on 1 Oct 2026, so a
+  // stranger goes straight to the paid cards underneath.
+  if (!member) return null;
 
   // Trial state is read against nowMs, never the wall clock. isTrial() and isExpiredTrial() call
   // Date.now() internally, so leaning on them here made the band ignore its own time argument: the

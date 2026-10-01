@@ -36,12 +36,8 @@ function memberAt(level: MembershipLevel, extra: Partial<Member> = {}): Member {
 }
 
 describe("entryBandFor", () => {
-  it("offers the free week to a stranger, unchanged", () => {
-    const band = entryBandFor(null, now, true);
-    expect(band).not.toBeNull();
-    expect(band!.href).toBe("/free-trial");
-    expect(band!.cta).toBe("start my free 7 days");
-    expect(band!.mine).toBe(false);
+  it("shows a stranger no band, since the free trial is retired and the paid cards are the offer", () => {
+    expect(entryBandFor(null, now, true)).toBeNull();
   });
 
   it("never offers a trial to someone already on one", () => {

@@ -305,7 +305,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
               <div className="flex items-center gap-4 flex-wrap" style={{ marginTop: 22 }}>
                 <Link href={closing.href} className="btn-pink">{closing.label}</Link>
-                <span style={{ fontSize: 12, lineHeight: 1.6, color: "var(--grey)" }}>$0 today · $88 a month from day 8, cancel anytime</span>
+                <span style={{ fontSize: 12, lineHeight: 1.6, color: "var(--grey)" }}>$88 a month, cancel anytime</span>
               </div>
             </div>
           )}

@@ -6,7 +6,7 @@ import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import ReplayPlayer from "@/components/ReplayPlayer";
 import { ASTROLOGY_CLASSES } from "@/lib/astrology-classes";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
+import { JOIN_CTA } from "@/lib/cta";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -64,7 +64,7 @@ export default function AstrologyClassesPage() {
               <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 460, margin: "0 auto 20px" }}>
                 Join to watch every class, whenever you like.
               </p>
-              <Link href={FREE_TRIAL_CTA.href} className="btn-pink">{FREE_TRIAL_CTA.label}</Link>
+              <Link href={JOIN_CTA.href} className="btn-pink">{JOIN_CTA.label}</Link>
             </div>
           ) : (
             <div className="flex flex-col gap-8">

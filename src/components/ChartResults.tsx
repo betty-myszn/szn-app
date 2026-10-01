@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { track, EVENTS } from "@/lib/analytics";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
 import type { ChartData } from "@/types/chart";
 import {
   ZODIAC_SYMBOLS,
@@ -376,22 +375,6 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               }}
             >
               join the membership &rarr;
-            </a>
-            <a
-              href={FREE_TRIAL_CTA.href}
-              style={{
-                background: "transparent",
-                color: "rgba(255,255,255,0.7)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "14px 28px",
-                border: "1.5px solid rgba(255,255,255,0.25)",
-                textDecoration: "none",
-              }}
-            >
-              {FREE_TRIAL_CTA.label}
             </a>
           </div>
         </div>

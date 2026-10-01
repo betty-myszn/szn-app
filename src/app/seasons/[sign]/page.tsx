@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SEASON_PAGES, SEASON_SLUGS } from "@/lib/season-pages";
 import { replayForSign } from "@/lib/workshops";
 import { OG_IMAGE } from "@/lib/site";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
+import { JOIN_CTA } from "@/lib/cta";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -241,11 +241,11 @@ export default async function SeasonPage({
             Experience {season.name} szn inside <span className="pk">MY SZN.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", maxWidth: 420, margin: "0 auto 28px" }}>
-            Start your free 7 days and read this season against your own chart. You pay $0 today and can cancel anytime.
+            Join and read this season against your own chart, with a live masterclass and astrotapping with Betty every month. $88/month, and you can cancel anytime.
           </p>
           <div className="flex justify-center">
-            <Link href={FREE_TRIAL_CTA.href} className="btn-pink no-underline" style={{ padding: "16px 36px" }}>
-              {FREE_TRIAL_CTA.label}
+            <Link href={JOIN_CTA.href} className="btn-pink no-underline" style={{ padding: "16px 36px" }}>
+              {JOIN_CTA.label}
             </Link>
           </div>
         </div>

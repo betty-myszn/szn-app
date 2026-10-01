@@ -51,7 +51,7 @@ const freeLinks = [
 ];
 
 // The guest menu is four doors, not six. Home and the paid offer stand alone; everything that is
-// browsing rather than deciding goes under EXPLORE, so the free trial button is competing with two
+// browsing rather than deciding goes under EXPLORE, so the join button is competing with two
 // links instead of six. Coaching is a different business (The Cosmic Co) and is marked as leaving
 // the site, which is what the arrow is for.
 const guestLinks = [
@@ -736,7 +736,7 @@ export default function NavBar() {
                 member login
               </Link>
               <Link
-                href="/free-trial"
+                href="/membership"
                 className="no-underline"
                 style={{
                   background: "var(--pink)",
@@ -750,7 +750,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                💖 start free trial
+                💖 join my szn
               </Link>
             </>
           )}
@@ -1010,12 +1010,12 @@ export default function NavBar() {
           ) : (
             <>
               <Link
-                href="/free-trial"
+                href="/membership"
                 onClick={() => setOpen(false)}
                 className="no-underline"
                 style={{ color: "var(--pink)", fontWeight: 800 }}
               >
-                💖 start free trial
+                💖 join my szn
               </Link>
               <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
                 member login

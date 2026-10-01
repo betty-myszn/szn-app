@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
+import { JOIN_CTA } from "@/lib/cta";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -153,7 +153,7 @@ export default function Home() {
 
           <div className="mt-9 flex flex-col items-start gap-4">
             <Link
-              href={FREE_TRIAL_CTA.href}
+              href={JOIN_CTA.href}
               className="no-underline"
               style={{
                 background: "var(--dark)",
@@ -167,7 +167,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              start your free trial
+              {JOIN_CTA.label}
             </Link>
           </div>
           </div>
@@ -195,7 +195,7 @@ export default function Home() {
           "a live masterclass every month",
           "live astrotapping™ with betty",
           "the community rooms",
-          "$0 today, cancel anytime",
+          "$88 a month, cancel anytime",
         ]}
       />
 
@@ -443,11 +443,11 @@ export default function Home() {
               getting in the way, and create a life you&apos;re obsessed with.
             </p>
             <Link
-              href={FREE_TRIAL_CTA.href}
+              href={JOIN_CTA.href}
               className="no-underline"
               style={{ fontSize: 13, fontWeight: 700, color: "var(--pink)", textDecoration: "underline" }}
             >
-              try it free for 7 days
+              start journaling inside my szn
             </Link>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -660,22 +660,22 @@ export default function Home() {
         <img className="close-planet" src="/cosmic-planet.png" alt="" aria-hidden="true" />
         <div className="max-w-4xl mx-auto text-center" style={{ position: "relative", zIndex: 1 }}>
           <h2 className="display" style={{ fontSize: "clamp(38px, 7vw, 88px)", color: "#fff", lineHeight: 0.98 }}>
-            try it FREE
+            come inside
             <br />
-            <span className="pk">for 7 days.</span>
+            <span className="pk">my szn.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.8)", maxWidth: 620, margin: "26px auto 0", fontWeight: 500 }}>
-            Get the WHOLE MY SZN experience for seven days, completely free. Explore your personalised
+            The moment you join, the WHOLE MY SZN experience is yours. Explore your personalised
             portal, use your journal, watch the workshops, join the rooms, dive into your chart +
             Human Design, and see what happens when you actually start creating your dream life with
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            No commitment. Cancel anytime. $88/month only if you decide to stay.
+            $88/month, and you can cancel anytime.
           </p>
           <div className="mt-10">
             <Link
-              href={FREE_TRIAL_CTA.href}
+              href={JOIN_CTA.href}
               className="no-underline"
               style={{
                 background: "var(--pink)",
@@ -689,7 +689,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              start your free trial
+              {JOIN_CTA.label}
             </Link>
           </div>
         </div>

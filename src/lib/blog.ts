@@ -239,16 +239,16 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Scorpio season lands in YOUR chart",
-      body: "Inside MY SZN, Scorpio season, Mercury retrograde and both moons are read against your own placements, so you know which part of your life is going deep. Your first 7 days are free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Inside MY SZN, Scorpio season, Mercury retrograde and both moons are read against your own placements, so you know which part of your life is going deep. Join and it opens up the moment you're in.",
+      label: "join my szn",
+      href: "/membership",
     },
     closing: {
       heading: "your scorpio season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Scorpio season guide, Mercury retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Your full chart, your personalised Scorpio season guide, Mercury retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
+      label: "join my szn",
+      href: "/membership",
     },
     faqs: [
       {
@@ -345,16 +345,16 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Sagittarius season lands in YOUR chart",
-      body: "Inside MY SZN, Sagittarius season, Jupiter's retrograde and both moons are read against your own placements, so you know exactly where your life is ready to expand. Your first 7 days are free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Inside MY SZN, Sagittarius season, Jupiter's retrograde and both moons are read against your own placements, so you know exactly where your life is ready to expand. Join and it opens up the moment you're in.",
+      label: "join my szn",
+      href: "/membership",
     },
     closing: {
       heading: "your sagittarius season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Sagittarius season guide, Jupiter read through your own houses, the live workshops and the community, all yours for 7 days, free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Your full chart, your personalised Sagittarius season guide, Jupiter read through your own houses, the live workshops and the community, all yours the moment you join.",
+      label: "join my szn",
+      href: "/membership",
     },
     faqs: [
       {
@@ -451,16 +451,16 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Capricorn season lands in YOUR chart",
-      body: "Inside MY SZN, Capricorn season, Mars retrograde and both moons are read against your own placements, so you know exactly which part of your life you are building. Your first 7 days are free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Inside MY SZN, Capricorn season, Mars retrograde and both moons are read against your own placements, so you know exactly which part of your life you are building. Join and it opens up the moment you're in.",
+      label: "join my szn",
+      href: "/membership",
     },
     closing: {
       heading: "your capricorn season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Capricorn season guide, Mars retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Your full chart, your personalised Capricorn season guide, Mars retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
+      label: "join my szn",
+      href: "/membership",
     },
     faqs: [
       {
@@ -557,16 +557,16 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where the Aquarius eclipse lands in YOUR chart",
-      body: "Inside MY SZN, Aquarius season, the solar eclipse and Mercury retrograde are read against your own placements, so you know which part of your life the future is knocking on. Your first 7 days are free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Inside MY SZN, Aquarius season, the solar eclipse and Mercury retrograde are read against your own placements, so you know which part of your life the future is knocking on. Join and it opens up the moment you're in.",
+      label: "join my szn",
+      href: "/membership",
     },
     closing: {
       heading: "your aquarius season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Aquarius season guide, the eclipse read through your own houses, the live workshops and the community, all yours for 7 days, free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Your full chart, your personalised Aquarius season guide, the eclipse read through your own houses, the live workshops and the community, all yours the moment you join.",
+      label: "join my szn",
+      href: "/membership",
     },
     faqs: [
       {
@@ -786,17 +786,17 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Libra season lands in YOUR chart",
-      body: "Inside MY SZN, Libra season, Venus retrograde and both moons are read against your own placements, so you know which part of your life is getting the glow up and which part is getting the review. Your first 7 days are free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Inside MY SZN, Libra season, Venus retrograde and both moons are read against your own placements, so you know which part of your life is getting the glow up and which part is getting the review. Join and it opens up the moment you're in.",
+      label: "join my szn",
+      href: "/membership",
     },
     workshops: ["libra-szn-workshop-1", "libra-szn-workshop-2"],
     closing: {
       heading: "your libra season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Libra season guide, Venus retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
-      label: "start my free 7 days",
-      href: "/free-trial",
+      body: "Your full chart, your personalised Libra season guide, Venus retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
+      label: "join my szn",
+      href: "/membership",
     },
     faqs: [
       {

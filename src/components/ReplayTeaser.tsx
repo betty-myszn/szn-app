@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { hasActiveAccess } from "@/lib/membership-access";
 import { latestReplay, formatWorkshopWhenLA } from "@/lib/workshops";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
+import { JOIN_CTA } from "@/lib/cta";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -31,8 +31,8 @@ export default function ReplayTeaser({ background = "var(--cream)" }: { backgrou
     <section className="px-5 md:px-8" style={{ background, borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 72 }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
         <Link
-          href={FREE_TRIAL_CTA.href}
-          aria-label={`${replay.title}: start your free 7 days to watch the replay`}
+          href={JOIN_CTA.href}
+          aria-label={`${replay.title}: join my szn to watch the replay`}
           style={{
             display: "block",
             position: "relative",
@@ -96,13 +96,13 @@ export default function ReplayTeaser({ background = "var(--cream)" }: { backgrou
             </div>
           )}
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--grey)", maxWidth: 520, marginBottom: 26 }}>
-            {replay.blurb} The full recording is saved in the vault along with every other class, and your free week opens all of them.
+            {replay.blurb} The full recording is saved in the vault along with every other class, and joining opens every single one of them.
           </p>
-          <Link href={FREE_TRIAL_CTA.href} className="btn-pink">
-            {FREE_TRIAL_CTA.label}
+          <Link href={JOIN_CTA.href} className="btn-pink">
+            {JOIN_CTA.label}
           </Link>
           <p style={{ fontSize: 12.5, color: "var(--grey-light)", marginTop: 14 }}>
-            $0 today. Watch it back as many times as you like.
+            Watch it back as many times as you like, for as long as you&apos;re a member.
           </p>
         </div>
       </div>

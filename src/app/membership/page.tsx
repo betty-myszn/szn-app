@@ -8,7 +8,7 @@ import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
 import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import { upcomingWorkshops, seasonOfNextWorkshop, shortWorkshopMeta } from "@/lib/workshops";
-import { joinCta, FREE_TRIAL_CTA } from "@/lib/cta";
+import { joinCta } from "@/lib/cta";
 import { useMember } from "@/lib/use-member";
 import { isTrial } from "@/lib/membership-access";
 import { trialCountdown } from "@/lib/trial-countdown";
@@ -56,9 +56,9 @@ function MembershipReasonBanner() {
 }
 
 export default function MembershipPage() {
-  // Every launch-related CTA on this page, from one rule in @/lib/cta. Doors open: the primary CTA
-  // scrolls to the pricing cards, which hold the real Stripe checkout buttons. Doors closed: it
-  // becomes the free trial, never a waitlist, so a visitor who can't buy today still gets in today.
+  // Every launch-related CTA on this page, from one rule in @/lib/cta: the primary CTA scrolls to
+  // the pricing cards, which hold the real Stripe checkout buttons. There is no free trial (retired
+  // 1 Oct 2026) and no waitlist to fall back to when the doors are closed.
   const enrolmentOpen = useEnrolmentOpen();
   const { href: joinHref, label: joinLabel } = joinCta(enrolmentOpen, "#pricing");
 
@@ -73,17 +73,15 @@ export default function MembershipPage() {
   // ahead rather than the one the calendar is still in.
   const workshopSeason = now === null ? season.sign : seasonOfNextWorkshop(now, season.sign);
 
-  // Who is reading this page, because the entry band below the hero used to be the same for
-  // everyone: a full-width "start my free 7 days" sitting ABOVE the paid cards. A woman already
-  // inside her free week was being sold the exact thing she was already using, at the one moment
-  // she was there to buy, and nobody who already has an account can start a trial anyway (the
-  // create-trial route refuses any email that already exists), so the offer was undeliverable for
-  // every logged-in reader. The branching lives in @/lib/membership-entry-band, where it's tested.
+  // Who is reading this page: the entry band below the hero speaks to a woman still finishing a
+  // trial she started before trials were retired, or to a free or lapsed account, and shows nothing
+  // to a stranger or a paying member. The branching lives in @/lib/membership-entry-band, where
+  // it's tested.
   const { member, ready } = useMember();
   const trial = now !== null && member && isTrial(member) ? trialCountdown(member.trialExpiresAt, now) : null;
   const entryBand = entryBandFor(member, now, ready);
 
-  // Never point a trial member at the trial. Everything else on the page keeps the standing rule.
+  // A woman still on a trial goes straight to the plans. Everything else keeps the standing rule.
   const ctaHref = trial ? "#pricing" : joinHref;
   const ctaLabel = trial ? "become a member" : joinLabel;
 
@@ -130,8 +128,7 @@ export default function MembershipPage() {
             <LaunchCountdown variant="dark" />
           </div>
 
-          {/* Doors open: the primary CTA drops her into the pricing cards (real Stripe checkout).
-              Doors closed: the free trial, so she gets in today either way. See @/lib/cta. */}
+          {/* The primary CTA drops her into the pricing cards (real Stripe checkout). See @/lib/cta. */}
           <div className="flex flex-col items-center gap-4">
             <Link href={ctaHref} className="btn-pink no-underline" style={{ display: "inline-block", padding: "16px 44px" }}>
               {ctaLabel}
@@ -139,7 +136,7 @@ export default function MembershipPage() {
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
               {enrolmentOpen
                 ? "Doors are open. Choose your plan below. Founding member pricing, limited spots."
-                : "Start your free 7 days and you'll already be inside when the doors reopen."}
+                : "The doors reopen soon. Founding member pricing, limited spots."}
             </p>
           </div>
         </div>
@@ -759,14 +756,13 @@ export default function MembershipPage() {
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
             {enrolmentOpen
               ? "Enrolment is open now. Choose your plan below. Limited founding member spots."
-              : "Enrolment is currently closed. Start your free 7 days and you'll be inside while you wait."}
+              : "Enrolment is currently closed, and the doors reopen soon."}
           </p>
 
           {/* The entry band, deliberately full width ABOVE the paid cards rather than a fourth
               column, so it doesn't compete with the engineered $88-centred hierarchy below. What it
-              offers depends on who's reading (see entryBand): a stranger gets the free week, anyone
-              who already has an account gets the join, since she can't start a trial anyway, and a
-              paying member gets no band at all. */}
+              offers depends on who's reading (see entryBand): a woman finishing a trial, or a free or
+              lapsed account, gets the join; a stranger and a paying member get no band at all. */}
           {entryBand && (
             <div
               className="p-6 md:p-7 mb-5 flex items-center justify-between gap-6 flex-wrap"
@@ -934,7 +930,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I start small and upgrade later?",
-                a: "Anytime. Start with a free 7-day trial of the whole platform, which is $0 today and yours to cancel anytime. If you stay, it carries on as your $88 a month membership from day 8 with nothing for you to do, and if you cancel before then you pay nothing and your access ends there. You manage it all from your settings.",
+                a: "Anytime. Start on MY SZN at $88 a month and move up to VIP whenever you want Betty working on your chart with you directly. You can cancel anytime, and you manage it all from your settings.",
               },
               {
                 q: "How much time do I need to commit each week?",
@@ -995,7 +991,7 @@ export default function MembershipPage() {
               }}>
                 {enrolmentOpen
                   ? "The doors are open right now to a limited number of founding members. Cancel anytime. Choose your plan and your personalised portal is built the moment you're in."
-                  : "We open the doors to a limited number of founding members at a time. Cancel anytime. Start your free 7 days now and you'll already be inside when they reopen."}
+                  : "We open the doors to a limited number of founding members at a time, and they reopen soon. Cancel anytime."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
@@ -1043,20 +1039,19 @@ export default function MembershipPage() {
                 </>
               ) : (
                 <>
-                  {/* Doors closed. A stranger is pointed at the free week; anyone who already has an
-                      account can't start one, so she's pointed at the join instead of at an offer
-                      the signup route would refuse. */}
-                  <div className="tag mb-3">{member ? "keep your platform" : "start your free week"}</div>
+                  {/* Doors closed. No free trial and no waitlist to offer, so it says what the
+                      membership is and sends her to the plans. */}
+                  <div className="tag mb-3">{member ? "keep your platform" : "the doors reopen soon"}</div>
                   <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
                     {member
                       ? "Membership is $88 a month, cancel anytime, and it keeps everything open on the account you already have."
-                      : "Full access for 7 days, $0 today. You'll be inside and using your portal before the paid doors reopen."}
+                      : "Membership is $88 a month and you can cancel anytime. We open the doors to a limited number of founding members at a time."}
                   </p>
-                  <Link href={member ? "#pricing" : FREE_TRIAL_CTA.href} className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
-                    {member ? "become a member" : FREE_TRIAL_CTA.label}
+                  <Link href="#pricing" className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
+                    {member ? "become a member" : "see the plans"}
                   </Link>
                   <div className="flex flex-wrap gap-2 mt-6">
-                    {["$0 today", "Full access", "Cancel anytime"].map((b) => (
+                    {["$88/month", "Full access", "Cancel anytime"].map((b) => (
                       <span key={b} style={{
                         fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
                         color: "var(--dark)", padding: "6px 12px",

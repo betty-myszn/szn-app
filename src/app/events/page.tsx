@@ -8,7 +8,7 @@ import Ticker from "@/components/Ticker";
 import ReplayTeaser from "@/components/ReplayTeaser";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
-import { FREE_TRIAL_CTA } from "@/lib/cta";
+import { JOIN_CTA } from "@/lib/cta";
 import { hasActiveAccess } from "@/lib/membership-access";
 import {
   getRsvp,
@@ -261,8 +261,8 @@ export default function EventsPage() {
                   </div>
                 )}
                 {!member ? (
-                  <Link href={FREE_TRIAL_CTA.href} className="btn-pink">
-                    {FREE_TRIAL_CTA.label}
+                  <Link href={JOIN_CTA.href} className="btn-pink">
+                    {JOIN_CTA.label}
                   </Link>
                 ) : !workshop.startIso ? (
                   notified[workshop.id] ? (
@@ -394,7 +394,7 @@ export default function EventsPage() {
       </section>
 
       {/* The newest replay, locked, for anyone without access: a guest can see the class exists and
-          what it was, and starting the free week is what opens it. Self-hides for members. */}
+          what it was, and joining is what opens it. Self-hides for members. */}
       <ReplayTeaser />
 
       {member ? (
@@ -441,7 +441,7 @@ export default function EventsPage() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link href={FREE_TRIAL_CTA.href} className="btn-pink">{FREE_TRIAL_CTA.label}</Link>
+              <Link href={JOIN_CTA.href} className="btn-pink">{JOIN_CTA.label}</Link>
             </div>
           </div>
         </section>

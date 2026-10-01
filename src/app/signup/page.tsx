@@ -8,23 +8,20 @@ import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
-type PlanId = "trial" | "monthly" | "vip";
+type PlanId = "monthly" | "vip";
 
-// The signup hub. The free way in is now the 7-day trial, not a chat-only account: the trial gives
-// the full experience for a week and then settles into exactly the old free tier (chat rooms +
-// charts), so it dominates a plain free signup and, crucially, signing up "free" first can't lock
-// someone out of the better door. So "free" here links straight to /free-trial. The paid tiers hand
-// off to Stripe checkout (same links as the membership page); the webhook parks the membership by
-// email, claimed when she sets her password after checkout. The old create-free route still exists
-// (expired trials converge onto that same free tier) but is no longer a front door.
+// The signup hub. Both plans hand off to Stripe checkout (same links as the membership page); the
+// webhook parks the membership by email, claimed when she sets her password after checkout. The
+// 7-day free trial that used to sit first here was retired on 1 Oct 2026, so joining is paid from
+// day one. The old create-free route still exists (expired trials converge onto the free tier) but
+// is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
-  { id: "trial", name: "Free 7-day trial", tagline: "the full experience for 7 days, then $88 a month unless you cancel", price: "$0" },
   { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astrotapping every month", price: "$88/mo" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 
 export default function SignupPage() {
-  const [plan, setPlan] = useState<PlanId>("trial");
+  const [plan, setPlan] = useState<PlanId>("monthly");
   const enrolmentOpen = useEnrolmentOpen();
 
   return (
@@ -35,7 +32,7 @@ export default function SignupPage() {
           join <span className="pk">MY SZN.</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-          Try the whole thing free for 7 days, or go all in on the full platform now. You can always upgrade later.
+          Go all in on the full personalised platform, or go VIP and have Betty working on your chart with you directly. You can always upgrade later.
         </p>
 
         {/* All three sign-ups together, so nobody has to leave to find the paid tiers */}
@@ -67,38 +64,23 @@ export default function SignupPage() {
           })}
         </div>
 
-        {plan === "trial" ? (
-          <div>
-            <p style={{ fontSize: 13, color: "var(--grey-light)", lineHeight: 1.7, marginBottom: 20 }}>
-              Come inside the whole of MY SZN free for 7 days: your personalised platform, the workshops, the meditations and the community. You pay $0 today, and on day 8 it carries on as your $88 a month membership unless you cancel before then.
-            </p>
-            <Link
-              href="/free-trial"
-              className="btn-pink w-full no-underline"
-              style={{ display: "block", textAlign: "center" }}
-            >
-              start my free 7 days
-            </Link>
-          </div>
-        ) : (
-          <div>
-            <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
-              {plan === "vip"
-                ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
-                : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astrotapping with Betty every month."}
-            </p>
-            <CheckoutButton
-              checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
-              label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $88/mo"}
-              fallbackHref="/membership#pricing"
-              plan={plan}
-              value={plan === "vip" ? 555 : 88}
-            />
-            <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
-              You&apos;ll set your password and add your birth details right after checkout.
-            </p>
-          </div>
-        )}
+        <div>
+          <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
+            {plan === "vip"
+              ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
+              : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astrotapping with Betty every month."}
+          </p>
+          <CheckoutButton
+            checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
+            label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $88/mo"}
+            fallbackHref="/membership#pricing"
+            plan={plan}
+            value={plan === "vip" ? 555 : 88}
+          />
+          <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
+            You&apos;ll set your password and add your birth details right after checkout.
+          </p>
+        </div>
 
         <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 20, lineHeight: 1.6 }}>
           Already have an account?{" "}
