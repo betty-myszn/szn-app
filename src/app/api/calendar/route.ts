@@ -4,6 +4,7 @@ import path from "path";
 import { DateTime } from "luxon";
 import { ZODIAC_SIGNS } from "@/types/chart";
 import { SKY_ZONE } from "@/lib/sky-zone";
+import { scanPersonalSky } from "@/lib/sky-personal-scan";
 
 const EPHE_PATH = path.join(process.cwd(), "ephe");
 swisseph.swe_set_ephe_path(EPHE_PATH);
@@ -68,11 +69,16 @@ const MAJOR_ASPECT_PAIRS: [string, number, string, number][] = [
   ["Saturn", swisseph.SE_SATURN, "North Node", swisseph.SE_TRUE_NODE],
 ];
 
-const ASPECT_TARGETS: { angle: number; type: MajorTransit["aspectType"] }[] = [
+// Every exact angle, both directions round the circle, so a waning square or trine is caught as
+// well as a waxing one.
+const ASPECT_TARGETS_SIGNED: { angle: number; type: MajorTransit["aspectType"] }[] = [
   { angle: 0, type: "conjunction" },
   { angle: 60, type: "sextile" },
+  { angle: 300, type: "sextile" },
   { angle: 90, type: "square" },
+  { angle: 270, type: "square" },
   { angle: 120, type: "trine" },
+  { angle: 240, type: "trine" },
   { angle: 180, type: "opposition" },
 ];
 
@@ -118,14 +124,6 @@ function nodeEndFor(jd: number, moonLongitude: number): "north" | "south" {
   return angDist(moonLongitude, node) <= angDist(moonLongitude, node + 180) ? "north" : "south";
 }
 
-// 0–180° separation between two bodies, direction-agnostic, for detecting aspect crossings.
-function angularSeparation(jd: number, idA: number, idB: number): number {
-  const a = calcAt(jd, idA).longitude;
-  const b = calcAt(jd, idB).longitude;
-  const diff = Math.abs(a - b) % 360;
-  return diff > 180 ? 360 - diff : diff;
-}
-
 // A station is the moment a planet's apparent speed crosses zero. The scan below steps two days at
 // a time, which on its own announces a station up to two days after it happened and reads the sign
 // off the wrong day, so each crossing is bisected to the moment itself. That matters more than it
@@ -136,17 +134,6 @@ function refineStation(bodyId: number, lo: number, hi: number): number {
   for (let i = 0; i < 24; i++) {
     const mid = (lo + hi) / 2;
     if ((calcAt(mid, bodyId).speed < 0) === wasRetro) lo = mid;
-    else hi = mid;
-  }
-  return (lo + hi) / 2;
-}
-
-function refineSeparation(idA: number, idB: number, lo: number, hi: number, target: number): number {
-  const f = (jd: number) => angularSeparation(jd, idA, idB) - target;
-  const signLo = f(lo) < 0;
-  for (let i = 0; i < 24; i++) {
-    const mid = (lo + hi) / 2;
-    if ((f(mid) < 0) === signLo) lo = mid;
     else hi = mid;
   }
   return (lo + hi) / 2;
@@ -168,9 +155,14 @@ function scanMajorTransits(startJd: number): MajorTransit[] {
   for (const body of OUTER_BODIES) {
     prevRetroSpeed[body.name] = calcAt(startJd, body.id).speed;
   }
-  const prevSep: Record<string, number> = {};
+  // Signed offset from each exact angle, -180..180. The old check compared a folded 0..180
+  // separation against the angle, which can never cross 0 or 180, so conjunctions and oppositions
+  // between the slow planets were silently never reported. 270 is the other square.
+  const signedOff = (jd: number, idA: number, idB: number, angle: number) =>
+    (((calcAt(jd, idA).longitude - calcAt(jd, idB).longitude - angle) % 360) + 540) % 360 - 180;
+  const prevOff: Record<string, number> = {};
   for (const [nameA, idA, nameB, idB] of MAJOR_ASPECT_PAIRS) {
-    prevSep[`${nameA}-${nameB}`] = angularSeparation(startJd, idA, idB);
+    for (const { angle } of ASPECT_TARGETS_SIGNED) prevOff[`${nameA}-${nameB}-${angle}`] = signedOff(startJd, idA, idB, angle);
   }
 
   for (let d = step; d <= days; d += step) {
@@ -201,13 +193,21 @@ function scanMajorTransits(startJd: number): MajorTransit[] {
     }
 
     for (const [nameA, idA, nameB, idB] of MAJOR_ASPECT_PAIRS) {
-      const key = `${nameA}-${nameB}`;
-      const sep = angularSeparation(jd, idA, idB);
-      for (const { angle, type } of ASPECT_TARGETS) {
-        const wasBelow = prevSep[key] < angle;
-        const isBelow = sep < angle;
-        if (wasBelow !== isBelow) {
-          const exact = refineSeparation(idA, idB, jd - step, jd, angle);
+      for (const { angle, type } of ASPECT_TARGETS_SIGNED) {
+        const key = `${nameA}-${nameB}-${angle}`;
+        const off = signedOff(jd, idA, idB, angle);
+        const prev = prevOff[key];
+        prevOff[key] = off;
+        // A sign flip with a small step is the exact aspect; a jump of ~360 is just the wrap at ±180.
+        if (Math.sign(off) !== Math.sign(prev) && Math.abs(off - prev) < 20) {
+          let lo = jd - step;
+          let hi = jd;
+          for (let i = 0; i < 24; i++) {
+            const mid = (lo + hi) / 2;
+            if (Math.sign(signedOff(mid, idA, idB, angle)) === Math.sign(prev)) lo = mid;
+            else hi = mid;
+          }
+          const exact = (lo + hi) / 2;
           events.push({
             type: "aspect",
             date: jdToIso(exact),
@@ -219,7 +219,6 @@ function scanMajorTransits(startJd: number): MajorTransit[] {
           });
         }
       }
-      prevSep[key] = sep;
     }
   }
 
@@ -399,10 +398,17 @@ export async function GET() {
   const sunNow = calcAt(startJd, swisseph.SE_SUN);
   const eclipseSeason = distanceToNode(startJd, sunNow.longitude) <= 18;
 
+  const { personalNow, personalEvents, retrogradeNow } = scanPersonalSky(startJd);
+
   return NextResponse.json(
     {
       events,
       majorTransits,
+      // The fast-moving sky: where Mercury, Venus and Mars are now, their sign changes, stations and
+      // hard contacts to the slow planets, and which slow planets are retrograde today.
+      personalNow,
+      personalEvents,
+      retrogradeNow,
       mercuryRetrogradeNow: mercuryNow.speed < 0,
       // Where Mercury is right now, so the "retrograde right now" card can name its sign too.
       mercurySignNow: signAt(mercuryNow.longitude).sign,

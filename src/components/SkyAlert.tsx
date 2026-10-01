@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { daysUntilSkyDate } from "@/lib/sky-zone";
 import { HOUSE_MEANINGS, ordinalHouse, houseForLongitude, longitudeForSignDegree } from "@/lib/interpretations";
+import { skyCardBody, skyForYou, skyHref, type SkyInput } from "@/lib/personal-sky-content";
 import type { ChartData } from "@/types/chart";
 
 // What each lunation asks of her, once it has been placed in one of her houses. This used to live
@@ -46,9 +47,45 @@ interface MercuryShadow {
   degree: number;
 }
 
+// The fast-moving sky (lib/sky-personal-scan.ts): Mercury, Venus and Mars, plus the slow planets
+// sitting retrograde in the background.
+interface PersonalNow {
+  planet: "Mercury" | "Venus" | "Mars";
+  sign: string;
+  degree: number;
+  retrograde: boolean;
+  since: string | null;
+  until: string | null;
+  stations: { type: "retrograde_start" | "retrograde_end"; date: string; degree: number }[];
+}
+
+interface PersonalEvent {
+  type: "ingress" | "retrograde_start" | "retrograde_end" | "aspect";
+  date: string;
+  planet: "Mercury" | "Venus" | "Mars";
+  sign: string;
+  degree: number;
+  retrograde?: boolean;
+  otherPlanet?: string;
+  otherSign?: string;
+  otherDegree?: number;
+  aspectType?: "conjunction" | "square" | "opposition";
+}
+
+interface RetrogradeNow {
+  planet: string;
+  sign: string;
+  degree: number;
+  since: string | null;
+  until: string | null;
+}
+
 interface CalendarResponse {
   events: CalendarEvent[];
   majorTransits: MajorTransit[];
+  personalNow?: PersonalNow[];
+  personalEvents?: PersonalEvent[];
+  retrogradeNow?: RetrogradeNow[];
   mercuryRetrogradeNow: boolean;
   mercurySignNow?: string;
   mercuryShadow: MercuryShadow | null;
@@ -66,6 +103,15 @@ const BIG_TYPES = new Set([
   "new_moon",
 ]);
 const MAJOR_WINDOW_DAYS = 45;
+// The coming-up rail holds this many cards at most, soonest first.
+const RAIL_MAX = 10;
+const ASPECT_VERB = { conjunction: "conjunct", square: "square", opposition: "opposite" } as const;
+
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+function shortDate(dateIso: string): string {
+  const [, m, d] = dateIso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
+}
 
 // "today" is measured in the zone the API publishes its dates in, so a member in Asia isn't a day
 // out on every countdown.
@@ -89,23 +135,46 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
 
   if (!data) return null;
 
+  const inWindow = (date: string) => {
+    const until = daysUntil(date);
+    return until >= 0 && until <= MAJOR_WINDOW_DAYS;
+  };
+  const personalEvents = (data.personalEvents ?? []).filter((e) => inWindow(e.date));
   const bigEvents = data.events.filter((e) => BIG_TYPES.has(e.type)).slice(0, 4);
+  // Venus and Mars stations arrive in both lists; the fast-moving scan carries them now.
   const nearMajorTransits = (data.majorTransits || [])
-    .filter((t) => {
-      const until = daysUntil(t.date);
-      return until >= 0 && until <= MAJOR_WINDOW_DAYS;
-    })
-    .slice(0, 2);
+    .filter((t) => inWindow(t.date))
+    .filter((t) => !((t.planet === "Venus" || t.planet === "Mars") && t.type !== "aspect" && t.type !== "ingress" && personalEvents.length > 0))
+    .slice(0, 3);
+  const personalNow = data.personalNow ?? [];
+  const retrogradeNow = data.retrogradeNow ?? [];
   const showShadow = !data.mercuryRetrogradeNow && !!data.mercuryShadow;
-  if (bigEvents.length === 0 && !data.mercuryRetrogradeNow && !showShadow && nearMajorTransits.length === 0) return null;
+  if (bigEvents.length === 0 && personalNow.length === 0 && !data.mercuryRetrogradeNow && !showShadow && nearMajorTransits.length === 0) return null;
 
   type SkyItem =
     | { kind: "big"; date: string; event: CalendarEvent }
-    | { kind: "transit"; date: string; transit: MajorTransit };
+    | { kind: "transit"; date: string; transit: MajorTransit }
+    | { kind: "personal"; date: string; personal: PersonalEvent };
   const items: SkyItem[] = [
     ...bigEvents.map((e): SkyItem => ({ kind: "big", date: e.date, event: e })),
     ...nearMajorTransits.map((t): SkyItem => ({ kind: "transit", date: t.date, transit: t })),
-  ].sort((a, b) => a.date.localeCompare(b.date));
+    ...personalEvents.map((p): SkyItem => ({ kind: "personal", date: p.date, personal: p })),
+  ]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, RAIL_MAX);
+
+  const skyInputOf = (e: PersonalEvent): SkyInput => ({
+    planet: e.planet,
+    type: e.type,
+    sign: e.sign,
+    degree: e.degree,
+    date: e.date,
+    retrograde: e.retrograde,
+    otherPlanet: e.otherPlanet,
+    otherSign: e.otherSign,
+    otherDegree: e.otherDegree,
+    aspectType: e.aspectType,
+  });
 
   // One flattened, uniform card model so the big events, transits and mercury notes all render the
   // same compact card in the rail.
@@ -128,6 +197,28 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
     const until = daysUntil(item.date);
     const isNow = until <= 0;
     const timing = isNow ? "now" : until === 1 ? "tomorrow" : `in ${until} days`;
+    if (item.kind === "personal") {
+      const e = item.personal;
+      const input = skyInputOf(e);
+      const p = e.planet.toLowerCase();
+      const sign = e.sign.toLowerCase();
+      const label =
+        e.type === "ingress" ? `${p} ${e.retrograde ? "backs into" : "into"} ${sign}`
+        : e.type === "retrograde_start" ? `${p} retrograde in ${sign}`
+        : e.type === "retrograde_end" ? `${p} direct in ${sign}`
+        : `${p} in ${sign} ${ASPECT_VERB[e.aspectType ?? "square"]} ${(e.otherPlanet ?? "").toLowerCase()} in ${(e.otherSign ?? "").toLowerCase()}`;
+      cards.push({
+        key: `p-${e.type}-${e.planet}-${e.otherPlanet ?? ""}-${e.date}`,
+        date: e.date,
+        timing,
+        hot: isNow || e.type === "retrograde_start",
+        label,
+        body: skyCardBody(input),
+        mine: chart ? skyForYou(input, chart) : undefined,
+        href: skyHref(input),
+      });
+      continue;
+    }
     if (item.kind === "big") {
       const event = item.event;
       // Every label carries its sign, so the card answers "new moon in what" at a glance rather
@@ -192,7 +283,7 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
     }
   }
 
-  if (data.mercuryRetrogradeNow) {
+  if (data.mercuryRetrogradeNow && personalNow.length === 0) {
     cards.unshift({
       key: "mercury-rx",
       date: null,
@@ -233,6 +324,67 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
             you&apos;re in eclipse season, the window around each eclipse below, not just the exact date. Things move faster and feel less optional.
           </p>
         )}
+        {personalNow.length > 0 && (
+          <>
+            <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--dark)", marginBottom: 10 }}>
+              right now
+            </div>
+            <div className="grid gap-3 md:grid-cols-3" style={{ marginBottom: 16 }}>
+              {personalNow.map((n) => {
+                const input: SkyInput = { planet: n.planet, type: "now", sign: n.sign, degree: n.degree };
+                const mine = chart ? skyForYou(input, chart) : null;
+                const stay = [n.since ? `since ${shortDate(n.since)}` : null, n.until ? `until ${shortDate(n.until)}` : null].filter(Boolean).join(" · ");
+                return (
+                  <Link
+                    key={n.planet}
+                    href={skyHref(input)}
+                    className={`no-underline hover:opacity-90 transition-opacity${n.planet === "Mercury" ? " szn-holo" : ""}`}
+                    style={{ border: `2px solid ${n.retrograde ? "var(--pink)" : "var(--dark)"}`, borderRadius: 16, padding: "16px 18px", background: n.planet === "Mercury" ? undefined : n.retrograde ? "var(--pink-bg)" : "#fff", display: "flex", flexDirection: "column", color: "var(--dark)", boxShadow: n.planet === "Mercury" ? "4px 4px 0 var(--pink)" : "none" }}
+                  >
+                    <div className="flex items-baseline justify-between gap-2" style={{ marginBottom: 8 }}>
+                      <span style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, textTransform: "lowercase" }}>
+                        {n.planet.toLowerCase()} {n.retrograde ? "retrograde " : ""}in {n.sign.toLowerCase()}
+                      </span>
+                      {stay && <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--pink)", whiteSpace: "nowrap" }}>{stay}</span>}
+                    </div>
+                    <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: "var(--grey)", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{skyCardBody(input)}</p>
+                    {mine && (
+                      <p style={{ margin: "10px 0 0", paddingTop: 10, borderTop: "1.5px solid rgba(26,26,26,0.12)", fontSize: 12, lineHeight: 1.45 }}>
+                        <b style={{ fontSize: 8.5, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)", display: "block", marginBottom: 3 }}>for you</b>
+                        {mine}
+                      </p>
+                    )}
+                    <span style={{ marginTop: "auto", paddingTop: 12, fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>break it down for me →</span>
+                  </Link>
+                );
+              })}
+            </div>
+            {retrogradeNow.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2" style={{ marginBottom: 26 }}>
+                <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey)" }}>also retrograde:</span>
+                {retrogradeNow.map((r) => {
+                  const lon = longitudeForSignDegree(r.sign, r.degree);
+                  const house = cusps && lon !== null ? houseForLongitude(lon, cusps) : null;
+                  return (
+                    <Link
+                      key={r.planet}
+                      href={`/your-season/transit?type=retrograde_start&date=${r.since ?? ""}&planet=${encodeURIComponent(r.planet)}&sign=${encodeURIComponent(r.sign)}`}
+                      className="no-underline"
+                      style={{ fontSize: 11.5, fontWeight: 700, color: "#3C2A70", background: "var(--lav-light)", border: "1.5px solid var(--lav)", borderRadius: 999, padding: "5px 11px", textTransform: "lowercase" }}
+                    >
+                      {r.planet} in {r.sign}
+                      {r.until ? ` · until ${shortDate(r.until)}` : ""}
+                      {house ? ` · your ${ordinalHouse(house)}` : ""}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+            <div style={{ fontFamily: poppins, fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--dark)", marginBottom: 10 }}>
+              coming up
+            </div>
+          </>
+        )}
         <div style={{ display: "flex", gap: 14, overflowX: "auto", paddingBottom: 8 }}>
           {cards.map((c) => {
             const inner = (
@@ -261,8 +413,8 @@ export default function SkyAlert({ chart }: { chart?: ChartData | null }) {
             const cardStyle: React.CSSProperties = {
               flex: "0 0 238px",
               borderRadius: 14,
-              border: `2px solid ${c.gold ? "#E7C66B" : c.hot ? "var(--pink)" : "var(--dark)"}`,
-              background: c.gold ? "var(--gold)" : c.hot ? "var(--pink-bg)" : "#fff",
+              border: `2px solid ${c.gold ? "var(--lav)" : c.hot ? "var(--pink)" : "var(--dark)"}`,
+              background: c.gold ? "var(--lav-light)" : c.hot ? "var(--pink-bg)" : "#fff",
               padding: 20,
               display: "flex",
               flexDirection: "column",
