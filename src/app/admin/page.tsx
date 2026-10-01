@@ -263,6 +263,9 @@ export default function AdminPage() {
           <Link href="/admin/messages" className="btn-pink" style={{ display: "inline-block", marginTop: 18 }}>
             💌 member messages
           </Link>
+          <Link href="/admin/szn-report" className="btn-pink" style={{ display: "inline-block", marginTop: 18, marginLeft: 12 }}>
+            ✦ what members want
+          </Link>
           {/* Checks the error reporting end to end: one browser error and one server error, both
               labelled as tests, should arrive in Sentry within a minute. It says what happened, because
               a button that throws quietly in the background looks like it does nothing. */}

@@ -5,6 +5,7 @@ import NavBar from "@/components/NavBar";
 import TrialBar from "@/components/TrialBar";
 import Analytics from "@/components/Analytics";
 import ActivityLogger from "@/components/ActivityLogger";
+import SznLaunchModal from "@/components/SznLaunchModal";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
 import CookieConsent from "@/components/CookieConsent";
@@ -121,6 +122,8 @@ export default function RootLayout({
         <ActivityLogger />
         <ServiceWorkerRegistrar />
         <InstallPrompt />
+        {/* The one-time "customise my szn" launch, for every member who hasn't picked yet. */}
+        <SznLaunchModal />
 
         {/* Nav */}
         <NavBar />

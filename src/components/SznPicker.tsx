@@ -138,6 +138,7 @@ export default function SznPicker({
             </>
           )}
         </h1>
+        <p className="szn-sub">Your picks get the deep reads on your dashboard, and every new season you get to choose again.</p>
 
         <div className="szn-live">
           <SznWheel picks={draft} popId={popId} />

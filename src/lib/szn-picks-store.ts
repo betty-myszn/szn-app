@@ -9,6 +9,9 @@ import { sanitizePicks } from "@/lib/szn-picks";
 //   szn_picks_season   the season sign she last picked for, so a new season can ask her again
 //   szn_picks_at       when she last saved
 //   szn_prompt_dismissed  an existing member said "not now" to the invitation card
+//   szn_launch_seen    she has seen the one-time "new feature" popup
+//   szn_picks_history  her picks per season, newest last: [{ s: season, p: picks, at }], read by the
+//                      admin report to show how picks move from season to season
 
 export interface SznPicksState {
   /** null = she has never chosen. [] = she chose to skip. */
@@ -36,19 +39,49 @@ export async function loadSznPicks(): Promise<SznPicksState> {
   }
 }
 
+// One entry per season (a later save in the same season replaces it), a year deep. History rides in
+// the session token, so it stays small on purpose.
+const HISTORY_CAP = 12;
+
 export async function saveSznPicks(picks: string[], seasonSign: string): Promise<SznPicksState | null> {
   try {
-    const { data, error } = await createClient().auth.updateUser({
+    const supabase = createClient();
+    const clean = sanitizePicks(picks);
+    const at = new Date().toISOString();
+    const { data: current } = await supabase.auth.getSession();
+    const prior = current.session?.user?.user_metadata?.szn_picks_history;
+    const earlier = (Array.isArray(prior) ? prior : []).filter((h: { s?: unknown }) => h?.s !== seasonSign);
+    const history = [...earlier, { s: seasonSign, p: clean, at }].slice(-HISTORY_CAP);
+    const { data, error } = await supabase.auth.updateUser({
       data: {
-        szn_picks: sanitizePicks(picks),
+        szn_picks: clean,
         szn_picks_season: seasonSign,
-        szn_picks_at: new Date().toISOString(),
+        szn_picks_at: at,
+        szn_picks_history: history,
       },
     });
     if (error || !data.user) return null;
     return fromMetadata(data.user.user_metadata);
   } catch {
     return null;
+  }
+}
+
+/** Whether the one-time "new feature" popup has been shown to her, on any device. */
+export async function loadLaunchSeen(): Promise<boolean> {
+  try {
+    const { data } = await createClient().auth.getSession();
+    return data.session?.user?.user_metadata?.szn_launch_seen === true;
+  } catch {
+    return true; // can't tell, so don't risk showing it twice
+  }
+}
+
+export async function markLaunchSeen(): Promise<void> {
+  try {
+    await createClient().auth.updateUser({ data: { szn_launch_seen: true } });
+  } catch {
+    // Worst case she sees it once more on another visit.
   }
 }
 

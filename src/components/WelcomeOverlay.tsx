@@ -18,7 +18,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // Shown to genuinely new accounts only. Rolling it out must not ambush a member who has been here
 // for months with a "welcome" she does not need.
 const NEW_ACCOUNT_DAYS = 14;
-const SEEN_KEY = "myszn-welcome-seen";
+export const SEEN_KEY = "myszn-welcome-seen";
 
 /**
  * Whether this member should be welcomed. Exported and tested because the cost of getting it wrong
