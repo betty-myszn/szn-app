@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { WORKSHOPS } from "@/lib/workshops";
 import {
-  BLOG_POSTS,
+  livePosts,
   postBySlug,
   categoryBySlug,
   relatedPosts,
@@ -42,8 +42,12 @@ function Prose({ text }: { text: string }) {
 // they would be generated on demand, which is slower for the crawler and gives up the static HTML
 // that makes a content page cheap to serve.
 export function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  return livePosts().map((p) => ({ slug: p.slug }));
 }
+
+// Re-rendered every 10 minutes, so a post scheduled with goLiveAt stops 404ing and goes public on
+// its own shortly after that moment, without waiting for a deploy.
+export const revalidate = 600;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

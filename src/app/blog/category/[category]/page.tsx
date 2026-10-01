@@ -21,6 +21,9 @@ export function generateStaticParams() {
   return populatedCategories().map((c) => ({ category: c.slug }));
 }
 
+// Same 10 minute timer as the posts, so a scheduled post joins its category when it goes live.
+export const revalidate = 600;
+
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: slug } = await params;
   const category = categoryBySlug(slug);

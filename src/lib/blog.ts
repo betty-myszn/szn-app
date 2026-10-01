@@ -61,6 +61,10 @@ export interface BlogPost {
   category: CategorySlug;
   publishedAt: string; // ISO date
   updatedAt: string; // ISO date
+  /** Exact moment a post written ahead goes public, e.g. a season guide set to the Sun's ingress.
+   *  Until then it is missing from every list, the sitemap and its own URL (which 404s). Posts
+   *  without one are public from publishedAt. */
+  goLiveAt?: string;
   readingMinutes: number;
   /** One-line hook used on the hub and category pages. */
   excerpt: string;
@@ -156,6 +160,433 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 export const BLOG_POSTS: BlogPost[] = [
   // Every date and degree below comes from the app's own Swiss Ephemeris (lib/sky-bank.ts for the
   // lunations and stations, ingresses computed the same way), in New York time to match the calendar.
+  // The next four season guides, written ahead and held back by goLiveAt until the exact moment
+  // the Sun enters each sign (New York time, from the same Swiss Ephemeris as lib/sky-bank.ts).
+  {
+    slug: "scorpio-season-2026",
+    title: "It's Scorpio Season, Baby: Your Scorpio Season 2026 Guide",
+    metaTitle: "Scorpio Season 2026: Dates, Mercury Retrograde & Themes",
+    description:
+      "Scorpio Season 2026 runs 23 October to 22 November. The key dates, Mercury and Venus retrograde, both moons, journal prompts and affirmations for the season.",
+    category: "zodiac-signs",
+    publishedAt: "2026-10-23",
+    updatedAt: "2026-10-23",
+    goLiveAt: "2026-10-23T09:37:00Z",
+    readingMinutes: 5,
+    excerpt:
+      "Mercury and Venus are both retrograde as the season opens, so Scorpio season starts in the deep end. The dates, the themes, the journal prompts and the affirmations.",
+    intro: [
+      "It's Scorpio season, baby, and the sky is about to get verrrry interested in everything you keep behind closed doors. Scorpio Season 2026 begins when the Sun enters Scorpio at 5:37am New York time on Friday 23 October and runs until the Sun moves into Sagittarius at 2:23am on Sunday 22 November, and it opens with Mercury stationing retrograde the very next morning while Venus is still retrograde from [Libra season](/blog/libra-season-2026), so this season starts in the deep end.",
+      "Scorpio is the fixed water sign, ruled traditionally by Mars and in modern astrology by Pluto, and it governs intimacy, trust, desire, shared money, power and transformation. Libra season asked whether your relationships felt fair, and Scorpio season goes underneath them to find out what is really driving the whole thing.",
+    ],
+    sections: [
+      {
+        heading: "Scorpio Season 2026 key dates",
+        body: ["Every time below is New York time, from the same Swiss Ephemeris that powers every chart inside MY SZN."],
+        items: [
+          {
+            name: "24 October: Mercury stations retrograde in Scorpio",
+            body: "Mercury turns retrograde at 20°58' Scorpio at 3:12am and stays there until 13 November, so reread before you send, research before you sign and let the conversations that matter happen slowly.",
+          },
+          {
+            name: "25 and 26 October: Venus backs into Libra, then the Taurus full moon",
+            body: "Venus, still retrograde, slides back into Libra at 5:09am on 25 October. The full moon follows at 2°45' Taurus at 12:11am on 26 October, lighting up the axis between what you own and what you share.",
+          },
+          {
+            name: "9 November: new moon in Scorpio",
+            body: "The new moon lands at 16°53' Scorpio at 2:02am, the most private, potent reset of the year for intentions around desire, intimacy, money and power.",
+          },
+          {
+            name: "13 November: Mercury and Venus both turn direct",
+            body: "Mercury stations direct at 5°02' Scorpio at 10:53am and Venus at 22°51' Libra at 7:27pm, so the planets of thinking and loving start moving forward on the same day, and the decisions you have been circling for weeks get clear enough to make.",
+          },
+        ],
+      },
+      {
+        heading: "What Scorpio season is about",
+        body: [
+          "Scorpio belongs to the eighth house, the part of the chart that holds sex, death, rebirth, debt, inheritance, other people's money and the psychological stuff you usually save for your therapist. Its energy is intense, loyal, private and magnetic, and this is the season when you can smell bullsh*t from across the room, your own included.",
+          "With Mercury retrograde for the first three weeks, old feelings, old patterns and old money stories come back up for review, and the gift is getting to look at them with the lights on. Scorpio rewards the woman who is willing to look her jealousy, her control and her fear of being seen in the eye and turn all of it into power, which makes this the best month of the year for shadow work.",
+        ],
+      },
+      {
+        heading: "Journal prompts for Scorpio season",
+        body: [
+          "Write these fast, by candlelight if you are feeling witchy, and without editing. Take them into [your MY SZN journal](/journal), where every entry sits next to your chart and your season.",
+        ],
+        items: [
+          { name: "The want you keep private", body: "Write about the desire you have never said out loud, and what your life would look like if you went after it fully." },
+          { name: "Where your power leaks", body: "List the people, habits and money patterns that leave you drained, then circle the one you will deal with before the new moon on 9 November." },
+          { name: "The version of you ready to go", body: "Scorpio is death and rebirth, so write a short goodbye letter to a version of you who has done her job, and thank her before you let her go." },
+        ],
+      },
+      {
+        heading: "Scorpio season affirmations",
+        body: ["Say them out loud, write them on the mirror or keep them in [your affirmations deck](/affirmations), which changes with the season and your sun sign."],
+        items: [
+          { name: "I am safe to be seen all the way through.", body: "For the real you that usually stays behind a locked door." },
+          { name: "My desire is information, and I trust it.", body: "For every want you were taught to feel guilty about." },
+          { name: "I release what I have outgrown, and I rise.", body: "For the rebirth Scorpio is famous for." },
+        ],
+      },
+      {
+        heading: "Your Scorpio season inside MY SZN",
+        body: [
+          "[Your personalised season guide](/your-season) shows which house Scorpio lights up in your chart, which matters SO much this year because Mercury retrograde plays out in that same part of your life, and [your moon readings](/your-season/moon) take the Taurus full moon and the Scorpio new moon through your own placements.",
+          "For the money side of Scorpio, pair the [Venus Money meditation](/meditations/venus-money) with the [money affirmations subliminal](/subliminals), one for the deeeep inner work and one to play on repeat while you live your life. Pluto, Scorpio's modern ruler, is explained in full in the [Pluto in Aquarius class](/events/astrology), live workshop dates land on [the workshops page](/events), every class you miss waits in [the replay vault](/events/replays), and the [chat rooms](/community) are where you process all of it with women living the same sky.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where Scorpio season lands in YOUR chart",
+      body: "Inside MY SZN, Scorpio season, Mercury retrograde and both moons are read against your own placements, so you know which part of your life is going deep. Your first 7 days are free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    closing: {
+      heading: "your scorpio season, read for",
+      pink: "your chart",
+      body: "Your full chart, your personalised Scorpio season guide, Mercury retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    faqs: [
+      {
+        question: "When does Scorpio season 2026 start and end?",
+        answer:
+          "Scorpio season 2026 starts when the Sun enters Scorpio at 5:37am New York time on 23 October and ends when the Sun moves into Sagittarius at 2:23am New York time on 22 November 2026.",
+      },
+      {
+        question: "When is Mercury retrograde in Scorpio in 2026?",
+        answer:
+          "Mercury stations retrograde at 20°58' Scorpio on 24 October 2026 and turns direct at 5°02' Scorpio on 13 November 2026, the same day Venus ends her retrograde in Libra.",
+      },
+      {
+        question: "When is the new moon in Scorpio in 2026?",
+        answer: "The Scorpio new moon is on 9 November 2026 at 16°53' Scorpio, exact at 2:02am New York time.",
+      },
+    ],
+    related: ["libra-season-2026", "new-moon-vs-full-moon", "12-houses-in-astrology"],
+  },
+  {
+    slug: "sagittarius-season-2026",
+    title: "It's Sagittarius Season, Baby: Your Sagittarius Season 2026 Guide",
+    metaTitle: "Sagittarius Season 2026: Dates, Jupiter Retrograde & Themes",
+    description:
+      "Sagittarius Season 2026 runs 22 November to 21 December. The key dates, the Gemini full moon, Jupiter retrograde, journal prompts and affirmations for the season.",
+    category: "zodiac-signs",
+    publishedAt: "2026-11-22",
+    updatedAt: "2026-11-22",
+    goLiveAt: "2026-11-22T07:23:00Z",
+    readingMinutes: 5,
+    excerpt:
+      "After a deeeep Scorpio season, Sagittarius throws the windows open. The dates, the themes, Jupiter's retrograde, the journal prompts and the affirmations.",
+    intro: [
+      "It's Sagittarius season, baby, and after a month of [Scorpio season](/blog/scorpio-season-2026) intensity the whole sky finally wants to have some FUN. Sagittarius Season 2026 begins when the Sun enters Sagittarius at 2:23am New York time on Sunday 22 November and runs until the winter solstice, when the Sun moves into Capricorn at 3:50pm on Monday 21 December.",
+      "Sagittarius is the mutable fire sign ruled by Jupiter, the planet of luck, growth, wisdom and more-is-more, and it governs travel, study, belief, adventure and the big-picture life you are building towards. This year Jupiter stations retrograde in Leo on 12 December, right in the middle of his own season, so you get to expand your horizons and then check that the life you are expanding into is the one you really want.",
+    ],
+    sections: [
+      {
+        heading: "Sagittarius Season 2026 key dates",
+        body: ["Every time below is New York time, from the same Swiss Ephemeris that powers every chart inside MY SZN."],
+        items: [
+          {
+            name: "24 and 25 November: the Gemini full moon, then Mars enters Virgo",
+            body: "The full moon lands at 2°20' Gemini at 9:53am on 24 November, so information arrives fast and updates what you thought you knew. Mars moves into Virgo at 6:37pm the next day and gets practical, which is perfect for turning a big idea into an actual plan.",
+          },
+          {
+            name: "4 and 6 December: Venus returns to Scorpio and Mercury enters Sagittarius",
+            body: "Venus, now direct, moves back into Scorpio at 3:12am on 4 December to finish what her retrograde started. Mercury enters Sagittarius at 3:33am on 6 December, and conversations get bolder, funnier and much more honest.",
+          },
+          {
+            name: "8 December: new moon in Sagittarius",
+            body: "The new moon lands at 16°56' Sagittarius at 7:51pm, one of the most optimistic resets of the year for intentions around travel, study, teaching, publishing or simply saying yes to more life.",
+          },
+          {
+            name: "10 and 12 December: Saturn and Neptune turn direct, Jupiter turns retrograde",
+            body: "Saturn stations direct at 7°55' Aries at 6:31pm on 10 December and Neptune at 1°36' Aries at 5:17pm on 12 December. That same evening Jupiter stations retrograde at 27°01' Leo at 7:56pm, staying retrograde until 12 April 2027, so luck turns inward while the structures around you start moving again.",
+          },
+        ],
+      },
+      {
+        heading: "What Sagittarius season is about",
+        body: [
+          "Sagittarius rules the ninth house, the part of the chart that holds long-distance travel, higher learning, philosophy, faith, publishing and the meaning you make of your life. Its symbol is the archer, half woman and half horse, aiming an arrow at something far beyond where she is standing, and that is the energy of this season: restless, generous, curious, outrageously honest and allergic to small thinking.",
+          "The shadow is a classic too. Sagittarius can promise more than it delivers, bolt from anything that smells like commitment and turn \"I'm just being honest\" into a licence to be careless. With Jupiter retrograde from 12 December, the move is to expand on purpose, choosing the adventure, the course or the belief that genuinely grows you over every shiny new thing that says yes.",
+        ],
+      },
+      {
+        heading: "Journal prompts for Sagittarius season",
+        body: [
+          "Sagittarius thinks out loud, so let these run long. Write them in [your MY SZN journal](/journal), where your entries sit beside your chart and your season.",
+        ],
+        items: [
+          { name: "The life that feels too big", body: "Describe the version of your life that feels slightly too big to say out loud: where you live, what you do, who is with you and how free you feel." },
+          { name: "The belief you have outgrown", body: "List three beliefs about money, love or yourself that you inherited rather than chose, then rewrite each one into something you want to believe from now on." },
+          { name: "Your next adventure", body: "Name one adventure you could take before the year ends, a trip, a class, a new city or a new room to walk into, and the date you will book it." },
+        ],
+      },
+      {
+        heading: "Sagittarius season affirmations",
+        body: ["Say them out loud, write them on the mirror or keep them in [your affirmations deck](/affirmations), which changes with the season and your sun sign."],
+        items: [
+          { name: "Life is expanding to meet me.", body: "For the version of you who is ready for more." },
+          { name: "I am free to change my mind and my direction.", body: "For the beliefs you are ready to outgrow." },
+          { name: "My luck grows every time I back myself.", body: "For Jupiter, who loves a woman who bets on herself." },
+        ],
+      },
+      {
+        heading: "Your Sagittarius season inside MY SZN",
+        body: [
+          "[Your personalised season guide](/your-season) shows which house Sagittarius lights up for you, and Jupiter's retrograde reads completely differently depending on where Leo falls in [your astrology chart](/my-chart). Both moons are read against your placements in [your moon readings](/your-season/moon), and Sagittarius loves a goal with a horizon on it, so the new moon on 8 December is the night to set one in [your goals](/goals).",
+          "For the manifesting side, the [Quantum Manifesting meditation](/meditations/quantum-manifesting) takes you to the timeline where the big life already exists, and the [general astrology classes](/events/astrology) are made for the sign that loves to learn. Live workshop dates land on [the workshops page](/events), every past class lives in [the replay vault](/events/replays), and the [chat rooms](/community) are where you find your travel buddies, study partners and fellow optimists.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where Sagittarius season lands in YOUR chart",
+      body: "Inside MY SZN, Sagittarius season, Jupiter's retrograde and both moons are read against your own placements, so you know exactly where your life is ready to expand. Your first 7 days are free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    closing: {
+      heading: "your sagittarius season, read for",
+      pink: "your chart",
+      body: "Your full chart, your personalised Sagittarius season guide, Jupiter read through your own houses, the live workshops and the community, all yours for 7 days, free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    faqs: [
+      {
+        question: "When does Sagittarius season 2026 start and end?",
+        answer:
+          "Sagittarius season 2026 starts when the Sun enters Sagittarius at 2:23am New York time on 22 November and ends at the winter solstice, when the Sun moves into Capricorn at 3:50pm New York time on 21 December 2026.",
+      },
+      {
+        question: "When is Jupiter retrograde in 2026?",
+        answer:
+          "Jupiter stations retrograde at 27°01' Leo on 12 December 2026 and turns direct at 16°59' Leo on 12 April 2027. Jupiter rules Sagittarius, so the retrograde begins in the middle of his own season.",
+      },
+      {
+        question: "When is the new moon in Sagittarius in 2026?",
+        answer: "The Sagittarius new moon is on 8 December 2026 at 16°56' Sagittarius, exact at 7:51pm New York time.",
+      },
+    ],
+    related: ["scorpio-season-2026", "north-node-and-life-purpose", "new-moon-vs-full-moon"],
+  },
+  {
+    slug: "capricorn-season-2026",
+    title: "It's Capricorn Season, Baby: Your Capricorn Season 2026 Guide",
+    metaTitle: "Capricorn Season 2026: Dates, Mars Retrograde & Themes",
+    description:
+      "Capricorn Season 2026 runs 21 December to 20 January 2027. The key dates, the Cancer full moon, the Capricorn new moon, Mars retrograde, journal prompts and affirmations.",
+    category: "zodiac-signs",
+    publishedAt: "2026-12-21",
+    updatedAt: "2026-12-21",
+    goLiveAt: "2026-12-21T20:50:00Z",
+    readingMinutes: 5,
+    excerpt:
+      "The solstice opens the season of the CEO. The dates, the themes, Mars retrograde in Virgo, the journal prompts and the affirmations for building a 2027 that lasts.",
+    intro: [
+      "It's Capricorn season, baby, and the sky is about to get verrrry serious about your ambitions, in the hottest possible way. Capricorn Season 2026 begins on the winter solstice, when the Sun enters Capricorn at 3:50pm New York time on Monday 21 December, and runs until the Sun moves into Aquarius at 2:29am on Wednesday 20 January 2027, carrying you over the new year and straight into the first big decisions of 2027.",
+      "Capricorn is the cardinal earth sign ruled by Saturn, the planet of time, structure, mastery and commitment, and it governs your career, your reputation and the things you build slowly enough that they last. After the expansion of [Sagittarius season](/blog/sagittarius-season-2026), this is where you pick the dream that matters most and put a plan, a budget and a calendar behind it.",
+    ],
+    sections: [
+      {
+        heading: "Capricorn Season 2026 key dates",
+        body: ["Every time below is New York time, from the same Swiss Ephemeris that powers every chart inside MY SZN."],
+        items: [
+          {
+            name: "23 and 25 December: the Cancer full moon, then Mercury enters Capricorn",
+            body: "The full moon lands at 2°13' Cancer at 8:28pm on 23 December, right before the holidays, lighting up the axis between home and career, where you come from and what you are building. Mercury moves into Capricorn at 1:22pm on 25 December, and your end-of-year review gets beautifully strategic.",
+          },
+          {
+            name: "6 and 7 January: Chiron direct, Venus into Sagittarius and the Capricorn new moon",
+            body: "Chiron stations direct at 26°15' Aries at 6:00am on 6 January. On 7 January Venus enters Sagittarius at 3:53am and the new moon lands at 17°18' Capricorn at 3:24pm, the strongest new moon of the year for goals you intend to keep.",
+          },
+          {
+            name: "10 January: Mars stations retrograde in Virgo",
+            body: "Mars turns retrograde at 10°25' Virgo at 7:59am and stays retrograde until 1 April, slipping back into Leo on 21 February, so work, routines and health go under review and refining beats pushing.",
+          },
+          {
+            name: "13 January: Mercury enters Aquarius",
+            body: "Mercury moves into Aquarius at 1:05am and your thinking turns towards the future, your community and the ideas that feel bigger than you.",
+          },
+        ],
+      },
+      {
+        heading: "What Capricorn season is about",
+        body: [
+          "Capricorn rules the tenth house, the highest point of the chart, which describes your career, your public image, your authority and the legacy you want to leave. Its symbol is the sea goat, a creature that climbs mountains with the tail of a fish, and that is Capricorn's secret: under all the discipline lives a deeply emotional, deeply ambitious woman who wants her life to mean something. Your own [midheaven](/blog/midheaven-and-career) shows the career story this season is talking to.",
+          "The shadow is workaholism, coldness and the belief that rest has to be earned. With Saturn direct in Aries since 10 December and Mars retrograde in Virgo from 10 January, the message about pace is clear: commit to the big goal, then build it at a speed your body can actually sustain.",
+        ],
+      },
+      {
+        heading: "Journal prompts for Capricorn season",
+        body: [
+          "Capricorn likes a plan on paper, so write these properly in [your MY SZN journal](/journal), where you can read them back next December and see exactly what you built.",
+        ],
+        items: [
+          { name: "Your 2027 headline", body: "Write the headline you want people to read about you at the end of 2027, then the three decisions you would make in January for it to come true." },
+          { name: "Success in your own words", body: "Write down who taught you what success looks like, then write your own definition, with your pleasure and your peace included." },
+          { name: "What you are building", body: "Describe your life as a house under construction: the foundations, the finished rooms, the rooms still waiting and the one you want to live in by next winter." },
+        ],
+      },
+      {
+        heading: "Capricorn season affirmations",
+        body: ["Say them out loud, write them on the mirror or keep them in [your affirmations deck](/affirmations), which changes with the season and your sun sign."],
+        items: [
+          { name: "I build a life that lasts, one decision at a time.", body: "For the long game Capricorn plays so well." },
+          { name: "Rest is part of my strategy.", body: "For the woman who keeps forgetting she is allowed to stop." },
+          { name: "I am the authority in my own life.", body: "For every time you waited for permission." },
+        ],
+      },
+      {
+        heading: "Your Capricorn season inside MY SZN",
+        body: [
+          "[Your personalised season guide](/your-season) shows where Capricorn sits in your chart, so you know whether this season is building your career, your money, your home or your relationships. The new moon on 7 January is the night to set your 2027 goals in [your goals](/goals), and the [challenge board](/challenges) gives you a little daily structure to stay consistent once the new year sparkle wears off.",
+          "Saturn rules Capricorn, so if you are anywhere between 27 and 30 the [Saturn return class](/events/astrology) is essential viewing this season. The [Venus Money meditation](/meditations/venus-money) and the [money affirmations subliminal](/subliminals) keep your money mindset rising while you plan, live workshop dates land on [the workshops page](/events), and every past class is waiting in [the replay vault](/events/replays).",
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where Capricorn season lands in YOUR chart",
+      body: "Inside MY SZN, Capricorn season, Mars retrograde and both moons are read against your own placements, so you know exactly which part of your life you are building. Your first 7 days are free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    closing: {
+      heading: "your capricorn season, read for",
+      pink: "your chart",
+      body: "Your full chart, your personalised Capricorn season guide, Mars retrograde read through your own houses, the live workshops and the community, all yours for 7 days, free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    faqs: [
+      {
+        question: "When does Capricorn season 2026 start and end?",
+        answer:
+          "Capricorn season starts at the winter solstice, when the Sun enters Capricorn at 3:50pm New York time on 21 December 2026, and ends when the Sun moves into Aquarius at 2:29am New York time on 20 January 2027.",
+      },
+      {
+        question: "When is Mars retrograde in 2027?",
+        answer:
+          "Mars stations retrograde at 10°25' Virgo on 10 January 2027 and turns direct at 20°55' Leo on 1 April 2027, moving back into Leo on 21 February along the way.",
+      },
+      {
+        question: "When is the new moon in Capricorn?",
+        answer: "The Capricorn new moon is on 7 January 2027 at 17°18' Capricorn, exact at 3:24pm New York time.",
+      },
+    ],
+    related: ["sagittarius-season-2026", "midheaven-and-career", "12-houses-in-astrology"],
+  },
+  {
+    slug: "aquarius-season-2027",
+    title: "It's Aquarius Season, Baby: Your Aquarius Season 2027 Guide",
+    metaTitle: "Aquarius Season 2027: Dates, Solar Eclipse & Themes",
+    description:
+      "Aquarius Season 2027 runs 20 January to 18 February. The key dates, the solar eclipse in Aquarius, Mercury retrograde, journal prompts and affirmations for the season.",
+    category: "zodiac-signs",
+    publishedAt: "2027-01-20",
+    updatedAt: "2027-01-20",
+    goLiveAt: "2027-01-20T07:29:00Z",
+    readingMinutes: 5,
+    excerpt:
+      "A solar eclipse in Aquarius, Pluto and the North Node in the sign, and Uranus turning direct. The dates, the themes, the journal prompts and the affirmations.",
+    intro: [
+      "It's Aquarius season, baby, and the future is officially calling. Aquarius Season 2027 begins when the Sun enters Aquarius at 2:29am New York time on Wednesday 20 January and runs until the Sun moves into Pisces at 4:33pm on Thursday 18 February, with a solar eclipse in Aquarius on 6 February sitting right in the middle, the second Aquarius eclipse in under a year.",
+      "Aquarius is the fixed air sign, ruled traditionally by Saturn and in modern astrology by Uranus, and it governs community, friendship, technology, innovation, freedom and the future you want to help build. With Pluto settled in Aquarius until 2044 and [the North Node](/blog/north-node-and-life-purpose) here too, the collective is already being pulled towards Aquarian themes, and this season brings them right to your front door.",
+    ],
+    sections: [
+      {
+        heading: "Aquarius Season 2027 key dates",
+        body: ["Every time below is New York time, from the same Swiss Ephemeris that powers every chart inside MY SZN."],
+        items: [
+          {
+            name: "22 January: full moon in Leo",
+            body: "The full moon lands at 2°14' Leo at 7:17am, lighting up the axis between your individuality and your community, the spotlight and the group chat, so something you have made wants to be seen.",
+          },
+          {
+            name: "31 January and 3 February: Mercury enters Pisces, Venus enters Capricorn",
+            body: "Mercury moves into Pisces at 8:25pm on 31 January and your thinking gets dreamier and more intuitive. Venus enters Capricorn at 9:30am on 3 February, and love and money get loyal, serious and quietly luxurious.",
+          },
+          {
+            name: "6 February: solar eclipse in Aquarius",
+            body: "The new moon lands at 17°37' Aquarius at 10:56am, close enough to the North Node to become a solar eclipse. Eclipses happen when a new or full moon falls near the nodes, the points where the Moon's path crosses the Sun's, and a North Node solar eclipse is a portal for beginnings that pull you towards your future.",
+          },
+          {
+            name: "8 and 9 February: Uranus turns direct, Mercury turns retrograde",
+            body: "Uranus, Aquarius's modern ruler, stations direct at 1°40' Gemini at 7:29am on 8 February. Mercury stations retrograde at 5°58' Pisces at 12:36pm on 9 February, backs into Aquarius on 18 February and turns direct on 3 March.",
+          },
+        ],
+      },
+      {
+        heading: "What Aquarius season is about",
+        body: [
+          "Aquarius rules the eleventh house of friends, networks, communities and hopes for the future, and its symbol is the water bearer pouring out knowledge for everybody. Its energy is original, rebellious, humanitarian and gloriously weird, and it gets restless the second life starts to feel like a template someone else designed. This season rewards the woman who lets herself be different and finds the people who love her for exactly that.",
+          "The shadow is detachment: intellectualising feelings instead of feeling them, keeping everyone at a cool distance and confusing independence with never needing anybody. With Mars retrograde in Virgo the whole season, action is slower and more considered, so let the eclipse show you the future and give yourself the time to build towards it properly.",
+        ],
+      },
+      {
+        heading: "Journal prompts for Aquarius season",
+        body: [
+          "Aquarius journals best when it gets to dream about the future, so let these be wild. Write them in [your MY SZN journal](/journal), where they sit beside your chart and your season.",
+        ],
+        items: [
+          { name: "A day one year from now", body: "Write a day in your life twelve months from today, from the moment you wake up to the moment you fall asleep, including who you talk to, what you create and how free you feel." },
+          { name: "Your people", body: "List the people who make you feel most like yourself and the communities you want to belong to next, then write one way you will show up for them this month." },
+          { name: "The rule you are ready to break", body: "Write down a rule you have been living by that never really fit you, and what you would do instead if you let yourself be completely original." },
+        ],
+      },
+      {
+        heading: "Aquarius season affirmations",
+        body: ["Say them out loud, write them on the mirror or keep them in [your affirmations deck](/affirmations), which changes with the season and your sun sign."],
+        items: [
+          { name: "My difference is my magic.", body: "For the parts of you that never fit the template." },
+          { name: "The future I want is already on its way to me.", body: "For the eclipse on 6 February." },
+          { name: "I belong with people who celebrate the real me.", body: "For the friendships Aquarius season is calling in." },
+        ],
+      },
+      {
+        heading: "Your Aquarius season inside MY SZN",
+        body: [
+          "[Your personalised season guide](/your-season) shows which house the eclipse lands in for you, which tells you what part of your life it is opening, and [your Human Design chart](/human-design) adds the other half of the picture, how you are designed to move towards it. The [Pluto in Aquarius class](/events/astrology) is basically required viewing this season, and the [Quantum Manifesting meditation](/meditations/quantum-manifesting) is made for a North Node eclipse, connecting you to the timeline where your future self already lives.",
+          "Aquarius is the sign of community, so get into the [chat rooms](/community) and find your people, then keep the eclipse alive in [your goals](/goals) long after 6 February. Live workshop dates land on [the workshops page](/events), and every class you miss waits in [the replay vault](/events/replays).",
+        ],
+      },
+    ],
+    cta: {
+      heading: "See exactly where the Aquarius eclipse lands in YOUR chart",
+      body: "Inside MY SZN, Aquarius season, the solar eclipse and Mercury retrograde are read against your own placements, so you know which part of your life the future is knocking on. Your first 7 days are free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    closing: {
+      heading: "your aquarius season, read for",
+      pink: "your chart",
+      body: "Your full chart, your personalised Aquarius season guide, the eclipse read through your own houses, the live workshops and the community, all yours for 7 days, free.",
+      label: "start my free 7 days",
+      href: "/free-trial",
+    },
+    faqs: [
+      {
+        question: "When does Aquarius season 2027 start and end?",
+        answer:
+          "Aquarius season 2027 starts when the Sun enters Aquarius at 2:29am New York time on 20 January and ends when the Sun moves into Pisces at 4:33pm New York time on 18 February 2027.",
+      },
+      {
+        question: "When is the solar eclipse in Aquarius in 2027?",
+        answer:
+          "The solar eclipse is on 6 February 2027 at 17°37' Aquarius, exact at 10:56am New York time. It falls near the North Node, which is what turns this new moon into an eclipse.",
+      },
+      {
+        question: "When is Mercury retrograde in February 2027?",
+        answer:
+          "Mercury stations retrograde at 5°58' Pisces on 9 February 2027, moves back into Aquarius on 18 February and turns direct at 20°55' Aquarius on 3 March 2027.",
+      },
+    ],
+    related: ["capricorn-season-2026", "north-node-and-life-purpose", "new-moon-vs-full-moon"],
+  },
   {
     slug: "libra-season-2026",
     title: "It's Libra Season, Baby: Your Libra Season 2026 Guide",
@@ -164,7 +595,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Libra Season 2026 runs 22 September to 23 October. The key dates, the Aries full moon, Venus retrograde, the themes to work with and Libra's shadow side.",
     category: "zodiac-signs",
     publishedAt: "2026-09-22",
-    updatedAt: "2026-09-22",
+    updatedAt: "2026-10-01",
     readingMinutes: 15,
     excerpt:
       "Venus, Libra's own ruler, stations retrograde halfway through the season. The dates, the themes, the shadow side and how to make this your Venus era.",
@@ -349,6 +780,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "Reading about Libra season is lovely. Living it with your own chart open in front of you, in a room full of women doing the same work, is where things ACTUALLY change, and that is what MY SZN is for. It is the astrology-led membership that reads every season, every moon and every retrograde against your own birth chart and your Human Design, with live coaching workshops, astrotapping™ (our blend of journaling, EFT tapping and somatic work, layered over your chart), community chat rooms and a personalised season guide waiting for you every time the Sun changes sign.",
           "This Libra season we are meeting live twice, on the two moons that matter most. Call In Your Venus Era, on Saturday 26 September at 11:30am Los Angeles time, is a manifestation workshop under the Aries full moon for calling in more money, love, pleasure and everything you actually f*cking want. We dive into your personal Venus placement and what it reveals about your relationship with money, attraction and desire, then use Future Self work and embodiment to start becoming the version of you who gets to have it.",
           "The Glow Up Guide, on Saturday 10 October at 11:30am Los Angeles time, opens the Libra new moon with a working session that kicks off our 30-Day Glow Up Experiment. You choose your own changes and little acts of rebellion across money, beauty, pleasure, relationships, confidence and your environment, and then we spend a month finding out just how good life can get.",
+          "Call In Your Venus Era has already happened, and the full replay is waiting in [the replay vault](/events/replays) whenever you want to call her in again. The [general astrology classes](/events/astrology) on Saturn returns and Pluto in Aquarius sit in the workshops menu too, and the [Venus Money meditation](/meditations/venus-money) is the perfect companion to a Venus retrograde.",
         ],
       },
     ],
@@ -1447,12 +1879,23 @@ export const BLOG_POSTS: BlogPost[] = [
 // pages disagreeing about which post is newest.
 // ---------------------------------------------------------------------------
 
+export function isLive(post: BlogPost, nowMs: number = Date.now()): boolean {
+  return Date.parse(post.goLiveAt ?? post.publishedAt) <= nowMs;
+}
+
+/** Every post that is public right now. The blog pages revalidate on a timer, so a scheduled post
+ *  appears by itself within minutes of its goLiveAt, with no deploy. */
+export function livePosts(): BlogPost[] {
+  const now = Date.now();
+  return BLOG_POSTS.filter((p) => isLive(p, now));
+}
+
 export function allPosts(): BlogPost[] {
-  return [...BLOG_POSTS].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return livePosts().sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export function postBySlug(slug: string): BlogPost | undefined {
-  return BLOG_POSTS.find((p) => p.slug === slug);
+  return livePosts().find((p) => p.slug === slug);
 }
 
 export function postsInCategory(category: CategorySlug): BlogPost[] {

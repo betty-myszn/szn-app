@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { SEASON_SLUGS } from "@/lib/season-pages";
-import { BLOG_POSTS, populatedCategories } from "@/lib/blog";
+import { livePosts, populatedCategories } from "@/lib/blog";
 
 // Only public, indexable pages belong here. Anything the membership gate redirects, or that is a
 // step inside a flow (checkout, auth callbacks, password resets), is deliberately absent: listing a
 // URL that redirects or 404s for a crawler is a coverage error in Search Console, not a signal.
+// Revalidated so a scheduled blog post is listed once it goes live, not only after the next deploy.
+export const revalidate = 600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
@@ -40,7 +43,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // lastModified comes from the post's own updatedAt rather than the build date, so re-deploying
   // without touching content does not tell Search Console every article changed.
-  const blogPosts: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({
+  const blogPosts: MetadataRoute.Sitemap = livePosts().map((p) => ({
     url: `${SITE_URL}/blog/${p.slug}`,
     lastModified: new Date(`${p.updatedAt}T12:00:00Z`),
     changeFrequency: "monthly" as const,

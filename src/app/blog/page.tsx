@@ -8,6 +8,9 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 // A server component on purpose. Most of this app is "use client" because it reads a member's
 // chart, but the blog exists to be crawled, so every page here renders to static HTML at build
 // time with its own metadata and structured data. A client component cannot export metadata at all.
+// Same 10 minute timer as the posts, so a scheduled post joins the hub when it goes live.
+export const revalidate = 600;
+
 export const metadata: Metadata = {
   title: "Astrology Blog: Birth Charts, Zodiac Signs, Love & Timing",
   description:
