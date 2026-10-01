@@ -88,6 +88,31 @@ export const MEDITATIONS: Meditation[] = [
     ],
     publishedAt: "2026-09-28",
   },
+  {
+    slug: "quantum-manifesting",
+    title: "Quantum Manifesting",
+    purpose: "Connect with your highest timeline and fifth-dimensional energy, shift your vibration and work with your future self to call in what you want.",
+    theme: "manifesting",
+    youtubeId: "PMCMeKEKV14",
+    intro: [
+      "In the quantum field there's no single future set in stone, there are endless versions of your life existing at the same time, and this meditation takes you to the one where everything you want is already yours.",
+      "We'll connect with fifth-dimensional energy, where manifesting feels easy and abundance flows freely, and shift your vibration so it matches the reality you're calling in rather than the one you're leaving behind.",
+      "You'll leave with the tools to keep the manifesting magic going long after you open your eyes.",
+    ],
+    workingWith: [
+      "🌌 Quantum timelines and how they shape what you manifest",
+      "🪞 Working with your future self and your past self",
+      "✨ Connecting with your highest timeline",
+      "💫 Fifth-dimensional energy",
+      "🔮 Shifting your vibration to match your desires",
+    ],
+    howTo: [
+      "Get comfortable somewhere you won't be interrupted, headphones in if you have them, and give yourself the full half hour.",
+      "Come back to it whenever you're calling in something new, so you keep choosing the timeline where it's already yours.",
+      "Please don't listen while driving or doing anything that requires your full attention.",
+    ],
+    publishedAt: "2026-10-01",
+  },
 ];
 
 export function meditationBySlug(slug: string): Meditation | undefined {

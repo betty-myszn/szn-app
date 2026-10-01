@@ -15,6 +15,9 @@ const REPLAYS: Record<string, string> = {
   "virgo-szn-workshop-1": "NgKBnHmj7K8",
   "virgo-szn-workshop-2": "xNKJsqbjgI4",
   "libra-szn-workshop-1": "_DNo4IuL19k",
+  // General astrology classes (lib/astrology-classes.ts), same members-only door.
+  "astrology-saturn-return": "ska74IrlUvQ",
+  "astrology-pluto-in-aquarius": "npk54RnHmQc",
 };
 
 export function replayFor(workshopId: string): string | null {

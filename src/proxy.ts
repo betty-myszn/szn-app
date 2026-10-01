@@ -21,6 +21,7 @@ const FULL_PLATFORM = [
   "/affirmations",
   "/style",
   "/meditations",
+  "/subliminals",
 ];
 
 // Community: the live chat rooms are the front door, open to the free tier and every paying tier,
