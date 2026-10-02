@@ -221,13 +221,20 @@ export default function Home() {
           <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--dark)", marginTop: 14, maxWidth: 760 }}>
             MY SZN runs in three-month chapters, and this one is {CHAPTERS[0].title}. We lock in together for three zodiac seasons, love ourselves enough to want more, heal the shadow and claim our power, then go after our biggest dreams, so we walk into 2027 already moving.
           </p>
-          <div className="flex flex-wrap gap-3" style={{ marginTop: 26 }}>
-            {CHAPTERS[0].szns.map((sign) => {
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 30 }}>
+            {CHAPTERS[0].szns.map((sign, i) => {
               const t = sznTheme(sign);
               return (
-                <span key={sign} style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, padding: "10px 18px", border: "var(--border)", borderRadius: 999, background: "var(--pink-light)", color: "var(--dark)" }}>
-                  {t.emoji} {t.name}
-                </span>
+                <div key={sign} style={{ border: "var(--border)", borderRadius: 18, background: "var(--pink-light)", padding: "20px 20px 22px" }}>
+                  <div style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 10 }}>
+                    {`month ${i + 1} · ${sign} szn · ${t.dates ?? ""}`}
+                  </div>
+                  <div style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.15, color: "var(--dark)", marginBottom: 8 }}>
+                    {t.emoji} {t.name}
+                  </div>
+                  <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700, lineHeight: 1.4, color: "var(--dark)", marginBottom: 8 }}>{t.coreIdea}</div>
+                  <div style={{ fontSize: 14, lineHeight: 1.6, color: "var(--dark)" }}>{t.arcQuestion}</div>
+                </div>
               );
             })}
           </div>

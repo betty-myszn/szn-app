@@ -31,6 +31,8 @@ export interface SznTheme {
   arcQuestion: string;
   /** How the season's lens lands on each life area. */
   lenses: Partial<Record<LensArea, string>>;
+  /** The season's dates this year, for cards ("22 sep to 22 oct"). */
+  dates?: string;
   /** The SZN's live Transformation Workshop (see SZN-EXPERIENCE-MODEL.md). */
   workshop?: { title: string; focus: string };
 }
@@ -39,6 +41,7 @@ export const SZN_THEMES: Record<string, SznTheme> = {
   Libra: {
     sign: "Libra",
     name: "Self-Love SZN",
+    dates: "22 sep to 22 oct",
     emoji: "💗",
     coreIdea: "Love yourself enough to want more.",
     about:
@@ -59,6 +62,7 @@ export const SZN_THEMES: Record<string, SznTheme> = {
   Scorpio: {
     sign: "Scorpio",
     name: "Bad B*tch SZN",
+    dates: "23 oct to 21 nov",
     emoji: "🦂",
     coreIdea: "Heal the shadow. Reclaim your power.",
     about:
@@ -82,6 +86,7 @@ export const SZN_THEMES: Record<string, SznTheme> = {
   Sagittarius: {
     sign: "Sagittarius",
     name: "Big Dream SZN",
+    dates: "22 nov to 21 dec",
     emoji: "🏹",
     coreIdea: "Go after your biggest life.",
     about:
