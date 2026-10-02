@@ -7,6 +7,7 @@ import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useDoorCta } from "@/lib/use-door-cta";
 import Manifesto from "@/components/Manifesto";
+import DoorButton from "@/components/DoorButton";
 import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
@@ -334,6 +335,7 @@ export default function Home() {
               </p>
             </div>
           </div>
+          <DoorButton />
         </div>
       </section>
 
@@ -432,6 +434,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
+          <DoorButton />
         </div>
       </section>
 
@@ -566,6 +569,7 @@ export default function Home() {
               </p>
             </div>
           </div>
+          <DoorButton />
         </div>
       </section>
 
@@ -604,6 +608,7 @@ export default function Home() {
               ))}
             </div>
           )}
+          <DoorButton />
         </div>
       </section>
 
@@ -636,6 +641,7 @@ export default function Home() {
               workshop chat.
             </p>
           </div>
+          <DoorButton />
         </div>
       </section>
 
@@ -664,6 +670,7 @@ export default function Home() {
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginTop: 24 }}>
             a my szn member
           </div>
+          <DoorButton center />
         </div>
       </section>
 
@@ -698,6 +705,7 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <DoorButton />
         </div>
       </section>
 
