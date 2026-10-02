@@ -676,7 +676,9 @@ export default function DashboardPage() {
                   <textarea value={pollDraft} onChange={(e) => setPollDraft(e.target.value)} placeholder="tell me everything, bb..." rows={4} className="w-full block" style={{ background: "#fff", color: "var(--dark)", border: "2px solid var(--dark)", outline: "none", padding: "16px 18px", fontSize: 16, lineHeight: 1.5, marginBottom: 16, fontFamily: "inherit", resize: "vertical", maxWidth: 560, borderRadius: 14 }} />
                 )}
                 <div>
-                  <button onClick={handlePollSubmit} disabled={!pollDraft.trim()} style={{ cursor: pollDraft.trim() ? "pointer" : "default", border: "none", background: "#fff", color: "var(--pink)", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 40, opacity: pollDraft.trim() ? 1 : 0.6 }}>
+                  {/* Full strength even before she's typed: faded to 60% it went pale pink on pink and
+                      couldn't be read. The disabled attribute alone stops an empty submit. */}
+                  <button onClick={handlePollSubmit} disabled={!pollDraft.trim()} style={{ cursor: pollDraft.trim() ? "pointer" : "default", border: "2px solid var(--dark)", background: "var(--dark)", color: "#fff", fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "15px 30px", borderRadius: 40 }}>
                     submit answer
                   </button>
                 </div>

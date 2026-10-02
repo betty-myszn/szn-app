@@ -18,8 +18,8 @@ const h2: React.CSSProperties = { fontFamily: poppins, fontSize: 22, fontWeight:
 const SEGMENT_LABEL = { trial: "trial", paying: "paying", lapsed: "lapsed" } as const;
 
 function when(iso: string): string {
-  // Betty reads this in Vietnam: show her own clock and say so.
-  return new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Ho_Chi_Minh" });
+  // Betty reads this in England: show her own clock and say so.
+  return new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" });
 }
 
 function Bar({ value, color, title }: { value: number; color: string; title: string }) {
@@ -97,7 +97,7 @@ export default function SznReportPage() {
             <button onClick={load} disabled={loading} className="szn-pill hot szn-holo-hot" style={{ cursor: loading ? "default" : "pointer" }}>
               {loading ? "refreshing…" : "refresh ✦"}
             </button>
-            {r && <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>updated {when(r.generatedAt)} (Vietnam time)</span>}
+            {r && <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>updated {when(r.generatedAt)} (UK time)</span>}
           </div>
         </div>
       </section>
