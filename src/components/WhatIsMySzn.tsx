@@ -15,7 +15,9 @@ export default function WhatIsMySzn() {
       <div className="max-w-5xl mx-auto text-center">
         <div className="tag mb-5" style={{ color: "#3C2A70" }}>in plain english</div>
         <h2 className="display" style={{ fontSize: "clamp(28px, 5vw, 60px)", color: "#3C2A70", lineHeight: 1.08 }}>
-          MY SZN is basically the <span className="pk">astro girls support group</span> for the baddies.
+          {"You lock in for three months "}
+          <span className="pk">with a room full of women</span>
+          {" doing it right alongside you."}
         </h2>
         <p
           style={{
@@ -27,9 +29,7 @@ export default function WhatIsMySzn() {
             fontWeight: 500,
           }}
         >
-          Your personalised astrology and Human Design, live coaching, workshops, meditations,
-          manifestation, shadow work, and a community of women who actually wanna talk about this
-          sh*t with you.
+          {"Every season the doors open for three days and a new intake starts together. For three zodiac seasons you go after the life you actually want with your own astrology and Human Design, a live Transformation Workshop and Community Circle every season, shadow work, hypnosis and manifestation, next to women who are locking in at exactly the same time as you, cheering your wins and holding you to it."}
         </p>
       </div>
     </section>
