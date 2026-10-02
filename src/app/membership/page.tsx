@@ -1009,7 +1009,11 @@ export default function MembershipPage() {
                   </div>
                 ))}
               </div>
-              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join vip · $555/mo" dark plan="vip" value={555} fallbackHref="#doors" />
+              {enrolmentOpen ? (
+                <CheckoutButton checkoutUrl={VIP_CHECKOUT_URL} label="join vip · $555/mo" dark plan="vip" value={555} />
+              ) : doors.ready ? (
+                <DoorAlert next={doors.next} dark />
+              ) : null}
             </div>
 
           </div>
