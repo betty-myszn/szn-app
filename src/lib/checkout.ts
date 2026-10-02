@@ -12,11 +12,11 @@
 export const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/fZueVe5sj13peCe6ON7kc0l";
 
 // The two ways to join a chapter. $250 once for 3 months (doesn't renew), or the 3 x $88 plan
-// (committed for 3 payments, then monthly). The plan link is null until it exists in Stripe, and
-// the membership page only offers the plan once it's set. MONTHLY_CHECKOUT_URL above is the old
-// open-ended $88 a month, kept for the pages that haven't moved to chapters.
+// (committed for 3 payments, then monthly). The plan runs on the existing $88 a month link: from the
+// founding door onwards a join on that price is a plan join, and the commitment rules in
+// src/lib/commitment.ts apply to it (see PLAN_COMMITMENT_FROM in stripe-tiers.ts).
 export const UPFRONT_CHECKOUT_URL = "https://buy.stripe.com/6oU5kEdYP7rN2Twehf7kc0x";
-export const PLAN_CHECKOUT_URL: string | null = null;
+export const PLAN_CHECKOUT_URL: string | null = MONTHLY_CHECKOUT_URL;
 export const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 
 /**

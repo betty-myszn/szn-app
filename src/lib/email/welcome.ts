@@ -50,8 +50,10 @@ const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallb
 
 function kindForPrice(priceId: string): WelcomeKind | null {
   const id = priceId.trim();
-  if (PLAN_PRICE_ID && id === PLAN_PRICE_ID) return "welcome_plan";
   if (CANONICAL_PRICE_KIND[id]) return CANONICAL_PRICE_KIND[id];
+  // A dedicated plan price (if one is ever created) gets its own welcome; while the plan runs on the
+  // existing $88 price it keeps that price's welcome above.
+  if (PLAN_PRICE_ID && id === PLAN_PRICE_ID) return "welcome_plan";
   // Env-registered prices (trimmed) cover any future additions not yet in the canonical map.
   if (id === process.env.STRIPE_PRICE_MONTHLY?.trim()) return "welcome_monthly";
   if (id === process.env.STRIPE_PRICE_MONTHLY_3MO_UPFRONT?.trim()) return "welcome_3mo";

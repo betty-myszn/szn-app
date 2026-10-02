@@ -31,6 +31,8 @@ export interface SznTheme {
   arcQuestion: string;
   /** How the season's lens lands on each life area. */
   lenses: Partial<Record<LensArea, string>>;
+  /** The SZN's live Transformation Workshop (see SZN-EXPERIENCE-MODEL.md). */
+  workshop?: { title: string; focus: string };
 }
 
 export const SZN_THEMES: Record<string, SznTheme> = {
@@ -63,6 +65,10 @@ export const SZN_THEMES: Record<string, SznTheme> = {
       "The deepest stage, with shadow work, hypnosis, coaching, witchcraft and ritual going after the fear, conditioning and people-pleasing that would sabotage the bigger life you want. F*CK being easy to deal with.",
     question: "What needs to change, heal or die so I can actually become the woman capable of holding the life I want?",
     arcQuestion: "What's stopping me from having it, and what am I ready to change?",
+    workshop: {
+      title: "Reclaim Your F*cking Power",
+      focus: "deep shadow work, conditioning, money wounds, visibility wounds, boundaries, fear, shame, power and identity",
+    },
     lenses: {
       money: "Money shadows, scarcity, financial independence, receiving more, power around money and becoming harder to financially control.",
       love: "Boundaries, intimacy, attachment, desire, power dynamics and refusing to abandon yourself to keep someone else comfortable.",
@@ -82,6 +88,10 @@ export const SZN_THEMES: Record<string, SznTheme> = {
       "We stop editing our dreams to whatever feels realistic and go BIG, with manifestation, money, career, freedom and the vision for 2027, all the way to the 2027 Manifestation Party.",
     question: "If I stopped worrying about whether my dream was realistic, what would I actually choose?",
     arcQuestion: "How big am I willing to make my life now?",
+    workshop: {
+      title: "How Big Are You Willing to Go?",
+      focus: "manifestation, expansion, purpose, money, adventure, freedom, possibility and enormous goals",
+    },
     lenses: {
       money: "Bigger financial goals, wealth, expansion, earning capacity and what money could make possible.",
       love: "The relationship you genuinely want rather than the relationship you believe you should settle for.",

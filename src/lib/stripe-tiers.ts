@@ -22,10 +22,11 @@ type PaidTier = Exclude<MembershipLevel, "none" | "free" | "trial">;
 // backstop. Env vars still work and take precedence for anything NEW (see below), they just can't
 // break these known ones any more.
 // The 3-month payment plan: $88 a month, committed for 3 payments, then monthly until she switches
-// it off. A separate Stripe price from the open-ended $88 so the commitment can be recognised from
-// the price alone. Null until Betty creates it in Stripe; set it here and the tier map, the welcome
-// email and the commitment rules (src/lib/commitment.ts) all pick it up.
-export const PLAN_PRICE_ID: string | null = null;
+// it off. It runs on the existing $88 price, so the commitment is recognised from the price plus
+// the start date: memberships on this price that started from the founding door onwards are plan
+// joins. Members who joined on it before then keep the cancel-anytime terms they signed up on.
+export const PLAN_PRICE_ID: string | null = "price_1U3FDpJ6s9fRhiJor7ofzAzT";
+export const PLAN_COMMITMENT_FROM = "2026-10-07T13:00:00Z"; // the founding door opening
 
 // One-time prices that buy a fixed 3 months. They never renew, so the account page says what she
 // paid for instead of offering a cancel button with nothing behind it.

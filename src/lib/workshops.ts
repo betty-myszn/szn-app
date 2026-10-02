@@ -186,41 +186,6 @@ export const WORKSHOPS: Workshop[] = [
       pink: "Let's make her expensive.",
     },
   },
-  {
-    id: "libra-szn-workshop-2",
-    season: "Libra",
-    label: "libra szn workshop 2",
-    kind: "working session",
-    blurb: "A 30-day experiment in becoming hotter, happier, richer + more obsessed with your own life.",
-    // Thursday 8 Oct at 9pm Vietnam (Betty's evening; she travels on the Friday) = 7am LA / 10am New
-    // York / 3pm UK. That is the balsamic moon in Virgo, so the class is the clear-out and decide
-    // session; the 30 day experiment itself starts at the new moon, exact Sat 10 Oct 8:50am LA.
-    meta: "8 october · 7am la time · before the libra new moon",
-    title: "Libra New Moon: The Glow Up Guide",
-    coverImage: "/glow-up-guide-cover.jpg",
-    dark: false,
-    startIso: "2026-10-08T07:00:00-07:00",
-    durationMinutes: 75,
-    location: "live on zoom, link emailed before class",
-    hasJoinLink: false,
-    hasReplay: false,
-    replayPublishedAt: null,
-    paragraphs: [
-      "A 30-day experiment in becoming hotter, happier, richer + more obsessed with your own life.",
-      "We're using the Libra New Moon to glow up the WHOLE f*cking life.",
-      "Your self-concept. Your money. Your relationships. Your boundaries. Your style. Your confidence. Your environment. Your routines. Your pleasure. Your standards. The way you treat yourself when nobody else is watching.",
-      "This isn't about becoming somebody else. We're looking at what happens when you start treating your life, your body, your desires, your time and your energy like they actually matter.",
-      "We'll explore the Venusian areas of your life that are ready for an upgrade, look at where you've been settling, comparing, shrinking or waiting for external validation, then decide what your next level actually looks and FEELS like.",
-      "Then we're taking it out of the workshop and into real life.",
-      "The Libra New Moon kicks off our 30-Day Glow Up Experiment, where you'll choose your own changes, challenges and little acts of rebellion across money, beauty, pleasure, relationships, self-love, confidence and your environment.",
-      "Maybe you finally wear the clothes you've been saving. Raise your rates. Take yourself on dates. Stop entertaining relationships that drain you. Make your bedroom feel incredible. Spend money on something that genuinely improves your life. Move your body because it feels good. Book the thing. Change your hair. Take up more space. Say no without writing a three-paragraph explanation.",
-      "No waiting until January. No imaginary Future You who magically wakes up with a different life.",
-    ],
-    callout: {
-      plain: "We're giving her 30 days and seeing ",
-      pink: "just how f*cking good life can get.",
-    },
-  },
 ];
 
 export type WorkshopStatus = "tbc" | "upcoming" | "live" | "past";

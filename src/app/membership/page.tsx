@@ -230,7 +230,15 @@ export default function MembershipPage() {
                   </div>
                   <p style={{ fontFamily: pp, fontSize: 15, fontWeight: 700, lineHeight: 1.4, marginBottom: 10 }}>{t.coreIdea}</p>
                   <p style={{ fontSize: 13.5, lineHeight: 1.7, color: "var(--dark)", marginBottom: 14 }}>{t.about}</p>
-                  <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70", fontStyle: "italic", margin: 0 }}>{t.question}</p>
+                  <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70", fontStyle: "italic", marginBottom: t.workshop ? 16 : 0 }}>{t.question}</p>
+                  {t.workshop && (
+                    <div style={{ borderTop: "var(--border)", paddingTop: 12 }}>
+                      <div style={{ fontSize: 9.5, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 4 }}>
+                        the workshop
+                      </div>
+                      <div style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, lineHeight: 1.3 }}>{t.workshop.title}</div>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -243,8 +251,8 @@ export default function MembershipPage() {
                 b: "You start by finishing one sentence, \"By 2027, I'm becoming a woman who…\", and everything we do for the next three months points straight at her.",
               },
               {
-                h: "Two live moments every SZN",
-                b: "The main workshop is where the deep transformation happens, and the community experience (spell nights, rituals, manifestation parties, moon circles) is where the magic, the friendships and the FUN happen.",
+                h: "Two live experiences every SZN",
+                b: "The Transformation Workshop is where the deep work starts, with astrology, coaching, shadow work, Astro Tapping and real-world action, and the Community Circle is where we share wins, do the ritual and spellwork and actually feel the transformation together. Plus a SZN hypnosis to come back to all season long.",
               },
               {
                 h: "Your chart is the lens",
@@ -935,14 +943,15 @@ export default function MembershipPage() {
                   We&apos;re locking in for three months.
                 </p>
                 <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, marginBottom: 22 }}>
-                  Three zodiac seasons that build on each other, read against your own chart, with the live workshops doing the deep work and the community experiences making it fun, witchy and completely fabulous.
+                  Three zodiac seasons that build on each other, read against your own chart, with the Transformation Workshop doing the deep work and the Community Circle making it fun, witchy and completely fabulous.
                 </p>
                 <div className="space-y-3 mb-7">
                   {[
                     "Three zodiac SZNs with one destination",
-                    "A live workshop every SZN for the deep work",
-                    "A live community experience every SZN: spells, rituals, manifestation parties",
-                    "Shadow work, hypnosis, astrotapping™ and manifestation",
+                    "A live Transformation Workshop every SZN",
+                    "A live Community Circle every SZN: wins, ritual, spellwork, magic",
+                    "A SZN hypnosis to come back to all season",
+                    "Astro Tapping, shadow work, manifestation and audio guides when you need them",
                     "Your full MY SZN platform, personalised to your chart and Human Design",
                     "The MY SZN community, starting together with your intake",
                     "Replays of every live",
@@ -1043,7 +1052,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes. Every SZN has a live workshop with Betty and a live community experience, in a room with the other members, with replays of both. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me.",
+                a: "Yes. Every SZN has a live Transformation Workshop with Betty and a live Community Circle, in a room with the other members, with replays of both. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
@@ -1055,7 +1064,7 @@ export default function MembershipPage() {
               },
               {
                 q: "How much time do I need each week?",
-                a: "The two lives happen once each per season, and between them you have the community, your personalised portal and the replays. You take what you need, when you need it. No homework, no guilt.",
+                a: "Two lives a season: the Transformation Workshop and the Community Circle. Between them you have the SZN hypnosis, the community, your personalised portal and the replays, and you take what you need, when you need it. No homework, no guilt.",
               },
               {
                 q: "How much does it cost?",
@@ -1122,7 +1131,7 @@ export default function MembershipPage() {
               <div className="flex flex-wrap gap-3 mb-10">
                 {[
                   "3 zodiac SZNs",
-                  "2 lives every SZN",
+                  "Workshop + Circle every SZN",
                   // Read off the schedule rather than typed in, so it can't sit here advertising a
                   // class that already happened.
                   nextTwo[0] ? `Next live ${shortWorkshopMeta(nextTwo[0], now ?? 0).split(" · ")[0]}` : "A live workshop every SZN",

@@ -6,7 +6,7 @@
 // her first 3 months the billing portal opens without a cancel button (see
 // src/app/api/stripe/portal/route.ts) and the account page says when the commitment ends.
 
-import { PLAN_PRICE_ID, isUpfrontPrice } from "@/lib/stripe-tiers";
+import { PLAN_COMMITMENT_FROM, PLAN_PRICE_ID, isUpfrontPrice } from "@/lib/stripe-tiers";
 
 export const COMMITMENT_MONTHS = 3;
 
@@ -14,15 +14,21 @@ export function isPlanPrice(priceId: string | null | undefined): boolean {
   return !!PLAN_PRICE_ID && !!priceId && priceId.trim() === PLAN_PRICE_ID;
 }
 
-/** When a plan member's commitment ends: 3 months after the membership started. */
+/**
+ * When a plan member's commitment ends: 3 months after the membership started. Only memberships
+ * that started on the plan price from `fromIso` (the founding door) onwards are committed; earlier
+ * joins on the same $88 price were cancel-anytime and stay that way.
+ */
 export function commitmentEndsAt(
   priceId: string | null | undefined,
   startedAtIso: string | null | undefined,
-  planPriceId: string | null = PLAN_PRICE_ID
+  planPriceId: string | null = PLAN_PRICE_ID,
+  fromIso: string = PLAN_COMMITMENT_FROM
 ): Date | null {
   if (!planPriceId || !priceId || priceId.trim() !== planPriceId || !startedAtIso) return null;
   const start = new Date(startedAtIso);
   if (Number.isNaN(start.getTime())) return null;
+  if (start.getTime() < Date.parse(fromIso)) return null;
   const end = new Date(start);
   end.setUTCMonth(end.getUTCMonth() + COMMITMENT_MONTHS);
   return end;
@@ -33,9 +39,10 @@ export function isInCommitment(
   priceId: string | null | undefined,
   startedAtIso: string | null | undefined,
   nowMs: number,
-  planPriceId: string | null = PLAN_PRICE_ID
+  planPriceId: string | null = PLAN_PRICE_ID,
+  fromIso: string = PLAN_COMMITMENT_FROM
 ): boolean {
-  const end = commitmentEndsAt(priceId, startedAtIso, planPriceId);
+  const end = commitmentEndsAt(priceId, startedAtIso, planPriceId, fromIso);
   return !!end && nowMs < end.getTime();
 }
 
