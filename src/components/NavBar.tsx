@@ -10,14 +10,10 @@ import { isFreeMember, memberHomeHref } from "@/lib/membership-access";
 import { loadBroadcasts, loadReadBroadcastIds, markAllBroadcastsRead, getUnreadCount, type Broadcast } from "@/lib/broadcasts";
 import { loadNotifications, unreadCount as notifUnreadCount, markAllNotificationsRead, notificationTimeAgo, type AppNotification } from "@/lib/notifications";
 
-const memberLinks = [
-  { href: "/journal", label: "journal" },
-  { href: "/meditations", label: "meditations" },
-  { href: "/subliminals", label: "subliminals" },
-  // The blog is public, so it sits in both nav sets rather than only the guest one. A member who
-  // lands on a post from search should still see where she is in the site.
-  { href: "/blog", label: "blog" },
-];
+// Consolidated 2 Oct 2026: members get four doors (my szn, my chart, chat rooms, the work). Journal,
+// meditations and subliminals moved into "the work" with the workshops; the blog is marketing and
+// left the member nav (it's still in the footer and the guest nav).
+const memberLinks: { href: string; label: string }[] = [];
 
 // Two readings of the same birth data, so they sit together under one "my chart" menu rather than
 // Human Design taking its own top-level nav slot. Desktop renders this as the dropdown's contents;
@@ -35,6 +31,9 @@ const workshopsMenu = [
   { href: "/events", label: "workshops" },
   { href: "/events/replays", label: "replays", indent: true },
   { href: "/events/astrology", label: "general astrology", indent: true },
+  { href: "/journal", label: "journal" },
+  { href: "/meditations", label: "meditations" },
+  { href: "/subliminals", label: "subliminals" },
 ];
 
 // The free tier is a different platform, not a dimmed version of the paid one, so it gets its own
@@ -135,7 +134,7 @@ export default function NavBar() {
   // Highlights EXPLORE while the visitor is on any page inside it, so she can see where she is.
   const exploreActive = exploreMenu.some((item) => isActive(item.href));
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
-  const workshopsSectionActive = pathname?.startsWith("/events");
+  const workshopsSectionActive = ["/events", "/journal", "/meditations", "/subliminals"].some((p) => pathname?.startsWith(p));
 
   useEffect(() => {
     if (!member) return;
@@ -315,7 +314,7 @@ export default function NavBar() {
                   fontWeight: workshopsSectionActive ? 800 : undefined,
                 }}
               >
-                workshops ▾
+                the work ▾
               </button>
               {workshopsOpen && (
                 <div
@@ -885,7 +884,7 @@ export default function NavBar() {
                   fontWeight: workshopsSectionActive ? 800 : undefined,
                 }}
               >
-                workshops {workshopsOpen ? "▴" : "▾"}
+                the work {workshopsOpen ? "▴" : "▾"}
               </button>
               {workshopsOpen &&
                 workshopsMenu.map((item) => (
