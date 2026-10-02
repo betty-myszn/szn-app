@@ -734,7 +734,7 @@ export default function Home() {
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            We&apos;re locking in for three months: $250, with the doors opening for a few days at the start of every season.
+            We&apos;re locking in for three months at founding member pricing: $250, or 3 monthly payments of $88, and it&apos;s going up as MY SZN grows.
           </p>
           <div className="mt-10">
             <Link

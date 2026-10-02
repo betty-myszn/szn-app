@@ -83,7 +83,7 @@ export default function MembershipPage() {
   // The chapter on sale. Before the clock is read this is the first chapter, so the static render
   // and the first client render agree.
   const chapter = currentChapter(now ?? 0) ?? CHAPTERS[0];
-  const planLine = PLAN_CHECKOUT_URL ? "$250 for 3 months, or 3 monthly payments of $88" : "$250 for 3 months";
+  const planLine = PLAN_CHECKOUT_URL ? "Founding member pricing: $250 for 3 months, or 3 monthly payments of $88" : "Founding member pricing: $250 for 3 months";
 
   // Who is reading this page: the entry band below the hero speaks to a woman still finishing a
   // trial she started before trials were retired, or to a free or lapsed account, and shows nothing
@@ -934,7 +934,7 @@ export default function MembershipPage() {
               </div>
               <div className="p-8 md:p-9">
                 <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
-                  my szn · 3 months
+                  my szn · 3 months · founding member pricing
                 </div>
                 <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
                   $250<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}> / 3 months</span>
@@ -945,6 +945,9 @@ export default function MembershipPage() {
                 <div style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
                   that&apos;s $2.78 a day, less than your oat latte ☕
                 </div>
+                <p style={{ fontSize: 13.5, fontWeight: 600, color: "var(--dark)", lineHeight: 1.6, marginTop: 12, marginBottom: 0 }}>
+                  Three months of live group coaching, an intimate mastermind-style room and your personalised platform, for less than most coaches charge for a single session. This is founding member pricing, and it&apos;s going up as MY SZN grows.
+                </p>
                 <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
                   We&apos;re locking in for three months.
                 </p>
