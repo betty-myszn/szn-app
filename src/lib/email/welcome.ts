@@ -35,6 +35,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1U3FDpJ6s9fRhiJor7ofzAzT: "welcome_monthly", // $88 / month (current price)
   price_1TwER7J6s9fRhiJooQRyfcwQ: "welcome_monthly", // $111 / month (retired price, grandfathered)
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "welcome_3mo",
+  price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
 };
 

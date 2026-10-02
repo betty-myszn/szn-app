@@ -25,6 +25,7 @@ const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
   price_1U3FDpJ6s9fRhiJor7ofzAzT: "monthly", // $88 / month (current price)
   price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month (retired price, kept for grandfathered members)
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "monthly", // $333 once, 3 months upfront (same tier)
+  price_1UM5myJ6s9fRhiJodOXnycqj: "monthly", // $250 once, 3 months upfront (current upfront price, from 2 Oct 2026)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
   price_1TzVeaJ6s9fRhiJojBgk1aTJ: "social", // $33 / month, Stripe product "MY SZN social"
 };
