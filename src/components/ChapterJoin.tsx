@@ -86,7 +86,7 @@ export default function ChapterJoin({ dark = false }: { dark?: boolean }) {
         <CheckoutButton
           key="plan"
           checkoutUrl={PLAN_CHECKOUT_URL}
-          label="lock in · 3 × $88"
+          label="lock me in · 3 × $88"
           plan="chapter_plan_3x88"
           value={88}
           terms={PLAN_TERMS}
@@ -96,7 +96,7 @@ export default function ChapterJoin({ dark = false }: { dark?: boolean }) {
         <CheckoutButton
           key="upfront"
           checkoutUrl={UPFRONT_CHECKOUT_URL}
-          label="lock in · $250"
+          label="lock me in · $250"
           plan="chapter_upfront_250"
           value={250}
           terms={UPFRONT_TERMS}
@@ -176,7 +176,7 @@ export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: bo
         className="btn-pink w-full"
         style={{ cursor: state === "sending" ? "wait" : "pointer", opacity: state === "sending" ? 0.6 : 1 }}
       >
-        {state === "sending" ? "saving your spot…" : "tell me when doors open"}
+        {state === "sending" ? "saving your spot…" : "save my spot"}
       </button>
       {state === "error" && (
         <p style={{ fontSize: 12, color: "var(--pink)", marginTop: 10 }}>

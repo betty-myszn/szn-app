@@ -21,6 +21,8 @@ import { useDoors } from "@/lib/enrolment";
 import { CHAPTERS, currentChapter, doorDay, doorDays, doorTime, sznList, sznTheme } from "@/lib/doors";
 import ChapterJoin, { DoorAlert } from "@/components/ChapterJoin";
 import Manifesto from "@/components/Manifesto";
+import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
+import WhoThisIsFor from "@/components/WhoThisIsFor";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -68,7 +70,7 @@ export default function MembershipPage() {
   const enrolmentOpen = !!doors.open;
   const door = doors.open ?? doors.next;
   const { href: joinHref } = joinCta(enrolmentOpen, "#pricing");
-  const joinLabel = enrolmentOpen ? "lock in now" : "tell me when doors open";
+  const joinLabel = enrolmentOpen ? "lock me in" : "put me on the waitlist";
 
   // The upcoming-workshops block reads the same schedule as /events, so this sales page never
   // advertises a class that has already happened. Clock read on the client so the upcoming split
@@ -286,6 +288,10 @@ export default function MembershipPage() {
           </p>
         </div>
       </section>
+
+      <ThreeMonthsFromNow />
+
+      <WhoThisIsFor />
 
       <Manifesto />
 
@@ -1053,6 +1059,14 @@ export default function MembershipPage() {
                 a: PLAN_CHECKOUT_URL
                   ? "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. Pay $250 once, which covers the full three months and never renews, or take the 3 x $88 plan, where those three monthly payments are committed and after the third it carries on monthly until you switch it off in your settings. The women who stay for the whole chapter are the ones who change, so that's what we build for."
                   : "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. It's $250, paid once, which covers the full three months and never renews. The women who stay for the whole chapter are the ones who change, so that's what we build for.",
+              },
+              {
+                q: "I always buy things and don't use them. How is this different?",
+                a: "Because nothing in here waits for you to find the motivation on your own. You join with an intake on a set date, so you start alongside women beginning at exactly the same time as you, you lock in for three months instead of browsing for a week, and every season has a live Transformation Workshop and a Community Circle where we check in, share the wins and hold each other to it. The hypnosis and audio guides fit into a walk or a quiet ten minutes, so it works in real life too.",
+              },
+              {
+                q: "What time zone are the lives in?",
+                a: "We schedule the lives to work across the US and the UK, every date and time is on your dashboard well in advance, and every live is recorded, so wherever you are in the world you can catch the replay in your own time.",
               },
               {
                 q: "When can I join?",

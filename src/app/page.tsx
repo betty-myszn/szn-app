@@ -8,6 +8,7 @@ import { useSeason } from "@/lib/use-season";
 import { useDoorCta } from "@/lib/use-door-cta";
 import Manifesto from "@/components/Manifesto";
 import DoorButton from "@/components/DoorButton";
+import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
 import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
@@ -83,6 +84,7 @@ export default function Home() {
   const season = useSeason();
   // The front-door button follows the doors: join while one is open, the waitlist while shut.
   const doorCta = useDoorCta();
+  const janCta = useDoorCta(1);
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
@@ -241,16 +243,18 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 32 }}>
             <Link
-              href={doorCta.href}
+              href={janCta.href}
               className="no-underline"
               style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 44px", display: "inline-block" }}
             >
-              {doorCta.label}
+              {janCta.label}
             </Link>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)" }}>{doorCta.line}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)" }}>{janCta.line}</span>
           </div>
         </div>
       </section>
+
+      <ThreeMonthsFromNow />
 
       {/* ─── 2. WHAT IT IS ─── job: make the model obvious. The season examples do the explaining, so
              the copy around them stays plain. Betty appears here, in the first third, because the
@@ -335,7 +339,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <DoorButton />
+          <DoorButton variant={1} />
         </div>
       </section>
 
@@ -434,7 +438,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <DoorButton />
+          <DoorButton variant={2} />
         </div>
       </section>
 
@@ -569,7 +573,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <DoorButton />
+          <DoorButton variant={3} />
         </div>
       </section>
 
@@ -608,7 +612,7 @@ export default function Home() {
               ))}
             </div>
           )}
-          <DoorButton />
+          <DoorButton variant={0} />
         </div>
       </section>
 
@@ -641,7 +645,7 @@ export default function Home() {
               workshop chat.
             </p>
           </div>
-          <DoorButton />
+          <DoorButton variant={1} />
         </div>
       </section>
 
@@ -670,7 +674,7 @@ export default function Home() {
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginTop: 24 }}>
             a my szn member
           </div>
-          <DoorButton center />
+          <DoorButton variant={2} center />
         </div>
       </section>
 
@@ -705,7 +709,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <DoorButton />
+          <DoorButton variant={3} />
         </div>
       </section>
 

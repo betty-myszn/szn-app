@@ -8,8 +8,8 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // The door-aware button dropped through the home page: "get on the waitlist" while the doors are
 // shut, "join my szn" while one is open, with the dated door line beside it. The line inherits the
 // section's text colour so it works on light and dark grounds.
-export default function DoorButton({ center = false }: { center?: boolean }) {
-  const cta = useDoorCta();
+export default function DoorButton({ center = false, variant = 0 }: { center?: boolean; variant?: number }) {
+  const cta = useDoorCta(variant);
   return (
     <div className={`flex flex-wrap items-center gap-x-6 gap-y-3 ${center ? "justify-center text-center" : ""}`} style={{ marginTop: 40 }}>
       <Link

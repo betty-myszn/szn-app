@@ -8,7 +8,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // The MY SZN manifesto: the feminist, anti-conditioning, big-dreams heart of the brand, in Betty's
 // voice, then the ask. Shared by the home page and the membership page.
 export default function Manifesto() {
-  const cta = useDoorCta();
+  const cta = useDoorCta(3);
   return (
     <section className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 84, paddingBottom: 88 }}>
       <div className="max-w-4xl mx-auto">
