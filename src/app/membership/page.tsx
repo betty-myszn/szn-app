@@ -978,8 +978,11 @@ export default function MembershipPage() {
               <div style={{ fontFamily: pp, fontSize: 38, fontWeight: 800, color: "#fff", letterSpacing: "-1.5px", lineHeight: 1 }}>
                 $555<span style={{ fontSize: 16, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
               </div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 4, marginBottom: 18 }}>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 4, marginBottom: 10 }}>
                 billed monthly · cancel anytime
+              </div>
+              <div style={{ display: "inline-block", marginBottom: 18, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
+                that&apos;s $18.25 a day, less than your Friday night cocktail 🍸
               </div>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.65, marginBottom: 18 }}>
                 Everything inside MY SZN, plus direct access to me. For the members who want proximity and personal coaching.
