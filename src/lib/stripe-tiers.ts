@@ -26,7 +26,7 @@ type PaidTier = Exclude<MembershipLevel, "none" | "free" | "trial">;
 // the start date: memberships on this price that started from the founding door onwards are plan
 // joins. Members who joined on it before then keep the cancel-anytime terms they signed up on.
 export const PLAN_PRICE_ID: string | null = "price_1U3FDpJ6s9fRhiJor7ofzAzT";
-export const PLAN_COMMITMENT_FROM = "2026-10-07T13:00:00Z"; // the founding door opening
+export const PLAN_COMMITMENT_FROM = "2026-10-06T13:00:00Z"; // the founding door opening
 
 // One-time prices that buy a fixed 3 months. They never renew, so the account page says what she
 // paid for instead of offering a cancel button with nothing behind it.

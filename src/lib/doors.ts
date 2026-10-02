@@ -64,7 +64,7 @@ export const DOORS: Door[] = [
   {
     id: "founding-2026",
     name: "the founding intake",
-    opensAt: "2026-10-07T13:00:00Z", // Wed 7 Oct, 9am New York
+    opensAt: "2026-10-06T13:00:00Z", // Tue 6 Oct, 9am New York (two days before the Thursday kickoff live)
     closesAt: "2026-10-10T15:50:00Z", // the Libra new moon, 17°21' Libra
     closesAtMoment: "the Libra new moon",
     szns: ["Libra", "Scorpio", "Sagittarius"],

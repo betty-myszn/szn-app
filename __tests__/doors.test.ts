@@ -35,12 +35,12 @@ describe("doorState", () => {
 });
 
 describe("the schedule", () => {
-  it("is in order, never overlaps, and every door is open for two or three days", () => {
+  it("is in order, never overlaps, and every door is open for two to four days", () => {
     for (let i = 0; i < DOORS.length; i++) {
       const d = DOORS[i];
       const days = (at(d.closesAt) - at(d.opensAt)) / 86_400_000;
       expect(days).toBeGreaterThanOrEqual(1.5);
-      expect(days).toBeLessThanOrEqual(3.5);
+      expect(days).toBeLessThanOrEqual(4.5);
       if (i > 0) expect(at(d.opensAt)).toBeGreaterThanOrEqual(at(DOORS[i - 1].closesAt));
     }
   });
@@ -58,7 +58,7 @@ describe("the schedule", () => {
   });
 
   it("formats door moments in LA and New York", () => {
-    expect(doorDay(founding.opensAt)).toBe("wednesday 7 october");
+    expect(doorDay(founding.opensAt)).toBe("tuesday 6 october");
     expect(doorTime(founding.opensAt)).toBe("6am la · 9am new york");
     expect(doorTime(founding.closesAt)).toBe("8:50am la · 11:50am new york");
   });
