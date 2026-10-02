@@ -192,13 +192,14 @@ export const WORKSHOPS: Workshop[] = [
     label: "libra szn workshop 2",
     kind: "working session",
     blurb: "A 30-day experiment in becoming hotter, happier, richer + more obsessed with your own life.",
-    // Same 11:30am LA / 7:30pm UK slot as the Venus Era class. The new moon is exact at 8:50am LA,
-    // so day one of the 30 day experiment starts a few hours into the new cycle.
-    meta: "10 october · 11:30am la time · libra new moon",
+    // Same 11:30am LA / 7:30pm UK slot as the Venus Era class, moved to Thursday 8 Oct because Betty is
+    // away from the Friday. That is the balsamic moon (22° Virgo), so the class is the clear-out and
+    // decide session; the 30 day experiment itself starts at the new moon, exact Sat 10 Oct 8:50am LA.
+    meta: "8 october · 11:30am la time · before the libra new moon",
     title: "Libra New Moon: The Glow Up Guide",
     coverImage: "/glow-up-guide-cover.jpg",
     dark: false,
-    startIso: "2026-10-10T11:30:00-07:00",
+    startIso: "2026-10-08T11:30:00-07:00",
     durationMinutes: 75,
     location: "live on zoom, link emailed before class",
     hasJoinLink: false,
