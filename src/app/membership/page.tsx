@@ -939,6 +939,9 @@ export default function MembershipPage() {
                 <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4 }}>
                   {PLAN_CHECKOUT_URL ? "paid once, or 3 monthly payments of $88" : "paid once · doesn't renew"}
                 </div>
+                <div style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
+                  that&apos;s $2.78 a day, less than your oat latte ☕
+                </div>
                 <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
                   We&apos;re locking in for three months.
                 </p>
