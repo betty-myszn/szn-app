@@ -7,6 +7,8 @@ import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useDoorCta } from "@/lib/use-door-cta";
 import BigDreamsBand from "@/components/BigDreamsBand";
+import { useDoors } from "@/lib/enrolment";
+import { CHAPTERS, doorDay, doorDays, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -67,12 +69,12 @@ const HOW_IT_WORKS = [
 const INCLUDED = [
   "Your birth chart and Human Design",
   "Personalised seasonal guidance",
-  "Shadow work, journalling and goals",
-  "A live masterclass every month",
-  "A live astrotapping every month",
-  "The seasonal programming in the rooms",
+  "A live Transformation Workshop every SZN",
+  "A live Community Circle every SZN",
+  "A SZN hypnosis + audio guides",
+  "Shadow work, Astro Tapping and journalling",
+  "The community, starting with your intake",
   "The full replay vault",
-  "Seasonal and eclipse guides",
 ];
 
 export default function Home() {
@@ -81,6 +83,14 @@ export default function Home() {
   const season = useSeason();
   // The front-door button follows the doors: join while one is open, the waitlist while shut.
   const doorCta = useDoorCta();
+  const doors = useDoors();
+  const doorLine = !doors.ready
+    ? ""
+    : doors.open
+      ? `The doors are open now and close at ${doors.open.closesAtMoment}, ${doorDay(doors.open.closesAt)}.`
+      : doors.next
+        ? `The doors open ${doorDay(doors.next.opensAt)}, for ${doorDays(doors.next)} days only.`
+        : "The doors open for a few days at the start of every season.";
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
@@ -128,7 +138,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 items-end">
           <div>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 22 }}>
-            your life · your money · your moves
+            lock-in season · become her before 2027
           </div>
           <h1
             className="display"
@@ -194,13 +204,49 @@ export default function Home() {
       <Ticker
         variant="lav"
         items={[
-          "personalised to your chart",
-          "a live masterclass every month",
-          "live astrotapping™ with betty",
-          "the community rooms",
+          "it's lock-in season",
+          "become her before 2027",
+          "a transformation workshop every szn",
+          "a community circle every szn",
           "lock in for 3 months · $250",
         ]}
       />
+
+      {/* ─── 1b. LOCK-IN SEASON ─── the chapter on sale: why now, the three stages, the doors. */}
+      <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 76 }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="tag mb-6">it&apos;s lock-in season</div>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 72px)", color: "var(--dark)", lineHeight: 1 }}>
+            don&apos;t wait until <span className="pk">january.</span>
+          </h2>
+          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 26, fontWeight: 600, maxWidth: 760 }}>
+            We&apos;re not waking up on the 30th of December wondering why life looks exactly the same, then cramming every change we&apos;ve ever wanted into January. We&apos;re doing it NOW.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--dark)", marginTop: 14, maxWidth: 760 }}>
+            MY SZN runs in three-month chapters, and this one is {CHAPTERS[0].title}. We lock in together for three zodiac seasons, love ourselves enough to want more, heal the shadow and claim our power, then go after our biggest dreams, so we walk into 2027 already moving.
+          </p>
+          <div className="flex flex-wrap gap-3" style={{ marginTop: 26 }}>
+            {CHAPTERS[0].szns.map((sign) => {
+              const t = sznTheme(sign);
+              return (
+                <span key={sign} style={{ fontFamily: poppins, fontSize: 14, fontWeight: 800, padding: "10px 18px", border: "var(--border)", borderRadius: 999, background: "var(--pink-light)", color: "var(--dark)" }}>
+                  {t.emoji} {t.name}
+                </span>
+              );
+            })}
+          </div>
+          <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 32 }}>
+            <Link
+              href={doorCta.href}
+              className="no-underline"
+              style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 44px", display: "inline-block" }}
+            >
+              {doorCta.label}
+            </Link>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)" }}>{doorLine}</span>
+          </div>
+        </div>
+      </section>
 
       {/* ─── 2. WHAT IT IS ─── job: make the model obvious. The season examples do the explaining, so
              the copy around them stays plain. Betty appears here, in the first third, because the
@@ -273,7 +319,7 @@ export default function Home() {
                 hey, i&apos;m <span className="pk">betty.</span>
               </h3>
               <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--grey)", marginBottom: 14 }}>
-                I teach the masterclass, I run the astrotapping, I write the seasonal work, and
+                I teach the workshops, I lead the Circles, I write the seasonal work, and
                 I&apos;m in the rooms with you most days. When you ask a question in here, you&apos;re
                 asking me.
               </p>
