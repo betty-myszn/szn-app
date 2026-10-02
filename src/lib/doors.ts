@@ -109,17 +109,12 @@ export function doorState(nowMs: number, doors: Door[] = DOORS): DoorState {
 }
 
 /**
- * A manual override on top of the schedule, read from NEXT_PUBLIC_ENROLMENT_OPEN: "true" holds the
- * doors open (using the next scheduled door's details), "false" holds them shut, anything else
- * leaves the schedule in charge.
+ * A manual override on top of the schedule, read from NEXT_PUBLIC_ENROLMENT_OPEN: only "false" can
+ * hold the doors shut. "true" is ignored on purpose: it is the old always-open launch value, still
+ * set in Railway, and honouring it held the doors open over the schedule.
  */
 export function applyOverride(state: DoorState, flag: string | undefined): DoorState {
-  const f = flag?.trim();
-  if (f === "false") return { open: null, next: state.next };
-  if (f === "true" && !state.open) {
-    const door = state.next ?? DOORS[DOORS.length - 1];
-    return { open: door, next: state.next };
-  }
+  if (flag?.trim() === "false") return { open: null, next: state.next };
   return state;
 }
 

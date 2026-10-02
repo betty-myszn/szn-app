@@ -66,12 +66,11 @@ describe("the schedule", () => {
 
 describe("applyOverride", () => {
   const closed = doorState(at("2026-10-02T12:00:00Z"));
-  it("holds the doors open with 'true' and shut with 'false'", () => {
-    expect(applyOverride(closed, "true").open?.id).toBe("founding-2026");
+  it("can only hold the doors shut, with 'false'", () => {
     expect(applyOverride(doorState(at(founding.opensAt)), "false").open).toBeNull();
   });
-  it("leaves the schedule in charge for anything else", () => {
-    for (const f of [undefined, "", "TRUE", "no", "0"]) expect(applyOverride(closed, f)).toEqual(closed);
+  it("leaves the schedule in charge for anything else, including the old 'true' launch value", () => {
+    for (const f of [undefined, "", "true", "TRUE", "no", "0"]) expect(applyOverride(closed, f)).toEqual(closed);
   });
 });
 
