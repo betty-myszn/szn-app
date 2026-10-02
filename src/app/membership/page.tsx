@@ -23,6 +23,7 @@ import ChapterJoin, { DoorAlert } from "@/components/ChapterJoin";
 import Manifesto from "@/components/Manifesto";
 import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
 import WhoThisIsFor from "@/components/WhoThisIsFor";
+import WhenYouJoin from "@/components/WhenYouJoin";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -863,6 +864,8 @@ export default function MembershipPage() {
       </section>
 
       {/* ═══════════════ PRICING ═══════════════ */}
+      <WhenYouJoin />
+
       <section id="pricing" className="px-8 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
           <div className="tag mb-6 text-center">lock in</div>
