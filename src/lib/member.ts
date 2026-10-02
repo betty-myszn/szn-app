@@ -32,6 +32,10 @@ export interface Member {
    *  file and something to manage". Used instead of asserting from membership level, which cannot
    *  tell a card-free legacy trial from a Stripe one. */
   stripeCustomerId: string | null;
+  /** The Stripe price she joined on, which is how the 3-month commitment is recognised. */
+  stripePriceId: string | null;
+  /** When her current membership started (set at checkout). */
+  membershipStartedAt: string | null;
   /** False for legacy magic-link-only accounts, drives the optional "add a password" banner */
   passwordSet: boolean;
 }
@@ -91,7 +95,7 @@ export async function getCurrentMember(): Promise<Member | null> {
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set, stripe_customer_id"
+      "name, is_admin, created_at, onboarded, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at, blocked, password_set, stripe_customer_id, stripe_price_id, membership_started_at"
     )
     .eq("id", user.id)
     // maybeSingle, not single: a genuinely missing profile row must stay a null profile (exactly
@@ -128,6 +132,8 @@ export async function getCurrentMember(): Promise<Member | null> {
     trialExpiresAt: profile?.trial_expires_at ?? null,
     blocked: !!profile?.blocked,
     stripeCustomerId: (profile?.stripe_customer_id as string | null) ?? null,
+    stripePriceId: (profile?.stripe_price_id as string | null) ?? null,
+    membershipStartedAt: (profile?.membership_started_at as string | null) ?? null,
     onboarded: !!profile?.onboarded,
     passwordSet: !!profile?.password_set,
   };

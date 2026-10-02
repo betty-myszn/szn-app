@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import LaunchCountdown from "@/components/LaunchCountdown";
 import CheckoutButton from "@/components/CheckoutButton";
-import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
+import { PLAN_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
 import { upcomingWorkshops, seasonOfNextWorkshop, shortWorkshopMeta } from "@/lib/workshops";
 import { joinCta } from "@/lib/cta";
 import { useMember } from "@/lib/use-member";
@@ -17,7 +17,9 @@ import { useSeason } from "@/lib/use-season";
 import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import SoulBlueprint from "@/components/SoulBlueprint";
 import WhatIsMySzn from "@/components/WhatIsMySzn";
-import { useEnrolmentOpen } from "@/lib/enrolment";
+import { useDoors } from "@/lib/enrolment";
+import { CHAPTERS, currentChapter, doorDay, doorTime, sznList, sznTheme } from "@/lib/doors";
+import ChapterJoin, { DoorAlert } from "@/components/ChapterJoin";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -59,8 +61,13 @@ export default function MembershipPage() {
   // Every launch-related CTA on this page, from one rule in @/lib/cta: the primary CTA scrolls to
   // the pricing cards, which hold the real Stripe checkout buttons. There is no free trial (retired
   // 1 Oct 2026) and no waitlist to fall back to when the doors are closed.
-  const enrolmentOpen = useEnrolmentOpen();
-  const { href: joinHref, label: joinLabel } = joinCta(enrolmentOpen, "#pricing");
+  // The doors (src/lib/doors.ts): open for a few days at the start of each season, closing at a
+  // real sky moment. `door` is the one the page talks about: the open one, else the next one.
+  const doors = useDoors();
+  const enrolmentOpen = !!doors.open;
+  const door = doors.open ?? doors.next;
+  const { href: joinHref } = joinCta(enrolmentOpen, "#pricing");
+  const joinLabel = enrolmentOpen ? "lock in now" : "tell me when doors open";
 
   // The upcoming-workshops block reads the same schedule as /events, so this sales page never
   // advertises a class that has already happened. Clock read on the client so the upcoming split
@@ -72,6 +79,10 @@ export default function MembershipPage() {
   // Named after the season the classes belong to, which in the run-up to a new season is the one
   // ahead rather than the one the calendar is still in.
   const workshopSeason = now === null ? season.sign : seasonOfNextWorkshop(now, season.sign);
+  // The chapter on sale. Before the clock is read this is the first chapter, so the static render
+  // and the first client render agree.
+  const chapter = currentChapter(now ?? 0) ?? CHAPTERS[0];
+  const planLine = PLAN_CHECKOUT_URL ? "$250 for 3 months, or 3 monthly payments of $88" : "$250 for 3 months";
 
   // Who is reading this page: the entry band below the hero speaks to a woman still finishing a
   // trial she started before trials were retired, or to a free or lapsed account, and shows nothing
@@ -97,33 +108,39 @@ export default function MembershipPage() {
       >
         <div className="max-w-3xl mx-auto">
           <div className="tag mb-4">
-            {enrolmentOpen ? "enrolment open now" : "enrolment opens soon · limited spots"}
+            {!doors.ready
+              ? "my szn"
+              : doors.open
+                ? `doors open now · close ${doorDay(doors.open.closesAt)}`
+                : doors.next
+                  ? `doors open ${doorDay(doors.next.opensAt)}`
+                  : "doors open at the start of each season"}
           </div>
 
           <h1 style={{
             fontFamily: pp, fontSize: "clamp(42px, 7vw, 72px)", fontWeight: 800,
             color: "#fff", lineHeight: 1.05, letterSpacing: "-2px", marginBottom: 24,
           }}>
-            Every season is<br />your <span style={{ color: "var(--pink)" }}>season.</span>
+            Become her<br />before <span style={{ color: "var(--pink)" }}>2027.</span>
           </h1>
 
           <p style={{
             fontSize: 17, lineHeight: 1.8, color: "#fff",
             maxWidth: 520, margin: "0 auto 12px",
           }}>
-            Astrology tells you who you are.<br />
-            <span style={{ fontWeight: 500 }}>MY SZN helps you become her.</span>
+            {chapter.campaign}<br />
+            <span style={{ fontWeight: 500 }}>We&apos;re locking in for three months.</span>
           </p>
           <p style={{
             fontSize: 14, lineHeight: 1.8, color: "#fff",
-            maxWidth: 540, margin: "0 auto 36px",
+            maxWidth: 560, margin: "0 auto 36px",
           }}>
-            The astrology-led membership for women who are done playing small. Combining astrology, Human Design, subconscious rewiring, coaching and community to help you create more confidence, love, money, purpose and self-trust. Stay as long as it&apos;s working for you. This is not something you forget about. This is the container that changes your life.
+            October, November and December are three zodiac seasons we are NOT writing off. Self-Love SZN, Bad B*tch SZN and Big Dream SZN take you from loving yourself enough to want more, through the shadow work that&apos;s been talking you out of it, all the way to going after your biggest life, with your own chart, your Human Design, live workshops, magic and a room full of women doing it with you, so you walk into 2027 already moving.
           </p>
 
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 10, textAlign: "center" }}>
-              {enrolmentOpen ? "enrolment is open" : "countdown to launch"}
+              {enrolmentOpen ? "doors close in" : "doors open in"}
             </div>
             <LaunchCountdown variant="dark" />
           </div>
@@ -134,9 +151,13 @@ export default function MembershipPage() {
               {ctaLabel}
             </Link>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", letterSpacing: "0.04em" }}>
-              {enrolmentOpen
-                ? "Doors are open. Choose your plan below. Founding member pricing, limited spots."
-                : "The doors reopen soon. Founding member pricing, limited spots."}
+              {!doors.ready
+                ? planLine
+                : doors.open
+                  ? `Doors close at ${doors.open.closesAtMoment}, ${doorTime(doors.open.closesAt)}. ${planLine}.`
+                  : doors.next
+                    ? `Doors open ${doorDay(doors.next.opensAt)}, ${doorTime(doors.next.opensAt)}. ${planLine}.`
+                    : `${planLine}.`}
             </p>
           </div>
         </div>
@@ -145,18 +166,23 @@ export default function MembershipPage() {
       {/* Launch banner */}
       <section className="px-8 py-10 text-center" style={{ background: "var(--pink)", borderBottom: "var(--border)" }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 10 }}>
-          {enrolmentOpen ? "the doors are open" : "mark your calendar"}
+          {enrolmentOpen ? "the doors are open" : "save the date"}
         </div>
         <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 10 }}>
-          {enrolmentOpen ? "MY SZN is open now." : "MY SZN opens soon."}
+          {!doors.ready || !door
+            ? "Doors open at the start of every season."
+            : doors.open
+              ? `${door.name.charAt(0).toUpperCase()}${door.name.slice(1)} is open.`
+              : `Doors open ${doorDay(door.opensAt)}.`}
         </h2>
-        <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 6px" }}>
-          {enrolmentOpen
-            ? "Enrolment is open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Your next live class kicks off Wednesday 19 August at 7pm LA time."
-            : "Doors open for a limited time only. Founding member spots are limited and once they're gone, they're gone. Next live class kicks off Wednesday 19 August at 7pm LA time."}
+        <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 6px" }}>
+          {door
+            ? `New members join together in a short intake at the start of a season, and ${door.name} locks in for ${sznList(door)}, three seasons that build on each other. The doors close at ${door.closesAtMoment}, ${doorDay(door.closesAt)} at ${doorTime(door.closesAt)}.`
+            : "New members join together in a short intake at the start of a season and lock in for three seasons that build on each other."}
+          {nextTwo[0] ? ` We start together with ${nextTwo[0].title}, ${shortWorkshopMeta(nextTwo[0], now ?? 0)}.` : ""}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching with Betty is VIP only. However many months of becoming her you want.
+          1:1 coaching with Betty is on VIP.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -168,6 +194,88 @@ export default function MembershipPage() {
         }}>
           {ctaLabel}
         </Link>
+      </section>
+
+      {/* ═══════════════ THE CHAPTER ═══════════════ */}
+      {/* The chapter on sale: its three seasons as stages, then how the three months work. Copy for
+          the stages comes from src/lib/szn-themes.ts (Betty's framework, SZN-THEMES-Q4-2026.md). */}
+      <section className="px-6 md:px-8 py-20 md:py-28" style={{ background: "var(--lav-light)", borderBottom: "var(--border)" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="tag mb-5 text-center">the chapter</div>
+          <h2 style={{ fontFamily: pp, fontSize: "clamp(30px, 5.5vw, 50px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.08, textAlign: "center", marginBottom: 14 }}>
+            {chapter.title}
+          </h2>
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--dark)", textAlign: "center", maxWidth: 560, margin: "0 auto 44px", fontWeight: 600 }}>
+            {chapter.arc}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">
+            {chapter.szns.map((sign, i) => {
+              const t = sznTheme(sign);
+              const live = season.sign === sign;
+              return (
+                <div key={sign} className="p-6 md:p-7" style={{ background: "#fff", border: live ? "2px solid var(--pink)" : "var(--border)", borderRadius: 18 }}>
+                  <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>
+                    <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>
+                      stage {i + 1} · {sign}
+                    </span>
+                    {live && (
+                      <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#fff", background: "var(--pink)", padding: "4px 8px", borderRadius: 999 }}>
+                        we&apos;re here
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontFamily: pp, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", lineHeight: 1.1, marginBottom: 8 }}>
+                    {t.emoji} {t.name}
+                  </div>
+                  <p style={{ fontFamily: pp, fontSize: 15, fontWeight: 700, lineHeight: 1.4, marginBottom: 10 }}>{t.coreIdea}</p>
+                  <p style={{ fontSize: 13.5, lineHeight: 1.7, color: "var(--dark)", marginBottom: 14 }}>{t.about}</p>
+                  <p style={{ fontSize: 13, lineHeight: 1.6, color: "#3C2A70", fontStyle: "italic", margin: 0 }}>{t.question}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7 max-w-4xl mx-auto">
+            {[
+              {
+                h: "Your destination",
+                b: "You start by finishing one sentence, \"By 2027, I'm becoming a woman who…\", and everything we do for the next three months points straight at her.",
+              },
+              {
+                h: "Two live moments every SZN",
+                b: "The main workshop is where the deep transformation happens, and the community experience (spell nights, rituals, manifestation parties, moon circles) is where the magic, the friendships and the FUN happen.",
+              },
+              {
+                h: "Your chart is the lens",
+                b: "We all live the same season together, and your astrology and Human Design show you exactly what it means for YOUR money, love, career, confidence and visibility.",
+              },
+              {
+                h: "One room, all of us",
+                b: "Your intake starts together and introduces themselves, then we celebrate each other's wins, money moves, boundaries, wobbles and Bad B*tch moments all the way through.",
+              },
+              {
+                h: "Proof that you changed",
+                b: "As we go you collect the evidence: what you stopped tolerating, the boundary you held, the money you made. At the end we look back at who you were when you started and who you are now.",
+              },
+              {
+                h: "Then you keep going",
+                b: "Every chapter flows into the next, so you can carry everything you've built into the next three seasons with the same women beside you.",
+              },
+            ].map((x) => (
+              <div key={x.h}>
+                <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, letterSpacing: "-0.3px", marginBottom: 6 }}>
+                  <span style={{ color: "var(--pink)" }}>&#10038;</span> {x.h}
+                </div>
+                <p style={{ fontSize: 14, lineHeight: 1.75, color: "var(--dark)", margin: 0 }}>{x.b}</p>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ fontFamily: pp, fontSize: "clamp(20px, 3.5vw, 28px)", fontWeight: 800, textAlign: "center", letterSpacing: "-0.6px", marginTop: 52, marginBottom: 0 }}>
+            2027: <span className="pk">we&apos;re not starting. We&apos;re continuing.</span>
+          </p>
+        </div>
       </section>
 
       {/* The plain-english one-liner, then the blueprint story: high on the sales page so the whole
@@ -358,11 +466,11 @@ export default function MembershipPage() {
       <section className="px-8 py-12 text-center" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
         <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 16 }}>
           {enrolmentOpen
-            ? <>Enrolment is open. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>
-            : <>Doors open for a limited time only. <span style={{ color: "var(--pink)" }}>Limited spots.</span></>}
+            ? <>The doors are open. <span style={{ color: "var(--pink)" }}>We&apos;re locking in.</span></>
+            : <>{door ? `Doors open ${doorDay(door.opensAt)}.` : "Doors open every season."} <span style={{ color: "var(--pink)" }}>We&apos;re locking in.</span></>}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
-          Membership from $88/mo. 1:1 coaching with Betty is on VIP, $555/mo.
+          {planLine}. 1:1 coaching with Betty is on VIP, $555/mo.
         </p>
         <Link href={ctaHref} className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           {ctaLabel}
@@ -560,7 +668,7 @@ export default function MembershipPage() {
             The Seasonal <span style={{ color: "var(--pink)" }}>Membership.</span>
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "#fff", textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
-            Every month follows the zodiac. Because every season has something to teach you and you&apos;re done leaving those lessons on the table. Stay for as many seasons as you need.
+            Every month follows the zodiac, and every three seasons make a chapter with one destination, so each season has a job in who you&apos;re becoming. Lock in for one chapter, then carry on into the next.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
@@ -740,7 +848,7 @@ export default function MembershipPage() {
       {/* ═══════════════ PRICING ═══════════════ */}
       <section id="pricing" className="px-8 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
-          <div className="tag mb-6 text-center">you&apos;re invited</div>
+          <div className="tag mb-6 text-center">lock in</div>
           <h2 style={{
             fontFamily: pp, fontSize: "clamp(30px, 5.5vw, 48px)", fontWeight: 800,
             letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 16,
@@ -751,12 +859,16 @@ export default function MembershipPage() {
             fontSize: 16, lineHeight: 1.8, color: "var(--dark)", textAlign: "center",
             maxWidth: 560, margin: "0 auto 12px",
           }}>
-            This is the room where women stop talking about change and start living it. A transformation container built around your astrology, your goals, and your next level. Founding member pricing is live.
+            This is the room where women stop talking about change and start living it. Three zodiac seasons, one destination, your own chart and Human Design, and a whole room of women locking in with you.
           </p>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
-            {enrolmentOpen
-              ? "Enrolment is open now. Choose your plan below. Limited founding member spots."
-              : "Enrolment is currently closed, and the doors reopen soon."}
+            {!doors.ready
+              ? "\u00a0"
+              : doors.open
+                ? `The doors are open until ${doors.open.closesAtMoment}, ${doorDay(doors.open.closesAt)}.`
+                : doors.next
+                  ? `The doors are closed right now. They open ${doorDay(doors.next.opensAt)}.`
+                  : "The doors are closed right now. They open at the start of the next season."}
           </p>
 
           {/* The entry band, deliberately full width ABOVE the paid cards rather than a fourth
@@ -807,35 +919,34 @@ export default function MembershipPage() {
             {/* ── MY SZN · $88 · THE membership (hero, lifted) ── */}
             <div className="md:-mt-6" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)", boxShadow: "0 12px 44px rgba(255,45,135,0.20)" }}>
               <div style={{ background: "var(--pink)", padding: "9px 0", textAlign: "center", fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "#fff" }}>
-                ★ most popular
+                ★ the chapter
               </div>
               <div className="p-8 md:p-9">
                 <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
-                  my szn
+                  my szn · 3 months
                 </div>
                 <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
-                  $88<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
+                  $250<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}> / 3 months</span>
                 </div>
                 <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4 }}>
-                  billed monthly · cancel anytime
+                  {PLAN_CHECKOUT_URL ? "paid once, or 3 monthly payments of $88" : "paid once · doesn't renew"}
                 </div>
                 <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
-                  The complete MY SZN experience.
+                  We&apos;re locking in for three months.
                 </p>
                 <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, marginBottom: 22 }}>
-                  This is where the platform comes to life. You don&apos;t just read about the astrology, you work with each season as it&apos;s happening and apply it to your own life. Supported, challenged and inspired, every single season.
+                  Three zodiac seasons that build on each other, read against your own chart, with the live workshops doing the deep work and the community experiences making it fun, witchy and completely fabulous.
                 </p>
                 <div className="space-y-3 mb-7">
                   {[
-                    "Full access to the MY SZN platform",
-                    "One live masterclass a month",
-                    "One live astrotapping a month",
-                    "Replays of every masterclass and tapping",
-                    "Community chat rooms",
-                    "Seasonal astrology updates",
-                    "Exclusive member resources",
+                    "Three zodiac SZNs with one destination",
+                    "A live workshop every SZN for the deep work",
+                    "A live community experience every SZN: spells, rituals, manifestation parties",
+                    "Shadow work, hypnosis, astrotapping™ and manifestation",
+                    "Your full MY SZN platform, personalised to your chart and Human Design",
+                    "The MY SZN community, starting together with your intake",
+                    "Replays of every live",
                     "Discounts on reports and Cosmic Coaching",
-                    "Early access to new features, experiences and events",
                   ].map((item) => (
                     <div key={item} className="flex gap-3 items-start">
                       <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
@@ -843,7 +954,7 @@ export default function MembershipPage() {
                     </div>
                   ))}
                 </div>
-                <CheckoutButton checkoutUrl={enrolmentOpen ? MONTHLY_CHECKOUT_URL : undefined} label="join my szn · $88/mo" plan="monthly" value={88} />
+                <ChapterJoin />
               </div>
             </div>
 
@@ -883,7 +994,7 @@ export default function MembershipPage() {
                   </div>
                 ))}
               </div>
-              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join vip · $555/mo" dark plan="vip" value={555} />
+              <CheckoutButton checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined} label="join vip · $555/mo" dark plan="vip" value={555} fallbackHref="#doors" />
             </div>
 
           </div>
@@ -893,7 +1004,7 @@ export default function MembershipPage() {
               fontFamily: pp, fontSize: 16, fontWeight: 800, color: "#fff",
               lineHeight: 1.4, margin: 0,
             }}>
-              This is how you stop reading about astrology and start <span style={{ textDecoration: "underline", textUnderlineOffset: 4 }}>living</span> it.{enrolmentOpen ? " Enrolment is open now." : " Enrolment opens soon."}
+              This is how you stop reading about astrology and start <span style={{ textDecoration: "underline", textUnderlineOffset: 4 }}>living</span> it.{doors.open ? ` Doors close at ${doors.open.closesAtMoment}.` : door ? ` Doors open ${doorDay(door.opensAt)}.` : ""}
             </p>
           </div>
         </div>
@@ -913,8 +1024,18 @@ export default function MembershipPage() {
           <div style={{ border: "var(--border)" }}>
             {[
               {
-                q: "What's the difference between the three tiers?",
-                a: "Free gets you a real account and the live community chat rooms, which is where the girls actually hang out day to day, and it costs nothing. MY SZN ($88/mo) is the full experience: your whole birth chart and Human Design personalised across the platform, a live masterclass and a live astrotapping with Betty every month, and the actual work to apply each season to your life. MY SZN VIP ($555/mo) is everything in MY SZN plus a private monthly 1:1 Cosmic Coaching session with Betty.",
+                q: "How does the 3-month commitment work?",
+                a: PLAN_CHECKOUT_URL
+                  ? "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. Pay $250 once, which covers the full three months and never renews, or take the 3 x $88 plan, where those three monthly payments are committed and after the third it carries on monthly until you switch it off in your settings. The women who stay for the whole chapter are the ones who change, so that's what we build for."
+                  : "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. It's $250, paid once, which covers the full three months and never renews. The women who stay for the whole chapter are the ones who change, so that's what we build for.",
+              },
+              {
+                q: "When can I join?",
+                a: "The doors open for a few days at the start of each season and close at a real moment in the sky, a new moon or the Sun changing sign. New members join together as an intake, so you start alongside a group of women beginning at exactly the same time as you. When the doors are closed, leave your email in the pricing section and we'll tell you the second they open.",
+              },
+              {
+                q: "What if I join partway through a chapter?",
+                a: "Everyone inside lives the same season together, so you walk into the room exactly where it is. Your three seasons start with the one you join in, the replays from earlier in the chapter are waiting for you, and you get the end-of-chapter look back with everyone else.",
               },
               {
                 q: "Is it really personalised, or just my sun sign?",
@@ -922,27 +1043,29 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes, on MY SZN and VIP. MY SZN ($88/mo) includes a live masterclass and a live astrotapping with Betty every month, in a room with the other members. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me. The free tier is the chat rooms only and doesn't include coaching.",
+                a: "Yes. Every SZN has a live workshop with Betty and a live community experience, in a room with the other members, with replays of both. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
                 a: "Perfect. You don't need to know your Big 3, your houses, your transits or your Human Design type. We generate your full chart and Human Design for you and teach you how to actually use them. Most astrology content stops at awareness. We start there.",
               },
               {
-                q: "Can I start small and upgrade later?",
-                a: "Anytime. Start on MY SZN at $88 a month and move up to VIP whenever you want Betty working on your chart with you directly. You can cancel anytime, and you manage it all from your settings.",
+                q: "Can I move up to VIP later?",
+                a: "Anytime. Lock in on MY SZN and move up to VIP whenever you want Betty working on your chart with you directly.",
               },
               {
-                q: "How much time do I need to commit each week?",
-                a: "The masterclass and the astrotapping happen monthly, not weekly. Between them you have the community, The Vault and your personalised portal. You take what you need, when you need it. No homework, no guilt.",
+                q: "How much time do I need each week?",
+                a: "The two lives happen once each per season, and between them you have the community, your personalised portal and the replays. You take what you need, when you need it. No homework, no guilt.",
               },
               {
                 q: "How much does it cost?",
-                a: "A free tier that costs nothing and gets you into the community chat rooms, then two paid tiers billed monthly and cancellable anytime: MY SZN is $88/mo and MY SZN VIP is $555/mo. Everything is shown in the pricing section above.",
+                a: `${planLine}. VIP, with a private monthly 1:1 coaching session with Betty, is $555/mo. Everything is in the pricing section above.`,
               },
               {
                 q: "Can I cancel or get a refund?",
-                a: "You can cancel anytime from your settings, and you'll keep access until the end of the month you've already paid for. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
+                a: PLAN_CHECKOUT_URL
+                  ? "The $250 is one payment for three months and simply ends, nothing renews. On the 3 x $88 plan the three payments are committed, so cancelling opens up after your third payment, and from then on you can switch it off any time in your settings. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point."
+                  : "The $250 is one payment for three months and simply ends, nothing renews and there's nothing to cancel. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
               },
               {
                 q: "I'm not a business owner. Is this still for me?",
@@ -968,8 +1091,10 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* ═══════════════ WAITLIST CTA (FINAL) ═══════════════ */}
-      <section id="waitlist-form" className="px-8 py-20 md:py-28" style={{ background: "var(--pink-light)" }}>
+      {/* ═══════════════ FINAL CTA ═══════════════ */}
+      {/* Door-aware: while a door is open this is the join; while they're shut it's the door alert,
+          which files her on the MY SZN waitlist list so she hears the second the next one opens. */}
+      <section id="doors" className="px-8 py-20 md:py-28" style={{ background: "var(--pink-light)" }}>
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div>
@@ -977,32 +1102,32 @@ export default function MembershipPage() {
                 fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "var(--pink)", marginBottom: 24,
               }}>
-                {enrolmentOpen ? "enrolment open · limited spots" : "doors open intermittently"}
+                {enrolmentOpen ? "the doors are open" : "the doors are closed right now"}
               </div>
               <h2 style={{
                 fontFamily: pp, fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 800,
                 letterSpacing: "-1px", lineHeight: 1.15, marginBottom: 16,
               }}>
-                Become one of the first women inside <span className="pk">MY SZN.</span>
+                Become her <span className="pk">before 2027.</span>
               </h2>
               <p style={{
                 fontSize: 15, lineHeight: 1.8, color: "var(--dark)", maxWidth: 440,
                 marginBottom: 28,
               }}>
                 {enrolmentOpen
-                  ? "The doors are open right now to a limited number of founding members. Cancel anytime. Choose your plan and your personalised portal is built the moment you're in."
-                  : "We open the doors to a limited number of founding members at a time, and they reopen soon. Cancel anytime."}
+                  ? "We're locking in for three months, and you're invited. Choose how you'd like to pay and your personalised portal is built the moment you're in."
+                  : "We open the doors for a few days at the start of each season, so everyone who joins starts together. Leave your email and you'll be the first to know when they open."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
                 {[
-                  "1:1 coaching with Betty",
-                  "Founding member pricing",
+                  "3 zodiac SZNs",
+                  "2 lives every SZN",
                   // Read off the schedule rather than typed in, so it can't sit here advertising a
                   // class that already happened.
-                  nextTwo[0] ? `Next live class ${shortWorkshopMeta(nextTwo[0], now ?? 0).split(" · ")[0]}` : "A live class every month",
-                  "Cancel anytime",
-                  "Limited spots",
+                  nextTwo[0] ? `Next live ${shortWorkshopMeta(nextTwo[0], now ?? 0).split(" · ")[0]}` : "A live workshop every SZN",
+                  "Your chart + Human Design",
+                  planLine,
                 ].map((b) => (
                   <span key={b} style={{
                     fontSize: 11, fontWeight: 600, letterSpacing: "0.04em",
@@ -1016,53 +1141,8 @@ export default function MembershipPage() {
             </div>
 
             <div className="p-8 md:p-10" style={{ border: "var(--border)", background: "#fff" }}>
-              {enrolmentOpen ? (
-                <>
-                  <div className="tag mb-3">choose your plan</div>
-                  <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
-                    Enrolment is open. Pick your membership and continue to secure checkout. Founding pricing, limited spots.
-                  </p>
-                  <Link href="#pricing" className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
-                    see the plans
-                  </Link>
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {["Founding pricing", "1:1 coaching with Betty", "Cancel anytime"].map((b) => (
-                      <span key={b} style={{
-                        fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
-                        color: "var(--dark)", padding: "6px 12px",
-                        background: "var(--pink-light)",
-                      }}>
-                        {b}
-                      </span>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Doors closed. No free trial and no waitlist to offer, so it says what the
-                      membership is and sends her to the plans. */}
-                  <div className="tag mb-3">{member ? "keep your platform" : "the doors reopen soon"}</div>
-                  <p style={{ fontSize: 13, color: "var(--dark)", lineHeight: 1.7, marginBottom: 24 }}>
-                    {member
-                      ? "Membership is $88 a month, cancel anytime, and it keeps everything open on the account you already have."
-                      : "Membership is $88 a month and you can cancel anytime. We open the doors to a limited number of founding members at a time."}
-                  </p>
-                  <Link href="#pricing" className="btn-pink no-underline block text-center" style={{ padding: "16px 32px" }}>
-                    {member ? "become a member" : "see the plans"}
-                  </Link>
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {["$88/month", "Full access", "Cancel anytime"].map((b) => (
-                      <span key={b} style={{
-                        fontSize: 10, fontWeight: 600, letterSpacing: "0.06em",
-                        color: "var(--dark)", padding: "6px 12px",
-                        background: "var(--pink-light)",
-                      }}>
-                        {b}
-                      </span>
-                    ))}
-                  </div>
-                </>
-              )}
+              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "doors alert"}</div>
+              {enrolmentOpen ? <ChapterJoin /> : doors.ready ? <DoorAlert next={doors.next} /> : <div style={{ minHeight: 220 }} aria-hidden />}
             </div>
           </div>
         </div>

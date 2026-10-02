@@ -775,3 +775,63 @@ html, body { overflow-x: hidden; }
   .szn-wheel path.pop, .szn-spin, .szn-reveal li, .szn-pickcard, .szn-toast { animation: none !important; transition: none !important; }
   .szn-area:hover { transform: none; }
 }
+
+/* ─── "big dreams, bigger $$$" band (src/components/BigDreamsBand.tsx) ─── */
+.bigdreams-wall {
+  position: absolute;
+  inset: 0;
+  padding: 18px 28px;
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-weight: 800;
+  font-size: clamp(15px, 1.9vw, 24px);
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  color: var(--dark);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.bigdreams-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 22px;
+  margin: 0 -4px;
+  scrollbar-width: thin;
+}
+.bigdreams-card {
+  flex: 0 0 min(86vw, 380px);
+  scroll-snap-align: start;
+  background: #fff;
+  border: var(--border);
+  border-radius: 18px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 14px 40px rgba(26, 26, 26, 0.18);
+}
+.bigdreams-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  object-fit: cover;
+  object-position: 50% 22%;
+  flex-shrink: 0;
+  border: 2px solid var(--pink);
+}
+.bigdreams-count {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b6b6b;
+  background: #f1f1f1;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.bigdreams-ask {
+  background: rgba(255, 255, 255, 0.92);
+  border: var(--border);
+  border-radius: 22px;
+  padding: clamp(24px, 4vw, 44px);
+  margin-top: 18px;
+  max-width: 880px;
+}

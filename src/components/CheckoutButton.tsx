@@ -19,6 +19,9 @@ interface CheckoutButtonProps {
   plan?: string;
   /** Charge in USD for this plan, sent as the begin_checkout value. */
   value?: number;
+  /** What she agrees to before checkout. Defaults to the cancel-anytime monthly wording; the
+   *  chapter plans pass their own commitment terms. */
+  terms?: React.ReactNode;
 }
 
 // Appends client_reference_id so the webhook can link the completed checkout straight back to
@@ -40,7 +43,7 @@ function withClientReferenceId(checkoutUrl: string, userId: string): string {
 // in, we attach her user id via client_reference_id for a clean id-based link; if she's logged
 // out, she checks out on the plain link and the webhook parks her membership by email, which she
 // claims when she sets up her account (password) on /create-account afterwards.
-export default function CheckoutButton({ checkoutUrl, label, dark = false, fallbackHref = JOIN_CTA.href, plan, value }: CheckoutButtonProps) {
+export default function CheckoutButton({ checkoutUrl, label, dark = false, fallbackHref = JOIN_CTA.href, plan, value, terms }: CheckoutButtonProps) {
   const [agreed, setAgreed] = useState(false);
   const { member } = useMember();
 
@@ -110,8 +113,12 @@ export default function CheckoutButton({ checkoutUrl, label, dark = false, fallb
           style={{ marginTop: 3, accentColor: "var(--pink)", width: 18, height: 18, flexShrink: 0 }}
         />
         <span style={{ fontSize: 12, lineHeight: 1.6, color: textColor }}>
-          I understand payments are <strong>non-refundable</strong>. You can cancel anytime, and
-          cancelling stops future billing rather than refunding what&apos;s already been paid.
+          {terms ?? (
+            <>
+              I understand payments are <strong>non-refundable</strong>. You can cancel anytime, and
+              cancelling stops future billing rather than refunding what&apos;s already been paid.
+            </>
+          )}
         </span>
       </label>
       <a

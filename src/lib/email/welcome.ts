@@ -1,5 +1,6 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoTemplateEmail } from "@/lib/email/brevo";
+import { PLAN_PRICE_ID } from "@/lib/stripe-tiers";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -7,7 +8,7 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // membership tier, because two different prices ($111/mo and $333 upfront) share the same 'monthly'
 // tier but get different emails. The branded template for each is designed and hosted in Brevo and
 // referenced here by id via env, so copy and design changes never require a code deploy.
-export type WelcomeKind = "welcome_monthly" | "welcome_3mo" | "welcome_vip";
+export type WelcomeKind = "welcome_monthly" | "welcome_plan" | "welcome_3mo" | "welcome_vip";
 
 interface WelcomeSpec {
   kind: WelcomeKind;
@@ -41,12 +42,15 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
 
 const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
   welcome_monthly: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_MONTHLY, fallbackTemplate: 31, planName: "Monthly Membership" },
+  // The 3 x $88 plan. Uses the monthly welcome (#31) until its own template exists in Brevo.
+  welcome_plan: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_PLAN, fallbackTemplate: 31, planName: "3-Month Plan" },
   welcome_3mo: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_3MO, fallbackTemplate: 32, planName: "3-Month Membership" },
   welcome_vip: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_VIP, fallbackTemplate: 33, planName: "VIP Membership" },
 };
 
 function kindForPrice(priceId: string): WelcomeKind | null {
   const id = priceId.trim();
+  if (PLAN_PRICE_ID && id === PLAN_PRICE_ID) return "welcome_plan";
   if (CANONICAL_PRICE_KIND[id]) return CANONICAL_PRICE_KIND[id];
   // Env-registered prices (trimmed) cover any future additions not yet in the canonical map.
   if (id === process.env.STRIPE_PRICE_MONTHLY?.trim()) return "welcome_monthly";

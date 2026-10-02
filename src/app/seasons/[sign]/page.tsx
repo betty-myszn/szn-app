@@ -241,7 +241,7 @@ export default async function SeasonPage({
             Experience {season.name} szn inside <span className="pk">MY SZN.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", maxWidth: 420, margin: "0 auto 28px" }}>
-            Join and read this season against your own chart, with a live masterclass and astrotapping with Betty every month. $88/month, and you can cancel anytime.
+            Lock in for three months and read this season against your own chart, with a live workshop and a community experience with Betty every season. $250 for 3 months, with the doors opening for a few days at the start of every season.
           </p>
           <div className="flex justify-center">
             <Link href={JOIN_CTA.href} className="btn-pink no-underline" style={{ padding: "16px 36px" }}>

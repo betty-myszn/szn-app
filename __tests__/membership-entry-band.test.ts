@@ -30,6 +30,8 @@ function memberAt(level: MembershipLevel, extra: Partial<Member> = {}): Member {
     onboarded: true,
     blocked: false,
   stripeCustomerId: null,
+    stripePriceId: null,
+    membershipStartedAt: null,
     passwordSet: true,
     ...extra,
   };

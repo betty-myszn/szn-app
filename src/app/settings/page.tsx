@@ -15,6 +15,7 @@ import { updateSavedName, getSavedBirthData } from "@/lib/url-params";
 import { syncBirthDataToSupabase } from "@/lib/chart-sync";
 import { getMyReferralCode, getReferralCount } from "@/lib/referral";
 import { isVip, hasActiveAccess, hasBillingIssue, isCancellationScheduled, isTrial } from "@/lib/membership-access";
+import { commitmentEndsAt, isUpfrontPrice } from "@/lib/commitment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -39,6 +40,14 @@ const inputStyle: React.CSSProperties = {
 export default function SettingsPage() {
   const router = useRouter();
   const { member, ready } = useMember();
+  // The chapter terms: a one-time $250 (3 months, never renews, nothing to cancel) or the 3 x $88
+  // plan, which can't be cancelled until its third payment. The clock is read after mount.
+  const [nowMs, setNowMs] = useState<number | null>(null);
+  useEffect(() => setNowMs(Date.now()), []);
+  const upfront = !!member && isUpfrontPrice(member.stripePriceId) && !member.subscriptionStatus?.startsWith("trial");
+  const commitmentEnd = member ? commitmentEndsAt(member.stripePriceId, member.membershipStartedAt) : null;
+  const inCommitment = !!commitmentEnd && nowMs !== null && nowMs < commitmentEnd.getTime();
+  const fmtDate = (d: Date | string) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [earnedStickers, setEarnedStickers] = useState<Set<RewardStickerId>>(new Set());
   const [emailPrefs, setEmailPrefs] = useState<EmailPrefs | null>(null);
@@ -293,7 +302,7 @@ export default function SettingsPage() {
 
                   {member.subscriptionCurrentPeriodEnd && member.subscriptionStatus !== "trialing" && (
                     <p style={{ fontSize: 13, color: "var(--grey)", marginBottom: isCancellationScheduled(member) ? 6 : 20 }}>
-                      {isCancellationScheduled(member) ? "Your membership ends on " : "Renews on "}
+                      {upfront ? "Your 3 months run until " : isCancellationScheduled(member) ? "Your membership ends on " : "Renews on "}
                       <strong style={{ color: "var(--dark)" }}>
                         {new Date(member.subscriptionCurrentPeriodEnd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
                       </strong>
@@ -303,7 +312,21 @@ export default function SettingsPage() {
                   {/* A cancelled TRIAL is already over, so it must not be told it has time left. A
                       cancelled paid month genuinely does keep running to the date she paid through,
                       which is a different sentence and the only one that was here before. */}
-                  {isCancellationScheduled(member) && (
+                  {upfront && (
+                    <p style={{ fontSize: 12, color: "var(--grey-light)", marginBottom: 20 }}>
+                      Your 3 months are paid in full, so nothing else will ever be charged. When they&apos;re up, you can lock in again at the next door.
+                    </p>
+                  )}
+
+                  {inCommitment && commitmentEnd && (
+                    <p style={{ fontSize: 12.5, color: "var(--grey)", lineHeight: 1.65, marginBottom: 20 }}>
+                      {"You're locked in for 3 months, so your plan runs until "}
+                      <strong style={{ color: "var(--dark)" }}>{fmtDate(commitmentEnd)}</strong>
+                      {". After that it carries on monthly, and you can switch it off any time from then."}
+                    </p>
+                  )}
+
+                  {isCancellationScheduled(member) && !upfront && (
                     <p style={{ fontSize: 12, color: "var(--grey-light)", marginBottom: 20 }}>
                       {member.subscriptionStatus === "trialing"
                         ? "Your free trial is cancelled, so your access has ended. You haven't been charged and you won't be."
@@ -320,7 +343,10 @@ export default function SettingsPage() {
                       manage membership
                     </a>
                     {/* Cancelling gets its own door, said in the word people actually look for.
-                        Hiding it inside "manage" is why members email asking how to cancel. */}
+                        Hiding it inside "manage" is why members email asking how to cancel. Not
+                        shown for a one-time 3 months (nothing to cancel) or inside the plan's
+                        committed 3 months (the line above says when it opens up). */}
+                    {!upfront && !inCommitment && (
                     <a
                       href="/api/stripe/portal"
                       className="no-underline"
@@ -337,6 +363,7 @@ export default function SettingsPage() {
                     >
                       cancel membership
                     </a>
+                    )}
                     {!isVip(member) && (
                       <Link
                         href="/membership"
@@ -364,7 +391,7 @@ export default function SettingsPage() {
                     </p>
                   )}
 
-                  {!isCancellationScheduled(member) && (
+                  {!isCancellationScheduled(member) && !upfront && !inCommitment && (
                     <p style={{ fontSize: 12.5, color: "var(--grey-light)", lineHeight: 1.65, marginTop: 10, marginBottom: 0 }}>
                       You can cancel yourself in there any time, no asking me first.
                       {member.subscriptionStatus === "trialing" ? (

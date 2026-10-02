@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
-import { JOIN_CTA } from "@/lib/cta";
+import { useDoorCta } from "@/lib/use-door-cta";
+import BigDreamsBand from "@/components/BigDreamsBand";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -78,6 +79,8 @@ export default function Home() {
   const router = useRouter();
   const { member, ready } = useMember();
   const season = useSeason();
+  // The front-door button follows the doors: join while one is open, the waitlist while shut.
+  const doorCta = useDoorCta();
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
@@ -153,7 +156,7 @@ export default function Home() {
 
           <div className="mt-9 flex flex-col items-start gap-4">
             <Link
-              href={JOIN_CTA.href}
+              href={doorCta.href}
               className="no-underline"
               style={{
                 background: "var(--dark)",
@@ -167,7 +170,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              {JOIN_CTA.label}
+              {doorCta.label}
             </Link>
           </div>
           </div>
@@ -195,7 +198,7 @@ export default function Home() {
           "a live masterclass every month",
           "live astrotapping™ with betty",
           "the community rooms",
-          "$88 a month, cancel anytime",
+          "lock in for 3 months · $250",
         ]}
       />
 
@@ -284,6 +287,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ─── 2b. BIG DREAMS ─── the vibe: Betty's own text post on the "big dreams, bigger $$$" wall,
+             then the ask. */}
+      <BigDreamsBand />
 
       {/* ─── 3. SHOW THE PRODUCT ─── job: prove a real personalised product exists. Nothing here
              impersonates a member: no invented usernames, quotes or results. The room card shows the
@@ -443,7 +450,7 @@ export default function Home() {
               getting in the way, and create a life you&apos;re obsessed with.
             </p>
             <Link
-              href={JOIN_CTA.href}
+              href={doorCta.href}
               className="no-underline"
               style={{ fontSize: 13, fontWeight: 700, color: "var(--pink)", textDecoration: "underline" }}
             >
@@ -671,11 +678,11 @@ export default function Home() {
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            $88/month, and you can cancel anytime.
+            We&apos;re locking in for three months: $250, with the doors opening for a few days at the start of every season.
           </p>
           <div className="mt-10">
             <Link
-              href={JOIN_CTA.href}
+              href={doorCta.href}
               className="no-underline"
               style={{
                 background: "var(--pink)",
@@ -689,7 +696,7 @@ export default function Home() {
                 display: "inline-block",
               }}
             >
-              {JOIN_CTA.label}
+              {doorCta.label}
             </Link>
           </div>
         </div>

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import CheckoutButton from "@/components/CheckoutButton";
-import { MONTHLY_CHECKOUT_URL, VIP_CHECKOUT_URL } from "@/lib/checkout";
+import { VIP_CHECKOUT_URL } from "@/lib/checkout";
+import ChapterJoin from "@/components/ChapterJoin";
 import { useEnrolmentOpen } from "@/lib/enrolment";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -16,7 +17,7 @@ type PlanId = "monthly" | "vip";
 // day one. The old create-free route still exists (expired trials converge onto the free tier) but
 // is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
-  { id: "monthly", name: "MY SZN", tagline: "the full personalised platform, plus a live masterclass and astrotapping every month", price: "$88/mo" },
+  { id: "monthly", name: "MY SZN", tagline: "lock in for three zodiac seasons: your personalised platform, a live workshop and a community experience every season", price: "$250 / 3 months" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 
@@ -68,15 +69,21 @@ export default function SignupPage() {
           <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
             {plan === "vip"
               ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
-              : "MY SZN is the full personalised platform built around your own chart, with a live masterclass and a live astrotapping with Betty every month."}
+              : "MY SZN is three zodiac seasons with one destination, built around your own chart, with a live workshop and a community experience with Betty every season."}
           </p>
-          <CheckoutButton
-            checkoutUrl={enrolmentOpen ? (plan === "vip" ? VIP_CHECKOUT_URL : MONTHLY_CHECKOUT_URL) : undefined}
-            label={plan === "vip" ? "join vip · $555/mo" : "join my szn · $88/mo"}
-            fallbackHref="/membership#pricing"
-            plan={plan}
-            value={plan === "vip" ? 555 : 88}
-          />
+          {plan === "vip" ? (
+            <CheckoutButton
+              checkoutUrl={enrolmentOpen ? VIP_CHECKOUT_URL : undefined}
+              label="join vip · $555/mo"
+              fallbackHref="/membership#doors"
+              plan="vip"
+              value={555}
+            />
+          ) : (
+            // The chapter join reads the doors itself: the two ways to pay while a door is open,
+            // the door alert while they're shut.
+            <ChapterJoin />
+          )}
           <p style={{ fontSize: 12, color: "var(--grey-light)", marginTop: 12, lineHeight: 1.6 }}>
             You&apos;ll set your password and add your birth details right after checkout.
           </p>

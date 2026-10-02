@@ -28,7 +28,7 @@ export default function TermsPage() {
           <h1 style={{ fontFamily: poppins, fontSize: "clamp(28px, 4.5vw, 40px)", fontWeight: 800, letterSpacing: "-1px", color: "#fff", marginBottom: 12 }}>
             terms &amp; conditions.
           </h1>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>Last updated 23 July 2026.</p>
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>Last updated 2 October 2026.</p>
         </div>
       </section>
 
@@ -65,7 +65,7 @@ export default function TermsPage() {
           <div style={sectionStyle}>
             <h2 style={headingStyle}>billing and refunds</h2>
             <p style={bodyStyle}>
-              There is <strong>no minimum term</strong>. Monthly memberships bill each month until you cancel, and you can cancel at any time. If you choose an upfront plan, you pay once for the period it covers and it doesn&apos;t renew automatically.
+              MY SZN is joined for <strong>a 3-month term</strong>: one chapter of three zodiac seasons, starting with the season you join in. You can pay once for the full 3 months, which doesn&apos;t renew, or join on the 3-month plan, three monthly payments that make up the term. The plan can&apos;t be cancelled before your third payment, and after that it continues monthly until you cancel. VIP is billed monthly until you cancel. Monthly memberships that started before 2 October 2026 keep the cancel-anytime terms they joined on.
             </p>
             <p style={{ ...bodyStyle, marginTop: 12 }}>
               <strong>Payments are non-refundable.</strong> Once a payment is taken, whether it&apos;s a single month or a full upfront term, we don&apos;t refund it, including if you stop using the membership partway through a period you&apos;ve already paid for. You confirm this at checkout before payment is taken.
@@ -75,7 +75,7 @@ export default function TermsPage() {
           <div style={sectionStyle}>
             <h2 style={headingStyle}>cancelling</h2>
             <p style={bodyStyle}>
-              You can cancel future billing at any time from{" "}
+              Once any 3-month commitment has been met, you can cancel future billing at any time from{" "}
               <Link href="/settings" style={{ color: "var(--pink)", fontWeight: 700 }}>settings</Link>. You&apos;ll keep access until the end of the period you&apos;ve already paid for, and you won&apos;t be billed again. Cancelling doesn&apos;t refund payments already taken, and it doesn&apos;t automatically delete your data, see our{" "}
               <Link href="/privacy" style={{ color: "var(--pink)", fontWeight: 700 }}>privacy policy</Link> for how to request full deletion.
             </p>

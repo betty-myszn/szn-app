@@ -21,6 +21,23 @@ type PaidTier = Exclude<MembershipLevel, "none" | "free" | "trial">;
 // nothing). Price IDs aren't secrets and these three don't change, so they belong in code as the
 // backstop. Env vars still work and take precedence for anything NEW (see below), they just can't
 // break these known ones any more.
+// The 3-month payment plan: $88 a month, committed for 3 payments, then monthly until she switches
+// it off. A separate Stripe price from the open-ended $88 so the commitment can be recognised from
+// the price alone. Null until Betty creates it in Stripe; set it here and the tier map, the welcome
+// email and the commitment rules (src/lib/commitment.ts) all pick it up.
+export const PLAN_PRICE_ID: string | null = null;
+
+// One-time prices that buy a fixed 3 months. They never renew, so the account page says what she
+// paid for instead of offering a cancel button with nothing behind it.
+export const UPFRONT_PRICE_IDS: ReadonlySet<string> = new Set([
+  "price_1TwEXMJ6s9fRhiJoRzDMbrQZ", // $333 once (retired)
+  "price_1UM5myJ6s9fRhiJodOXnycqj", // $250 once (current)
+]);
+
+export function isUpfrontPrice(priceId: string | null | undefined): boolean {
+  return !!priceId && UPFRONT_PRICE_IDS.has(priceId.trim());
+}
+
 const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
   price_1U3FDpJ6s9fRhiJor7ofzAzT: "monthly", // $88 / month (current price)
   price_1TwER7J6s9fRhiJooQRyfcwQ: "monthly", // $111 / month (retired price, kept for grandfathered members)
@@ -50,7 +67,7 @@ function buildPriceMap(): Record<string, PaidTier> {
   if (envSocial) map[envSocial] = "social";
   // ...but the canonical mapping is applied last so the known live IDs always win, no matter what
   // the deployed env happens to hold.
-  return { ...map, ...CANONICAL_PRICE_TO_TIER };
+  return { ...map, ...CANONICAL_PRICE_TO_TIER, ...(PLAN_PRICE_ID ? { [PLAN_PRICE_ID]: "monthly" as const } : {}) };
 }
 
 export const PRICE_TO_TIER: Record<string, PaidTier> = buildPriceMap();

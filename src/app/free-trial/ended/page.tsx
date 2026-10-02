@@ -104,7 +104,7 @@ const BENEFITS: Array<[string, string]> = [
   ["coaching + community", "the member rooms and the women who actually talk about this stuff with you."],
   ["a platform that evolves with you", "your portal changes with the season and the version of you that's ready to emerge."],
   ["the full vault, always", "every replay, workbook and resource, yours for as long as you stay."],
-  ["cancel anytime", "stay for as many seasons as it's working for you. no lock-in, no minimum."],
+  ["three months, locked in", "one chapter of three zodiac seasons, with the doors opening for a few days at the start of every season."],
 ];
 
 // Read from the real schedule rather than a hardcoded list, so a woman who just lost access is never
@@ -204,14 +204,14 @@ export default async function TrialEndedPage() {
           <span className="ey">keep going</span>
           <h2 className="disp">you don&apos;t have to leave.</h2>
           <div className="ask-card">
-            <span className="lbl">become a member</span>
-            <div className="price">$88<small> / month</small></div>
+            <span className="lbl">lock in for 3 months</span>
+            <div className="price">$250<small> / 3 months</small></div>
             <p>
               {"Your chart, your journal, your goals and everything you started this week are still saved. Join and you pick up in the exact same account, right where you left off."}
             </p>
-            <Link href="/membership" className="cta">become a member · $88/month</Link>
+            <Link href="/membership" className="cta">see when the doors open</Link>
             <p className="micro" style={{ marginTop: 14 }}>
-              the free week has closed, so this is the only door still open.
+              the doors open for a few days at the start of every season.
             </p>
           </div>
         </div>
