@@ -80,15 +80,35 @@ export async function deletePoll(id: string): Promise<Poll[]> {
   return loadPolls();
 }
 
-// The one poll a member should actually see right now: the newest active poll they haven't
-// already answered, so the dashboard never nags about something already responded to.
+// created_at doubles as a poll's go-live time: a row dated in the future is scheduled and stays
+// hidden until then, which is how a run of questions gets written ahead to land on the transits.
+export function isPollReleased(poll: Poll, now: number = Date.now()): boolean {
+  return new Date(poll.createdAt).getTime() <= now;
+}
+
+// How long a question stays on the dashboard after it goes live. They're written to the sky, so
+// past this they read stale (an eclipse question sat there a month), and a newer one has normally
+// taken over long before.
+const POLL_DASHBOARD_DAYS = 10;
+
+// The one poll a member should actually see right now: the newest released, still-fresh active poll
+// they haven't already answered, so the dashboard never nags about something already responded to.
 export function getActivePollFor(polls: Poll[], responses: PollResponse[], respondent: string): Poll | null {
+  const now = Date.now();
   const answeredIds = new Set(responses.filter((r) => r.respondent === respondent).map((r) => r.pollId));
-  return polls.find((p) => p.active && !answeredIds.has(p.id)) || null;
+  return (
+    polls.find(
+      (p) =>
+        p.active &&
+        isPollReleased(p, now) &&
+        now - new Date(p.createdAt).getTime() < POLL_DASHBOARD_DAYS * 86_400_000 &&
+        !answeredIds.has(p.id)
+    ) || null
+  );
 }
 
 export function getPollsForSeason(polls: Poll[], seasonSign: string): Poll[] {
-  return polls.filter((p) => p.season === seasonSign);
+  return polls.filter((p) => p.season === seasonSign && isPollReleased(p));
 }
 
 export async function loadResponses(): Promise<PollResponse[]> {

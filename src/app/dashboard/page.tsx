@@ -670,7 +670,10 @@ export default function DashboardPage() {
                     ))}
                   </div>
                 ) : (
-                  <textarea value={pollDraft} onChange={(e) => setPollDraft(e.target.value)} placeholder="type your answer..." rows={3} className="w-full" style={{ border: "none", outline: "none", padding: "12px 14px", fontSize: 14, marginBottom: 14, fontFamily: "inherit", resize: "vertical", maxWidth: 560, borderRadius: 10 }} />
+                  // Tailwind's preflight makes a textarea transparent with inherited text colour, so on
+                  // this pink band the box vanished and typing came out white-on-pink. Solid white,
+                  // dark ink and a 16px size (no iOS zoom on focus) make it read as a place to write.
+                  <textarea value={pollDraft} onChange={(e) => setPollDraft(e.target.value)} placeholder="tell me everything, bb..." rows={4} className="w-full block" style={{ background: "#fff", color: "var(--dark)", border: "2px solid var(--dark)", outline: "none", padding: "16px 18px", fontSize: 16, lineHeight: 1.5, marginBottom: 16, fontFamily: "inherit", resize: "vertical", maxWidth: 560, borderRadius: 14 }} />
                 )}
                 <div>
                   <button onClick={handlePollSubmit} disabled={!pollDraft.trim()} style={{ cursor: pollDraft.trim() ? "pointer" : "default", border: "none", background: "#fff", color: "var(--pink)", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 40, opacity: pollDraft.trim() ? 1 : 0.6 }}>
