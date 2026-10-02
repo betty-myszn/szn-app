@@ -9,6 +9,7 @@ import { useDoorCta } from "@/lib/use-door-cta";
 import Manifesto from "@/components/Manifesto";
 import DoorButton from "@/components/DoorButton";
 import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
+import QuoteStrip from "@/components/QuoteStrip";
 import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
@@ -256,6 +257,8 @@ export default function Home() {
 
       <ThreeMonthsFromNow />
 
+      <QuoteStrip ids={["zara", "georgia", "hannah"]} />
+
       {/* ─── 2. WHAT IT IS ─── job: make the model obvious. The season examples do the explaining, so
              the copy around them stays plain. Betty appears here, in the first third, because the
              coaching and the perspective are part of what people are joining. */}
@@ -345,6 +348,8 @@ export default function Home() {
 
       {/* ─── 2b. MANIFESTO ─── the feminist heart of it, then the ask. */}
       <Manifesto />
+
+      <QuoteStrip ids={["jade", "lauren", "chloe"]} label="what bigger moves look like in here" tone="lav" />
 
       {/* ─── 3. SHOW THE PRODUCT ─── job: prove a real personalised product exists. Nothing here
              impersonates a member: no invented usernames, quotes or results. The room card shows the
@@ -649,7 +654,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 8. PROOF ─── job: evidence. One real member quote, because one is what exists. Adding
+      <QuoteStrip ids={["aisha", "maya", "sophie"]} label="the women inside" tone="pink" />
+
+            {/* ─── 8. PROOF ─── job: evidence. One real member quote, because one is what exists. Adding
              invented stories here would be worse than the gap. When real ones arrive (money made,
              prices raised, careers changed) this becomes a grid and gets far stronger. */}
       <section
@@ -713,7 +720,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 10. FINAL CTA ─── job: the offer. Nothing new, one button. */}
+      <QuoteStrip ids={["priya", "amelia", "danielle"]} />
+
+            {/* ─── 10. FINAL CTA ─── job: the offer. Nothing new, one button. */}
       <section
         className="px-5 md:px-8 bg-glitter"
         style={{ paddingTop: 88, paddingBottom: 96, position: "relative", overflow: "hidden" }}

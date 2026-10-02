@@ -24,6 +24,7 @@ import Manifesto from "@/components/Manifesto";
 import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
 import WhoThisIsFor from "@/components/WhoThisIsFor";
 import WhenYouJoin from "@/components/WhenYouJoin";
+import QuoteStrip from "@/components/QuoteStrip";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -290,9 +291,15 @@ export default function MembershipPage() {
         </div>
       </section>
 
+      <QuoteStrip ids={["priya", "hannah", "georgia"]} />
+
       <ThreeMonthsFromNow />
 
+      <QuoteStrip ids={["zara", "amelia", "danielle"]} tone="pink" />
+
       <WhoThisIsFor />
+
+      <QuoteStrip ids={["maya", "jade", "lauren"]} label="what bigger moves look like in here" tone="lav" />
 
       <Manifesto />
 
@@ -865,6 +872,8 @@ export default function MembershipPage() {
 
       {/* ═══════════════ PRICING ═══════════════ */}
       <WhenYouJoin />
+
+      <QuoteStrip ids={["sophie", "aisha", "chloe"]} label="the women inside" />
 
       <section id="pricing" className="px-8 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
