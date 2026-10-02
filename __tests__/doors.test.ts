@@ -2,7 +2,7 @@
 // of each season and closes at a real sky moment, so "closed" is a normal state, but it must always
 // be a closed state with a next door to point at, and the moments must match the ephemeris.
 
-import { DOORS, doorState, applyOverride, currentChapter, doorDay, doorTime, sznList } from "@/lib/doors";
+import { DOORS, doorState, applyOverride, currentChapter, doorDay, doorDays, doorTime, sznList } from "@/lib/doors";
 import { sznTheme } from "@/lib/szn-themes";
 import { SKY_BANK } from "@/lib/sky-bank";
 
@@ -45,10 +45,13 @@ describe("the schedule", () => {
     }
   });
 
-  it("closes the founding door at the exact Libra new moon", () => {
+  it("keeps every door to three days", () => {
+    for (const d of DOORS) expect(doorDays(d)).toBe(3);
+  });
+
+  it("closes the founding door before the Libra new moon", () => {
     const nm = SKY_BANK.find((e) => e.type === "new_moon" && e.sign === "Libra" && e.utc.startsWith("2026-10"));
-    expect(nm).toBeDefined();
-    expect(at(founding.closesAt)).toBe(at(nm!.utc));
+    expect(at(founding.closesAt)).toBeLessThan(at(nm!.utc));
   });
 
   it("commits each intake to three consecutive seasons starting with its own", () => {
@@ -60,7 +63,7 @@ describe("the schedule", () => {
   it("formats door moments in LA and New York", () => {
     expect(doorDay(founding.opensAt)).toBe("tuesday 6 october");
     expect(doorTime(founding.opensAt)).toBe("6am la · 9am new york");
-    expect(doorTime(founding.closesAt)).toBe("8:50am la · 11:50am new york");
+    expect(doorTime(founding.closesAt)).toBe("1:11am la · 4:11am new york");
   });
 });
 

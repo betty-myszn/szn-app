@@ -65,14 +65,14 @@ export const DOORS: Door[] = [
     id: "founding-2026",
     name: "the founding intake",
     opensAt: "2026-10-06T13:00:00Z", // Tue 6 Oct, 9am New York (two days before the Thursday kickoff live)
-    closesAt: "2026-10-10T15:50:00Z", // the Libra new moon, 17°21' Libra
-    closesAtMoment: "the Libra new moon",
+    closesAt: "2026-10-09T08:11:00Z", // the Moon moving into Libra, the run-up to the new moon
+    closesAtMoment: "the Moon moving into Libra",
     szns: ["Libra", "Scorpio", "Sagittarius"],
   },
   {
     id: "scorpio-2026",
     name: "the Scorpio intake",
-    opensAt: "2026-10-21T13:00:00Z", // Wed 21 Oct, 9am New York
+    opensAt: "2026-10-20T13:00:00Z", // Tue 20 Oct, 9am New York
     closesAt: "2026-10-23T09:37:00Z", // Sun into Scorpio
     closesAtMoment: "the start of Scorpio season",
     szns: ["Scorpio", "Sagittarius", "Capricorn"],
@@ -80,7 +80,7 @@ export const DOORS: Door[] = [
   {
     id: "sagittarius-2026",
     name: "the Sagittarius intake",
-    opensAt: "2026-11-20T14:00:00Z", // Fri 20 Nov, 9am New York
+    opensAt: "2026-11-19T14:00:00Z", // Thu 19 Nov, 9am New York
     closesAt: "2026-11-22T07:23:00Z", // Sun into Sagittarius
     closesAtMoment: "the start of Sagittarius season",
     szns: ["Sagittarius", "Capricorn", "Aquarius"],
@@ -88,7 +88,7 @@ export const DOORS: Door[] = [
   {
     id: "capricorn-2026",
     name: "the Capricorn intake",
-    opensAt: "2026-12-19T14:00:00Z", // Sat 19 Dec, 9am New York
+    opensAt: "2026-12-18T14:00:00Z", // Fri 18 Dec, 9am New York
     closesAt: "2026-12-21T20:50:00Z", // Sun into Capricorn, the solstice
     closesAtMoment: "the solstice",
     szns: ["Capricorn", "Aquarius", "Pisces"],
@@ -143,8 +143,7 @@ export function doorTime(iso: string): string {
   return `${t(LA)} la · ${t(NY)} new york`;
 }
 
-/** How many days a door is open for, rounded: 2 for a normal door, 3 for the founding door (which
- *  holds the Thursday kickoff live inside it). */
+/** How many days a door is open for, rounded: every door is three days. */
 export function doorDays(door: Door): number {
   return Math.max(1, Math.round((Date.parse(door.closesAt) - Date.parse(door.opensAt)) / 86_400_000));
 }
