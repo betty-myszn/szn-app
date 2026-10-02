@@ -20,6 +20,7 @@ import WhatIsMySzn from "@/components/WhatIsMySzn";
 import { useDoors } from "@/lib/enrolment";
 import { CHAPTERS, currentChapter, doorDay, doorDays, doorTime, sznList, sznTheme } from "@/lib/doors";
 import ChapterJoin, { DoorAlert } from "@/components/ChapterJoin";
+import Manifesto from "@/components/Manifesto";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -285,6 +286,8 @@ export default function MembershipPage() {
           </p>
         </div>
       </section>
+
+      <Manifesto />
 
       {/* The plain-english one-liner, then the blueprint story: high on the sales page so the whole
           thesis frames the pitch before the features. Both shared with the homepage via one component

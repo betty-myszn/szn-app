@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useDoorCta } from "@/lib/use-door-cta";
-import BigDreamsBand from "@/components/BigDreamsBand";
+import Manifesto from "@/components/Manifesto";
 import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
@@ -337,9 +337,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 2b. BIG DREAMS ─── the vibe: Betty's own text post on the "big dreams, bigger $$$" wall,
-             then the ask. */}
-      <BigDreamsBand />
+      {/* ─── 2b. MANIFESTO ─── the feminist heart of it, then the ask. */}
+      <Manifesto />
 
       {/* ─── 3. SHOW THE PRODUCT ─── job: prove a real personalised product exists. Nothing here
              impersonates a member: no invented usernames, quotes or results. The room card shows the
