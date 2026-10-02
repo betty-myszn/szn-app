@@ -35,12 +35,12 @@ describe("doorState", () => {
 });
 
 describe("the schedule", () => {
-  it("is in order, never overlaps, and every door is open for two to four days", () => {
+  it("is in order, never overlaps, and every door is open for two or three days", () => {
     for (let i = 0; i < DOORS.length; i++) {
       const d = DOORS[i];
       const days = (at(d.closesAt) - at(d.opensAt)) / 86_400_000;
-      expect(days).toBeGreaterThanOrEqual(2);
-      expect(days).toBeLessThanOrEqual(4);
+      expect(days).toBeGreaterThanOrEqual(1.5);
+      expect(days).toBeLessThanOrEqual(3.5);
       if (i > 0) expect(at(d.opensAt)).toBeGreaterThanOrEqual(at(DOORS[i - 1].closesAt));
     }
   });

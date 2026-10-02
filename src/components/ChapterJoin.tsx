@@ -4,7 +4,7 @@ import { useState } from "react";
 import CheckoutButton from "@/components/CheckoutButton";
 import { PLAN_CHECKOUT_URL, UPFRONT_CHECKOUT_URL } from "@/lib/checkout";
 import { useDoors } from "@/lib/enrolment";
-import { doorDay, doorTime, sznList, type Door } from "@/lib/doors";
+import { doorDay, doorDays, doorTime, sznList, type Door } from "@/lib/doors";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -131,8 +131,9 @@ export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: bo
 
   const when = next ? (
     <>
-      The next doors open <strong>{doorDay(next.opensAt)}</strong> at {doorTime(next.opensAt)}, for {next.name}, and they
-      close again at {next.closesAtMoment}.
+      {"The next doors open "}
+      <strong>{doorDay(next.opensAt)}</strong>
+      {` at ${doorTime(next.opensAt)}, for ${next.name}, and they're only open for ${doorDays(next)} days, closing at ${next.closesAtMoment}.`}
     </>
   ) : (
     <>The doors open for a few days at the start of each season, and the next dates are going up very soon.</>

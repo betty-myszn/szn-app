@@ -18,7 +18,7 @@ import HumanDesignExplainer from "@/components/HumanDesignExplainer";
 import SoulBlueprint from "@/components/SoulBlueprint";
 import WhatIsMySzn from "@/components/WhatIsMySzn";
 import { useDoors } from "@/lib/enrolment";
-import { CHAPTERS, currentChapter, doorDay, doorTime, sznList, sznTheme } from "@/lib/doors";
+import { CHAPTERS, currentChapter, doorDay, doorDays, doorTime, sznList, sznTheme } from "@/lib/doors";
 import ChapterJoin, { DoorAlert } from "@/components/ChapterJoin";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -156,7 +156,7 @@ export default function MembershipPage() {
                 : doors.open
                   ? `Doors close at ${doors.open.closesAtMoment}, ${doorTime(doors.open.closesAt)}. ${planLine}.`
                   : doors.next
-                    ? `Doors open ${doorDay(doors.next.opensAt)}, ${doorTime(doors.next.opensAt)}. ${planLine}.`
+                    ? `Doors open ${doorDay(doors.next.opensAt)}, ${doorTime(doors.next.opensAt)}, for ${doorDays(doors.next)} days only. ${planLine}.`
                     : `${planLine}.`}
             </p>
           </div>
@@ -177,7 +177,7 @@ export default function MembershipPage() {
         </h2>
         <p style={{ fontSize: 15, color: "#fff", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 6px" }}>
           {door
-            ? `New members join together in a short intake at the start of a season, and ${door.name} locks in for ${sznList(door)}, three seasons that build on each other. The doors close at ${door.closesAtMoment}, ${doorDay(door.closesAt)} at ${doorTime(door.closesAt)}.`
+            ? `The doors are only open for ${doorDays(door)} days. New members join together in a short intake at the start of a season, and ${door.name} locks in for ${sznList(door)}, three seasons that build on each other. The doors close at ${door.closesAtMoment}, ${doorDay(door.closesAt)} at ${doorTime(door.closesAt)}.`
             : "New members join together in a short intake at the start of a season and lock in for three seasons that build on each other."}
           {nextTwo[0] ? ` We start together with ${nextTwo[0].title}, ${shortWorkshopMeta(nextTwo[0], now ?? 0)}.` : ""}
         </p>
