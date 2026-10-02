@@ -7,8 +7,7 @@ import { useMember } from "@/lib/use-member";
 import { useSeason } from "@/lib/use-season";
 import { useDoorCta } from "@/lib/use-door-cta";
 import BigDreamsBand from "@/components/BigDreamsBand";
-import { useDoors } from "@/lib/enrolment";
-import { CHAPTERS, doorDay, doorDays, sznTheme } from "@/lib/doors";
+import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -83,14 +82,6 @@ export default function Home() {
   const season = useSeason();
   // The front-door button follows the doors: join while one is open, the waitlist while shut.
   const doorCta = useDoorCta();
-  const doors = useDoors();
-  const doorLine = !doors.ready
-    ? ""
-    : doors.open
-      ? `The doors are open now and close at ${doors.open.closesAtMoment}, ${doorDay(doors.open.closesAt)}.`
-      : doors.next
-        ? `The doors open ${doorDay(doors.next.opensAt)}, for ${doorDays(doors.next)} days only.`
-        : "The doors open for a few days at the start of every season.";
 
   useEffect(() => {
     if (ready && member) router.replace("/dashboard");
@@ -164,7 +155,7 @@ export default function Home() {
             For women who want to make BIGGER moves, more $$$ and create their absolute BEST life.
           </p>
 
-          <div className="mt-9 flex flex-col items-start gap-4">
+          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <Link
               href={doorCta.href}
               className="no-underline"
@@ -182,6 +173,11 @@ export default function Home() {
             >
               {doorCta.label}
             </Link>
+            {doorCta.line && (
+              <span style={{ fontFamily: poppins, fontSize: 15, fontWeight: 800, color: "var(--dark)", maxWidth: 260, lineHeight: 1.4 }}>
+                {doorCta.line}
+              </span>
+            )}
           </div>
           </div>
 
@@ -243,7 +239,7 @@ export default function Home() {
             >
               {doorCta.label}
             </Link>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)" }}>{doorLine}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--dark)" }}>{doorCta.line}</span>
           </div>
         </div>
       </section>
@@ -744,6 +740,9 @@ export default function Home() {
             >
               {doorCta.label}
             </Link>
+            {doorCta.line && (
+              <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginTop: 18 }}>{doorCta.line}</p>
+            )}
           </div>
         </div>
       </section>

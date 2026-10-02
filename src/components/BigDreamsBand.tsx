@@ -109,6 +109,7 @@ export default function BigDreamsBand() {
           >
             {cta.label}
           </Link>
+          {cta.line && <p style={{ fontSize: 15, fontWeight: 700, color: "var(--dark)", marginTop: 14, marginBottom: 0 }}>{cta.line}</p>}
         </div>
       </div>
     </section>
