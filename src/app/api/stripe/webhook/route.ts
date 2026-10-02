@@ -519,6 +519,20 @@ export async function POST(request: Request) {
         // failed payment should actually cost her access, one failed attempt alone usually
         // leaves the subscription 'past_due', which ACCESS_GRANTING_STATUSES still allows.
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+
+        // Opt-in, per member: Betty sets metadata cancel_on_failed_retry=true on a subscription
+        // whose card has already failed once, and the next failed retry ends it there and then
+        // instead of leaving her inside on 'past_due' for the whole retry schedule. Cancelling
+        // (rather than locking while Stripe keeps retrying) also stops a later retry charging her
+        // for a month she was shut out of. The deleted event follows and does the same write as
+        // the sync below, which is here so access goes even if that event is slow.
+        if (subscription.metadata?.cancel_on_failed_retry === "true" && (invoice.attempt_count ?? 0) >= 2 && subscription.status !== "canceled") {
+          const cancelled = await stripe.subscriptions.cancel(subscription.id);
+          await syncSubscriptionOntoProfile(admin, stripe, cancelled);
+          console.log("stripe webhook: cancelled after failed retry", { subscriptionId: subscription.id, attempt: invoice.attempt_count });
+          break;
+        }
+
         await syncSubscriptionOntoProfile(admin, stripe, subscription);
         break;
       }
