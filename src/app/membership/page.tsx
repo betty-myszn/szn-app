@@ -867,7 +867,7 @@ export default function MembershipPage() {
             fontSize: 16, lineHeight: 1.8, color: "var(--dark)", textAlign: "center",
             maxWidth: 560, margin: "0 auto 12px",
           }}>
-            This is the room where women stop talking about change and start living it. Three zodiac seasons, one destination, your own chart and Human Design, and a whole room of women locking in with you.
+            Part mastermind, part membership, and built to change your whole f*cking life: three zodiac seasons, one destination, your own chart and Human Design, and an intimate room of women locking in with you.
           </p>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
             {!doors.ready
