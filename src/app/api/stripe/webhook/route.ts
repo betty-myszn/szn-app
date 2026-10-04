@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { tierForPriceId, ACCESS_GRANTING_STATUSES } from "@/lib/stripe-tiers";
+import { tierForPriceId, ACCESS_GRANTING_STATUSES, PLAN_PRICE_ID, PLAN_COMMITMENT_FROM } from "@/lib/stripe-tiers";
 import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
 import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
@@ -295,6 +295,19 @@ export async function POST(request: Request) {
           if (tier === "none") {
             console.error("stripe webhook: checkout completed with unrecognised price", { priceId, sessionId: session.id });
             break;
+          }
+
+          // The three-month cohort is three payments and then it ends: schedule the subscription to
+          // cancel exactly three months after it started, so no fourth payment is ever taken. Only
+          // for cohort joins from the founding door on; never fails the webhook.
+          if (PLAN_PRICE_ID && priceId === PLAN_PRICE_ID && !subscription.cancel_at && subscription.start_date * 1000 >= Date.parse(PLAN_COMMITMENT_FROM)) {
+            try {
+              const end = new Date(subscription.start_date * 1000);
+              end.setUTCMonth(end.getUTCMonth() + 3);
+              await stripe.subscriptions.update(subscriptionId, { cancel_at: Math.floor(end.getTime() / 1000), proration_behavior: "none" });
+            } catch (e) {
+              console.error("stripe webhook: could not schedule the cohort's end", { subscriptionId, error: e instanceof Error ? e.message : e });
+            }
           }
 
           const grantsAccess = ACCESS_GRANTING_STATUSES.has(subscription.status);

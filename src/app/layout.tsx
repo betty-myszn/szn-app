@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   // or resolves against the deploy preview host instead of the real domain.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "MY SZN, Astrology & Human Design Membership for Women",
+    default: "MY SZN, the Astrology-Backed Manifestation Mastermind for Ambitious Women",
     template: "%s | MY SZN",
   },
   description:
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "MY SZN, Astrology + Human Design for Women",
-    description: "Your birth chart and your Human Design, read together as one thing. Free chart calculator, live coaching, and a membership built around both."
+    description: "Your birth chart and your Human Design, read together as one thing. Free chart calculator, and a three-month mastermind with private coaching built around both."
   },
   robots: {
     index: true,
@@ -91,7 +91,7 @@ const siteJsonLd = {
       legalName: "The Cosmic Co.",
       url: SITE_URL,
       description:
-        "A membership for ambitious women that reads astrology and Human Design together as one system, combining birth chart work, Human Design, live coaching and subconscious rewiring.",
+        "A three-month mastermind for ambitious women that reads astrology and Human Design together as one system, combining birth chart work, Human Design, live coaching and subconscious rewiring.",
       sameAs: ["https://instagram.com/itsmyszn"],
     },
     {

@@ -17,7 +17,7 @@ const PLAN_TERMS = (
   <>
     {"I'm locking in for the three-month cohort: "}
     <strong>3 monthly payments of $555</strong>
-    {", non-refundable, and I can't cancel during those 3 months."}
+    {", non-refundable, and I can't cancel during those 3 months. Nothing is charged after the third."}
   </>
 );
 

@@ -320,9 +320,9 @@ export default function SettingsPage() {
 
                   {inCommitment && commitmentEnd && (
                     <p style={{ fontSize: 12.5, color: "var(--grey)", lineHeight: 1.65, marginBottom: 20 }}>
-                      {"You're locked in for 3 months, so your plan runs until "}
+                      {"You're in the three-month cohort, which runs until "}
                       <strong style={{ color: "var(--dark)" }}>{fmtDate(commitmentEnd)}</strong>
-                      {". After that it carries on monthly, and you can switch it off any time from then."}
+                      {". That's your three payments, and nothing is charged after your third."}
                     </p>
                   )}
 

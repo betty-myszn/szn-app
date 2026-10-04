@@ -230,7 +230,7 @@ export default function BlogHubPage() {
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link href="/chart" className="btn-pink">get your free birth chart</Link>
-            <Link href="/membership" className="btn-outline btn-outline--white">see the membership</Link>
+            <Link href="/membership" className="btn-outline btn-outline--white">apply for MY SZN</Link>
           </div>
           {rest.length > 0 && (
             <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 22 }}>

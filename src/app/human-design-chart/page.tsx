@@ -33,7 +33,7 @@ const FAQS = [
   },
   {
     q: "Is this Human Design calculator really free?",
-    a: "Yes. Your Type, Strategy, Authority, Profile and bodygraph are free, with no signup required to see them. The deeper reading, your centres, channels, every gate and how your design plays out across money, love, business and confidence, lives inside the MY SZN membership.",
+    a: "Yes. Your Type, Strategy, Authority, Profile and bodygraph are free, with no signup required to see them. The deeper reading, your centres, channels, every gate and how your design plays out across money, love, business and confidence, lives inside MY SZN, the three-month mastermind.",
   },
   {
     q: "What are the five Human Design Types?",
@@ -182,10 +182,10 @@ export default function HumanDesignChartPage() {
           want to go deeper than your type?
         </p>
         <h2 style={{ fontFamily: poppins, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 800, lineHeight: 1.15, marginBottom: 12 }}>
-          Join the MY SZN membership.
+          Apply for MY SZN.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 500, margin: "0 auto 8px" }}>
-          Your Type is the surface. Inside, your Human Design and your astrology are woven together across every part of your life: your centres, channels and every gate, plus how your design actually plays out in money, love, business and confidence, with live coaching and community to help you live it.
+          Your Type is the surface. Inside, your Human Design and your astrology are woven together across every part of your life: your centres, channels and every gate, plus how your design actually plays out in money, love, business and confidence, with private coaching from Betty and a small cohort to help you live it.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           Three-month cohorts with Betty · applications open now

@@ -5,7 +5,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // The title deliberately omits the brand: the root layout's template already appends " | MY SZN".
 export const metadata = {
   title: "Terms & Conditions",
-  description: "The terms that govern your use of the MY SZN membership platform.",
+  description: "The terms that govern your use of MY SZN.",
   alternates: { canonical: "/terms" },
 };
 
@@ -41,9 +41,9 @@ export default function TermsPage() {
           </div>
 
           <div style={sectionStyle}>
-            <h2 style={headingStyle}>the membership</h2>
+            <h2 style={headingStyle}>what MY SZN is</h2>
             <p style={bodyStyle}>
-              MY SZN is a paid membership giving you access to personalised astrology content, workshops, community spaces and coaching tools. Pricing, billing frequency and what&apos;s included at each membership tier are shown at checkout and may be updated from time to time, we&apos;ll always tell you before a change affects an active subscription.
+              MY SZN is a paid three-month coaching cohort: private 1:1 coaching with Betty, group coaching, personalised astrology and Human Design, hypnosis and a private community. Pricing and what&apos;s included are shown at checkout and may be updated from time to time, we&apos;ll always tell you before a change affects an active subscription.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ export default function TermsPage() {
           <div style={sectionStyle}>
             <h2 style={headingStyle}>billing and refunds</h2>
             <p style={bodyStyle}>
-              MY SZN is joined for <strong>a 3-month term</strong>: one chapter of three zodiac seasons, starting with the season you join in. You can pay once for the full 3 months, which doesn&apos;t renew, or join on the 3-month plan, three monthly payments that make up the term. The plan can&apos;t be cancelled before your third payment, and after that it continues monthly until you cancel. VIP is billed monthly until you cancel. Monthly memberships that started before 2 October 2026 keep the cancel-anytime terms they joined on.
+              MY SZN is joined for <strong>a 3-month cohort</strong>, paid as three monthly payments. The cohort can&apos;t be cancelled before your third payment, and nothing is charged after it. Memberships that started before 4 October 2026 keep the terms they joined on.
             </p>
             <p style={{ ...bodyStyle, marginTop: 12 }}>
               <strong>Payments are non-refundable.</strong> Once a payment is taken, whether it&apos;s a single month or a full upfront term, we don&apos;t refund it, including if you stop using the membership partway through a period you&apos;ve already paid for. You confirm this at checkout before payment is taken.

@@ -59,7 +59,7 @@ export default function AstrologyClassesPage() {
           {!member ? (
             <div className="p-8 text-center" style={{ border: "var(--border)", background: "var(--lav-light)" }}>
               <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#2E1C63", marginBottom: 10 }}>
-                the astrology classes are inside the membership.
+                the astrology classes are inside MY SZN.
               </h2>
               <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 460, margin: "0 auto 20px" }}>
                 Join to watch every class, whenever you like.

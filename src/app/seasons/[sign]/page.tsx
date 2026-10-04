@@ -156,7 +156,7 @@ export default async function SeasonPage({
             <div style={{ marginBottom: 28 }}>
               <Link
                 href="/events/replays"
-                aria-label={`Watch the ${season.name} season class replay inside the membership`}
+                aria-label={`Watch the ${season.name} season class replay inside MY SZN`}
                 style={{
                   display: "block",
                   position: "relative",
@@ -193,7 +193,7 @@ export default async function SeasonPage({
                 </span>
               </Link>
               <p style={{ fontSize: 13, lineHeight: 1.8, color: "var(--dark)", marginTop: 12 }}>
-                The full replay of this class is saved inside the membership.{" "}
+                The full replay of this class is saved inside MY SZN.{" "}
                 <Link href="/events/replays" className="pk" style={{ fontWeight: 700 }}>
                   Join to watch it back any time.
                 </Link>

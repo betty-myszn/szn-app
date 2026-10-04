@@ -188,7 +188,7 @@ export default function ChartPage() {
           Live your chart inside MY SZN.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Your chart is just the beginning. Get a live masterclass and astrotapping every month, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
+          Your chart is just the beginning. MY SZN is the three-month mastermind where you live it, with a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           Three-month cohorts with Betty · applications open now

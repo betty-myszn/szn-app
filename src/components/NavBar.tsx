@@ -55,7 +55,7 @@ const freeLinks = [
 // the site, which is what the arrow is for.
 const guestLinks = [
   { href: "/", label: "home" },
-  { href: "/membership", label: "join my szn" },
+  { href: "/membership", label: "apply for my szn" },
 ];
 
 const exploreMenu = [

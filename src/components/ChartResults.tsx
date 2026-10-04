@@ -265,7 +265,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 display: "inline-block",
               }}
             >
-              join the membership &rarr;
+              apply for MY SZN &rarr;
             </a>
           </div>
         </div>
@@ -357,7 +357,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
             this is just the <span className="pk">beginning.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.5)", marginBottom: 24 }}>
-            Your chart is a blueprint. Now learn how to use it. Join the MY SZN membership for the monthly masterclass and astrotapping, and a community of women who actually get it.
+            Your chart is a blueprint. Now learn how to use it. Apply for MY SZN, the three-month mastermind with a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <a
@@ -374,7 +374,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 textDecoration: "none",
               }}
             >
-              join the membership &rarr;
+              apply for MY SZN &rarr;
             </a>
           </div>
         </div>

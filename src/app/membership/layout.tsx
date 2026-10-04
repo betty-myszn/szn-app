@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Join the Astrology + Human Design Membership for Women",
+  title: "Apply for MY SZN, the Three-Month Astrology Mastermind for Women",
   description:
-    "Apply to MY SZN, where your birth chart and your Human Design are read together instead of separately. A live masterclass and astrotapping every month, subconscious rewiring, a personalised chart and design portal, and a community of ambitious women. Cancel anytime. Limited founding member spots.",
+    "Apply to MY SZN, where your birth chart and your Human Design are read together instead of separately. A private 1:1 with Betty every month, group coaching every season, a hypnosis per season, your personalised chart and design guide, and a small cohort of ambitious women. Founding price, applications open now.",
   alternates: { canonical: "/membership" },
   openGraph: {
-    title: "MY SZN Membership, Your Era Starts Now",
-    description: "Astrology tells you who you are here to become. Human Design tells you how you are built to get there. MY SZN gives you both, per life area, every szn. Cancel anytime.",
+    title: "MY SZN, Your Era Starts Now",
+    description: "Astrology tells you who you are here to become. Human Design tells you how you are built to get there. MY SZN gives you both, with private coaching, across three seasons.",
     url: "/membership",
     type: "website",
     images: [OG_IMAGE],

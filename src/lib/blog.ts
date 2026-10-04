@@ -239,15 +239,15 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Scorpio season lands in YOUR chart",
-      body: "Inside MY SZN, Scorpio season, Mercury retrograde and both moons are read against your own placements, so you know which part of your life is going deep. Join and it opens up the moment you're in.",
-      label: "join my szn",
+      body: "Inside MY SZN, Scorpio season, Mercury retrograde and both moons are read against your own placements, so you know which part of your life is going deep. Apply for the cohort and it opens up the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     closing: {
       heading: "your scorpio season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Scorpio season guide, Mercury retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
-      label: "join my szn",
+      body: "Your full chart, your personalised Scorpio season guide, Mercury retrograde read through your own houses, private coaching with Betty and the cohort, all yours the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -345,15 +345,15 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Sagittarius season lands in YOUR chart",
-      body: "Inside MY SZN, Sagittarius season, Jupiter's retrograde and both moons are read against your own placements, so you know exactly where your life is ready to expand. Join and it opens up the moment you're in.",
-      label: "join my szn",
+      body: "Inside MY SZN, Sagittarius season, Jupiter's retrograde and both moons are read against your own placements, so you know exactly where your life is ready to expand. Apply for the cohort and it opens up the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     closing: {
       heading: "your sagittarius season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Sagittarius season guide, Jupiter read through your own houses, the live workshops and the community, all yours the moment you join.",
-      label: "join my szn",
+      body: "Your full chart, your personalised Sagittarius season guide, Jupiter read through your own houses, private coaching with Betty and the cohort, all yours the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -451,15 +451,15 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Capricorn season lands in YOUR chart",
-      body: "Inside MY SZN, Capricorn season, Mars retrograde and both moons are read against your own placements, so you know exactly which part of your life you are building. Join and it opens up the moment you're in.",
-      label: "join my szn",
+      body: "Inside MY SZN, Capricorn season, Mars retrograde and both moons are read against your own placements, so you know exactly which part of your life you are building. Apply for the cohort and it opens up the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     closing: {
       heading: "your capricorn season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Capricorn season guide, Mars retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
-      label: "join my szn",
+      body: "Your full chart, your personalised Capricorn season guide, Mars retrograde read through your own houses, private coaching with Betty and the cohort, all yours the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -557,15 +557,15 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where the Aquarius eclipse lands in YOUR chart",
-      body: "Inside MY SZN, Aquarius season, the solar eclipse and Mercury retrograde are read against your own placements, so you know which part of your life the future is knocking on. Join and it opens up the moment you're in.",
-      label: "join my szn",
+      body: "Inside MY SZN, Aquarius season, the solar eclipse and Mercury retrograde are read against your own placements, so you know which part of your life the future is knocking on. Apply for the cohort and it opens up the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     closing: {
       heading: "your aquarius season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Aquarius season guide, the eclipse read through your own houses, the live workshops and the community, all yours the moment you join.",
-      label: "join my szn",
+      body: "Your full chart, your personalised Aquarius season guide, the eclipse read through your own houses, private coaching with Betty and the cohort, all yours the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -777,7 +777,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Your Libra season workshops inside MY SZN",
         body: [
-          "Reading about Libra season is lovely. Living it with your own chart open in front of you, in a room full of women doing the same work, is where things ACTUALLY change, and that is what MY SZN is for. It is the astrology-led membership that reads every season, every moon and every retrograde against your own birth chart and your Human Design, with live coaching workshops, astrotapping™ (our blend of journaling, EFT tapping and somatic work, layered over your chart), community chat rooms and a personalised season guide waiting for you every time the Sun changes sign.",
+          "Reading about Libra season is lovely. Living it with your own chart open in front of you, in a room full of women doing the same work, is where things ACTUALLY change, and that is what MY SZN is for. It is the astrology-backed manifestation mastermind for ambitious women: three months, a private 1:1 with Betty every month, group coaching with astrotapping™ (our blend of journaling, EFT tapping and somatic work, layered over your chart) every season, a small cohort and a personalised season guide read against your own birth chart and Human Design every time the Sun changes sign.",
           "This Libra season we have already met live once. Call In Your Venus Era, on Saturday 26 September at 11:30am Los Angeles time, is a manifestation workshop under the Aries full moon for calling in more money, love, pleasure and everything you actually f*cking want. We dive into your personal Venus placement and what it reveals about your relationship with money, attraction and desire, then use Future Self work and embodiment to start becoming the version of you who gets to have it.",
           "Then on Thursday 8 October at 7am Los Angeles time (10am New York, 3pm UK), two days before the Libra new moon, the founding intake of MY SZN starts live, together.",
           "Call In Your Venus Era has already happened, and the full replay is waiting in [the replay vault](/events/replays) whenever you want to call her in again. The [general astrology classes](/events/astrology) on Saturn returns and Pluto in Aquarius sit in the workshops menu too, and the [Venus Money meditation](/meditations/venus-money) is the perfect companion to a Venus retrograde.",
@@ -786,16 +786,16 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "See exactly where Libra season lands in YOUR chart",
-      body: "Inside MY SZN, Libra season, Venus retrograde and both moons are read against your own placements, so you know which part of your life is getting the glow up and which part is getting the review. Join and it opens up the moment you're in.",
-      label: "join my szn",
+      body: "Inside MY SZN, Libra season, Venus retrograde and both moons are read against your own placements, so you know which part of your life is getting the glow up and which part is getting the review. Apply for the cohort and it opens up the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     workshops: ["libra-szn-workshop-1"],
     closing: {
       heading: "your libra season, read for",
       pink: "your chart",
-      body: "Your full chart, your personalised Libra season guide, Venus retrograde read through your own houses, the live workshops and the community, all yours the moment you join.",
-      label: "join my szn",
+      body: "Your full chart, your personalised Libra season guide, Venus retrograde read through your own houses, private coaching with Betty and the cohort, all yours the moment you're in.",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -1778,7 +1778,7 @@ export const BLOG_POSTS: BlogPost[] = [
     cta: {
       heading: "Go deeper than the theory",
       body: "Knowing what the nodes are is one thing. Seeing your own axis read in full, by sign and house, and updated every time the sky shifts, is what MY SZN is built for.",
-      label: "see the membership",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [
@@ -1849,7 +1849,7 @@ export const BLOG_POSTS: BlogPost[] = [
     cta: {
       heading: "Every moon, read for your chart",
       body: "A new moon in Leo lands somewhere specific in your chart, and that is what decides what it is actually asking of you. Inside MY SZN, every lunation is read against your own placements.",
-      label: "see the membership",
+      label: "apply for MY SZN",
       href: "/membership",
     },
     faqs: [

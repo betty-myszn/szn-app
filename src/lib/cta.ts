@@ -19,7 +19,7 @@ export interface Cta {
 /** The join: the default ask for anyone who isn't a member. */
 export const JOIN_CTA: Cta = {
   href: "/membership",
-  label: "join my szn",
+  label: "apply for my szn",
 };
 
 /**

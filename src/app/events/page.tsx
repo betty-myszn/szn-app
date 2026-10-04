@@ -109,7 +109,7 @@ export default function EventsPage() {
       <section className="px-5 md:px-8 py-14 text-center" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-3xl mx-auto">
           <div className="tag mb-3">
-            {member ? "your live events this szn" : "your first workshops inside the membership"}
+            {member ? "your live events this szn" : "your first sessions inside MY SZN"}
           </div>
           <h1
             style={{
@@ -124,7 +124,7 @@ export default function EventsPage() {
           </h1>
           {member && (
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 540, margin: "16px auto 0" }}>
-              A live masterclass and astrotapping every month, replays and rituals, all included in your membership. Show up live for the full experience, or catch the replay in your own time.
+              A live group mastermind every season, replays and rituals, all part of your three months. Show up live for the full experience, or catch the replay in your own time.
             </p>
           )}
         </div>
@@ -323,7 +323,7 @@ export default function EventsPage() {
                         )}
                         {workshop.hasJoinLink && !hasActiveAccess(member) && (
                           <p style={{ fontSize: 12, color: dimColor, marginBottom: 4 }}>
-                            The Zoom link unlocks with an active membership.{" "}
+                            The Zoom link unlocks once you&apos;re in MY SZN.{" "}
                             <a href="/membership" style={{ color: "var(--pink)", fontWeight: 700 }}>
                               join to get in
                             </a>

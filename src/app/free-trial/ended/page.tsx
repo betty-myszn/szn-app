@@ -100,7 +100,7 @@ const MEMBERS_ONLY = [
 
 const BENEFITS: Array<[string, string]> = [
   ["pick up where you left off", "your chart, journal, goals and progress are all still saved on this account."],
-  ["a new workshop every month", "a live masterclass and a live astrotapping, every single season."],
+  ["betty, privately, every month", "a private 1:1 every month and a live group mastermind every season."],
   ["coaching + community", "the member rooms and the women who actually talk about this stuff with you."],
   ["a platform that evolves with you", "your portal changes with the season and the version of you that's ready to emerge."],
   ["the full vault, always", "every replay, workbook and resource, yours for as long as you stay."],

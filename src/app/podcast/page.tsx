@@ -165,10 +165,10 @@ export default function PodcastPage() {
           love the podcast? go deeper.
         </div>
         <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 12 }}>
-          Join the MY SZN membership.
+          Apply for MY SZN.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.7)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Everything from the podcast, taken to the next level. A live masterclass and astrotapping every month, subconscious rewiring and community. Go VIP and you get a 1:1 coaching call with Betty on top.
+          Everything from the podcast, taken to the next level: a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
           Three-month cohorts with Betty · applications open now
