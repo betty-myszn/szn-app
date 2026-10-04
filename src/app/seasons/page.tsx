@@ -151,7 +151,7 @@ export default function SeasonsIndexPage() {
             ))}
           </div>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--dark)", marginTop: 26, maxWidth: 760 }}>
-            Every season has one live Transformation Workshop, one live Community Circle and a SZN hypnosis, and the doors open for just three days at the start of each season so every intake starts together.
+            Every month you get a private 1:1 with Betty, every season has a live group mastermind and its own hypnosis, and the cohort moves through all three seasons together.
           </p>
         </div>
       </section>
@@ -218,7 +218,7 @@ export default function SeasonsIndexPage() {
             lock in for the <span style={{ color: "#fff" }}>next chapter.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--dark)", fontWeight: 600, marginTop: 20 }}>
-            The founding price goes to the waitlist first, and it's going up after the founding cohort.
+            Founding price: $555 a month for three months, worth $1,111 a month, and it's going up after the founding cohort.
           </p>
           <DoorButton center />
         </div>

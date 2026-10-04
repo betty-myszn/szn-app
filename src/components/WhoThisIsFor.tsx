@@ -10,7 +10,7 @@ const TRAITS = [
   "You love astrology and you want it to change your real life, way beyond knowing your Big 3.",
   "You're ready to go into the shadow: the people-pleasing, the money wounds and the fear of being too much.",
   "You want a room of women who celebrate your wins and cheer you on louder than anyone.",
-  "You want the magic and the fun too: rituals, spellwork, manifestation and a whole lot of pink.",
+  "You want Betty in your corner privately, plus the magic and the fun: rituals, manifestation and a whole lot of pink.",
 ];
 
 export default function WhoThisIsFor() {

@@ -71,8 +71,8 @@ const HOW_IT_WORKS = [
 const INCLUDED = [
   "Your birth chart and Human Design",
   "Personalised seasonal guidance",
-  "A live Transformation Workshop every SZN",
-  "A live Community Circle every SZN",
+  "A private 1:1 with Betty every month",
+  "A live group mastermind every SZN",
   "A SZN hypnosis + audio guides",
   "Shadow work, Astro Tapping and journalling",
   "The community, starting with your intake",
@@ -206,8 +206,8 @@ export default function Home() {
         items={[
           "it's lock-in season",
           "become her before 2027",
-          "a transformation workshop every szn",
-          "a community circle every szn",
+          "a private 1:1 with betty every month",
+          "group coaching every season",
           "the waitlist is open",
         ]}
       />
@@ -330,7 +330,7 @@ export default function Home() {
                 hey, i&apos;m <span className="pk">betty.</span>
               </h3>
               <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--grey)", marginBottom: 14 }}>
-                I teach the workshops, I lead the Circles, I write the seasonal work, and
+                I coach you privately every month, I run the group mastermind, I write the seasonal work, and
                 I&apos;m in the rooms with you most days. When you ask a question in here, you&apos;re
                 asking me.
               </p>
@@ -747,7 +747,7 @@ export default function Home() {
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            The founding price goes to the waitlist first, and it&apos;s going up after the founding cohort.
+            Founding price: $555 a month for three months, worth $1,111 a month, and it&apos;s going up after the founding cohort.
           </p>
           <div className="mt-10">
             <Link

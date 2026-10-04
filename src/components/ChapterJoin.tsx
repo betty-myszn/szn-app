@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import CheckoutButton from "@/components/CheckoutButton";
-import { PLAN_CHECKOUT_URL, UPFRONT_CHECKOUT_URL } from "@/lib/checkout";
+import { PLAN_CHECKOUT_URL } from "@/lib/checkout";
 import { useDoors } from "@/lib/enrolment";
 import { doorDay, doorDays, doorTime, sznList, type Door } from "@/lib/doors";
 
@@ -12,97 +12,34 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 // payments of $88. Only while a door is open. With the doors shut it becomes the door alert, which
 // files her on the MY SZN waitlist list in Brevo so she hears the moment the next door opens.
 
-type Option = "upfront" | "plan";
-
-const UPFRONT_TERMS = (
-  // Strings, not loose JSX text: this Next build drops the space after a closing tag here.
-  <>
-    {"I understand this is "}
-    <strong>one payment of $250</strong>
-    {" for 3 months of MY SZN. It's non-refundable and it doesn't renew."}
-  </>
-);
 
 const PLAN_TERMS = (
   <>
-    {"I'm locking in for 3 months: "}
-    <strong>3 monthly payments of $88</strong>
-    {", non-refundable, and I can't cancel during those 3 months. After my third payment it carries on monthly until I switch it off in my settings."}
+    {"I'm locking in for the three-month cohort: "}
+    <strong>3 monthly payments of $555</strong>
+    {", non-refundable, and I can't cancel during those 3 months."}
   </>
 );
 
 export default function ChapterJoin({ dark = false }: { dark?: boolean }) {
   const { ready, open, next } = useDoors();
-  const [option, setOption] = useState<Option>("upfront");
-
   if (!ready) return <div style={{ minHeight: 220 }} aria-hidden />;
-  if (!open) return <DoorAlert next={next} dark={dark} />;
-
-  const hasPlan = !!PLAN_CHECKOUT_URL;
-  const chosen: Option = hasPlan ? option : "upfront";
+  if (!open || !PLAN_CHECKOUT_URL) return <DoorAlert next={next} dark={dark} />;
   const textColor = dark ? "#fff" : "var(--dark)";
-
   return (
     <div>
       <p style={{ fontSize: 12.5, color: textColor, lineHeight: 1.6, marginBottom: 14 }}>
         <strong>Doors close at {open.closesAtMoment}</strong>, {doorDay(open.closesAt)} at {doorTime(open.closesAt)}.
         You&apos;re joining {open.name}, locking in for {sznList(open)}.
       </p>
-
-      {hasPlan && (
-        <div className="grid grid-cols-2 gap-2 mb-4" role="radiogroup" aria-label="how you'd like to pay">
-          {(
-            [
-              { id: "upfront", top: "$250", sub: "once, for 3 months" },
-              { id: "plan", top: "3 × $88", sub: "monthly payments" },
-            ] as const
-          ).map((o) => {
-            const on = chosen === o.id;
-            return (
-              <button
-                key={o.id}
-                type="button"
-                role="radio"
-                aria-checked={on}
-                onClick={() => setOption(o.id)}
-                style={{
-                  cursor: "pointer",
-                  textAlign: "left",
-                  padding: "12px 14px",
-                  border: on ? "2px solid var(--pink)" : "var(--border)",
-                  background: on ? "#fff" : "transparent",
-                  color: textColor,
-                }}
-              >
-                <div style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", lineHeight: 1.1 }}>{o.top}</div>
-                <div style={{ fontSize: 11, marginTop: 2 }}>{o.sub}</div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {chosen === "plan" && PLAN_CHECKOUT_URL ? (
-        <CheckoutButton
-          key="plan"
-          checkoutUrl={PLAN_CHECKOUT_URL}
-          label="lock me in · 3 × $88"
-          plan="chapter_plan_3x88"
-          value={88}
-          terms={PLAN_TERMS}
-          dark={dark}
-        />
-      ) : (
-        <CheckoutButton
-          key="upfront"
-          checkoutUrl={UPFRONT_CHECKOUT_URL}
-          label="lock me in · $250"
-          plan="chapter_upfront_250"
-          value={250}
-          terms={UPFRONT_TERMS}
-          dark={dark}
-        />
-      )}
+      <CheckoutButton
+        checkoutUrl={PLAN_CHECKOUT_URL}
+        label="lock me in · $555 a month × 3"
+        plan="cohort_555x3"
+        value={555}
+        terms={PLAN_TERMS}
+        dark={dark}
+      />
     </div>
   );
 }

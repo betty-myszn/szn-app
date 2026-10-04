@@ -87,7 +87,7 @@ export default function MembershipPage() {
   // The chapter on sale. Before the clock is read this is the first chapter, so the static render
   // and the first client render agree.
   const chapter = currentChapter(now ?? 0) ?? CHAPTERS[0];
-  const planLine = "The founding price goes to the waitlist first";
+  const planLine = "Founding price: $555 a month for 3 months (worth $1,111 a month), going up after the founding cohort";
 
   // Who is reading this page: the entry band below the hero speaks to a woman still finishing a
   // trial she started before trials were retired, or to a free or lapsed account, and shows nothing
@@ -187,7 +187,7 @@ export default function MembershipPage() {
           {nextTwo[0] ? ` We start together with ${nextTwo[0].title}, ${shortWorkshopMeta(nextTwo[0], now ?? 0)}.` : ""}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>
-          1:1 coaching with Betty is on VIP.
+          A private 1:1 with Betty every month of your three months.
         </p>
         <div style={{ marginBottom: 20 }}>
           <LaunchCountdown variant="pink" />
@@ -256,8 +256,8 @@ export default function MembershipPage() {
                 b: "You start by finishing one sentence, \"By 2027, I'm becoming a woman who…\", and everything we do for the next three months points straight at her.",
               },
               {
-                h: "Two live experiences every SZN",
-                b: "The Transformation Workshop is where the deep work starts, with astrology, coaching, shadow work, Astro Tapping and real-world action, and the Community Circle is where we share wins, do the ritual and spellwork and actually feel the transformation together. Plus a SZN hypnosis to come back to all season long.",
+                h: "Betty, privately, every month",
+                b: "A private 1:1 with Betty every month, built around what you're creating in your 90 days, plus a live group mastermind every season with coaching, shadow work, Astro Tapping and real-world action, and a hypnosis to come back to all season long.",
               },
               {
                 h: "Your chart is the lens",
@@ -495,7 +495,7 @@ export default function MembershipPage() {
             : <>{door ? `Doors open ${doorDay(door.opensAt)}.` : "Doors open every season."} <span style={{ color: "var(--pink)" }}>We&apos;re locking in.</span></>}
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
-          {planLine}. 1:1 coaching with Betty is on VIP, $555/mo.
+          {planLine}.
         </p>
         <Link href={ctaHref} className="btn-pink no-underline" style={{ padding: "14px 32px" }}>
           {ctaLabel}
@@ -762,16 +762,16 @@ export default function MembershipPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 12 }}>
-                  vip membership only · $555/mo
+                  every month of your three months
                 </div>
                 <h3 style={{ fontFamily: pp, fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 12 }}>
                   1:1 coaching with <span style={{ color: "var(--pink)" }}>Betty.</span>
                 </h3>
                 <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.7)", margin: 0 }}>
-                  Not a group Q&A. Not a pre-recorded video. A private, personalised coaching session where we go deep on your chart, your blocks, your business, your relationships, your next move.
+                  A private, personalised coaching session every month where we go deep on your chart, your blocks, your business, your relationships and your next move.
                 </p>
                 <p style={{ fontSize: 13, lineHeight: 1.7, color: "#fff", fontWeight: 700, marginTop: 14, marginBottom: 0 }}>
-                  This is the one thing the $88 plan doesn&apos;t include. Working with me privately only happens on VIP.
+                  Three private sessions with me across your three months, built around what you&apos;re creating.
                 </p>
               </div>
               <div className="p-6" style={{ background: "rgba(255,45,135,0.08)", border: "1px solid rgba(255,45,135,0.2)" }}>
@@ -888,7 +888,7 @@ export default function MembershipPage() {
             fontSize: 16, lineHeight: 1.8, color: "var(--dark)", textAlign: "center",
             maxWidth: 560, margin: "0 auto 12px",
           }}>
-            Part mastermind, part membership, and built to change your whole f*cking life: three zodiac seasons, one destination, your own chart and Human Design, and an intimate room of women locking in with you.
+            Part mastermind, part private coaching, and built to change your whole f*cking life: three zodiac seasons, a monthly 1:1 with Betty, your own chart and Human Design, and an intimate room of women locking in with you.
           </p>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--pink)", textAlign: "center", marginBottom: 48 }}>
             {!doors.ready
@@ -937,103 +937,42 @@ export default function MembershipPage() {
             </div>
           )}
 
-          {/* Two paid tiers since the $33 social tier was retired: free now owns the chat rooms, so
-              social had nothing left that was uniquely its own, and its rituals (book club, moon
-              audios, seasonal updates) moved up into MY SZN. Retired from SALE only, the tier still
-              exists in stripe-tiers.ts and still passes the gates so existing $33 members keep what
-              they're paying for. MY SZN ($88) stays the focal point: lifted, the only Most Popular
-              badge, the boldest price and the strongest CTA, with VIP ($555, proximity) beside it. */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start mb-6">
-
-            {/* ── MY SZN · $88 · THE membership (hero, lifted) ── */}
-            <div className="md:-mt-6" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)", boxShadow: "0 12px 44px rgba(255,45,135,0.20)" }}>
-              <div style={{ background: "var(--pink)", padding: "9px 0", textAlign: "center", fontSize: 10, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "#fff" }}>
-                ★ the chapter
+          {/* One offer: the three-month cohort. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 mb-6" style={{ border: "2px solid var(--pink)", background: "var(--pink-light)", boxShadow: "0 12px 44px rgba(255,45,135,0.20)" }}>
+            <div className="p-8 md:p-10">
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
+                my szn · the three-month cohort
               </div>
-              <div className="p-8 md:p-9">
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
-                  my szn · 3 months
-                </div>
-                <div style={{ fontFamily: pp, fontSize: 46, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
-                  waitlist first
-                </div>
-                <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 6 }}>
-                  the founding price goes to the waitlist before anyone else
-                </div>
-                <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
-                  We&apos;re locking in for three months.
-                </p>
-                <p style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.7, marginBottom: 22 }}>
-                  Three zodiac seasons that build on each other, read against your own chart, with the Transformation Workshop doing the deep work and the Community Circle making it fun, witchy and completely fabulous.
-                </p>
-                <div className="space-y-3 mb-7">
-                  {[
-                    "Three zodiac SZNs with one destination",
-                    "A live Transformation Workshop every SZN",
-                    "A live Community Circle every SZN: wins, ritual, spellwork, magic",
-                    "A SZN hypnosis to come back to all season",
-                    "Astro Tapping, shadow work, manifestation and audio guides when you need them",
-                    "Your full MY SZN platform, personalised to your chart and Human Design",
-                    "The MY SZN community, starting together with your intake",
-                    "Replays of every live",
-                    "Discounts on reports and Cosmic Coaching",
-                  ].map((item) => (
-                    <div key={item} className="flex gap-3 items-start">
-                      <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
-                      <span style={{ fontSize: 14, color: "var(--dark)", lineHeight: 1.5, fontWeight: 500 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <ChapterJoin />
+              <div style={{ fontSize: 15, color: "var(--dark)", textDecoration: "line-through", textDecorationColor: "var(--pink)" }}>worth $1,111 a month</div>
+              <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
+                $555<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}> a month × 3</span>
               </div>
-            </div>
-
-            {/* ── MY SZN VIP · $555 · everything, plus direct 1:1 coaching ── */}
-            <div className="p-8" style={{ border: "var(--border)", background: "var(--dark)" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 16 }}>
-                my szn vip
+              <div style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
+                founding price · going up after the founding cohort
               </div>
-              <div style={{ fontFamily: pp, fontSize: 38, fontWeight: 800, color: "#fff", letterSpacing: "-1.5px", lineHeight: 1 }}>
-                $555<span style={{ fontSize: 16, fontWeight: 600, letterSpacing: 0 }}>/mo</span>
-              </div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 4, marginBottom: 10 }}>
-                billed monthly · cancel anytime
-              </div>
-              <div style={{ display: "inline-block", marginBottom: 18, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
-                that&apos;s $18.25 a day, less than your Friday night cocktail 🍸
-              </div>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.65, marginBottom: 18 }}>
-                Everything inside MY SZN, plus direct access to me. For the members who want proximity and personal coaching.
+              <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "18px 0 14px" }}>
+                Private coaching with Betty, a small room of women and your own chart, for three months.
               </p>
-              <div className="p-4 mb-5" style={{ background: "var(--pink)" }}>
-                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 6 }}>
-                  only on vip
-                </div>
-                <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", lineHeight: 1.3 }}>
-                  Monthly 1:1 Cosmic Coaching with Betty
-                </div>
-              </div>
-              <div className="space-y-2.5 mb-6">
+              <div className="space-y-3">
                 {[
-                  "Everything in MY SZN",
-                  "One monthly 1:1 Cosmic Coaching session",
-                  "Priority booking",
-                  "VIP-only bonuses and experiences",
-                  "Early access to new features and events",
+                  "A private 1:1 session with Betty every month (three in total)",
+                  "A live group mastermind every season, with Astro Tapping, hot seats and real-world action",
+                  "A hypnosis for every season to rewire the old identity",
+                  "Your personalised astrology + Human Design guide for every season",
+                  "A small private cohort for accountability, wins and questions",
+                  "Proof you're changing: your 90-day goal, actions and wins in one place",
                 ].map((item) => (
                   <div key={item} className="flex gap-3 items-start">
-                    <span style={{ color: "var(--pink)", fontSize: 13, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
-                    <span style={{ fontSize: 13, color: "#fff", lineHeight: 1.5 }}>{item}</span>
+                    <span style={{ color: "var(--pink)", fontSize: 14, marginTop: 2, flexShrink: 0 }}>&#10038;</span>
+                    <span style={{ fontSize: 14.5, color: "var(--dark)", lineHeight: 1.5, fontWeight: 500 }}>{item}</span>
                   </div>
                 ))}
               </div>
-              {enrolmentOpen ? (
-                <CheckoutButton checkoutUrl={VIP_CHECKOUT_URL} label="join vip · $555/mo" dark plan="vip" value={555} />
-              ) : doors.ready ? (
-                <DoorAlert next={doors.next} dark />
-              ) : null}
             </div>
-
+            <div className="p-8 md:p-10" style={{ background: "#fff", borderLeft: "2px solid var(--pink)" }}>
+              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "the waitlist"}</div>
+              <ChapterJoin />
+            </div>
           </div>
 
           <div className="p-6 text-center" style={{ background: "var(--pink)" }}>
@@ -1066,7 +1005,7 @@ export default function MembershipPage() {
               },
               {
                 q: "I always buy things and don't use them. How is this different?",
-                a: "Because nothing in here waits for you to find the motivation on your own. You join with an intake on a set date, so you start alongside women beginning at exactly the same time as you, you lock in for three months instead of browsing for a week, and every season has a live Transformation Workshop and a Community Circle where we check in, share the wins and hold each other to it. The hypnosis and audio guides fit into a walk or a quiet ten minutes, so it works in real life too.",
+                a: "Because nothing in here waits for you to find the motivation on your own. You join with an intake on a set date, so you start alongside women beginning at exactly the same time as you, you lock in for three months instead of browsing for a week, and you have a private 1:1 with Betty every month and a group mastermind every season where we check in, share the wins and hold each other to it. The hypnosis fits into a walk or a quiet ten minutes, so it works in real life too.",
               },
               {
                 q: "What time zone are the lives in?",
@@ -1086,23 +1025,19 @@ export default function MembershipPage() {
               },
               {
                 q: "Do I get coaching with Betty?",
-                a: "Yes. Every SZN has a live Transformation Workshop with Betty and a live Community Circle, in a room with the other members, with replays of both. MY SZN VIP ($555/mo) adds a private monthly 1:1 Cosmic Coaching session, just you and me.",
+                a: "Yes, privately. You get a 1:1 session with Betty every month of your three months, built around what you're creating: coaching, your astrology and Human Design, money, visibility, relationships, shadow work, whatever is actually coming up for you. Then there's a live group mastermind every season with the rest of your cohort.",
               },
               {
                 q: "What if I'm new to astrology or Human Design?",
                 a: "Perfect. You don't need to know your Big 3, your houses, your transits or your Human Design type. We generate your full chart and Human Design for you and teach you how to actually use them. Most astrology content stops at awareness. We start there.",
               },
               {
-                q: "Can I move up to VIP later?",
-                a: "Anytime. Lock in on MY SZN and move up to VIP whenever you want Betty working on your chart with you directly.",
-              },
-              {
                 q: "How much time do I need each week?",
-                a: "Two lives a season: the Transformation Workshop and the Community Circle. Between them you have the SZN hypnosis, the community, your personalised portal and the replays, and you take what you need, when you need it. No homework, no guilt.",
+                a: "Each month: one private 1:1 with Betty and one group mastermind. Between them you have the SZN hypnosis, your cohort and your personalised astrology, and you take what you need, when you need it. No homework, no guilt.",
               },
               {
                 q: "How much does it cost?",
-                a: `${planLine}. VIP, with a private monthly 1:1 coaching session with Betty, is $555/mo. Everything is in the pricing section above.`,
+                a: `${planLine}. Everything is in the pricing section above.`,
               },
               {
                 q: "Can I cancel or get a refund?",

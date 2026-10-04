@@ -9,6 +9,7 @@
 //
 // There is no social ($33) link: that tier is retired from sale. See the note in stripe-tiers.ts.
 
+export const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
 export const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/fZueVe5sj13peCe6ON7kc0l";
 
 // The two ways to join a chapter. $250 once for 3 months (doesn't renew), or the 3 x $88 plan
@@ -16,8 +17,7 @@ export const MONTHLY_CHECKOUT_URL = "https://buy.stripe.com/fZueVe5sj13peCe6ON7k
 // founding door onwards a join on that price is a plan join, and the commitment rules in
 // src/lib/commitment.ts apply to it (see PLAN_COMMITMENT_FROM in stripe-tiers.ts).
 export const UPFRONT_CHECKOUT_URL = "https://buy.stripe.com/6oU5kEdYP7rN2Twehf7kc0x";
-export const PLAN_CHECKOUT_URL: string | null = MONTHLY_CHECKOUT_URL;
-export const VIP_CHECKOUT_URL = "https://buy.stripe.com/28EaEY1c3cM73XAehf7kc0i";
+export const PLAN_CHECKOUT_URL: string | null = VIP_CHECKOUT_URL; // $555 a month x 3, the three-month cohort
 
 /**
  * Stripe's hosted Customer Portal login page.

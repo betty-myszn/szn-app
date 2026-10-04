@@ -17,8 +17,7 @@ type PlanId = "monthly" | "vip";
 // day one. The old create-free route still exists (expired trials converge onto the free tier) but
 // is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
-  { id: "monthly", name: "MY SZN", tagline: "lock in for three zodiac seasons: your personalised platform, a Transformation Workshop and a Community Circle every season", price: "waitlist open" },
-  { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
+  { id: "monthly", name: "MY SZN", tagline: "the three-month cohort: a private 1:1 with Betty every month, group coaching every season and your own chart", price: "$555/mo × 3" },
 ];
 
 export default function SignupPage() {
@@ -33,7 +32,7 @@ export default function SignupPage() {
           join <span className="pk">MY SZN.</span>
         </h1>
         <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7, marginBottom: 20 }}>
-          Go all in on the full personalised platform, or go VIP and have Betty working on your chart with you directly. You can always upgrade later.
+          Three months, a private 1:1 with Betty every month, group coaching every season and your own chart guiding every move.
         </p>
 
         {/* All three sign-ups together, so nobody has to leave to find the paid tiers */}
@@ -69,7 +68,7 @@ export default function SignupPage() {
           <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 16 }}>
             {plan === "vip"
               ? "VIP is the full platform plus private one to one astrology coaching with Betty, for when you want her working on your chart directly."
-              : "MY SZN is three zodiac seasons with one destination, built around your own chart, with a live Transformation Workshop and a Community Circle with Betty every season."}
+              : "MY SZN is three zodiac seasons with one destination, built around your own chart, with a private 1:1 with Betty every month and group coaching every season."}
           </p>
           {plan === "vip" ? (
             <CheckoutButton

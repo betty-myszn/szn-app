@@ -14,8 +14,8 @@ describe("the 3-month commitment", () => {
     expect(isInCommitment(PLAN, start, Date.parse("2027-01-08T10:00:00Z"), PLAN)).toBe(false);
   });
 
-  it("leaves members who joined on the $88 price before the founding door on cancel-anytime terms", () => {
-    const real = "price_1U3FDpJ6s9fRhiJor7ofzAzT";
+  it("leaves members who joined on the cohort price before the founding door on their old terms", () => {
+    const real = "price_1TwEZjJ6s9fRhiJoJ0EAROdR";
     expect(commitmentEndsAt(real, "2026-09-20T10:00:00Z")).toBeNull();
     expect(isInCommitment(real, "2026-09-20T10:00:00Z", Date.parse("2026-10-20T00:00:00Z"))).toBe(false);
     expect(commitmentEndsAt(real, "2026-10-08T02:00:00Z")?.toISOString()).toBe("2027-01-08T02:00:00.000Z");
@@ -23,7 +23,7 @@ describe("the 3-month commitment", () => {
   });
 
   it("never applies to other prices, a missing start, or before the plan exists", () => {
-    expect(commitmentEndsAt("price_1TwER7J6s9fRhiJooQRyfcwQ", start, PLAN)).toBeNull();
+    expect(commitmentEndsAt("price_1U3FDpJ6s9fRhiJor7ofzAzT", start, PLAN)).toBeNull();
     expect(commitmentEndsAt(PLAN, null, PLAN)).toBeNull();
     expect(commitmentEndsAt(PLAN, start, null)).toBeNull();
   });

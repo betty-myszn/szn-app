@@ -25,7 +25,7 @@ type PaidTier = Exclude<MembershipLevel, "none" | "free" | "trial">;
 // it off. It runs on the existing $88 price, so the commitment is recognised from the price plus
 // the start date: memberships on this price that started from the founding door onwards are plan
 // joins. Members who joined on it before then keep the cancel-anytime terms they signed up on.
-export const PLAN_PRICE_ID: string | null = "price_1U3FDpJ6s9fRhiJor7ofzAzT";
+export const PLAN_PRICE_ID: string | null = "price_1TwEZjJ6s9fRhiJoJ0EAROdR"; // $555 a month, the three-month cohort
 export const PLAN_COMMITMENT_FROM = "2026-10-06T13:00:00Z"; // the founding door opening
 
 // One-time prices that buy a fixed 3 months. They never renew, so the account page says what she
@@ -68,7 +68,8 @@ function buildPriceMap(): Record<string, PaidTier> {
   if (envSocial) map[envSocial] = "social";
   // ...but the canonical mapping is applied last so the known live IDs always win, no matter what
   // the deployed env happens to hold.
-  return { ...map, ...CANONICAL_PRICE_TO_TIER, ...(PLAN_PRICE_ID ? { [PLAN_PRICE_ID]: "monthly" as const } : {}) };
+  // The plan price keeps its own canonical tier when it has one (the $555 cohort runs on the VIP price).
+  return { ...map, ...(PLAN_PRICE_ID ? { [PLAN_PRICE_ID]: "monthly" as const } : {}), ...CANONICAL_PRICE_TO_TIER };
 }
 
 export const PRICE_TO_TIER: Record<string, PaidTier> = buildPriceMap();

@@ -29,7 +29,7 @@ export default function WhatIsMySzn() {
             fontWeight: 500,
           }}
         >
-          {"Every season the doors open for three days and a new intake starts together. For three zodiac seasons you go after the life you actually want with your own astrology and Human Design, a live Transformation Workshop and Community Circle every season, shadow work, hypnosis and manifestation, next to women who are locking in at exactly the same time as you, cheering your wins and holding you to it."}
+          {"Every season the doors open for three days and a new intake starts together. For three zodiac seasons you go after the life you actually want with your own astrology and Human Design, a private 1:1 with Betty every month, group coaching every season, shadow work, hypnosis and manifestation, next to women who are locking in at exactly the same time as you, cheering your wins and holding you to it."}
         </p>
       </div>
     </section>

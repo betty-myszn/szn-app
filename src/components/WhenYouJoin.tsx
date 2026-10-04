@@ -6,7 +6,7 @@ const STEPS = [
   { h: "the second you're in", b: "Create your account and your personalised platform builds itself from your birth chart and your Human Design." },
   { h: "set your intention", b: "Tell us who you're becoming over the next three months, so everything you read and do points straight at her." },
   { h: "meet your intake", b: "Introduce yourself in the room (we pre-write it for you, one tap) and meet the women starting at the same time as you." },
-  { h: "get the dates", b: "This SZN's Transformation Workshop and Community Circle are on your dashboard, with the replays there if you can't make it live." },
+  { h: "book your first 1:1", b: "Pick the time for your first private session with Betty, and get the date of this season's group mastermind." },
   { h: "press play", b: "Your first hypnosis and audio guides are waiting in the app for a walk, a bath or a quiet ten minutes." },
   { h: "we start together", b: "When the doors close, your intake begins together. There's no falling behind in here: use what you need, ignore what you don't." },
 ];
