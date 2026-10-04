@@ -9,6 +9,7 @@ import { useDoorCta } from "@/lib/use-door-cta";
 import Manifesto from "@/components/Manifesto";
 import DoorButton from "@/components/DoorButton";
 import ThreeMonthsFromNow from "@/components/ThreeMonthsFromNow";
+import CoachingBand from "@/components/CoachingBand";
 import QuoteStrip from "@/components/QuoteStrip";
 import { CHAPTERS, sznTheme } from "@/lib/doors";
 import { upcomingWorkshops, pastWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
@@ -156,7 +157,7 @@ export default function Home() {
               fontWeight: 600,
             }}
           >
-            For women who want to make BIGGER moves, more $$$ and create their absolute BEST life.
+            For women who want to make BIGGER moves, more $$$ and create their absolute BEST life, with private coaching from Betty every month.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
@@ -223,7 +224,7 @@ export default function Home() {
             We&apos;re not waking up on the 30th of December wondering why life looks exactly the same, then cramming every change we&apos;ve ever wanted into January. We&apos;re doing it NOW.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--dark)", marginTop: 14, maxWidth: 760 }}>
-            MY SZN runs in three-month chapters, and this one is {CHAPTERS[0].title}. We lock in together for three zodiac seasons, love ourselves enough to want more, heal the shadow and claim our power, then go after our biggest dreams, so we walk into 2027 already moving.
+            MY SZN is a three-month cohort with a private 1:1 with Betty every month and group coaching every season, and this one is {CHAPTERS[0].title}. We lock in together for three zodiac seasons, love ourselves enough to want more, heal the shadow and claim our power, then go after our biggest dreams, so we walk into 2027 already moving.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 30 }}>
             {CHAPTERS[0].szns.map((sign, i) => {
@@ -254,6 +255,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <CoachingBand />
 
       <ThreeMonthsFromNow />
 
