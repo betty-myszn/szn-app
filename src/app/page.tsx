@@ -159,6 +159,9 @@ export default function Home() {
           >
             For women who want to make BIGGER moves, more $$$ and create their absolute BEST life, with private coaching from Betty every month.
           </p>
+          <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2vw, 21px)", fontWeight: 800, color: "#fff", maxWidth: 520, marginTop: 14, lineHeight: 1.35 }}>
+            The astrology-backed manifestation mastermind for ambitious women.
+          </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <Link

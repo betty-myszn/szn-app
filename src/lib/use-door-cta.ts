@@ -25,6 +25,6 @@ export function useDoorCta(variant = 0): { href: string; label: string; line: st
     label: pick(CLOSED),
     line: next
       ? `Doors open ${doorDay(next.opensAt)} at ${doorTime(next.opensAt)}, for ${doorDays(next)} days only.`
-      : "Doors open for a few days at the start of every season.",
+      : "The waitlist is open now. The founding cohort opens soon.",
   };
 }
