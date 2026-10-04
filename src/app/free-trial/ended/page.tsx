@@ -205,7 +205,7 @@ export default async function TrialEndedPage() {
           <h2 className="disp">you don&apos;t have to leave.</h2>
           <div className="ask-card">
             <span className="lbl">lock in for 3 months</span>
-            <div className="price">$250<small> / 3 months</small></div>
+            <div className="price">waitlist<small> first</small></div>
             <p>
               {"Your chart, your journal, your goals and everything you started this week are still saved. Join and you pick up in the exact same account, right where you left off."}
             </p>

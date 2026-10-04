@@ -208,7 +208,7 @@ export default function Home() {
           "become her before 2027",
           "a transformation workshop every szn",
           "a community circle every szn",
-          "lock in for 3 months · $250",
+          "the waitlist is open",
         ]}
       />
 
@@ -747,7 +747,7 @@ export default function Home() {
             us.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.7, color: "#fff", margin: "18px auto 0", fontWeight: 700 }}>
-            We&apos;re locking in for three months at founding member pricing: $250, or 3 monthly payments of $88, and it&apos;s going up as MY SZN grows.
+            The founding price goes to the waitlist first, and it&apos;s going up after the founding cohort.
           </p>
           <div className="mt-10">
             <Link

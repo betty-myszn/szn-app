@@ -416,7 +416,7 @@ export default function ChatRoomPage() {
               style={{ background: "var(--dark)", border: "var(--border)" }}
             >
               <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, maxWidth: 460 }}>
-                A live masterclass and astrotapping every month open up in MY SZN ($250 for 3 months), alongside your full personalised platform.
+                A live masterclass and astrotapping every month open up in MY SZN, alongside your full personalised platform.
               </p>
               <Link href="/membership" className="btn-pink" style={{ whiteSpace: "nowrap" }}>
                 unlock the rituals

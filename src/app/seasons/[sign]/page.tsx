@@ -241,7 +241,7 @@ export default async function SeasonPage({
             Experience {season.name} szn inside <span className="pk">MY SZN.</span>
           </h2>
           <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--dark)", maxWidth: 420, margin: "0 auto 28px" }}>
-            Lock in for three months and read this season against your own chart, with a live Transformation Workshop and a Community Circle with Betty every season. $250 for 3 months, with the doors opening for a few days at the start of every season.
+            Lock in for three months and read this season against your own chart, with a live Transformation Workshop and a Community Circle with Betty every season. The founding price goes to the waitlist first.
           </p>
           <div className="flex justify-center">
             <Link href={JOIN_CTA.href} className="btn-pink no-underline" style={{ padding: "16px 36px" }}>

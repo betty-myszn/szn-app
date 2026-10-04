@@ -87,7 +87,7 @@ export default function MembershipPage() {
   // The chapter on sale. Before the clock is read this is the first chapter, so the static render
   // and the first client render agree.
   const chapter = currentChapter(now ?? 0) ?? CHAPTERS[0];
-  const planLine = PLAN_CHECKOUT_URL ? "Founding member pricing: $250 for 3 months, or 3 monthly payments of $88" : "Founding member pricing: $250 for 3 months";
+  const planLine = "The founding price goes to the waitlist first";
 
   // Who is reading this page: the entry band below the hero speaks to a woman still finishing a
   // trial she started before trials were retired, or to a free or lapsed account, and shows nothing
@@ -952,20 +952,14 @@ export default function MembershipPage() {
               </div>
               <div className="p-8 md:p-9">
                 <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 14 }}>
-                  my szn · 3 months · founding member pricing
+                  my szn · 3 months
                 </div>
-                <div style={{ fontFamily: pp, fontSize: 54, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2.5px", lineHeight: 1 }}>
-                  $250<span style={{ fontSize: 22, fontWeight: 600, letterSpacing: 0 }}> / 3 months</span>
+                <div style={{ fontFamily: pp, fontSize: 46, fontWeight: 800, color: "var(--dark)", letterSpacing: "-2px", lineHeight: 1 }}>
+                  waitlist first
                 </div>
-                <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 4 }}>
-                  {PLAN_CHECKOUT_URL ? "paid once, or 3 monthly payments of $88" : "paid once · doesn't renew"}
+                <div style={{ fontSize: 13, color: "var(--dark)", marginTop: 6 }}>
+                  the founding price goes to the waitlist before anyone else
                 </div>
-                <div style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--pink)", padding: "5px 12px", borderRadius: 999 }}>
-                  that&apos;s $2.78 a day, less than your oat latte ☕
-                </div>
-                <p style={{ fontSize: 13.5, fontWeight: 600, color: "var(--dark)", lineHeight: 1.6, marginTop: 12, marginBottom: 0 }}>
-                  Three months of live group coaching, an intimate mastermind-style room and your personalised platform, for less than most coaches charge for a single session. This is founding member pricing, and it&apos;s going up as MY SZN grows.
-                </p>
                 <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, color: "var(--dark)", letterSpacing: "-0.4px", lineHeight: 1.3, margin: "16px 0 10px" }}>
                   We&apos;re locking in for three months.
                 </p>
@@ -1068,9 +1062,7 @@ export default function MembershipPage() {
             {[
               {
                 q: "How does the 3-month commitment work?",
-                a: PLAN_CHECKOUT_URL
-                  ? "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. Pay $250 once, which covers the full three months and never renews, or take the 3 x $88 plan, where those three monthly payments are committed and after the third it carries on monthly until you switch it off in your settings. The women who stay for the whole chapter are the ones who change, so that's what we build for."
-                  : "You're locking in for one chapter: three zodiac seasons, starting with the one you join in. It's $250, paid once, which covers the full three months and never renews. The women who stay for the whole chapter are the ones who change, so that's what we build for.",
+                a: "You're locking in for one cohort: three zodiac seasons that you move through together, from the first day to the end-of-cohort look back. The founding price and payment options go to the waitlist first.",
               },
               {
                 q: "I always buy things and don't use them. How is this different?",
@@ -1114,9 +1106,7 @@ export default function MembershipPage() {
               },
               {
                 q: "Can I cancel or get a refund?",
-                a: PLAN_CHECKOUT_URL
-                  ? "The $250 is one payment for three months and simply ends, nothing renews. On the 3 x $88 plan the three payments are committed, so cancelling opens up after your third payment, and from then on you can switch it off any time in your settings. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point."
-                  : "The $250 is one payment for three months and simply ends, nothing renews and there's nothing to cancel. We don't offer refunds on payments already taken, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
+                a: "Payments aren't refundable, because real transformation requires showing up, even on the days you don't feel like it. That's the whole point.",
               },
               {
                 q: "I'm not a business owner. Is this still for me?",

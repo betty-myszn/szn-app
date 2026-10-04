@@ -70,7 +70,7 @@ export function entryBandFor(member: Member | null, nowMs: number | null, ready:
     sub: "the chat rooms and your charts are still yours",
     body:
       "Your personalised platform, your szn guide, the live workshops, the astrotapping and the meditations are the members-only part. Everything you've already written and started stays saved on this account, so joining picks it all back up rather than starting anything again.",
-    cta: "lock in · $250 for 3 months",
+    cta: "get on the waitlist",
     href: "#pricing",
   };
 }

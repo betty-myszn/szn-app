@@ -218,7 +218,7 @@ export default function SeasonsIndexPage() {
             lock in for the <span style={{ color: "#fff" }}>next chapter.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--dark)", fontWeight: 600, marginTop: 20 }}>
-            Founding member pricing: $250 for three months, or 3 monthly payments of $88, and it's going up as MY SZN grows.
+            The founding price goes to the waitlist first, and it's going up after the founding cohort.
           </p>
           <DoorButton center />
         </div>

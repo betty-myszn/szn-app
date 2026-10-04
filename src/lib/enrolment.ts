@@ -13,11 +13,12 @@
 // moment a door opens or closes.
 
 import { useEffect, useState } from "react";
-import { applyOverride, doorState, type DoorState } from "@/lib/doors";
+import { WAITLIST_ONLY, applyOverride, doorState, type DoorState } from "@/lib/doors";
 
 const FLAG = process.env.NEXT_PUBLIC_ENROLMENT_OPEN;
 
 export function doorsAt(nowMs: number): DoorState {
+  if (WAITLIST_ONLY) return { open: null, next: null };
   return applyOverride(doorState(nowMs), FLAG);
 }
 

@@ -17,7 +17,7 @@ type PlanId = "monthly" | "vip";
 // day one. The old create-free route still exists (expired trials converge onto the free tier) but
 // is no longer a front door.
 const PLAN_OPTIONS: { id: PlanId; name: string; tagline: string; price: string }[] = [
-  { id: "monthly", name: "MY SZN", tagline: "lock in for three zodiac seasons: your personalised platform, a Transformation Workshop and a Community Circle every season", price: "$250 / 3 months" },
+  { id: "monthly", name: "MY SZN", tagline: "lock in for three zodiac seasons: your personalised platform, a Transformation Workshop and a Community Circle every season", price: "waitlist open" },
   { id: "vip", name: "MY SZN VIP", tagline: "everything in MY SZN, plus private 1:1 coaching with Betty", price: "$555/mo" },
 ];
 

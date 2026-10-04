@@ -95,6 +95,10 @@ export const DOORS: Door[] = [
   },
 ];
 
+// Waitlist first (Betty, 4 Oct 2026): MY SZN is being relaunched as a premium three-month cohort,
+// so no door opens on the schedule below until this is switched off. The schedule stays as data.
+export const WAITLIST_ONLY = true;
+
 export interface DoorState {
   /** The door that is open right now, if any. */
   open: Door | null;
