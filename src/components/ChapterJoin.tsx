@@ -47,8 +47,12 @@ export default function ChapterJoin({ dark = false }: { dark?: boolean }) {
 export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: boolean }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [goal, setGoal] = useState("");
+  const [block, setBlock] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const textColor = dark ? "#fff" : "var(--dark)";
+  const field = { width: "100%", padding: "12px 14px", border: "var(--border)", marginBottom: 8, fontSize: 14, background: "#fff", color: "var(--dark)", fontFamily: "inherit" } as const;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +62,14 @@ export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: bo
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), name: name.trim() || undefined, source: "membership-waitlist" }),
+        body: JSON.stringify({
+          email: email.trim(),
+          name: name.trim() || undefined,
+          instagram: instagram.trim() || undefined,
+          why: goal.trim() || undefined,
+          block: block.trim() || undefined,
+          source: "membership-waitlist",
+        }),
       });
       setState(res.ok ? "done" : "error");
     } catch {
@@ -68,21 +79,19 @@ export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: bo
 
   const when = next ? (
     <>
-      {"The next doors open "}
-      <strong>{doorDay(next.opensAt)}</strong>
-      {` at ${doorTime(next.opensAt)}, for ${next.name}, and they're only open for ${doorDays(next)} days, closing at ${next.closesAtMoment}.`}
+      {"Applications are open for "}
+      <strong>{next.name}</strong>
+      {`, and the doors open ${doorDay(next.opensAt)} at ${doorTime(next.opensAt)} for ${doorDays(next)} days only.`}
     </>
   ) : (
-    <>The doors open for a few days at the start of each season, and the next dates are going up very soon.</>
+    <>Applications are open for the founding cohort. Tell me a little about you and we&apos;ll be in touch before the doors open.</>
   );
 
   if (state === "done") {
     return (
       <div style={{ color: textColor }}>
-        <p style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, marginBottom: 8 }}>You&apos;re on the list, babe 💗</p>
-        <p style={{ fontSize: 13, lineHeight: 1.7 }}>
-          We&apos;ll email you the second the doors open, so you can lock in with everyone else.
-        </p>
+        <p style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, marginBottom: 8 }}>Your application is in, babe 💗</p>
+        <p style={{ fontSize: 13, lineHeight: 1.7 }}>We&apos;ll be in touch before the founding cohort opens.</p>
       </div>
     );
   }
@@ -90,30 +99,13 @@ export function DoorAlert({ next, dark = false }: { next: Door | null; dark?: bo
   return (
     <form onSubmit={submit} style={{ color: textColor }}>
       <p style={{ fontSize: 13, lineHeight: 1.7, marginBottom: 14 }}>{when}</p>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="first name"
-        autoComplete="given-name"
-        style={{ width: "100%", padding: "12px 14px", border: "var(--border)", marginBottom: 8, fontSize: 14, background: "#fff", color: "var(--dark)" }}
-      />
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="email"
-        autoComplete="email"
-        style={{ width: "100%", padding: "12px 14px", border: "var(--border)", marginBottom: 12, fontSize: 14, background: "#fff", color: "var(--dark)" }}
-      />
-      <button
-        type="submit"
-        disabled={state === "sending"}
-        className="btn-pink w-full"
-        style={{ cursor: state === "sending" ? "wait" : "pointer", opacity: state === "sending" ? 0.6 : 1 }}
-      >
-        {state === "sending" ? "saving your spot…" : "save my spot"}
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="first name" autoComplete="given-name" aria-label="First name" style={field} />
+      <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email" autoComplete="email" aria-label="Email" style={field} />
+      <input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="instagram (optional)" aria-label="Instagram handle" style={field} />
+      <textarea value={goal} onChange={(e) => setGoal(e.target.value)} rows={2} placeholder="What do you want to create in the next 90 days?" aria-label="What do you want to create in the next 90 days?" style={field} />
+      <textarea value={block} onChange={(e) => setBlock(e.target.value)} rows={2} placeholder="What's been getting in the way?" aria-label="What's been getting in the way?" style={{ ...field, marginBottom: 12 }} />
+      <button type="submit" disabled={state === "sending"} className="btn-pink w-full" style={{ cursor: state === "sending" ? "wait" : "pointer", opacity: state === "sending" ? 0.6 : 1 }}>
+        {state === "sending" ? "sending your application…" : "apply for the founding cohort"}
       </button>
       {state === "error" && (
         <p style={{ fontSize: 12, color: "var(--pink)", marginTop: 10 }}>

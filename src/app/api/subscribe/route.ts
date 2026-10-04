@@ -16,6 +16,10 @@ const CHART_ATTRIBUTES: Array<{ name: string; type: "text" | "date" }> = [
   { name: "DATE_OF_BIRTH", type: "text" },
   { name: "BIRTH_TIME", type: "text" },
   { name: "PLACE_OF_BIRTH", type: "text" },
+  // The founding-cohort application (the door alert form on /membership).
+  { name: "INSTAGRAM", type: "text" },
+  { name: "APPLY_GOAL", type: "text" },
+  { name: "APPLY_BLOCK", type: "text" },
 ];
 
 async function brevo(path: string, opts: RequestInit = {}) {
@@ -47,7 +51,7 @@ async function ensureAttribute(name: string, type: string): Promise<void> {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name, source, instagram, why, dateOfBirth, birthTime, birthTimeApproximate, placeOfBirth, sunSign, moonSign, risingSign } = body;
+    const { email, name, source, instagram, why, block, dateOfBirth, birthTime, birthTimeApproximate, placeOfBirth, sunSign, moonSign, risingSign } = body;
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -91,6 +95,9 @@ export async function POST(req: NextRequest) {
         if (dateOfBirth) attributes.DATE_OF_BIRTH = dateOfBirth;
         if (birthTime) attributes.BIRTH_TIME = birthTimeApproximate ? `${birthTime} (approx)` : birthTime;
         if (placeOfBirth) attributes.PLACE_OF_BIRTH = placeOfBirth;
+        if (instagram) attributes.INSTAGRAM = String(instagram).slice(0, 200);
+        if (why) attributes.APPLY_GOAL = String(why).slice(0, 2000);
+        if (block) attributes.APPLY_BLOCK = String(block).slice(0, 2000);
 
         const res = await brevo("/contacts", {
           method: "POST",

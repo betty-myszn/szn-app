@@ -7,7 +7,7 @@ import { doorDay, doorDays, doorTime } from "@/lib/doors";
 // so a page full of buttons doesn't say the same thing every time: waitlist wording while the doors
 // are shut, join wording while one is open. Both land on /membership, at the door alert form or the
 // plans. `line` is the dated sentence that sits next to the button.
-const CLOSED = ["put me on the waitlist", "I'm done waiting until January", "save my spot", "I'm ready to become her"];
+const CLOSED = ["apply for the founding cohort", "I'm done waiting until January", "apply now", "I'm ready to become her"];
 const OPEN = ["lock me in", "I'm done waiting until January", "I'm ready to become her", "lock me in for 3 months"];
 
 export function useDoorCta(variant = 0): { href: string; label: string; line: string } {
@@ -25,6 +25,6 @@ export function useDoorCta(variant = 0): { href: string; label: string; line: st
     label: pick(CLOSED),
     line: next
       ? `Doors open ${doorDay(next.opensAt)} at ${doorTime(next.opensAt)}, for ${doorDays(next)} days only.`
-      : "The waitlist is open now. The founding cohort opens soon.",
+      : "Applications are open now for the founding cohort.",
   };
 }

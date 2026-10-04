@@ -188,7 +188,7 @@ export default function HumanDesignChartPage() {
           Your Type is the surface. Inside, your Human Design and your astrology are woven together across every part of your life: your centres, channels and every gate, plus how your design actually plays out in money, love, business and confidence, with live coaching and community to help you live it.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          Three-month cohorts with Betty · the waitlist is open
+          Three-month cohorts with Betty · applications open now
         </p>
         <a
           href="/membership"

@@ -72,7 +72,7 @@ export default function MembershipPage() {
   const enrolmentOpen = !!doors.open;
   const door = doors.open ?? doors.next;
   const { href: joinHref } = joinCta(enrolmentOpen, "#pricing");
-  const joinLabel = enrolmentOpen ? "lock me in" : "put me on the waitlist";
+  const joinLabel = enrolmentOpen ? "lock me in" : "apply for the founding cohort";
 
   // The upcoming-workshops block reads the same schedule as /events, so this sales page never
   // advertises a class that has already happened. Clock read on the client so the upcoming split
@@ -970,7 +970,7 @@ export default function MembershipPage() {
               </div>
             </div>
             <div className="p-8 md:p-10" style={{ background: "#fff", borderLeft: "2px solid var(--pink)" }}>
-              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "the waitlist"}</div>
+              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "apply"}</div>
               <ChapterJoin />
             </div>
           </div>
@@ -1078,7 +1078,7 @@ export default function MembershipPage() {
                 fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "var(--pink)", marginBottom: 24,
               }}>
-                {enrolmentOpen ? "the doors are open" : "the doors are closed right now"}
+                {enrolmentOpen ? "the doors are open" : "applications are open"}
               </div>
               <h2 style={{
                 fontFamily: pp, fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 800,
@@ -1092,7 +1092,7 @@ export default function MembershipPage() {
               }}>
                 {enrolmentOpen
                   ? "We're locking in for three months, and you're invited. Choose how you'd like to pay and your personalised portal is built the moment you're in."
-                  : "We open the doors for a few days at the start of each season, so everyone who joins starts together. Leave your email and you'll be the first to know when they open."}
+                  : "Applications are open for the founding cohort. Tell me a little about you and what you want to create, and we'll be in touch before the doors open."}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-10">
@@ -1117,7 +1117,7 @@ export default function MembershipPage() {
             </div>
 
             <div className="p-8 md:p-10" style={{ border: "var(--border)", background: "#fff" }}>
-              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "doors alert"}</div>
+              <div className="tag mb-3">{enrolmentOpen ? "lock in" : "apply"}</div>
               {enrolmentOpen ? <ChapterJoin /> : doors.ready ? <DoorAlert next={doors.next} /> : <div style={{ minHeight: 220 }} aria-hidden />}
             </div>
           </div>

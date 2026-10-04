@@ -191,7 +191,7 @@ export default function ChartPage() {
           Your chart is just the beginning. Get a live masterclass and astrotapping every month, subconscious rewiring and community to help you actually live your astrology. Go VIP and you get a 1:1 coaching call with Betty on top.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          Three-month cohorts with Betty · the waitlist is open
+          Three-month cohorts with Betty · applications open now
         </p>
         <a href="/membership" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
