@@ -17,8 +17,10 @@ export interface Offer {
   line: string;
   /** Confirmed price only, or null. */
   price: string | null;
-  /** Brevo list id env var. Unset = contact still saved in Supabase + tagged, filed on the default list. */
+  /** Brevo list id env var, overriding the canonical id below if the list is ever replaced. */
   brevoEnv: string;
+  /** The Brevo list this waitlist files onto (created 13-15 Oct 2026). */
+  brevoList: number;
   cta: string;
 }
 
@@ -31,6 +33,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "your personalised money report: what your chart says about wealth, worth and getting PAID",
     price: "$88",
     brevoEnv: "BREVO_LIST_RICH_BTCH_RISING",
+    brevoList: 25,
     cta: "join the waitlist",
   },
   "bad-btch-report": {
@@ -41,6 +44,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "your personalised confidence report: your power, your visibility, your most unapologetic self",
     price: null,
     brevoEnv: "BREVO_LIST_BAD_BTCH_REPORT",
+    brevoList: 22,
     cta: "join the waitlist",
   },
   "baddie-coven": {
@@ -51,6 +55,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "our creative, cosmic clubhouse: monthly classes, rituals, witchcraft and your girls",
     price: null,
     brevoEnv: "BREVO_LIST_BADDIE_COVEN",
+    brevoList: 23,
     cta: "join the waitlist",
   },
   mastermind: {
@@ -61,6 +66,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "90 days of becoming HER, with private coaching from Betty every month",
     price: "$1,500 for 90 days ($500 a month)",
     brevoEnv: "BREVO_LIST_MASTERMIND",
+    brevoList: 26,
     cta: "join the waitlist",
   },
   retreat: {
@@ -71,6 +77,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "in real life, all of you: body, sensuality, shadow, power, sisterhood",
     price: null,
     brevoEnv: "BREVO_LIST_RETREAT",
+    brevoList: 24,
     cta: "join the waitlist",
   },
   book: {
@@ -81,6 +88,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     line: "becoming your future self, in print, coming soon",
     price: null,
     brevoEnv: "BREVO_LIST_BOOK",
+    brevoList: 27,
     cta: "register my interest",
   },
 };
@@ -91,10 +99,10 @@ export function isOfferSlug(v: unknown): v is OfferSlug {
   return typeof v === "string" && (OFFER_SLUGS as string[]).includes(v);
 }
 
-/** The Brevo list a waitlist signup lands on, or null when Betty hasn't set the list id yet. */
-export function waitlistListId(slug: OfferSlug): number | null {
+/** The Brevo list a waitlist signup lands on: the env override if set, else the canonical list. */
+export function waitlistListId(slug: OfferSlug): number {
   const v = process.env[OFFERS[slug].brevoEnv]?.trim();
-  return v && /^\d+$/.test(v) ? parseInt(v, 10) : null;
+  return v && /^\d+$/.test(v) ? parseInt(v, 10) : OFFERS[slug].brevoList;
 }
 
 export const PODCAST = { emoji: "🎙️", name: "The MY SZN Podcast", href: "/podcast" };
