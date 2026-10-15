@@ -13,8 +13,8 @@ type Tone = "pink" | "white" | "lav" | "dark" | "pinkLight";
 const BG: Record<Tone, string> = { pink: "var(--pink)", white: "#fff", lav: "var(--lav-light)", dark: "var(--dark)", pinkLight: "var(--pink-light)" };
 
 export function OfferHero({
-  offer, kicker, title, accent, intro, tone = "pink", art,
-}: { offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode }) {
+  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", extraCta,
+}: { offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
   const o = OFFERS[offer];
   const ink = tone === "dark" ? "#fff" : "var(--dark)";
   const accentInk = tone === "pink" ? "#fff" : "var(--pink)";
@@ -32,9 +32,10 @@ export function OfferHero({
         </h1>
         <div style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.65, color: ink, maxWidth: 680, marginTop: 26, fontWeight: 600 }}>{intro}</div>
         <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 34 }}>
-          <a href="#waitlist" className="no-underline" style={{ background: tone === "pink" ? "var(--dark)" : "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block" }}>
+          <a href={ctaHref} {...(ctaHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="no-underline" style={{ background: tone === "pink" ? "var(--dark)" : "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block" }}>
             {o.cta}
           </a>
+          {extraCta}
           {o.price && <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: ink }}>{o.price}</span>}
         </div>
         </div>
@@ -140,7 +141,7 @@ export function Cover({ kind }: { kind: "rich-btch-rising" | "bad-btch-report" |
   const c = {
     "rich-btch-rising": { bg: "var(--dark)", ink: "#fff", top: "my szn presents", lines: ["rich", "b*tch", "rising."], hot: 1, sub: "worth · wealth · receiving · purpose", img: "/cosmic-money.png", tilt: -4 },
     "bad-btch-report": { bg: "var(--pink)", ink: "var(--dark)", top: "my szn presents", lines: ["the bad", "b*tch", "report"], hot: 1, sub: "your personalised astrology blueprint for taking up more space", img: null, tilt: 4 },
-    book: { bg: "var(--lav)", ink: "var(--dark)", top: "betty · my szn", lines: ["becoming", "her."], hot: 1, sub: "coming soon", img: null, tilt: -3 },
+    book: { bg: "var(--lav)", ink: "var(--dark)", top: "betty · my szn", lines: ["becoming", "her."], hot: 1, sub: "out now in paperback + ebook", img: null, tilt: -3 },
   }[kind];
   return (
     <div aria-hidden="true" style={{ width: "min(320px, 78vw)", aspectRatio: "0.707", background: c.bg, color: c.ink, border: "var(--border)", borderRadius: 6, padding: "26px 24px", position: "relative", overflow: "hidden", transform: `rotate(${c.tilt}deg)`, boxShadow: "10px 12px 0 var(--dark)", display: "flex", flexDirection: "column" }}>

@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
-import { OfferHero, Band, Tiles, WaitlistBand, OfferCards, Cover } from "@/components/Offer";
+import { OfferHero, Band, Tiles, OfferCards, Cover } from "@/components/Offer";
+import { BOOK_PAPERBACK_URL, BOOK_EBOOK_URL } from "@/lib/offers";
 
-// The MY SZN Book: coming soon. Register-your-interest only. No title, date or publisher is
-// confirmed, so the page names none of them.
+const pp = "var(--font-poppins), Poppins, sans-serif";
+const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+// The MY SZN Book: out now on Amazon in paperback and as an ebook. Sold directly, no waitlist.
 
 export const metadata: Metadata = {
-  title: "The MY SZN Book, Coming Soon",
+  title: "The MY SZN Book, Paperback + Ebook on Amazon",
   description:
-    "The MY SZN book is coming: becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life. Register your interest.",
+    "The MY SZN book: becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life. Out now on Amazon in paperback and Kindle ebook.",
   alternates: { canonical: "/book" },
   openGraph: {
     title: "The MY SZN Book 📚",
-    description: "Becoming your future self, in print. Coming soon, register your interest.",
+    description: "Becoming your future self, in print. Out now on Amazon in paperback and ebook.",
     url: "/book",
     type: "website",
   },
@@ -25,12 +28,18 @@ export default function BookPage() {
         offer="book"
         art={<Cover kind="book" />}
         tone="dark"
-        kicker="the my szn book · coming soon"
+        ctaHref={BOOK_PAPERBACK_URL}
+        extraCta={
+          <a href={BOOK_EBOOK_URL} {...ext} className="no-underline" style={{ border: "2px solid #fff", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px", display: "inline-block" }}>
+            get the ebook
+          </a>
+        }
+        kicker="the my szn book · out now on amazon"
         title="becoming her,"
         accent="in print."
         intro={
           <p>
-            OMGGGG, there&apos;s a book coming, a whole entire book about becoming your future self through astrology, manifestation and a LOT of self-love, written for every woman who knows deep down she&apos;s meant for a bigger, richer, wilder life than the one she was handed.
+            OMGGGG, the MY SZN book is OUT, a whole entire book about becoming your future self through astrology, manifestation and a LOT of self-love, written for every woman who knows deep down she&apos;s meant for a bigger, richer, wilder life than the one she was handed.
           </p>
         }
       />
@@ -46,16 +55,22 @@ export default function BookPage() {
         />
       </Band>
 
-      <WaitlistBand
-        offer="book"
-        title="be first"
-        accent="in line."
-        body={
-          <p>
-            Register your interest and you&apos;ll be the first to know the moment there&apos;s a cover to swoon over, a date to circle and a way to get your hands on a copy.
+      <section className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92 }}>
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
+            get your hands
+            <br />
+            <span className="pk">on it.</span>
+          </h2>
+          <p style={{ fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,0.85)", marginTop: 22, fontWeight: 500 }}>
+            The MY SZN book is out now on Amazon, so grab the paperback for your bedside table (and your highlighters) or the ebook for your Kindle, and start becoming HER tonight.
           </p>
-        }
-      />
+          <div className="flex flex-wrap justify-center gap-4" style={{ marginTop: 30 }}>
+            <a href={BOOK_PAPERBACK_URL} {...ext} className="no-underline" style={{ background: "var(--pink)", color: "#fff", display: "inline-block", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 40px" }}>get the paperback</a>
+            <a href={BOOK_EBOOK_URL} {...ext} className="no-underline" style={{ border: "2px solid #fff", color: "#fff", display: "inline-block", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 40px" }}>get the ebook</a>
+          </div>
+        </div>
+      </section>
 
       <OfferCards exclude="book" />
     </>

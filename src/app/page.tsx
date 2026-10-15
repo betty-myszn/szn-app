@@ -24,7 +24,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 //   5 reports        money + confidence, side by side
 //   6 coven          the clubhouse
 //   7 retreat        in real life
-//   8 podcast + book listen now, read soon
+//   8 podcast + book listen now, read now
 //   9-11             manifesto, Betty, quotes (the brand's beliefs and founder, moved from the old home)
 //   12 free chart    the free way in
 //   13 close         pick your door
@@ -225,10 +225,10 @@ export default function Home() {
             <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>listen →</div>
           </Link>
           <Link href="/book" className="no-underline offer-card" style={{ background: "var(--pink-light)", color: "var(--dark)", border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
-            <div className="tag">📚 coming soon</div>
+            <div className="tag">📚 out now</div>
             <h2 className="display" style={{ fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 1, marginTop: 12 }}>the my szn <span className="pk">book.</span></h2>
-            <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14 }}>Becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life, in print.</p>
-            <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>register my interest →</div>
+            <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14 }}>Becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life, in paperback and ebook.</p>
+            <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>get your copy →</div>
           </Link>
         </div>
       </section>

@@ -85,11 +85,11 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     emoji: "📚",
     name: "The MY SZN Book",
     href: "/book",
-    line: "becoming your future self, in print, coming soon",
+    line: "becoming your future self, out now in paperback + ebook",
     price: null,
     brevoEnv: "BREVO_LIST_BOOK",
     brevoList: 27,
-    cta: "register my interest",
+    cta: "get the paperback",
   },
 };
 
@@ -104,5 +104,9 @@ export function waitlistListId(slug: OfferSlug): number {
   const v = process.env[OFFERS[slug].brevoEnv]?.trim();
   return v && /^\d+$/.test(v) ? parseInt(v, 10) : OFFERS[slug].brevoList;
 }
+
+// The MY SZN book on Amazon. The book page sells it directly: no waitlist.
+export const BOOK_PAPERBACK_URL = "https://www.amazon.com/dp/B0FQBMQNKM";
+export const BOOK_EBOOK_URL = "https://www.amazon.com/dp/B0FQ5DR8HR";
 
 export const PODCAST = { emoji: "🎙️", name: "The MY SZN Podcast", href: "/podcast" };
