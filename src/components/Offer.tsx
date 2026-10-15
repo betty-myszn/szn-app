@@ -62,7 +62,7 @@ export function Band({ tone = "white", tag, title, accent, children }: { tone?: 
 }
 
 /** A grid of themed tiles: what we explore / what's inside. */
-export function Tiles({ items, tone = "white" }: { items: { emoji: string; title: string; body: string }[]; tone?: Tone }) {
+export function Tiles({ items, tone = "white" }: { items: { emoji: string; title: string; body: ReactNode }[]; tone?: Tone }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
       {items.map((t) => (
