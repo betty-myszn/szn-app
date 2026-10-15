@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { OfferHero, Band, Tiles, OfferCards, Cover } from "@/components/Offer";
+import { OfferHero, Band, Tiles, OfferCards } from "@/components/Offer";
 import { BOOK_PAPERBACK_URL, BOOK_EBOOK_URL } from "@/lib/offers";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -8,12 +8,12 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 // The MY SZN Book: out now on Amazon in paperback and as an ebook. Sold directly, no waitlist.
 
 export const metadata: Metadata = {
-  title: "The MY SZN Book, Paperback + Ebook on Amazon",
+  title: "The MY SZN Book by Betty Andrews, Paperback + Ebook on Amazon",
   description:
-    "The MY SZN book: becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life. Out now on Amazon in paperback and Kindle ebook.",
+    "The MY SZN book by Betty Andrews: becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life. Out now on Amazon in paperback and Kindle ebook.",
   alternates: { canonical: "/book" },
   openGraph: {
-    title: "The MY SZN Book 📚",
+    title: "The MY SZN Book by Betty Andrews 📚",
     description: "Becoming your future self, in print. Out now on Amazon in paperback and ebook.",
     url: "/book",
     type: "website",
@@ -26,7 +26,10 @@ export default function BookPage() {
     <>
       <OfferHero
         offer="book"
-        art={<Cover kind="book" />}
+        art={
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/myszn-book-cover.jpg" alt="MY SZN by Betty Andrews, book cover" style={{ width: "min(340px, 78vw)", height: "auto", border: "var(--border)", borderRadius: 6, transform: "rotate(-3deg)", boxShadow: "10px 12px 0 var(--pink)" }} />
+        }
         tone="dark"
         ctaHref={BOOK_PAPERBACK_URL}
         extraCta={
@@ -35,8 +38,8 @@ export default function BookPage() {
           </a>
         }
         kicker="the my szn book · out now on amazon"
-        title="becoming her,"
-        accent="in print."
+        title="the my szn book"
+        accent="by betty andrews."
         intro={
           <p>
             OMGGGG, the MY SZN book is OUT, a whole entire book about becoming your future self through astrology, manifestation and a LOT of self-love, written for every woman who knows deep down she&apos;s meant for a bigger, richer, wilder life than the one she was handed.

@@ -226,7 +226,7 @@ export default function Home() {
           </Link>
           <Link href="/book" className="no-underline offer-card" style={{ background: "var(--pink-light)", color: "var(--dark)", border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
             <div className="tag">📚 out now</div>
-            <h2 className="display" style={{ fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 1, marginTop: 12 }}>the my szn <span className="pk">book.</span></h2>
+            <h2 className="display" style={{ fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 1, marginTop: 12 }}>the my szn book <span className="pk">by betty andrews.</span></h2>
             <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14 }}>Becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life, in paperback and ebook.</p>
             <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>get your copy →</div>
           </Link>

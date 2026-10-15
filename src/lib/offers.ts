@@ -83,7 +83,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
   book: {
     slug: "book",
     emoji: "📚",
-    name: "The MY SZN Book",
+    name: "The MY SZN Book by Betty Andrews",
     href: "/book",
     line: "becoming your future self, out now in paperback + ebook",
     price: null,
