@@ -17,9 +17,12 @@ export interface Cta {
 }
 
 /** The join: the default ask for anyone who isn't a member. */
+// Oct 2026: every MY SZN offer is waitlist-only while the ecosystem relaunches, and the old
+// "apply for my szn" join was the Mastermind (private 1:1s with Betty), so it now lands on the
+// Mastermind waitlist. /membership itself redirects to The Baddie Coven.
 export const JOIN_CTA: Cta = {
-  href: "/membership",
-  label: "apply for my szn",
+  href: "/mastermind#waitlist",
+  label: "join the mastermind waitlist",
 };
 
 /**
@@ -29,6 +32,6 @@ export const JOIN_CTA: Cta = {
  * destination: there is no free trial or waitlist left to fall back to, and the pricing section is
  * what explains the doors.
  */
-export function joinCta(_enrolmentOpen: boolean, paidHref = "/membership"): Cta {
+export function joinCta(_enrolmentOpen: boolean, paidHref = JOIN_CTA.href): Cta {
   return { href: paidHref, label: JOIN_CTA.label };
 }

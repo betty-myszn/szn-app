@@ -49,31 +49,33 @@ const freeLinks = [
   { href: "/blog", label: "blog" },
 ];
 
-// The guest menu is four doors, not six. Home and the paid offer stand alone; everything that is
-// browsing rather than deciding goes under EXPLORE, so the join button is competing with two
-// links instead of six. Coaching is a different business (The Cosmic Co) and is marked as leaving
-// the site, which is what the arrow is for.
+// The guest menu (13 Oct 2026): WORK WITH ME holds every offer, then the podcast and the book stand
+// alone, then EXPLORE for browsing. The logo is home, so there's no separate home link.
 const guestLinks = [
-  { href: "/", label: "home" },
-  { href: "/membership", label: "apply for my szn" },
+  { href: "/podcast", label: "podcast" },
+  { href: "/book", label: "book" },
 ];
 
-const exploreMenu = [
+const workMenu = [
+  { href: "/reports", label: "reports" },
+  { href: "/reports/rich-btch-rising", label: "rich b*tch rising", indent: true },
+  { href: "/reports/bad-btch-report", label: "the bad b*tch report", indent: true },
+  { href: "/baddie-coven", label: "the baddie coven" },
+  { href: "/mastermind", label: "the mastermind" },
+  { href: "/retreat", label: "the bad b*tch retreat" },
+];
+
+const exploreMenu: { href: string; label: string; indent?: boolean }[] = [
   // The free birth chart is the lowest-friction way in and the biggest single source of signups, so
   // it sits at the top of the menu it now lives in.
   { href: "/chart", label: "free birth chart" },
   { href: "/seasons", label: "seasons" },
   { href: "/events", label: "workshops" },
-  { href: "/podcast", label: "podcast" },
   { href: "/blog", label: "blog" },
   // MY SZN IRL host recruitment for London, New York and Los Angeles.
   { href: "/irl-host", label: "become a host" },
 ];
 
-/** Betty's coaching business, a separate site. Opens in a new tab so a visitor reading MY SZN does
- *  not lose her place, and carries rel="noopener" because a target="_blank" link without it hands
- *  the opened page a handle back to this one. */
-const COACHING_URL = "https://thecosmicco.com";
 
 // "customise my szn" launched 30 Sep 2026. The NEW sticker runs until Scorpio szn is well under
 // way, long enough for every regular member to have seen it, then drops off by itself.
@@ -101,16 +103,57 @@ function NewSticker() {
   );
 }
 
+/** A hover/click dropdown in the guest bar (WORK WITH ME, EXPLORE). Each owns its open state, with a
+ *  short grace period on mouse-out so clipping the edge on the way past doesn't make it blink. */
+function GuestMenu({ label, items, isActive }: { label: string; items: { href: string; label: string; indent?: boolean }[]; isActive: (href: string) => boolean }) {
+  const [open, setOpen] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  const active = items.some((i) => isActive(i.href));
+  return (
+    <div
+      style={{ position: "relative", paddingBottom: 14, marginBottom: -14 }}
+      onMouseEnter={() => { if (timer.current) clearTimeout(timer.current); }}
+      onMouseLeave={() => {
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = setTimeout(() => setOpen(false), 180);
+      }}
+    >
+      <button
+        type="button"
+        // Open, not toggle: a hover has already opened it, so a toggle would shut it on the click.
+        onClick={() => setOpen(true)}
+        onMouseEnter={() => setOpen(true)}
+        aria-expanded={open}
+        className="hover:text-[var(--pink)] transition-colors"
+        style={{ background: "none", border: "none", font: "inherit", letterSpacing: "inherit", textTransform: "inherit", cursor: "pointer", padding: 0, color: active ? "var(--pink)" : "var(--dark)", fontWeight: active ? 800 : undefined }}
+      >
+        {label} &#9662;
+      </button>
+      {open && (
+        <div className="flex flex-col" style={{ position: "absolute", top: 24, left: 0, minWidth: 220, background: "#fff", border: "var(--border)", zIndex: 200 }}>
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="no-underline hover:text-[var(--pink)]"
+              style={{ fontSize: 11, fontWeight: isActive(item.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: item.indent ? "10px 14px 10px 26px" : "10px 14px", borderBottom: "1px solid #eee", color: isActive(item.href) ? "var(--pink)" : "var(--dark)", background: isActive(item.href) ? "var(--lav-light)" : undefined }}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [chartOpen, setChartOpen] = useState(false);
   const [workshopsOpen, setWorkshopsOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
-  const exploreCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => {
-    if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
-  }, []);
   const [bellOpen, setBellOpen] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [unread, setUnread] = useState(0);
@@ -131,8 +174,6 @@ export default function NavBar() {
   const links = member ? (freeMember ? freeLinks : memberLinks) : guestLinks;
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
-  // Highlights EXPLORE while the visitor is on any page inside it, so she can see where she is.
-  const exploreActive = exploreMenu.some((item) => isActive(item.href));
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
   const workshopsSectionActive = ["/events", "/journal", "/meditations", "/subliminals"].some((p) => pathname?.startsWith(p));
 
@@ -209,8 +250,9 @@ export default function NavBar() {
 
         {/* Desktop nav */}
         <div
-          className="hidden md:flex gap-6 items-center"
+          className="hidden md:flex gap-5 items-center"
           style={{
+            whiteSpace: "nowrap",
             fontSize: 13,
             fontWeight: 500,
             letterSpacing: "0.04em",
@@ -353,6 +395,7 @@ export default function NavBar() {
               )}
             </div>
           )}
+          {!member && <GuestMenu label="work with me" items={workMenu} isActive={isActive} />}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -363,86 +406,7 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
-          {!member && (
-            <div
-              style={{ position: "relative", paddingBottom: 14, marginBottom: -14 }}
-              onMouseEnter={() => {
-                if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
-              }}
-              onMouseLeave={() => {
-                // Grace period rather than an instant close, so a mouse that clips the edge of the
-                // menu on its way somewhere else does not make the panel blink.
-                if (exploreCloseTimer.current) clearTimeout(exploreCloseTimer.current);
-                exploreCloseTimer.current = setTimeout(() => setExploreOpen(false), 180);
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setExploreOpen((v) => !v)}
-                onMouseEnter={() => setExploreOpen(true)}
-                className="hover:text-[var(--pink)] transition-colors"
-                style={{
-                  background: "none",
-                  border: "none",
-                  font: "inherit",
-                  letterSpacing: "inherit",
-                  textTransform: "inherit",
-                  cursor: "pointer",
-                  padding: 0,
-                  color: exploreActive ? "var(--pink)" : "var(--dark)",
-                  fontWeight: exploreActive ? 800 : undefined,
-                }}
-              >
-                explore &#9662;
-              </button>
-              {exploreOpen && (
-                <div
-                  className="flex flex-col"
-                  style={{
-                    position: "absolute",
-                    top: 24,
-                    left: 0,
-                    minWidth: 200,
-                    background: "#fff",
-                    border: "var(--border)",
-                    zIndex: 200,
-                  }}
-                >
-                  {exploreMenu.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setExploreOpen(false)}
-                      className="no-underline hover:text-[var(--pink)]"
-                      style={{
-                        fontSize: 11,
-                        fontWeight: isActive(item.href) ? 800 : 700,
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: "10px 14px",
-                        borderBottom: "1px solid #eee",
-                        color: isActive(item.href) ? "var(--pink)" : "var(--dark)",
-                        background: isActive(item.href) ? "var(--lav-light)" : undefined,
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          {!member && (
-            <a
-              href={COACHING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="no-underline hover:text-[var(--pink)] transition-colors"
-              style={{ color: "var(--dark)" }}
-            >
-              coaching &#8599;
-            </a>
-          )}
+          {!member && <GuestMenu label="explore" items={exploreMenu} isActive={isActive} />}
         </div>
 
         <div className="flex items-center gap-3">
@@ -735,7 +699,7 @@ export default function NavBar() {
                 member login
               </Link>
               <Link
-                href="/membership"
+                href="/#universe"
                 className="no-underline"
                 style={{
                   background: "var(--pink)",
@@ -749,7 +713,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                💖 join my szn
+                💖 pick your door
               </Link>
             </>
           )}
@@ -906,6 +870,22 @@ export default function NavBar() {
                 ))}
             </>
           )}
+          {!member && (
+            <>
+              <div style={{ fontWeight: 800, color: workMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>work with me</div>
+              {workMenu.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="no-underline hover:text-[var(--pink)]"
+                  style={{ paddingLeft: item.indent ? 32 : 16, color: isActive(item.href) ? "var(--pink)" : "var(--dark)" }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </>
+          )}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -921,7 +901,7 @@ export default function NavBar() {
             <>
               {/* No dropdown on mobile, so the nesting is shown by indenting, the same way the
                   member menus already handle their sub-items. */}
-              <div style={{ fontWeight: 800, color: exploreActive ? "var(--pink)" : "var(--dark)" }}>explore</div>
+              <div style={{ fontWeight: 800, color: exploreMenu.some((e) => isActive(e.href)) ? "var(--pink)" : "var(--dark)" }}>explore</div>
               {exploreMenu.map((item) => (
                 <Link
                   key={item.href}
@@ -933,16 +913,6 @@ export default function NavBar() {
                   {item.label}
                 </Link>
               ))}
-              <a
-                href={COACHING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="no-underline hover:text-[var(--pink)]"
-                style={{ color: "var(--dark)" }}
-              >
-                coaching &#8599;
-              </a>
             </>
           )}
           {member ? (
@@ -1009,12 +979,12 @@ export default function NavBar() {
           ) : (
             <>
               <Link
-                href="/membership"
+                href="/#universe"
                 onClick={() => setOpen(false)}
                 className="no-underline"
                 style={{ color: "var(--pink)", fontWeight: 800 }}
               >
-                💖 join my szn
+                💖 pick your door
               </Link>
               <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
                 member login

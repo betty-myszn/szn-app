@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 // Generated rather than a checked-in PNG so it can never drift from the brand colours, and so there
 // is no multi-megabyte image in the repo. Applies to every route that does not define its own.
-export const alt = "MY SZN, the astrology-led membership for ambitious women";
+export const alt = "MY SZN, astrology, manifestation and sisterhood for women becoming HER";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -48,7 +48,7 @@ export default async function Image() {
             marginBottom: 34,
           }}
         >
-          astrology membership for women
+          astrology, manifestation + sisterhood
         </div>
 
         <div style={{ display: "flex", fontSize: 128, fontWeight: 800, letterSpacing: -4 }}>
@@ -65,7 +65,7 @@ export default async function Image() {
             lineHeight: 1.4,
           }}
         >
-          Stop guessing. Start becoming her.
+          You didn't come here to play small.
         </div>
 
         <div

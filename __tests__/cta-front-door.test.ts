@@ -41,19 +41,9 @@ function code(text: string): string {
 const files = sourceFiles(SRC).filter((f) => !ALLOWED.some((a) => f.endsWith(a)));
 
 describe("joining is the only front door", () => {
-  it("has no waitlist call to action anywhere", () => {
-    const offenders: string[] = [];
-    for (const file of files) {
-      const body = code(fs.readFileSync(file, "utf8"));
-      if (/join the waitlist/i.test(body)) {
-        offenders.push(`${path.relative(SRC, file)}: says "join the waitlist"`);
-      }
-      if (/href=["'{][^"'}\n]*(?:\/waitlist|#waitlist)/.test(body)) {
-        offenders.push(`${path.relative(SRC, file)}: links to a waitlist`);
-      }
-    }
-    expect(offenders).toEqual([]);
-  });
+  // The old "no waitlist anywhere" rule was retired deliberately on 13 Oct 2026: Betty relaunched
+  // every MY SZN offer (reports, Coven, Mastermind, Retreat, Book) as waitlist-only, built on
+  // /api/waitlist + lib/offers. The free trial rule below still stands.
 
   it("has no free trial call to action anywhere", () => {
     const offenders: string[] = [];
@@ -72,9 +62,8 @@ describe("joining is the only front door", () => {
 
   it("routes non-members to the join", async () => {
     const { JOIN_CTA, joinCta } = await import("@/lib/cta");
-    expect(JOIN_CTA.href).toBe("/membership");
-    // Doors closed is exactly the case that used to fall through to the waitlist, then the trial.
-    expect(joinCta(false).href).toBe("/membership");
+    expect(JOIN_CTA.href).toBe("/mastermind#waitlist");
+    expect(joinCta(false).href).toBe("/mastermind#waitlist");
     expect(joinCta(true, "#pricing").href).toBe("#pricing");
   });
 });

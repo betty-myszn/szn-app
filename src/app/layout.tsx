@@ -30,11 +30,11 @@ export const metadata: Metadata = {
   // or resolves against the deploy preview host instead of the real domain.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "MY SZN, the Astrology-Backed Manifestation Mastermind for Ambitious Women",
+    default: "MY SZN, Astrology, Manifestation + Sisterhood for Women Becoming HER",
     template: "%s | MY SZN",
   },
   description:
-    "Your birth chart and your Human Design, read together as one thing instead of two. Free birth chart calculator, live coaching, subconscious rewiring, and a community of ambitious women. Most places give you astrology or Human Design. This gives you both, per life area, every szn.",
+    "MY SZN is a universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and unapologetic: personalised money + confidence reports, The Baddie Coven, the 90-day Mastermind, The Bad B*tch Retreat, the podcast and the book.",
   // Default canonical for the home page. Every other route overrides it with its own, which is what
   // stops query-string and trailing-slash variants being indexed as separate pages.
   alternates: { canonical: "/" },
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: SITE_NAME,
-    title: "MY SZN, Astrology + Human Design for Women",
-    description: "Stop guessing. Start becoming her. Your birth chart tells you who you are here to become, your Human Design tells you how you are built to get there. Both, in one read.",
+    title: "MY SZN, a Universe for Women Becoming HER 💜",
+    description: "Astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and completely obsessed with their lives. Reports, The Baddie Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MY SZN, Astrology + Human Design for Women",
-    description: "Your birth chart and your Human Design, read together as one thing. Free chart calculator, and a three-month mastermind with private coaching built around both."
+    title: "MY SZN, a Universe for Women Becoming HER 💜",
+    description: "Astrology, manifestation, creativity and sisterhood for women becoming HER. Reports, The Baddie Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book."
   },
   robots: {
     index: true,
@@ -159,11 +159,17 @@ export default function RootLayout({
           >
             &copy; 2026 The Cosmic Co. All rights reserved.
           </div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
             {[
               // The blog needs at least one site-wide internal link or it depends entirely on the
               // sitemap to be discovered, which is a much weaker signal than being linked from
               // every page.
+              { label: "reports", href: "/reports" },
+              { label: "coven", href: "/baddie-coven" },
+              { label: "mastermind", href: "/mastermind" },
+              { label: "retreat", href: "/retreat" },
+              { label: "podcast", href: "/podcast" },
+              { label: "book", href: "/book" },
               { label: "blog", href: "/blog" },
               { label: "privacy", href: "/privacy" },
               { label: "terms", href: "/terms" },

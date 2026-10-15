@@ -3,6 +3,15 @@ import { withSentryConfig } from "@sentry/nextjs/config";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["swisseph"],
+  // The MY SZN ecosystem restructure (13 Oct 2026). Temporary (307) on purpose so they're easy to
+  // reverse: the membership is becoming The Baddie Coven, and the Money Blueprint is now Rich B*tch
+  // Rising. Both old pages are kept in the codebase untouched.
+  async redirects() {
+    return [
+      { source: "/membership", destination: "/baddie-coven", permanent: false },
+      { source: "/money-blueprint", destination: "/reports/rich-btch-rising", permanent: false },
+    ];
+  },
 };
 
 // Sentry's build step. Source maps are uploaded (so stack traces read as real file and line) only

@@ -63,7 +63,7 @@ export default function CoachingBand() {
           ))}
         </div>
         <p style={{ fontSize: 15, fontWeight: 700, marginTop: 26 }}>
-          Plus a hypnosis every season, your personalised astrology guide and a small private cohort. Worth $1,111 a month, founding price $555 a month for three months.
+          Plus a hypnosis every season, your personalised astrology guide and a small private cohort. Worth $1,111 a month, and it&apos;s $1,500 for the full 90 days, which is $500 a month for three months.
         </p>
         <DoorButton variant={2} />
       </div>

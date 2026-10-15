@@ -776,3 +776,9 @@ html, body { overflow-x: hidden; }
   .szn-area:hover { transform: none; }
 }
 
+
+/* ── Offer pages (reports, coven, retreat, book, mastermind) ── */
+.offer-copy p { font-size: 17px; line-height: 1.8; margin: 0 0 16px; }
+.offer-copy p:last-child { margin-bottom: 0; }
+.offer-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.offer-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--dark); }

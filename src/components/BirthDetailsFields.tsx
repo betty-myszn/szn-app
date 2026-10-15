@@ -36,11 +36,13 @@ const defaultInput: CSSProperties = {
   outline: "none",
 };
 
-export default function BirthDetailsFields({ value, onChange, labelStyle = defaultLabel, inputStyle = defaultInput }: {
+export default function BirthDetailsFields({ value, onChange, labelStyle = defaultLabel, inputStyle = defaultInput, noteColor = "var(--grey)" }: {
   value: BirthDetails;
   onChange: (patch: Partial<BirthDetails>) => void;
   labelStyle?: CSSProperties;
   inputStyle?: CSSProperties;
+  /** Colour of the small "approximate time" note; override on dark backgrounds. */
+  noteColor?: string;
 }) {
   const { dateOfBirth, birthTime, birthTimeApproximate, location } = value;
 
@@ -114,7 +116,7 @@ export default function BirthDetailsFields({ value, onChange, labelStyle = defau
           className="h-4 w-4"
           style={{ accentColor: "var(--pink)" }}
         />
-        <label htmlFor="approximate" style={{ fontSize: 12, color: "var(--grey)" }}>
+        <label htmlFor="approximate" style={{ fontSize: 12, color: noteColor }}>
           Birth time is approximate / unknown exact time
         </label>
       </div>

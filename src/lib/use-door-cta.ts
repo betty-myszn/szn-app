@@ -1,30 +1,16 @@
 "use client";
 
-import { useDoors } from "@/lib/enrolment";
-import { doorDay, doorDays, doorTime } from "@/lib/doors";
-
-// The front-door button for pages outside /membership. First-person labels, rotated by `variant`
-// so a page full of buttons doesn't say the same thing every time: waitlist wording while the doors
-// are shut, join wording while one is open. Both land on /membership, at the door alert form or the
-// plans. `line` is the dated sentence that sits next to the button.
-const CLOSED = ["apply for the founding cohort", "I'm done waiting until January", "apply now", "I'm ready to become her"];
-const OPEN = ["lock me in", "I'm done waiting until January", "I'm ready to become her", "lock me in for 3 months"];
+// The Mastermind button used across the site (Manifesto, ValueStack, CoachingBand, WhoThisIsFor,
+// the seasons page). The Mastermind is waitlist-only for now (Oct 2026), so every variant lands on
+// the waitlist form at /mastermind#waitlist. First-person labels still rotate by `variant` so a page
+// full of buttons doesn't say the same thing every time. The door-aware version (join while a door
+// is open) is in git history; bring it back when the Mastermind opens for enrolment.
+const LABELS = ["join the mastermind waitlist", "I'm done waiting until January", "I'm ready to become her", "put me on the list"];
 
 export function useDoorCta(variant = 0): { href: string; label: string; line: string } {
-  const { ready, open, next } = useDoors();
-  const pick = (list: string[]) => list[variant % list.length];
-  if (!ready) return { href: "/membership#pricing", label: pick(OPEN), line: "" };
-  if (open)
-    return {
-      href: "/membership#pricing",
-      label: pick(OPEN),
-      line: `Doors are open now and close at ${open.closesAtMoment}, ${doorDay(open.closesAt)}.`,
-    };
   return {
-    href: "/membership#doors",
-    label: pick(CLOSED),
-    line: next
-      ? `Doors open ${doorDay(next.opensAt)} at ${doorTime(next.opensAt)}, for ${doorDays(next)} days only.`
-      : "Applications are open now for the founding cohort.",
+    href: "/mastermind#waitlist",
+    label: LABELS[variant % LABELS.length],
+    line: "Waitlist only for now, and the next cohort's dates go to the waitlist first.",
   };
 }

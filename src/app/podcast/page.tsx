@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { OG_IMAGE } from "@/lib/site";
 import { JOIN_CTA } from "@/lib/cta";
+import { OfferCards } from "@/components/Offer";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -165,13 +166,13 @@ export default function PodcastPage() {
           love the podcast? go deeper.
         </div>
         <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 12 }}>
-          Apply for MY SZN.
+          The MY SZN Mastermind.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.7)", maxWidth: 480, margin: "0 auto 8px" }}>
           Everything from the podcast, taken to the next level: a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          Three-month cohorts with Betty · applications open now
+          Three-month cohorts with Betty · waitlist open now
         </p>
         <a href={JOIN_CTA.href} style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
@@ -181,6 +182,7 @@ export default function PodcastPage() {
           {JOIN_CTA.label}
         </a>
       </div>
+      <OfferCards title="more of the my szn universe" />
     </>
   );
 }

@@ -13,5 +13,5 @@ export const OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "MY SZN, the astrology-led membership for ambitious women",
+  alt: "MY SZN, astrology, manifestation and sisterhood for women becoming HER",
 };
