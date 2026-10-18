@@ -589,13 +589,10 @@ html, body { overflow-x: hidden; }
     width: calc(100% + var(--hero-bleed));
     margin-left: 0;
     margin-right: calc(-1 * var(--hero-bleed));
-    /* Lifts the planet level with the eyebrow above the headline.
-       This has to scale: the image is bottom-anchored and its height grows with the bleed, so a
-       fixed lift that is right at 1280px sends it up behind the nav by 1600px. The slope keeps the
-       top roughly put as the image grows (measured: +146px of height per +320px of viewport), and
-       the min() caps it so it can never stop lifting altogether on very wide screens. */
-    margin-top: min(-20px, calc(45.6vw - 754px));
-    margin-bottom: -104px;
+    /* Centred beside the copy (see page.tsx) so the whole collage, planet to cash, sits in the
+       first screen next to the headline instead of hanging off the bottom of the hero. */
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 @media (max-width: 767px) {

@@ -111,7 +111,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div style={{ position: "relative", alignSelf: "end" }}>
+          <div style={{ position: "relative", alignSelf: "center" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hero-cutout" src="/hero-cutout.png" alt="" aria-hidden="true" />
           </div>
