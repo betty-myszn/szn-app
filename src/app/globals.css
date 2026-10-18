@@ -779,3 +779,52 @@ html, body { overflow-x: hidden; }
 .offer-copy p:last-child { margin-bottom: 0; }
 .offer-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
 .offer-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--dark); }
+
+/* ── Holographic foil (the Cosmic Co foil, colour-boosted) ──
+   Rule: never holo on holo. Anything sitting on a foil surface stays solid black or white. */
+:root { --foil: url("/brand/holographic.jpg"); }
+@keyframes foil-drift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes foil-sweep { from { transform: translateX(-120%) skewX(-20deg); } to { transform: translateX(260%) skewX(-20deg); } }
+
+/* Foil ring drawn over a card's own border, so it works on top of inline styles */
+.holo-edge, .offer-card, .pcard { position: relative; }
+.holo-edge::before, .offer-card::before, .pcard::before {
+  content: ""; position: absolute; inset: -2px; border-radius: inherit; padding: 3px; pointer-events: none;
+  background: var(--foil) center / 300% 300%; animation: foil-drift 14s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+
+/* Pink CTA keeps its pink, a foil sheen sweeps across on hover */
+.btn-pink { position: relative; overflow: hidden; }
+.btn-pink::after {
+  content: ""; position: absolute; top: 0; left: 0; width: 45%; height: 100%; pointer-events: none;
+  background: var(--foil) center / cover; mix-blend-mode: screen; opacity: 0; transform: translateX(-120%) skewX(-20deg);
+}
+.btn-pink:hover::after { opacity: 0.8; animation: foil-sweep 0.9s ease-out forwards; }
+
+/* Outline buttons fill with full foil on hover */
+.btn-outline:hover { background: var(--foil) center / 250% 250%; color: var(--dark); border-color: var(--dark); animation: foil-drift 8s ease-in-out infinite; }
+
+/* Opt-in pieces */
+.btn-foil { background: var(--foil) center / 250% 250%; color: var(--dark); border: 1.5px solid var(--dark); animation: foil-drift 10s ease-in-out infinite; }
+.btn-foil:hover { opacity: 0.92; }
+.holo-sticker {
+  display: inline-block; border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--dark); background: var(--foil) center / 300% 300%; animation: foil-drift 12s ease-in-out infinite;
+  box-shadow: 0 0 0 3px #fff, 0 6px 16px -6px rgba(122, 78, 134, 0.5);
+}
+.foil-text {
+  background: var(--foil) center / 200%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: foil-drift 9s ease-in-out infinite;
+}
+.holo-shape {
+  display: inline-block; background: var(--foil) center / 300%; animation: foil-drift 10s ease-in-out infinite;
+  -webkit-mask: var(--shape) center / contain no-repeat; mask: var(--shape) center / contain no-repeat;
+}
+.holo-shape-wrap { display: inline-block; line-height: 0; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 6px 8px rgba(122, 78, 134, 0.35)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-edge::before, .offer-card::before, .pcard::before, .btn-outline:hover, .btn-foil, .holo-sticker, .foil-text, .holo-shape { animation: none; }
+  .btn-pink:hover::after { animation: none; opacity: 0; }
+}

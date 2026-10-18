@@ -7,6 +7,7 @@ import { useMember } from "@/lib/use-member";
 import Manifesto from "@/components/Manifesto";
 import MeetBetty from "@/components/MeetBetty";
 import QuoteStrip from "@/components/QuoteStrip";
+import HoloShape from "@/components/HoloShape";
 import { OFFERS, PODCAST } from "@/lib/offers";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -88,8 +89,8 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 items-end">
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 22 }}>
-              💜 welcome to my szn 🪩
+            <div style={{ marginBottom: 26 }}>
+              <span className="holo-sticker" style={{ transform: "rotate(-4deg)" }}>💜 welcome to my szn 🪩</span>
             </div>
             <h1 className="display" style={{ fontSize: "clamp(40px, 6vw, 78px)", color: "var(--dark)", lineHeight: 0.98 }}>
               you didn&apos;t come here
@@ -112,6 +113,9 @@ export default function Home() {
             </div>
           </div>
           <div style={{ position: "relative", alignSelf: "center" }}>
+            <HoloShape shape="star" size={64} style={{ position: "absolute", top: "4%", left: "2%", zIndex: 2, transform: "rotate(-12deg)" }} />
+            <HoloShape shape="moon" size={54} style={{ position: "absolute", bottom: "8%", right: "4%", zIndex: 2 }} />
+            <HoloShape shape="planet" size={70} style={{ position: "absolute", top: "10%", right: "0%", zIndex: 2 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hero-cutout" src="/hero-cutout.png" alt="" aria-hidden="true" />
           </div>
