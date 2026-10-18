@@ -136,7 +136,7 @@ export default function SeasonPersonalised() {
           <div style={eyebrow}>welcome, {name.toLowerCase()}</div>
           <h2 style={sectionHead}>your personalised <span className="pk">{season.sign.toLowerCase()} szn guide.</span></h2>
 
-          <Link href={houseHref} className="no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "var(--lav-light)", padding: 32, marginBottom: 16 }}>
+          <Link href={houseHref} className="holo-edge no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "var(--lav-light)", padding: 32, marginBottom: 16 }}>
             <div className="tag mb-3" style={{ color: "#3C2A70" }}>where {season.sign.toLowerCase()} falls in your chart</div>
             <h3 style={{ fontFamily: poppins, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, letterSpacing: "-0.8px", lineHeight: 1.12, color: "#3C2A70", marginBottom: 14 }}>
               {season.sign.toLowerCase()} activates your {ordinalHouse(activatedHouse)} house of {houseMeaning.title}.
@@ -150,7 +150,7 @@ export default function SeasonPersonalised() {
           </Link>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <Link href={themeHref} className="no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--pink)", background: "var(--pink-bg)", padding: 28 }}>
+            <Link href={themeHref} className="holo-edge no-underline block hover:opacity-95 transition-opacity" style={{ borderRadius: 22, border: "2px solid var(--pink)", background: "var(--pink-bg)", padding: 28 }}>
               <div className="tag mb-3">your theme this szn</div>
               <h3 style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 10, color: "var(--dark)" }}>
                 {seasonTraits.flavour[0]} energy, aimed at your {houseMeaning.lifeAreas[0]}.
@@ -164,7 +164,7 @@ export default function SeasonPersonalised() {
               </span>
             </Link>
             {activatedRuler && (
-              <div style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "#fff", padding: 28 }}>
+              <div className="holo-edge" style={{ borderRadius: 22, border: "2px solid var(--dark)", background: "#fff", padding: 28 }}>
                 <div className="tag mb-3">how this szn reaches you</div>
                 <p style={{ fontSize: 15, lineHeight: 1.9, color: "var(--dark)" }}>
                   <strong>{season.sign} season</strong> activates your <strong>{ordinalHouse(activatedHouse)} house</strong> of {houseMeaning.title}.{placement.full} That house is ruled by <strong>{activatedRuler.rulerName}</strong> (the ruler of {activatedCuspSign.toLowerCase()}), and your {activatedRuler.rulerName} sits in <strong>{activatedRuler.rulerSign.toLowerCase()}</strong> in your <strong>{ordinalHouse(activatedRuler.rulerHouse)} house</strong>{activatedRuler.rulerHouse === activatedHouse ? ", right where it governs" : ""}, which is exactly what this szn is asking you to work with.

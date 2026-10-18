@@ -788,6 +788,9 @@ html, body { overflow-x: hidden; }
 
 /* Foil ring drawn over a card's own border, so it works on top of inline styles */
 .holo-edge, .offer-card, .pcard { position: relative; }
+/* .holo-edge swaps the card's own border for the foil ring, drawn inside so overflow:hidden cards keep it */
+.holo-edge { border: 0 !important; }
+.holo-edge::before { inset: 0 !important; z-index: 3; }
 .holo-edge::before, .offer-card::before, .pcard::before {
   content: ""; position: absolute; inset: -2px; border-radius: inherit; padding: 3px; pointer-events: none;
   background: var(--foil) center / 300% 300%; animation: foil-drift 14s ease-in-out infinite;

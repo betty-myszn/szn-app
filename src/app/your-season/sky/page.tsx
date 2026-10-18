@@ -168,7 +168,7 @@ function SkyPageContent() {
       </section>
 
       <section className="px-5 md:px-8 py-12">
-        <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)", borderRadius: 18, overflow: "hidden" }}>
+        <div className="holo-edge max-w-3xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)", borderRadius: 18, overflow: "hidden" }}>
           <div className="p-8" style={{ background: "#fff" }}>
             <div className="tag mb-4">journal on it</div>
             <p style={{ fontFamily: poppins, fontSize: 18, fontWeight: 700, lineHeight: 1.5, color: "#3C2A70", marginBottom: 20 }}>{r.prompt}</p>

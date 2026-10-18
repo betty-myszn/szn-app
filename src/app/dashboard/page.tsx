@@ -410,7 +410,7 @@ export default function DashboardPage() {
           </div>
 
           <div
-            className="grid grid-cols-1 md:grid-cols-[1.35fr_0.95fr]"
+            className="holo-edge grid grid-cols-1 md:grid-cols-[1.35fr_0.95fr]"
             style={{ borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "linear-gradient(130deg, #FFEAF3 0%, #F7ECFF 55%, #EEE6FE 100%)" }}
           >
             <div style={{ padding: "clamp(28px, 4vw, 44px)" }}>
@@ -467,7 +467,7 @@ export default function DashboardPage() {
             const classEnds = new Date("2026-09-11T03:15:00Z").getTime();
             if (nowMs < moment - 7 * 86400000 || nowMs > classEnds) return null;
             return (
-              <div className="flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
+              <div className="holo-edge flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
                 <p style={{ margin: 0, fontSize: 13, color: "var(--dark)" }}>
                   🌑 <strong>new moon in virgo, thursday the 10th.</strong> We set your intentions together
                   in the circle at 7pm LA, ninety minutes before it goes exact.
@@ -492,7 +492,7 @@ export default function DashboardPage() {
           })()}
 
           {isEclipseSeasonLive() && (
-            <div className="flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
+            <div className="holo-edge flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, background: "#fff", border: "2px solid var(--dark)", borderRadius: 14, padding: "16px 22px" }}>
               <p style={{ margin: 0, fontSize: 13, color: "var(--dark)" }}>
                 🌒 <strong>eclipse season is live.</strong> A Leo solar eclipse on the 12th, a Pisces lunar eclipse on the 28th.
               </p>
@@ -589,7 +589,7 @@ export default function DashboardPage() {
           </div>
           <div ref={trackRef} style={{ display: "flex", gap: 16, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory" }}>
             {workshopSlides.map(({ w, kind }) => (
-              <article key={w.id} style={{ flex: "0 0 320px", scrollSnapAlign: "start", borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "#fff", display: "flex", flexDirection: "column" }}>
+              <article className="holo-edge" key={w.id} style={{ flex: "0 0 320px", scrollSnapAlign: "start", borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "#fff", display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
                     height: 160,
@@ -641,7 +641,7 @@ export default function DashboardPage() {
           <h2 style={{ ...sectionHead, color: "#3C2A70", marginBottom: 26 }}>everything to <span className="pk">use.</span></h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             {TOOLS.map((t) => (
-              <Link key={t.t} href={t.href} className="no-underline flex flex-col" style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", padding: 24, minHeight: 140, color: "#3C2A70" }}>
+              <Link key={t.t} href={t.href} className="holo-edge no-underline flex flex-col" style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", padding: 24, minHeight: 140, color: "#3C2A70" }}>
                 <div style={{ fontSize: 22, marginBottom: 12 }}>{t.glyph}</div>
                 <h3 style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, marginBottom: 6 }}>{t.t}</h3>
                 <p style={{ margin: 0, fontSize: 12, color: "#3C2A70", opacity: 0.72 }}>{t.b}</p>
@@ -772,7 +772,7 @@ export default function DashboardPage() {
               { sym: "▷", t: "workshop replays", b: "Every class, saved forever.", href: "/events" },
               { sym: "☾", t: "your wrapped", b: "Everything you've done this szn.", href: "/your-season/wrapped" },
             ].map((v) => (
-              <Link key={v.t} href={v.href} className="no-underline" style={{ borderRadius: 14, border: "2px solid var(--dark)", overflow: "hidden", color: "var(--dark)" }}>
+              <Link key={v.t} href={v.href} className="holo-edge no-underline" style={{ borderRadius: 14, border: "2px solid var(--dark)", overflow: "hidden", color: "var(--dark)" }}>
                 <div style={{ height: 66, display: "grid", placeItems: "center", fontSize: 26, background: "linear-gradient(135deg, var(--lav-light), var(--pink-bg))" }}>{v.sym}</div>
                 <div style={{ padding: "16px 18px" }}>
                   <h4 style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, textTransform: "lowercase", marginBottom: 3 }}>{v.t}</h4>
