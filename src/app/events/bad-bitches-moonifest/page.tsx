@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: "Money, Magic & Manifestation, Taurus Full Moon Edition. Live workshop + personalised astrology report + replay for $44.",
     url: `/events/${SLUG}`,
     type: "website",
-    images: [{ url: "/events/taurus-full-moon.jpg", width: 854, height: 496 }, OG_IMAGE],
+    images: [{ url: "/events/taurus-full-moon.jpg", width: 854, height: 494 }, OG_IMAGE],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -82,7 +82,7 @@ export default function MoonifestPage() {
       {/* Hero: the background is the artwork's own lilac, so the picture melts into the page and sits
           on the bottom edge like the homepage collage. Text is dark/pink only: white fails on lilac. */}
       <section className="px-5 md:px-8 overflow-hidden" style={{ background: event.heroBg ?? "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56 }}>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[0.62fr_1.38fr] gap-4 lg:gap-6 items-end">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-4 lg:gap-6 items-end">
           <div className="lg:pb-16">
             <Link href="/events" className="no-underline" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--dark)" }}>← all events</Link>
             <div style={{ margin: "24px 0 22px" }}><span className="holo-sticker">🌕 taurus full moon edition</span></div>

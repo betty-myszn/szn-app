@@ -59,19 +59,19 @@ export function EventPoster({ event, priority = false, tilt = -3 }: { event: Cos
 
 // The artwork at full size for an event hero whose background is set to the art's own colour
 // (heroBg), so the picture's edges disappear into the page. The top fades out because the collage
-// is cut off along its top edge.
+// is cut off along its top edge, so the image file itself fades into the lilac over its top third.
+// Served unoptimized so the lilac stays exactly heroBg (re-encoding shifts it and shows a seam).
 export function EventHeroImage({ event }: { event: CosmicEvent }) {
-  const fade = "linear-gradient(to bottom, transparent 0, #000 14%)";
   if (!hasImage(event)) return <div style={{ position: "relative", width: "100%", aspectRatio: "854 / 496" }}><Placeholder /></div>;
   return (
     <Image
       src={event.image!}
       alt={event.imageAlt ?? event.title}
       width={854}
-      height={496}
+      height={494}
       priority
-      sizes="(max-width: 1024px) 100vw, 60vw"
-      style={{ display: "block", width: "100%", height: "auto", WebkitMaskImage: fade, maskImage: fade }}
+      unoptimized
+      style={{ display: "block", width: "100%", height: "auto" }}
     />
   );
 }
