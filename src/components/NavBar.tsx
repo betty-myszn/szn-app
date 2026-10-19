@@ -66,6 +66,7 @@ const workMenu: MenuItem[] = [
       { href: "/reports/bad-btch-report", label: "the bad b*tch report" },
     ],
   },
+  { href: "/baddie-sessions", label: "the baddie sessions (1:1)" },
   { href: "/baddie-coven", label: "the baddie coven" },
   { href: "/mastermind", label: "the mastermind" },
   { href: "/retreat", label: "the bad b*tch retreat" },
