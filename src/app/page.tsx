@@ -7,7 +7,6 @@ import { useMember } from "@/lib/use-member";
 import Manifesto from "@/components/Manifesto";
 import MeetBetty from "@/components/MeetBetty";
 import QuoteStrip from "@/components/QuoteStrip";
-import HoloShape from "@/components/HoloShape";
 import EventPromoBand from "@/components/EventPromoBand";
 import { OFFERS, PODCAST } from "@/lib/offers";
 
@@ -111,9 +110,6 @@ export default function Home() {
             </div>
           </div>
           <div style={{ position: "relative", alignSelf: "center" }}>
-            <HoloShape shape="star" size={64} style={{ position: "absolute", top: "4%", left: "2%", zIndex: 2, transform: "rotate(-12deg)" }} />
-            <HoloShape shape="moon" size={54} style={{ position: "absolute", bottom: "8%", right: "4%", zIndex: 2 }} />
-            <HoloShape shape="planet" size={70} style={{ position: "absolute", top: "10%", right: "0%", zIndex: 2 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hero-cutout" src="/hero-cutout.png" alt="" aria-hidden="true" />
           </div>

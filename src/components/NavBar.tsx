@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
@@ -109,6 +109,13 @@ function NewSticker() {
   );
 }
 
+/** Each menu row lights up in its own brand colour on hover, cycling pink, lilac, black. */
+const HOVERS = [
+  { "--hover-bg": "var(--pink)", "--hover-ink": "#fff" },
+  { "--hover-bg": "var(--lav)", "--hover-ink": "var(--dark)" },
+  { "--hover-bg": "var(--dark)", "--hover-ink": "var(--pink)" },
+] as unknown as CSSProperties[];
+
 /** The mobile menu has no room for flyouts, so children list underneath, indented. */
 const flatMenu = (items: MenuItem[]): MenuItem[] => items.flatMap((i) => [i, ...(i.children ?? []).map((c) => ({ ...c, indent: true }))]);
 
@@ -142,14 +149,14 @@ function GuestMenu({ label, items, isActive }: { label: string; items: MenuItem[
       </button>
       {open && (
         <div className="flex flex-col" style={{ position: "absolute", top: 24, left: 0, minWidth: 220, background: "#fff", border: "var(--border)", zIndex: 200 }}>
-          {items.map((item) => {
+          {items.map((item, idx) => {
             const row = (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="no-underline hover:text-[var(--pink)] flex items-center justify-between gap-4"
-                style={{ fontSize: 11, fontWeight: isActive(item.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: item.indent ? "10px 14px 10px 26px" : "10px 14px", borderBottom: "1px solid #eee", color: isActive(item.href) || fly === item.href ? "var(--pink)" : "var(--dark)", background: isActive(item.href) || fly === item.href ? "var(--lav-light)" : undefined }}
+                className="nav-row no-underline flex items-center justify-between gap-4"
+                style={{ ...HOVERS[idx % 3], fontSize: 11, fontWeight: isActive(item.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: item.indent ? "10px 14px 10px 26px" : "10px 14px", borderBottom: "1px solid #eee", color: isActive(item.href) || fly === item.href ? "var(--pink)" : "var(--dark)", background: isActive(item.href) || fly === item.href ? "var(--lav-light)" : undefined }}
               >
                 {item.label}
                 {item.children && <span aria-hidden>&#9656;</span>}
@@ -161,8 +168,8 @@ function GuestMenu({ label, items, isActive }: { label: string; items: MenuItem[
                 {row}
                 {fly === item.href && (
                   <div className="flex flex-col" style={{ position: "absolute", top: -1.5, left: "100%", minWidth: 220, background: "#fff", border: "var(--border)", zIndex: 201 }}>
-                    {item.children.map((c) => (
-                      <Link key={c.href} href={c.href} onClick={() => setOpen(false)} className="no-underline hover:text-[var(--pink)]" style={{ fontSize: 11, fontWeight: isActive(c.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "10px 14px", borderBottom: "1px solid #eee", color: isActive(c.href) ? "var(--pink)" : "var(--dark)", background: isActive(c.href) ? "var(--lav-light)" : undefined }}>
+                    {item.children.map((c, ci) => (
+                      <Link key={c.href} href={c.href} onClick={() => setOpen(false)} className="nav-row no-underline" style={{ ...HOVERS[(ci + 1) % 3], fontSize: 11, fontWeight: isActive(c.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "10px 14px", borderBottom: "1px solid #eee", color: isActive(c.href) ? "var(--pink)" : "var(--dark)", background: isActive(c.href) ? "var(--lav-light)" : undefined }}>
                         {c.label}
                       </Link>
                     ))}

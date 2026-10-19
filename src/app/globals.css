@@ -837,3 +837,10 @@ html, body { overflow-x: hidden; }
 @media (min-width: 1024px) { .event-hero-art { margin-right: min(-2rem, calc((80rem - 100vw) / 2)); } }
 /* Below the two-column layout the art is cropped to its middle so she stays big on a phone. */
 @media (max-width: 1023px) { .event-hero-art img { aspect-ratio: 6 / 5; object-fit: cover; object-position: 50% 100%; max-height: 520px; } }
+
+/* Nav dropdown rows: each lights up in its own brand colour, slides right and grows a sparkle. */
+.nav-row { position: relative; transition: background-color .16s ease, color .16s ease, padding-left .16s ease; }
+.nav-row::before { content: "✦"; position: absolute; left: 10px; opacity: 0; transform: scale(.4) rotate(-40deg); transition: opacity .16s ease, transform .2s ease; }
+.nav-row:hover, .nav-row:focus-visible { background: var(--hover-bg) !important; color: var(--hover-ink) !important; padding-left: 28px !important; }
+.nav-row:hover::before, .nav-row:focus-visible::before { opacity: 1; transform: scale(1) rotate(0); }
+@media (prefers-reduced-motion: reduce) { .nav-row, .nav-row::before { transition: none; } }
