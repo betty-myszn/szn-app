@@ -29,6 +29,8 @@ export interface CosmicEvent {
   /** Public path under /public. Missing file falls back to the drawn artwork. */
   image?: string;
   imageAlt?: string;
+  /** The artwork's own background colour, so the event hero melts into the image. */
+  heroBg?: string;
   shortDescription: string;
   cta: string;
   /** Stripe Payment Link for paid events. */
@@ -66,6 +68,7 @@ export const EVENTS: CosmicEvent[] = [
     price: 44,
     format: "Live online workshop + personalised astrology report + replay",
     image: "/events/taurus-full-moon.jpg",
+    heroBg: "#F1C7F9",
     imageAlt: "Taurus full moon artwork: a silver-haired woman with Taurus horns, pink dollar signs and gold stars on lilac",
     shortDescription:
       "Money, self-worth, pleasure and abundance under the Taurus Full Moon, with your own 7-10 page astrology report written for your birth chart before we go live.",

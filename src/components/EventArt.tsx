@@ -15,7 +15,7 @@ function Placeholder() {
 // The event's artwork as a landscape card, for listings.
 export default function EventArt({ event, priority = false }: { event: CosmicEvent; priority?: boolean }) {
   return (
-    <div style={{ position: "relative", aspectRatio: "1086 / 496", overflow: "hidden", background: "var(--lav-light)", borderBottom: "var(--border)" }}>
+    <div style={{ position: "relative", aspectRatio: "854 / 496", overflow: "hidden", background: "var(--lav-light)", borderBottom: "var(--border)" }}>
       {hasImage(event) ? (
         <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 420px" priority={priority} style={{ objectFit: "cover" }} />
       ) : (
@@ -54,5 +54,24 @@ export function EventPoster({ event, priority = false, tilt = -3 }: { event: Cos
         </div>
       </div>
     </div>
+  );
+}
+
+// The artwork at full size for an event hero whose background is set to the art's own colour
+// (heroBg), so the picture's edges disappear into the page. The top fades out because the collage
+// is cut off along its top edge.
+export function EventHeroImage({ event }: { event: CosmicEvent }) {
+  const fade = "linear-gradient(to bottom, transparent 0, #000 14%)";
+  if (!hasImage(event)) return <div style={{ position: "relative", width: "100%", aspectRatio: "854 / 496" }}><Placeholder /></div>;
+  return (
+    <Image
+      src={event.image!}
+      alt={event.imageAlt ?? event.title}
+      width={854}
+      height={496}
+      priority
+      sizes="(max-width: 1024px) 100vw, 60vw"
+      style={{ display: "block", width: "100%", height: "auto", WebkitMaskImage: fade, maskImage: fade }}
+    />
   );
 }

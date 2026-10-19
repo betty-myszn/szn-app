@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Band, Tiles, ForYouIf } from "@/components/Offer";
-import { EventPoster } from "@/components/EventArt";
+import { EventHeroImage } from "@/components/EventArt";
 import EventBookingForm from "@/components/EventBookingForm";
 import { getEvent } from "@/lib/events";
 import { OG_IMAGE, SITE_URL } from "@/lib/site";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: "Money, Magic & Manifestation, Taurus Full Moon Edition. Live workshop + personalised astrology report + replay for $44.",
     url: `/events/${SLUG}`,
     type: "website",
-    images: [{ url: "/events/taurus-full-moon.jpg", width: 1086, height: 496 }, OG_IMAGE],
+    images: [{ url: "/events/taurus-full-moon.jpg", width: 854, height: 496 }, OG_IMAGE],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -79,34 +79,27 @@ export default function MoonifestPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Hero, in the same shape as the offer pages: pink, black headline, white accent, tilted cover */}
-      <section className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 64, paddingBottom: 80 }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
-          <div>
+      {/* Hero: the background is the artwork's own lilac, so the picture melts into the page and sits
+          on the bottom edge like the homepage collage. Text is dark/pink only: white fails on lilac. */}
+      <section className="px-5 md:px-8 overflow-hidden" style={{ background: event.heroBg ?? "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56 }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[0.62fr_1.38fr] gap-4 lg:gap-6 items-end">
+          <div className="lg:pb-16">
             <Link href="/events" className="no-underline" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--dark)" }}>← all events</Link>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", margin: "26px 0 22px" }}>🌕 taurus full moon edition</div>
-            <h1 className="display" style={{ fontSize: "clamp(46px, 7.5vw, 100px)", color: "var(--dark)", lineHeight: 0.95 }}>
+            <div style={{ margin: "24px 0 22px" }}><span className="holo-sticker">🌕 taurus full moon edition</span></div>
+            <h1 className="display" style={{ fontSize: "clamp(46px, 4.6vw, 68px)", color: "var(--dark)", lineHeight: 0.95 }}>
               bad b*tches
               <br />
-              <span style={{ color: "#fff" }}>moonifest.</span>
+              <span className="pk">moonifest.</span>
             </h1>
-            <div style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.65, color: "var(--dark)", maxWidth: 620, marginTop: 26, fontWeight: 600 }}>
-              <p style={{ fontFamily: pp, fontWeight: 800, color: "#fff", margin: "0 0 14px" }}>Money, Magic &amp; Manifestation.</p>
-              <p style={{ margin: 0 }}>A live Full Moon workshop, your own astrology report written from YOUR birth chart and the full replay, for the baddies who are SOOO ready to call in more money, more pleasure and more of what they&apos;re worth.</p>
-            </div>
-            <div style={{ marginTop: 26, color: "var(--dark)" }}>
-              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18 }}>Monday 26 October · 6:30pm UK</div>
-              <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4 }}>
-                11:30am LA · 2:30pm New York · 5:30am Tue Sydney · <a href="#times" style={{ color: "var(--dark)", textDecoration: "underline" }}>all times</a>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 32 }}>
+            <p style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(17px, 1.5vw, 20px)", color: "var(--dark)", margin: "18px 0 0" }}>Money, Magic &amp; Manifestation.</p>
+            <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, color: "var(--dark)", margin: "14px 0 0" }}>🗓 Mon 26 Oct · 6:30pm UK</p>
+            <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 26 }}>
               <a href="#book" className="no-underline" style={button("var(--dark)")}>{event.cta}</a>
               <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: "var(--dark)" }}>$44 USD</span>
             </div>
           </div>
-          <div className="flex justify-center" style={{ paddingBottom: 12 }}>
-            <EventPoster event={event} priority />
+          <div className="event-hero-art -mx-5 md:-mx-8 lg:ml-0">
+            <EventHeroImage event={event} />
           </div>
         </div>
       </section>

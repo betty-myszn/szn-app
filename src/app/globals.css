@@ -831,3 +831,9 @@ html, body { overflow-x: hidden; }
   .holo-edge::before, .offer-card::before, .pcard::before, .btn-outline:hover, .btn-foil, .holo-sticker, .foil-text, .holo-shape { animation: none; }
   .btn-pink:hover::after { animation: none; opacity: 0; }
 }
+
+/* Event hero art: on wide screens it bleeds off the right edge of the page. Its edges are the hero's
+   own colour (the event's heroBg), so there is no visible box, just the picture. */
+@media (min-width: 1024px) { .event-hero-art { margin-right: min(-2rem, calc((80rem - 100vw) / 2)); } }
+/* Below the two-column layout the art is cropped to its middle so she stays big on a phone. */
+@media (max-width: 1023px) { .event-hero-art img { aspect-ratio: 6 / 5; object-fit: cover; object-position: 50% 100%; max-height: 520px; } }
