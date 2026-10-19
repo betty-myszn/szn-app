@@ -70,7 +70,7 @@ const exploreMenu: { href: string; label: string; indent?: boolean }[] = [
   // it sits at the top of the menu it now lives in.
   { href: "/chart", label: "free birth chart" },
   { href: "/seasons", label: "seasons" },
-  { href: "/events", label: "workshops" },
+  { href: "/events", label: "events" },
   { href: "/blog", label: "blog" },
   // MY SZN IRL host recruitment for London, New York and Los Angeles.
   { href: "/irl-host", label: "become a host" },

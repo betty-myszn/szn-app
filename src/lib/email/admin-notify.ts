@@ -19,7 +19,7 @@ const SIGNUP_ALERT_KIND = "admin_new_signup";
  * works without any new configuration; set ADMIN_NOTIFY_EMAIL to send somewhere else. Comma
  * separated addresses are allowed, each gets its own send so one bad address can't drop the rest.
  */
-function adminRecipients(): string[] {
+export function adminRecipients(): string[] {
   const raw =
     process.env.ADMIN_NOTIFY_EMAIL ||
     process.env.BREVO_SENDER_EMAIL ||

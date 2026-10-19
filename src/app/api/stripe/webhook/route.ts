@@ -6,6 +6,8 @@ import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
 import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { logStripeEvent } from "@/lib/stripe/event-log";
+import { EVENTS } from "@/lib/events";
+import { sendEventBookingConfirmation, sendEventBookingAdminAlert } from "@/lib/email/event-booking";
 
 export const runtime = "nodejs";
 
@@ -87,6 +89,54 @@ function subscriptionIdFromInvoice(invoice: Stripe.Invoice): string | null {
 // checkout session itself) is the reliable path, set the moment CheckoutButton builds the
 // Payment Link URL. Everything after checkout only has customer/subscription ids to go on,
 // which is fine, by then stripe_customer_id has already been saved onto her profile.
+// Paid event tickets. Matched by client_reference_id "evt_<booking id>" (set by /api/events/book),
+// or, when someone paid the Payment Link directly without the form, by the link's URL, in which case
+// a booking row is created without birth details and the admin alert says to ask for them.
+// Returns true when the session was an event booking (handled or already handled).
+async function handleEventBooking(admin: ReturnType<typeof createAdminClient>, stripe: Stripe, session: Stripe.Checkout.Session): Promise<boolean> {
+  const ref = session.client_reference_id ?? "";
+  let bookingId = ref.startsWith("evt_") ? ref.slice(4) : null;
+  let eventSlug: string | null = null;
+
+  if (!bookingId) {
+    const linkId = typeof session.payment_link === "string" ? session.payment_link : session.payment_link?.id;
+    if (!linkId) return false;
+    const link = await stripe.paymentLinks.retrieve(linkId).catch(() => null);
+    eventSlug = EVENTS.find((e) => e.checkoutUrl && link?.url === e.checkoutUrl)?.slug ?? null;
+    if (!eventSlug) return false;
+  }
+
+  const email = session.customer_details?.email?.toLowerCase() ?? "";
+  const paid = { status: "paid", stripe_session_id: session.id, amount_total: session.amount_total, currency: session.currency, paid_at: new Date().toISOString() };
+
+  let row: { id: string; event_slug: string; email: string; name: string | null; birth_date: string | null; birth_place: string | null; confirmation_sent_at: string | null } | null = null;
+  if (bookingId) {
+    const { data } = await admin.from("event_bookings").select("id, event_slug, email, name, birth_date, birth_place, confirmation_sent_at").eq("id", bookingId).maybeSingle();
+    row = data;
+    if (row) await admin.from("event_bookings").update(paid).eq("id", row.id);
+  } else {
+    const { data: existing } = await admin.from("event_bookings").select("id, event_slug, email, name, birth_date, birth_place, confirmation_sent_at").eq("stripe_session_id", session.id).maybeSingle();
+    row = existing ?? (await admin.from("event_bookings")
+      .insert({ event_slug: eventSlug, email, name: session.customer_details?.name ?? null, ...paid })
+      .select("id, event_slug, email, name, birth_date, birth_place, confirmation_sent_at").single()).data;
+  }
+  if (!row) {
+    console.error("stripe webhook: event booking not found", { ref, sessionId: session.id });
+    return true;
+  }
+  if (row.confirmation_sent_at) return true; // Stripe retry: already confirmed.
+
+  const ev = EVENTS.find((e) => e.slug === row!.event_slug);
+  if (!ev) return true;
+  const to = row.email || email;
+  const name = row.name || session.customer_details?.name || "";
+  const sent = await sendEventBookingConfirmation(ev, to, name);
+  if (sent.ok) await admin.from("event_bookings").update({ confirmation_sent_at: new Date().toISOString() }).eq("id", row.id);
+  else console.error("event booking confirmation failed", { bookingId: row.id, error: sent.error });
+  await sendEventBookingAdminAlert(ev, { email: to, name, birthPlace: row.birth_place, hasBirth: !!row.birth_date });
+  return true;
+}
+
 async function findProfileId(
   admin: SupabaseAdmin,
   { clientReferenceId, customerId, subscriptionId, email }: {
@@ -281,6 +331,10 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        // Event bookings (MOONIFEST and every event after it) are one-off tickets, never membership,
+        // so they're handled here and never reach the tier logic below.
+        if (await handleEventBooking(admin, stripe, session)) break;
 
         // The "3 months upfront" plan is a one-time payment, not a subscription (confirmed
         // against the live price catalog), it has no session.subscription at all. Handling only

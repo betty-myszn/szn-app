@@ -831,3 +831,12 @@ html, body { overflow-x: hidden; }
   .holo-edge::before, .offer-card::before, .pcard::before, .btn-outline:hover, .btn-foil, .holo-sticker, .foil-text, .holo-shape { animation: none; }
   .btn-pink:hover::after { animation: none; opacity: 0; }
 }
+
+/* Events: bouncy CTAs, lifting cards, a tilted artwork that straightens on hover. */
+.event-cta { transition: transform .18s ease, box-shadow .18s ease; box-shadow: 4px 4px 0 var(--dark); }
+.event-cta:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--dark); }
+.event-card { transition: transform .2s ease, box-shadow .2s ease; }
+.event-card:hover { transform: translateY(-4px); box-shadow: 6px 6px 0 var(--dark); }
+.event-tilt { transform: rotate(2deg); transition: transform .3s ease; }
+.event-tilt:hover { transform: rotate(0) scale(1.02); }
+@media (prefers-reduced-motion: reduce) { .event-cta, .event-card, .event-tilt { transition: none; transform: none; } }
