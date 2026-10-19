@@ -52,3 +52,23 @@ export async function sendEventBookingAdminAlert(event: CosmicEvent, b: { email:
     if (!r.ok) console.error("event booking admin alert failed", { to, error: r.error });
   }
 }
+
+/** Files a paid booker on the event's Brevo list (creating or updating the contact). */
+export async function addEventBookerToBrevo(event: CosmicEvent, email: string, name: string): Promise<void> {
+  if (!event.brevoListId || !process.env.BREVO_API_KEY) return;
+  const attributes: Record<string, string> = {};
+  if (name) {
+    attributes.FIRSTNAME = name.split(" ")[0];
+    if (name.includes(" ")) attributes.LASTNAME = name.split(" ").slice(1).join(" ");
+  }
+  try {
+    const res = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: { "api-key": process.env.BREVO_API_KEY, "Content-Type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ email, attributes, listIds: [event.brevoListId], updateEnabled: true }),
+    });
+    if (!res.ok) console.error("event booking: Brevo list add failed", res.status, (await res.text().catch(() => "")).slice(0, 300));
+  } catch (e) {
+    console.error("event booking: Brevo list add threw", e instanceof Error ? e.message : e);
+  }
+}

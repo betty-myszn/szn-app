@@ -33,6 +33,8 @@ export interface CosmicEvent {
   checkoutUrl?: string;
   /** Asks for birth details before payment (personalised report events). */
   collectsBirth: boolean;
+  /** Brevo list every paid booker is added to. */
+  brevoListId?: number;
   joinUrl?: string;
   replayUrl?: string;
 }
@@ -58,6 +60,7 @@ export const EVENTS: CosmicEvent[] = [
     cta: "I'M READY TO MOONIFEST 💸",
     checkoutUrl: "https://buy.stripe.com/dRm00kdYPeUf79Mgpn7kc0z",
     collectsBirth: true,
+    brevoListId: 28,
   },
 ];
 

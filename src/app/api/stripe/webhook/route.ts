@@ -7,7 +7,7 @@ import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/ad
 import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
-import { sendEventBookingConfirmation, sendEventBookingAdminAlert } from "@/lib/email/event-booking";
+import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
 
 export const runtime = "nodejs";
 
@@ -133,6 +133,7 @@ async function handleEventBooking(admin: ReturnType<typeof createAdminClient>, s
   const sent = await sendEventBookingConfirmation(ev, to, name);
   if (sent.ok) await admin.from("event_bookings").update({ confirmation_sent_at: new Date().toISOString() }).eq("id", row.id);
   else console.error("event booking confirmation failed", { bookingId: row.id, error: sent.error });
+  await addEventBookerToBrevo(ev, to, name);
   await sendEventBookingAdminAlert(ev, { email: to, name, birthPlace: row.birth_place, hasBirth: !!row.birth_date });
   return true;
 }
