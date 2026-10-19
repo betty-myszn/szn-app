@@ -751,7 +751,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                💖 pick your door
+                💖 work with me
               </Link>
             </>
           )}
@@ -1025,7 +1025,7 @@ export default function NavBar() {
                 className="no-underline"
                 style={{ color: "var(--pink)", fontWeight: 800 }}
               >
-                💖 pick your door
+                💖 work with me
               </Link>
               <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
                 member login
