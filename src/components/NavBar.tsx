@@ -717,9 +717,6 @@ export default function NavBar() {
             </div>
           ) : (
             <>
-              <Link href="/login" className="no-underline hidden md:block hover:text-[var(--pink)]" style={{ color: "var(--dark)", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-                log in
-              </Link>
               <Link
                 href="/chart"
                 className="no-underline hidden md:block"
@@ -1026,9 +1023,6 @@ export default function NavBar() {
                 style={{ color: "var(--pink)", fontWeight: 800 }}
               >
                 💖 work with me
-              </Link>
-              <Link href="/login" onClick={() => setOpen(false)} className="no-underline text-[var(--pink)]">
-                member login
               </Link>
             </>
           )}
