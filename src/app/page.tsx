@@ -8,6 +8,7 @@ import Manifesto from "@/components/Manifesto";
 import MeetBetty from "@/components/MeetBetty";
 import QuoteStrip from "@/components/QuoteStrip";
 import HoloShape from "@/components/HoloShape";
+import EventPromoBand from "@/components/EventPromoBand";
 import { OFFERS, PODCAST } from "@/lib/offers";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -121,6 +122,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ─── 1b. NEXT EVENT (MOONIFEST first): sits under the hero while an event is on sale ─── */}
+      <EventPromoBand />
 
       {/* ─── 2. TICKER ─── */}
       <Ticker variant="lav" items={UNIVERSE.map((o) => `${o.emoji} ${o.name.toLowerCase()}`)} />
