@@ -45,7 +45,7 @@ const WORKSHOP = [
 ];
 
 const FAQ = [
-  { q: "When is the workshop?", a: "The weekend of October 24-25, 2026, right before the Taurus Full Moon peaks. The exact day and time are being locked in now, and every booked baddie gets them by email (with UK, US and every timezone in between covered) the moment they're confirmed." },
+  { q: "When is the workshop?", a: "Monday 26 October 2026 at 6:30pm UK time, which is 11:30am in Los Angeles, 2:30pm in New York and early Tuesday morning in Australia (5:30am Sydney), all while the Taurus Full Moon is still beautifully full. Your joining link comes by email." },
   { q: "I can't make it live. Is it still worth it?", a: "Totally. Everyone gets the full replay, and your personalised report is yours to keep, so you can do the whole experience in your own time and still get every drop of the magic." },
   { q: "Why do you need my birth details?", a: "Your 7-10 page report is written from YOUR chart, so I need your birth date, time and place to see exactly where this Full Moon lands for you. They're stored privately, used only to create your report and never shown anywhere public." },
   { q: "I don't know my birth time. Can I still come?", a: "Yes, babe. Tick the box when you book and your report will work from your planets and signs, which don't need a time, and skip the house-by-house detail." },
@@ -75,8 +75,7 @@ export default function MoonifestPage() {
     "@type": "Event",
     name: `${event.title}: ${event.subtitle}, ${event.edition}`,
     description: event.shortDescription,
-    startDate: "2026-10-24",
-    endDate: "2026-10-25",
+    startDate: "2026-10-26T18:30:00Z",
     eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     location: { "@type": "VirtualLocation", url: `${SITE_URL}/events/${SLUG}` },
@@ -100,11 +99,11 @@ export default function MoonifestPage() {
             </h1>
             <p style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(20px, 2.6vw, 28px)", color: "var(--lav)", margin: "18px 0 0" }}>{event.subtitle}</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 22 }}>
-              <Pill>🗓 Weekend of Oct 24-25, 2026</Pill>
+              <Pill>🗓 Mon 26 Oct · 6:30pm UK</Pill>
               <Pill>💻 Live online + replay</Pill>
               <Pill>💜 $44 USD</Pill>
             </div>
-            <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 14, marginTop: 12 }}>Exact workshop time TBC, booked baddies hear first.</p>
+            <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 14, marginTop: 12 }}>11:30am LA · 2:30pm New York · 5:30am Tue Sydney</p>
             <div style={{ marginTop: 28 }}><CtaLink>{event.cta}</CtaLink></div>
           </div>
           <div className="event-tilt"><EventArt event={event} priority /></div>
@@ -173,7 +172,7 @@ export default function MoonifestPage() {
           <div className="tag mb-5">the details</div>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              ["🗓 When", "Weekend of October 24-25, 2026. Exact day and time TBC, emailed to you the moment it's confirmed."],
+              ["🗓 When", "Monday 26 October 2026, 6:30pm UK time. Can't make it live? The replay is yours."],
               ["🌕 The moon", "The Full Moon peaks at 2° Taurus late on Sunday 25 October in the US (Monday 26 October in the UK)."],
               ["💻 Where", "Live online, joining link by email."],
               ["💸 Price", "$44 USD, one-time payment."],
@@ -184,6 +183,12 @@ export default function MoonifestPage() {
               </div>
             ))}
           </dl>
+          <div style={{ border: "var(--border)", borderRadius: 20, padding: 20, marginTop: 16, background: "var(--lav-light)" }}>
+            <div style={{ fontFamily: pp, fontWeight: 800 }}>⏰ Your time</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1" style={{ listStyle: "none", padding: 0, margin: "10px 0 0" }}>
+              {event.localTimes?.map((t) => <li key={t} style={{ fontWeight: 600 }}>{t}</li>)}
+            </ul>
+          </div>
         </div>
       </section>
 

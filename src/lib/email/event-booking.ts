@@ -12,7 +12,7 @@ export function eventBookingHtml(event: CosmicEvent, firstName: string): { subje
   const url = `${SITE_URL}/events/${event.slug}`;
   const greeting = firstName ? `Hiii ${esc(firstName)}, my love` : "Hiii my love";
   const when = event.startsAt
-    ? `${new Date(event.startsAt).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles", timeZoneName: "short" })} (${new Date(event.startsAt).toLocaleString("en-GB", { hour: "numeric", minute: "2-digit", timeZone: "Europe/London", timeZoneName: "short" })} UK)`
+    ? `${event.dateLabel}${event.localTimes ? ` (${event.localTimes.map((t) => t.replace(/^\S+ /, "")).join(" · ")})` : ""}. Your joining link comes by email before we go live.`
     : `${event.dateLabel}. The exact time and your joining link land in this inbox the moment they're locked in.`;
   const body = [
     `You're IN for ${event.title}, ${event.subtitle}${event.edition ? `, ${event.edition}` : ""}, and I am SOOOO excited to make money magic with you.`,

@@ -21,6 +21,8 @@ export interface CosmicEvent {
   /** ISO with offset, only once the time is confirmed. */
   startsAt: string | null;
   timezoneLabel?: string;
+  /** The confirmed start written out for her timezone, shown on the page and in the email. */
+  localTimes?: string[];
   /** Whole dollars; 0 = free. Always USD. */
   price: number;
   format: string;
@@ -48,9 +50,19 @@ export const EVENTS: CosmicEvent[] = [
     kind: "full-moon",
     status: "published",
     // The Full Moon is exact at 2°45' Taurus on 26 Oct 2026, 04:11 UTC (Sun 25 Oct 9:11pm PT,
-    // 00:11 ET on the 26th), checked against swisseph. The workshop runs the weekend before.
-    dateLabel: "Weekend of October 24-25, 2026 · exact time TBC",
-    startsAt: null,
+    // 00:11 ET on the 26th), checked against swisseph. The workshop is the evening after, UK time.
+    dateLabel: "Monday 26 October 2026 · 6:30pm UK",
+    startsAt: "2026-10-26T18:30:00Z",
+    localTimes: [
+      "🇬🇧 UK: Mon 26 Oct, 6:30pm",
+      "🇺🇸 New York: Mon 26 Oct, 2:30pm",
+      "🇺🇸 Chicago: Mon 26 Oct, 1:30pm",
+      "🇺🇸 Denver: Mon 26 Oct, 12:30pm",
+      "🇺🇸 Los Angeles: Mon 26 Oct, 11:30am",
+      "🇦🇺 Sydney + Melbourne: Tue 27 Oct, 5:30am",
+      "🇦🇺 Brisbane: Tue 27 Oct, 4:30am",
+      "🇦🇺 Perth: Tue 27 Oct, 2:30am",
+    ],
     price: 44,
     format: "Live online workshop + personalised astrology report + replay",
     image: "/events/taurus-full-moon.jpg",
