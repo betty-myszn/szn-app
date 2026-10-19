@@ -844,3 +844,8 @@ html, body { overflow-x: hidden; }
 .nav-row:hover, .nav-row:focus-visible { background: var(--hover-bg) !important; color: var(--hover-ink) !important; padding-left: 28px !important; }
 .nav-row:hover::before, .nav-row:focus-visible::before { opacity: 1; transform: scale(1) rotate(0); }
 @media (prefers-reduced-motion: reduce) { .nav-row, .nav-row::before { transition: none; } }
+
+/* Homepage "baddie szn" cards: the emoji does a little wiggle on hover. */
+.szn-way-emoji { display: inline-block; transition: transform .25s ease; }
+.szn-way:hover .szn-way-emoji { transform: rotate(-12deg) scale(1.18); }
+@media (prefers-reduced-motion: reduce) { .szn-way-emoji { transition: none; } }

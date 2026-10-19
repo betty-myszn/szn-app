@@ -20,7 +20,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // Section jobs, so nothing gets sold twice:
 //   1 hero           the brand promise, one feeling, two buttons
 //   2 ticker         the seven doors, scrolling
-//   3 the universe   all seven at a glance, one line each
+//   3 baddie szn     every way in, Betty's copy, as a colour-block grid
 //   4 mastermind     the premium offer gets the biggest spotlight (ad traffic still lands here)
 //   5 reports        money + confidence, side by side
 //   6 coven          the clubhouse
@@ -69,6 +69,19 @@ function Button({ href, children, tone = "dark" }: { href: string; children: Rea
     </Link>
   );
 }
+
+// The "your baddie szn" grid: Betty's copy word for word, each way in on its own brand colour so the
+// grid reads as a colour block instead of seven matching boxes. Wide cards break the rhythm.
+const SZN_WAYS: { emoji: string; title: string; body: string; href: string; ctaLabel: string; bg: string; ink: string; head?: string; cta: string; wide?: boolean }[] = [
+  { emoji: "🪐", title: "Get your Astro & HD reports", body: "Your birth chart has RECEIPTS, babe. Find out how you're wired, where your money magic lives, what makes you magnetic and how to use your astrology to your advantage.", href: "/reports", ctaLabel: "get your report", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)", wide: true },
+  { emoji: "🦄", title: "Join the Baddie Coven", body: "Witches, weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/baddie-coven", ctaLabel: "join the coven", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
+  // No 1:1 booking page exists yet, so this opens an email to Betty until there is one.
+  { emoji: "💜", title: "Book a 1:1 session", body: "Got big dreams and some sh*t to work through? Let's get into it. Astrology, manifestation, shadow work, money and becoming the most powerful version of YOU.", href: "mailto:hello@thecosmicco.com?subject=1%3A1%20session", ctaLabel: "book a session", bg: "var(--dark)", ink: "#fff", head: "var(--pink)", cta: "var(--pink)" },
+  { emoji: "🔥", title: "Join the mastermind", body: "Big dreams. Bigger moves. Women who actually want to see you WIN. Get coaching, accountability and a whole room of baddies who refuse to play small.", href: "/mastermind", ctaLabel: "join the mastermind", bg: "var(--pink-light)", ink: "var(--dark)", cta: "var(--pink)", wide: true },
+  { emoji: "🌴", title: "Come to our retreat", body: "Pack your bags, b*tch. We're going to MEXICO. Think astrology, witchcraft, shadow work, sisterhood and the kind of experiences you'll be talking about for YEARS.", href: "/retreat", ctaLabel: "come with us", bg: "var(--lav-light)", ink: "var(--dark)", cta: "var(--pink)" },
+  { emoji: "🎤", title: "Listen to the podcast", body: "Big conversations, wild stories, astrology, money, manifestation and women who are doing whatever the f*ck they want. Pop your headphones in, babe.", href: "/podcast", ctaLabel: "listen", bg: "var(--dark)", ink: "#fff", head: "#fff", cta: "var(--pink)" },
+  { emoji: "📖", title: "Read our book", body: "Consider this your permission slip to stop following everyone else's rules. Get into the astrology, self-discovery and practical magic that'll help you write your own damn story.", href: "/book", ctaLabel: "get the book", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)" },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -122,22 +135,29 @@ export default function Home() {
       {/* ─── 2. TICKER ─── */}
       <Ticker variant="lav" items={UNIVERSE.map((o) => `${o.emoji} ${o.name.toLowerCase()}`)} />
 
-      {/* ─── 3. THE UNIVERSE ─── */}
-      <section id="universe" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80, scrollMarginTop: 70 }}>
+      {/* ─── 3. YOUR BADDIE SZN (Betty's copy, 19 Oct 2026) ─── */}
+      <section id="universe" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 84, scrollMarginTop: 70 }}>
         <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5">the my szn universe</div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 72px)", color: "var(--dark)", lineHeight: 1 }}>
-            seven ways to <span className="pk">become HER.</span>
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 76px)", color: "var(--dark)", lineHeight: 0.98 }}>
+            welcome to your <span className="pk">baddie szn.</span> <span style={{ fontSize: "0.55em" }}>💖🪩</span>
           </h2>
-          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 22, fontWeight: 600, maxWidth: 760 }}>
-            Some of us want our chart in writing, some of us want a coven to cast spells with on a Tuesday night, and some of us want ninety days of coaching that drags our future self into the present, so we built a door for every version of you.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ marginTop: 32 }}>
-            {UNIVERSE.map((o) => (
-              <Link key={o.href} href={o.href} className="no-underline offer-card" style={{ border: "var(--border)", borderRadius: 18, background: "var(--pink-light)", padding: "22px 20px", color: "var(--dark)", display: "block" }}>
-                <div style={{ fontSize: 30 }}>{o.emoji}</div>
-                <div style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, lineHeight: 1.2, marginTop: 8 }}>{o.name}</div>
-                <div style={{ fontSize: 14.5, lineHeight: 1.6, marginTop: 6 }}>{o.line}</div>
+          <div style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 22, fontWeight: 600, maxWidth: 760 }}>
+            <p style={{ margin: "0 0 12px" }}>There&apos;s more than one way to be a bad b*tch, babe.</p>
+            <p style={{ margin: "0 0 12px" }}>Wanna make more money, understand your astrology, find your fellow witches or completely reinvent your f*cking life? You&apos;re in the right place.</p>
+            <p style={{ margin: 0, fontFamily: poppins, fontWeight: 800 }}>Pick your pleasure. Your SZN starts here.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 34 }}>
+            {SZN_WAYS.map((w) => (
+              <Link
+                key={w.title}
+                href={w.href}
+                className={`no-underline offer-card szn-way ${w.wide ? "lg:col-span-2" : ""}`}
+                style={{ background: w.bg, color: w.ink, border: "var(--border)", borderRadius: 22, padding: "26px 24px 24px", display: "flex", flexDirection: "column", gap: 10, minHeight: 230 }}
+              >
+                <span className="szn-way-emoji" style={{ fontSize: 40, lineHeight: 1 }}>{w.emoji}</span>
+                <span style={{ fontFamily: poppins, fontSize: w.wide ? "clamp(24px, 2.6vw, 32px)" : 23, fontWeight: 800, lineHeight: 1.1, color: w.head ?? w.ink }}>{w.title}</span>
+                <span style={{ fontSize: 15.5, lineHeight: 1.65, maxWidth: w.wide ? 560 : undefined }}>{w.body}</span>
+                <span style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: "auto", paddingTop: 8, color: w.cta }}>{w.ctaLabel} →</span>
               </Link>
             ))}
           </div>
