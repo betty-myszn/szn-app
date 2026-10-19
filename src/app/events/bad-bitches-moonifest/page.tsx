@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: "Money, Magic & Manifestation, Taurus Full Moon Edition. Live workshop + personalised astrology report + replay for $44.",
     url: `/events/${SLUG}`,
     type: "website",
-    images: [{ url: "/events/taurus-full-moon-workshop.jpg", width: 1080, height: 614 }, OG_IMAGE],
+    images: [{ url: "/events/taurus-full-moon.jpg", width: 1086, height: 496 }, OG_IMAGE],
   },
   twitter: { card: "summary_large_image" },
 };

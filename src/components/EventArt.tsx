@@ -10,7 +10,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 export default function EventArt({ event, priority = false }: { event: CosmicEvent; priority?: boolean }) {
   const hasImage = !!event.image && fs.existsSync(path.join(process.cwd(), "public", event.image));
   return (
-    <div className="event-art" style={{ position: "relative", aspectRatio: "1080 / 614", border: "var(--border)", overflow: "hidden", background: "var(--lav-light)" }}>
+    <div className="event-art" style={{ position: "relative", aspectRatio: "1086 / 496", border: "var(--border)", overflow: "hidden", background: "var(--lav-light)" }}>
       {hasImage ? (
         <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 640px" priority={priority} style={{ objectFit: "cover" }} />
       ) : (
