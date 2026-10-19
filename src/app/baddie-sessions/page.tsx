@@ -130,12 +130,13 @@ export default function BaddieSessionsPage() {
           <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
             book your <span className="pk">baddie session.</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 36 }}>
+          <div className={`grid grid-cols-1 gap-6 ${SESSION_OPTIONS.length > 1 ? "md:grid-cols-2" : "max-w-xl"}`} style={{ marginTop: 36 }}>
             {SESSION_OPTIONS.map((o, i) => (
               <div key={o.name} style={{ background: i === 0 ? "#fff" : "var(--pink)", color: "var(--dark)", border: "var(--border)", borderRadius: 24, padding: "28px 26px", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{o.name}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
                 <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>{o.blurb}</p>
+                {SESSION_OPTIONS.length === 1 && <p style={{ fontSize: 15, fontWeight: 700, margin: "10px 0 0" }}>The same session and price for all four: the Reset, Rich B*tch Energy, the Shadow Baddie Session or Main Character Activation.</p>}
                 <div style={{ marginTop: "auto", paddingTop: 22 }}>
                   <a href={bookingHref(o.bookingUrl, `${o.name} (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book {o.name.replace(/^The /, "the ")}</a>
                 </div>
