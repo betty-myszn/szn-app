@@ -226,17 +226,25 @@ export default function Home() {
       {/* ─── 8. PODCAST + BOOK ─── */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Link href="/podcast" className="no-underline offer-card" style={{ background: "var(--dark)", color: "#fff", border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
-            <div className="tag">🎙️ listen now</div>
-            <h2 className="display" style={{ fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 1, marginTop: 12, color: "#fff" }}>the my szn <span className="pk">podcast.</span></h2>
-            <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14 }}>Astrology, money, manifestation, guest conversations and main character energy, every week, straight into your ears.</p>
-            <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>listen →</div>
+          <Link href="/podcast" className="no-underline offer-card grid grid-cols-[1fr_auto] gap-5 items-center" style={{ background: "var(--dark)", color: "#fff", border: "var(--border)", borderRadius: 22, padding: "26px 24px" }}>
+            <div>
+              <div className="tag">🎙️ listen now</div>
+              <h2 className="display" style={{ fontSize: "clamp(30px, 4vw, 46px)", lineHeight: 1, marginTop: 12, color: "#fff" }}>the my szn <span className="pk">podcast.</span></h2>
+              <p style={{ fontSize: 15, lineHeight: 1.65, marginTop: 12 }}>Astrology, money, manifestation, guest conversations and main character energy, every week, straight into your ears.</p>
+              <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 16, color: "var(--pink)" }}>listen →</div>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/myszn-podcast.png" alt="The MY SZN podcast cover" style={{ width: "clamp(110px, 16vw, 190px)", aspectRatio: "1", objectFit: "cover", borderRadius: 14, border: "1.5px solid #fff", transform: "rotate(3deg)" }} />
           </Link>
-          <Link href="/book" className="no-underline offer-card" style={{ background: "var(--pink-light)", color: "var(--dark)", border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
-            <div className="tag">📚 out now</div>
-            <h2 className="display" style={{ fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 1, marginTop: 12 }}>the my szn book <span className="pk">by betty andrews.</span></h2>
-            <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14 }}>Becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life, in paperback and ebook.</p>
-            <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: "var(--pink)" }}>get your copy →</div>
+          <Link href="/book" className="no-underline offer-card grid grid-cols-[1fr_auto] gap-5 items-center" style={{ background: "var(--pink-light)", color: "var(--dark)", border: "var(--border)", borderRadius: 22, padding: "26px 24px" }}>
+            <div>
+              <div className="tag">📚 out now</div>
+              <h2 className="display" style={{ fontSize: "clamp(30px, 4vw, 46px)", lineHeight: 1, marginTop: 12 }}>the my szn <span className="pk">book.</span></h2>
+              <p style={{ fontSize: 15, lineHeight: 1.65, marginTop: 12 }}>Becoming your future self through astrology, manifestation, self-concept, confidence, healing, money and creating your dream life, in paperback and ebook.</p>
+              <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 16, color: "var(--pink)" }}>get your copy →</div>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/myszn-book-cover.jpg" alt="The MY SZN book cover" style={{ width: "clamp(96px, 13vw, 150px)", aspectRatio: "534 / 810", objectFit: "cover", borderRadius: 6, border: "var(--border)", transform: "rotate(-3deg)", boxShadow: "6px 7px 0 var(--dark)" }} />
           </Link>
         </div>
       </section>
