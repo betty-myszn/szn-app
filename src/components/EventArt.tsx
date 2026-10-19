@@ -5,28 +5,54 @@ import type { CosmicEvent } from "@/lib/events";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// The event's artwork. Uses the uploaded image when the file exists in /public, otherwise draws the
-// title card (lilac sky, full moon, stars) so a new event never ships with a broken image.
+const hasImage = (e: CosmicEvent) => !!e.image && fs.existsSync(path.join(process.cwd(), "public", e.image));
+
+/** Lilac stand-in for an event whose artwork hasn't been uploaded yet, so nothing ships broken. */
+function Placeholder() {
+  return <div aria-hidden style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 45%, #fff 0 16%, var(--lav-light) 17% 34%, var(--lav) 75%)" }} />;
+}
+
+// The event's artwork as a landscape card, for listings.
 export default function EventArt({ event, priority = false }: { event: CosmicEvent; priority?: boolean }) {
-  const hasImage = !!event.image && fs.existsSync(path.join(process.cwd(), "public", event.image));
   return (
-    <div className="event-art" style={{ position: "relative", aspectRatio: "1086 / 496", border: "var(--border)", overflow: "hidden", background: "var(--lav-light)" }}>
-      {hasImage ? (
-        <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 640px" priority={priority} style={{ objectFit: "cover" }} />
+    <div style={{ position: "relative", aspectRatio: "1086 / 496", overflow: "hidden", background: "var(--lav-light)", borderBottom: "var(--border)" }}>
+      {hasImage(event) ? (
+        <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 420px" priority={priority} style={{ objectFit: "cover" }} />
       ) : (
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 20, background: "radial-gradient(circle at 50% 42%, #fff 0 14%, var(--lav-light) 15% 30%, var(--lav) 70%)" }}>
-          {["8%,14%", "86%,10%", "14%,78%", "90%,70%", "70%,26%", "24%,36%"].map((p, i) => {
-            const [l, t] = p.split(",");
-            return <span key={i} aria-hidden style={{ position: "absolute", left: l, top: t, fontSize: 22, color: i % 2 ? "var(--pink)" : "#fff" }}>{i % 2 ? "$" : "✦"}</span>;
-          })}
-          <div style={{ fontFamily: pp, fontWeight: 900, fontSize: "clamp(20px, 4vw, 38px)", lineHeight: 0.95, color: "var(--dark)", letterSpacing: "-1px" }}>{event.title}</div>
-          <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginTop: 10 }}>{event.subtitle}</div>
-          {event.edition && <div style={{ fontSize: 13, fontWeight: 700, marginTop: 4 }}>{event.edition}</div>}
-        </div>
+        <Placeholder />
       )}
-      <span style={{ position: "absolute", right: 12, bottom: 12, background: "var(--dark)", color: "#fff", fontFamily: pp, fontWeight: 800, fontSize: 13, padding: "6px 12px", borderRadius: 999 }}>
-        {event.price === 0 ? "FREE" : `$${event.price} USD`}
-      </span>
+    </div>
+  );
+}
+
+// The event's poster for heroes: the artwork cropped square on top, the title block underneath, in
+// the same tilted, hard-shadowed cover language as the report covers on the offer pages.
+export function EventPoster({ event, priority = false, tilt = -3 }: { event: CosmicEvent; priority?: boolean; tilt?: number }) {
+  const [first, ...restWords] = event.title.toLowerCase().split(" ");
+  const lastWord = restWords.pop() ?? "";
+  const lead = [first, ...restWords].join(" ");
+  return (
+    <div style={{ width: "min(340px, 78vw)", background: "var(--dark)", color: "#fff", border: "var(--border)", borderRadius: 6, overflow: "hidden", transform: `rotate(${tilt}deg)`, boxShadow: "10px 12px 0 var(--dark)" }}>
+      <div style={{ position: "relative", aspectRatio: "1 / 1", background: "var(--lav-light)", borderBottom: "var(--border)" }}>
+        {hasImage(event) ? (
+          <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="340px" priority={priority} style={{ objectFit: "cover", objectPosition: "48% 50%" }} />
+        ) : (
+          <Placeholder />
+        )}
+      </div>
+      <div style={{ padding: "18px 20px 14px" }}>
+        <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8 }}>my szn presents</div>
+        <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 34, lineHeight: 0.92, letterSpacing: "-0.03em", marginTop: 10 }}>
+          {lead}
+          <br />
+          <span style={{ color: "var(--pink)" }}>{lastWord}.</span>
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 600, marginTop: 10, textTransform: "lowercase" }}>{event.subtitle}</div>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginTop: 14, borderTop: "1.5px solid #fff", paddingTop: 10, fontSize: 9, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase" }}>
+          <span>{event.edition ?? event.dateLabel}</span>
+          <span>{event.price === 0 ? "free" : `$${event.price} usd`}</span>
+        </div>
+      </div>
     </div>
   );
 }

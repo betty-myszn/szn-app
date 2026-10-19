@@ -17,7 +17,7 @@ export default function MoonifestBooked() {
         <p style={{ color: "rgba(255,255,255,0.88)", fontSize: 18, lineHeight: 1.7, marginTop: 22, fontWeight: 600 }}>
           Your confirmation is on its way to your inbox, your personalised report is going into the works and the exact workshop time plus your joining link will land by email the moment they&apos;re locked in.
         </p>
-        <Link href="/events" className="no-underline" style={{ display: "inline-block", marginTop: 30, background: "var(--pink)", color: "#fff", border: "var(--border)", borderRadius: 999, fontFamily: pp, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "18px 32px" }}>
+        <Link href="/events" className="no-underline" style={{ display: "inline-block", marginTop: 30, background: "var(--pink)", color: "#fff", fontFamily: pp, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 36px" }}>
           see all events
         </Link>
       </div>

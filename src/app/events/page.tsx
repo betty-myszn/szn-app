@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import EventArt from "@/components/EventArt";
+import EventArt, { EventPoster } from "@/components/EventArt";
 import WorkshopsClient from "./WorkshopsClient";
 import { upcomingEvents, pastEvents, priceLabel, type CosmicEvent } from "@/lib/events";
 import { OG_IMAGE } from "@/lib/site";
@@ -16,19 +16,21 @@ export const metadata: Metadata = {
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
+const button = { display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" as const };
+
 function EventCard({ event }: { event: CosmicEvent }) {
   const href = `/events/${event.slug}`;
   return (
-    <article className="event-card" style={{ background: "#fff", border: "var(--border)", borderRadius: 24, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <article className="offer-card" style={{ background: "#fff", border: "var(--border)", borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <Link href={href} className="no-underline"><EventArt event={event} /></Link>
-      <div style={{ padding: 22, display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>{event.dateLabel}</div>
-        <h3 style={{ fontFamily: pp, fontWeight: 900, fontSize: 22, lineHeight: 1.05, margin: 0 }}>{event.title}</h3>
-        <div style={{ fontWeight: 700 }}>{event.subtitle}{event.edition ? ` · ${event.edition}` : ""}</div>
+      <div style={{ padding: "20px 20px 22px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+        <div className="tag">{event.dateLabel}</div>
+        <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: 21, lineHeight: 1.15, margin: 0 }}>{event.title}</h3>
+        <div style={{ fontWeight: 700, fontSize: 15 }}>{event.subtitle}{event.edition ? ` · ${event.edition}` : ""}</div>
         <p style={{ margin: 0, lineHeight: 1.6, fontSize: 15 }}>{event.shortDescription}</p>
-        <div className="flex items-center justify-between gap-3" style={{ marginTop: "auto", paddingTop: 8 }}>
-          <span style={{ fontFamily: pp, fontWeight: 900, fontSize: 18 }}>{priceLabel(event)}</span>
-          <Link href={event.status === "past" && event.replayUrl ? event.replayUrl : href} className="event-cta no-underline" style={{ background: "var(--pink)", color: "#fff", border: "var(--border)", borderRadius: 999, fontFamily: pp, fontWeight: 800, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", padding: "12px 18px" }}>
+        <div className="flex items-center justify-between gap-3" style={{ marginTop: "auto", paddingTop: 10 }}>
+          <span style={{ fontFamily: pp, fontWeight: 800, fontSize: 16 }}>{priceLabel(event)}</span>
+          <Link href={event.status === "past" && event.replayUrl ? event.replayUrl : href} className="no-underline" style={{ ...button, fontSize: 12, padding: "13px 20px" }}>
             {event.status === "past" ? (event.replayUrl ? "watch the replay" : "see the event") : "book now"}
           </Link>
         </div>
@@ -45,20 +47,18 @@ export default function EventsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="px-5 md:px-8 text-center" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76, position: "relative", overflow: "hidden" }}>
-        {["6%,18%,✦", "90%,14%,🌕", "12%,74%,🪩", "86%,70%,✦", "48%,8%,✨"].map((p) => {
-          const [l, t, c] = p.split(",");
-          return <span key={p} aria-hidden style={{ position: "absolute", left: l, top: t, fontSize: 30, color: "#fff" }}>{c}</span>;
-        })}
-        <div className="max-w-4xl mx-auto" style={{ position: "relative" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 20 }}>my szn events</div>
-          <h1 className="display" style={{ fontSize: "clamp(44px, 8.5vw, 112px)", lineHeight: 0.92 }}>
-            YOUR NEXT <span style={{ color: "#fff" }}>COSMIC OBSESSION.</span> 🪩
+      <section className="px-5 md:px-8 text-center" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
+        <div className="max-w-4xl mx-auto">
+          <span className="holo-sticker">✦ my szn events</span>
+          <h1 className="display" style={{ fontSize: "clamp(46px, 8vw, 104px)", color: "var(--dark)", lineHeight: 0.95, marginTop: 26 }}>
+            your next
+            <br />
+            <span style={{ color: "#fff" }}>cosmic obsession.</span>
           </h1>
-          <p style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.6, fontWeight: 700, marginTop: 24 }}>
-            Workshops, moon rituals, manifestation magic and IRL experiences for bad b*tches who want more from life.
+          <p style={{ fontFamily: pp, fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.5, fontWeight: 800, color: "#fff", margin: "26px auto 0", maxWidth: 680 }}>
+            Workshops, moon rituals, manifestation magic and IRL experiences for bad b*tches who want more from life. 🪩
           </p>
-          <p style={{ fontSize: 16, lineHeight: 1.7, fontWeight: 500, marginTop: 12, maxWidth: 640, marginInline: "auto" }}>
+          <p style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 600, color: "var(--dark)", margin: "14px auto 0", maxWidth: 620 }}>
             Come for the astrology. Stay for the magic, the money, the friendships and becoming the woman you&apos;ve always wanted to be.
           </p>
         </div>
@@ -66,18 +66,23 @@ export default function EventsPage() {
 
       {/* Featured */}
       {featured && (
-        <section className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 72, paddingBottom: 80, borderBottom: "var(--border)" }}>
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-            <Link href={`/events/${featured.slug}`} className="event-tilt no-underline"><EventArt event={featured} priority /></Link>
+        <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 84 }}>
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-12 items-center">
+            <Link href={`/events/${featured.slug}`} className="no-underline flex justify-center" style={{ paddingBottom: 12 }}>
+              <EventPoster event={featured} priority tilt={3} />
+            </Link>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--pink)" }}>✦ featured · {featured.dateLabel}</div>
-              <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.95, marginTop: 14 }}>{featured.title} 🌕💸</h2>
-              <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 20, color: "var(--lav)", marginTop: 12 }}>{featured.subtitle}{featured.edition ? ` · ${featured.edition}` : ""}</p>
-              <p style={{ color: "rgba(255,255,255,0.88)", fontSize: 17, lineHeight: 1.7, marginTop: 14, fontWeight: 500 }}>{featured.shortDescription}</p>
-              <p style={{ color: "#fff", fontFamily: pp, fontWeight: 800, marginTop: 12 }}>{featured.format} · {priceLabel(featured)}</p>
-              <Link href={`/events/${featured.slug}`} className="event-cta no-underline" style={{ display: "inline-block", marginTop: 24, background: "var(--pink)", color: "#fff", border: "var(--border)", borderRadius: 999, fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "20px 34px" }}>
-                {featured.cta}
-              </Link>
+              <div className="tag mb-5">✦ next up · {featured.dateLabel}</div>
+              <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 72px)", lineHeight: 0.95 }}>
+                {featured.title.toLowerCase().split(" ").slice(0, -1).join(" ")} <span className="pk">{featured.title.toLowerCase().split(" ").slice(-1)[0]}.</span>
+              </h2>
+              <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, margin: "16px 0 0" }}>{featured.subtitle}{featured.edition ? ` · ${featured.edition}` : ""}</p>
+              <p style={{ fontSize: 17, lineHeight: 1.75, margin: "12px 0 0", maxWidth: 560 }}>{featured.shortDescription}</p>
+              <p style={{ fontWeight: 700, fontSize: 15, margin: "12px 0 0" }}>{featured.format}</p>
+              <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 26 }}>
+                <Link href={`/events/${featured.slug}`} className="no-underline" style={{ ...button, fontSize: 15, padding: "20px 36px" }}>{featured.cta}</Link>
+                <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>{priceLabel(featured)}</span>
+              </div>
             </div>
           </div>
         </section>
