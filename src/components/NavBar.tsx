@@ -51,27 +51,33 @@ const freeLinks = [
 
 // The guest menu (13 Oct 2026): WORK WITH ME holds every offer, then the podcast and the book stand
 // alone, then EXPLORE for browsing. The logo is home, so there's no separate home link.
-const guestLinks = [
-  { href: "/podcast", label: "podcast" },
-  { href: "/book", label: "book" },
-];
+// Podcast and book now live in the explore menu, so guests get no loose links in the bar.
+const guestLinks: { href: string; label: string }[] = [];
 
-const workMenu = [
-  { href: "/reports", label: "reports" },
-  { href: "/reports/rich-btch-rising", label: "rich b*tch rising", indent: true },
-  { href: "/reports/bad-btch-report", label: "the bad b*tch report", indent: true },
+type MenuItem = { href: string; label: string; indent?: boolean; children?: MenuItem[] };
+
+// The reports fly out to the right of their row on desktop instead of stacking underneath.
+const workMenu: MenuItem[] = [
+  {
+    href: "/reports",
+    label: "astro & HD reports",
+    children: [
+      { href: "/reports/rich-btch-rising", label: "rich b*tch rising" },
+      { href: "/reports/bad-btch-report", label: "the bad b*tch report" },
+    ],
+  },
   { href: "/baddie-coven", label: "the baddie coven" },
   { href: "/mastermind", label: "the mastermind" },
   { href: "/retreat", label: "the bad b*tch retreat" },
 ];
 
-const exploreMenu: { href: string; label: string; indent?: boolean }[] = [
-  // The free birth chart is the lowest-friction way in and the biggest single source of signups, so
-  // it sits at the top of the menu it now lives in.
-  { href: "/chart", label: "free birth chart" },
-  { href: "/seasons", label: "seasons" },
+const exploreMenu: MenuItem[] = [
+  // The free birth chart is not in here: it's the lowest-friction way in and the biggest single source
+  // of signups, so it has its own button in the header (where "member login" used to be).
   { href: "/events", label: "events" },
   { href: "/blog", label: "blog" },
+  { href: "/podcast", label: "podcast" },
+  { href: "/book", label: "book" },
   // MY SZN IRL host recruitment for London, New York and Los Angeles.
   { href: "/irl-host", label: "become a host" },
 ];
@@ -103,13 +109,17 @@ function NewSticker() {
   );
 }
 
+/** The mobile menu has no room for flyouts, so children list underneath, indented. */
+const flatMenu = (items: MenuItem[]): MenuItem[] => items.flatMap((i) => [i, ...(i.children ?? []).map((c) => ({ ...c, indent: true }))]);
+
 /** A hover/click dropdown in the guest bar (WORK WITH ME, EXPLORE). Each owns its open state, with a
  *  short grace period on mouse-out so clipping the edge on the way past doesn't make it blink. */
-function GuestMenu({ label, items, isActive }: { label: string; items: { href: string; label: string; indent?: boolean }[]; isActive: (href: string) => boolean }) {
+function GuestMenu({ label, items, isActive }: { label: string; items: MenuItem[]; isActive: (href: string) => boolean }) {
   const [open, setOpen] = useState(false);
+  const [fly, setFly] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
-  const active = items.some((i) => isActive(i.href));
+  const active = flatMenu(items).some((i) => isActive(i.href));
   return (
     <div
       style={{ position: "relative", paddingBottom: 14, marginBottom: -14 }}
@@ -132,17 +142,35 @@ function GuestMenu({ label, items, isActive }: { label: string; items: { href: s
       </button>
       {open && (
         <div className="flex flex-col" style={{ position: "absolute", top: 24, left: 0, minWidth: 220, background: "#fff", border: "var(--border)", zIndex: 200 }}>
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="no-underline hover:text-[var(--pink)]"
-              style={{ fontSize: 11, fontWeight: isActive(item.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: item.indent ? "10px 14px 10px 26px" : "10px 14px", borderBottom: "1px solid #eee", color: isActive(item.href) ? "var(--pink)" : "var(--dark)", background: isActive(item.href) ? "var(--lav-light)" : undefined }}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {items.map((item) => {
+            const row = (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="no-underline hover:text-[var(--pink)] flex items-center justify-between gap-4"
+                style={{ fontSize: 11, fontWeight: isActive(item.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: item.indent ? "10px 14px 10px 26px" : "10px 14px", borderBottom: "1px solid #eee", color: isActive(item.href) || fly === item.href ? "var(--pink)" : "var(--dark)", background: isActive(item.href) || fly === item.href ? "var(--lav-light)" : undefined }}
+              >
+                {item.label}
+                {item.children && <span aria-hidden>&#9656;</span>}
+              </Link>
+            );
+            if (!item.children) return row;
+            return (
+              <div key={item.href} style={{ position: "relative" }} onMouseEnter={() => setFly(item.href)} onMouseLeave={() => setFly(null)}>
+                {row}
+                {fly === item.href && (
+                  <div className="flex flex-col" style={{ position: "absolute", top: -1.5, left: "100%", minWidth: 220, background: "#fff", border: "var(--border)", zIndex: 201 }}>
+                    {item.children.map((c) => (
+                      <Link key={c.href} href={c.href} onClick={() => setOpen(false)} className="no-underline hover:text-[var(--pink)]" style={{ fontSize: 11, fontWeight: isActive(c.href) ? 800 : 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "10px 14px", borderBottom: "1px solid #eee", color: isActive(c.href) ? "var(--pink)" : "var(--dark)", background: isActive(c.href) ? "var(--lav-light)" : undefined }}>
+                        {c.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -682,8 +710,11 @@ export default function NavBar() {
             </div>
           ) : (
             <>
+              <Link href="/login" className="no-underline hidden md:block hover:text-[var(--pink)]" style={{ color: "var(--dark)", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                log in
+              </Link>
               <Link
-                href="/login"
+                href="/chart"
                 className="no-underline hidden md:block"
                 style={{
                   border: "var(--border)",
@@ -696,7 +727,7 @@ export default function NavBar() {
                   whiteSpace: "nowrap",
                 }}
               >
-                member login
+                ✨ free birth chart
               </Link>
               <Link
                 href="/#universe"
@@ -872,8 +903,8 @@ export default function NavBar() {
           )}
           {!member && (
             <>
-              <div style={{ fontWeight: 800, color: workMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>work with me</div>
-              {workMenu.map((item) => (
+              <div style={{ fontWeight: 800, color: flatMenu(workMenu).some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>work with me</div>
+              {flatMenu(workMenu).map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -978,6 +1009,9 @@ export default function NavBar() {
             </>
           ) : (
             <>
+              <Link href="/chart" onClick={() => setOpen(false)} className="no-underline" style={{ color: "var(--dark)", fontWeight: 800 }}>
+                ✨ free birth chart
+              </Link>
               <Link
                 href="/#universe"
                 onClick={() => setOpen(false)}
