@@ -85,13 +85,14 @@ export default function MoonifestPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[0.72fr_1.28fr] gap-4 lg:gap-6 items-end">
           <div className="lg:pb-16">
             <Link href="/events" className="no-underline" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--dark)" }}>← all events</Link>
-            <div style={{ margin: "24px 0 22px" }}><span className="holo-sticker">🌕 taurus full moon edition</span></div>
+            <div style={{ margin: "24px 0 22px" }}><span className="holo-sticker">🌕 {event.badge}</span></div>
             <h1 className="display" style={{ fontSize: "clamp(46px, 4.6vw, 68px)", color: "var(--dark)", lineHeight: 0.95 }}>
               bad b*tches
               <br />
               <span className="pk">moonifest.</span>
             </h1>
             <p style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(17px, 1.5vw, 20px)", color: "var(--dark)", margin: "18px 0 0" }}>Money, Magic &amp; Manifestation.</p>
+            <p style={{ fontSize: 16, fontWeight: 600, color: "var(--dark)", margin: "6px 0 0", maxWidth: 520 }}>{event.format}.</p>
             <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, color: "var(--dark)", margin: "14px 0 0" }}>🗓 Mon 26 Oct · 6:30pm UK</p>
             <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 26 }}>
               <a href="#book" className="no-underline" style={button("var(--dark)")}>{event.cta}</a>

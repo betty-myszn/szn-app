@@ -14,6 +14,8 @@ export interface CosmicEvent {
   title: string;
   subtitle: string;
   edition?: string;
+  /** What it IS, in a few words, for stickers and headers (e.g. "Taurus Full Moon Workshop"). */
+  badge?: string;
   kind: EventKind;
   status: EventStatus;
   /** Shown everywhere until startsAt is set. */
@@ -49,6 +51,7 @@ export const EVENTS: CosmicEvent[] = [
     title: "BAD B*TCHES MOONIFEST",
     subtitle: "Money, Magic & Manifestation",
     edition: "Taurus Full Moon Edition",
+    badge: "Live Taurus Full Moon Workshop",
     kind: "full-moon",
     status: "published",
     // The Full Moon is exact at 2°45' Taurus on 26 Oct 2026, 04:11 UTC (Sun 25 Oct 9:11pm PT,
