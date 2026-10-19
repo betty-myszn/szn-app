@@ -101,9 +101,6 @@ export default function Home() {
             <p style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.6, color: "var(--dark)", maxWidth: 480, marginTop: 24, fontWeight: 600 }}>
               MY SZN is a whole universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident, creative, independent and completely OBSESSED with the lives they&apos;re creating.
             </p>
-            <p style={{ fontFamily: poppins, fontSize: "clamp(17px, 2vw, 21px)", fontWeight: 800, color: "#fff", maxWidth: 520, marginTop: 14, lineHeight: 1.35 }}>
-              Pick your door, babe. There are seven.
-            </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <a href="#universe" className="no-underline" style={{ background: "var(--dark)", color: "#fff", fontFamily: poppins, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 44px", display: "inline-block" }}>
                 explore my szn
