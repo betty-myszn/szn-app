@@ -8,8 +8,12 @@ import { HOUSE_MEANINGS, SIGN_TRAITS, getBodyMeaning, ordinalHouse, degreeMeanin
 import { composeHouseDeepDive } from "@/lib/house-content";
 import { PLANET_SYMBOLS } from "@/types/chart";
 import { getSymbol } from "@/lib/style-data";
+import { glossify } from "@/components/AstroTerm";
+import { Box, SectionHead, TONES, makeLead } from "@/components/learn/LearnKit";
+import { DeepDiveBody, DeepDiveHero, DeepDivePage, PinkLink, Pill, Stack } from "@/components/learn/DeepDive";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
+const lead = makeLead(glossify);
 
 export default function HousePage() {
   const params = useParams<{ n: string }>();
@@ -63,314 +67,202 @@ export default function HousePage() {
   const deepDive = composeHouseDeepDive(houseNum, chart);
   const otherHouses = Array.from({ length: 12 }, (_, i) => i + 1).filter((n) => n !== houseNum);
 
+  const linkStyle: React.CSSProperties = { color: "var(--dark)", textDecoration: "underline", textUnderlineOffset: 3 };
+
   return (
-    <>
-      <section className="px-5 md:px-8 py-14" style={{ background: "var(--dark)", borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <Link
-            href="/my-chart"
-            className="no-underline"
-            style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--lav)" }}
-          >
-            ← my chart
-          </Link>
-          <div className="tag mb-2" style={{ marginTop: 18 }}>
-            {ordinalHouse(houseNum)} house · {getSymbol(cusp.sign)} {cusp.sign.toLowerCase()} on the cusp
-          </div>
-          <h1
-            style={{
-              fontFamily: poppins,
-              fontSize: "clamp(32px, 5vw, 48px)",
-              fontWeight: 800,
-              letterSpacing: "-1px",
-              lineHeight: 1.08,
-              color: "#fff",
-              marginBottom: 14,
-            }}
-          >
+    <DeepDivePage eyebrow={`${ordinalHouse(houseNum)} house`}>
+      <DeepDiveHero
+        eyebrow={`${ordinalHouse(houseNum)} house · ${getSymbol(cusp.sign)} ${cusp.sign.toLowerCase()} on the cusp`}
+        title={
+          <>
             your house of <span className="pk">{meaning.title}.</span>
-          </h1>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.8, maxWidth: 580 }}>
-            This house rules {meaning.rules}. {meaning.coach}
-          </p>
-        </div>
-      </section>
+          </>
+        }
+      >
+        {glossify(`This house rules ${meaning.rules}. ${meaning.coach}`)}
+      </DeepDiveHero>
 
-      {/* What this house actually governs */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-3">what this house actually governs</div>
-          <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{meaning.deepDive}</p>
-        </div>
-      </section>
+      <DeepDiveBody>
+        <SectionHead title="the basics" />
+        <Stack>
+          {/* What this house actually governs */}
+          <Box label="what this house actually governs">{lead(meaning.deepDive)}</Box>
 
-      {/* Sign on the door + life areas */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-          <div className="p-8" style={{ borderRight: "var(--border)" }}>
-            <div className="tag mb-3">the sign on the door</div>
-            <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 10 }}>
-              {cusp.sign.toLowerCase()} runs this arena.
-            </h2>
-            <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8 }}>
-              With {cusp.sign.toLowerCase()} on the cusp, you approach {meaning.lifeAreas.slice(0, 2).join(" and ")} with {cuspTraits?.essence}. Your natural edge here: {cuspTraits?.gift}.
-            </p>
-          </div>
-          <div className="p-8" style={{ background: "var(--lav-light)" }}>
-            <div className="tag mb-3">life areas this house runs</div>
-            <div className="flex gap-2 flex-wrap" style={{ marginBottom: 14 }}>
-              {meaning.lifeAreas.map((area) => (
-                <span
-                  key={area}
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    background: "#fff",
-                    border: "var(--border)",
-                    padding: "6px 12px",
-                  }}
-                >
-                  {area}
-                </span>
+          {/* Sign on the door + life areas */}
+          <Stack cols={260}>
+            <Box tone="pink" label="the sign on the door">
+              <strong style={{ display: "block", fontFamily: poppins, fontSize: 20, lineHeight: 1.25, marginBottom: 8 }}>{cusp.sign.toLowerCase()} runs this arena.</strong>
+              {glossify(`With ${cusp.sign.toLowerCase()} on the cusp, you approach ${meaning.lifeAreas.slice(0, 2).join(" and ")} with ${cuspTraits?.essence}. Your natural edge here: ${cuspTraits?.gift}.`)}
+            </Box>
+            <Box tone="lav" label="life areas this house runs">
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+                {meaning.lifeAreas.map((area) => (
+                  <Pill key={area}>{area}</Pill>
+                ))}
+              </div>
+              {glossify(`Cusp at ${cusp.formattedDegree} ${cusp.sign.toLowerCase()}, ${degreeMeaning(cusp.degree)}`)}
+            </Box>
+          </Stack>
+
+          {/* Natural ruler vs your actual cusp */}
+          {deepDive && <Box tone="lav" label="textbook house vs your house">{lead(deepDive.rulerLine)}</Box>}
+
+          {/* The ruler of this house, and where it actually sits */}
+          {deepDive?.rulerPlacement && (
+            <Box label="the ruler of this house">
+              <strong style={{ display: "block", fontFamily: poppins, fontSize: 19, lineHeight: 1.3, marginBottom: 10 }}>
+                {cusp.sign.toLowerCase()} is ruled by{" "}
+                <Link href={`/my-chart/${deepDive.rulerPlacement.rulerId}`} style={linkStyle}>
+                  {deepDive.rulerPlacement.rulerName.toLowerCase()}
+                </Link>
+                , in {deepDive.rulerPlacement.rulerSign.toLowerCase()}
+                {deepDive.rulerPlacement.rulerRetrograde && <span> (Rx)</span>}, in your {ordinalHouse(deepDive.rulerPlacement.rulerHouse)} house.
+              </strong>
+              {glossify(deepDive.rulerPlacement.synthesis)}
+              {planetsInside.length > 0 && (
+                <p style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.6, marginTop: 12 }}>
+                  Worth keeping separate: {planetsInside.map((p) => p.name).join(", ")} {planetsInside.length === 1 ? "sits" : "sit"} inside this house too, that&apos;s a different layer to the ruler above, see &ldquo;planets living here&rdquo; below for what {planetsInside.length === 1 ? "it" : "they"} add.
+                </p>
+              )}
+            </Box>
+          )}
+        </Stack>
+
+        {/* Planets living here */}
+        <SectionHead title={`planets living here · ${planetsInside.length}`} />
+        {planetsInside.length === 0 ? (
+          <Box>
+            {lead(`No planets live in this house, and that's not a gap. It means this life area runs on the style of its cusp sign, ${cusp.sign.toLowerCase()}, without extra cosmic noise. Steady, uncomplicated energy.`)}
+          </Box>
+        ) : (
+          <Stack>
+            {planetsInside.map((p) => {
+              const body = getBodyMeaning(p.id);
+              return (
+                <Link key={p.id} href={`/my-chart/${p.id}`} className="no-underline hd-tile" style={{ display: "block", borderRadius: 18 }}>
+                  <Box tone="pink">
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                      <span style={{ fontSize: 20 }}>{PLANET_SYMBOLS[p.name]}</span>
+                      <span style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800 }}>
+                        {p.name.toLowerCase()} in {p.sign.toLowerCase()}
+                      </span>
+                      {p.retrograde && <Pill tone="dark">Rx</Pill>}
+                    </div>
+                    {glossify(
+                      body
+                        ? `Your ${body.domainShort} operates from this arena, ${meaning.lifeAreas[0]} is where your ${p.name.toLowerCase()} energy makes itself felt most. Tap to read the full interpretation.`
+                        : "Tap to read the full interpretation."
+                    )}
+                  </Box>
+                </Link>
+              );
+            })}
+          </Stack>
+        )}
+
+        {deepDive && (
+          <>
+            <SectionHead title="the real talk" />
+            <Stack>
+              {/* Betty's take */}
+              <Box tone="dark" label="betty's take">{lead(deepDive.bettysTake)}</Box>
+
+              {/* The real block */}
+              <Box tone="pink" label="the real block">{lead(deepDive.rootPattern)}</Box>
+            </Stack>
+
+            {/* Before / after shift */}
+            <SectionHead title="the shift" />
+            <Stack cols={260}>
+              <Box label="the belief running the show">
+                <p style={{ fontSize: 17, fontStyle: "italic", lineHeight: 1.6 }}>&ldquo;{deepDive.shiftBefore}&rdquo;</p>
+              </Box>
+              <Box tone="pink" label="the belief you're building instead">
+                <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6 }}>&ldquo;{deepDive.shiftAfter}&rdquo;</p>
+              </Box>
+            </Stack>
+
+            {/* 5-day protocol */}
+            <SectionHead title="the protocol" />
+            <Box tone="lav">
+              <strong style={{ display: "block", fontFamily: poppins, fontSize: 22, lineHeight: 1.25, marginBottom: 8 }}>{deepDive.protocolTitle}.</strong>
+              One small, specific action a day, tied directly to this house. Do these in order across five days this week.
+            </Box>
+            <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+              {deepDive.protocolDays.map((step, i) => (
+                <Box key={step}>
+                  <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                    <div
+                      style={{ width: 52, height: 52, borderRadius: 14, background: "var(--pink)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
+                    >
+                      <span style={{ fontFamily: poppins, fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>day</span>
+                      <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, lineHeight: 1 }}>{i + 1}</span>
+                    </div>
+                    <div style={{ paddingTop: 4 }}>{glossify(step)}</div>
+                  </div>
+                </Box>
               ))}
             </div>
-            <p style={{ fontSize: 13, color: "#3C2A70", lineHeight: 1.7 }}>
-              Cusp at {cusp.formattedDegree} {cusp.sign.toLowerCase()}, {degreeMeaning(cusp.degree)}
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Natural ruler vs your actual cusp */}
-      {deepDive && (
-        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
-            <div className="tag mb-3">textbook house vs your house</div>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#3C2A70" }}>{deepDive.rulerLine}</p>
-          </div>
-        </section>
-      )}
-
-      {/* The ruler of this house, and where it actually sits */}
-      {deepDive?.rulerPlacement && (
-        <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-          <div className="max-w-4xl mx-auto p-8" style={{ border: "var(--border)" }}>
-            <div className="tag mb-3">the ruler of this house</div>
-            <h2 style={{ fontFamily: poppins, fontSize: 20, fontWeight: 800, letterSpacing: "-0.4px", marginBottom: 12 }}>
-              {cusp.sign.toLowerCase()} is ruled by{" "}
-              <Link href={`/my-chart/${deepDive.rulerPlacement.rulerId}`} className="pk" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
-                {deepDive.rulerPlacement.rulerName.toLowerCase()}
-              </Link>
-              , in {deepDive.rulerPlacement.rulerSign.toLowerCase()}
-              {deepDive.rulerPlacement.rulerRetrograde && <span style={{ color: "var(--pink)" }}> (Rx)</span>}, in your {ordinalHouse(deepDive.rulerPlacement.rulerHouse)} house.
-            </h2>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--grey)" }}>{deepDive.rulerPlacement.synthesis}</p>
-            {planetsInside.length > 0 && (
-              <p style={{ fontSize: 12, lineHeight: 1.7, color: "var(--grey-light)", marginTop: 14, fontStyle: "italic" }}>
-                Worth keeping separate: {planetsInside.map((p) => p.name).join(", ")} {planetsInside.length === 1 ? "sits" : "sit"} inside this house too, that&apos;s a different layer to the ruler above, see &ldquo;planets living here&rdquo; below for what {planetsInside.length === 1 ? "it" : "they"} add.
-              </p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Planets living here */}
-      <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">planets living here · {planetsInside.length}</div>
-          {planetsInside.length === 0 ? (
-            <div className="p-8" style={{ border: "var(--border)" }}>
-              <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8 }}>
-                No planets live in this house, and that&apos;s not a gap. It means this life area runs on the style of its cusp sign, {cusp.sign.toLowerCase()}, without extra cosmic noise. Steady, uncomplicated energy.
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
-              {planetsInside.map((p, i) => {
-                const body = getBodyMeaning(p.id);
-                return (
-                  <Link
-                    key={p.id}
-                    href={`/my-chart/${p.id}`}
-                    className="no-underline p-6 hover:bg-[#fafafa] transition-colors"
-                    style={{ color: "var(--dark)", borderBottom: i < planetsInside.length - 1 ? "1px solid #eee" : undefined }}
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <span style={{ fontSize: 20, color: "var(--pink)" }}>{PLANET_SYMBOLS[p.name]}</span>
-                      <span style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800 }}>
-                        {p.name.toLowerCase()} in {p.sign.toLowerCase()}
-                        {p.retrograde && <span style={{ color: "var(--pink)", fontSize: 11, marginLeft: 5 }}>Rx</span>}
-                      </span>
-                    </div>
-                    <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7 }}>
-                      {body
-                        ? `Your ${body.domainShort} operates from this arena, ${meaning.lifeAreas[0]} is where your ${p.name.toLowerCase()} energy makes itself felt most. Tap to read the full interpretation.`
-                        : "Tap to read the full interpretation."}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {deepDive && (
-        <>
-          {/* Betty's take */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--dark)" }}>
-              <div className="tag mb-3" style={{ color: "var(--pink)" }}>betty&apos;s take</div>
-              <p style={{ fontSize: 17, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{deepDive.bettysTake}</p>
-            </div>
-          </section>
-
-          {/* The real block */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--pink)" }}>
-              <div className="tag mb-3" style={{ color: "#fff" }}>the real block</div>
-              <p style={{ fontSize: 16, lineHeight: 1.9, color: "#fff", fontWeight: 500 }}>{deepDive.rootPattern}</p>
-            </div>
-          </section>
-
-          {/* Before / after shift */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto">
-              <div className="tag mb-5">the shift</div>
-              <div className="grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-                <div className="p-8" style={{ borderRight: "var(--border)", background: "#fafafa" }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--grey-light)", marginBottom: 10 }}>
-                    the belief running the show
-                  </div>
-                  <p style={{ fontSize: 17, fontStyle: "italic", lineHeight: 1.6, color: "var(--dark)" }}>
-                    &ldquo;{deepDive.shiftBefore}&rdquo;
-                  </p>
-                </div>
-                <div className="p-8" style={{ background: "var(--pink)" }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 10 }}>
-                    the belief you&apos;re building instead
-                  </div>
-                  <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, color: "#fff" }}>
-                    &ldquo;{deepDive.shiftAfter}&rdquo;
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 5-day protocol */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto">
-              <div className="tag mb-2">the protocol</div>
-              <h2 style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.6px", marginBottom: 10 }}>
-                {deepDive.protocolTitle}.
-              </h2>
-              <p style={{ fontSize: 13, color: "var(--grey)", lineHeight: 1.7, marginBottom: 24, maxWidth: 600 }}>
-                One small, specific action a day, tied directly to this house. Do these in order across five days this week.
-              </p>
-              <div className="flex flex-col gap-0" style={{ border: "var(--border)" }}>
-                {deepDive.protocolDays.map((step, i) => (
-                  <div
-                    key={step}
-                    className="p-6 flex gap-5 items-start"
-                    style={{ borderBottom: i < deepDive.protocolDays.length - 1 ? "var(--border)" : undefined }}
-                  >
-                    <div
-                      className="flex flex-col items-center justify-center shrink-0"
-                      style={{ width: 56, height: 56, border: "1.5px solid var(--pink)" }}
-                    >
-                      <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>day</span>
-                      <span style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, color: "var(--pink)" }}>{i + 1}</span>
-                    </div>
-                    <p style={{ fontSize: 14, lineHeight: 1.8, color: "var(--grey)", paddingTop: 8 }}>{step}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Stretch move */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto p-8" style={{ background: "var(--gold)" }}>
-              <div className="tag mb-3">the stretch move</div>
-              <p style={{ fontSize: 15, lineHeight: 1.85, color: "#3C2A70", fontWeight: 600 }}>{deepDive.stretchMove}</p>
-              <p style={{ fontSize: 12, color: "#3C2A70", marginTop: 14, opacity: 0.8 }}>
+            {/* Stretch move */}
+            <SectionHead title="the stretch move" />
+            <Box tone="dark">
+              {lead(deepDive.stretchMove)}
+              <p style={{ fontSize: 13.5, fontWeight: 700, marginTop: 12, color: "var(--pink)" }}>
                 This is the one action that creates outsized change. The protocol builds the muscle, this is where you actually use it.
               </p>
-            </div>
-          </section>
+            </Box>
 
-          {/* Proof markers */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto">
-              <div className="tag mb-5">how you&apos;ll know it&apos;s working</div>
-              <div className="grid md:grid-cols-3 gap-0" style={{ border: "var(--border)" }}>
-                {deepDive.proofMarkers.map((marker, i) => (
-                  <div
-                    key={marker}
-                    className="p-6"
-                    style={{ borderRight: i < deepDive.proofMarkers.length - 1 ? "var(--border)" : undefined, background: "var(--mint)" }}
-                  >
-                    <p style={{ fontSize: 13, lineHeight: 1.75, color: "#0F6E56" }}>{marker}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+            {/* Proof markers */}
+            <SectionHead title="how you'll know it's working" />
+            <Stack cols={180}>
+              {deepDive.proofMarkers.map((marker) => (
+                <Box key={marker} tone="lav">
+                  {glossify(marker)}
+                </Box>
+              ))}
+            </Stack>
 
-          {/* Affirmations + journal CTA */}
-          <section className="px-5 md:px-8 py-12" style={{ borderBottom: "var(--border)" }}>
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-0" style={{ border: "var(--border)" }}>
-              <div className="p-8 flex flex-col justify-center">
-                <div className="tag mb-3">journal on it</div>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--grey)", marginBottom: 18 }}>
-                  Log each day of the protocol and what shifts, this is exactly what journalling is for.
-                </p>
-                <Link href="/journal" className="btn-pink" style={{ alignSelf: "flex-start" }}>journal on this house</Link>
-              </div>
-              <div className="p-8" style={{ background: "var(--pink)" }}>
-                <div className="tag mb-3" style={{ color: "#fff" }}>your affirmations</div>
-                <div className="flex flex-col gap-3">
+            {/* Affirmations + journal CTA */}
+            <SectionHead title="make it yours" />
+            <Stack cols={260}>
+              <Box label="journal on it">
+                <p style={{ marginBottom: 16 }}>Log each day of the protocol and what shifts, this is exactly what journalling is for.</p>
+                <PinkLink href="/journal">journal on this house</PinkLink>
+              </Box>
+              <Box tone="pink" label="your affirmations">
+                <div style={{ display: "grid", gap: 10 }}>
                   {deepDive.affirmations.map((a) => (
-                    <p key={a} style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.6, color: "#fff" }}>
+                    <p key={a} style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.6 }}>
                       &ldquo;{a}&rdquo;
                     </p>
                   ))}
                 </div>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
+              </Box>
+            </Stack>
+          </>
+        )}
 
-      {/* Explore other houses */}
-      <section className="px-5 md:px-8 py-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">explore another house</div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0" style={{ border: "var(--border)" }}>
-            {otherHouses.map((n, i) => {
-              const otherMeaning = HOUSE_MEANINGS[n - 1];
-              return (
-                <Link
-                  key={n}
-                  href={`/my-chart/house/${n}`}
-                  className="no-underline p-5 text-center hover:bg-[#fafafa] transition-colors"
-                  style={{
-                    borderRight: (i + 1) % 4 !== 0 && i < otherHouses.length - 1 ? "var(--border)" : undefined,
-                    borderBottom: Math.floor(i / 4) < Math.floor((otherHouses.length - 1) / 4) ? "var(--border)" : undefined,
-                    color: "var(--dark)",
-                  }}
-                >
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "var(--pink)", marginBottom: 4 }}>{ordinalHouse(n)} house</div>
-                  <div style={{ fontSize: 12, fontWeight: 700 }}>{otherMeaning.title}</div>
-                </Link>
-              );
-            })}
-          </div>
+        {/* Explore other houses */}
+        <SectionHead title="explore another house" />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 10 }}>
+          {otherHouses.map((n, i) => {
+            const otherMeaning = HOUSE_MEANINGS[n - 1];
+            const tone = TONES[i % TONES.length];
+            return (
+              <Link
+                key={n}
+                href={`/my-chart/house/${n}`}
+                className="no-underline hd-tile"
+                style={{ display: "block", textAlign: "center", borderRadius: 16, padding: "14px 10px", background: tone.bg, color: tone.fg, border: tone.border ?? "none" }}
+              >
+                <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 4 }}>{ordinalHouse(n)} house</div>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{otherMeaning.title}</div>
+              </Link>
+            );
+          })}
         </div>
-      </section>
-    </>
+      </DeepDiveBody>
+    </DeepDivePage>
   );
 }

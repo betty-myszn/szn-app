@@ -104,7 +104,8 @@ export function createGlossary(glossary: Record<string, GlossaryEntry>) {
   const AUTO = Object.entries(glossary)
     .filter(([, e]) => e.auto)
     .sort((a, b) => b[1].auto!.source.length - a[1].auto!.source.length);
-  const COMBINED = new RegExp(AUTO.map(([, e]) => `(${e.auto!.source})`).join("|"), "gi");
+  // inner groups go non-capturing so group n of the combined pattern is always AUTO[n - 1]
+  const COMBINED = new RegExp(AUTO.map(([, e]) => `(${e.auto!.source.replace(/(?<!\\)\((?!\?)/g, "(?:")})`).join("|"), "gi");
 
   function Term({ k, children }: { k: string; children: React.ReactNode }) {
     return <GlossTerm entry={glossary[k]}>{children}</GlossTerm>;
