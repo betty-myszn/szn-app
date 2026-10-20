@@ -15,7 +15,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // Every gate the member actually carries, explained in full: what the gate is, where
 // it sits, which planets light it up in Personality and Design, and its shadow and
 // gift. Self-contained so the chart page only needs to drop in <HumanDesignGates />.
-export default function HumanDesignGates({ hd }: { hd: HumanDesignData }) {
+export default function HumanDesignGates({ hd, focusGate }: { hd: HumanDesignData; focusGate?: number }) {
   // gate -> the personality and design activations that light it up
   const byGate = new Map<number, { personality: HDActivation[]; design: HDActivation[] }>();
   for (const a of hd.personality) {
@@ -37,7 +37,7 @@ export default function HumanDesignGates({ hd }: { hd: HumanDesignData }) {
       </p>
       <div style={{ display: "grid", gap: 10 }}>
         {gates.map((g) => (
-          <GateRow key={g} gate={g} act={byGate.get(g)!} />
+          <GateRow key={g} gate={g} act={byGate.get(g)!} startOpen={g === focusGate} />
         ))}
       </div>
     </div>
@@ -47,18 +47,21 @@ export default function HumanDesignGates({ hd }: { hd: HumanDesignData }) {
 function GateRow({
   gate,
   act,
+  startOpen = false,
 }: {
   gate: number;
   act: { personality: HDActivation[]; design: HDActivation[] };
+  startOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  // opened straight from the bodygraph: start expanded (the lesson page scrolls it into view)
+  const [open, setOpen] = useState(startOpen);
   const content = GATE_CONTENT[gate];
   const centre = CENTER_LABELS[GATE_CENTER[gate]];
   const inP = act.personality.length > 0;
   const inD = act.design.length > 0;
 
   return (
-    <div style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderRadius: 14, overflow: "hidden" }}>
+    <div id={`hd-gate-${gate}`} style={{ background: "#fff", border: "1.5px solid var(--dark)", borderRadius: 14, overflow: "hidden" }}>
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -88,8 +91,8 @@ function GateRow({
           </p>
           {content && (
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <span style={{ ...pill, background: "#f0f0f0", color: "var(--grey, #666)" }}>the shadow: {content.shadow.toLowerCase()}</span>
-              <span style={{ ...pill, background: "var(--pink)", color: "#fff" }}>the gift: {content.gift.toLowerCase()}</span>
+              <span style={{ ...pill, background: "var(--lav-light)", color: "var(--dark)" }}>the shadow: {content.shadow.toLowerCase()}</span>
+              <span style={{ ...pill, background: "var(--pink)", color: "var(--dark)" }}>the gift: {content.gift.toLowerCase()}</span>
             </div>
           )}
         </div>

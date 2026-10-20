@@ -849,3 +849,26 @@ html, body { overflow-x: hidden; }
 .szn-way-emoji { display: inline-block; transition: transform .25s ease; }
 .szn-way:hover .szn-way-emoji { transform: rotate(-12deg) scale(1.18); }
 @media (prefers-reduced-motion: reduce) { .szn-way-emoji { transition: none; } }
+
+/* ── Human Design page ──
+   .hd-foil is the Cosmic Co foil as a surface (hero card, progress fill): everything on it stays
+   solid black or white. Lesson tiles tilt on hover and pick up a foil ring. .hd-flash pulses the
+   centre / channel / gate she jumped to from the bodygraph. */
+.hd-foil { background: var(--foil) center / 250% 250%; animation: foil-drift 14s ease-in-out infinite; }
+.hd-tile { position: relative; transition: transform .25s ease, box-shadow .25s ease; }
+.hd-tile::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 3px; pointer-events: none;
+  background: var(--foil) center / 300% 300%; animation: foil-drift 10s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity .25s ease;
+}
+.hd-tile:hover, .hd-tile:focus-visible { transform: perspective(700px) rotateX(3deg) rotateY(-4deg) translateY(-3px); box-shadow: 0 16px 30px -16px rgba(26, 26, 26, 0.5); }
+.hd-tile:hover::before, .hd-tile:focus-visible::before { opacity: 1; }
+.hd-flash { animation: hd-flash 1.8s ease-out 1; }
+@keyframes hd-flash { 0%, 45% { box-shadow: 0 0 0 4px var(--pink); } 100% { box-shadow: 0 0 0 0 rgba(255, 45, 135, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .hd-foil, .hd-tile::before { animation: none; }
+  .hd-tile, .hd-tile:hover, .hd-tile:focus-visible { transform: none; transition: none; }
+  .hd-flash { animation: none; outline: 4px solid var(--pink); }
+}

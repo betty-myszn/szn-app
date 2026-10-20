@@ -315,3 +315,17 @@ function designDateString(julianDay: number): string {
 
 // Re-exported so UI and tests can label centres without importing the constants file.
 export { CENTER_LABELS };
+
+// Today's sky on the gate wheel: where all 13 bodies sit right now. Powers the "today in your
+// design" card, which compares these transit gates with a member's own chart.
+export function transitActivations(at: Date = new Date()): HDActivation[] {
+  const hour = at.getUTCHours() + at.getUTCMinutes() / 60 + at.getUTCSeconds() / 3600;
+  const jd = swisseph.swe_julday(
+    at.getUTCFullYear(),
+    at.getUTCMonth() + 1,
+    at.getUTCDate(),
+    hour,
+    swisseph.SE_GREG_CAL
+  ) as unknown as number;
+  return activationsAt(jd);
+}

@@ -9,6 +9,12 @@ import Bodygraph from "@/components/Bodygraph";
 import HumanDesignAreas from "@/components/HumanDesignAreas";
 import HumanDesignGates from "@/components/HumanDesignGates";
 import HumanDesignProfileLines from "@/components/HumanDesignProfileLines";
+import HdTerm, { glossify } from "@/components/HdTerm";
+import HdShareButton from "@/components/HdShareCard";
+import HdToday from "@/components/HdToday";
+import { loadHdRead, saveHdRead } from "@/lib/hd-progress";
+import { OFF_TRACK_TYPE, OFF_TRACK_AUTHORITY } from "@/lib/human-design-learn";
+import type { HumanDesignData } from "@/types/human-design";
 import { CENTER_LABELS, GATE_NAME, channelKey } from "@/lib/human-design-constants";
 import {
   TYPE_CONTENT,
@@ -62,56 +68,34 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
   // go-deeper CTA in its place.
   const unlocked = hasActiveAccess(member);
 
+  return (
+    <Shell>
+      <DesignReading hd={hd} unlocked={unlocked} memberNav={memberNav} />
+    </Shell>
+  );
+}
+
+// Everything once the chart has loaded. Its own component so the lesson state can use hooks
+// (the parent returns early while loading).
+function DesignReading({ hd, unlocked, memberNav }: { hd: HumanDesignData; unlocked: boolean; memberNav: boolean }) {
   const type = TYPE_CONTENT[hd.type];
   const authority = AUTHORITY_CONTENT[hd.authority];
   const profile = PROFILE_CONTENT[hd.profile];
   const definition = DEFINITION_CONTENT[hd.definition];
   const cross = CROSS_ANGLE_CONTENT[hd.incarnationCross.angle];
+  const authorityShort = authority.title.replace(/ authority.*/i, "");
 
-  return (
-    <Shell>
-      {memberNav && (
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-          <Link href="/my-chart" style={navLink}>
-            &larr; my astrology chart
-          </Link>
-          <span style={{ ...navLink }}>human design</span>
-        </div>
-      )}
+  // ── which lesson is open, and from where ──
+  // Each lesson has its own link (#hd-authority) so emails and the dashboard can point straight at
+  // one. Opening from the page pushes a history entry so the phone's back gesture closes it.
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [anchor, setAnchor] = useState<string | undefined>();
+  const pushed = useRef(false);
+  const [read, setRead] = useState<string[]>([]);
 
-      <p style={eyebrow}>your energy blueprint</p>
-      <h1 style={{ fontFamily: poppins, fontSize: 44, lineHeight: 1.04, margin: "0 0 8px", fontWeight: 700 }}>
-        {hd.type}
-      </h1>
-      <p style={{ fontSize: 18, margin: "0 0 8px", fontFamily: poppins }}>
-        {type.title}
-      </p>
-      <p style={{ fontSize: 17, margin: "0 0 28px", lineHeight: 1.5 }}>
-        {hd.birthData.name ? `${hd.birthData.name}, ` : ""}
-        {type.intro.charAt(0).toLowerCase() + type.intro.slice(1)}
-      </p>
+  const focusGate = anchor?.startsWith("hd-gate-") ? Number(anchor.slice(8)) : undefined;
 
-      {/* quick reference */}
-      <div style={statGrid}>
-        <Stat label="Type" value={hd.type} />
-        <Stat label="Strategy" value={hd.strategy} />
-        <Stat label="Authority" value={authority.title.replace(/ authority.*/i, "")} />
-        <Stat label="Profile" value={`${hd.profile}  ${profile ? profile.title : ""}`} />
-        <Stat label="Definition" value={hd.definition} />
-        <Stat label="Cross" value={`${hd.incarnationCross.angle} (${hd.incarnationCross.gates.join("/")})`} />
-      </div>
-
-      {/* the bodygraph: interactive, hover or tap any centre, channel or gate to have it explained */}
-      <div style={{ margin: "8px 0 24px" }}>
-        <Bodygraph hd={hd} unlocked={unlocked} />
-      </div>
-
-      {/* the reading as bite-size lessons: a grid of colour-block tiles, each opening its own
-          full-screen page with the read laid out in boxes, so the page itself stays short. */}
-      <LearnGrid
-        unlocked={unlocked}
-        name={hd.birthData.name}
-        lessons={[
+  const lessons: Lesson[] = [
           {
             id: "type",
             eyebrow: "your type",
@@ -143,6 +127,34 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
               ]
             : []),
           {
+            id: "offtrack",
+            eyebrow: "your off-track signals",
+            title: `${hd.notSelfTheme} means stop`,
+            hook: "The exact signs you've drifted from your design, and what on track feels like.",
+            body: (
+              <div style={{ display: "grid", gap: 14 }}>
+                <Box tone="dark" label="you're off track when">
+                  <ul style={{ margin: 0, paddingLeft: 0, listStyle: "none", display: "grid", gap: 10 }}>
+                    {[...OFF_TRACK_TYPE[hd.type], ...OFF_TRACK_AUTHORITY[hd.authority]].map((s) => (
+                      <li key={s} style={{ paddingLeft: 24, position: "relative" }}>
+                        <span style={{ position: "absolute", left: 0, color: "var(--pink)", fontWeight: 800 }}>✦</span>
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </Box>
+                <Box tone="pink" label="on track feels like">
+                  <strong>{hd.signature}.</strong> That&apos;s your <HdTerm k="signature">signature</HdTerm>, the feeling that tells you you&apos;re
+                  living your design. The fastest way back to it is your strategy: <strong>{hd.strategy.toLowerCase()}</strong>.
+                </Box>
+                <Box tone="lav" label="try this today">
+                  Next time you feel {hd.notSelfTheme.toLowerCase()}, write down what happened in the hour before. Within a week
+                  you&apos;ll see your pattern, and patterns are way easier to break once you can name them.
+                </Box>
+              </div>
+            ),
+          },
+          {
             id: "definition",
             eyebrow: "how you're wired",
             title: hd.definition,
@@ -173,10 +185,10 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
                 </Box>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12, marginTop: 16 }}>
                   {hd.definedCenters.map((c) => (
-                    <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].defined} defined />
+                    <CenterRow key={c} id={`hd-centre-${c}`} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].defined} defined />
                   ))}
                   {hd.openCenters.map((c) => (
-                    <CenterRow key={c} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].open} defined={false} />
+                    <CenterRow key={c} id={`hd-centre-${c}`} label={CENTER_LABELS[c]} theme={CENTER_CONTENT[c].theme} text={CENTER_CONTENT[c].open} defined={false} />
                   ))}
                 </div>
               </>
@@ -194,7 +206,7 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 12 }}>
                   {hd.definedChannels.map((ch, i) => (
-                    <Box key={ch.key} tone={i % 2 ? "lav" : "pink"}>
+                    <Box key={ch.key} id={`hd-channel-${ch.key}`} tone={i % 2 ? "lav" : "pink"}>
                       <div style={{ fontFamily: poppins, fontWeight: 700, fontSize: 17, marginBottom: 6 }}>
                         {ch.gates[0]}–{ch.gates[1]} · {ch.name || "Channel"}
                       </div>
@@ -210,7 +222,7 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
             title: `${hd.activatedGates.length} gates`,
             hook: "Every gate you carry, what it is and how its energy works.",
             locked: true,
-            body: <HumanDesignGates hd={hd} />,
+            body: <HumanDesignGates hd={hd} focusGate={focusGate} />,
           },
           {
             id: "cross",
@@ -251,8 +263,130 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
               </>
             ),
           },
-        ]}
-      />
+  ];
+  const accessible = lessons.filter((l) => !l.locked || unlocked).map((l) => l.id);
+
+  useEffect(() => {
+    const fromHash = () => {
+      const id = window.location.hash.replace(/^#hd-/, "");
+      if (window.location.hash.startsWith("#hd-") && LESSON_IDS.includes(id)) {
+        setOpenId(id);
+      } else {
+        setOpenId(null);
+        setAnchor(undefined);
+        pushed.current = false;
+      }
+    };
+    fromHash();
+    window.addEventListener("popstate", fromHash);
+    window.addEventListener("hashchange", fromHash);
+    return () => {
+      window.removeEventListener("popstate", fromHash);
+      window.removeEventListener("hashchange", fromHash);
+    };
+  }, []);
+
+  useEffect(() => {
+    loadHdRead().then(setRead);
+  }, []);
+
+  // opening a lesson she has access to counts it as read
+  useEffect(() => {
+    if (!openId || !accessible.includes(openId) || read.includes(openId)) return;
+    const next = [...read, openId];
+    setRead(next);
+    saveHdRead(next);
+  }, [openId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const openLesson = (id: string, at?: string) => {
+    const url = `${window.location.pathname}${window.location.search}#hd-${id}`;
+    if (!openId) {
+      window.history.pushState(null, "", url);
+      pushed.current = true;
+    } else {
+      window.history.replaceState(null, "", url);
+    }
+    setAnchor(at);
+    setOpenId(id);
+  };
+  const closeLesson = () => {
+    if (pushed.current) {
+      window.history.back(); // popstate clears it
+    } else {
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      setOpenId(null);
+      setAnchor(undefined);
+    }
+  };
+
+  const idx = lessons.findIndex((l) => l.id === openId);
+  const readCount = accessible.filter((id) => read.includes(id)).length;
+
+  return (
+    <>
+      {memberNav && (
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+          <Link href="/my-chart" style={navLink}>
+            &larr; my astrology chart
+          </Link>
+          <span style={{ ...navLink }}>human design</span>
+        </div>
+      )}
+
+      {/* the foil hero card: her type as a collectable, everything on it solid black or white */}
+      <section className="hd-foil" style={{ borderRadius: 26, border: "2px solid var(--dark)", padding: "26px 20px 22px", color: "var(--dark)", marginBottom: 18 }}>
+        <p style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1.6, textTransform: "uppercase", margin: "0 0 8px" }}>
+          {hd.birthData.name ? `${hd.birthData.name}'s energy blueprint` : "your energy blueprint"}
+        </p>
+        <h1 style={{ fontFamily: poppins, fontSize: 46, lineHeight: 1.02, margin: "0 0 6px", fontWeight: 800 }}>{hd.type}</h1>
+        <p style={{ fontFamily: poppins, fontSize: 19, fontWeight: 700, margin: "0 0 18px" }}>{type.title}</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 8, marginBottom: 18 }}>
+          <HeroStat label={<HdTerm k="strategy">strategy</HdTerm>} value={hd.strategy} />
+          <HeroStat label={<HdTerm k="authority">authority</HdTerm>} value={authorityShort} />
+          <HeroStat label={<HdTerm k="profile">profile</HdTerm>} value={`${hd.profile} ${profile ? profile.title : ""}`} />
+          <HeroStat label={<HdTerm k="definition">definition</HdTerm>} value={hd.definition} />
+          <HeroStat label={<HdTerm k="cross">cross</HdTerm>} value={`${hd.incarnationCross.angle} (${hd.incarnationCross.gates.join("/")})`} />
+        </div>
+        <HdShareButton hd={hd} typeTitle={type.title} authority={authorityShort} />
+      </section>
+
+      {/* the 30-second version, for anyone who reads nothing else */}
+      <SectionHead title="your design in 30 seconds" />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10, marginBottom: 24 }}>
+        <Box tone="pink" label="how you're built">
+          <strong>{hd.type}.</strong> {type.intro}
+        </Box>
+        <Box tone="lav" label="how you decide">
+          {authority.intro} Your move: <strong>{hd.strategy.toLowerCase()}</strong>.
+        </Box>
+        <Box tone="dark" label="your off-track alarm" wide>
+          When you feel <strong><HdTerm k="notself">{hd.notSelfTheme.toLowerCase()}</HdTerm></strong>, something&apos;s off. When you feel{" "}
+          <strong><HdTerm k="signature">{hd.signature.toLowerCase()}</HdTerm></strong>, you&apos;re bang on.
+        </Box>
+      </div>
+
+      <HdToday hd={hd} />
+
+      {/* the bodygraph: hover or tap any centre, channel or gate, then open its full lesson */}
+      <div style={{ margin: "8px 0 24px" }}>
+        <Bodygraph hd={hd} unlocked={unlocked} onOpenLesson={(t) => openLesson(t.lesson, t.anchor)} />
+      </div>
+
+      {/* progress through the lessons */}
+      <div style={{ margin: "36px 0 6px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, marginBottom: 8 }}>
+          <h2 style={{ fontFamily: poppins, fontSize: 22, fontWeight: 700, margin: 0 }}>learn your design</h2>
+          <span style={{ fontFamily: poppins, fontSize: 13, fontWeight: 700 }}>
+            {readCount === accessible.length ? "all read ✦" : `${readCount} of ${accessible.length} read`}
+          </span>
+        </div>
+        <div style={{ height: 12, borderRadius: 999, background: "var(--lav-light)", border: "1.5px solid var(--dark)", overflow: "hidden" }}>
+          <div className="hd-foil" style={{ height: "100%", width: `${(readCount / Math.max(1, accessible.length)) * 100}%`, transition: "width .5s ease" }} />
+        </div>
+      </div>
+
+      <LessonTiles title="start here" lessons={lessons.slice(0, 4)} offset={0} unlocked={unlocked} read={read} onOpen={openLesson} />
+      <LessonTiles title="go deeper" lessons={lessons.slice(4)} offset={4} unlocked={unlocked} read={read} onOpen={openLesson} />
 
       {!unlocked && <GoDeeperCTA name={hd.birthData.name} />}
 
@@ -263,7 +397,30 @@ export default function HumanDesignReading({ memberNav = false }: { memberNav?: 
           </Link>
         </div>
       )}
-    </Shell>
+
+      {idx >= 0 && (
+        <LessonPage
+          lesson={lessons[idx]}
+          tone={TONES[idx % TONES.length]}
+          locked={!!lessons[idx].locked && !unlocked}
+          name={hd.birthData.name}
+          anchor={anchor}
+          prev={lessons[idx - 1]}
+          next={lessons[idx + 1]}
+          onGo={(id) => openLesson(id)}
+          onClose={closeLesson}
+        />
+      )}
+    </>
+  );
+}
+
+function HeroStat({ label, value }: { label: React.ReactNode; value: string }) {
+  return (
+    <div style={{ background: "#fff", border: "1.5px solid var(--dark)", borderRadius: 14, padding: "10px 12px" }}>
+      <div style={{ fontFamily: poppins, fontSize: 10.5, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 3 }}>{label}</div>
+      <div style={{ fontFamily: poppins, fontSize: 14, fontWeight: 600, lineHeight: 1.25 }}>{value}</div>
+    </div>
   );
 }
 
@@ -326,6 +483,9 @@ function GoDeeperCTA({ name }: { name?: string }) {
 
 // ── the lessons: tile grid + full-screen page ─────────────────────────────────────
 
+// Every lesson id, for the #hd-<id> deep links (a missing one, like profile, just opens nothing).
+const LESSON_IDS = ["type", "authority", "profile", "offtrack", "definition", "areas", "centres", "channels", "gates", "cross", "technical"];
+
 interface Lesson {
   id: string;
   eyebrow: string;
@@ -346,91 +506,71 @@ const TONES: { bg: string; fg: string; border?: string }[] = [
   { bg: "var(--lav)", fg: "var(--dark)" },
 ];
 
-function LearnGrid({ lessons, unlocked, name }: { lessons: Lesson[]; unlocked: boolean; name?: string }) {
-  const [openId, setOpenId] = useState<string | null>(null);
-
-  // The lesson page gets its own history entry, so the phone's back button / swipe closes it
-  // instead of leaving the chart.
-  useEffect(() => {
-    const onPop = () => setOpenId(null);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
-
-  const open = (id: string) => {
-    if (!openId) window.history.pushState({ hdLesson: id }, "");
-    setOpenId(id);
-  };
-  const close = () => window.history.back();
-
-  const idx = lessons.findIndex((l) => l.id === openId);
-  const start = lessons.slice(0, 3);
-  const deeper = lessons.slice(3);
-
-  const tiles = (list: Lesson[], offset: number) => (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))", gap: 12 }}>
-      {list.map((l, i) => {
-        const n = offset + i;
-        const tone = TONES[n % TONES.length];
-        const locked = !!l.locked && !unlocked;
-        return (
-          <button
-            key={l.id}
-            type="button"
-            onClick={() => open(l.id)}
-            style={{
-              textAlign: "left",
-              background: tone.bg,
-              color: tone.fg,
-              border: tone.border ?? "none",
-              borderRadius: 18,
-              padding: "16px 16px 14px",
-              minHeight: 170,
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-              cursor: "pointer",
-              fontFamily: "inherit",
-            }}
-          >
-            <span style={{ fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase" }}>
-              {String(n + 1).padStart(2, "0")} · {l.eyebrow}
-            </span>
-            <span style={{ fontFamily: poppins, fontSize: 19, fontWeight: 700, lineHeight: 1.15 }}>{l.title}</span>
-            <span style={{ fontSize: 13.5, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-              {l.hook}
-            </span>
-            <span style={{ marginTop: "auto", paddingTop: 8, fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase" }}>
-              {locked ? "🔒 members" : "open it ✦"}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-
+function LessonTiles({
+  title,
+  lessons,
+  offset,
+  unlocked,
+  read,
+  onOpen,
+}: {
+  title: string;
+  lessons: Lesson[];
+  offset: number;
+  unlocked: boolean;
+  read: string[];
+  onOpen: (id: string) => void;
+}) {
+  if (lessons.length === 0) return null;
   return (
     <>
-      <SectionHead title="start here" />
-      {tiles(start, 0)}
-      {deeper.length > 0 && (
-        <>
-          <SectionHead title="go deeper" />
-          {tiles(deeper, start.length)}
-        </>
-      )}
-
-      {idx >= 0 && (
-        <LessonPage
-          lesson={lessons[idx]}
-          tone={TONES[idx % TONES.length]}
-          locked={!!lessons[idx].locked && !unlocked}
-          name={name}
-          next={lessons[idx + 1]}
-          onNext={() => setOpenId(lessons[idx + 1].id)}
-          onClose={close}
-        />
-      )}
+      <SectionHead title={title} />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))", gap: 12 }}>
+        {lessons.map((l, i) => {
+          const n = offset + i;
+          const tone = TONES[n % TONES.length];
+          const locked = !!l.locked && !unlocked;
+          const done = read.includes(l.id) && !locked;
+          return (
+            <button
+              key={l.id}
+              type="button"
+              className="hd-tile"
+              onClick={() => onOpen(l.id)}
+              style={{
+                textAlign: "left",
+                background: tone.bg,
+                color: tone.fg,
+                border: tone.border ?? "none",
+                borderRadius: 18,
+                padding: "16px 16px 14px",
+                minHeight: 170,
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              {done && (
+                <span className="holo-sticker" style={{ position: "absolute", top: -10, right: 10, transform: "rotate(6deg)", padding: "4px 10px", fontSize: 10 }}>
+                  read ✦
+                </span>
+              )}
+              <span style={{ fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase" }}>
+                {String(n + 1).padStart(2, "0")} · {l.eyebrow}
+              </span>
+              <span style={{ fontFamily: poppins, fontSize: 19, fontWeight: 700, lineHeight: 1.15 }}>{l.title}</span>
+              <span style={{ fontSize: 13.5, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                {l.hook}
+              </span>
+              <span style={{ marginTop: "auto", paddingTop: 8, fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase" }}>
+                {locked ? "🔒 members" : done ? "read again ✦" : "open it ✦"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </>
   );
 }
@@ -440,35 +580,80 @@ function LessonPage({
   tone,
   locked,
   name,
+  anchor,
+  prev,
   next,
-  onNext,
+  onGo,
   onClose,
 }: {
   lesson: Lesson;
   tone: { bg: string; fg: string; border?: string };
   locked: boolean;
   name?: string;
+  anchor?: string;
+  prev?: Lesson;
   next?: Lesson;
-  onNext: () => void;
+  onGo: (id: string) => void;
   onClose: () => void;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
+  const touch = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight" && next) onGo(next.id);
+      if (e.key === "ArrowLeft" && prev) onGo(prev.id);
+    };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [onClose]);
+  }, [onClose, onGo, next, prev]);
 
-  // each lesson starts at the top
+  // each lesson starts at the top, or at the exact centre / channel / gate she tapped on the chart
   useEffect(() => {
     scroller.current?.scrollTo(0, 0);
-  }, [lesson.id]);
+    if (!anchor || locked) return;
+    const t = setTimeout(() => {
+      const el = document.getElementById(anchor);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("hd-flash");
+    }, 250);
+    return () => clearTimeout(t);
+  }, [lesson.id, anchor, locked]);
+
+  // swipe left / right between lessons on a phone
+  const onTouchStart = (e: React.TouchEvent) => {
+    touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touch.current;
+    touch.current = null;
+    if (!start) return;
+    const dx = e.changedTouches[0].clientX - start.x;
+    const dy = e.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) < 70 || Math.abs(dy) > 60) return;
+    if (dx < 0 && next) onGo(next.id);
+    if (dx > 0 && prev) onGo(prev.id);
+  };
+
+  const arrow: React.CSSProperties = {
+    width: 34,
+    height: 34,
+    borderRadius: 999,
+    border: "1.5px solid var(--dark)",
+    background: "#fff",
+    color: "var(--dark)",
+    fontSize: 16,
+    lineHeight: 1,
+    cursor: "pointer",
+    flexShrink: 0,
+  };
 
   return (
     <div
@@ -476,19 +661,27 @@ function LessonPage({
       role="dialog"
       aria-modal="true"
       aria-label={lesson.eyebrow}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
       style={{ position: "fixed", inset: 0, zIndex: 1000, background: "#fff", overflowY: "auto", color: "var(--dark)" }}
     >
-      {/* sticky close bar */}
+      {/* sticky bar: where you are, previous / next, close */}
       <div style={{ position: "sticky", top: 0, zIndex: 2, background: "#fff", borderBottom: "1.5px solid var(--dark)" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase" }}>
-            your human design · {lesson.eyebrow}
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "10px 16px", display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase", marginRight: "auto", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {lesson.eyebrow}
           </span>
+          <button type="button" style={{ ...arrow, visibility: prev ? "visible" : "hidden" }} onClick={() => prev && onGo(prev.id)} aria-label="Previous lesson">
+            ‹
+          </button>
+          <button type="button" style={{ ...arrow, visibility: next ? "visible" : "hidden" }} onClick={() => next && onGo(next.id)} aria-label="Next lesson">
+            ›
+          </button>
           <button
             type="button"
             onClick={onClose}
             autoFocus
-            style={{ background: "var(--dark)", color: "#fff", border: "none", borderRadius: 999, padding: "8px 16px", fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", cursor: "pointer", flexShrink: 0 }}
+            style={{ background: "var(--dark)", color: "#fff", border: "none", borderRadius: 999, padding: "9px 16px", fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", cursor: "pointer", flexShrink: 0 }}
           >
             close ✕
           </button>
@@ -511,11 +704,15 @@ function LessonPage({
         {next ? (
           <button
             type="button"
-            onClick={onNext}
+            onClick={() => onGo(next.id)}
             style={{ marginTop: 36, width: "100%", textAlign: "left", background: "var(--dark)", color: "#fff", border: "none", borderRadius: 18, padding: "18px 20px", cursor: "pointer", fontFamily: "inherit" }}
           >
-            <span style={{ display: "block", fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 4 }}>next up →</span>
-            <span style={{ fontFamily: poppins, fontSize: 19, fontWeight: 700 }}>{next.eyebrow}: {next.title}</span>
+            <span style={{ display: "block", fontFamily: poppins, fontSize: 11, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 4, color: "var(--pink)" }}>
+              next up → (or swipe)
+            </span>
+            <span style={{ fontFamily: poppins, fontSize: 19, fontWeight: 700 }}>
+              {next.eyebrow}: {next.title}
+            </span>
           </button>
         ) : (
           <button
@@ -532,7 +729,19 @@ function LessonPage({
 }
 
 // A coloured content box, the building block of every lesson page.
-function Box({ tone = "white", label, children }: { tone?: "white" | "pink" | "lav" | "dark"; label?: string; children: React.ReactNode }) {
+function Box({
+  tone = "white",
+  label,
+  id,
+  wide,
+  children,
+}: {
+  tone?: "white" | "pink" | "lav" | "dark";
+  label?: React.ReactNode;
+  id?: string;
+  wide?: boolean; // span every column of a grid
+  children: React.ReactNode;
+}) {
   const t = {
     white: { background: "#fff", color: "var(--dark)", border: "1.5px solid var(--dark)" },
     pink: { background: "var(--pink-light)", color: "var(--dark)", border: "none" },
@@ -540,7 +749,7 @@ function Box({ tone = "white", label, children }: { tone?: "white" | "pink" | "l
     dark: { background: "var(--dark)", color: "#fff", border: "none" },
   }[tone];
   return (
-    <div style={{ ...t, borderRadius: 18, padding: "18px 20px", fontSize: 15.5, lineHeight: 1.65 }}>
+    <div id={id} style={{ ...t, borderRadius: 18, padding: "18px 20px", fontSize: 15.5, lineHeight: 1.65, gridColumn: wide ? "1 / -1" : undefined }}>
       {label && (
         <div style={{ fontFamily: poppins, fontSize: 11.5, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 8, color: tone === "dark" ? "var(--pink)" : "var(--dark)" }}>
           {label}
@@ -548,6 +757,19 @@ function Box({ tone = "white", label, children }: { tone?: "white" | "pink" | "l
       )}
       {children}
     </div>
+  );
+}
+
+// The first sentence in bold as the one-liner, the rest after it with glossary words tappable.
+// Skimmers get the point, readers get the depth.
+function lead(text: string): React.ReactNode {
+  const m = text.match(/^(.+?[.!])\s+([\s\S]+)$/);
+  if (!m) return <strong>{text}</strong>;
+  return (
+    <>
+      <strong style={{ display: "block", fontSize: 17, lineHeight: 1.4, marginBottom: 6 }}>{m[1]}</strong>
+      {glossify(m[2])}
+    </>
   );
 }
 
@@ -564,17 +786,17 @@ function LessonReading({
 }) {
   return (
     <div style={{ display: "grid", gap: 14, marginBottom: 8 }}>
-      <Box label="what it means">{block.meaning}</Box>
-      <Box tone="lav" label="how to work with it">{block.apply}</Box>
+      <Box label="what it means">{lead(block.meaning)}</Box>
+      <Box tone="lav" label="how to work with it">{lead(block.apply)}</Box>
       {deep &&
         (unlocked ? (
           <>
             <SectionHead title="the deep dive" />
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
-              <Box tone="pink" label="for you">{deep.forYou}</Box>
-              <Box tone="lav" label="in your business">{deep.inBusiness}</Box>
-              <Box tone="dark" label="the shadow">{deep.shadow}</Box>
-              <Box label="how to heal">{deep.heal}</Box>
+              <Box tone="pink" label="for you">{lead(deep.forYou)}</Box>
+              <Box tone="lav" label="in your business">{lead(deep.inBusiness)}</Box>
+              <Box tone="dark" label="the shadow">{lead(deep.shadow)}</Box>
+              <Box label="how to heal">{lead(deep.heal)}</Box>
             </div>
           </>
         ) : (
@@ -591,18 +813,20 @@ function LessonReading({
 }
 
 function CenterRow({
+  id,
   label,
   theme,
   text,
   defined,
 }: {
+  id?: string;
   label: string;
   theme: string;
   text: string;
   defined: boolean;
 }) {
   return (
-    <div style={{ ...card, borderLeft: `3px solid ${defined ? "var(--pink)" : "var(--lav)"}` }}>
+    <div id={id} style={{ ...card, border: "1.5px solid var(--dark)", borderLeft: `6px solid ${defined ? "var(--pink)" : "var(--lav)"}` }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
         <span style={{ fontFamily: poppins, fontWeight: 600 }}>{label}</span>
         <span style={{ fontSize: 12 }}>{theme}</span>
@@ -620,7 +844,7 @@ function CenterRow({
           {defined ? "defined" : "open"}
         </span>
       </div>
-      <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0 }}>{text}</p>
+      <div style={{ fontSize: 14.5, lineHeight: 1.6 }}>{lead(text)}</div>
     </div>
   );
 }
@@ -650,15 +874,6 @@ function ActivationTable({
           ))}
         </tbody>
       </table>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderRadius: 14, padding: "12px 14px" }}>
-      <div style={{ ...eyebrow, marginBottom: 4 }}>{label}</div>
-      <div style={{ fontFamily: poppins, fontSize: 14.5, fontWeight: 600, lineHeight: 1.25 }}>{value}</div>
     </div>
   );
 }
@@ -695,12 +910,6 @@ const eyebrow: React.CSSProperties = {
   textTransform: "uppercase",
   letterSpacing: 1.8,
   fontSize: 10.5,
-};
-
-const statGrid: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-  gap: 10,
 };
 
 const card: React.CSSProperties = {

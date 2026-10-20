@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
+import HdTerm from "@/components/HdTerm";
 import {
   GATE_CENTER,
   GATE_NAME,
@@ -21,7 +22,8 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // wheel. Nine centres in their canonical positions, wired by the 36 channels, flanked by the two
 // activation columns (Design on the left, Personality on the right) the way every classic
 // bodygraph lays it out. Stylised to the brand palette: Design = pink (the traditional red),
-// Personality = black, a gate carried by both = black with a pink stripe.
+// Personality = black, a gate carried by both = black with a pink stripe. Defined centres carry a
+// drifting pink / lilac / white holo fill (static for reduced motion); open centres stay white.
 //
 // It's interactive: hover (or tap, on a phone) any centre, channel or gate and everything
 // unrelated dims while the panel underneath explains that piece for this member's own chart.
@@ -132,10 +134,26 @@ type Focus =
 const DESIGN = "var(--pink)";
 const PERSONALITY = "var(--dark)";
 
-export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData; unlocked?: boolean }) {
-  const [hovered, setHovered] = useState<Focus | null>(null);
-  const [pinned, setPinned] = useState<Focus | null>(null);
-  const focus = hovered ?? pinned;
+// Where "open the full lesson" goes for each kind of thing: the lesson id and the element to scroll to.
+export type LessonTarget = { lesson: string; anchor?: string };
+
+export default function Bodygraph({
+  hd,
+  unlocked = true,
+  onOpenLesson,
+}: {
+  hd: HumanDesignData;
+  unlocked?: boolean;
+  onOpenLesson?: (t: LessonTarget) => void;
+}) {
+  // One selection. A mouse selects on hover and it stays put (so the panel's buttons stay reachable),
+  // a tap selects on a phone, and the panel's clear button resets it.
+  const [focus, setFocus] = useState<Focus | null>(null);
+  const holoId = useId().replace(/:/g, "");
+  const [still, setStill] = useState(false);
+  useEffect(() => {
+    setStill(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   const defined = new Set(hd.definedCenters);
   const definedChannelKeys = new Set(hd.definedChannels.map((c) => c.key));
@@ -166,15 +184,12 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
   })();
 
   const dim = (on: boolean) => ({ opacity: lit && !on ? 0.2 : 1, transition: "opacity .2s" });
-  const same = (a: Focus | null, b: Focus) => JSON.stringify(a) === JSON.stringify(b);
-
-  // hover previews, tap/click pins (and a second tap on the same thing unpins)
   const bind = (f: Focus) => ({
-    onMouseEnter: () => setHovered(f),
-    onMouseLeave: () => setHovered(null),
-    onFocus: () => setHovered(f),
-    onBlur: () => setHovered(null),
-    onClick: () => setPinned((p) => (same(p, f) ? null : f)),
+    onPointerEnter: (e: React.PointerEvent) => {
+      if (e.pointerType === "mouse") setFocus(f);
+    },
+    onFocus: () => setFocus(f),
+    onClick: () => setFocus(f),
     style: { cursor: "pointer" },
   });
 
@@ -200,6 +215,22 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
         <Column title="design" colour={DESIGN} acts={hd.design} lit={lit} bind={bind} focus={focus} />
 
         <svg viewBox="0 0 320 560" width="100%" role="img" aria-label="Your Human Design bodygraph" style={{ display: "block", overflow: "visible" }}>
+          {/* the holo shimmer on her defined centres: pink, lilac and white foil, drifting */}
+          <defs>
+            <linearGradient id={holoId} x1="0" y1="0" x2="1" y2="1" spreadMethod="reflect">
+              <stop offset="0" stopColor="#FF2D87" />
+              <stop offset="0.3" stopColor="#FF8CC6" />
+              <stop offset="0.5" stopColor="#FFFFFF" />
+              <stop offset="0.7" stopColor="#C8B4F8" />
+              <stop offset="1" stopColor="#FF2D87" />
+              {!still && (
+                <>
+                  <animate attributeName="x1" values="0;0.8;0" dur="7s" repeatCount="indefinite" />
+                  <animate attributeName="x2" values="1;1.8;1" dur="7s" repeatCount="indefinite" />
+                </>
+              )}
+            </linearGradient>
+          </defs>
           {/* the fixed wiring, faint, with each activated gate's half drawn in its colour */}
           {WIRES.map((w) => {
             const on = !!lit?.wires.has(w.key);
@@ -234,7 +265,7 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
             const on = !!lit?.centres.has(key);
             const isFocus = focus?.kind === "centre" && focus.key === key;
             const props = {
-              fill: isFocus ? "var(--dark)" : isDefined ? "var(--pink)" : "#fff",
+              fill: isFocus ? "var(--dark)" : isDefined ? `url(#${holoId})` : "#fff",
               stroke: "var(--dark)",
               strokeWidth: on ? 3 : 2,
               tabIndex: 0,
@@ -257,7 +288,6 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
           {/* short centre labels */}
           {CENTRE_KEYS.map((key) => {
             const { x, y } = POS[key];
-            const isDefined = defined.has(key);
             const isFocus = focus?.kind === "centre" && focus.key === key;
             return (
               <text
@@ -268,7 +298,7 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
                 fontFamily={poppins}
                 fontSize={8}
                 fontWeight={700}
-                fill={isFocus || isDefined ? "#fff" : "var(--dark)"}
+                fill={isFocus ? "#fff" : "var(--dark)"}
                 style={{ pointerEvents: "none", ...dim(!!lit?.centres.has(key)) }}
               >
                 {CENTER_LABELS[key].replace(/ \(.*\)/, "").toLowerCase()}
@@ -282,14 +312,43 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
 
       {/* legend */}
       <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginTop: 14, fontSize: 11 }}>
-        <Key swatch={{ background: "var(--pink)" }} label="defined" />
-        <Key swatch={{ background: "#fff", border: "1.5px solid var(--dark)" }} label="open" />
-        <Key swatch={{ background: DESIGN, height: 4 }} label="design (unconscious)" />
-        <Key swatch={{ background: PERSONALITY, height: 4 }} label="personality (conscious)" />
+        <Key swatch={{ background: "linear-gradient(115deg, #FF2D87, #FFFFFF, #C8B4F8)", border: "1.5px solid var(--dark)" }} label={<HdTerm k="defined">defined</HdTerm>} />
+        <Key swatch={{ background: "#fff", border: "1.5px solid var(--dark)" }} label={<HdTerm k="open">open</HdTerm>} />
+        <Key swatch={{ background: DESIGN, height: 4 }} label={<><HdTerm k="design">design</HdTerm> (unconscious)</>} />
+        <Key swatch={{ background: PERSONALITY, height: 4 }} label={<><HdTerm k="personality">personality</HdTerm> (conscious)</>} />
         <Key swatch={{ background: `repeating-linear-gradient(90deg, ${PERSONALITY} 0 4px, ${DESIGN} 4px 8px)`, height: 4 }} label="both" />
       </div>
 
-      <Panel focus={focus} hd={hd} unlocked={unlocked} defined={defined} definedChannelKeys={definedChannelKeys} pGates={pGates} dGates={dGates} />
+      <div style={{ position: "relative" }}>
+        <Panel focus={focus} hd={hd} unlocked={unlocked} defined={defined} definedChannelKeys={definedChannelKeys} pGates={pGates} dGates={dGates} />
+        {focus && (
+          <button
+            type="button"
+            onClick={() => setFocus(null)}
+            aria-label="Clear selection"
+            style={{ position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: 999, border: "1.5px solid var(--dark)", background: "#fff", color: "var(--dark)", cursor: "pointer", fontSize: 14, lineHeight: 1 }}
+          >
+            ✕
+          </button>
+        )}
+      </div>
+      {focus && onOpenLesson && (
+        <button
+          type="button"
+          onClick={() =>
+            onOpenLesson(
+              focus.kind === "centre"
+                ? { lesson: "centres", anchor: `hd-centre-${focus.key}` }
+                : focus.kind === "channel"
+                  ? { lesson: "channels", anchor: definedChannelKeys.has(focus.key) ? `hd-channel-${focus.key}` : undefined }
+                  : { lesson: "gates", anchor: `hd-gate-${focus.gate}` }
+            )
+          }
+          style={{ marginTop: 10, width: "100%", background: "var(--dark)", color: "#fff", border: "none", borderRadius: 14, padding: "13px 16px", fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase", cursor: "pointer" }}
+        >
+          open the full lesson on this →
+        </button>
+      )}
     </div>
   );
 }
@@ -356,7 +415,7 @@ function Column({
   );
 }
 
-function Key({ swatch, label }: { swatch: React.CSSProperties; label: string }) {
+function Key({ swatch, label }: { swatch: React.CSSProperties; label: React.ReactNode }) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
       <span style={{ display: "inline-block", width: 14, height: 11, ...swatch }} />
@@ -393,7 +452,7 @@ function Panel({
     lineHeight: 1.55,
     fontSize: 14,
   };
-  const head: React.CSSProperties = { fontFamily: poppins, fontWeight: 700, fontSize: 18, margin: "0 0 2px" };
+  const head: React.CSSProperties = { fontFamily: poppins, fontWeight: 700, fontSize: 18, margin: "0 0 2px", paddingRight: 34 };
   const sub: React.CSSProperties = { fontSize: 12, margin: "0 0 10px" };
 
   // who carries a gate, e.g. "design Mars 34.3 · personality Sun 34.1"
@@ -523,3 +582,6 @@ function GateChip({ gate, p, d }: { gate: number; p: boolean; d: boolean }) {
     </span>
   );
 }
+
+// The fixed layout, shared with the story-sized share card so its mini bodygraph matches this one.
+export const BODYGRAPH_GEOMETRY = { POS, SQUARE_CENTRES, WIRES, centrePath };
