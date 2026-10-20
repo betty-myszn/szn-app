@@ -93,7 +93,7 @@ function getSignificance(transitPlanet: string, natalPlanet: string): "major" | 
 }
 
 // Theme mapping for activated placements
-const PLANET_THEMES: Record<string, Record<string, string>> = {
+export const PLANET_THEMES: Record<string, Record<string, string>> = {
   Sun: { conjunction: "identity awakening", opposition: "self vs other", square: "growth through tension", trine: "creative flow", sextile: "new opportunities" },
   Moon: { conjunction: "emotional reset", opposition: "emotional balance", square: "emotional growth", trine: "emotional ease", sextile: "nurturing connections" },
   Mercury: { conjunction: "mental clarity", opposition: "perspective shift", square: "communication challenge", trine: "intellectual flow", sextile: "learning opportunity" },
@@ -750,4 +750,27 @@ export function generateYourSzn(natalChart: ChartData): YourSznData {
     nextBestStep,
     recommendations,
   };
+}
+
+// The sky right now for every member at once: where the five fast movers sit. Powers the
+// "today in your chart" card on /my-chart, which lays these over her natal chart in the browser.
+export interface SkyNowPosition {
+  id: string;
+  name: string;
+  longitude: number;
+  sign: string;
+  degree: number;
+  retrograde: boolean;
+}
+
+export function skyNow(): SkyNowPosition[] {
+  const now = DateTime.utc();
+  const hour = now.hour + now.minute / 60 + now.second / 3600;
+  const jd = swisseph.swe_julday(now.year, now.month, now.day, hour, swisseph.SE_GREG_CAL) as unknown as number;
+  const flags = swisseph.SEFLG_SWIEPH | swisseph.SEFLG_SPEED;
+  return TRANSIT_PLANETS.slice(0, 5).map((planet) => {
+    const r = swisseph.swe_calc_ut(jd, planet.swissId, flags) as { longitude: number; longitudeSpeed: number };
+    const s = longitudeToSign(r.longitude);
+    return { id: planet.id, name: planet.name, longitude: r.longitude, sign: s.sign, degree: s.degree, retrograde: r.longitudeSpeed < 0 };
+  });
 }

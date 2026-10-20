@@ -562,7 +562,6 @@ export default function ChartWheel({
             textAnchor="middle"
             dominantBaseline="central"
             fill={WHITE}
-            fillOpacity="0.4"
             fontSize="10"
             fontFamily={poppins}
           >
@@ -634,7 +633,6 @@ export default function ChartWheel({
             textAnchor="middle"
             dominantBaseline="central"
             fill={WHITE}
-            fillOpacity="0.35"
             fontSize="9"
             fontFamily={poppins}
           >

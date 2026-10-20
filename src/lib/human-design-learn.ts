@@ -1,14 +1,9 @@
 import type { HDAuthorityKey, HDTypeName } from "@/types/human-design";
+import type { GlossaryEntry } from "@/components/learn/GlossTerm";
 
 // Teaching layer for the Human Design page: the tap-to-define glossary and the "you're off track
 // when..." signals. Interpretation of the chart itself lives in human-design-content.ts.
 
-export interface GlossaryEntry {
-  title: string;
-  def: string;
-  /** Pattern auto-linked inside lesson text (first match per box). Omitted = only linked by hand. */
-  auto?: RegExp;
-}
 
 export const GLOSSARY: Record<string, GlossaryEntry> = {
   type: {
