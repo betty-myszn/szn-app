@@ -81,7 +81,7 @@ export default function HumanDesignAreas({ hd, unlocked }: { hd: HumanDesignData
           >
             <summary style={{ cursor: "pointer", listStyle: "none" }}>
               <span style={{ fontFamily: poppins, fontSize: 17, fontWeight: 700 }}>{a.label}</span>
-              <span style={{ display: "block", fontSize: 13, opacity: 0.6, marginTop: 2 }}>{a.hook}</span>
+              <span style={{ display: "block", fontSize: 13, marginTop: 2 }}>{a.hook}</span>
             </summary>
 
             <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 14 }}>
@@ -97,16 +97,16 @@ export default function HumanDesignAreas({ hd, unlocked }: { hd: HumanDesignData
               {topGates.length > 0 && (
                 <div>
                   <div style={eyebrow}>your gates here</div>
-                  <p style={{ ...body, opacity: 0.6, marginBottom: 8 }}>{reading.gatesIntro}</p>
+                  <p style={{ ...body, marginBottom: 8 }}>{reading.gatesIntro}</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {topGates.map((g) => (
                       <div key={g.gate} style={{ borderLeft: "2px solid var(--pink)", paddingLeft: 12 }}>
                         <div style={{ fontFamily: poppins, fontSize: 13.5, fontWeight: 700 }}>
                           gate {g.gate} · {g.name}
                         </div>
-                        <div style={{ fontSize: 13.5, lineHeight: 1.55, opacity: 0.85 }}>{g.lens}</div>
+                        <div style={{ fontSize: 13.5, lineHeight: 1.55 }}>{g.lens}</div>
                         {g.shadow && g.gift && (
-                          <div style={{ fontSize: 12, opacity: 0.6, marginTop: 2 }}>
+                          <div style={{ fontSize: 12, marginTop: 2 }}>
                             the trap: {g.shadow.toLowerCase()} → the move: {g.gift.toLowerCase()}
                           </div>
                         )}
@@ -127,7 +127,6 @@ const eyebrow: React.CSSProperties = {
   textTransform: "uppercase",
   letterSpacing: 1.6,
   fontSize: 10,
-  opacity: 0.5,
   marginBottom: 4,
   fontFamily: poppins,
   fontWeight: 700,

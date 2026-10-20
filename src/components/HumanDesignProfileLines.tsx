@@ -15,10 +15,10 @@ export default function HumanDesignProfileLines({ profile }: { profile: string }
 
   return (
     <div>
-      <h2 style={{ fontFamily: poppins, fontSize: 13, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.55, margin: "34px 0 12px" }}>
+      <h2 style={{ fontFamily: poppins, fontSize: 13, textTransform: "uppercase", letterSpacing: 1.5, margin: "34px 0 12px" }}>
         your two profile lines
       </h2>
-      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+      <p style={{ fontSize: 14, margin: "0 0 16px", lineHeight: 1.55 }}>
         Your profile is <strong>{profile}</strong>. The first number is your conscious line, the part
         of you you know you are playing. The second is your unconscious line, the part your body runs
         underneath without you noticing. Together they are how you are here to meet the world.
@@ -51,7 +51,7 @@ function LineCard({
           {line}
         </span>
         <span style={{ fontFamily: poppins, fontWeight: 600, fontSize: 15.5 }}>{name}</span>
-        <span style={{ marginLeft: "auto", fontSize: 10, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 700, opacity: 0.55 }}>{tag}</span>
+        <span style={{ marginLeft: "auto", fontSize: 10, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 700 }}>{tag}</span>
       </div>
       <p style={{ fontSize: 14.5, lineHeight: 1.65, margin: 0 }}>{body}</p>
     </div>

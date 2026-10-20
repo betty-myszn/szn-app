@@ -281,7 +281,7 @@ export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData
       </div>
 
       {/* legend */}
-      <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginTop: 14, fontSize: 11, opacity: 0.75 }}>
+      <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginTop: 14, fontSize: 11 }}>
         <Key swatch={{ background: "var(--pink)" }} label="defined" />
         <Key swatch={{ background: "#fff", border: "1.5px solid var(--dark)" }} label="open" />
         <Key swatch={{ background: DESIGN, height: 4 }} label="design (unconscious)" />
@@ -394,7 +394,7 @@ function Panel({
     fontSize: 14,
   };
   const head: React.CSSProperties = { fontFamily: poppins, fontWeight: 700, fontSize: 18, margin: "0 0 2px" };
-  const sub: React.CSSProperties = { fontSize: 12, opacity: 0.55, margin: "0 0 10px" };
+  const sub: React.CSSProperties = { fontSize: 12, margin: "0 0 10px" };
 
   // who carries a gate, e.g. "design Mars 34.3 · personality Sun 34.1"
   const carriers = (g: number) =>
@@ -406,7 +406,7 @@ function Panel({
 
   if (!focus) {
     return (
-      <div style={{ ...box, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", opacity: 0.7 }} aria-live="polite">
+      <div style={{ ...box, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }} aria-live="polite">
         Hover or tap any centre, line or gate number and it&apos;ll light up and tell you exactly what that piece of your design is doing.
       </div>
     );
@@ -432,7 +432,7 @@ function Panel({
             ))}
           </div>
         ) : (
-          <p style={{ margin: 0, fontSize: 13, opacity: 0.6 }}>You don&apos;t carry any gates in this centre, so it&apos;s fully open.</p>
+          <p style={{ margin: 0, fontSize: 13 }}>You don&apos;t carry any gates in this centre, so it&apos;s fully open.</p>
         )}
       </div>
     );
@@ -486,7 +486,7 @@ function Panel({
         <Pill text={`shadow: ${gc.shadow}`} bg="var(--lav-light)" />
         <Pill text={`gift: ${gc.gift}`} bg="var(--pink-light)" />
       </div>
-      <p style={{ margin: "10px 0 0", fontSize: 12, opacity: 0.55 }}>
+      <p style={{ margin: "10px 0 0", fontSize: 12 }}>
         {dGates.has(g) && pGates.has(g)
           ? "You carry this one on both sides, so it runs through your body and you know it as yourself."
           : dGates.has(g)
@@ -517,8 +517,7 @@ function GateChip({ gate, p, d }: { gate: number; p: boolean; d: boolean }) {
         borderStyle: p || d ? "solid" : "dashed",
         color: p || d ? colour : "var(--dark)",
         background: p && d ? "var(--pink-light)" : "#fff",
-        opacity: p || d ? 1 : 0.6,
-      }}
+              }}
     >
       {gate} · {GATE_NAME[gate]}
     </span>

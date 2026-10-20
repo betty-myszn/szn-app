@@ -31,7 +31,7 @@ export default function HumanDesignGates({ hd }: { hd: HumanDesignData }) {
   return (
     <div>
       <SectionHead title={`your gates (${gates.length})`} />
-      <p style={{ fontSize: 14, opacity: 0.6, margin: "0 0 16px", lineHeight: 1.55 }}>
+      <p style={{ fontSize: 14, margin: "0 0 16px", lineHeight: 1.55 }}>
         Gates are the specific bits of circuitry switched on in your chart, the raw material behind
         your channels and centres. Each one carries a shadow and a gift. Tap any to open it.
       </p>
@@ -69,11 +69,11 @@ function GateRow({
             {gate}
           </span>
           <span style={{ fontFamily: poppins, fontWeight: 600, fontSize: 15 }}>{GATE_NAME[gate]?.toLowerCase()}</span>
-          <span style={{ fontSize: 11, opacity: 0.5 }}>{centre}</span>
-          <span style={{ marginLeft: "auto", fontSize: 20, lineHeight: 1, opacity: 0.4, transform: open ? "rotate(45deg)" : "none", transition: "transform 0.15s" }}>+</span>
+          <span style={{ fontSize: 11 }}>{centre}</span>
+          <span style={{ marginLeft: "auto", fontSize: 20, lineHeight: 1, transform: open ? "rotate(45deg)" : "none", transition: "transform 0.15s" }}>+</span>
         </div>
         {!open && content?.keynote && (
-          <p style={{ margin: "8px 0 0", fontSize: 13.5, opacity: 0.7, lineHeight: 1.5 }}>{content.keynote}.</p>
+          <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.5 }}>{content.keynote}.</p>
         )}
       </button>
 
@@ -106,7 +106,7 @@ function Tag({ text, bg }: { text: string; bg: string }) {
 
 function SectionHead({ title }: { title: string }) {
   return (
-    <h2 style={{ fontFamily: poppins, fontSize: 13, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.55, margin: "34px 0 12px" }}>
+    <h2 style={{ fontFamily: poppins, fontSize: 13, textTransform: "uppercase", letterSpacing: 1.5, margin: "34px 0 12px" }}>
       {title}
     </h2>
   );
