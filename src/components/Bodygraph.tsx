@@ -1,18 +1,33 @@
 "use client";
 
-import { GATE_CENTER, CHANNEL_PAIRS, channelKey, CENTER_LABELS, type CenterKey } from "@/lib/human-design-constants";
-import type { HumanDesignData } from "@/types/human-design";
+import { useState } from "react";
+import {
+  GATE_CENTER,
+  GATE_NAME,
+  CHANNEL_PAIRS,
+  CHANNEL_NAME,
+  channelKey,
+  CENTER_LABELS,
+  type CenterKey,
+} from "@/lib/human-design-constants";
+import { CENTER_CONTENT, CHANNEL_GIFT } from "@/lib/human-design-content";
+import { GATE_CONTENT } from "@/lib/human-design-gate-content";
+import { GATE_DESCRIPTION } from "@/lib/human-design-gate-descriptions";
+import type { HumanDesignData, HDActivation } from "@/types/human-design";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // The bodygraph: the visual half of a Human Design chart, the equivalent of the astrology chart
-// wheel. Nine centres in their canonical positions, wired by the 36 channels, with this member's
-// defined centres filled and her defined channels lit. Stylised to the brand palette (pink /
-// black / lavender / white) rather than the traditional per-function centre colours, so it sits
-// inside MY SZN instead of looking like a generic HD app screenshot.
+// wheel. Nine centres in their canonical positions, wired by the 36 channels, flanked by the two
+// activation columns (Design on the left, Personality on the right) the way every classic
+// bodygraph lays it out. Stylised to the brand palette: Design = pink (the traditional red),
+// Personality = black, a gate carried by both = black with a pink stripe.
+//
+// It's interactive: hover (or tap, on a phone) any centre, channel or gate and everything
+// unrelated dims while the panel underneath explains that piece for this member's own chart.
 //
 // Geometry is fixed reference data, the same layout every bodygraph uses, so it is hardcoded here.
-// What's personal comes from `hd`: definedCenters, openCenters and definedChannels.
+// What's personal comes from `hd`.
 
 // Centre anchor points on a 320 x 560 canvas, top (Head) to bottom (Root).
 const POS: Record<CenterKey, { x: number; y: number }> = {
@@ -50,92 +65,462 @@ function centrePath(key: CenterKey): string {
 }
 
 const SQUARE_CENTRES: CenterKey[] = ["throat", "sacral", "root"];
+const CENTRE_KEYS = Object.keys(POS) as CenterKey[];
 
-export default function Bodygraph({ hd }: { hd: HumanDesignData }) {
+// Several channels run between the same two centres (four between G and Sacral, for one), so
+// each is nudged sideways off the centre-to-centre line to keep every one visible and hoverable.
+const LANE = 7;
+
+type Pt = { x: number; y: number };
+interface Wire {
+  key: string;
+  gates: [number, number]; // gates[0] sits at centre a, gates[1] at centre b
+  centres: [CenterKey, CenterKey];
+  a: Pt;
+  b: Pt;
+  mid: Pt;
+}
+
+const WIRES: Wire[] = (() => {
+  const groups = new Map<string, number>();
+  const total = new Map<string, number>();
+  const pairKey = (x: CenterKey, y: CenterKey) => [x, y].sort().join("|");
+  for (const [g1, g2] of CHANNEL_PAIRS) {
+    const k = pairKey(GATE_CENTER[g1], GATE_CENTER[g2]);
+    total.set(k, (total.get(k) ?? 0) + 1);
+  }
+  return CHANNEL_PAIRS.map(([g1, g2]) => {
+    const ca = GATE_CENTER[g1];
+    const cb = GATE_CENTER[g2];
+    const k = pairKey(ca, cb);
+    const i = groups.get(k) ?? 0;
+    groups.set(k, i + 1);
+    const n = total.get(k)!;
+    // perpendicular offset, using a canonical direction so lanes don't flip per channel
+    const [p, q] = [ca, cb].sort() as [CenterKey, CenterKey];
+    const dx = POS[q].x - POS[p].x;
+    const dy = POS[q].y - POS[p].y;
+    const len = Math.hypot(dx, dy) || 1;
+    const off = (i - (n - 1) / 2) * LANE;
+    const ox = (-dy / len) * off;
+    const oy = (dx / len) * off;
+    const a = { x: POS[ca].x + ox, y: POS[ca].y + oy };
+    const b = { x: POS[cb].x + ox, y: POS[cb].y + oy };
+    return {
+      key: channelKey(g1, g2),
+      gates: [g1, g2],
+      centres: [ca, cb],
+      a,
+      b,
+      mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+    };
+  });
+})();
+
+// Planet glyphs for the activation columns. ︎ keeps them as text, not emoji, on iOS.
+const GLYPH: Record<string, string> = {
+  Sun: "☉", Earth: "⊕", Moon: "☽", "North Node": "☊", "South Node": "☋", Mercury: "☿",
+  Venus: "♀", Mars: "♂", Jupiter: "♃", Saturn: "♄", Uranus: "♅", Neptune: "♆", Pluto: "♇",
+};
+const glyph = (body: string) => (GLYPH[body] ?? body.slice(0, 2)) + "︎";
+
+type Focus =
+  | { kind: "centre"; key: CenterKey }
+  | { kind: "channel"; key: string }
+  | { kind: "gate"; gate: number };
+
+const DESIGN = "var(--pink)";
+const PERSONALITY = "var(--dark)";
+
+export default function Bodygraph({ hd, unlocked = true }: { hd: HumanDesignData; unlocked?: boolean }) {
+  const [hovered, setHovered] = useState<Focus | null>(null);
+  const [pinned, setPinned] = useState<Focus | null>(null);
+  const focus = hovered ?? pinned;
+
   const defined = new Set(hd.definedCenters);
   const definedChannelKeys = new Set(hd.definedChannels.map((c) => c.key));
+  const pGates = new Set(hd.personality.map((a) => a.gate));
+  const dGates = new Set(hd.design.map((a) => a.gate));
 
-  // Every channel's two centres, derived from the gate-to-centre map so it can't drift from the
-  // engine. Drawn faint as the fixed wiring; the member's defined channels are drawn bold on top.
-  const wiring = CHANNEL_PAIRS.map(([a, b]) => {
-    const ca = GATE_CENTER[a];
-    const cb = GATE_CENTER[b];
-    return { key: channelKey(a, b), a: POS[ca], b: POS[cb] };
+  // what the current focus lights up; everything else dims
+  const lit = (() => {
+    if (!focus) return null;
+    const centres = new Set<CenterKey>();
+    const wires = new Set<string>();
+    const gates = new Set<number>();
+    if (focus.kind === "centre") {
+      centres.add(focus.key);
+      for (const w of WIRES) if (w.centres.includes(focus.key)) wires.add(w.key);
+      for (const g of [...pGates, ...dGates]) if (GATE_CENTER[g] === focus.key) gates.add(g);
+    } else if (focus.kind === "channel") {
+      const w = WIRES.find((x) => x.key === focus.key)!;
+      wires.add(w.key);
+      w.centres.forEach((c) => centres.add(c));
+      w.gates.forEach((g) => gates.add(g));
+    } else {
+      gates.add(focus.gate);
+      centres.add(GATE_CENTER[focus.gate]);
+      for (const w of WIRES) if (w.gates.includes(focus.gate)) wires.add(w.key);
+    }
+    return { centres, wires, gates };
+  })();
+
+  const dim = (on: boolean) => ({ opacity: lit && !on ? 0.2 : 1, transition: "opacity .2s" });
+  const same = (a: Focus | null, b: Focus) => JSON.stringify(a) === JSON.stringify(b);
+
+  // hover previews, tap/click pins (and a second tap on the same thing unpins)
+  const bind = (f: Focus) => ({
+    onMouseEnter: () => setHovered(f),
+    onMouseLeave: () => setHovered(null),
+    onFocus: () => setHovered(f),
+    onBlur: () => setHovered(null),
+    onClick: () => setPinned((p) => (same(p, f) ? null : f)),
+    style: { cursor: "pointer" },
   });
 
+  // one half of a channel, coloured by who activates that gate
+  const half = (g: number, from: Pt, to: Pt, on: boolean, k: string) => {
+    const inP = pGates.has(g);
+    const inD = dGates.has(g);
+    const w = on ? 6 : 4;
+    if (!inP && !inD) return null;
+    return (
+      <g key={k}>
+        <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={inP ? PERSONALITY : DESIGN} strokeWidth={w} />
+        {inP && inD && (
+          <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={DESIGN} strokeWidth={w} strokeDasharray="4 4" />
+        )}
+      </g>
+    );
+  };
+
   return (
-    <svg viewBox="0 0 320 560" width="100%" role="img" aria-label="Your Human Design bodygraph" style={{ maxWidth: 340, display: "block", margin: "0 auto" }}>
-      {/* faint fixed wiring */}
-      {wiring.map((w, i) => (
-        <line
-          key={`w${i}`}
-          x1={w.a.x}
-          y1={w.a.y}
-          x2={w.b.x}
-          y2={w.b.y}
-          stroke="var(--lav)"
-          strokeWidth={3}
-          strokeOpacity={0.4}
-        />
-      ))}
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(46px, 64px) minmax(0, 340px) minmax(46px, 64px)", justifyContent: "center", gap: 6, alignItems: "stretch" }}>
+        <Column title="design" colour={DESIGN} acts={hd.design} lit={lit} bind={bind} focus={focus} />
 
-      {/* this member's defined channels, lit pink */}
-      {wiring
-        .filter((w) => definedChannelKeys.has(w.key))
-        .map((w, i) => (
-          <line
-            key={`d${i}`}
-            x1={w.a.x}
-            y1={w.a.y}
-            x2={w.b.x}
-            y2={w.b.y}
-            stroke="var(--pink)"
-            strokeWidth={5}
-            strokeLinecap="round"
-          />
-        ))}
+        <svg viewBox="0 0 320 560" width="100%" role="img" aria-label="Your Human Design bodygraph" style={{ display: "block", overflow: "visible" }}>
+          {/* the fixed wiring, faint, with each activated gate's half drawn in its colour */}
+          {WIRES.map((w) => {
+            const on = !!lit?.wires.has(w.key);
+            return (
+              <g key={w.key} style={dim(on)}>
+                <line x1={w.a.x} y1={w.a.y} x2={w.b.x} y2={w.b.y} stroke="var(--lav)" strokeWidth={on ? 5 : 3} strokeOpacity={on ? 0.8 : 0.35} />
+                {half(w.gates[0], w.a, w.mid, on, "h0")}
+                {half(w.gates[1], w.mid, w.b, on, "h1")}
+              </g>
+            );
+          })}
 
-      {/* the nine centres, defined = pink, open = white */}
-      {(Object.keys(POS) as CenterKey[]).map((key) => {
-        const isDefined = defined.has(key);
-        const fill = isDefined ? "var(--pink)" : "#fff";
-        const { x, y } = POS[key];
-        if (SQUARE_CENTRES.includes(key)) {
-          return (
-            <rect
-              key={key}
-              x={x - 30}
-              y={y - 30}
-              width={60}
-              height={60}
-              fill={fill}
-              stroke="var(--dark)"
-              strokeWidth={2}
+          {/* invisible fat hit areas so a 4px line is easy to hover or tap */}
+          {WIRES.map((w) => (
+            <line
+              key={`hit${w.key}`}
+              x1={w.a.x}
+              y1={w.a.y}
+              x2={w.b.x}
+              y2={w.b.y}
+              stroke="transparent"
+              strokeWidth={LANE}
+              tabIndex={0}
+              aria-label={`Channel ${w.key}, ${CHANNEL_NAME[w.key]}`}
+              {...bind({ kind: "channel", key: w.key })}
             />
-          );
-        }
-        return <polygon key={key} points={centrePath(key)} fill={fill} stroke="var(--dark)" strokeWidth={2} />;
-      })}
+          ))}
 
-      {/* short centre labels */}
-      {(Object.keys(POS) as CenterKey[]).map((key) => {
-        const { x, y } = POS[key];
-        const isDefined = defined.has(key);
+          {/* the nine centres, defined = pink, open = white */}
+          {CENTRE_KEYS.map((key) => {
+            const isDefined = defined.has(key);
+            const on = !!lit?.centres.has(key);
+            const isFocus = focus?.kind === "centre" && focus.key === key;
+            const props = {
+              fill: isFocus ? "var(--dark)" : isDefined ? "var(--pink)" : "#fff",
+              stroke: "var(--dark)",
+              strokeWidth: on ? 3 : 2,
+              tabIndex: 0,
+              "aria-label": `${CENTER_LABELS[key]}, ${isDefined ? "defined" : "open"}`,
+              ...bind({ kind: "centre", key }),
+            };
+            const { x, y } = POS[key];
+            const shape = SQUARE_CENTRES.includes(key) ? (
+              <rect x={x - 30} y={y - 30} width={60} height={60} {...props} style={{ ...props.style, ...dim(on) }} />
+            ) : (
+              <polygon points={centrePath(key)} {...props} style={{ ...props.style, ...dim(on) }} />
+            );
+            return (
+              <g key={key} style={{ filter: on ? "drop-shadow(0 0 6px var(--pink))" : "none", transition: "filter .2s" }}>
+                {shape}
+              </g>
+            );
+          })}
+
+          {/* short centre labels */}
+          {CENTRE_KEYS.map((key) => {
+            const { x, y } = POS[key];
+            const isDefined = defined.has(key);
+            const isFocus = focus?.kind === "centre" && focus.key === key;
+            return (
+              <text
+                key={`t${key}`}
+                x={x}
+                y={y + 3}
+                textAnchor="middle"
+                fontFamily={poppins}
+                fontSize={8}
+                fontWeight={700}
+                fill={isFocus || isDefined ? "#fff" : "var(--dark)"}
+                style={{ pointerEvents: "none", ...dim(!!lit?.centres.has(key)) }}
+              >
+                {CENTER_LABELS[key].replace(/ \(.*\)/, "").toLowerCase()}
+              </text>
+            );
+          })}
+        </svg>
+
+        <Column title="personality" colour={PERSONALITY} acts={hd.personality} lit={lit} bind={bind} focus={focus} />
+      </div>
+
+      {/* legend */}
+      <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginTop: 14, fontSize: 11, opacity: 0.75 }}>
+        <Key swatch={{ background: "var(--pink)" }} label="defined" />
+        <Key swatch={{ background: "#fff", border: "1.5px solid var(--dark)" }} label="open" />
+        <Key swatch={{ background: DESIGN, height: 4 }} label="design (unconscious)" />
+        <Key swatch={{ background: PERSONALITY, height: 4 }} label="personality (conscious)" />
+        <Key swatch={{ background: `repeating-linear-gradient(90deg, ${PERSONALITY} 0 4px, ${DESIGN} 4px 8px)`, height: 4 }} label="both" />
+      </div>
+
+      <Panel focus={focus} hd={hd} unlocked={unlocked} defined={defined} definedChannelKeys={definedChannelKeys} pGates={pGates} dGates={dGates} />
+    </div>
+  );
+}
+
+// ── the activation columns either side of the graph ───────────────────────────────
+function Column({
+  title,
+  colour,
+  acts,
+  lit,
+  bind,
+  focus,
+}: {
+  title: string;
+  colour: string;
+  acts: HDActivation[];
+  lit: { gates: Set<number> } | null;
+  bind: (f: Focus) => Record<string, unknown>;
+  focus: Focus | null;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <div style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: 1, fontWeight: 700, color: colour, textAlign: "center", marginBottom: 4, fontFamily: poppins }}>
+        {title}
+      </div>
+      {acts.map((a) => {
+        const on = !!lit?.gates.has(a.gate);
+        const isFocus = focus?.kind === "gate" && focus.gate === a.gate;
+        const b = bind({ kind: "gate", gate: a.gate });
         return (
-          <text
-            key={`t${key}`}
-            x={x}
-            y={y + 3}
-            textAnchor="middle"
-            fontFamily={poppins}
-            fontSize={8}
-            fontWeight={700}
-            fill={isDefined ? "#fff" : "var(--dark)"}
+          <button
+            key={a.body}
+            type="button"
+            title={`${a.body} in gate ${a.gate}, line ${a.line}: ${GATE_NAME[a.gate]}`}
+            {...b}
+            style={{
+              ...(b.style as object),
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 4,
+              padding: "2px 6px",
+              border: `1.5px solid ${colour}`,
+              borderRadius: 6,
+              background: isFocus ? colour : "#fff",
+              color: isFocus ? "#fff" : colour,
+              fontFamily: poppins,
+              fontSize: 12,
+              fontWeight: 600,
+              opacity: lit && !on ? 0.3 : 1,
+              transition: "opacity .2s, background .2s",
+              minHeight: 24,
+            }}
           >
-            {CENTER_LABELS[key].replace(/ \(.*\)/, "").toLowerCase()}
-          </text>
+            <span style={{ fontSize: 13, fontWeight: 400 }}>{glyph(a.body)}</span>
+            <span>
+              {a.gate}.{a.line}
+            </span>
+          </button>
         );
       })}
-    </svg>
+    </div>
+  );
+}
+
+function Key({ swatch, label }: { swatch: React.CSSProperties; label: string }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+      <span style={{ display: "inline-block", width: 14, height: 11, ...swatch }} />
+      {label}
+    </span>
+  );
+}
+
+// ── the explanation panel under the graph ─────────────────────────────────────────
+function Panel({
+  focus,
+  hd,
+  unlocked,
+  defined,
+  definedChannelKeys,
+  pGates,
+  dGates,
+}: {
+  focus: Focus | null;
+  hd: HumanDesignData;
+  unlocked: boolean;
+  defined: Set<CenterKey>;
+  definedChannelKeys: Set<string>;
+  pGates: Set<number>;
+  dGates: Set<number>;
+}) {
+  const box: React.CSSProperties = {
+    marginTop: 18,
+    padding: "18px 20px",
+    borderRadius: 14,
+    background: "#fff",
+    border: "1.5px solid var(--lav)",
+    minHeight: 120,
+    lineHeight: 1.55,
+    fontSize: 14,
+  };
+  const head: React.CSSProperties = { fontFamily: poppins, fontWeight: 700, fontSize: 18, margin: "0 0 2px" };
+  const sub: React.CSSProperties = { fontSize: 12, opacity: 0.55, margin: "0 0 10px" };
+
+  // who carries a gate, e.g. "design Mars 34.3 · personality Sun 34.1"
+  const carriers = (g: number) =>
+    [
+      ...hd.design.filter((a) => a.gate === g).map((a) => ({ side: "design", a })),
+      ...hd.personality.filter((a) => a.gate === g).map((a) => ({ side: "personality", a })),
+    ];
+  const firstSentence = (s: string) => s.split(/(?<=\.)\s/)[0];
+
+  if (!focus) {
+    return (
+      <div style={{ ...box, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", opacity: 0.7 }} aria-live="polite">
+        Hover or tap any centre, line or gate number and it&apos;ll light up and tell you exactly what that piece of your design is doing.
+      </div>
+    );
+  }
+
+  if (focus.kind === "centre") {
+    const c = CENTER_CONTENT[focus.key];
+    const isDef = defined.has(focus.key);
+    const gatesHere = [...new Set([...dGates, ...pGates])].filter((g) => GATE_CENTER[g] === focus.key).sort((a, b) => a - b);
+    const text = isDef ? c.defined : c.open;
+    return (
+      <div style={box} aria-live="polite">
+        <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+          <p style={head}>{CENTER_LABELS[focus.key]}</p>
+          <Pill text={isDef ? "defined" : "open"} bg={isDef ? "var(--pink-light)" : "var(--lav-light)"} />
+        </div>
+        <p style={sub}>the centre of {c.theme}</p>
+        <p style={{ margin: "0 0 10px" }}>{unlocked ? text : firstSentence(text)}</p>
+        {gatesHere.length > 0 ? (
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {gatesHere.map((g) => (
+              <GateChip key={g} gate={g} p={pGates.has(g)} d={dGates.has(g)} />
+            ))}
+          </div>
+        ) : (
+          <p style={{ margin: 0, fontSize: 13, opacity: 0.6 }}>You don&apos;t carry any gates in this centre, so it&apos;s fully open.</p>
+        )}
+      </div>
+    );
+  }
+
+  if (focus.kind === "channel") {
+    const w = WIRES.find((x) => x.key === focus.key)!;
+    const [g1, g2] = w.gates;
+    const has1 = pGates.has(g1) || dGates.has(g1);
+    const has2 = pGates.has(g2) || dGates.has(g2);
+    const status = definedChannelKeys.has(w.key)
+      ? "Fully defined in your chart, so this one is always switched on, a gift you can lean on every single day."
+      : has1 || has2
+        ? `You carry gate ${has1 ? g1 : g2}, so half of this channel is lit. When someone with gate ${has1 ? g2 : g1} walks in, the whole thing switches on, which is why certain people feel electric to you.`
+        : "Not activated in your chart, so you feel this energy through other people rather than running it yourself.";
+    return (
+      <div style={box} aria-live="polite">
+        <p style={head}>
+          {g1}–{g2} · {CHANNEL_NAME[w.key]}
+        </p>
+        <p style={sub}>
+          the channel linking your {CENTER_LABELS[w.centres[0]].replace(/ \(.*\)/, "")} and{" "}
+          {CENTER_LABELS[w.centres[1]].replace(/ \(.*\)/, "")}
+        </p>
+        <p style={{ margin: "0 0 8px" }}>{CHANNEL_GIFT[w.key]}</p>
+        <p style={{ margin: "0 0 10px", fontWeight: 600 }}>{status}</p>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {[g1, g2].map((g) => (
+            <GateChip key={g} gate={g} p={pGates.has(g)} d={dGates.has(g)} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const g = focus.gate;
+  const gc = GATE_CONTENT[g];
+  return (
+    <div style={box} aria-live="polite">
+      <p style={head}>
+        Gate {g} · {GATE_NAME[g]}
+      </p>
+      <p style={sub}>
+        in your {CENTER_LABELS[GATE_CENTER[g]].replace(/ \(.*\)/, "")} centre ·{" "}
+        {carriers(g)
+          .map(({ side, a }) => `${side} ${a.body} ${a.gate}.${a.line}`)
+          .join(", ")}
+      </p>
+      <p style={{ margin: "0 0 10px" }}>{unlocked ? GATE_DESCRIPTION[g] : gc.keynote + "."}</p>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <Pill text={`shadow: ${gc.shadow}`} bg="var(--lav-light)" />
+        <Pill text={`gift: ${gc.gift}`} bg="var(--pink-light)" />
+      </div>
+      <p style={{ margin: "10px 0 0", fontSize: 12, opacity: 0.55 }}>
+        {dGates.has(g) && pGates.has(g)
+          ? "You carry this one on both sides, so it runs through your body and you know it as yourself."
+          : dGates.has(g)
+            ? "Design side: your body runs this one automatically, and other people often see it in you before you do."
+            : "Personality side: this is the bit you consciously know and identify as you."}
+      </p>
+    </div>
+  );
+}
+
+function Pill({ text, bg }: { text: string; bg: string }) {
+  return (
+    <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.2, padding: "3px 9px", borderRadius: 999, background: bg }}>
+      {text}
+    </span>
+  );
+}
+
+function GateChip({ gate, p, d }: { gate: number; p: boolean; d: boolean }) {
+  const colour = p ? PERSONALITY : d ? DESIGN : "var(--lav)";
+  return (
+    <span
+      style={{
+        fontSize: 12,
+        padding: "3px 9px",
+        borderRadius: 999,
+        border: `1.5px solid ${colour}`,
+        borderStyle: p || d ? "solid" : "dashed",
+        color: p || d ? colour : "var(--dark)",
+        background: p && d ? "var(--pink-light)" : "#fff",
+        opacity: p || d ? 1 : 0.6,
+      }}
+    >
+      {gate} · {GATE_NAME[gate]}
+    </span>
   );
 }
