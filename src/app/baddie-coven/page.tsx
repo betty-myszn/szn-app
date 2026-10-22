@@ -11,9 +11,9 @@ import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 // transformation, then membership. Each section has one job, so no idea is sold twice.
 
 export const metadata: Metadata = {
-  title: "The Baddie Coven, a Magical Clubhouse for Women",
+  title: "The Baddie Coven, a Magical Membership for Women",
   description:
-    "A magical clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
+    "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
   alternates: { canonical: "/baddie-coven" },
   openGraph: {
     title: "The Baddie Coven 🦄",
@@ -240,7 +240,7 @@ export default function BaddieCovenPage() {
         intro={
           <>
             <p style={{ margin: "0 0 12px" }}>More magic. More money. More confidence. More creativity. More freedom. More of your most unapologetic self.</p>
-            <p style={{ margin: 0, fontWeight: 500 }}>Welcome to Baddie Coven, your very own magical clubhouse for women who are ready to reclaim their power, embrace their magic and create the most extraordinary lives imaginable.</p>
+            <p style={{ margin: 0, fontWeight: 500 }}>Welcome to Baddie Coven, your very own circle of witchy women who are ready to reclaim their power, embrace their magic and create the most extraordinary lives imaginable.</p>
           </>
         }
       />
@@ -252,7 +252,7 @@ export default function BaddieCovenPage() {
             BECOME MORE OF WHO YOU ARE. <span style={{ color: "var(--pink)" }}>CREATE THE LIFE YOU CAME HERE TO LIVE.</span>
           </div>
           <p style={{ fontSize: 16.5, lineHeight: 1.7, margin: "16px auto 0", maxWidth: 720 }}>
-            A magical clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives.
+            A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives.
           </p>
         </div>
       </section>
