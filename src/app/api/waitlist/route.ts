@@ -3,6 +3,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { checkAndRecordRate, clientIp } from "@/lib/rate-limit";
 import { OFFERS, isOfferSlug, waitlistListId } from "@/lib/offers";
 import { sendWaitlistConfirmation } from "@/lib/email/waitlist-confirm";
+import { sendBrevoEmail } from "@/lib/email/brevo";
+import { adminRecipients } from "@/lib/email/admin-notify";
 
 export const runtime = "nodejs";
 
@@ -80,6 +82,23 @@ async function syncToBrevo(email: string, name: string, offer: string, listId: n
   }
 }
 
+// Waitlists Betty gets an email about the moment someone new joins (sent through Brevo).
+const ALERT_OFFERS: string[] = ["baddie-coven"];
+
+const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function sendSignupAlert(offer: string, email: string, name: string, answer: string, place: string) {
+  const offerName = (OFFERS[offer as keyof typeof OFFERS]?.name ?? offer).replace(/^The /, "");
+  const htmlContent = `<p>Someone new just joined the <strong>${esc(offerName)}</strong> waitlist 💜</p>
+<p><strong>Name:</strong> ${esc(name || "(not given)")}<br><strong>Email:</strong> ${esc(email)}${place ? `<br><strong>Born in:</strong> ${esc(place)}` : ""}</p>
+${answer ? `<p><strong>Their answer:</strong><br>${esc(answer)}</p>` : ""}
+<p>Every signup is in /admin/waitlists.</p>`;
+  for (const to of adminRecipients()) {
+    const r = await sendBrevoEmail({ to: { email: to }, subject: `🦄 New ${offerName} waitlist signup: ${name || email}`, htmlContent, replyTo: { email, name: name || undefined } });
+    if (!r.ok) console.error("waitlist: admin alert failed", { offer, to, error: r.error });
+  }
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
@@ -127,6 +146,7 @@ export async function POST(request: NextRequest) {
   if (error?.code !== "23505") {
     const sent = await sendWaitlistConfirmation(offer, email, name.split(" ")[0] ?? "");
     if (!sent.ok) console.error("waitlist: confirmation email failed", sent.error, { offer });
+    if (ALERT_OFFERS.includes(offer)) await sendSignupAlert(offer, email, name, answer, birth?.place ?? "");
   }
   console.log("waitlist: signup", { offer: OFFERS[offer].slug, brevoOk });
   return NextResponse.json({ ok: true, already: error?.code === "23505" });
