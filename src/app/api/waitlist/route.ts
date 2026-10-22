@@ -83,7 +83,7 @@ async function syncToBrevo(email: string, name: string, offer: string, listId: n
 }
 
 // Waitlists Betty gets an email about the moment someone new joins (sent through Brevo).
-const ALERT_OFFERS: string[] = ["baddie-coven"];
+const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la"];
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 

@@ -37,7 +37,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   { q: "Are the sessions online?", a: "Yes. Sessions take place online, so you can join from anywhere in the world." },
   {
     q: "Can I work with Betty for longer?",
-    a: <>Yes. These are standalone sessions, but <a href="https://thecosmicco.com/cosmic-coaching" target="_blank" rel="noopener noreferrer" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>longer-term private coaching</a> is also available.</>,
+    a: <>Yes, babe. Book another Baddie Session whenever you&apos;re ready for your next one, or go deeper for ninety days in <a href="/mastermind" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>the MY SZN Mastermind</a>.</>,
   },
 ];
 

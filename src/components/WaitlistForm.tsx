@@ -12,6 +12,10 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 // form in place; a repeat signup gets the same warm confirmation, never an error.
 
 const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
+  "baddie-coven-la": {
+    title: "See you in LA, witch 🌴",
+    body: "You're on the LA coven waitlist, which means the dates, the location and the price of our in-person coven land in your inbox before anybody else hears a whisper.",
+  },
   "rich-btch-rising": {
     title: "YESSSS, you're on the list 💸",
     body: "Your rich b*tch era has officially been put on notice. You'll be the first to know the second your money report opens, so keep an eye on your inbox (and your bank balance, obviously).",

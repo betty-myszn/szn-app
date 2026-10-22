@@ -67,9 +67,14 @@ const workMenu: MenuItem[] = [
     ],
   },
   { href: "/baddie-sessions", label: "the baddie sessions (1:1)" },
-  { href: "/baddie-coven", label: "the baddie coven" },
   { href: "/mastermind", label: "the mastermind" },
   { href: "/retreat", label: "the bad b*tch retreat" },
+];
+
+// The coven has its own menu: online (anywhere) and in person in LA, priced separately.
+const covenMenu: MenuItem[] = [
+  { href: "/baddie-coven", label: "online coven" },
+  { href: "/baddie-coven/la", label: "LA coven (IRL)" },
 ];
 
 const exploreMenu: MenuItem[] = [
@@ -432,6 +437,7 @@ export default function NavBar() {
             </div>
           )}
           {!member && <GuestMenu label="work with me" items={workMenu} isActive={isActive} />}
+          {!member && <GuestMenu label="the baddie coven" items={covenMenu} isActive={isActive} />}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -910,6 +916,18 @@ export default function NavBar() {
             <>
               <div style={{ fontWeight: 800, color: flatMenu(workMenu).some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>work with me</div>
               {flatMenu(workMenu).map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="no-underline hover:text-[var(--pink)]"
+                  style={{ paddingLeft: item.indent ? 32 : 16, color: isActive(item.href) ? "var(--pink)" : "var(--dark)" }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div style={{ fontWeight: 800, color: covenMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>the baddie coven</div>
+              {covenMenu.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

@@ -6,7 +6,7 @@
 // Prices are Betty's confirmed numbers only. Nothing here invents dates, locations or availability:
 // every upcoming offer is waitlist-only until she says it's launching.
 
-export type OfferSlug = "mastermind" | "rich-btch-rising" | "bad-btch-report" | "baddie-coven" | "retreat" | "book";
+export type OfferSlug = "mastermind" | "rich-btch-rising" | "bad-btch-report" | "baddie-coven" | "baddie-coven-la" | "retreat" | "book";
 
 export interface Offer {
   slug: OfferSlug;
@@ -57,6 +57,19 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     brevoEnv: "BREVO_LIST_BADDIE_COVEN",
     brevoList: 23,
     cta: "join the waitlist",
+  },
+  // The in-person coven in Los Angeles (IRL), its own waitlist and Brevo list. Separate price from the
+  // online coven, and women can join both. Nothing about price or dates is confirmed yet.
+  "baddie-coven-la": {
+    slug: "baddie-coven-la",
+    emoji: "🌴",
+    name: "The LA Baddie Coven",
+    href: "/baddie-coven/la",
+    line: "the coven in real life: in-person magic, rituals and your girls in Los Angeles",
+    price: null,
+    brevoEnv: "BREVO_LIST_BADDIE_COVEN_LA",
+    brevoList: 29,
+    cta: "join the LA waitlist",
   },
   mastermind: {
     slug: "mastermind",

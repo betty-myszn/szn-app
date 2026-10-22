@@ -134,6 +134,7 @@ const PILLARS = [
 const MONTH = [
   ["🎨", "a creative class", "Vision boards, spell jars, magical art or a handmade something, made together, messily and joyfully."],
   ["🪐", "the astrology of the month", "What's happening in the sky, what it means for YOUR chart and how to work with it instead of getting steamrolled by it."],
+  ["🫶", "astrotapping™", "We take the theme of each month's astrology and tap it into your body with astrotapping™, so you EMBODY the sky instead of just reading about it."],
   ["🌙", "moon rituals", "Lunar rituals to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
   ["🕯️", "witchy workshops", "Deep dives into a practice, from tarot to candle magic to a full-on witchcraft workshop."],
   ["🌑", "shadow work prompts", "Personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion."],
