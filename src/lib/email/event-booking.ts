@@ -8,15 +8,18 @@ import type { CosmicEvent } from "@/lib/events";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export function eventBookingHtml(event: CosmicEvent, firstName: string): { subject: string; html: string } {
+export function eventBookingHtml(event: CosmicEvent, firstName: string, bookedAt = new Date()): { subject: string; html: string } {
   const url = `${SITE_URL}/events/${event.slug}`;
+  const reportWhen = event.reportBy && bookedAt < new Date(event.reportBy.bookBefore)
+    ? `lands in your inbox by ${event.reportBy.label}, the day before we go live,`
+    : "lands in your inbox before we go live,";
   const greeting = firstName ? `Hiii ${esc(firstName)}, my love` : "Hiii my love";
   const when = event.startsAt
     ? `${event.dateLabel}${event.localTimes ? ` (${event.localTimes.map((t) => t.replace(/^\S+ /, "")).join(" · ")})` : ""}. Your joining link comes by email before we go live.`
     : `${event.dateLabel}. The exact time and your joining link land in this inbox the moment they're locked in.`;
   const body = [
     `You're IN for ${event.title}, ${event.subtitle}${event.edition ? `, ${event.edition}` : ""}, and I am SOOOO excited to make money magic with you.`,
-    "Your personalised astrology report is being written from your birth chart right now, and it lands in your inbox before the workshop so you can sit with it, highlight it and come in already knowing what this Full Moon is lighting up for you.",
+    `Your personalised astrology report is being written from your birth chart right now, and it ${reportWhen} so you can sit with it, highlight it and come in already knowing what this Full Moon is lighting up for you.`,
     `When: ${when}`,
     event.joinUrl ? `Join here: ${event.joinUrl}` : "",
     "Can't make it live? The full replay comes to you after the workshop, so you can do the whole experience in your own time.",
@@ -29,6 +32,7 @@ export function eventBookingHtml(event: CosmicEvent, firstName: string): { subje
 <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ffffff;">${esc(event.title)}</div>
 <div style="font-size:34px;font-weight:800;line-height:1.05;color:#1a1a1a;margin-top:14px;letter-spacing:-1px;">you're booked, baddie 🌕💸</div>
 </td></tr>
+${event.image ? `<tr><td style="padding:0;border-top:2px solid #1a1a1a;"><a href="${url}"><img src="${SITE_URL}${event.image}" width="556" alt="${esc(event.imageAlt ?? event.title)}" style="display:block;width:100%;height:auto;border:0;"></a></td></tr>` : ""}
 <tr><td style="padding:30px 28px;font-family:Arial,sans-serif;font-size:16px;line-height:1.7;color:#1a1a1a;">
 <p style="margin:0 0 16px;font-weight:700;">${greeting} 💜</p>
 ${body.map((p) => `<p style="margin:0 0 16px;">${esc(p)}</p>`).join("\n")}

@@ -39,6 +39,9 @@ export interface CosmicEvent {
   checkoutUrl?: string;
   /** Asks for birth details before payment (personalised report events). */
   collectsBirth: boolean;
+  /** The day the report is promised by, and the cut-off after which a booking is promised it
+   * "before we go live" instead (so a late booker is never promised a date already gone). */
+  reportBy?: { label: string; bookBefore: string };
   /** Brevo list every paid booker is added to. */
   brevoListId?: number;
   joinUrl?: string;
@@ -78,6 +81,7 @@ export const EVENTS: CosmicEvent[] = [
     cta: "I'M READY TO MOONIFEST 💸",
     checkoutUrl: "https://buy.stripe.com/dRm00kdYPeUf79Mgpn7kc0z",
     collectsBirth: true,
+    reportBy: { label: "Sunday 25 October", bookBefore: "2026-10-25T09:00:00Z" },
     brevoListId: 28,
   },
 ];
