@@ -235,7 +235,7 @@ export default function BaddieCovenPage() {
         tone="lav"
         kicker="the baddie coven"
         titleSize="clamp(38px, 5.6vw, 72px)"
-        title="stop hiding from the f*cking world."
+        title="stop hiding from the world."
         accent="IT'S TIME TO BECOME ALL OF YOU."
         intro={
           <>
