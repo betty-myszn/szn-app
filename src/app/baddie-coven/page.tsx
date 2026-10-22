@@ -136,7 +136,7 @@ export default function BaddieCovenPage() {
         <p><strong>Basically, this is the club we all deserved when we were little, with considerably better conversations about sex, money and power.</strong></p>
       </Band>
 
-      <Band tag="soooo, what are we doing in here? 🪄" title="soooo, what are we" accent="doing in here.">
+      <Band wide tag="inside the coven 🪄" title="soooo, what are we" accent="doing in here.">
         <Tiles
           items={SECTIONS.map((x) => ({
             emoji: x.emoji,

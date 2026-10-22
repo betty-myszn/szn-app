@@ -46,7 +46,7 @@ export function OfferHero({
 }
 
 /** A copy band: tag, display heading, paragraphs. */
-export function Band({ tone = "white", tag, title, accent, children }: { tone?: Tone; tag: string; title: string; accent?: string; children: ReactNode }) {
+export function Band({ tone = "white", tag, title, accent, wide, children }: { tone?: Tone; tag: string; title: string; accent?: string; wide?: boolean; children: ReactNode }) {
   const ink = tone === "dark" ? "#fff" : "var(--dark)";
   return (
     <section className="px-5 md:px-8" style={{ background: BG[tone], borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
@@ -55,7 +55,7 @@ export function Band({ tone = "white", tag, title, accent, children }: { tone?: 
         <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: ink, lineHeight: 1 }}>
           {title} {accent && <span className="pk">{accent}</span>}
         </h2>
-        <div className="offer-copy" style={{ color: ink, marginTop: 24, maxWidth: 760 }}>{children}</div>
+        <div className="offer-copy" style={{ color: ink, marginTop: 24, maxWidth: wide ? undefined : 760 }}>{children}</div>
       </div>
     </section>
   );
@@ -64,7 +64,7 @@ export function Band({ tone = "white", tag, title, accent, children }: { tone?: 
 /** A grid of themed tiles: what we explore / what's inside. */
 export function Tiles({ items, tone = "white" }: { items: { emoji: string; title: string; body: ReactNode }[]; tone?: Tone }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+    <div className="offer-tiles grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
       {items.map((t) => (
         <div key={t.title} style={{ border: "var(--border)", borderRadius: 18, background: tone === "white" ? "var(--pink-light)" : "#fff", padding: "20px 20px 22px", color: "var(--dark)" }}>
           <div style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.2, marginBottom: 8 }}>{t.emoji} {t.title}</div>
