@@ -233,11 +233,12 @@ export default function BaddieCovenPage() {
         offer="baddie-coven"
         art={<HeroArt src="/disco-planet.png" />}
         tone="lav"
-        kicker="the baddie coven"
-        titleSize="clamp(30px, 4.2vw, 56px)"
-        title="baddie coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and"
-        accent="become completely obsessed with their own lives."
-        intro={null}
+        kicker="waitlist open now"
+        title="the baddie"
+        accent="coven."
+        intro={
+          <p>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
+        }
       />
 
       {/* 02 · Make her feel understood. */}
