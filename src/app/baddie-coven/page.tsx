@@ -137,7 +137,7 @@ const MONTH = [
   ["🌙", "moon rituals", "Lunar rituals to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
   ["🕯️", "witchy workshops", "Deep dives into a practice, from tarot to candle magic to a full-on witchcraft workshop."],
   ["🌑", "shadow work prompts", "Personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion."],
-  ["💬", "coven conversations", "Share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
+  ["💬", "coven chat rooms", "Private chat rooms for the coven, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
 ];
 
 // 08: the checklist she recognises herself in.
@@ -157,7 +157,7 @@ const QUOTES = ["maya", "georgia", "aisha", "lauren", "priya", "zara"];
 
 // 11: the practical bits. Nothing here promises a price or a date that isn't confirmed.
 const FAQS = [
-  ["How does the Baddie Coven work?", "Every month brings creative classes, the astrology of the month, moon rituals, witchy workshops, shadow work prompts and a community of women to do it all with. The full membership details go to the waitlist first."],
+  ["How does the Baddie Coven work?", "Every month brings creative classes, the astrology of the month, moon rituals, witchy workshops, shadow work prompts and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
   ["I'm a total beginner. Can I join?", "YESSS. You can be a serious businesswoman who casts spells, an astrologer who loves fashion or somebody who bought her very first tarot deck this week. Curiosity is the only requirement."],
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
@@ -190,7 +190,7 @@ function Head({ n, tag, title, accent }: { n: string; tag: string; title: string
 
 function Statement({ children, tone = "dark" }: { children: React.ReactNode; tone?: "dark" | "pink" }) {
   return (
-    <div style={{ marginTop: 28, border: "var(--border)", borderRadius: 18, background: tone === "dark" ? "var(--dark)" : "var(--pink)", color: "#fff", padding: "22px 24px", fontFamily: pp, fontSize: "clamp(18px, 2.4vw, 24px)", fontWeight: 800, lineHeight: 1.3 }}>
+    <div className="holo-edge" style={{ marginTop: 28, border: "var(--border)", borderRadius: 18, background: tone === "dark" ? "var(--dark)" : "var(--pink)", color: "#fff", padding: "22px 24px", fontFamily: pp, fontSize: "clamp(18px, 2.4vw, 24px)", fontWeight: 800, lineHeight: 1.3 }}>
       {children}
     </div>
   );
@@ -198,7 +198,7 @@ function Statement({ children, tone = "dark" }: { children: React.ReactNode; ton
 
 function Pic({ src, ratio = "4 / 5" }: { src: string; ratio?: string }) {
   return (
-    <div style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)", aspectRatio: ratio }}>
+    <div className="holo-edge" style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)", aspectRatio: ratio }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt="" aria-hidden="true" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
     </div>
@@ -237,7 +237,14 @@ export default function BaddieCovenPage() {
         title="the baddie"
         accent="coven."
         intro={
-          <p>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
+          <>
+            <p>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
+            <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
+              {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🎨 creative classes", "🌕 moon rituals"].map((t) => (
+                <span key={t} className="holo-sticker">{t}</span>
+              ))}
+            </div>
+          </>
         }
       />
 
@@ -251,7 +258,7 @@ export default function BaddieCovenPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {SMALL.map(([e, t]) => (
-              <div key={e} style={{ ...card, background: "var(--pink-light)" }}>
+              <div key={e} className="holo-edge" style={{ ...card, background: "var(--pink-light)" }}>
                 <div style={{ fontSize: 28 }}>{e}</div>
                 <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{t}</p>
               </div>
@@ -273,7 +280,7 @@ export default function BaddieCovenPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 36 }}>
           {HER.map(([e, t]) => (
-            <div key={e} style={card}>
+            <div key={e} className="holo-edge" style={card}>
               <div style={{ fontSize: 28 }}>{e}</div>
               <p style={{ ...copy, fontSize: 15.5, fontWeight: 600, margin: "10px 0 0" }}>{t}</p>
             </div>
@@ -291,7 +298,7 @@ export default function BaddieCovenPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" style={{ marginTop: 26 }}>
           {BLUEPRINT.map(([t, b]) => (
-            <div key={t} style={card}>
+            <div key={t} className="holo-edge" style={card}>
               <div className="display" style={{ fontSize: 24, lineHeight: 1, color: "var(--pink)" }}>{t}</div>
               <p style={{ ...copy, fontSize: 14.5, lineHeight: 1.6, margin: "12px 0 0" }}>{b}</p>
             </div>
@@ -311,7 +318,7 @@ export default function BaddieCovenPage() {
         <Head n="06" tag="every month inside" title="your monthly" accent="dose of magic." />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 32 }}>
           {MONTH.map(([e, t, b]) => (
-            <div key={t} style={card}>
+            <div key={t} className="holo-edge" style={card}>
               <div className="flex items-center gap-3">
                 <span style={{ fontSize: 30 }}>{e}</span>
                 <span style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.15 }}>{t}</span>
@@ -345,7 +352,7 @@ export default function BaddieCovenPage() {
           {FIT.map((f) => {
             const [emoji, ...rest] = f.split(" ");
             return (
-              <div key={f} className="flex items-start gap-3" style={{ ...card, padding: "16px 18px", background: "var(--pink-light)" }}>
+              <div key={f} className="holo-edge flex items-start gap-3" style={{ ...card, padding: "16px 18px", background: "var(--pink-light)" }}>
                 <span aria-hidden="true" style={{ flexShrink: 0, width: 26, height: 26, borderRadius: 7, border: "var(--border)", background: "var(--pink)", color: "#fff", display: "grid", placeItems: "center", fontSize: 15, fontWeight: 800 }}>✓</span>
                 <p style={{ ...copy, fontSize: 15.5, fontWeight: 600, margin: 0 }}>{rest.join(" ")} {emoji}</p>
               </div>
@@ -354,7 +361,7 @@ export default function BaddieCovenPage() {
         </div>
         <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 28 }}>
           <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.3, margin: 0, maxWidth: 640 }}>If you&apos;ve ever wished you had your own little coven of magical women, you&apos;ve found your invitation.</p>
-          <a href="#waitlist" className="no-underline" style={cta}>💜 join the waitlist</a>
+          <a href="#waitlist" className="no-underline btn-pink" style={cta}>💜 join the waitlist</a>
         </div>
       </Section>
 
@@ -383,7 +390,7 @@ export default function BaddieCovenPage() {
         <p style={{ ...copy, marginTop: 20, maxWidth: 760 }}>These are from women inside MY SZN, my membership and coaching programmes. The Baddie Coven hasn&apos;t opened yet, so think of these as a little taste of what happens when women start working with their blueprint.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 24 }}>
           {QUOTES.map((id) => MEMBER_QUOTES[id]).filter(Boolean).map((q) => (
-            <figure key={q.name} style={{ ...card, margin: 0, display: "flex", flexDirection: "column", background: "var(--pink-light)" }}>
+            <figure key={q.name} className="holo-edge" style={{ ...card, margin: 0, display: "flex", flexDirection: "column", background: "var(--pink-light)" }}>
               <div aria-hidden="true" style={{ fontFamily: pp, fontSize: 46, fontWeight: 800, color: "var(--pink)", lineHeight: 0.8, marginBottom: 8 }}>&ldquo;</div>
               <blockquote style={{ margin: 0, fontSize: 15, lineHeight: 1.7, flex: 1 }}>{q.quote}</blockquote>
               <figcaption style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--pink)", marginTop: 16 }}>
@@ -402,7 +409,7 @@ export default function BaddieCovenPage() {
           </div>
           <div className="grid gap-3">
             {FAQS.map(([q, a]) => (
-              <details key={q} style={{ ...card, padding: "16px 20px" }}>
+              <details key={q} className="holo-edge" style={{ ...card, padding: "16px 20px" }}>
                 <summary style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, cursor: "pointer" }}>{q}</summary>
                 <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{a}</p>
               </details>
