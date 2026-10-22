@@ -52,7 +52,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     emoji: "🦄",
     name: "The Baddie Coven",
     href: "/baddie-coven",
-    line: "our creative, cosmic clubhouse: monthly classes, rituals, witchcraft and your girls",
+    line: "our creative, magical clubhouse: monthly classes, rituals, witchcraft and your girls",
     price: null,
     brevoEnv: "BREVO_LIST_BADDIE_COVEN",
     brevoList: 23,

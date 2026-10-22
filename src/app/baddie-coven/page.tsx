@@ -5,15 +5,15 @@ import CovenExplorer from "@/components/CovenExplorer";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
-// The Baddie Coven: the ongoing creative, cosmic membership (what the MY SZN membership becomes,
+// The Baddie Coven: the ongoing creative, magical membership (what the MY SZN membership becomes,
 // Oct 2026). Waitlist only, no price or start date confirmed; /membership redirects here.
 // Built as a sales page in twelve sections (Betty's structure, 22 Oct 2026): desire, then
 // transformation, then membership. Each section has one job, so no idea is sold twice.
 
 export const metadata: Metadata = {
-  title: "The Baddie Coven, a Cosmic Clubhouse for Women",
+  title: "The Baddie Coven, a Magical Clubhouse for Women",
   description:
-    "A cosmic clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
+    "A magical clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
   alternates: { canonical: "/baddie-coven" },
   openGraph: {
     title: "The Baddie Coven 🦄",
@@ -70,7 +70,7 @@ const BLUEPRINT = [
 const PILLARS = [
   {
     emoji: "🪐",
-    title: "01. Cosmic self-discovery",
+    title: "01. Astrology + self-discovery",
     img: PICS.astrology,
     body: [
       "Birth chart deep dives, Human Design experiments and the astrology of each month, turned into real decisions about your money, your love life, your career and your creativity.",
@@ -134,7 +134,7 @@ const PILLARS = [
 const MONTH = [
   ["🎨", "a creative class", "Vision boards, spell jars, magical art or a handmade something, made together, messily and joyfully."],
   ["🪐", "the astrology of the month", "What's happening in the sky, what it means for YOUR chart and how to work with it instead of getting steamrolled by it."],
-  ["🌙", "moon rituals", "Lunar rituals to set intentions, release what you're done carrying and manifest on the cosmic calendar."],
+  ["🌙", "moon rituals", "Lunar rituals to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
   ["🕯️", "witchy workshops", "Deep dives into a practice, from tarot to candle magic to a full-on witchcraft workshop."],
   ["🌑", "shadow work prompts", "Personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion."],
   ["💬", "coven conversations", "Share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
@@ -252,7 +252,7 @@ export default function BaddieCovenPage() {
             BECOME MORE OF WHO YOU ARE. <span style={{ color: "var(--pink)" }}>CREATE THE LIFE YOU CAME HERE TO LIVE.</span>
           </div>
           <p style={{ fontSize: 16.5, lineHeight: 1.7, margin: "16px auto 0", maxWidth: 720 }}>
-            A cosmic clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives.
+            A magical clubhouse for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives.
           </p>
         </div>
       </section>
@@ -303,7 +303,7 @@ export default function BaddieCovenPage() {
         <Head n="04" tag="the baddie coven philosophy" title="your soul blueprint is the" accent="motherf*cking assignment." />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ marginTop: 24 }}>
           <p style={{ ...copy, fontSize: 18, fontWeight: 700 }}>We&apos;re bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are.</p>
-          <p style={copy}>We&apos;re talking about understanding your cosmic gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning.</p>
+          <p style={copy}>We&apos;re talking about understanding your gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" style={{ marginTop: 26 }}>
           {BLUEPRINT.map(([t, b]) => (
