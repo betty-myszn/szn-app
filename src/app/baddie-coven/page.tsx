@@ -300,7 +300,7 @@ export default function BaddieCovenPage() {
 
       {/* 04 · The philosophy: the soul blueprint. */}
       <Section bg="var(--dark)" ink="#fff">
-        <Head n="04" tag="the baddie coven philosophy" title="your soul blueprint is the" accent="motherf*cking assignment." />
+        <Head n="04" tag="the baddie coven philosophy" title="your soul blueprint is the" accent="assignment." />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ marginTop: 24 }}>
           <p style={{ ...copy, fontSize: 18, fontWeight: 700 }}>We&apos;re bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are.</p>
           <p style={copy}>We&apos;re talking about understanding your gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning.</p>
