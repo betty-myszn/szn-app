@@ -234,28 +234,11 @@ export default function BaddieCovenPage() {
         art={<HeroArt src="/disco-planet.png" />}
         tone="lav"
         kicker="the baddie coven"
-        titleSize="clamp(38px, 5.6vw, 72px)"
-        title="stop hiding from the world."
-        accent="IT'S TIME TO BECOME ALL OF YOU."
-        intro={
-          <>
-            <p style={{ margin: "0 0 12px" }}>More magic. More money. More confidence. More creativity. More freedom. More of your most unapologetic self.</p>
-            <p style={{ margin: 0, fontWeight: 500 }}>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
-          </>
-        }
+        titleSize="clamp(30px, 4.2vw, 56px)"
+        title="baddie coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and"
+        accent="become completely obsessed with their own lives."
+        intro={null}
       />
-
-      {/* The line the whole brand is built around. */}
-      <section className="px-5 md:px-8 text-center" style={{ background: "var(--dark)", color: "#fff", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 46 }}>
-        <div className="max-w-4xl mx-auto">
-          <div style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(22px, 3.4vw, 38px)", lineHeight: 1.15, letterSpacing: "-0.01em" }}>
-            BECOME MORE OF WHO YOU ARE. <span style={{ color: "var(--pink)" }}>CREATE THE LIFE YOU CAME HERE TO LIVE.</span>
-          </div>
-          <p style={{ fontSize: 16.5, lineHeight: 1.7, margin: "16px auto 0", maxWidth: 720 }}>
-            A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives.
-          </p>
-        </div>
-      </section>
 
       {/* 02 · Make her feel understood. */}
       <Section bg="#fff">
