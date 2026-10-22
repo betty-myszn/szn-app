@@ -240,7 +240,7 @@ export default function BaddieCovenPage() {
         intro={
           <>
             <p style={{ margin: "0 0 12px" }}>More magic. More money. More confidence. More creativity. More freedom. More of your most unapologetic self.</p>
-            <p style={{ margin: 0, fontWeight: 500 }}>Welcome to Baddie Coven, your very own circle of witchy women who are ready to reclaim their power, embrace their magic and create the most extraordinary lives imaginable.</p>
+            <p style={{ margin: 0, fontWeight: 500 }}>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
           </>
         }
       />
