@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import QuoteStrip from "@/components/QuoteStrip";
-import { OfferHero, Band, Tiles, WaitlistBand, OfferCards, HeroArt } from "@/components/Offer";
+import { OfferHero, WaitlistBand, OfferCards, HeroArt } from "@/components/Offer";
+import CovenExplorer from "@/components/CovenExplorer";
 
 // The Baddie Coven: the ongoing creative, cosmic membership (what the MY SZN membership becomes,
 // Oct 2026). Waitlist only, no price or start date confirmed; /membership redirects here.
@@ -21,11 +22,25 @@ export const metadata: Metadata = {
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
+// Every picture on the page lives here, so swapping in new photos is a one-line change per slot.
+// Drop new files in /public/coven/ and point the slot at them.
+const PICS = {
+  welcome: "/hero-collage.png",
+  creative: "/astrology-journaling.png",
+  astrology: "/cosmic-planet.png",
+  money: "/cosmic-money.png",
+  witchy: "/eclipse-moon.png",
+  shadow: "/libra-moon.png",
+  people: "/hero-cutout.png",
+  club: "/disco-planet.png",
+};
+
 // Betty's own Baddie Coven copy (15 Oct 2026), used word for word.
 
 const SECTIONS = [
   {
     "emoji": "🎨",
+    "img": PICS.creative,
     "title": "01. Getting our hands dirty with creative magic",
     "body": [
       "Monthly creative classes designed to bring back that delicious feeling of making something simply because YOU WANT TO.",
@@ -37,6 +52,7 @@ const SECTIONS = [
   },
   {
     "emoji": "🪐",
+    "img": PICS.astrology,
     "title": "02. Becoming the women who actually understand their astrology",
     "body": [
       "We're exploring your birth chart, planetary transits, houses, retrogrades, lunar cycles and all the wonderfully complicated astrological influences that make you YOU.",
@@ -47,6 +63,7 @@ const SECTIONS = [
   },
   {
     "emoji": "💸",
+    "img": PICS.money,
     "title": "03. Making money magic",
     "body": [
       "Money bowls. Prosperity rituals. Manifestation experiments. Wealth affirmations. Exploring abundance through astrology.",
@@ -58,6 +75,7 @@ const SECTIONS = [
   },
   {
     "emoji": "🕯️",
+    "img": PICS.witchy,
     "title": "04. Getting witchy AF",
     "body": [
       "Moon rituals, tarot, candle magic, spellwork, crystals, seasonal celebrations, intention setting and a healthy appreciation for the wonderfully strange.",
@@ -69,6 +87,7 @@ const SECTIONS = [
   },
   {
     "emoji": "🌑",
+    "img": PICS.shadow,
     "title": "05. Meeting your shadow and loving the woman underneath",
     "body": [
       "We're also exploring the deeper parts of ourselves through shadow work, astrology, journaling, self-reflection and conversations about confidence, self-worth, boundaries, relationships and personal power.",
@@ -79,6 +98,7 @@ const SECTIONS = [
   },
   {
     "emoji": "🪩",
+    "img": PICS.people,
     "title": "06. Finding your F*CKING PEOPLE",
     "body": [
       "Imagine being able to tell a group of women that you've just manifested a new client, pulled the Tower card three times in a week, booked a solo adventure or decided to completely reinvent your life.",
@@ -100,6 +120,28 @@ const FIT = [
   "🪩 You've been looking for a group of women who are ambitious, compassionate, creative, interesting and just the right amount of F*CKING UNHINGED."
 ];
 
+const wrap = "max-w-6xl mx-auto";
+const h2 = { fontSize: "clamp(32px, 5vw, 58px)", color: "var(--dark)", lineHeight: 1 } as const;
+const copy = { fontSize: 16.5, lineHeight: 1.7, margin: "0 0 14px", color: "var(--dark)" } as const;
+const card = { border: "var(--border)", borderRadius: 18, background: "#fff", padding: "20px 20px 22px", color: "var(--dark)" } as const;
+const cta = { display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" } as const;
+
+function Section({ bg, children }: { bg: string; children: React.ReactNode }) {
+  return (
+    <section className="px-5 md:px-8" style={{ background: bg, borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
+      <div className={wrap}>{children}</div>
+    </section>
+  );
+}
+
+function Statement({ children, tone = "dark" }: { children: React.ReactNode; tone?: "dark" | "pink" }) {
+  return (
+    <div style={{ marginTop: 28, border: "var(--border)", borderRadius: 18, background: tone === "dark" ? "var(--dark)" : "var(--pink)", color: "#fff", padding: "22px 24px", fontFamily: pp, fontSize: "clamp(18px, 2.4vw, 24px)", fontWeight: 800, lineHeight: 1.3 }}>
+      {children}
+    </div>
+  );
+}
+
 export default function BaddieCovenPage() {
   return (
     <>
@@ -115,75 +157,133 @@ export default function BaddieCovenPage() {
         }
       />
 
-      <Band tag="welcome to the baddie coven" title="your very own" accent="magical clubhouse.">
-        <p><strong>Welcome to The Baddie Coven, your very own magical clubhouse for women who want more astrology, witchcraft, manifestation, creativity, friendship and ridiculous amounts of FUN in their everyday lives.</strong></p>
-        <p>Imagine having a group of women to cast money spells with, celebrate your wins, dissect your birth chart, make beautiful things, share your latest manifestations and discuss everything from your Saturn return to the audacity of the patriarchy.</p>
-        <p>We&apos;re bringing back the pure joy of making things, believing in magic, having hobbies, learning something simply because it interests you and staying up far too late talking to your friends.</p>
-        <p>Only this time, we&apos;re also manifesting financial independence, healing our money wounds, examining our shadows and becoming the most gloriously self-possessed versions of ourselves.</p>
-        <p><strong>Your inner child, teenage witch and future rich b*tch are ALL invited.</strong></p>
-        <a href="#waitlist" className="no-underline" style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
-          💜 join the coven waitlist
-        </a>
-      </Band>
+      {/* Welcome: the pitch beside a picture, then the three "imagine" lines as a row. */}
+      <Section bg="#fff">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+          <div>
+            <div className="tag mb-5">welcome to the baddie coven</div>
+            <h2 className="display" style={h2}>your very own <span className="pk">magical clubhouse.</span></h2>
+            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Welcome to The Baddie Coven, your very own magical clubhouse for women who want more astrology, witchcraft, manifestation, creativity, friendship and ridiculous amounts of FUN in their everyday lives.</p>
+            <a href="#waitlist" className="no-underline" style={{ ...cta, marginTop: 8 }}>💜 join the coven waitlist</a>
+          </div>
+          <div style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={PICS.welcome} alt="" aria-hidden="true" style={{ width: "100%", height: "auto", display: "block" }} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 40 }}>
+          {[
+            ["🔮", "Imagine having a group of women to cast money spells with, celebrate your wins, dissect your birth chart, make beautiful things, share your latest manifestations and discuss everything from your Saturn return to the audacity of the patriarchy."],
+            ["🎀", "We're bringing back the pure joy of making things, believing in magic, having hobbies, learning something simply because it interests you and staying up far too late talking to your friends."],
+            ["👑", "Only this time, we're also manifesting financial independence, healing our money wounds, examining our shadows and becoming the most gloriously self-possessed versions of ourselves."],
+          ].map(([e, t]) => (
+            <div key={e} style={{ ...card, background: "var(--pink-light)" }}>
+              <div style={{ fontSize: 28 }}>{e}</div>
+              <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{t}</p>
+            </div>
+          ))}
+        </div>
+        <Statement>Your inner child, teenage witch and future rich b*tch are ALL invited. ✨</Statement>
+      </Section>
 
-      <Band tone="pinkLight" tag="a little witchcraft. a lot of audacity." title="absolutely fabulous" accent="women.">
-        <p>Somewhere between growing up, working, paying bills, managing relationships and trying to become functioning adults, far too many women stopped making time for the things that made them feel alive.</p>
-        <p>The art projects. The secret clubs. The notebooks filled with impossible dreams. The fascination with crystals, mythology, the moon, tarot cards and all the wonderfully strange things that made the world feel magical.</p>
-        <p><strong>Well, we&apos;re bringing ALL OF IT BACK.</strong></p>
-        <p>We&apos;re creating a space where you can explore whatever interests you, make friends who share your passions and spend time doing things purely because they make you happy.</p>
-        <p>You can be a serious businesswoman who casts spells, an astrologer who loves fashion, a creative who wants to make more money, or a complete beginner who bought her first tarot deck last Tuesday.</p>
-        <p>There&apos;s room for your ambition, your imagination, your weirdness, your vulnerability and all the different versions of yourself you&apos;re still getting to know.</p>
-        <p><strong>Basically, this is the club we all deserved when we were little, with considerably better conversations about sex, money and power.</strong></p>
-      </Band>
+      {/* Why: the story on the left, the turn ("we're bringing it all back") on the right. */}
+      <Section bg="var(--pink-light)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div>
+            <div className="tag mb-5">a little witchcraft. a lot of audacity.</div>
+            <h2 className="display" style={h2}>absolutely fabulous <span className="pk">women.</span></h2>
+            <p style={{ ...copy, marginTop: 22 }}>Somewhere between growing up, working, paying bills, managing relationships and trying to become functioning adults, far too many women stopped making time for the things that made them feel alive.</p>
+            <p style={copy}>The art projects. The secret clubs. The notebooks filled with impossible dreams. The fascination with crystals, mythology, the moon, tarot cards and all the wonderfully strange things that made the world feel magical.</p>
+          </div>
+          <div style={{ ...card, padding: "26px 26px 24px", boxShadow: "8px 8px 0 var(--dark)" }}>
+            <div className="display" style={{ fontSize: "clamp(28px, 3.6vw, 40px)", lineHeight: 1 }}>Well, we&apos;re bringing <span className="pk">ALL OF IT BACK.</span></div>
+            <p style={{ ...copy, marginTop: 18 }}>We&apos;re creating a space where you can explore whatever interests you, make friends who share your passions and spend time doing things purely because they make you happy.</p>
+            <p style={copy}>You can be a serious businesswoman who casts spells, an astrologer who loves fashion, a creative who wants to make more money, or a complete beginner who bought her first tarot deck last Tuesday.</p>
+            <p style={{ ...copy, margin: 0 }}>There&apos;s room for your ambition, your imagination, your weirdness, your vulnerability and all the different versions of yourself you&apos;re still getting to know.</p>
+          </div>
+        </div>
+        <Statement tone="pink">Basically, this is the club we all deserved when we were little, with considerably better conversations about sex, money and power.</Statement>
+      </Section>
 
-      <Band wide tag="inside the coven 🪄" title="soooo, what are we" accent="doing in here.">
-        <Tiles
-          items={SECTIONS.map((x) => ({
-            emoji: x.emoji,
-            title: x.title,
-            body: (
-              <>
-                {x.body.map((t, i) => (
-                  <p key={i} style={{ margin: i === x.body.length - 1 ? 0 : "0 0 10px", fontWeight: i === x.body.length - 1 ? 700 : undefined }}>{t}</p>
-                ))}
-              </>
-            ),
-          }))}
-        />
-      </Band>
+      {/* What we do: six themes as one tabbed panel. */}
+      <Section bg="#fff">
+        <div className="tag mb-5">inside the coven 🪄</div>
+        <h2 className="display" style={h2}>soooo, what are we <span className="pk">doing in here.</span></h2>
+        <CovenExplorer items={SECTIONS} />
+      </Section>
 
-      <Band tone="lav" tag="so much more life to live" title="being a grown woman should be a" accent="LOT more fun than this.">
-        <p>We spend so much of our lives trying to improve ourselves, fix our perceived flaws, achieve the next milestone and become the kind of women the world tells us we should be.</p>
-        <p>Meanwhile, our actual lives are happening.</p>
-        <p>We could be learning tarot, creating art, celebrating the moon, making new friends, discovering ridiculous new hobbies, dressing up for absolutely no reason and having experiences that make ordinary Tuesdays feel extraordinary.</p>
-        <p>You deserve a life with room for pleasure, play, creativity, friendship and all the beautifully unnecessary things that make being alive such a F*CKING TREAT.</p>
-        <p>You deserve to have interests that don&apos;t need to become businesses.</p>
-        <p>To make something without worrying whether it&apos;s good enough.</p>
-        <p>To spend an evening talking about witchcraft with women who don&apos;t look at you like you&apos;ve grown a second head.</p>
-        <p>To take your dreams seriously while refusing to take yourself seriously ALL THE TIME.</p>
-        <p><strong>We have SO MUCH MORE LIFE TO LIVE, witches.</strong></p>
-      </Band>
+      {/* More life: the case on the left, the "you deserve" lines stacked as cards on the right. */}
+      <Section bg="var(--lav-light)">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
+          <div>
+            <div className="tag mb-5">so much more life to live</div>
+            <h2 className="display" style={h2}>being a grown woman should be a <span className="pk">LOT more fun than this.</span></h2>
+            <p style={{ ...copy, marginTop: 22 }}>We spend so much of our lives trying to improve ourselves, fix our perceived flaws, achieve the next milestone and become the kind of women the world tells us we should be.</p>
+            <p className="display" style={{ fontSize: "clamp(22px, 2.8vw, 30px)", lineHeight: 1.1, margin: "6px 0 18px", color: "var(--pink)" }}>Meanwhile, our actual lives are happening.</p>
+            <p style={copy}>We could be learning tarot, creating art, celebrating the moon, making new friends, discovering ridiculous new hobbies, dressing up for absolutely no reason and having experiences that make ordinary Tuesdays feel extraordinary.</p>
+          </div>
+          <div className="grid gap-3">
+            {[
+              "You deserve a life with room for pleasure, play, creativity, friendship and all the beautifully unnecessary things that make being alive such a F*CKING TREAT.",
+              "You deserve to have interests that don't need to become businesses.",
+              "To make something without worrying whether it's good enough.",
+              "To spend an evening talking about witchcraft with women who don't look at you like you've grown a second head.",
+              "To take your dreams seriously while refusing to take yourself seriously ALL THE TIME.",
+            ].map((t) => (
+              <div key={t} style={{ ...card, padding: "16px 18px", fontWeight: 700, fontSize: 15.5, lineHeight: 1.55 }}>
+                <span className="pk">✦ </span>{t}
+              </div>
+            ))}
+          </div>
+        </div>
+        <Statement>We have SO MUCH MORE LIFE TO LIVE, witches. 🪩</Statement>
+      </Section>
 
-      <Band tone="pinkLight" tag="you'll fit right in if" title="you'll fit right" accent="in if...">
-        <ul style={{ listStyle: "none", padding: 0, margin: "26px 0 0", display: "grid", gap: 14 }}>
-          {FIT.map((f) => <li key={f} style={{ fontSize: 16.5, lineHeight: 1.6, fontWeight: 600 }}>{f}</li>)}
-        </ul>
-        <p style={{ marginTop: 24 }}><strong>If you&apos;ve ever wished you had your own little coven of magical women, you&apos;ve found your invitation.</strong></p>
-      </Band>
+      {/* Fit: seven cards, the eighth cell is the invitation. */}
+      <Section bg="var(--pink-light)">
+        <div className="tag mb-5">you&apos;ll fit right in if</div>
+        <h2 className="display" style={h2}>you&apos;ll fit right <span className="pk">in if...</span></h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ marginTop: 32 }}>
+          {FIT.map((f) => {
+            const [emoji, ...rest] = f.split(" ");
+            return (
+              <div key={f} style={card}>
+                <div style={{ fontSize: 30 }}>{emoji}</div>
+                <p style={{ ...copy, fontSize: 15, fontWeight: 600, margin: "10px 0 0" }}>{rest.join(" ")}</p>
+              </div>
+            );
+          })}
+          <a href="#waitlist" className="no-underline flex flex-col justify-between" style={{ ...card, background: "var(--dark)", color: "#fff", gap: 18 }}>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, lineHeight: 1.3 }}>If you&apos;ve ever wished you had your own little coven of magical women, you&apos;ve found your invitation.</span>
+            <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>join the waitlist →</span>
+          </a>
+        </div>
+      </Section>
 
       <QuoteStrip ids={["aisha", "priya", "lauren"]} label="a few words from the my szn universe 💖" />
       <p className="text-center" style={{ fontSize: 13, fontStyle: "italic", color: "var(--grey)", background: "#fff", padding: "0 20px 28px", margin: 0 }}>
         These are experiences shared by MY SZN members, giving you a taste of the community we&apos;re building.
       </p>
 
-      <Band tag="the magical girls' club" title="your membership to the magical girls' club" accent="starts here.">
-        <p>Imagine opening your calendar each month and finding creative workshops, witchy gatherings, astrology explorations, rituals and opportunities to spend time with women who share your interests.</p>
-        <p>A little pocket of magic in the middle of your everyday life.</p>
-        <p>A reason to try something new, make something wonderful, celebrate yourself and connect with women around the world.</p>
-        <p>A place where the ambitious woman, the artist, the witch, the dreamer, the feminist, the occasional emotional wreck and the absolute menace to societal expectations can all exist in the same person.</p>
-        <p><strong>Because you get to be ALL OF HER.</strong></p>
-        <p>The Baddie Coven is currently waitlist-only, and the women on our list get first access to opening dates, membership details and everything we&apos;re putting together.</p>
-      </Band>
+      {/* The club: heading and picture on the left, the monthly picture on the right. */}
+      <Section bg="#fff">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div>
+            <div className="tag mb-5">the magical girls&apos; club</div>
+            <h2 className="display" style={h2}>your membership to the magical girls&apos; club <span className="pk">starts here.</span></h2>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={PICS.club} alt="" aria-hidden="true" className="hidden md:block" style={{ width: 240, height: "auto", marginTop: 24 }} />
+          </div>
+          <div>
+            <p style={copy}>Imagine opening your calendar each month and finding creative workshops, witchy gatherings, astrology explorations, rituals and opportunities to spend time with women who share your interests.</p>
+            <p style={copy}>A little pocket of magic in the middle of your everyday life.</p>
+            <p style={copy}>A reason to try something new, make something wonderful, celebrate yourself and connect with women around the world.</p>
+            <p style={copy}>A place where the ambitious woman, the artist, the witch, the dreamer, the feminist, the occasional emotional wreck and the absolute menace to societal expectations can all exist in the same person.</p>
+            <p className="display" style={{ fontSize: "clamp(22px, 2.8vw, 30px)", lineHeight: 1.1, margin: "4px 0 18px" }}>Because you get to be <span className="pk">ALL OF HER.</span></p>
+            <p style={{ ...copy, margin: 0 }}>The Baddie Coven is currently waitlist-only, and the women on our list get first access to opening dates, membership details and everything we&apos;re putting together.</p>
+          </div>
+        </div>
+      </Section>
 
       <WaitlistBand
         offer="baddie-coven"
