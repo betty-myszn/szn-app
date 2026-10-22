@@ -13,8 +13,8 @@ type Tone = "pink" | "white" | "lav" | "dark" | "pinkLight";
 const BG: Record<Tone, string> = { pink: "var(--pink)", white: "#fff", lav: "var(--lav-light)", dark: "var(--dark)", pinkLight: "var(--pink-light)" };
 
 export function OfferHero({
-  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", extraCta,
-}: { offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
+  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", extraCta, titleSize = "clamp(42px, 7.5vw, 96px)",
+}: { titleSize?: string; offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
   const o = OFFERS[offer];
   const ink = tone === "dark" ? "#fff" : "var(--dark)";
   const accentInk = tone === "pink" ? "#fff" : "var(--pink)";
@@ -25,7 +25,7 @@ export function OfferHero({
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: tone === "pink" ? "#fff" : "var(--pink)", marginBottom: 22 }}>
           {o.emoji} {kicker}
         </div>
-        <h1 className="display" style={{ fontSize: "clamp(42px, 7.5vw, 96px)", color: ink, lineHeight: 0.95 }}>
+        <h1 className="display" style={{ fontSize: titleSize, color: ink, lineHeight: 0.95 }}>
           {title}
           <br />
           <span style={{ color: accentInk }}>{accent}</span>

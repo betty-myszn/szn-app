@@ -150,20 +150,22 @@ export default function BaddieCovenPage() {
         art={<HeroArt src="/disco-planet.png" />}
         tone="lav"
         kicker="the baddie coven"
-        title="your childhood dream of joining a secret witch club just got"
-        accent="VERY F*CKING REAL."
+        titleSize="clamp(38px, 5.6vw, 72px)"
+        title="stop hiding from the f*cking world."
+        accent="IT'S TIME TO BECOME ALL OF YOU."
         intro={
-          <p>Except now we&apos;re grown women with our own money, complicated birth charts, excellent taste, ambitious dreams and absolutely no intention of behaving ourselves.</p>
+          <p>More magic. More money. More confidence. More creativity. More freedom. More of your most unapologetic self.</p>
         }
       />
 
-      {/* Welcome: the pitch beside a picture, then the three "imagine" lines as a row. */}
+      {/* Welcome: the pitch beside a picture, the turn as a banner, then what we do as a card grid. */}
       <Section bg="#fff">
         <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
           <div>
             <div className="tag mb-5">welcome to the baddie coven</div>
             <h2 className="display" style={h2}>your very own <span className="pk">magical clubhouse.</span></h2>
-            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Welcome to The Baddie Coven, your very own magical clubhouse for women who want more astrology, witchcraft, manifestation, creativity, friendship and ridiculous amounts of FUN in their everyday lives.</p>
+            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Welcome to Baddie Coven, your very own magical clubhouse for women who are ready to reclaim their power, embrace their magic and create the most extraordinary lives imaginable.</p>
+            <p style={copy}>You&apos;ve spent enough of your life making yourself smaller, questioning your intuition, hiding your gifts, worrying what people think and putting your biggest dreams on hold while you try to become the woman everyone else expects you to be.</p>
             <a href="#waitlist" className="no-underline" style={{ ...cta, marginTop: 8 }}>💜 join the coven waitlist</a>
           </div>
           <div style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)" }}>
@@ -171,13 +173,16 @@ export default function BaddieCovenPage() {
             <img src={PICS.welcome} alt="" aria-hidden="true" style={{ width: "100%", height: "auto", display: "block" }} />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 40 }}>
+        <Statement tone="pink">F*CK THAT. WE&apos;VE GOT BIGGER PLANS FOR YOU. 🔥</Statement>
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4" style={{ marginTop: 20 }}>
           {[
-            ["🔮", "Imagine having a group of women to cast money spells with, celebrate your wins, dissect your birth chart, make beautiful things, share your latest manifestations and discuss everything from your Saturn return to the audacity of the patriarchy."],
-            ["🎀", "We're bringing back the pure joy of making things, believing in magic, having hobbies, learning something simply because it interests you and staying up far too late talking to your friends."],
-            ["👑", "Only this time, we're also manifesting financial independence, healing our money wounds, examining our shadows and becoming the most gloriously self-possessed versions of ourselves."],
-          ].map(([e, t]) => (
-            <div key={e} style={{ ...card, background: "var(--pink-light)" }}>
+            ["🔮", "We're bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are."],
+            ["🪐", "We're talking about understanding your cosmic gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning."],
+            ["🎀", "The kind of life where you're following your wildest ideas, doing things that scare you in the best possible way, exploring your creativity, making incredible friends and finally giving yourself permission to want absolutely EVERYTHING."],
+            ["🕯️", "Inside the coven, we'll be working with astrology, manifestation, money magic, rituals, creative workshops and shadow work to help you bring more of yourself into every area of your life."],
+            ["🦄", "You'll get to explore the witchy things you've always been curious about, reconnect with the parts of yourself you've kept hidden and surround yourself with women who celebrate your ambition, your weirdness, your magic and your biggest dreams."],
+          ].map(([e, t], i) => (
+            <div key={e} className={i < 3 ? "md:col-span-2" : "md:col-span-3"} style={{ ...card, background: "var(--pink-light)" }}>
               <div style={{ fontSize: 28 }}>{e}</div>
               <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{t}</p>
             </div>
