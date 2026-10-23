@@ -158,6 +158,157 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
+  // Taurus full moon, the first lunation of Scorpio season. Degrees and times from the same Swiss
+  // Ephemeris (Moon 2°45' Taurus, exact 04:11 UTC 26 Oct, Pluto 3°06' Aquarius square to the minute).
+  {
+    slug: "full-moon-in-taurus-2026",
+    title: "Full Moon in Taurus 2026: Your Money Moon in Scorpio Season",
+    metaTitle: "Full Moon in Taurus 2026: Meaning, Date & What It Means for You",
+    description:
+      "The Taurus full moon on 26 October 2026 lands at 2°45' Taurus in Scorpio season, square Pluto with Venus retrograde. The meaning, themes, rituals and what it means for every sign.",
+    category: "moon-transits",
+    publishedAt: "2026-10-23",
+    updatedAt: "2026-10-23",
+    readingMinutes: 8,
+    excerpt:
+      "The first full moon of Scorpio season lands in Taurus, the sign of money, worth and pleasure, exactly square Pluto. The themes, the timing and what it means for your sign.",
+    intro: [
+      "The full moon in Taurus lands at 2°45' Taurus on Monday 26 October 2026, exact at 12:11am New York time (9:11pm on Sunday 25 October in Los Angeles and 4:11am in the UK), with the Sun sitting opposite at 2°45' Scorpio. It's the first full moon of [Scorpio season](/blog/scorpio-season-2026), and it shines a big, glowing spotlight on money, self-worth, pleasure and how much you actually let yourself receive.",
+      "Taurus rules what you own and Scorpio rules what you share, so this moon stretches right across the axis of your money, your body, your desire and your power, and with Pluto squaring it almost to the minute, it's asking you to get honest about what you're worth and then charge like you mean it, babe.",
+    ],
+    sections: [
+      {
+        heading: "Why a Taurus full moon in Scorpio season hits different",
+        body: [
+          "Every full moon puts the Sun and Moon in opposite signs, and Scorpio season always delivers its full moon in Taurus, so the two signs end up in a delicious tug of war between having and merging, between the money in your own account and the money, intimacy and power you share with other people.",
+          "Taurus is the fixed earth sign ruled by Venus, the sign of your body, your bank balance, your senses, your values and the slow, luxurious pleasure of building something that lasts. The Moon is exalted in Taurus, which means she's at her most comfortable and most nourished here, so emotions this week land in the body first: in your appetite, your cravings, your spending and the moment your nervous system finally relaxes because you feel safe.",
+          "Scorpio, on the Sun's side, wants depth, truth and transformation, and this year it arrived with Mercury retrograde in Scorpio and Venus retrograde too, so everything you'd normally keep in a locked drawer is ready to come up for air under a verrrry bright moon.",
+        ],
+      },
+      {
+        heading: "The themes of the Taurus full moon",
+        body: ["Whatever has been growing in these five areas of your life since the spring reaches its fullest point this week, so notice where each one shows up for you."],
+        items: [
+          { name: "Money and receiving", body: "Taurus is the sign of your own money, your income and your sense of what you deserve, so this full moon shows you exactly where you've been undercharging, overgiving or playing small with your prices, and where you're ready to let MOOOORE in." },
+          { name: "Self-worth", body: "Your worth and your net worth love to get tangled up together, and this moon untangles them, showing you which money stories were handed to you by your family and which ones actually belong to the rich baddie you're becoming." },
+          { name: "Pleasure and the body", body: "Taurus wants you fed, rested, touched and adorned, so notice where you've been denying yourself pleasure until you've somehow 'earned' it, and give yourself some of it now." },
+          { name: "Stability and security", body: "Something you've been building for a while reaches a point of fullness, whether that's your savings, your client list, your home or a relationship, and you get to see clearly which parts are solid and which parts have been propped up with hope." },
+          { name: "Letting go", body: "Full moons are for releasing, and Taurus is famously stubborn, so this is the moment to loosen your grip on the habit, the price point, the possession or the person you've outgrown and have kept purely because it feels familiar." },
+        ],
+      },
+      {
+        heading: "What you need to know about this full moon",
+        body: ["Every time here is New York time, from the same Swiss Ephemeris that powers every chart inside MY SZN."],
+        items: [
+          { name: "It's exactly square Pluto", body: "Pluto sits at 3° Aquarius, square both the Moon and the Sun almost to the minute, forming a fixed T-square across Taurus, Scorpio and Aquarius. Pluto is the planet of power, control and total transformation, so the money and worth themes this week arrive with real intensity, along with a huge opportunity to take your power back from whatever, or whoever, has been holding onto it." },
+          { name: "Venus, the ruler of Taurus, is retrograde", body: "Venus rules this moon and she's retrograde until 13 November, having slipped back into Libra on 25 October, which makes this the perfect moon for reviewing what you value, what you charge and what you spend. Raise your prices, cancel the subscriptions you never use and save the big luxury purchase for after Venus turns direct." },
+          { name: "Mercury is retrograde in Scorpio", body: "Mercury turned retrograde at 20°58' Scorpio on 24 October, so reread the contract, double check the invoice and let money conversations happen slowly and honestly. Old money stories and old financial loose ends are likely to come back for a second look, and you get to deal with them properly this time." },
+          { name: "It's early in the sign", body: "At 2° Taurus this moon carries fresh, raw energy, so the feelings may arrive first and the understanding a day or two later. Pay attention to whatever comes up between Sunday and Tuesday, because that's the real message." },
+        ],
+      },
+      {
+        heading: "How to work with the Taurus full moon",
+        body: [
+          "Make it sensual and make it rich. Light a candle, run a bath, put on something that feels expensive against your skin and sit down with your bank statements and your journal, because Taurus energy loves a ritual you can touch, taste and smell.",
+          "Write down every money belief you inherited, circle the ones you're ready to release and burn them safely, or tear them up and throw them away. Then write the number you're calling in, the price you're raising and the pleasure you're giving yourself this month, and read the whole list out loud like you already have it.",
+          "Earth rituals land beautifully under this moon, so bury a coin in a plant pot, carry a piece of pyrite or rose quartz in your purse, or charge your crystals in the moonlight on Sunday or Monday night. Take your intentions into [your MY SZN journal](/journal) so they sit right next to your chart.",
+        ],
+      },
+      {
+        heading: "Journal prompts for the Taurus full moon",
+        body: ["Write fast, write honestly and don't edit a single word until you've finished."],
+        items: [
+          { name: "What I'm really worth", body: "Write the number you'd charge if you knew, without a shadow of doubt, that you were worth it, then write down exactly what stops you charging it right now." },
+          { name: "The money story I'm done with", body: "Write the sentence about money you heard most growing up, then rewrite it the way a rich baddie would say it." },
+          { name: "The pleasure I've been postponing", body: "List five pleasures you keep saving for 'one day' and choose one to give yourself before the new moon in Scorpio on 9 November." },
+        ],
+      },
+      {
+        heading: "Taurus full moon affirmations",
+        body: ["Say them out loud, write them on your mirror or keep them in [your affirmations deck](/affirmations)."],
+        items: [
+          { name: "I am worthy of receiving more than I ever thought possible.", body: "For every time you've talked yourself down on price." },
+          { name: "Money flows to me easily, and I let it stay.", body: "For saving, investing and keeping what you earn." },
+          { name: "My pleasure is a priority, and my body is safe.", body: "For the Taurus moon that wants you fed, rested and adorned." },
+        ],
+      },
+      {
+        heading: "What the Taurus full moon means for every sign",
+        body: [
+          "Read for your rising sign first, because it tells you which house this full moon lands in, then read for your sun sign as a second layer.",
+        ],
+        items: [
+          { name: "Aries", body: "This lands in your house of money, income and self-worth, so it's an all-out money moon for you, babe. Your prices, your pay and your sense of what you deserve come into sharp focus, and this is your moment to ask for MORE." },
+          { name: "Taurus", body: "This is YOUR full moon, landing in your own sign and your house of self, so you see yourself clearly, body, style and all. A chapter of how you show up is complete, and the version of you who knows her worth is ready to step forward." },
+          { name: "Gemini", body: "This lands in your most private house of rest, endings and the subconscious, so your money and worth stories surface through dreams, your body and feelings that arrive before the words do. Rest is the assignment, and your intuition is LOUD." },
+          { name: "Cancer", body: "This lands in your house of friends, community and big dreams, so a group, a network or a wish you've held for years reaches a point of clarity. Look closely at who's genuinely invested in your rise and which circles deserve your energy." },
+          { name: "Leo", body: "This lands at the top of your chart in your house of career and reputation, so something professional peaks, finishes or finally gets seen. Your ambition is fully lit, and you get to decide what you want to be known (and paid) for." },
+          { name: "Virgo", body: "This lands in your house of travel, study, beliefs and publishing, so a belief about money or success is ready for an upgrade. A course, a trip, a teaching opportunity or a big idea about your future comes into focus." },
+          { name: "Libra", body: "This lands in your house of shared money, intimacy and other people's resources, so debts, investments, joint finances or an emotional truth inside a close bond come to the surface. Going deep pays off for you this week." },
+          { name: "Scorpio", body: "With the Sun in your own sign and this moon in your house of partnership, a relationship, a client or a business partner reaches a moment of truth. The balance between what you give and what you get back becomes impossible to ignore." },
+          { name: "Sagittarius", body: "This lands in your house of work, routines and health, so your daily life gets an audit. Your workload, your body and the way you earn day to day reach a point where something shifts towards more ease and more pleasure." },
+          { name: "Capricorn", body: "This lands in your house of creativity, romance and joy, so a creative project, a love affair or your whole relationship with fun comes into full bloom. Let yourself enjoy what you've built, babe." },
+          { name: "Aquarius", body: "This lands at the base of your chart in your house of home, family and roots, with Pluto in your own sign squaring it, so a family money pattern or something about where you live comes up to be transformed, and your foundations get stronger for it." },
+          { name: "Pisces", body: "This lands in your house of voice, ideas and communication, so the thing you've been wanting to say, write, post or pitch is ready. Your words have real earning power this week." },
+        ],
+      },
+      {
+        heading: "Come and moonifest with me, LIVE",
+        body: [
+          "I'm celebrating this full moon with BAD B*TCHES MOONIFEST, my brand new money, magic and manifestation workshop, live online on Monday 26 October at 6:30pm UK time (2:30pm in New York and 11:30am in LA), while the Taurus moon is still beautifully full.",
+          "Every baddie who books gets her own 7-10 page astrology report written from her birth chart, covering how this full moon hits her chart, her money and self-worth themes, personalised shadow work, journal prompts, affirmations and Full Moon rituals, and it lands in her inbox before we go live. On the night we do Taurus Full Moon astrology, money manifestation, releasing money blocks, shadow work, money magic and EFT tapping or guided hypnosis together, and the full replay is yours to keep if you can't make it live.",
+          "It's $44, and you'll want to [book by Sunday 25 October](/events/bad-bitches-moonifest) so I can write your report in time. Come get RICHHH in every way with me, babe.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Your Taurus full moon, written for YOUR chart",
+      body: "Book BAD B*TCHES MOONIFEST and get your own 7-10 page report showing exactly where this full moon lands in your chart, plus the live money workshop and the full replay, all for $44.",
+      label: "I'm ready to moonifest",
+      href: "/events/bad-bitches-moonifest",
+    },
+    closing: {
+      heading: "come moonifest with me this",
+      pink: "taurus full moon",
+      body: "Your own 7-10 page astrology report, the live money, magic and manifestation workshop on Monday 26 October at 6:30pm UK and the full replay, all for $44.",
+      label: "I'm ready to moonifest 💸",
+      href: "/events/bad-bitches-moonifest",
+    },
+    faqs: [
+      {
+        question: "When is the full moon in Taurus 2026?",
+        answer:
+          "It's exact at 2°45' Taurus on 26 October 2026 at 12:11am New York time, which is 9:11pm on 25 October in Los Angeles and 4:11am on 26 October in the UK. Its energy is felt across the couple of days either side.",
+      },
+      {
+        question: "What does the Taurus full moon mean?",
+        answer:
+          "It highlights money, self-worth, pleasure, the body and security, set against Scorpio's themes of shared resources, intimacy and power. It's a moment to see clearly what you're worth and release whatever has been blocking you from receiving.",
+      },
+      {
+        question: "Why is the full moon in Taurus during Scorpio season?",
+        answer:
+          "A full moon always falls in the sign opposite the Sun, so while the Sun moves through Scorpio each year, the full moon lands in Taurus.",
+      },
+      {
+        question: "What should I do on the Taurus full moon?",
+        answer:
+          "Release old money stories, review your prices and your spending, and do a grounded, sensual ritual that celebrates what you already have. With Venus retrograde, save big impulse purchases until she turns direct on 13 November.",
+      },
+      {
+        question: "Should I read for my sun sign or rising sign?",
+        answer:
+          "Rising sign first, because it determines which house of your chart the full moon falls in. Your sun sign works as a second read, or as your main one if you don't know your birth time.",
+      },
+    ],
+    related: ["scorpio-season-2026", "new-moon-vs-full-moon", "full-moon-in-aquarius-2026"],
+    heroImage: {
+      src: "/events/taurus-full-moon.jpg",
+      alt: "Taurus full moon artwork: a silver-haired woman with Taurus horns, pink dollar signs and gold stars on lilac",
+      width: 854,
+      height: 494,
+    },
+  },
   // Every date and degree below comes from the app's own Swiss Ephemeris (lib/sky-bank.ts for the
   // lunations and stations, ingresses computed the same way), in New York time to match the calendar.
   // The next four season guides, written ahead and held back by goLiveAt until the exact moment
