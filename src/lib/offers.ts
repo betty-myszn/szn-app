@@ -42,7 +42,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     name: "The Bad B*tch Report",
     href: "/reports/bad-btch-report",
     line: "your personalised astrology blueprint for becoming the main character of your own life",
-    price: null,
+    price: "$88 intro price",
     brevoEnv: "BREVO_LIST_BAD_BTCH_REPORT",
     brevoList: 22,
     cta: "join the waitlist",

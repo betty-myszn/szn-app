@@ -77,7 +77,7 @@ const FAQ = [
   ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports. Sorry to your horoscope app. 😘"],
   ["If you don't know your birth time", "Tick the box on the form and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
   ["How you get it", "Your report arrives as a private web page you can read on your phone in bed, plus a beautifully designed PDF to save, print, highlight and scribble ALLLL over."],
-  ["What it costs", "The price goes to the waitlist first, and the waitlist gets first access before anybody else gets a look in. Being early has its perks, babe. 💖"],
+  ["What it costs", "$88 at the introductory price, and the waitlist gets first dibs on it before anybody else gets a look in. Being early has its perks, babe. 💖"],
 ] as const;
 
 export default function BadBtchReportPage() {
