@@ -29,11 +29,11 @@ const ACTS = [
     name: "who you are",
     bg: "var(--pink)",
     chapters: [
-      ["01", "Your Bad B*tch DNA", "The woman you are when nobody's shrinking you, read from your Sun, Moon and Rising."],
-      ["02", "Your Money Era", "Where your money comes from, where you leave it on the table, and how to pick it back up."],
-      ["03", "Your Visibility Power", "How you're built to be seen, and what you get known for once you stop hiding."],
-      ["04", "Your Desire + Magnetism", "What you actually want, before you edit it down to something polite."],
-      ["05", "Your F*ck Around & Find Out Energy", "How you go after what you want, and what happens to anyone standing in the way."],
+      ["01", "Your Bad B*tch DNA", "The woman you are when nobody's shrinking you, read straight from your Sun, Moon and Rising. She's a LOT. We love her."],
+      ["02", "Your Money Era", "Where your money comes from, where you've been leaving it on the table, and how to go back for every last dollarrr. 💸"],
+      ["03", "Your Visibility Power", "How you're built to be SEEN, and what you get famous for once you stop hiding in the group chat."],
+      ["04", "Your Desire + Magnetism", "What you actually want, before you edit it down into something polite enough to say at brunch."],
+      ["05", "Your F*ck Around & Find Out Energy", "How you go after what you want, and what happens to anyone silly enough to stand in the way. 😈"],
     ],
   },
   {
@@ -41,9 +41,9 @@ const ACTS = [
     name: "what's been keeping you small",
     bg: "var(--lav)",
     chapters: [
-      ["06", "Your Dark Femme + Power", "The parts of you that got called too much. We're taking them back."],
-      ["07", "The Shadow Keeping You Small", "The old patterns that feel like safety and keep you exactly where you are."],
-      ["→", "Old SZN to Next SZN", "Your nodes side by side: who you've been, what you carry with you, and who you're walking towards."],
+      ["06", "Your Dark Femme + Power", "The parts of you that got called too much, too loud, too intense. We're taking ALLLL of them back."],
+      ["07", "The Shadow Keeping You Small", "The old patterns that feel like safety and keep you parked in exactly the same spot, year after yearrr."],
+      ["→", "Old SZN to Next SZN", "Who you've been, what you're bringing with you, and the woman you're walking towards like it's a runway. 🦄"],
     ],
   },
   {
@@ -51,19 +51,19 @@ const ACTS = [
     name: "who you're becoming",
     bg: "var(--dark)",
     chapters: [
-      ["08", "Your Big Dream Energy", "Where life gets bigger, and the direction your chart keeps pointing you."],
-      ["09", "Become That B*tch", "The part where you stop reading about her and start becoming her."],
+      ["08", "Your Big Dream Energy", "Where life gets BIGGGG, and the direction your chart has been pointing you in this whole time."],
+      ["09", "Become That B*tch", "The part where you stop reading about her and start BECOMING her. Pen out, babe."],
     ],
   },
 ] as const;
 
 const WORKBOOK = [
-  ["💋", "6 affirmations written for your chart", "Two each from your Venus, your Saturn and your North Node, every one with a line telling you exactly when to say it."],
-  ["✍️", "6 journal prompts that go deep", "Pulled from your South Node, your Chiron and your North Node, so you're writing about YOUR patterns."],
-  ["🔥", "5 Bad B*tch Moves", "One for your money, two for your power and two for your big dream, each one a real thing to go and do this month."],
-  ["🗓️", "Two 30-day challenges", "Sixty days of becoming her, week by week, built from your North Node sign and house."],
-  ["🎬", "Your main character dates", "The days in the next 90 when the sky points straight at you: your new and full moons by house, plus the Sun, Venus, Mars and Jupiter crossing your chart. Put them in the calendar and plan your big moves around them."],
-  ["💌", "A letter from her", "The final page is written by your future self, a few years from now, from the life your chart says you're building."],
+  ["💋", "6 affirmations written for your chart", "Two each from your Venus, your Saturn and your North Node, each with a line telling you exactly when to say it (usually right before you discount yourself againnn)."],
+  ["✍️", "6 journal prompts that go deep", "Pulled from your South Node, your Chiron and your North Node, so you're journaling about YOUR patterns, and yesss, it gets juicy."],
+  ["🔥", "5 Bad B*tch Moves", "One for your money, two for your power and two for your big dream, each one a real thing to go and DO this month, ideally in a great outfit."],
+  ["🗓️", "Two 30-day challenges", "Sixty days of becoming her, week by week, built from your North Node sign and house. Accountability, but make it astrology. 🪐"],
+  ["🎬", "Your main character dates", "The days in the next 90 when the sky is pointing straight at YOU, from your new and full moons to the Sun, Venus, Mars and Jupiter crossing your chart. Diary them, then plan your big moves like the CEO you are."],
+  ["💌", "A letter from her", "The final page is written by your future self, a few years from now, from the life your chart says you're building. Keep tissues nearby, she gets emotional. 💌"],
 ] as const;
 
 const NUMBERS = [
@@ -74,10 +74,10 @@ const NUMBERS = [
 ] as const;
 
 const FAQ = [
-  ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports."],
-  ["If you don't know your birth time", "Tick the box on the form and we'll work with what we've got. Your signs stay accurate, and the house-based sections are where a birth time makes the biggest difference, so if you can dig it out of a birth certificate or a family member, it's worth the text."],
-  ["How you get it", "Your report arrives as a private web page you can read on your phone, with a beautifully designed PDF to save, print and scribble all over."],
-  ["What it costs", "The price is announced to the waitlist first, and the waitlist gets first access before anybody else."],
+  ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports. Sorry to your horoscope app. 😘"],
+  ["If you don't know your birth time", "Tick the box on the form and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["How you get it", "Your report arrives as a private web page you can read on your phone in bed, plus a beautifully designed PDF to save, print, highlight and scribble ALLLL over."],
+  ["What it costs", "The price goes to the waitlist first, and the waitlist gets first access before anybody else gets a look in. Being early has its perks, babe. 💖"],
 ] as const;
 
 export default function BadBtchReportPage() {
@@ -89,20 +89,20 @@ export default function BadBtchReportPage() {
         tone="dark"
         kicker="the bad b*tch report · your personalised astrology blueprint"
         title="become the main character"
-        accent="of your own life."
+        accent="of your own damn life."
         intro={
           <p>
-            Your birth chart is the blueprint of the woman you were born to be, before anybody told you to tone it down, so The Bad B*tch Report reads it across nine chapters and shows you who she is, what&apos;s been keeping you from her, and exactly how to step into her life: the money, the pleasure, the power and the dream you&apos;ve been too polite to say out loud. 💜
+            Babe. Your birth chart is the blueprint of the woman you were born to be, back before the world handed you a rulebook about being nice, small and low-maintenance 🙄 The Bad B*tch Report reads ALLLL of it across nine chapters and shows you who she is, what&apos;s been keeping you from her, and exactly how to step into her life: the money, the pleasure, the power and the big, outrageous dream you&apos;ve been waaaay too polite to say out loud. 💜
           </p>
         }
       />
 
-      <Band tag="the supporting role era" title="you've been the supporting character" accent="for long enough.">
+      <Band tag="the supporting role era is overrr" title="you've been an extra in your own movie" accent="for long enough.">
         <p>
-          You&apos;re the friend who hypes everyone else&apos;s launch, the one who remembers the birthdays, holds the group chat together, says yes when she means absolutely not and keeps the dream life saved in a notes app for some future moment when everyone else is sorted, and you&apos;ve been so busy making space for other people&apos;s main storylines that your own has been waiting in the wings for yearsss.
+          You&apos;re the one who hypes everyone else&apos;s launch, remembers every single birthday, keeps the group chat alive, says &quot;yesss of course!&quot; when you mean absolutely f*cking not, and keeps your dream life saved in a notes app for some magical future moment when everybody else is sorted (spoiler: they will never be sorted) 😭 Meanwhile your own storyline has been sitting in the wings for yearsss, waiting for its cue.
         </p>
         <p>
-          This report is where that ends. We&apos;re done putting everyone else first, and we&apos;re starting with the most precise map you&apos;ll ever get of who you&apos;re here to be.
+          Consider this your cue, my love. We&apos;re DONE putting everyone else first, done being grateful for scraps, done being easy to deal with, and we&apos;re starting with the most precise map you&apos;ll ever get of who you&apos;re actually here to be. Then we&apos;re making her impossible to ignore. 🪩
         </p>
       </Band>
 
@@ -110,10 +110,10 @@ export default function BadBtchReportPage() {
         <div className="max-w-4xl mx-auto">
           <div className="tag mb-5" style={{ color: "var(--pink)" }}>the bad b*tch manifesto</div>
           <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
-            the patriarchy wants us small. <span className="pk">living big is how we rebel.</span>
+            the patriarchy wants us small. <span className="pk">so we&apos;re getting HUGEEE.</span>
           </h2>
           <p style={{ color: "#fff", fontSize: 18, lineHeight: 1.7, marginTop: 26, maxWidth: 720, fontWeight: 500 }}>
-            A bad b*tch knows exactly who she is and has stopped asking permission to be her. She says what she wants out loud, she charges what she&apos;s worth, she takes up the space she needs, and she lets everybody else have whatever opinion they like about it.
+            A baddie knows exactly who she is and has stopped asking permission to be her. She says what she wants out loud, she charges what she&apos;s worth (then adds tax), she takes up ALL the space she needs, and she lets everybody else have whatever opinion they like about it, because their opinion was never her business anyway. 💖
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "34px 0 0", borderTop: "1.5px solid #fff" }}>
             {["want the thing", "make the money", "take up the space", "say the no", "go first"].map((l, i) => (
@@ -129,10 +129,10 @@ export default function BadBtchReportPage() {
         <div className="max-w-5xl mx-auto">
           <div className="tag mb-5">what&apos;s inside</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: "var(--dark)", lineHeight: 1 }}>
-            nine chapters. <span className="pk">one new you.</span>
+            nine chapters. <span className="pk">zero chill.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.7, marginTop: 22, maxWidth: 720, fontWeight: 500, color: "var(--dark)" }}>
-            Every chapter reads a specific part of your chart, sign AND house, so the woman on these pages is you, written in the language of how you&apos;re actually wired.
+            Every chapter reads a specific part of your chart, sign AND house, so the woman on these pages is YOU, written in the language of how you&apos;re actually wired, and some of it is going to read you for absolute filthhh. 🔥
           </p>
           <div style={{ display: "grid", gap: 22, marginTop: 40 }}>
             {ACTS.map((a) => {
@@ -166,7 +166,7 @@ export default function BadBtchReportPage() {
             your workbook, <span className="pk">written for your chart.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.7, marginTop: 22, maxWidth: 720, fontWeight: 500, color: "var(--dark)" }}>
-            Reading about her is lovely, and becoming her is the whole point, so the report ends in a workbook where every affirmation, prompt, move and challenge comes from your own placements.
+            Reading about her is fun, and becoming her is the whole entire point, so the report ends in a workbook where every affirmation, prompt, move and challenge comes from YOUR placements. Homework has never been this hot. 😏
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 32 }}>
             {WORKBOOK.map(([e, t, b]) => (
@@ -198,10 +198,10 @@ export default function BadBtchReportPage() {
             </h2>
             <div className="offer-copy" style={{ marginTop: 22 }}>
               <p>
-                I&apos;ve spent years watching brilliant women play supporting roles in their own lives, and I&apos;ve done it myself, so I wrote this report as the conversation I&apos;d have with you if we sat down with your chart between us and a very large coffee.
+                I&apos;ve spent years watching brilliant, hilarious, wildly capable women play supporting roles in their own lives (hi, I did it too, for waaaay too long), so I wrote this report as the conversation I&apos;d have with you if we sat down with your chart between us, a very large coffee and absolutely zero filter. ✨
               </p>
               <p>
-                Every word in it is mine, written for every sign and every house, then matched to your exact chart, so some of it will feel like a compliment and some of it will feel like being caught, and both of those are the point. Read it slowly, underline everything that makes your stomach flip, and then go and DO the final chapter, because that&apos;s where your actual life starts changing.
+                Every word in it is mine, written for every sign and every house, then matched to your exact chart, so some of it will feel like a compliment and some of it will feel like being caught red-handed, and both are the point. 💖 Read it slowly, underline everything that makes your stomach flip, and then go and DO the final chapter, because that&apos;s where your actual life starts changing.
               </p>
             </div>
           </div>
@@ -211,10 +211,10 @@ export default function BadBtchReportPage() {
       <Band tone="white" tag="this is for the woman who" title="is ready to" accent="become her.">
         <ForYouIf
           items={[
-            "Knows she's meant for a bigger life and is DONE waiting for permission to live it",
-            "Wants to make more money, be more visible and take up more space, in a way that feels completely like her",
-            "Has been called too much, too loud or too ambitious, and is ready to be MORE of all three",
-            "Wants a plan with dates on it, so becoming her starts this month",
+            "Knows she's meant for a MUCH bigger life and is sooo done waiting for anybody's permission to live it",
+            "Wants more money, more visibility and more space, in a way that feels completely, unapologetically HER 💸",
+            "Has been called too much, too loud or too ambitious, and is ready to be MOREEE of all three",
+            "Wants a plan with actual dates on it, so becoming her starts this month instead of \"one day\"",
           ]}
         />
       </Band>
@@ -238,7 +238,7 @@ export default function BadBtchReportPage() {
         accent="go meet her."
         body={
           <p>
-            The Bad B*tch Report is waitlist only right now, so add your name and your birth details, and you&apos;ll be the first to know the moment it opens, with first access before anybody else gets a look in. Your main character era starts here, my love. ✨
+            The Bad B*tch Report is waitlist only right now, so pop in your name and birth details and you&apos;ll be the very first to know the second it opens, with first access before anybody else gets a look in. Your main character era starts HERE, my love. ✨
           </p>
         }
       />
