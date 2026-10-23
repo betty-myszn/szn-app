@@ -53,7 +53,7 @@ export default function ReportsPage() {
               </h2>
               <p style={{ fontSize: 17, lineHeight: 1.7, marginTop: 16, fontWeight: 500 }}>{blurb}</p>
               <div style={{ fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: accent, marginTop: 22 }}>
-                {o.price ? `${o.price} · ` : ""}waitlist open →
+                {o.price ? `${o.price} · ` : ""}{o.cta === "join the waitlist" ? "waitlist open" : o.cta} →
               </div>
             </Link>
           ))}

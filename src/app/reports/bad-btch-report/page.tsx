@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import QuoteStrip from "@/components/QuoteStrip";
-import { OfferHero, Band, ForYouIf, WaitlistBand, OfferCards, Cover } from "@/components/Offer";
+import { OfferHero, Band, ForYouIf, OfferCards, Cover } from "@/components/Offer";
 
 // The Bad B*tch Report: becoming the main character of your own life, read from your birth chart.
 // Waitlist only, no price confirmed yet. The page runs as one arc: she sees herself, feels the ache,
@@ -9,11 +9,11 @@ import { OfferHero, Band, ForYouIf, WaitlistBand, OfferCards, Cover } from "@/co
 export const metadata: Metadata = {
   title: "The Bad B*tch Report, Your Personalised Astrology Blueprint for Becoming Her",
   description:
-    "The Bad B*tch Report reads your birth chart across nine chapters on money, visibility, desire, power, shadow and your big dream, with affirmations, journal prompts, two 30-day challenges and your main character dates. Join the waitlist.",
+    "The Bad B*tch Report reads your birth chart across nine chapters on money, visibility, desire, power, shadow and your big dream, with affirmations, journal prompts, two 30-day challenges and your main character dates. $88 intro price, in your inbox within 48 hours.",
   alternates: { canonical: "/reports/bad-btch-report" },
   openGraph: {
     title: "The Bad B*tch Report 💜",
-    description: "Become the main character of your own life. Your personalised astrology blueprint, waitlist open now.",
+    description: "Become the main character of your own life. Your personalised astrology blueprint, in your inbox within 48 hours.",
     url: "/reports/bad-btch-report",
     type: "website",
   },
@@ -21,6 +21,10 @@ export const metadata: Metadata = {
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
+
+// Stripe Payment Link. Birth details are collected on the checkout page; the webhook files the buyer
+// on the Brevo "Baddie Report PAID" list and sends the 48-hour email (src/lib/email/bad-btch-report.ts).
+const BUY_URL = "https://buy.stripe.com/5kQcN6f2TcM7gKm4GF7kc0A";
 
 // The nine chapters, grouped into the three acts of becoming her. Hooks are the report's own chapter openers.
 const ACTS = [
@@ -75,9 +79,9 @@ const NUMBERS = [
 
 const FAQ = [
   ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports. Sorry to your horoscope app. 😘"],
-  ["If you don't know your birth time", "Tick the box on the form and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
-  ["How you get it", "Your report arrives as a private web page you can read on your phone in bed, plus a beautifully designed PDF to save, print, highlight and scribble ALLLL over."],
-  ["What it costs", "$88 at the introductory price, and the waitlist gets first dibs on it before anybody else gets a look in. Being early has its perks, babe. 💖"],
+  ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["How you get it", "Your report lands in your inbox within 48 hours of buying, as a beautifully designed PDF to read in bed, print, highlight and scribble ALLLL over. You'll get a confirmation email with your birth details the second you pay, so you can check we've got them right."],
+  ["What it costs", "$88 at the introductory price, one payment, yours forever. Being early has its perks, babe. 💖"],
 ] as const;
 
 export default function BadBtchReportPage() {
@@ -85,6 +89,7 @@ export default function BadBtchReportPage() {
     <>
       <OfferHero
         offer="bad-btch-report"
+        ctaHref={BUY_URL}
         art={<Cover kind="bad-btch-report" />}
         tone="dark"
         kicker="the bad b*tch report · your personalised astrology blueprint"
@@ -92,7 +97,7 @@ export default function BadBtchReportPage() {
         accent="of your own damn life."
         intro={
           <p>
-            Babe. Your birth chart is the blueprint of the woman you were born to be, back before the world handed you a rulebook about being nice, small and low-maintenance 🙄 The Bad B*tch Report reads ALLLL of it across nine chapters and shows you who she is, what&apos;s been keeping you from her, and exactly how to step into her life: the money, the pleasure, the power and the big, outrageous dream you&apos;ve been waaaay too polite to say out loud. 💜
+            Babe. Your birth chart is the blueprint of the woman you were born to be, back before the world handed you a rulebook about being nice, small and low-maintenance 🙄 The Bad B*tch Report reads ALLLL of it across nine chapters and shows you who she is, what&apos;s been keeping you from her, and exactly how to step into her life: the money, the pleasure, the power and the big, outrageous dream you&apos;ve been waaaay too polite to say out loud. Order today and she&apos;s in your inbox within 48 hours. 💜
           </p>
         }
       />
@@ -232,16 +237,24 @@ export default function BadBtchReportPage() {
         </div>
       </Band>
 
-      <WaitlistBand
-        offer="bad-btch-report"
-        title="she's already in your chart."
-        accent="go meet her."
-        body={
-          <p>
-            The Bad B*tch Report is waitlist only right now, so pop in your name and birth details and you&apos;ll be the very first to know the second it opens, with first access before anybody else gets a look in. Your main character era starts HERE, my love. ✨
+      <section id="buy" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92 }}>
+        <div className="max-w-3xl mx-auto">
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
+            she&apos;s already in your chart.
+            <br />
+            <span className="pk">go meet her.</span>
+          </h2>
+          <p style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500, maxWidth: 640 }}>
+            Pop your birth details in at checkout and your Bad B*tch Report lands in your inbox within 48 hours, written for your chart, sign AND house, every single page. Your main character era starts HERE, my love. ✨
           </p>
-        }
-      />
+          <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 32 }}>
+            <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>
+              get my report
+            </a>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 intro price · in your inbox within 48 hours</span>
+          </div>
+        </div>
+      </section>
 
       <OfferCards exclude="bad-btch-report" />
     </>

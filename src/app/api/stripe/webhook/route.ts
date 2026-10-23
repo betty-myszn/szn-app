@@ -8,6 +8,7 @@ import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
+import { isBadBtchReportPrice, handleBadBtchReportPurchase } from "@/lib/email/bad-btch-report";
 
 export const runtime = "nodejs";
 
@@ -440,6 +441,13 @@ export async function POST(request: Request) {
         if (session.mode === "payment") {
           const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
           const priceId = lineItems.data[0]?.price?.id ?? null;
+
+          // The Bad B*tch Report is a one-off report, never a membership.
+          if (isBadBtchReportPrice(priceId)) {
+            await handleBadBtchReportPurchase(admin, session);
+            break;
+          }
+
           const tier = tierForPriceId(priceId);
 
           if (tier === "none") {
