@@ -41,7 +41,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     emoji: "💜",
     name: "The Bad B*tch Report",
     href: "/reports/bad-btch-report",
-    line: "your personalised confidence report: your power, your visibility, your most unapologetic self",
+    line: "your personalised astrology blueprint for becoming the main character of your own life",
     price: null,
     brevoEnv: "BREVO_LIST_BAD_BTCH_REPORT",
     brevoList: 22,
