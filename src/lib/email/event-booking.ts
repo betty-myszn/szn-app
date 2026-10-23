@@ -14,8 +14,8 @@ export function eventBookingHtml(event: CosmicEvent, firstName: string, bookedAt
     ? `lands in your inbox by ${event.reportBy.label}, the day before we go live,`
     : "lands in your inbox before we go live,";
   const greeting = firstName ? `Hiii ${esc(firstName)}, my love` : "Hiii my love";
-  // The time block: the headline time, then every city on its own row, plus a calendar link
-  // (Google shows it in her own timezone, which is the closest an email gets to "pick your time").
+  // The UK time only; every other city lives on the event page (#times). The calendar link opens in
+  // her own timezone.
   const calendarUrl = event.startsAt
     ? `https://calendar.google.com/calendar/render?${new URLSearchParams({
         action: "TEMPLATE",
@@ -24,19 +24,9 @@ export function eventBookingHtml(event: CosmicEvent, firstName: string, bookedAt
         details: `${event.subtitle}. Your joining link comes by email before we go live. ${url}`,
       }).toString().replace("%2F", "/")}`
     : "";
-  const cityRows = (event.localTimes ?? []).map((t) => {
-    const [place, time] = t.split(/:\s(.+)/);
-    return `<tr><td style="padding:7px 0;border-top:1px solid #1a1a1a;font-size:14px;font-weight:700;color:#1a1a1a;">${esc(place)}</td><td align="right" style="padding:7px 0;border-top:1px solid #1a1a1a;font-size:14px;color:#1a1a1a;">${esc(time ?? "")}</td></tr>`;
-  }).join("");
+  const link = "color:#1a1a1a;font-weight:700;text-decoration:underline;";
   const whenBlock = event.startsAt
-    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 20px;background:${event.heroBg ?? "#F1C7F9"};border:2px solid #1a1a1a;">
-<tr><td style="padding:20px 22px;font-family:Arial,sans-serif;">
-<div style="font-family:Poppins,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#1a1a1a;">when we go live</div>
-<div style="font-family:Poppins,Arial,sans-serif;font-size:22px;font-weight:800;line-height:1.2;color:#1a1a1a;margin:8px 0 14px;">${esc(event.dateLabel)}</div>
-${cityRows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${cityRows}</table>` : ""}
-<div style="margin-top:16px;"><a href="${calendarUrl}" style="display:inline-block;background:#1a1a1a;color:#ffffff;text-decoration:none;font-family:Poppins,Arial,sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:12px 20px;">add it to my calendar 📅</a></div>
-<div style="font-size:14px;line-height:1.6;color:#1a1a1a;margin-top:12px;">Your joining link comes by email before we go live.</div>
-</td></tr></table>`
+    ? `<p style="margin:0 0 16px;"><strong>When: ${esc(event.dateLabel)}</strong><br><a href="${url}#times" style="${link}">See the time in your city</a> · <a href="${calendarUrl}" style="${link}">Add it to my calendar 📅</a><br>Your joining link comes by email before we go live.</p>`
     : `<p style="margin:0 0 16px;">${esc(`When: ${event.dateLabel}. The exact time and your joining link land in this inbox the moment they're locked in.`)}</p>`;
   const body = [
     `You're IN for ${event.title}, ${event.subtitle}${event.edition ? `, ${event.edition}` : ""}, and I am SOOOO excited to make money magic with you.`,
