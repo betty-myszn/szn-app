@@ -261,7 +261,7 @@ export default function SeasonPersonalised() {
                     {embodiment.title[0]} <span className="pk">{embodiment.title[1]}</span>
                   </p>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.7, maxWidth: 560 }}>
-                    {embodiment.exercises.length} exercises from the {embodiment.source.title} workshop, made interactive so you can do them in your body any day of the szn: {embodiment.exercises.map((e) => e.label).join(", ")}.
+                    {embodiment.exercises.length} exercises {embodiment.source ? `from the ${embodiment.source.title} workshop` : `written for ${season.sign} szn`}, made interactive so you can do them in your body any day of the szn: {embodiment.exercises.map((e) => e.label).join(", ")}.
                   </p>
                 </div>
                 <span className="btn-pink" style={{ whiteSpace: "nowrap" }}>open the exercises &rarr;</span>

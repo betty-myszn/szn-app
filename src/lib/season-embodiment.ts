@@ -33,6 +33,9 @@ export interface DialExercise extends ExerciseBase {
   we: { label: string; sub: string };
   areas: string[];
   note: string;
+  /** Result lines for areas leaning to each end. Default to the Libra wording. */
+  weNote?: string;
+  meNote?: string;
 }
 
 export interface AuditExercise extends ExerciseBase {
@@ -40,6 +43,9 @@ export interface AuditExercise extends ExerciseBase {
   steps: string[];
   example: { bent: string; cost: number; reclaim: string };
   threshold: number;
+  /** First column header and placeholder. Default to the Libra wording. */
+  head?: string;
+  placeholder?: string;
 }
 
 export interface VenusExercise extends ExerciseBase {
@@ -78,8 +84,9 @@ export type EmbodimentExercise =
 
 export interface SeasonEmbodiment {
   sign: string;
-  /** Where the set comes from, with the replay to point at. */
-  source: { title: string; replayHref: string };
+  /** Where the set comes from, with the replay to point at. A set written for the szn rather
+   *  than taken from a workshop has none. */
+  source?: { title: string; replayHref: string };
   ticker: string[];
   title: [string, string];
   lede: string;
@@ -238,7 +245,126 @@ const LIBRA: SeasonEmbodiment = {
   ],
 };
 
-const EMBODIMENT: Record<string, SeasonEmbodiment> = { Libra: LIBRA };
+// Scorpio's set was written for the szn itself rather than taken from a workshop deck, so it has no
+// source. It reuses the dial, audit, retire and tapping kinds around Bad B*tch SZN: where you hand
+// your power away, where you white-knuckle it, the versions of you that kept you small, and the
+// "too intense" feeling that shows up the second you stop hiding.
+const SCORPIO: SeasonEmbodiment = {
+  sign: "Scorpio",
+  ticker: ["scorpio szn", "bad b*tch szn", "your power", "no more hiding", "astrotapping™"],
+  title: ["take it back.", "all of it."],
+  lede:
+    "Scorpio szn is Bad B*tch SZN, the month you find every place you handed your power to somebody else and bring it home. The Full Moon lands in Taurus this szn, right across the axis, so the whole season runs between what you're gripping and what you're finally ready to let go of. Do these any day of the szn: tap them, fill them in and save the good stuff to your journal.",
+  asks: "where did i give it away, and what am i taking back?",
+  chips: [
+    { label: "sun in", value: "scorpio" },
+    { label: "ruled by", value: "pluto + mars" },
+    { label: "full moon in", value: "taurus" },
+  ],
+  arrive: {
+    title: ["this is a space", "for the real you."],
+    steps: ["Hand on your belly.", "Feet flat on the floor.", "Three slow, deep breaths.", "Ask: what am I ready to stop hiding today?"],
+    rules: [
+      { head: "notifications off.", sub: "These few minutes are yours. Nobody else gets a say in them." },
+      { head: "the dark stuff is welcome.", sub: "Jealous, petty, furious, obsessed. It all gets to exist in here." },
+      { head: "write the real thing.", sub: "Your journal is for your eyes only. Say what you actually mean." },
+      { head: "feel it in your body.", sub: "Notice where you're gripping. Your body knows first." },
+    ],
+    band: "three breaths. then we go deep.",
+  },
+  exercises: [
+    {
+      kind: "dial",
+      id: "grip-or-give",
+      label: "grip or give it away",
+      minutes: 4,
+      ticker: ["your power", "grip it", "give it away", "where it leaks", "take it back"],
+      eyebrow: "where your power lives",
+      title: ["grip it", "or give it away?"],
+      intro: "Power leaks two ways: you hand it to someone else, or you hold it so tight nothing gets to move. Tap where you honestly sit right now in each part of your life, the answer you'd give if nobody was reading over your shoulder.",
+      me: { label: "grip · control it all", sub: "My plan. No surprises. Trust nobody." },
+      we: { label: "give it away · their call", sub: "Whatever they want. Shrink to fit." },
+      areas: ["love", "money", "family", "friends", "work", "my body"],
+      note: "Your power lives in the middle: held, never white-knuckled.",
+      weNote: "you've been handing your power over here. Start your power audit right here.",
+      meNote: "you've been white-knuckling this one. Scorpio szn wants you to loosen your grip and let it change.",
+      band: "the dot furthest from the middle is where the work is.",
+    },
+    {
+      kind: "audit",
+      id: "power-audit",
+      label: "the power audit",
+      minutes: 8,
+      ticker: ["bad b*tch szn", "the audit", "where i gave it", "what it cost", "take it back"],
+      eyebrow: "the bad b*tch szn",
+      title: ["the power", "audit."],
+      intro: "Every time you shrank to keep someone comfortable, you handed them a little piece of your power. This one shows you exactly who's been holding it, and what you're taking back.",
+      steps: [
+        "List three places you gave your power away: a person, a habit or a story.",
+        "Score what each one cost YOU, 0 to 10.",
+        "Anything 7 or above: write how you're taking it back.",
+      ],
+      example: { bent: "Let his mood decide how my whole weekend went.", cost: 8, reclaim: "Making my plans first and inviting him into them." },
+      threshold: 7,
+      head: "where i gave it away",
+      placeholder: "where I handed my power over",
+      band: "your power. your call. effective now.",
+      journal: { prompt: "The power audit: where I gave my power away, what it cost me and how I'm taking it back.", type: "shadow work" },
+    },
+    {
+      kind: "retire",
+      id: "retire-the-nice-girl",
+      label: "retire the nice girl",
+      minutes: 5,
+      ticker: ["the identity shift", "thank her", "release her", "who i am now", "effective today"],
+      eyebrow: "the identity shift",
+      title: ["retire the", "nice girl."],
+      intro: "The version of you who hid it, softened it and kept everyone comfortable had a job. She kept you safe. Pick the one Scorpio szn is done with and write her a proper retirement letter. She's earned it.",
+      shifts: [
+        { was: "The one who hides it.", becoming: "the one who shows it." },
+        { was: "The over-explainer.", becoming: "the one whose no is a full sentence." },
+        { was: "The nice girl.", becoming: "the powerful one." },
+        { was: "The one who keeps the peace.", becoming: "the one who keeps her power." },
+        { was: "The one who saw it coming and said nothing.", becoming: "the one who trusts what she knows." },
+      ],
+      band: "thank her. then let her go.",
+      journal: { prompt: "My notice of retirement: the version of me I'm letting go of this Scorpio szn.", type: "shadow work" },
+    },
+    {
+      kind: "tapping",
+      id: "tap-out-too-intense",
+      label: "tap out the “too intense”",
+      minutes: 6,
+      ticker: ["astrotapping™", "clear it", "tap it out", "the too intense feeling", "embody her"],
+      eyebrow: "astrotapping™",
+      title: ["tap out the", "“too intense.”"],
+      intro: "It shows up the second you stop hiding how deep you feel and how much you want. Rate the feeling first, then tap through the points with the script below.",
+      howItWorks: "Two fingers. Gentle, steady taps, about seven on each point. Say each line out loud and let yourself feel it.",
+      points: [
+        { name: "karate chop", where: "Outer edge of your hand" },
+        { name: "eyebrow", where: "Where your brow begins" },
+        { name: "side of eye", where: "On the bone, outer corner" },
+        { name: "under eye", where: "On the cheekbone" },
+        { name: "under nose", where: "Above your top lip" },
+        { name: "chin", where: "The crease below your lip" },
+        { name: "collarbone", where: "Just below the collarbone" },
+        { name: "under arm", where: "A hand below the armpit" },
+        { name: "top of head", where: "The crown of your head" },
+      ],
+      script: { ticker: ["astrotapping™", "the script", "name it", "soften it", "claim it"], title: "say it. tap it. let it move." },
+      setup: "“Even though I've been told I'm too intense, too much and too deep, I love and accept myself and my depth is safe with me.”",
+      rounds: [
+        { name: "name it", lines: ["This too intense feeling.", "Tone it down, they said.", "Scared I'll scare them off.", "Safer to keep it hidden.", "Too deep. Too dark. Too much."] },
+        { name: "soften it", lines: ["What if my depth is the gift?", "What if the right people can handle me?", "What if showing it is safe now?", "This feeling can soften now.", "I'm safe to be all of me."] },
+        { name: "claim it", lines: ["My intensity is my power.", "I take my power back now.", "The real me is safe to be seen.", "I'm stepping into my Bad B*tch era.", "So it is."] },
+      ],
+      band: "rate it again. 0 to 10. notice what moved.",
+      journal: { prompt: "Astrotapping™ the “too intense” feeling: where it started and where it landed.", type: "win" },
+    },
+  ],
+};
+
+const EMBODIMENT: Record<string, SeasonEmbodiment> = { Libra: LIBRA, Scorpio: SCORPIO };
 
 export function getSeasonEmbodiment(sign: string): SeasonEmbodiment | null {
   return EMBODIMENT[sign] ?? null;

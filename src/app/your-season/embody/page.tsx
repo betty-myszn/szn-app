@@ -279,7 +279,7 @@ function Hero({ set, houseLine }: { set: SeasonEmbodiment; houseLine: string }) 
           </div>
         </div>
       </div>
-      <Strip items={[set.source.title, "a my szn workshop", "made interactive"]} />
+      <Strip items={set.source ? [set.source.title, "a my szn workshop", "made interactive"] : [`${set.sign.toLowerCase()} szn`, "a my szn exclusive", "made interactive"]} />
     </section>
   );
 }
@@ -474,12 +474,12 @@ function Dial({ ex, index, value, onChange }: { ex: DialExercise; index: number;
                 <div style={{ ...smallCaps, color: "var(--pink)", marginBottom: 8 }}>your work is in {listJoin(flagged)}.</div>
                 {weSide.length > 0 && (
                   <p style={{ margin: "0 0 6px", fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.8)" }}>
-                    <strong style={{ color: "#fff" }}>{listJoin(weSide)}:</strong>{" "}the we has been winning. Start your compromise audit right here.
+                    <strong style={{ color: "#fff" }}>{listJoin(weSide)}:</strong>{" "}{ex.weNote ?? "the we has been winning. Start your compromise audit right here."}
                   </p>
                 )}
                 {meSide.length > 0 && (
                   <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.8)" }}>
-                    <strong style={{ color: "#fff" }}>{listJoin(meSide)}:</strong>{" "}you&apos;ve been running this one solo. Libra szn wants you to let somebody meet you there.
+                    <strong style={{ color: "#fff" }}>{listJoin(meSide)}:</strong>{" "}{ex.meNote ?? "you've been running this one solo. Libra szn wants you to let somebody meet you there."}
                   </p>
                 )}
               </>
@@ -539,7 +539,7 @@ function Audit({ ex, index, sign, startWith }: { ex: AuditExercise; index: numbe
         <div>
           <div style={{ border: RULE }}>
             <div className="hidden md:grid grid-cols-[1.3fr_0.9fr_1.3fr] gap-4" style={{ padding: "12px 16px", borderBottom: RULE }}>
-              <span style={headCell}>where i bent</span>
+              <span style={headCell}>{ex.head ?? "where i bent"}</span>
               <span style={headCell}>cost</span>
               <span style={headCell}>what i&apos;m reclaiming</span>
             </div>
@@ -566,7 +566,7 @@ function Audit({ ex, index, sign, startWith }: { ex: AuditExercise; index: numbe
                       rows={2}
                       value={row.bent}
                       onChange={(e) => update(i, { bent: e.target.value })}
-                      placeholder="where I said yes to keep the peace"
+                      placeholder={ex.placeholder ?? "where I said yes to keep the peace"}
                       aria-label={`Compromise ${i + 1}: where I bent`}
                       style={field}
                     />
@@ -1140,10 +1140,14 @@ export default function EmbodyPage() {
       <section className="px-5 md:px-8 py-10" style={{ background: "var(--dark)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-5 flex-wrap">
           <p style={{ margin: 0, fontSize: 14, color: "rgba(255,255,255,0.75)", maxWidth: 520 }}>
-            These come from the <strong style={{ color: "#fff" }}>{set.source.title}</strong> workshop. The replay walks you through every one of them live.
+            {set.source ? (
+              <>These come from the <strong style={{ color: "#fff" }}>{set.source.title}</strong> workshop. The replay walks you through every one of them live.</>
+            ) : (
+              <>Come back to these all szn. Every time you do one, the next rep gets easier and your power gets louder.</>
+            )}
           </p>
           <div className="flex gap-3 flex-wrap">
-            <Link href={set.source.replayHref} className="btn-pink">watch the replay</Link>
+            {set.source && <Link href={set.source.replayHref} className="btn-pink">watch the replay</Link>}
             <Link
               href="/dashboard"
               className="no-underline"
