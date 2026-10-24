@@ -109,18 +109,8 @@ const PILLARS = [
     ],
   },
   {
-    emoji: "🎨",
-    title: "05. Creative magic",
-    img: PICS.creative,
-    body: [
-      "Vision boards, spell jars, magical art and journaling woven into our circles and rituals, with zero pressure to be good at any of it.",
-      "Your self-expression gets loud again, and the woman who makes things purely for fun starts making BIG things happen everywhere else too.",
-      "Perfectionism can stay outside with the patriarchy.",
-    ],
-  },
-  {
     emoji: "🪩",
-    title: "06. Sisterhood",
+    title: "05. Sisterhood",
     img: PICS.people,
     body: [
       "A coven of women who celebrate your wins, get your particular brand of weird and cheer you on through every single reinvention.",
@@ -309,7 +299,7 @@ export default function BaddieCovenPage() {
 
       {/* 05 · The six pillars, one tabbed panel. */}
       <Section bg="#fff">
-        <Head n="05" tag="inside the coven 🪄" title="six ways we're" accent="making magic." />
+        <Head n="05" tag="inside the coven 🪄" title="five ways we're" accent="making magic." />
         <CovenExplorer items={PILLARS} />
       </Section>
 
