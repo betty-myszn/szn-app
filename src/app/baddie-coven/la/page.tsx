@@ -52,7 +52,7 @@ export default function LaCovenPage() {
               title: "The online coven",
               body: (
                 <>
-                  <p style={{ margin: "0 0 10px" }}>Monthly creative classes, the astrology of the month, astrotapping™, moon rituals, witchy workshops, shadow work prompts and the coven chat rooms, from anywhere in the world.</p>
+                  <p style={{ margin: "0 0 10px" }}>One live coven circle a month, your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and the coven chat rooms, from anywhere in the world.</p>
                   <Link href="/baddie-coven" style={{ color: "var(--pink)", fontWeight: 800, textDecoration: "underline" }}>see the online coven →</Link>
                 </>
               ),

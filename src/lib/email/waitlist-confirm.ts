@@ -30,8 +30,8 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
     subject: "Welcome to the coven, witch 🦄",
     heading: "your name is in the book",
     body: [
-      "You're on the waitlist for The Baddie Coven, our creative, cosmic clubhouse, and I'm OBSESSED that you're here.",
-      "Monthly creative classes, astrology, manifestation, rituals, a little witchcraft and a whole community of women bringing more magic into their everyday lives, all in one place.",
+      "You're on the waitlist for The Baddie Coven, our magical coven, and I'm OBSESSED that you're here.",
+      "A live coven circle every month, a platform personalised to your birth chart, moon rituals, shadow work, a little witchcraft and a whole community of women bringing more magic into their everyday lives, all in one place.",
       "The doors, the dates and every magical detail come to this list before anyone else hears a whisper.",
     ],
   },

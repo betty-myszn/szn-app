@@ -113,7 +113,7 @@ const PILLARS = [
     title: "05. Creative magic",
     img: PICS.creative,
     body: [
-      "Monthly creative classes for vision boards, spell jars, magical art, journaling and beautiful handmade objects, with zero pressure to be good at any of it.",
+      "Vision boards, spell jars, magical art and journaling woven into our circles and rituals, with zero pressure to be good at any of it.",
       "Your self-expression gets loud again, and the woman who makes things purely for fun starts making BIG things happen everywhere else too.",
       "Perfectionism can stay outside with the patriarchy.",
     ],
@@ -132,11 +132,10 @@ const PILLARS = [
 
 // 06: what a month inside actually holds. Only what Betty has described; dates go to the waitlist.
 const MONTH = [
-  ["🎨", "a creative class", "Vision boards, spell jars, magical art or a handmade something, made together, messily and joyfully."],
-  ["🪐", "the astrology of the month", "What's happening in the sky, what it means for YOUR chart and how to work with it instead of getting steamrolled by it."],
+  ["🕯️", "one coven circle a month", "Once a month the whole coven gathers live for our circle, where we work with that month's magic together, share what's moving and leave with our power turned UP."],
+  ["📱", "your personalised platform", "A platform built around YOUR birth chart and Human Design, so the astrology of the month, your season and everything you open is written for you, every single day."],
   ["🫶", "astrotapping™", "We take the theme of each month's astrology and tap it into your body with astrotapping™, so you EMBODY the sky instead of just reading about it."],
-  ["🌙", "moon rituals", "Lunar rituals to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
-  ["🕯️", "witchy workshops", "Deep dives into a practice, from tarot to candle magic to a full-on witchcraft workshop."],
+  ["🌙", "moon rituals", "Lunar rituals waiting in your platform for every new and full moon, to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
   ["🌑", "shadow work prompts", "Personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion."],
   ["💬", "coven chat rooms", "Private chat rooms for the coven, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
 ];
@@ -158,7 +157,7 @@ const QUOTES = ["maya", "georgia", "aisha", "lauren", "priya", "zara"];
 
 // 11: the practical bits. Nothing here promises a price or a date that isn't confirmed.
 const FAQS = [
-  ["How does the Baddie Coven work?", "Every month brings creative classes, the astrology of the month, moon rituals, witchy workshops, shadow work prompts and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
+  ["How does the Baddie Coven work?", "Every month brings one live coven circle, plus your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
   ["I'm a total beginner. Can I join?", "YESSS. You can be a serious businesswoman who casts spells, an astrologer who loves fashion or somebody who bought her very first tarot deck this week. Curiosity is the only requirement."],
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
@@ -241,7 +240,7 @@ export default function BaddieCovenPage() {
           <>
             <p>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
-              {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🎨 creative classes", "🌕 moon rituals"].map((t) => (
+              {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🕯️ monthly coven circle", "🌕 moon rituals"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
               ))}
             </div>

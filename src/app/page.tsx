@@ -211,7 +211,7 @@ export default function Home() {
             a clubhouse <span style={{ color: "#fff" }}>for witches.</span>
           </h2>
           <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 24, maxWidth: 740, fontWeight: 600 }}>
-            Our ongoing creative, cosmic membership, with monthly creative classes, astrology, manifestation, rituals, witchcraft and a community of women who connect, create and bring a ridiculous amount of magic into their everyday lives together.
+            Our ongoing magical membership, with a live coven circle every month, a platform personalised to your birth chart and Human Design, moon rituals, shadow work, chat rooms and a community of women who bring a ridiculous amount of magic into their everyday lives together.
           </p>
           <div style={{ marginTop: 30 }}>
             <Button href="/baddie-coven">join the coven waitlist</Button>
