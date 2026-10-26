@@ -123,12 +123,12 @@ const METHOD = [
 ];
 
 // A sample day: Betty confirmed meditations, shadow work, Human Design + astrology, witchy things
-// and lots of downtime (26 Oct 2026). The real schedule goes to accepted women.
+// lots of downtime, yoga and sound baths (26 Oct 2026). The real schedule goes to accepted women.
 const DAY = [
-  { when: "sunrise", what: "Meditation and slow, sensual movement to wake your body up before your phone gets a look in." },
+  { when: "sunrise", what: "Yoga, meditation and slow, sensual movement to wake your body up before your phone gets a look in." },
   { when: "late morning", what: "The big session of the day, whether that's shadow work, a deep dive into your chart or a Human Design workshop on how YOU are built to make decisions and money." },
   { when: "afternoon", what: "Downtime, and LOTS of it. The pool, a book, a nap, a journal or a long lunch with your new favourite women, because integration needs space." },
-  { when: "sunset", what: "Witchy hour: candle magic, spell jars, moon work and burning whatever you're done carrying into 2027." },
+  { when: "sunset", what: "Witchy hour: sound baths, candle magic, spell jars, moon work and burning whatever you're done carrying into 2027." },
   { when: "evening", what: "Long, beautiful dinners where the conversation goes everywhere and nobody wants to go to bed." },
 ];
 
@@ -226,6 +226,16 @@ export default function RetreatPage() {
             </div>
           ))}
         </div>
+      </Band>
+
+      <Band tone="pinkLight" tag="just for you 💜" title="every single woman" accent="gets her own...">
+        <ForYouIf
+          items={[
+            "90-minute one-on-one session with me, just the two of us, going deep on your chart, your Human Design and exactly what's standing between you and the 2027 version of you.",
+            "Separate one-on-one energy healing session, to clear whatever your body and your energy have been holding onto so there's room for everything you're calling in.",
+          ]}
+        />
+        <p style={{ marginTop: 22 }}><strong>On top of that, there are yoga sessions and sound baths built into the retreat, so your body gets as much love as your mindset.</strong></p>
       </Band>
 
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
