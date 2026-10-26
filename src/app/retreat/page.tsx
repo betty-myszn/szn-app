@@ -3,7 +3,8 @@ import { OfferHero, Band, Tiles, ForYouIf, WaitlistBand, OfferCards, HeroArt } f
 
 // The Bad B*tch Manifestation Retreat: the in-person experience. Waitlist only. Venue booked 26 Oct
 // 2026: an oceanfront estate on Soliman Bay, Tulum, 4 to 9 January 2027, for 10 to 15 women with a
-// deposit. Price still goes to the waitlist first.
+// deposit. Room prices set 26 Oct 2026 from Betty's £3,600 private room, converted to dollars;
+// $1,000 deposit, balance due 1 December 2026.
 
 export const metadata: Metadata = {
   title: "The Bad B*tch Manifestation Retreat, Tulum, 4 to 9 January 2027",
@@ -136,7 +137,25 @@ const DETAILS = [
   { label: "where + when", body: "A private oceanfront estate on Soliman Bay in Tulum, Mexico, from Monday 4 to Saturday 9 January 2027, so you walk into the new year already being her." },
   { label: "who", body: "10 to 15 women, hand-selected, so the group stays small enough for every single one of you to be seen, heard and properly looked after." },
   { label: "before we fly", body: "Group calls in the run-up to the retreat, so you get to know the other women and arrive already giggling with your new besties." },
-  { label: "your spot", body: "A deposit secures your place once you're accepted. Pricing goes to the waitlist first." },
+  { label: "your spot", body: "A $1,000 deposit secures your room once you're accepted, with the balance due by 1 December 2026." },
+];
+
+// Answers only state what Betty has confirmed; anything unknown (refunds, the meal plan) stays vague.
+const FAQ = [
+  { q: "Do I need to know anything about astrology or Human Design?", a: "Not even a little bit, babe. I'll have read your chart and your Human Design before you land, and I'll explain everything in plain English, so all you need to bring is your birth time and an open heart." },
+  { q: "Can I come on my own?", a: "YESSS, and you absolutely should. We do group calls before the retreat so you get to know the other women first, which means you'll be walking into that villa already knowing who you can't wait to hug." },
+  { q: "I've never done shadow work, yoga or a sound bath. Is that okay?", a: "Totally okay. Everything is designed for real women with real lives, so whether you're a total beginner or you've been doing this for years, you'll be held, guided and never pushed further than feels right for you." },
+  { q: "I'm an introvert. Will it be too much?", a: "There's LOTS of downtime built into every single day, so you can join in when you feel social and disappear to a hammock with a book when you need to recharge. Nobody will ever make you share more than you want to." },
+  { q: "Where do I fly into?", a: "The nearest airport is Tulum International, about 55km from the villa, and Cancún is the other option if you want more flight choices. Full travel details go to every woman who gets a spot." },
+  { q: "Will I share a room?", a: "Only if you want to. There are five private rooms, plus shared twin and four-bed rooms for a lower price, and nobody ever shares a bed. You'll find all three with photos in the rooms section above." },
+  { q: "What about food and dietary needs?", a: "Tell us about any dietary needs or allergies when you apply and we'll make sure you're looked after. The full meal plan goes to every woman who gets a spot." },
+  { q: "How do I get a spot?", a: "Join the waitlist below and we'll chat to make sure the retreat is right for you. Once you're accepted, pick your room and a $1,000 deposit secures it, with the balance due by 1 December 2026." },
+];
+
+const ROOMS = [
+  { name: "your own room", price: "$4,750", img: "/retreat/room-private.jpg", alt: "A private bedroom with an extra-large double bed and doors out to the sea", beds: "An extra-large double bed all to yourself", body: "Five of these, for the woman who wants to spread out, sleep diagonally and have her own sanctuary to come back to after the big sessions." },
+  { name: "shared twin", price: "$3,500", img: "/retreat/room-twin.jpg", alt: "A twin bedroom with two double beds", beds: "Your own bed in a room for two", body: "Share with one other woman, each with your own bed (most of these are doubles), which is perfect if you're coming with a friend or want a built-in late-night chat buddy." },
+  { name: "shared four-bed", price: "$2,950", img: "/retreat/room-quad.jpg", alt: "A four-bed room with bunk beds", beds: "Your own single bed in a room for four", body: "The full sleepover energy at the best price, sharing with three other women and all the giggling that comes with it." },
 ];
 
 function JoinButton({ children }: { children: React.ReactNode }) {
@@ -285,7 +304,7 @@ export default function RetreatPage() {
           items={[
             "Ten bedrooms and ten bathrooms, so there's room to spread out, get ready together and still have your own space when you need it.",
             "A private pool, a hot tub and a lush tropical garden for all that glorious downtime.",
-            "Staff on site, so the cooking and the clearing up are handled and your only job is YOU.",
+            "Staff on site, so the clearing up is handled and your only job is YOU.",
           ]}
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" style={{ marginTop: 30 }}>
@@ -296,7 +315,27 @@ export default function RetreatPage() {
         </div>
       </Band>
 
-      <Band tag="the details" title="the" accent="need-to-knows.">
+      <Band tag="pick your room 🛏️" title="choose your" accent="room.">
+        <p>Every room comes with the full retreat: five nights at the villa, your 90-minute one-on-one with me, your energy healing session, every session, ritual, yoga class and sound bath, and the group calls before we fly.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 28 }}>
+          {ROOMS.map((r) => (
+            <div key={r.name} style={{ border: "var(--border)", borderRadius: 18, background: "var(--pink-light)", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={r.img} alt={r.alt} loading="lazy" style={{ width: "100%", aspectRatio: "3 / 2", objectFit: "cover", display: "block", borderBottom: "var(--border)" }} />
+              <div style={{ padding: "18px 20px 22px" }}>
+                <div style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>{r.name}</div>
+                <div style={{ fontFamily: pp, fontSize: 34, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{r.price}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, marginTop: 2 }}>per person</div>
+                <div style={{ fontSize: 15, fontWeight: 800, marginTop: 14 }}>{r.beds}</div>
+                <p style={{ fontSize: 15, lineHeight: 1.6, margin: "6px 0 0" }}>{r.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ marginTop: 26 }}><strong>A $1,000 deposit secures your room once you&apos;re accepted, with the balance due by 1 December 2026.</strong></p>
+      </Band>
+
+      <Band tone="lav" tag="the details" title="the" accent="need-to-knows.">
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ margin: "28px 0 0" }}>
           {DETAILS.map((d) => (
             <div key={d.label} style={{ border: "var(--border)", borderRadius: 18, padding: "18px 20px 20px", background: "var(--pink-light)" }}>
@@ -305,6 +344,17 @@ export default function RetreatPage() {
             </div>
           ))}
         </dl>
+      </Band>
+
+      <Band tone="pinkLight" tag="faq" title="all your" accent="questions.">
+        <div style={{ marginTop: 26, display: "grid", gap: 12 }}>
+          {FAQ.map((f) => (
+            <details key={f.q} style={{ background: "#fff", border: "var(--border)", borderRadius: 18, padding: "16px 20px" }}>
+              <summary style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, cursor: "pointer" }}>{f.q}</summary>
+              <p style={{ margin: "10px 0 0" }}>{f.a}</p>
+            </details>
+          ))}
+        </div>
       </Band>
 
       <WaitlistBand
