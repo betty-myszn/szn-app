@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { OfferHero, Band, Tiles, ForYouIf, WaitlistBand, OfferCards, HeroArt } from "@/components/Offer";
 
-// The Bad B*tch Manifestation Retreat: the in-person experience. Waitlist only. Tulum, January 2027,
-// 10 to 15 women and a deposit are confirmed (26 Oct 2026); price and exact dates go to the waitlist first.
+// The Bad B*tch Manifestation Retreat: the in-person experience. Waitlist only. Venue booked 26 Oct
+// 2026: an oceanfront estate on Soliman Bay, Tulum, 4 to 9 January 2027, for 10 to 15 women with a
+// deposit. Price still goes to the waitlist first.
 
 export const metadata: Metadata = {
-  title: "The Bad B*tch Manifestation Retreat, Tulum, January 2027",
+  title: "The Bad B*tch Manifestation Retreat, Tulum, 4 to 9 January 2027",
   description:
-    "The Bad B*tch Manifestation Retreat is a luxury villa retreat in Tulum, Mexico, for 10 to 15 women in January 2027: astrology, Human Design, somatics, shadow work, manifestation, hypnosis and embodiment. Join the waitlist.",
+    "The Bad B*tch Manifestation Retreat is an oceanfront estate retreat in Tulum, Mexico, for 10 to 15 women from 4 to 9 January 2027: astrology, Human Design, somatics, shadow work, manifestation, hypnosis and embodiment. Join the waitlist.",
   alternates: { canonical: "/retreat" },
   openGraph: {
     title: "The Bad B*tch Manifestation Retreat, Tulum 🌴",
@@ -123,7 +124,7 @@ const DAY = [
 ];
 
 const DETAILS = [
-  { label: "where + when", body: "A luxury villa in Tulum, Mexico, in January 2027, so you walk into the new year already being her. Exact dates go to the waitlist first." },
+  { label: "where + when", body: "A private oceanfront estate on Soliman Bay in Tulum, Mexico, from Monday 4 to Saturday 9 January 2027, so you walk into the new year already being her." },
   { label: "who", body: "10 to 15 women, hand-selected, so the group stays small enough for every single one of you to be seen, heard and properly looked after." },
   { label: "before we fly", body: "Group calls in the run-up to the retreat, so you get to know the other women and arrive already giggling with your new besties." },
   { label: "your spot", body: "A deposit secures your place once you're accepted. Pricing goes to the waitlist first." },
@@ -143,7 +144,7 @@ export default function RetreatPage() {
       <OfferHero
         offer="retreat"
         art={<HeroArt src="/cosmic-planet.png" />}
-        kicker="tulum, mexico · january 2027 💸🪩"
+        kicker="tulum, mexico · 4 to 9 january 2027 💸🪩"
         title="the bad b*tch"
         accent="manifestation retreat."
         intro={
@@ -259,6 +260,17 @@ export default function RetreatPage() {
         <p style={{ marginTop: 22 }}><strong>Most importantly, a renewed commitment to creating a life that feels outrageously, wonderfully YOURS.</strong></p>
       </Band>
 
+      <Band tone="pinkLight" tag="where you'll be staying 🌊" title="an oceanfront estate" accent="on soliman bay.">
+        <p>For five nights we&apos;re taking over a private oceanfront estate in Tulum, right on the turquoise water of Soliman Bay, with the beach a few steps from your door.</p>
+        <ForYouIf
+          items={[
+            "Ten bedrooms and ten bathrooms, so there's room to spread out, get ready together and still have your own space when you need it.",
+            "A private pool, a hot tub and a lush tropical garden for all that glorious downtime.",
+            "Staff on site, so the cooking and the clearing up are handled and your only job is YOU.",
+          ]}
+        />
+      </Band>
+
       <Band tag="the details" title="the" accent="need-to-knows.">
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ margin: "28px 0 0" }}>
           {DETAILS.map((d) => (
@@ -276,8 +288,8 @@ export default function RetreatPage() {
         accent="makes everything sexier."
         body={
           <>
-            <p style={{ margin: "0 0 14px" }}>The villa? The experiences? The surprises?</p>
-            <p style={{ margin: "0 0 14px" }}>We&apos;re putting together something seriously special, with the villa, dates, experiences and all the delicious details announced to our waitlist first.</p>
+            <p style={{ margin: "0 0 14px" }}>The experiences? The surprises?</p>
+            <p style={{ margin: "0 0 14px" }}>We&apos;re putting together something seriously special, with the experiences and all the delicious details announced to our waitlist first.</p>
             <p style={{ margin: "0 0 14px" }}>If your whole body is already screaming YES, consider that your invitation.</p>
             <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Come be a little bit F*CKING MUCH with us.</p>
             <p style={{ margin: 0 }}>Your next favourite life experience might be closer than you think. 💜 🪩 🦄 ✨</p>
