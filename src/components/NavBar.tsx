@@ -51,8 +51,9 @@ const freeLinks = [
 
 // The guest menu (13 Oct 2026): WORK WITH ME holds every offer, then the podcast and the book stand
 // alone, then EXPLORE for browsing. The logo is home, so there's no separate home link.
-// Podcast and book now live in the explore menu, so guests get no loose links in the bar.
-const guestLinks: { href: string; label: string }[] = [];
+// Podcast and book now live in the explore menu. The retreat stands alone in the bar (Betty,
+// 26 Oct 2026), between the coven and explore, so it has left the WORK WITH ME menu.
+const guestLinks: { href: string; label: string }[] = [{ href: "/retreat", label: "the retreat 🌴" }];
 
 type MenuItem = { href: string; label: string; indent?: boolean; children?: MenuItem[] };
 
@@ -68,7 +69,6 @@ const workMenu: MenuItem[] = [
   },
   { href: "/baddie-sessions", label: "the baddie sessions (1:1)" },
   { href: "/mastermind", label: "the mastermind" },
-  { href: "/retreat", label: "the bad b*tch retreat" },
 ];
 
 // The coven has its own menu: online (anywhere) and in person in LA, priced separately.
