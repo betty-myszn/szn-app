@@ -5,7 +5,7 @@ import { WaitlistBand, OfferCards } from "@/components/Offer";
 // The Bad B*tch Manifestation Retreat: the in-person experience. Application only (26 Oct 2026). Venue booked 26 Oct
 // 2026: an oceanfront estate on Soliman Bay, Tulum, 4 to 9 January 2027, for 10 to 15 women with a
 // deposit. Room prices set 26 Oct 2026 from Betty's £3,600 private room, converted to dollars;
-// $1,000 deposit, balance due 1 December 2026.
+// $1,000 deposit, then a payment plan for the rest (no fixed balance date, Betty 26 Oct 2026).
 //
 // Redesigned 26 Oct 2026 because the long copy bands read as a document: the page is now photo-led,
 // with Betty's copy cut down to its strongest lines and the facts shown as chips, grids and timelines.
@@ -160,7 +160,7 @@ const FAQ = [
   { q: "Where do I fly into?", a: "The nearest airport is Tulum International, about 55km from the villa, and Cancún is the other option if you want more flight choices. Full travel details go to every woman who gets a spot." },
   { q: "Will I share a room?", a: "Only if you want to. There are five private rooms, plus shared twin and four-bed rooms for a lower price, and nobody ever shares a bed." },
   { q: "What about food and dietary needs?", a: "Tell us about any dietary needs or allergies when you apply and we'll make sure you're looked after. The full meal plan goes to every woman who gets a spot." },
-  { q: "How do I get a spot?", a: "Apply below and I'll read your application myself, then we'll chat to make sure the retreat is right for you. Once you're accepted, pick your room and a $1,000 deposit secures it, with the balance due by 1 December 2026." },
+  { q: "How do I get a spot?", a: "Apply below and I'll read your application myself, then we'll chat to make sure the retreat is right for you. Once you're accepted, pick your room and a $1,000 deposit secures it. Pay the rest in full or spread it over a payment plan, whatever feels best for you." },
 ];
 
 // The retreat is curated, so the waitlist form is an application (Betty, 26 Oct 2026). Answers land
@@ -498,7 +498,7 @@ export default function RetreatPage() {
           </div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4" style={{ marginTop: 26, background: "var(--dark)", color: "#fff", border: "var(--border)", borderRadius: 20, padding: "22px 24px" }}>
             <p style={{ margin: 0, fontSize: 17, lineHeight: 1.5, fontWeight: 600 }}>
-              <strong style={{ color: "var(--pink)" }}>$1,000 deposit</strong>{" "}secures your room once you&apos;re accepted. Balance due by 1 December 2026.
+              <strong style={{ color: "var(--pink)" }}>$1,000 deposit</strong>{" "}secures your room once you&apos;re accepted, then pay the rest in full or on a payment plan.
             </p>
             <Btn href="#waitlist">apply now</Btn>
           </div>
@@ -586,7 +586,7 @@ export default function RetreatPage() {
         body={
           <>
             <p style={{ margin: "0 0 14px" }}>This is a hand-picked group, so it starts with a little application. I read every single one myself, then we&apos;ll chat to make sure Tulum is right for you.</p>
-            <p style={{ margin: "0 0 14px" }}>Once you&apos;re accepted, a $1,000 deposit secures your room, with the balance due by 1 December 2026.</p>
+            <p style={{ margin: "0 0 14px" }}>Once you&apos;re accepted, a $1,000 deposit secures your room, and payment plans are available for the rest.</p>
             <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Come be a little bit F*CKING MUCH with us. 💜 🪩 🦄 ✨</p>
           </>
         }
