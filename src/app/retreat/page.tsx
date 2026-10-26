@@ -90,7 +90,7 @@ const GALLERY_ALTS = [
 const GALLERY = GALLERY_ALTS.map((alt, i) => ({ src: `/retreat/gallery/${String(i + 1).padStart(2, "0")}.jpg`, alt }));
 
 // Hero facts, shown as chips so the essentials land before any scrolling.
-const FACTS = ["📍 tulum, mexico", "🗓️ 4 to 9 january 2027", "👯 10 to 15 hand-picked women", "💸 from $2,950"];
+const FACTS = ["📍 tulum, mexico", "🗓️ 4 to 9 january 2027", "💜 3 one-on-ones with betty", "👯 10 to 15 hand-picked women", "💸 from $2,950"];
 
 const MORE = ["more money", "more freedom", "more pleasure", "more confidence", "more MAGIC"];
 
@@ -109,6 +109,7 @@ const INCLUDED = [
     phase: "in tulum 🌴",
     items: [
       { icon: "🌊", title: "5 nights on the ocean", body: "A private oceanfront estate on Soliman Bay with a pool, hot tub and the beach on your doorstep." },
+      { icon: "🥂", title: "Breakfast + 2 special dinners", body: "Breakfast every morning, a welcome dinner and a farewell celebration dinner, plus coffee, juices and snacks all week." },
       { icon: "💜", title: "90 minutes one-on-one with me", body: "Going deep on your chart, your Human Design and your 2027." },
       { icon: "✨", title: "Your own energy healing", body: "A separate one-on-one session to clear what your body has been holding onto." },
       { icon: "🧸", title: "Inner child work", body: "Giving little you the love, safety and permission she never got, so grown-up you can finally go for it." },
@@ -129,7 +130,7 @@ const INCLUDED = [
   },
 ];
 
-const NOT_INCLUDED = ["Flights", "Travel insurance (highly recommended)", "Tips for the villa staff", "Spa treatments and massages", "Meals out on your own time", "Personal spending and shopping"];
+const NOT_INCLUDED = ["Flights", "Travel insurance (highly recommended)", "Tips for the villa staff", "Spa treatments and massages", "Lunches and dinners on your own time (apart from our welcome and farewell dinners)", "Personal spending and shopping"];
 
 // The four-part method behind everything Betty teaches, in its real order.
 const METHOD = [
@@ -191,7 +192,7 @@ const FAQ = [
   { q: "I'm an introvert. Will it be too much?", a: "There's LOTS of downtime built into every single day, so you can join in when you feel social and disappear to a hammock with a book when you need to recharge." },
   { q: "Where do I fly into?", a: "The nearest airport is Tulum International, about 55km from the villa, and Cancún is the other option if you want more flight choices. Full travel details go to every woman who gets a spot." },
   { q: "Will I share a room?", a: "Only if you want to. There are five private rooms, plus shared twin and four-bed rooms for a lower price, and nobody ever shares a bed." },
-  { q: "What about food and dietary needs?", a: "Tell us about any dietary needs or allergies when you apply and we'll make sure you're looked after. The full meal plan goes to every woman who gets a spot." },
+  { q: "What about food and dietary needs?", a: "Breakfast every morning, a welcome dinner and a farewell celebration dinner are all included, plus coffee, juices and snacks at the villa all week. Your other meals are yours to enjoy out in Tulum, and we'll send you our favourite spots. Tell us about any dietary needs or allergies when you apply." },
   { q: "How do I get a spot?", a: "Apply below and I'll read your application myself, then we'll chat to make sure the retreat is right for you. Once you're accepted, pick your room and a $1,000 deposit secures it. Pay the rest in full, or split it into 3 or 4 payments (you choose), all wrapped up by 31 December 2026." },
 ];
 
