@@ -77,6 +77,33 @@ const MAGIC = [
   },
 ];
 
+// Placeholder photos until the real retreat shoot exists: Betty's Tulum shots in /public/retreat,
+// plus free Unsplash images (hotlinked) for the sisterhood strip.
+const u = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&h=1100&q=75`;
+
+const PLACE_PHOTOS = [
+  { src: "/retreat/tulum-1.jpg", alt: "The Tulum ruins above a white sand beach and turquoise sea" },
+  { src: "/retreat/tulum-2.jpg", alt: "Clay pots and a floor cushion by a plunge pool in Tulum" },
+  { src: "/retreat/tulum-3.jpg", alt: "A white bike under a Follow That Dream street sign in Tulum" },
+];
+
+const SISTER_PHOTOS = [
+  { src: u("1522543558187-768b6df7c25c"), alt: "Women with their arms around each other" },
+  { src: u("1495837174058-628aafc7d610"), alt: "Women dancing with their hands in the air at sunset" },
+  { src: u("1504194921103-f8b80cadd5e4"), alt: "A group of women standing together" },
+];
+
+function PhotoStrip({ photos }: { photos: { src: string; alt: string }[] }) {
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", borderBottom: "var(--border)" }}>
+      {photos.map((p) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={p.src} src={p.src} alt={p.alt} loading="lazy" style={{ width: "100%", aspectRatio: "4 / 5", objectFit: "cover", display: "block" }} />
+      ))}
+    </section>
+  );
+}
+
 function JoinButton({ children }: { children: React.ReactNode }) {
   return (
     <a href="#waitlist" className="no-underline" style={{ display: "inline-block", marginTop: 28, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
@@ -101,7 +128,9 @@ export default function RetreatPage() {
         }
       />
 
-      <Band tag="imagine" title="the entire woman," accent="at the party.">
+      <PhotoStrip photos={PLACE_PHOTOS} />
+
+      <Band tag="imagine" title="starting 2027" accent="in the right waaaayyyyyyyyyy.">
         <p>Imagine a few days dedicated to your pleasure, your power, your body, your dreams, your magic and every deliciously complicated part of being a woman.</p>
         <p>Days filled with astrology, witchcraft, movement, sensuality, shadow work, creativity, extraordinary conversations, outrageous laughter and the kind of female friendships that change your entire life.</p>
         <p>A place where you can be loud, emotional, ambitious, sensual, spiritual, ridiculous, vulnerable, wildly confident and completely yourself.</p>
@@ -118,6 +147,8 @@ export default function RetreatPage() {
         <p><strong>Expect magic. Expect mischief. Expect revelations.</strong></p>
         <p>Expect to meet women who make you wonder where the hell they&apos;ve been your entire life.</p>
       </Band>
+
+      <PhotoStrip photos={SISTER_PHOTOS} />
 
       <Band tag="a little taste of the magic 🪄" title="a little taste" accent="of the magic.">
         <Tiles items={MAGIC} />
