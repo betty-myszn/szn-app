@@ -78,20 +78,29 @@ const MAGIC = [
   },
 ];
 
-// Placeholder photos until the real retreat shoot exists: Betty's Tulum shots in /public/retreat,
-// plus free Unsplash images (hotlinked) for the sisterhood strip.
+// The booked villa's listing photos (in /public/retreat), plus free Unsplash images (hotlinked) for
+// the sisterhood strip until the real retreat shoot exists.
 const u = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&h=1100&q=75`;
 
 const PLACE_PHOTOS = [
-  { src: "/retreat/tulum-1.jpg", alt: "The Tulum ruins above a white sand beach and turquoise sea" },
-  { src: "/retreat/tulum-2.jpg", alt: "Clay pots and a floor cushion by a plunge pool in Tulum" },
-  { src: "/retreat/tulum-3.jpg", alt: "A white bike under a Follow That Dream street sign in Tulum" },
+  { src: "/retreat/villa-pool-beach.jpg", alt: "The villa's pool running down to the beach and the sea" },
+  { src: "/retreat/villa-dusk.jpg", alt: "The villa lit up at dusk behind its palm-lined pools" },
+  { src: "/retreat/villa-pool-walkway.jpg", alt: "A wooden walkway between two pools leading to the ocean" },
 ];
 
 const SISTER_PHOTOS = [
   { src: u("1522543558187-768b6df7c25c"), alt: "Women with their arms around each other" },
   { src: u("1495837174058-628aafc7d610"), alt: "Women dancing with their hands in the air at sunset" },
   { src: u("1504194921103-f8b80cadd5e4"), alt: "A group of women standing together" },
+];
+
+const VILLA_PHOTOS = [
+  { src: "/retreat/villa-rooftop-hot-tub.jpg", alt: "The rooftop hot tub looking out to sea" },
+  { src: "/retreat/villa-dining.jpg", alt: "A long dining table in the open-plan living room" },
+  { src: "/retreat/villa-bedroom.jpg", alt: "A bedroom with sea views and a macramé wall hanging" },
+  { src: "/retreat/villa-rooftop-lounge.jpg", alt: "The rooftop lounge and sun loungers above the ocean" },
+  { src: "/retreat/villa-hammocks.jpg", alt: "Hammocks strung between palm trees on the sand" },
+  { src: "/retreat/villa-balcony.jpg", alt: "Two chairs on a balcony overlooking the pool and the sea" },
 ];
 
 function PhotoStrip({ photos }: { photos: { src: string; alt: string }[] }) {
@@ -269,6 +278,12 @@ export default function RetreatPage() {
             "Staff on site, so the cooking and the clearing up are handled and your only job is YOU.",
           ]}
         />
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" style={{ marginTop: 30 }}>
+          {VILLA_PHOTOS.map((p) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={p.src} src={p.src} alt={p.alt} loading="lazy" style={{ width: "100%", aspectRatio: "3 / 2", objectFit: "cover", display: "block", borderRadius: 14, border: "var(--border)" }} />
+          ))}
+        </div>
       </Band>
 
       <Band tag="the details" title="the" accent="need-to-knows.">
