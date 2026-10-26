@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import WaitlistForm from "@/components/WaitlistForm";
+import WaitlistForm, { type ApplicationQuestion } from "@/components/WaitlistForm";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -90,7 +90,7 @@ export function ForYouIf({ items }: { items: string[] }) {
 }
 
 /** The waitlist band, anchored at #waitlist so every hero button lands here. */
-export function WaitlistBand({ offer, title, accent, body, question }: { offer: OfferSlug; title: string; accent: string; body: ReactNode; question?: string }) {
+export function WaitlistBand({ offer, title, accent, body, question, questions, submitLabel }: { offer: OfferSlug; title: string; accent: string; body: ReactNode; question?: string; questions?: ApplicationQuestion[]; submitLabel?: string }) {
   return (
     <section id="waitlist" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, scrollMarginTop: 80 }}>
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
@@ -102,7 +102,7 @@ export function WaitlistBand({ offer, title, accent, body, question }: { offer: 
           </h2>
           <div style={{ fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,0.85)", marginTop: 22, fontWeight: 500 }}>{body}</div>
         </div>
-        <WaitlistForm offer={offer} question={question} tone="dark" />
+        <WaitlistForm offer={offer} question={question} questions={questions} submitLabel={submitLabel} tone="dark" />
       </div>
     </section>
   );

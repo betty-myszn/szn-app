@@ -83,7 +83,7 @@ async function syncToBrevo(email: string, name: string, offer: string, listId: n
 }
 
 // Waitlists Betty gets an email about the moment someone new joins (sent through Brevo).
-const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la"];
+const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "retreat"];
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -91,7 +91,7 @@ async function sendSignupAlert(offer: string, email: string, name: string, answe
   const offerName = (OFFERS[offer as keyof typeof OFFERS]?.name ?? offer).replace(/^The /, "");
   const htmlContent = `<p>Someone new just joined the <strong>${esc(offerName)}</strong> waitlist 💜</p>
 <p><strong>Name:</strong> ${esc(name || "(not given)")}<br><strong>Email:</strong> ${esc(email)}${place ? `<br><strong>Born in:</strong> ${esc(place)}` : ""}</p>
-${answer ? `<p><strong>Their answer:</strong><br>${esc(answer)}</p>` : ""}
+${answer ? `<p><strong>Their answers:</strong><br>${esc(answer).replace(/\n/g, "<br>")}</p>` : ""}
 <p>Every signup is in /admin/waitlists.</p>`;
   for (const to of adminRecipients()) {
     const r = await sendBrevoEmail({ to: { email: to }, subject: `🦄 New ${offerName} waitlist signup: ${name || email}`, htmlContent, replyTo: { email, name: name || undefined } });
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
   const name = typeof body?.name === "string" ? body.name.trim().slice(0, 120) : "";
-  const answer = typeof body?.answer === "string" ? body.answer.trim().slice(0, 2000) : "";
+  const answer = typeof body?.answer === "string" ? body.answer.trim().slice(0, 6000) : "";
   const offer = body?.offer;
   const birth = parseBirth(body?.birth);
 

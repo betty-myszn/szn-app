@@ -33,8 +33,8 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     body: "Future you just did a little happy dance. The next cohort's dates come to the waitlist first, so you'll have first pick of a seat before it goes anywhere else.",
   },
   retreat: {
-    title: "YESSSS, see you in real life 🌴",
-    body: "You're on the list for The Bad B*tch Retreat, which means the where, the when and every juicy detail lands in your inbox first, the second we can tell you.",
+    title: "Application received, babe 🌴",
+    body: "OMG we're SO excited you applied. I read every single application myself, and I'll be in touch to chat about whether Tulum is your next chapter, so keep an eye on your inbox.",
   },
   book: {
     title: "SOOOO happy you're here 📚",
@@ -42,19 +42,33 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
   },
 };
 
+/** An application question. Answers are saved together in the signup's one answer field. */
+export interface ApplicationQuestion {
+  label: string;
+  type?: "text" | "textarea" | "select";
+  options?: string[];
+  required?: boolean;
+}
+
 export default function WaitlistForm({
   offer,
   question,
+  questions,
+  submitLabel,
   tone = "light",
 }: {
   offer: OfferSlug;
   /** Optional extra question, saved alongside the signup. */
   question?: string;
+  /** Turns the waitlist into an application (the retreat): several questions, saved as Q + A text. */
+  questions?: ApplicationQuestion[];
+  submitLabel?: string;
   tone?: "light" | "dark";
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [answer, setAnswer] = useState("");
+  const [answers, setAnswers] = useState<string[]>(() => (questions ?? []).map(() => ""));
   const [birth, setBirth] = useState<BirthDetails>({ dateOfBirth: "", birthTime: "", birthTimeApproximate: false, location: null });
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
@@ -75,7 +89,15 @@ export default function WaitlistForm({
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ offer, name, email, answer, birth }),
+        body: JSON.stringify({
+          offer,
+          name,
+          email,
+          answer: questions
+            ? questions.map((q, i) => `${q.label}\n${answers[i].trim() || "(left blank)"}`).join("\n\n")
+            : answer,
+          birth,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Something glitched, try again in a sec");
@@ -125,6 +147,25 @@ export default function WaitlistForm({
         inputStyle={field}
         noteColor={dark ? "rgba(255,255,255,0.85)" : "var(--grey)"}
       />
+      {questions?.map((q, i) => {
+        const id = `wl-q${i}-${offer}`;
+        const set = (v: string) => setAnswers((a) => a.map((x, j) => (j === i ? v : x)));
+        return (
+          <div key={q.label}>
+            <label htmlFor={id} style={label}>{q.label}{q.required ? "" : " (optional)"}</label>
+            {q.type === "select" ? (
+              <select id={id} style={field} required={q.required} value={answers[i]} onChange={(e) => set(e.target.value)}>
+                <option value="">Pick one</option>
+                {q.options?.map((o) => <option key={o} value={o}>{o}</option>)}
+              </select>
+            ) : q.type === "textarea" ? (
+              <textarea id={id} style={{ ...field, minHeight: 90, resize: "vertical" }} required={q.required} value={answers[i]} onChange={(e) => set(e.target.value)} />
+            ) : (
+              <input id={id} style={field} required={q.required} value={answers[i]} onChange={(e) => set(e.target.value)} />
+            )}
+          </div>
+        );
+      })}
       {question && (
         <div>
           <label htmlFor={`wl-q-${offer}`} style={label}>{question} (optional)</label>
@@ -136,7 +177,7 @@ export default function WaitlistForm({
         disabled={state === "sending"}
         style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 28px", border: "none", cursor: "pointer", opacity: state === "sending" ? 0.7 : 1 }}
       >
-        {state === "sending" ? "adding you..." : OFFERS[offer].cta}
+        {state === "sending" ? "sending..." : submitLabel ?? OFFERS[offer].cta}
       </button>
       {state === "error" && <p role="alert" style={{ fontSize: 14, fontWeight: 700, color: dark ? "#fff" : "var(--pink)" }}>{error}</p>}
     </form>
