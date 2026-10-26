@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 // anyone building six automations in Brevo first. Voice rules: "Hiii my love", b*tch always
 // censored, no em dashes, no rhetorical questions, no invented dates or prices.
 
-const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[] }> = {
+const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]; image?: { src: string; alt: string } }> = {
   "rich-btch-rising": {
     subject: "You're on the Rich B*tch Rising list 💸",
     heading: "your rich b*tch era is officially loading",
@@ -53,13 +53,16 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
       "The next cohort's dates come to this list first, so you'll get first pick of a seat before it goes anywhere else.",
     ],
   },
+  // The retreat is an application now (26 Oct 2026), so this thanks her for applying, with the villa.
   retreat: {
-    subject: "You're on The Bad B*tch Retreat list 🌴",
-    heading: "YESSSS, see you in real life",
+    subject: "Thanks for applying, babe 🌴 Your Tulum application is in",
+    heading: "thanks for applying, we'll be in touch very soon",
     body: [
-      "You just put your name down for The Bad B*tch Retreat, an immersive in-person experience where we explore every single part of ourselves: body, sensuality, creativity, confidence, sexuality, shadow, power and self-love.",
-      "Where we're going, when we're going and every juicy detail goes to this list first, the second I can tell you.",
+      "We're SOOO excited that you want to change your life with us. Your application for The Bad B*tch Manifestation Retreat has landed safely, and I'll be reading every word of it myself.",
+      "I'll be in touch very soon to chat about you, your 2027 and whether Tulum is your next chapter, so keep a little eye on this inbox.",
+      "Five nights in a private oceanfront villa on Soliman Bay, 4 to 9 January 2027, with a small circle of hand-picked women. I honestly can't wait to meet you.",
     ],
+    image: { src: "/retreat/villa-pool-beach.jpg", alt: "The villa's pool running down to the beach in Tulum" },
   },
   book: {
     subject: "You're on the list for the MY SZN book 📚",
@@ -86,13 +89,14 @@ export function waitlistConfirmHtml(offer: OfferSlug, firstName: string): { subj
 <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ffffff;">${esc(o.name)}</div>
 <div style="font-size:34px;font-weight:800;line-height:1.05;color:#1a1a1a;margin-top:14px;letter-spacing:-1px;">${esc(c.heading)}</div>
 </td></tr>
+${c.image ? `<tr><td style="padding:0;border-top:2px solid #1a1a1a;border-bottom:2px solid #1a1a1a;"><img src="${SITE_URL}${c.image.src}" alt="${esc(c.image.alt)}" width="556" style="display:block;width:100%;max-width:556px;height:auto;border:0;"></td></tr>` : ""}
 <tr><td style="padding:30px 28px;font-family:Arial,sans-serif;font-size:16px;line-height:1.7;color:#1a1a1a;">
 <p style="margin:0 0 16px;font-weight:700;">${greeting} 💜</p>
 ${c.body.map((p) => `<p style="margin:0 0 16px;">${esc(p)}</p>`).join("\n")}
 <p style="margin:24px 0 0;"><a href="${url}" style="display:inline-block;background:#1a1a1a;color:#ffffff;text-decoration:none;font-family:Poppins,Arial,sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 28px;">see ${esc(o.name)}</a></p>
 <p style="margin:28px 0 0;">Love,<br><strong>Betty</strong> 🪩</p>
 </td></tr>
-<tr><td style="background:#1a1a1a;padding:18px 28px;font-family:Arial,sans-serif;font-size:12px;color:#ffffff;">my<span style="color:#FF2D87;">szn</span> · You're getting this because you joined a waitlist at itsmyszn.com.</td></tr>
+<tr><td style="background:#1a1a1a;padding:18px 28px;font-family:Arial,sans-serif;font-size:12px;color:#ffffff;">my<span style="color:#FF2D87;">szn</span> · You're getting this because you ${offer === "retreat" ? "applied for the retreat" : "joined a waitlist"} at itsmyszn.com.</td></tr>
 </table></td></tr></table></body></html>`;
   return { subject: c.subject, html };
 }

@@ -89,12 +89,13 @@ const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 async function sendSignupAlert(offer: string, email: string, name: string, answer: string, place: string) {
   const offerName = (OFFERS[offer as keyof typeof OFFERS]?.name ?? offer).replace(/^The /, "");
-  const htmlContent = `<p>Someone new just joined the <strong>${esc(offerName)}</strong> waitlist 💜</p>
+  const isApp = offer === "retreat";
+  const htmlContent = `<p>Someone new just ${isApp ? "applied for" : "joined the"} <strong>${esc(offerName)}</strong>${isApp ? "" : " waitlist"} 💜</p>
 <p><strong>Name:</strong> ${esc(name || "(not given)")}<br><strong>Email:</strong> ${esc(email)}${place ? `<br><strong>Born in:</strong> ${esc(place)}` : ""}</p>
 ${answer ? `<p><strong>Their answers:</strong><br>${esc(answer).replace(/\n/g, "<br>")}</p>` : ""}
 <p>Every signup is in /admin/waitlists.</p>`;
   for (const to of adminRecipients()) {
-    const r = await sendBrevoEmail({ to: { email: to }, subject: `🦄 New ${offerName} waitlist signup: ${name || email}`, htmlContent, replyTo: { email, name: name || undefined } });
+    const r = await sendBrevoEmail({ to: { email: to }, subject: isApp ? `🌴 New retreat application: ${name || email}` : `🦄 New ${offerName} waitlist signup: ${name || email}`, htmlContent, replyTo: { email, name: name || undefined } });
     if (!r.ok) console.error("waitlist: admin alert failed", { offer, to, error: r.error });
   }
 }
