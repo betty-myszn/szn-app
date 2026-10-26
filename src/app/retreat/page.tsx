@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { WaitlistBand, OfferCards } from "@/components/Offer";
+import RetreatGallery from "@/components/RetreatGallery";
 
 // The Bad B*tch Manifestation Retreat: the in-person experience. Application only (26 Oct 2026). Venue booked 26 Oct
 // 2026: an oceanfront estate on Soliman Bay, Tulum, 4 to 9 January 2027, for 10 to 15 women with a
@@ -56,6 +57,37 @@ const PAGE_CSS = `
   .retreat-bento > :first-child { grid-column: 1; grid-row: span 2; }
 }
 `;
+
+// The villa gallery near the top (Betty wanted the venue shown early, lots of it). Listing photos,
+// numbered in the order they show.
+const GALLERY_ALTS = [
+  "The pool running down to the beach and the sea",
+  "The villa lit up at dusk behind its pools",
+  "A wooden walkway between two pools out to the ocean",
+  "The gardens and pools at sunset",
+  "The villa from the beach, with daybeds under the palms",
+  "Loungers beside the pool with the ocean behind",
+  "The rooftop lounge above the sea",
+  "The rooftop hot tub with ocean views",
+  "Steps from the hot tub down to the rooftop pool",
+  "Rooftop chairs looking out over the Caribbean",
+  "The villa seen across the dunes from the shore",
+  "The view over the pool to the turquoise sea",
+  "The beach and reef from the upper terrace",
+  "A sandy path lined with palms and hammock chairs",
+  "Hammocks strung between the palms",
+  "A boardwalk through the palms to the beach",
+  "The open-plan living and dining room",
+  "The kitchen with its long breakfast bar",
+  "The lounge and dining table opening onto the garden",
+  "A dining table under woven pendant lights",
+  "A bedroom with a macramé hanging and sea views",
+  "A bedroom with a hammock on the terrace outside",
+  "Two chairs on a balcony overlooking the pool and sea",
+  "A balcony chair looking out across the jungle",
+  "The villa's white entrance among the palms",
+];
+const GALLERY = GALLERY_ALTS.map((alt, i) => ({ src: `/retreat/gallery/${String(i + 1).padStart(2, "0")}.jpg`, alt }));
 
 // Hero facts, shown as chips so the essentials land before any scrolling.
 const FACTS = ["📍 tulum, mexico", "🗓️ 4 to 9 january 2027", "👯 10 to 15 hand-picked women", "💸 from $2,950"];
@@ -250,11 +282,19 @@ export default function RetreatPage() {
         </div>
       </div>
 
+      {/* ── The villa, early: a swipeable gallery with a full-screen viewer ── */}
+      <section style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 64, paddingBottom: 56 }}>
+        <div className="max-w-6xl mx-auto px-5 md:px-8" style={{ marginBottom: 28 }}>
+          <Heading tag="the villa 📸" title="your home for 5 nights." accent="take a look around." />
+        </div>
+        <RetreatGallery photos={GALLERY} />
+      </section>
+
       {/* ── The invitation: photo + Betty's strongest lines ── */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-14 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1.25fr_1fr] gap-10 md:gap-14 items-center">
           <div style={{ position: "relative" }}>
-            <div style={{ aspectRatio: "4 / 5", border: "var(--border)", borderRadius: 24, overflow: "hidden", boxShadow: "12px 12px 0 var(--pink)" }}>
+            <div style={{ aspectRatio: "3 / 2", border: "var(--border)", borderRadius: 24, overflow: "hidden", boxShadow: "12px 12px 0 var(--pink)" }}>
               <Img src="/retreat/villa-pool-walkway.jpg" alt="A wooden walkway between two pools leading to the ocean" />
             </div>
             <div style={{ position: "absolute", left: -8, bottom: 26, background: "var(--dark)", color: "#fff", ...label, fontSize: 11, padding: "10px 14px", transform: "rotate(-4deg)", border: "1.5px solid #fff" }}>
