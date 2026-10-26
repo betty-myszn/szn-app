@@ -446,7 +446,7 @@ export default function RetreatPage() {
             </svg>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3" style={{ marginTop: 12, maxWidth: 560, marginLeft: "auto", marginRight: "auto" }}>
-            <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>📍 The villa is on Soliman Bay, about 1.5 to 2 hours' drive south of Cancún airport and a short hop from Tulum town.</p>
+            <p style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>📍 The villa is on Soliman Bay, about 1.5 to 2 hours&apos; drive south of Cancún airport and a short hop from Tulum town.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=Soliman+Bay+Tulum+Mexico" target="_blank" rel="noopener noreferrer" style={{ ...label, fontSize: 11, color: "var(--pink)" }}>open in google maps →</a>
           </div>
         </div>
