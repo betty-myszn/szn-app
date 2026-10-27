@@ -1,7 +1,7 @@
 // The Baddie Sessions: Betty's four 1:1 coaching sessions. Everything a visitor sees about price,
 // length and booking lives here, so changing a price or adding a booking link is a one-line edit.
 //
-// One standard session for all four themes: 60 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). No booking or payment system is connected yet:
+// One standard session for all four themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). No booking or payment system is connected yet:
 // while bookingUrl is null every button opens an email to Betty with the session in the subject.
 
 export const BADDIE_SESSIONS_CONTACT = "hello@thecosmicco.com";
@@ -10,13 +10,15 @@ export interface SessionOption {
   name: string;
   minutes: number;
   priceUsd: number;
+  /** Same session booked for two people (a couple, besties, sisters, business partners). */
+  priceForTwoUsd: number;
   blurb: string;
   /** Stripe Payment Link / booking page once approved. null = email Betty. */
   bookingUrl: string | null;
 }
 
 export const SESSION_OPTIONS: SessionOption[] = [
-  { name: "The Baddie Session", minutes: 60, priceUsd: 333, blurb: "Private 1:1 coaching, personalised astrology insights and practical next steps.", bookingUrl: null },
+  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 666, blurb: "Ninety minutes of private 1:1 coaching, strategised around your astrology and Human Design, with hypnosis, mindset work and energy work woven in wherever your goals need it.", bookingUrl: null },
 ];
 
 export interface BaddieSession {

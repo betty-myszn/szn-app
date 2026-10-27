@@ -23,11 +23,20 @@ export const metadata: Metadata = {
 // Sentence case on every button here (Betty's brief), so no uppercase transform.
 const btn = (bg: string, ink = "#fff") => ({ display: "inline-block", background: bg, color: ink, fontFamily: pp, fontSize: 16, fontWeight: 800, padding: "18px 32px", border: "var(--border)" });
 
+// Why book with Betty: sits straight under the hero so the benefits come first (Betty's brief, 27 Oct 2026).
+const WHY = [
+  { emoji: "🔮", title: "A session built around YOUR chart", body: "Before we ever meet, I go through your astrology and your Human Design and strategise the whole ninety minutes around how you're actually wired, so nothing in that room is a template someone else got too." },
+  { emoji: "💸", title: "Twenty years of business brain on your side", body: "I've been a business consultant and strategist for twenty years and I run my own global dream business, so when your goal is more money, a launch or a big career move, you get a real strategy alongside the magic." },
+  { emoji: "🧠", title: "We go deeper than talking", body: "Hypnosis, mindset work and energy work all come out when your goals call for them, which means we shift the subconscious stuff that's been running the show instead of just understanding it." },
+  { emoji: "💖", title: "Thousands of women have gone first", body: "I've been coaching women for over a decade, thousands of them, so whatever you're carrying in, I've seen it, I'm not scared of it, and I know exactly how to help you move it." },
+];
+
 const STEPS = [
-  { n: "01", title: "Pick your session", body: "Choose the area of your life you're ready to work on." },
-  { n: "02", title: "Tell us what's going on", body: "Complete a short intake form with your birth details, goals and what you'd love help with." },
-  { n: "03", title: "Get your personal Baddie Session", body: "Meet Betty online for a private coaching experience combining personalised astrology, shadow work, manifestation and practical coaching." },
-  { n: "04", title: "Take your power into real life", body: "Leave with personalised insights, practical next steps and tools to continue the work." },
+  { n: "01", title: "Pick your session", body: "Choose the area of your life you're ready to level up, whether that's a reset, your money, your shadow or your main character era." },
+  { n: "02", title: "Send me your birth details and your goals", body: "A short intake with your birth time, date and place, plus what you want, what's in the way and what you'd love us to crack open together." },
+  { n: "03", title: "I strategise your session", body: "I look at your Human Design and your astrology side by side and build the session around what they're showing me about you and the goals you came in with." },
+  { n: "04", title: "Ninety minutes, all about YOU", body: "We meet online, and depending on what you're being guided towards your session can include hypnosis, mindset work, energy work and coaching, every bit of it led by your goals, your astrology and your Human Design." },
+  { n: "05", title: "Walk out activated", body: "You leave with clear next steps, the insights from your chart and the tools to keep the shift going long after we hang up." },
 ];
 
 const FAQ: { q: string; a: React.ReactNode }[] = [
@@ -81,6 +90,19 @@ export default function BaddieSessionsPage() {
           </div>
         </div>
       </section>
+
+      {/* Why book with Betty */}
+      <Band tone="white" tag="why book with me" title="why baddies book" accent="with betty.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+          {WHY.map((w) => (
+            <div key={w.title} style={{ background: "var(--lav-light)", border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px" }}>
+              <div style={{ fontSize: 30, lineHeight: 1 }}>{w.emoji}</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 10 }}>{w.title}</div>
+              <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{w.body}</p>
+            </div>
+          ))}
+        </div>
+      </Band>
 
       {/* The four sessions */}
       <section id="sessions" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 88, scrollMarginTop: 70 }}>
@@ -143,6 +165,18 @@ export default function BaddieSessionsPage() {
               </div>
             ))}
           </div>
+          {/* Sessions for two: full foil panel, so everything on it stays solid black (no holo on holo) */}
+          {SESSION_OPTIONS.map((o) => (
+            <div key={`${o.name}-for-two`} className="max-w-xl" style={{ marginTop: 24, background: "var(--foil) center / 250% 250%", animation: "foil-drift 56s ease-in-out infinite", color: "var(--dark)", border: "var(--border)", borderRadius: 24, padding: "28px 26px", boxShadow: "8px 10px 0 var(--pink)" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>💞 booking for two</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26, marginTop: 8, lineHeight: 1.1 }}>Bring your person.</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceForTwoUsd} USD for two</div>
+              <p style={{ fontSize: 16, lineHeight: 1.65, fontWeight: 600, margin: "14px 0 0" }}>Any of the four sessions can be booked for two, so bring your partner, your bestie, your sister or your business bestie. I strategise the session around both of your charts and both of your Human Designs, which means you each walk out with your own breakthroughs plus everything that lights up when you two go after it together.</p>
+              <div style={{ paddingTop: 22 }}>
+                <a href={bookingHref(o.bookingUrl, `${o.name} for two (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book a session for two</a>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -157,7 +191,8 @@ export default function BaddieSessionsPage() {
             <div className="offer-copy" style={{ marginTop: 20 }}>
               <p>I&apos;m an astrologer, manifestation coach and shadow work practitioner, and I help women make more money, reclaim their power and become more of who they actually are.</p>
               <p>My work combines astrology, Human Design, subconscious work, manifestation and coaching, because understanding yourself is one thing, but actually changing how you live is where the magic happens.</p>
-              <p>I&apos;ve spent years helping women work through their fears, change their beliefs and build lives that feel like their own.</p>
+              <p>I&apos;ve been coaching women for over a decade, thousands of them, through the fear, the old beliefs and the &quot;who do I think I am&quot; spiral, all the way into lives that feel like their own.</p>
+              <p>I&apos;ve also been a business consultant and strategist for twenty years, all while building and running my own global dream business, so I know what it takes to want BIG things and then actually go and get them.</p>
               <p><strong>You get my full attention, personalised insight and a woman who&apos;s absolutely rooting for you.</strong></p>
             </div>
             <a href="#sessions" className="no-underline" style={{ ...btn("var(--pink)"), marginTop: 22 }}>Find your session</a>
