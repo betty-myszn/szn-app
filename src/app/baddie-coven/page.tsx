@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { OfferHero, WaitlistBand } from "@/components/Offer";
 import CovenExplorer from "@/components/CovenExplorer";
+import CovenCountdown from "@/components/CovenCountdown";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
@@ -243,6 +244,7 @@ export default function BaddieCovenPage() {
             <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
               <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our first big event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
+              <CovenCountdown />
             </div>
           </>
         }
