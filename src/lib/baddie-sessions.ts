@@ -34,6 +34,8 @@ export interface BaddieSession {
   accent: string;
   accentInk: string;
   bookingUrl: string | null;
+  /** Live $333 Stripe price behind bookingUrl; the webhook uses it to send the booking email. */
+  stripePriceId: string | null;
 }
 
 export const BADDIE_SESSIONS: BaddieSession[] = [
@@ -51,7 +53,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Getting your confidence, identity and desire back",
       "A real plan for your next chapter, with dates on it",
     ],
-    cta: "Book your reset", accent: "var(--pink)", accentInk: "#fff", bookingUrl: "https://buy.stripe.com/7sY4gAf2TcM70Lo2yx7kc0B",
+    cta: "Book your reset", accent: "var(--pink)", accentInk: "#fff", bookingUrl: "https://buy.stripe.com/7sY4gAf2TcM70Lo2yx7kc0B", stripePriceId: "price_1UVGzBJ6s9fRhiJoAWw305a8",
   },
   {
     slug: "rich-btch-energy", number: "02", emoji: "💸", name: "Rich B*tch Energy",
@@ -67,7 +69,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Manifestation that fits who you really are",
       "Real-world moves towards your money goals",
     ],
-    cta: "Book your money session", accent: "var(--lav)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/8x25kE7Ar8vRalY5KJ7kc0C",
+    cta: "Book your money session", accent: "var(--lav)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/8x25kE7Ar8vRalY5KJ7kc0C", stripePriceId: "price_1UVGzCJ6s9fRhiJobkoGzRf4",
   },
   {
     slug: "shadow", number: "03", emoji: "🖤", name: "The Shadow Baddie Session",
@@ -84,7 +86,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Boundaries, self-worth and taking your power back",
       "Living your shadow work out loud in real life",
     ],
-    cta: "Book your shadow session", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/28E6oI2g7fYjbq26ON7kc0D",
+    cta: "Book your shadow session", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/28E6oI2g7fYjbq26ON7kc0D", stripePriceId: "price_1UVGzEJ6s9fRhiJo42IkpGx9",
   },
   {
     slug: "main-character", number: "04", emoji: "🔥", name: "Main Character Activation",
@@ -100,7 +102,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Identity, self-image and embodiment",
       "Practical ways to start showing up like HER",
     ],
-    cta: "Book your activation", accent: "var(--pink-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/cNi8wQaMDaDZfGic977kc0E",
+    cta: "Book your activation", accent: "var(--pink-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/cNi8wQaMDaDZfGic977kc0E", stripePriceId: "price_1UVGzFJ6s9fRhiJofGW99cFk",
   },
   {
     slug: "business", number: "05", emoji: "💼", name: "The Business Baddie Session",
@@ -117,9 +119,14 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Getting seen, selling without the ick and charging what you're WORTH",
       "A plan with real dates on it, so the dream finally moves out of your Notes app",
     ],
-    cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F",
+    cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F", stripePriceId: "price_1UVH2vJ6s9fRhiJo5s9D8Pd7",
   },
 ];
+
+/** The session a paid Stripe price belongs to, or null if it isn't a Baddie Session. */
+export function baddieSessionForPrice(priceId: string | null | undefined): BaddieSession | null {
+  return (priceId && BADDIE_SESSIONS.find((s) => s.stripePriceId === priceId.trim())) || null;
+}
 
 /** Where a booking button goes: the real booking link once set, otherwise an email to Betty. */
 export function bookingHref(url: string | null, subject: string): string {

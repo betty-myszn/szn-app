@@ -9,6 +9,8 @@ import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
 import { isBadBtchReportPrice, handleBadBtchReportPurchase } from "@/lib/email/bad-btch-report";
+import { handleBaddieSessionPurchase } from "@/lib/email/baddie-session";
+import { baddieSessionForPrice } from "@/lib/baddie-sessions";
 
 export const runtime = "nodejs";
 
@@ -445,6 +447,13 @@ export async function POST(request: Request) {
           // The Bad B*tch Report is a one-off report, never a membership.
           if (isBadBtchReportPrice(priceId)) {
             await handleBadBtchReportPurchase(admin, session);
+            break;
+          }
+
+          // The Baddie Sessions are one-off 1:1 bookings, never a membership.
+          const baddie = baddieSessionForPrice(priceId);
+          if (baddie) {
+            await handleBaddieSessionPurchase(admin, session, baddie);
             break;
           }
 
