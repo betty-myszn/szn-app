@@ -30,7 +30,7 @@ const btn = (bg: string, ink = "#fff") => ({ display: "inline-block", background
 const lastOdd = (i: number, n: number, bp: "sm" | "md" = "md") =>
   n % 2 === 1 && i === n - 1 ? (bp === "md" ? "md:col-span-2 md:mx-auto md:w-[calc(50%-12px)]" : "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-8px)]") : "";
 
-// Why book with Betty: sits straight under the hero so the benefits come first (Betty's brief, 27 Oct 2026).
+// Why book with Betty: sits after the session cards, once she knows what's on offer (Betty moved it down, 27 Oct 2026).
 const WHY = [
   { emoji: "🔮", title: "I do my homework on YOU", body: "Before we ever meet I spend two to three hours obsessing over your astrology and your Human Design like it's my favourite group chat, then I build all ninety minutes around how YOU are wired, so every single minute is made for you and you alone." },
   { emoji: "💸", title: "Twenty years of business brain, babe", body: "I've been a business consultant and strategist for twenty years and I run my own global dream business, so when you want more money, a launch or a big fat career glow-up, you get a proper strategy with the magic poured all over the top." },
@@ -135,19 +135,6 @@ export default function BaddieSessionsPage() {
         </div>
       </section>
 
-      {/* Why book with Betty */}
-      <Band tone="white" tag="why book with me" title="why baddies book" accent="with betty.">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
-          {WHY.map((w) => (
-            <div key={w.title} className="holo-edge" style={{ background: "var(--lav-light)", border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px" }}>
-              <div style={{ fontSize: 30, lineHeight: 1 }}>{w.emoji}</div>
-              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 10 }}>{w.title}</div>
-              <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{w.body}</p>
-            </div>
-          ))}
-        </div>
-      </Band>
-
       {/* This is for you if */}
       <Band tone="pinkLight" tag="this is for you if" title="this is SO" accent="for you if...">
         <ul className="holo-edge" style={{ listStyle: "none", margin: "30px 0 0", padding: "22px 24px", display: "grid", gap: 12, background: "#fff", border: "var(--border)", borderRadius: 18 }}>
@@ -230,6 +217,19 @@ export default function BaddieSessionsPage() {
           </div>
         </div>
       </section>
+
+      {/* Why book with Betty */}
+      <Band tone="pinkLight" tag="why book with me" title="why baddies book" accent="with betty.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+          {WHY.map((w) => (
+            <div key={w.title} className="holo-edge" style={{ background: "var(--lav-light)", border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px" }}>
+              <div style={{ fontSize: 30, lineHeight: 1 }}>{w.emoji}</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 10 }}>{w.title}</div>
+              <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{w.body}</p>
+            </div>
+          ))}
+        </div>
+      </Band>
 
       {/* How it works */}
       <Band tone="lav" tag="how it works" title="one session." accent="all about YOU.">
