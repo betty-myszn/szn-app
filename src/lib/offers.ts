@@ -53,7 +53,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     name: "The Baddie Coven",
     href: "/baddie-coven",
     line: "our magical coven: a monthly coven circle, your personalised platform, rituals and your girls",
-    price: null,
+    price: "$44/month founding price",
     brevoEnv: "BREVO_LIST_BADDIE_COVEN",
     brevoList: 23,
     cta: "join the waitlist",
