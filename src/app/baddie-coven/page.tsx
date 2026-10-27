@@ -279,6 +279,7 @@ export default function BaddieCovenPage() {
             </div>
             {/* The launch: a three-day window, then the first big event. */}
             <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
+              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · manifestation workshop</span>
               <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our first big event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
               <CovenCountdown />
@@ -356,6 +357,19 @@ export default function BaddieCovenPage() {
       {/* 06 · What a month inside holds. */}
       <Section bg="var(--lav-light)">
         <Head n="06" tag="every month inside" title="your monthly" accent="dose of magic." />
+        {/* The first big event, so nobody misses it. No time is set yet, so only the date. */}
+        <div className="holo-edge grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-center" style={{ ...card, marginTop: 30, padding: "26px 28px", background: "var(--dark)", color: "#fff", boxShadow: "8px 8px 0 var(--pink)", position: "relative" }}>
+          <div className="hd-foil" style={{ border: "var(--border)", borderRadius: 18, padding: "16px 22px", textAlign: "center", color: "var(--dark)", transform: "rotate(-3deg)", boxShadow: "4px 4px 0 #fff" }}>
+            <div style={{ fontFamily: pp, fontSize: 52, fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>11/11</div>
+            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>save the date</div>
+          </div>
+          <div>
+            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--pink)" }}>✨ save the f*cking date</div>
+            <div style={{ fontFamily: pp, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, lineHeight: 1.1, margin: "8px 0 10px" }}>your first big event: <span style={{ color: "var(--pink)" }}>the 11/11 manifestation workshop.</span></div>
+            <p style={{ ...copy, margin: 0 }}>The most manifest-y moment of the ENTIRE year, and you KNOW we&apos;ll be there with candles lit, intentions SET and the most outrageous version of our lives on ordeeeer. Because of course we are. 🪄</p>
+          </div>
+          <HoloStar size={44} style={{ top: -20, right: 30, transform: "rotate(12deg)" }} />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 32 }}>
           {MONTH.map(([e, t, b]) => (
             <div key={t} className="holo-edge" style={card}>
