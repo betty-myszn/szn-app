@@ -21,8 +21,11 @@ export const metadata: Metadata = {
     description: "Become more of who you are. Create the life you came here to live. Waitlist open now.",
     url: "/baddie-coven",
     type: "website",
+    // A designed share card (her photo + foil "the baddie coven" sticker), so links on Threads,
+    // Instagram and WhatsApp look like the page instead of plain text.
+    images: [{ url: "/coven/og-baddie-coven.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 5 November." }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven.jpg"] },
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -164,18 +167,41 @@ const cta = { display: "inline-block", background: "var(--pink)", color: "#fff",
 
 function Section({ bg, ink = "var(--dark)", children }: { bg: string; ink?: string; children: React.ReactNode }) {
   return (
-    <section className="px-5 md:px-8" style={{ background: bg, color: ink, borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
-      <div className={wrap}>{children}</div>
-    </section>
+    <>
+      <section className="px-5 md:px-8" style={{ background: bg, color: ink, borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
+        <div className={wrap}>{children}</div>
+      </section>
+      {/* a thin foil seam between sections */}
+      <div className="hd-foil" aria-hidden="true" style={{ height: 8, borderBottom: "var(--border)" }} />
+    </>
   );
 }
 
 function Head({ n, tag, title, accent }: { n: string; tag: string; title: string; accent: string }) {
   return (
     <>
-      <div className="tag mb-5">{n} · {tag}</div>
+      <div className="mb-5">
+        <span className="holo-sticker" style={{ transform: `rotate(${Number(n) % 2 ? -3 : 2}deg)` }}>{n} · {tag}</span>
+      </div>
       <h2 className="display" style={h2}>{title} <span className="pk">{accent}</span></h2>
     </>
+  );
+}
+
+// A four-point foil sparkle, cut from the site's holographic foil.
+const SPARKLE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L61 39 L100 50 L61 61 L50 100 L39 61 L0 50 L39 39 Z'/%3E%3C/svg%3E")`;
+function HoloStar({ size = 44, style }: { size?: number; style?: React.CSSProperties }) {
+  return (
+    <span className="holo-shape-wrap" aria-hidden="true" style={{ position: "absolute", zIndex: 4, pointerEvents: "none", ...style }}>
+      <span className="holo-shape" style={{ width: size, height: size, ["--shape" as string]: SPARKLE } as React.CSSProperties} />
+    </span>
+  );
+}
+
+/** An emoji in a foil circle, for the top of a card. */
+function FoilEmoji({ e }: { e: string }) {
+  return (
+    <span className="hd-foil" style={{ width: 50, height: 50, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 24, boxShadow: "3px 3px 0 var(--dark)" }}>{e}</span>
   );
 }
 
@@ -183,15 +209,21 @@ function Statement({ children, tone = "dark" }: { children: React.ReactNode; ton
   return (
     <div className="holo-edge" style={{ marginTop: 28, border: "var(--border)", borderRadius: 18, background: tone === "dark" ? "var(--dark)" : "var(--pink)", color: "#fff", padding: "22px 24px", fontFamily: pp, fontSize: "clamp(18px, 2.4vw, 24px)", fontWeight: 800, lineHeight: 1.3 }}>
       {children}
+      <HoloStar size={46} style={{ top: -22, right: 26, transform: "rotate(12deg)" }} />
+      <HoloStar size={24} style={{ bottom: -12, left: 34 }} />
     </div>
   );
 }
 
-function Pic({ src, ratio = "4 / 5" }: { src: string; ratio?: string }) {
+function Pic({ src, ratio = "4 / 5", label }: { src: string; ratio?: string; label?: string }) {
   return (
-    <div className="holo-edge" style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)", aspectRatio: ratio }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" aria-hidden="true" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+    <div style={{ position: "relative" }}>
+      <div className="holo-edge" style={{ border: "var(--border)", borderRadius: 22, overflow: "hidden", background: "var(--lav)", boxShadow: "8px 8px 0 var(--dark)", aspectRatio: ratio }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt="" aria-hidden="true" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      </div>
+      {label && <span className="holo-sticker" style={{ position: "absolute", top: -14, left: 18, zIndex: 5, transform: "rotate(-5deg)", fontSize: 12 }}>{label}</span>}
+      <HoloStar size={38} style={{ bottom: -16, right: -10, transform: "rotate(-8deg)" }} />
     </div>
   );
 }
@@ -223,9 +255,14 @@ export default function BaddieCovenPage() {
       <OfferHero
         offer="baddie-coven"
         art={
-          <div className="holo-edge" style={{ width: "min(380px, 82vw)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+          <div style={{ position: "relative" }}>
+            <div className="holo-edge" style={{ width: "min(380px, 82vw)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+            </div>
+            <span className="holo-sticker" style={{ position: "absolute", top: -12, right: -6, zIndex: 5, transform: "rotate(7deg)", fontSize: 12 }}>🦄 baddies only</span>
+            <HoloStar size={58} style={{ bottom: -24, left: -26, transform: "rotate(-10deg)" }} />
+            <HoloStar size={28} style={{ top: 70, left: -18 }} />
           </div>
         }
         tone="lav"
@@ -261,7 +298,7 @@ export default function BaddieCovenPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {SMALL.map(([e, t]) => (
               <div key={e} className="holo-edge" style={{ ...card, background: "var(--pink-light)" }}>
-                <div style={{ fontSize: 28 }}>{e}</div>
+                <FoilEmoji e={e} />
                 <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{t}</p>
               </div>
             ))}
@@ -278,12 +315,12 @@ export default function BaddieCovenPage() {
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>The kind of life where you&apos;re following your wildest ideas, doing things that scare you in the best possible way, exploring your creativity, making incredible friends and finally giving yourself permission to want absolutely EVERYTHING.</p>
             <p style={copy}>She already lives in you, my love, and she&apos;s been waiting sooooo patiently for you to let her out.</p>
           </div>
-          <Pic src={PICS.becoming} ratio="1 / 1" />
+          <Pic src={PICS.becoming} ratio="1 / 1" label="✨ future you" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 36 }}>
           {HER.map(([e, t]) => (
             <div key={e} className="holo-edge" style={card}>
-              <div style={{ fontSize: 28 }}>{e}</div>
+              <FoilEmoji e={e} />
               <p style={{ ...copy, fontSize: 15.5, fontWeight: 600, margin: "10px 0 0" }}>{t}</p>
             </div>
           ))}
@@ -300,7 +337,8 @@ export default function BaddieCovenPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" style={{ marginTop: 26 }}>
           {BLUEPRINT.map(([t, b]) => (
-            <div key={t} className="holo-edge" style={card}>
+            <div key={t} className="holo-edge" style={{ ...card, overflow: "hidden" }}>
+              <div className="hd-foil" aria-hidden="true" style={{ height: 12, margin: "-20px -20px 16px", borderBottom: "var(--border)" }} />
               <div className="display" style={{ fontSize: 24, lineHeight: 1, color: "var(--pink)" }}>{t}</div>
               <p style={{ ...copy, fontSize: 14.5, lineHeight: 1.6, margin: "12px 0 0" }}>{b}</p>
             </div>
@@ -322,7 +360,7 @@ export default function BaddieCovenPage() {
           {MONTH.map(([e, t, b]) => (
             <div key={t} className="holo-edge" style={card}>
               <div className="flex items-center gap-3">
-                <span style={{ fontSize: 30 }}>{e}</span>
+                <FoilEmoji e={e} />
                 <span style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.15 }}>{t}</span>
               </div>
               <p style={{ ...copy, fontSize: 15.5, margin: "12px 0 0" }}>{b}</p>
@@ -335,7 +373,7 @@ export default function BaddieCovenPage() {
       {/* 07 · Sisterhood gets its own big section. */}
       <Section bg="var(--pink-light)">
         <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-10 items-center">
-          <Pic src={PICS.people} />
+          <Pic src={PICS.people} label="🪩 your people" />
           <div>
             <Head n="07" tag="sisterhood" title="find your" accent="people." />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Imagine being able to tell a group of women that you&apos;ve just manifested a new client, pulled the Tower card three times in a week, booked a solo adventure or decided to completely reinvent your life.</p>
@@ -355,7 +393,7 @@ export default function BaddieCovenPage() {
             const [emoji, ...rest] = f.split(" ");
             return (
               <div key={f} className="holo-edge flex items-start gap-3" style={{ ...card, padding: "16px 18px", background: "var(--pink-light)" }}>
-                <span aria-hidden="true" style={{ flexShrink: 0, width: 26, height: 26, borderRadius: 7, border: "var(--border)", background: "var(--pink)", color: "#fff", display: "grid", placeItems: "center", fontSize: 15, fontWeight: 800 }}>✓</span>
+                <span aria-hidden="true" className="hd-foil" style={{ flexShrink: 0, width: 28, height: 28, borderRadius: 8, border: "var(--border)", color: "var(--dark)", display: "grid", placeItems: "center", fontSize: 15, fontWeight: 800 }}>✓</span>
                 <p style={{ ...copy, fontSize: 15.5, fontWeight: 600, margin: 0 }}>{rest.join(" ")} {emoji}</p>
               </div>
             );
@@ -370,7 +408,7 @@ export default function BaddieCovenPage() {
       {/* 09 · Meet the head witch. */}
       <Section bg="var(--lav-light)">
         <div className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 items-center">
-          <Pic src={PICS.betty} />
+          <Pic src={PICS.betty} label="🔮 your head witch" />
           <div>
             <Head n="09" tag="meet your head witch" title="hi, i'm" accent="betty. 🔮" />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>I&apos;ve spent nearly two decades obsessed with astrology, manifestation, shadow work and the deliciously witchy art of becoming yourself, and I&apos;ve written two published books about it along the way.</p>
@@ -379,7 +417,7 @@ export default function BaddieCovenPage() {
             <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.3, margin: "18px 0 0" }}>You can&apos;t hate yourself into a version of yourself that you love.</p>
             <div className="flex flex-wrap gap-2" style={{ marginTop: 20 }}>
               {["libra sun", "aquarius moon", "aquarius rising", "manifestor 4/6"].map((c) => (
-                <span key={c} style={{ fontFamily: pp, fontWeight: 800, fontSize: 13, border: "var(--border)", borderRadius: 999, padding: "7px 14px", background: "#fff" }}>{c}</span>
+                <span key={c} className="holo-sticker" style={{ fontSize: 12 }}>{c}</span>
               ))}
             </div>
           </div>
@@ -393,7 +431,7 @@ export default function BaddieCovenPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 24 }}>
           {QUOTES.map((id) => MEMBER_QUOTES[id]).filter(Boolean).map((q) => (
             <figure key={q.name} className="holo-edge" style={{ ...card, margin: 0, display: "flex", flexDirection: "column", background: "var(--pink-light)" }}>
-              <div aria-hidden="true" style={{ fontFamily: pp, fontSize: 46, fontWeight: 800, color: "var(--pink)", lineHeight: 0.8, marginBottom: 8 }}>&ldquo;</div>
+              <div aria-hidden="true" className="szn-holo-text" style={{ fontFamily: pp, fontSize: 56, fontWeight: 800, lineHeight: 0.8, marginBottom: 8 }}>&ldquo;</div>
               <blockquote style={{ margin: 0, fontSize: 15, lineHeight: 1.7, flex: 1 }}>{q.quote}</blockquote>
               <figcaption style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--pink)", marginTop: 16 }}>
                 {q.name} · my szn member

@@ -23,8 +23,8 @@ export default function CovenExplorer({ items }: { items: CovenTheme[] }) {
                 type="button"
                 onClick={() => setOpen(i)}
                 aria-expanded={on}
-                className="w-full text-left flex items-center gap-3"
-                style={{ border: "var(--border)", borderRadius: 14, background: on ? "var(--pink)" : "#fff", color: on ? "#fff" : "var(--dark)", padding: "14px 16px", fontFamily: pp, fontSize: 16, fontWeight: 800, lineHeight: 1.25, cursor: "pointer", boxShadow: on ? "4px 4px 0 var(--dark)" : "none" }}
+                className={`w-full text-left flex items-center gap-3 ${on ? "hd-foil" : "hd-tile"}`}
+                style={{ border: "var(--border)", borderRadius: 14, background: on ? undefined : "#fff", color: "var(--dark)", padding: "14px 16px", fontFamily: pp, fontSize: 16, fontWeight: 800, lineHeight: 1.25, cursor: "pointer", boxShadow: on ? "4px 4px 0 var(--dark)" : "none" }}
               >
                 <span style={{ fontSize: 24, flexShrink: 0 }}>{t.emoji}</span>
                 <span>{t.title}</span>
@@ -47,7 +47,7 @@ export default function CovenExplorer({ items }: { items: CovenTheme[] }) {
 
 function Panel({ t }: { t: CovenTheme }) {
   return (
-    <div style={{ border: "var(--border)", borderRadius: 18, background: "var(--pink-light)", padding: "24px 24px 26px", color: "var(--dark)", overflow: "hidden" }}>
+    <div className="szn-holo holo-edge" style={{ border: "var(--border)", borderRadius: 18, padding: "24px 24px 26px", color: "var(--dark)", overflow: "hidden" }}>
       <div className="flex items-start justify-between gap-4">
         <div style={{ fontFamily: pp, fontSize: "clamp(20px, 2.4vw, 26px)", fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.01em" }}>{t.title}</div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
