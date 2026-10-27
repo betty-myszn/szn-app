@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { OfferHero, WaitlistBand, HeroArt } from "@/components/Offer";
+import { OfferHero, WaitlistBand } from "@/components/Offer";
 import CovenExplorer from "@/components/CovenExplorer";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
@@ -29,7 +29,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 // Every picture on the page lives here, so swapping in new photos is a one-line change per slot.
 // Drop new files in /public/coven/ and point the slot at them.
 const PICS = {
-  becoming: "/hero-collage.png",
+  becoming: "/coven/baddie-money-pink.jpg",
   creative: "/astrology-journaling.png",
   astrology: "/cosmic-planet.png",
   money: "/cosmic-money.png",
@@ -221,7 +221,12 @@ export default function BaddieCovenPage() {
       {/* 01 · The hero */}
       <OfferHero
         offer="baddie-coven"
-        art={<HeroArt src="/disco-planet.png" />}
+        art={
+          <div className="holo-edge" style={{ width: "min(380px, 82vw)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+          </div>
+        }
         tone="lav"
         kicker="waitlist open now"
         title="the baddie"
