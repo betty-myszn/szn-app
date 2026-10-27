@@ -156,7 +156,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Pricing isn't confirmed yet, and the waitlist hears it before anybody else does."],
-  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Your first big event as a member is the 11/11 manifestation workshop. 🪄"],
+  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, and you'll want to be there. 🪄"],
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -279,9 +279,9 @@ export default function BaddieCovenPage() {
             </div>
             {/* The launch: a three-day window, then the first big event. */}
             <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
-              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · manifestation workshop</span>
+              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · our first ever event</span>
               <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our first big event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
               <CovenCountdown />
             </div>
           </>
@@ -359,14 +359,16 @@ export default function BaddieCovenPage() {
         <Head n="06" tag="every month inside" title="your monthly" accent="dose of magic." />
         {/* The first big event, so nobody misses it. No time is set yet, so only the date. */}
         <div className="holo-edge grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-center" style={{ ...card, marginTop: 30, padding: "26px 28px", background: "var(--dark)", color: "#fff", boxShadow: "8px 8px 0 var(--pink)", position: "relative" }}>
-          <div className="hd-foil" style={{ border: "var(--border)", borderRadius: 18, padding: "16px 22px", textAlign: "center", color: "var(--dark)", transform: "rotate(-3deg)", boxShadow: "4px 4px 0 #fff" }}>
+          <div className="hd-foil" style={{ position: "relative", border: "var(--border)", borderRadius: 18, padding: "16px 22px", textAlign: "center", color: "var(--dark)", transform: "rotate(-3deg)", boxShadow: "4px 4px 0 #fff", justifySelf: "start" }}>
             <div style={{ fontFamily: pp, fontSize: 52, fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>11/11</div>
             <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>save the date</div>
+            <span style={{ position: "absolute", top: -16, right: -18, transform: "rotate(10deg)", background: "#fff", border: "var(--border)", borderRadius: 999, padding: "5px 12px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", whiteSpace: "nowrap" }}>✦ first ever ✦</span>
           </div>
           <div>
             <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--pink)" }}>✨ save the f*cking date</div>
-            <div style={{ fontFamily: pp, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, lineHeight: 1.1, margin: "8px 0 10px" }}>your first big event: <span style={{ color: "var(--pink)" }}>the 11/11 manifestation workshop.</span></div>
+            <div style={{ fontFamily: pp, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, lineHeight: 1.1, margin: "8px 0 10px" }}>our FIRST EVER coven event: <span style={{ color: "var(--pink)" }}>the 11/11 manifestation workshop.</span></div>
             <p style={{ ...copy, margin: 0 }}>The most manifest-y moment of the ENTIRE year, and you KNOW we&apos;ll be there with candles lit, intentions SET and the most outrageous version of our lives on ordeeeer. Because of course we are. 🪄</p>
+            <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Baddie Coven begins, and you&apos;ll want to say you were there. 💜</p>
           </div>
           <HoloStar size={44} style={{ top: -20, right: 30, transform: "rotate(12deg)" }} />
         </div>
