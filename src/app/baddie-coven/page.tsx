@@ -152,7 +152,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Pricing isn't confirmed yet, and the waitlist hears it before anybody else does."],
-  ["When can I join?", "Opening dates go to the waitlist first, so pop your name down and you'll be the very first to know."],
+  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Your first big event as a member is the 11/11 manifestation workshop. 🪄"],
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -238,6 +238,11 @@ export default function BaddieCovenPage() {
               {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🕯️ monthly coven circle", "🌕 moon rituals"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
               ))}
+            </div>
+            {/* The launch: a three-day window, then the first big event. */}
+            <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
+              <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our first big event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
             </div>
           </>
         }
