@@ -45,6 +45,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   { q: "Do I need to know anything about astrology?", a: "Babe, no. You don't need to know your rising sign from your elbow, that's literally my job. We go through all of it together." },
   { q: "Are these astrology readings or coaching sessions?", a: "Both, and then some. We use your astrology and Human Design to understand exactly how you're wired, then go to work with coaching, hypnosis, shadow work, mindset and energy work and real next steps." },
   { q: "Which session should I book?", a: "Whichever one made you go \"oh, that's SO me\". Every session gets built around you anyway, so we go wherever you actually need to go." },
+  { q: "How do I book my time?", a: "Pay for your session and I'll be in your inbox to find a time that works in your time zone and mine, wherever in the world you are. I'll grab your birth details and goals at the same time, so my two to three hours of prep can start." },
   { q: "Are the sessions online?", a: "Yes, all on Zoom, so you can join from anywhere in the world, in your pyjamas, with a matcha. Love that for you." },
   {
     q: "Can I work with Betty for longer?",
@@ -167,6 +168,7 @@ export default function BaddieSessionsPage() {
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
                 <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>{o.blurb}</p>
                 {SESSION_OPTIONS.length === 1 && <p style={{ fontSize: 15, fontWeight: 700, margin: "10px 0 0" }}>Same session, same price for all five: the Reset, Rich B*tch Energy, the Shadow Baddie Session, Main Character Activation or the Business Baddie Session.</p>}
+                <p style={{ fontSize: 15, lineHeight: 1.6, margin: "10px 0 0" }}>💌 Once you&apos;ve paid, I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine, and to grab your birth details and goals so I can start my prep.</p>
                 <div style={{ marginTop: "auto", paddingTop: 22 }}>
                   <a href={bookingHref(o.bookingUrl, `${o.name} (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book {o.name.replace(/^The /, "the ")}</a>
                 </div>
