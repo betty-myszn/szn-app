@@ -2,7 +2,8 @@
 // length and booking lives here, so changing a price or adding a booking link is a one-line edit.
 //
 // One standard session for all five themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each of the five sessions has its own $333 Stripe Payment Link
-// (created 27 Oct 2026); the price card scrolls to them. Sessions for two have no link yet, so that button emails Betty.
+// (created 27 Oct 2026); the price card scrolls to them. Sessions for two share one
+// $555 link (special, normally $666) with a dropdown for the session.
 
 export const BADDIE_SESSIONS_CONTACT = "hello@thecosmicco.com";
 
@@ -12,13 +13,21 @@ export interface SessionOption {
   priceUsd: number;
   /** Same session booked for two people (a couple, besties, sisters, business partners). */
   priceForTwoUsd: number;
+  /** Shown struck through next to priceForTwoUsd while the for-two special is on; null hides it. */
+  priceForTwoWasUsd: number | null;
+  /** One $555 Payment Link for every session: a dropdown on the checkout says which one. */
+  forTwoBookingUrl: string | null;
+  forTwoStripePriceId: string | null;
+  /** $333 gift checkout: asks for her name, her email and an optional note. */
+  giftBookingUrl: string | null;
+  giftStripePriceId: string | null;
   blurb: string;
   /** Stripe Payment Link / booking page once approved. null = email Betty. */
   bookingUrl: string | null;
 }
 
 export const SESSION_OPTIONS: SessionOption[] = [
-  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 666, blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
+  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
 export interface BaddieSession {
@@ -122,6 +131,16 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
     cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F", stripePriceId: "price_1UVH2vJ6s9fRhiJo5s9D8Pd7",
   },
 ];
+
+/** The for-two checkout's "which session" dropdown values (Stripe only allows alphanumerics). */
+export const sessionForDropdownValue = (value: string | null | undefined): BaddieSession | null =>
+  BADDIE_SESSIONS.find((s) => s.slug.replace(/[^a-z0-9]/gi, "") === (value ?? "").trim()) ?? null;
+
+export const isForTwoPrice = (priceId: string | null | undefined) =>
+  !!priceId && SESSION_OPTIONS.some((o) => o.forTwoStripePriceId === priceId.trim());
+
+export const isGiftPrice = (priceId: string | null | undefined) =>
+  !!priceId && SESSION_OPTIONS.some((o) => o.giftStripePriceId === priceId.trim());
 
 /** The session a paid Stripe price belongs to, or null if it isn't a Baddie Session. */
 export function baddieSessionForPrice(priceId: string | null | undefined): BaddieSession | null {

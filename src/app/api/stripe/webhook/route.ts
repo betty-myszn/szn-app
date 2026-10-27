@@ -9,8 +9,8 @@ import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
 import { isBadBtchReportPrice, handleBadBtchReportPurchase } from "@/lib/email/bad-btch-report";
-import { handleBaddieSessionPurchase } from "@/lib/email/baddie-session";
-import { baddieSessionForPrice } from "@/lib/baddie-sessions";
+import { handleBaddieSessionPurchase, handleBaddieGiftPurchase } from "@/lib/email/baddie-session";
+import { baddieSessionForPrice, isForTwoPrice, isGiftPrice, sessionForDropdownValue } from "@/lib/baddie-sessions";
 
 export const runtime = "nodejs";
 
@@ -453,7 +453,16 @@ export async function POST(request: Request) {
           // The Baddie Sessions are one-off 1:1 bookings, never a membership.
           const baddie = baddieSessionForPrice(priceId);
           if (baddie) {
-            await handleBaddieSessionPurchase(admin, session, baddie);
+            await handleBaddieSessionPurchase(admin, session, baddie, false);
+            break;
+          }
+          if (isGiftPrice(priceId)) {
+            await handleBaddieGiftPurchase(admin, session);
+            break;
+          }
+          if (isForTwoPrice(priceId)) {
+            const picked = session.custom_fields?.find((f) => f.key === "session")?.dropdown?.value;
+            await handleBaddieSessionPurchase(admin, session, sessionForDropdownValue(picked), true);
             break;
           }
 
