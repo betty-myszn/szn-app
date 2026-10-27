@@ -351,7 +351,7 @@ export default function BaddieCovenPage() {
 
       {/* 05 · The six pillars, one tabbed panel. */}
       <Section bg="#fff">
-        <Head n="05" tag="inside the coven 🪄" title="five ways we're" accent="making magic." />
+        <Head n="05" tag="inside the coven 🪄" title="choose what you" accent="need, baddie." />
         <CovenExplorer items={PILLARS} />
       </Section>
 
