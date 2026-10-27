@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/baddie-sessions" },
   openGraph: {
     title: "The Baddie Sessions 💅",
-    description: "Four private 1:1 coaching sessions with Betty: astrology, manifestation, shadow work and practical tools to become the woman you actually want to be.",
+    description: "Five private 1:1 coaching sessions with Betty: astrology, manifestation, shadow work, business strategy and practical tools to become the woman you actually want to be.",
     url: "/baddie-sessions",
     type: "website",
     images: [OG_IMAGE],
@@ -25,7 +25,7 @@ const btn = (bg: string, ink = "#fff") => ({ display: "inline-block", background
 
 // Why book with Betty: sits straight under the hero so the benefits come first (Betty's brief, 27 Oct 2026).
 const WHY = [
-  { emoji: "🔮", title: "A session built around YOUR chart", body: "Before we ever meet, I go through your astrology and your Human Design and strategise the whole ninety minutes around how you're actually wired, so nothing in that room is a template someone else got too." },
+  { emoji: "🔮", title: "A session built around YOUR chart", body: "Before we ever meet, I spend two to three hours going through your astrology and your Human Design and strategising the whole ninety minutes around how you're actually wired, so nothing in that room is a template someone else got too." },
   { emoji: "💸", title: "Twenty years of business brain on your side", body: "I've been a business consultant and strategist for twenty years and I run my own global dream business, so when your goal is more money, a launch or a big career move, you get a real strategy alongside the magic." },
   { emoji: "🧠", title: "We go deeper than talking", body: "Hypnosis, mindset work and energy work all come out when your goals call for them, which means we shift the subconscious stuff that's been running the show instead of just understanding it." },
   { emoji: "💖", title: "Thousands of women have gone first", body: "I've been coaching women for over a decade, thousands of them, so whatever you're carrying in, I've seen it, I'm not scared of it, and I know exactly how to help you move it." },
@@ -34,7 +34,7 @@ const WHY = [
 const STEPS = [
   { n: "01", title: "Pick your session", body: "Choose the area of your life you're ready to level up, whether that's a reset, your money, your shadow or your main character era." },
   { n: "02", title: "Send me your birth details and your goals", body: "A short intake with your birth time, date and place, plus what you want, what's in the way and what you'd love us to crack open together." },
-  { n: "03", title: "I strategise your session", body: "I look at your Human Design and your astrology side by side and build the session around what they're showing me about you and the goals you came in with." },
+  { n: "03", title: "I strategise your session", body: "I spend two to three hours with your Human Design and your astrology side by side before we meet, building the session around what they're showing me about you and the goals you came in with." },
   { n: "04", title: "Ninety minutes, all about YOU", body: "We meet online, and depending on what you're being guided towards your session can include hypnosis, mindset work, energy work and coaching, every bit of it led by your goals, your astrology and your Human Design." },
   { n: "05", title: "Walk out activated", body: "You leave with clear next steps, the insights from your chart and the tools to keep the shift going long after we hang up." },
 ];
@@ -67,18 +67,18 @@ export default function BaddieSessionsPage() {
             <div style={{ fontSize: "clamp(16px, 1.8vw, 19px)", lineHeight: 1.65, color: "var(--dark)", fontWeight: 600, maxWidth: 600, marginTop: 16 }}>
               <p style={{ margin: "0 0 10px" }}>Got some patterns to break, money to make, confidence to build or an entire life to reinvent?</p>
               <p style={{ margin: "0 0 10px", fontWeight: 800 }}>Welcome to your personal bad b*tch intervention.</p>
-              <p style={{ margin: 0 }}>Four private coaching experiences combining astrology, manifestation, shadow work and practical tools to help you become the woman you actually want to be.</p>
+              <p style={{ margin: 0 }}>Five private coaching experiences combining astrology, manifestation, shadow work, business strategy and practical tools to help you become the woman you actually want to be.</p>
             </div>
             <a href="#sessions" className="no-underline" style={{ ...btn("var(--dark)"), marginTop: 30 }}>Find your Baddie Session</a>
           </div>
-          {/* The four sessions fanned like a hand of cards */}
+          {/* The sessions fanned like a hand of cards */}
           <div aria-hidden className="hidden sm:flex justify-center" style={{ position: "relative", height: 400 }}>
             {BADDIE_SESSIONS.map((s, i) => (
               <div
                 key={s.slug}
                 style={{
-                  position: "absolute", top: 20 + i * 18, left: `calc(50% - 130px + ${(i - 1.5) * 46}px)`, width: 230, height: 300,
-                  transform: `rotate(${(i - 1.5) * 8}deg)`, background: s.accent, color: s.accentInk === "var(--pink)" ? "#fff" : s.accentInk,
+                  position: "absolute", top: 20 + i * 18, left: `calc(50% - 130px + ${(i - (BADDIE_SESSIONS.length - 1) / 2) * 42}px)`, width: 230, height: 300,
+                  transform: `rotate(${(i - (BADDIE_SESSIONS.length - 1) / 2) * 7}deg)`, background: s.accent, color: s.accentInk === "var(--pink)" ? "#fff" : s.accentInk,
                   border: "var(--border)", borderRadius: 14, boxShadow: "8px 10px 0 var(--dark)", padding: "20px 18px", display: "flex", flexDirection: "column",
                 }}
               >
@@ -104,11 +104,11 @@ export default function BaddieSessionsPage() {
         </div>
       </Band>
 
-      {/* The four sessions */}
+      {/* The sessions */}
       <section id="sessions" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 88, scrollMarginTop: 70 }}>
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-5">meet your baddie sessions</div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 5.5vw, 66px)", lineHeight: 1 }}>four ways to <span className="pk">take your power back.</span></h2>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 5.5vw, 66px)", lineHeight: 1 }}>five ways to <span className="pk">take your power back.</span></h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 40 }}>
             {BADDIE_SESSIONS.map((s) => (
               <article key={s.slug} id={s.slug} className="offer-card" style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
@@ -158,7 +158,7 @@ export default function BaddieSessionsPage() {
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{o.name}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
                 <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>{o.blurb}</p>
-                {SESSION_OPTIONS.length === 1 && <p style={{ fontSize: 15, fontWeight: 700, margin: "10px 0 0" }}>The same session and price for all four: the Reset, Rich B*tch Energy, the Shadow Baddie Session or Main Character Activation.</p>}
+                {SESSION_OPTIONS.length === 1 && <p style={{ fontSize: 15, fontWeight: 700, margin: "10px 0 0" }}>The same session and price for all five: the Reset, Rich B*tch Energy, the Shadow Baddie Session, Main Character Activation or the Business Baddie Session.</p>}
                 <div style={{ marginTop: "auto", paddingTop: 22 }}>
                   <a href={bookingHref(o.bookingUrl, `${o.name} (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book {o.name.replace(/^The /, "the ")}</a>
                 </div>
@@ -171,9 +171,9 @@ export default function BaddieSessionsPage() {
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>💞 booking for two</div>
               <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26, marginTop: 8, lineHeight: 1.1 }}>Bring your person.</div>
               <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceForTwoUsd} USD for two</div>
-              <p style={{ fontSize: 16, lineHeight: 1.65, fontWeight: 600, margin: "14px 0 0" }}>Any of the four sessions can be booked for two, so bring your partner, your bestie, your sister or your business bestie. I strategise the session around both of your charts and both of your Human Designs, which means you each walk out with your own breakthroughs plus everything that lights up when you two go after it together.</p>
+              <p style={{ fontSize: 16, lineHeight: 1.65, fontWeight: 600, margin: "14px 0 0" }}>Any of the five sessions can be booked for two, so bring your partner, your bestie, your sister or your business bestie. I strategise the session around both of your charts and both of your Human Designs, which means you each walk out with your own breakthroughs plus everything that lights up when you two go after it together.</p>
               <div style={{ paddingTop: 22 }}>
-                <a href={bookingHref(o.bookingUrl, `${o.name} for two (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book a session for two</a>
+                <a href={bookingHref(null, `${o.name} for two (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Book a session for two</a>
               </div>
             </div>
           ))}

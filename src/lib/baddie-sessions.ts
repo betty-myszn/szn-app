@@ -1,8 +1,8 @@
-// The Baddie Sessions: Betty's four 1:1 coaching sessions. Everything a visitor sees about price,
+// The Baddie Sessions: Betty's five 1:1 coaching sessions. Everything a visitor sees about price,
 // length and booking lives here, so changing a price or adding a booking link is a one-line edit.
 //
-// One standard session for all four themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). No booking or payment system is connected yet:
-// while bookingUrl is null every button opens an email to Betty with the session in the subject.
+// One standard session for all five themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each of the five sessions has its own $333 Stripe Payment Link
+// (created 27 Oct 2026); the price card scrolls to them. Sessions for two have no link yet, so that button emails Betty.
 
 export const BADDIE_SESSIONS_CONTACT = "hello@thecosmicco.com";
 
@@ -18,7 +18,7 @@ export interface SessionOption {
 }
 
 export const SESSION_OPTIONS: SessionOption[] = [
-  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 666, blurb: "Ninety minutes of private 1:1 coaching, strategised around your astrology and Human Design, with hypnosis, mindset work and energy work woven in wherever your goals need it.", bookingUrl: null },
+  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 666, blurb: "Ninety minutes of private 1:1 coaching, plus two to three hours I spend beforehand strategising it around your astrology and Human Design, with hypnosis, mindset work and energy work woven in wherever your goals need it.", bookingUrl: "#sessions" },
 ];
 
 export interface BaddieSession {
@@ -51,7 +51,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Reconnecting with your confidence, identity and desires",
       "Creating an actionable plan for your next chapter",
     ],
-    cta: "Book your reset", accent: "var(--pink)", accentInk: "#fff", bookingUrl: null,
+    cta: "Book your reset", accent: "var(--pink)", accentInk: "#fff", bookingUrl: "https://buy.stripe.com/7sY4gAf2TcM70Lo2yx7kc0B",
   },
   {
     slug: "rich-btch-energy", number: "02", emoji: "💸", name: "Rich B*tch Energy",
@@ -67,7 +67,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Manifestation practices that work with your identity",
       "Practical actions to support your financial goals",
     ],
-    cta: "Book your money session", accent: "var(--lav)", accentInk: "var(--dark)", bookingUrl: null,
+    cta: "Book your money session", accent: "var(--lav)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/8x25kE7Ar8vRalY5KJ7kc0C",
   },
   {
     slug: "shadow", number: "03", emoji: "🖤", name: "The Shadow Baddie Session",
@@ -84,7 +84,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Boundaries, self-worth and personal power",
       "Integrating shadow work into everyday life",
     ],
-    cta: "Book your shadow session", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: null,
+    cta: "Book your shadow session", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/28E6oI2g7fYjbq26ON7kc0D",
   },
   {
     slug: "main-character", number: "04", emoji: "🔥", name: "Main Character Activation",
@@ -100,7 +100,23 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Identity, self-image and embodiment",
       "Practical steps to start showing up differently",
     ],
-    cta: "Book your activation", accent: "var(--pink-light)", accentInk: "var(--dark)", bookingUrl: null,
+    cta: "Book your activation", accent: "var(--pink-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/cNi8wQaMDaDZfGic977kc0E",
+  },
+  {
+    slug: "business", number: "05", emoji: "💼", name: "The Business Baddie Session",
+    tagline: "Your empire, built around how you're actually wired.",
+    body: [
+      "For the founders, the side hustlers and the women with a business idea they can't stop thinking about, who are ready to make serious money doing it their way.",
+      "I bring twenty years as a business consultant and strategist to the table, then line it up with your astrology and your Human Design, so your offers, your pricing and your launches fit your energy, your timing and the money you want to make.",
+    ],
+    focus: [
+      "Your business astrology: your Midheaven, 10th house, 2nd house and Jupiter",
+      "Your Human Design type and strategy for how you work, sell and decide",
+      "Offers, pricing and launches that match your energy",
+      "Visibility, selling and charging what you're worth",
+      "A clear business plan with real next steps and real dates",
+    ],
+    cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F",
   },
 ];
 
