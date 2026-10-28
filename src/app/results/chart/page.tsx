@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ChartResults from "@/components/ChartResults";
+import ResultsUpsell from "@/components/ResultsUpsell";
 import { useChart } from "@/lib/use-chart";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -61,6 +62,7 @@ export default function FreeChartReadingPage() {
         </div>
       </section>
       <ChartResults chart={chart} />
+      <ResultsUpsell name={chart.birthData?.name} />
     </>
   );
 }

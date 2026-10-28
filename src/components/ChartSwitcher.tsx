@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ChartData } from "@/types/chart";
 import ChartResults from "@/components/ChartResults";
 import HumanDesignReading from "@/components/HumanDesignReading";
+import ResultsUpsell from "@/components/ResultsUpsell";
 import { track, EVENTS } from "@/lib/analytics";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -104,6 +105,7 @@ export default function ChartSwitcher({ chart }: { chart: ChartData }) {
 
       {/* The active reading, rendered inline. Only the selected one mounts, so the page stays light. */}
       {tab === "astro" ? <ChartResults chart={chart} /> : <HumanDesignReading />}
+      <ResultsUpsell name={name} />
     </>
   );
 }

@@ -336,50 +336,6 @@ export default function ChartResults({ chart }: ChartResultsProps) {
         />
       </div>
 
-      {/* CTA */}
-      <div
-        className="px-8 py-16"
-        style={{ background: "var(--dark)", borderTop: "var(--border)" }}
-      >
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="tag mb-4">keep going</div>
-          <h2
-            style={{
-              fontFamily: poppins,
-              fontSize: "clamp(24px, 4vw, 36px)",
-              fontWeight: 800,
-              letterSpacing: "-0.8px",
-              color: "#fff",
-              lineHeight: 1.1,
-              marginBottom: 12,
-            }}
-          >
-            this is just the <span className="pk">beginning.</span>
-          </h2>
-          <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(255,255,255,0.5)", marginBottom: 24 }}>
-            Your chart is a blueprint. Now learn how to use it. Apply for MY SZN, the three-month mastermind with a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
-          </p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <a
-              onClick={() => track(EVENTS.CTA_CLICK, { label: "join_the_membership", location: "results_footer" })}
-              href="/membership"
-              style={{
-                background: "var(--pink)",
-                color: "var(--dark)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "14px 28px",
-                textDecoration: "none",
-              }}
-            >
-              apply for MY SZN &rarr;
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Technical Data (collapsible) */}
       <div className="mx-auto max-w-6xl px-8 py-12 space-y-12">
         <details>
