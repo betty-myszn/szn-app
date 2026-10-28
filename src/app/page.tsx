@@ -7,7 +7,7 @@ import { useMember } from "@/lib/use-member";
 import Manifesto from "@/components/Manifesto";
 import MeetBetty from "@/components/MeetBetty";
 import QuoteStrip from "@/components/QuoteStrip";
-import EventPromoBand from "@/components/EventPromoBand";
+import CovenPromoBand from "@/components/CovenPromoBand";
 import { OFFERS, PODCAST } from "@/lib/offers";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -128,8 +128,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 1b. NEXT EVENT (MOONIFEST first): sits under the hero while an event is on sale ─── */}
-      <EventPromoBand />
+      {/* ─── 1b. THE BADDIE COVEN launch, in the slot the event band (EventPromoBand) used for the full moon ─── */}
+      <CovenPromoBand />
 
       {/* ─── 2. TICKER ─── */}
       <Ticker variant="lav" items={UNIVERSE.map((o) => `${o.emoji} ${o.name.toLowerCase()}`)} />
