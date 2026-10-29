@@ -10,7 +10,7 @@ import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
 import { isBadBtchReportPrice, handleBadBtchReportPurchase } from "@/lib/email/bad-btch-report";
 import { handleBaddieSessionPurchase, handleBaddieGiftPurchase } from "@/lib/email/baddie-session";
-import { baddieSessionForPrice, isForTwoPrice, isGiftPrice, sessionForDropdownValue } from "@/lib/baddie-sessions";
+import { baddieSessionForPrice, isForTwoPrice, isGiftPrice, isPackagePrice, sessionForDropdownValue } from "@/lib/baddie-sessions";
 
 export const runtime = "nodejs";
 
@@ -454,6 +454,10 @@ export async function POST(request: Request) {
           const baddie = baddieSessionForPrice(priceId);
           if (baddie) {
             await handleBaddieSessionPurchase(admin, session, baddie, false);
+            break;
+          }
+          if (isPackagePrice(priceId)) {
+            await handleBaddieSessionPurchase(admin, session, null, false, true);
             break;
           }
           if (isGiftPrice(priceId)) {

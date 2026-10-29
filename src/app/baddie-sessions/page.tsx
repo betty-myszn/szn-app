@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Band } from "@/components/Offer";
 import HoloShape from "@/components/HoloShape";
-import { BADDIE_SESSIONS, SESSION_OPTIONS, bookingHref } from "@/lib/baddie-sessions";
+import { BADDIE_SESSIONS, SESSION_OPTIONS, SESSION_PACKAGE, bookingHref } from "@/lib/baddie-sessions";
 import { OG_IMAGE } from "@/lib/site";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -69,10 +69,11 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   { q: "Which session should I book?", a: "Whichever one made you go \"oh, that's SO me\". Every session gets built around you anyway, so we go wherever you actually need to go." },
   { q: "How do I book my time?", a: "Pop your birth details in at checkout and pay, then I'll be in your inbox to find a time that works in your time zone and mine, wherever in the world you are. Your chart lands with me the second you book, so my two to three hours of prep can start straight away." },
   { q: "Can I reschedule or get a refund?", a: "Life happens, babe. Give me at least 48 hours' notice and we'll move your session once, no drama. Because my two to three hours of prep start the moment you book, sessions are non-refundable, but if something big comes up, email me and we'll work it out together." },
+  { q: "Is this therapy?", a: "No, babe. The Baddie Sessions are coaching, so they aren't therapy, counselling or medical, psychological or financial advice, and they're never a replacement for any of those. If you're working with a therapist or doctor, keep going, and if you're in crisis or struggling with your mental health, please reach out to a medical professional or your local support line first." },
   { q: "Are the sessions online?", a: "Yes, all on Zoom, so you can join from anywhere in the world, in your pyjamas, with a matcha. Love that for you." },
   {
     q: "Can I work with Betty for longer?",
-    a: <>Obsessed with that energy. Book another Baddie Session whenever you&apos;re ready for round two, or go full throttle for ninety days in <a href="/mastermind" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>the MY SZN Mastermind</a>.</>,
+    a: <>Obsessed with that energy. Grab <a href="#package" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}, book another Baddie Session whenever you&apos;re ready for round two, or go full throttle for ninety days in <a href="/mastermind" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>the MY SZN Mastermind</a>.</>,
   },
 ];
 
@@ -215,7 +216,9 @@ export default function BaddieSessionsPage() {
                   <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 6 }}>
                     {s.focus.map((f) => <li key={f} style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5 }}><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>{f}</li>)}
                   </ul>
+                  <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 16, lineHeight: 1.45, margin: "20px 0 0", padding: "14px 16px", background: "var(--pink-light)", border: "var(--border)", borderRadius: 14 }}>✨ {s.after}</p>
                   <div style={{ marginTop: "auto", paddingTop: 24 }}>
+                    <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: "0 0 14px" }}>💌 Want more than one? <a href="#package" style={{ color: "var(--dark)", fontWeight: 800, textDecoration: "underline" }}>Get any three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}.</p>
                     <a href={bookingHref(s.bookingUrl, `Baddie Session: ${s.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{s.cta}</a>
                   </div>
                 </div>
@@ -282,6 +285,26 @@ export default function BaddieSessionsPage() {
           ))}
         </div>
       </Band>
+
+      {/* The 3-session package: white card on the glitter, so the holo ring is allowed */}
+      <section id="package" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, borderBottom: "var(--border)", scrollMarginTop: 70 }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-5"><span className="holo-sticker">✦ the baddie session package</span></div>
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
+            three sessions. <span className="pk">a whole new era.</span>
+          </h2>
+          <div className="holo-edge" style={{ marginTop: 36, background: "#fff", color: "var(--dark)", border: "var(--border)", borderRadius: 24, padding: "28px 26px", boxShadow: "8px 10px 0 var(--pink)" }}>
+            <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{SESSION_PACKAGE.sessions} Baddie Sessions</div>
+            <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{SESSION_PACKAGE.sessions} x {SESSION_OPTIONS[0].minutes} minutes | <s style={{ fontWeight: 600 }}>${SESSION_PACKAGE.wasUsd}</s> ${SESSION_PACKAGE.priceUsd} USD</div>
+            <div style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontWeight: 800, fontSize: 14, padding: "6px 14px", borderRadius: 999, border: "var(--border)" }}>You save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}</div>
+            <p style={{ fontSize: 16, lineHeight: 1.65, margin: "16px 0 0" }}>For the baddie who wants the full transformation, this is three sessions mixed and matched however you like from all five, so you can rebuild your money, your confidence and your big dream one after the other, or go three rounds deep on the one thing that&apos;s been running your life. I prep two to three hours from your astrology and Human Design before every single session, so each one picks up exactly where the last one left you.</p>
+            <p style={{ fontSize: 16, lineHeight: 1.65, margin: "12px 0 0" }}>Pop your birth details in at checkout, then I&apos;ll be in your inbox to pick your first session and lock in a time that works in your time zone AND mine. 💖</p>
+            <div style={{ paddingTop: 22 }}>
+              <a href={bookingHref(SESSION_PACKAGE.bookingUrl, "Baddie Session package")} className="no-underline" style={btn("var(--dark)")}>Book your three sessions</a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <section className="px-5 md:px-8 text-center" style={{ background: "var(--pink)", paddingTop: 80, paddingBottom: 88 }}>

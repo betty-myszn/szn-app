@@ -3,7 +3,8 @@
 //
 // One standard session for all five themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each of the five sessions has its own $333 Stripe Payment Link
 // (created 27 Oct 2026); the price card scrolls to them. Sessions for two share one
-// $555 link (special, normally $666) with a dropdown for the session.
+// $555 link (special, normally $666) with a dropdown for the session. The 3-session package is one
+// $888 link (saves $111 on three singles, created 29 Oct 2026); she picks her sessions by email.
 
 export const BADDIE_SESSIONS_CONTACT = "hello@thecosmicco.com";
 
@@ -30,6 +31,19 @@ export const SESSION_OPTIONS: SessionOption[] = [
   { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
+/** Three sessions, mixed and matched from all five; birth details at checkout like a single. */
+export const SESSION_PACKAGE = {
+  sessions: 3,
+  priceUsd: 888,
+  /** What three singles would cost, so the page can show the saving. */
+  wasUsd: 999,
+  bookingUrl: "https://buy.stripe.com/4gM00kbQHdQbdya6ON7kc0I",
+  stripePriceId: "price_1UVpcwJ6s9fRhiJoHDV4BCNg",
+};
+
+export const isPackagePrice = (priceId: string | null | undefined) =>
+  !!priceId && priceId.trim() === SESSION_PACKAGE.stripePriceId;
+
 export interface BaddieSession {
   slug: string;
   number: string;
@@ -37,6 +51,8 @@ export interface BaddieSession {
   name: string;
   tagline: string;
   body: string[];
+  /** Who she is when she walks out: the card's closing line. */
+  after: string;
   focus: string[];
   cta: string;
   /** Card accent, brand palette only. */
@@ -55,6 +71,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Stuck, lost, numb or one bad day away from shaving your head and moving to Bali, this is your personal reset button, babe.",
       "We dig through your astrology, your identity and the beliefs keeping you small, then we go and find the version of you who's ready to take over the whole operation.",
     ],
+    after: "She walks out lighter, louder and back in charge of her own life, with the next chapter already in the diary.",
     focus: [
       "Where you are right now and what you ACTUALLY want",
       "The limiting beliefs and self-sabotage you keep putting on repeat",
@@ -71,6 +88,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "For the women who are DONE being broke, undercharging and apologising for wanting more, and who are ready for a filthy rich relationship with money.",
       "We go through your money astrology, your subconscious money beliefs and your manifestation patterns, then build the practical moves that get the dollars landing in your account.",
     ],
+    after: "The woman who leaves this one names her price without flinching and lets the money in like she was always meant to have it.",
     focus: [
       "Your money astrology and wealth placements",
       "The money blocks you inherited from everyone else",
@@ -88,6 +106,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "We're dragging all of it into the light, babe.",
       "With your astrology, shadow work and personalised coaching we get to know your patterns and take back the parts of you that you've been too scared to let out, because those parts are exactly where your power has been hiding.",
     ],
+    after: "Afterwards she stops shrinking to keep the peace, because every part of her finally gets a seat at the table.",
     focus: [
       "Black Moon Lilith, Chiron and your 8th house",
       "People-pleasing, shame and good-girl conditioning",
@@ -104,6 +123,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "For the woman who's ready to be SEEN, take up all the space, say the thing and stop caring what that girl from school thinks.",
       "Whether you're building a business, changing careers, putting yourself online or finding your voice again, this session is you stepping into your power and staying there.",
     ],
+    after: "Hello, main character: the one everyone clocks the second she walks in, posting, speaking and showing up like it was always her stage.",
     focus: [
       "Confidence, visibility and loud self-expression",
       "Your astrology and Human Design for personal power",
@@ -121,6 +141,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "I've spent twenty years as a business consultant and strategist, so I'm bringing the brains, the receipts and the actual plan, then lining every single move up with your astrology and your Human Design, so you launch, sell and charge in a way that feels like YOU and makes you sooo much money.",
       "We're done with undercharging, playing small and waiting for someone to give you permission. You walk out knowing exactly what to sell, what to charge and when to GO for it.",
     ],
+    after: "This baddie leaves as a CEO who knows exactly what she sells, what she charges and the date she's going for it.",
     focus: [
       "Your money-making astrology: your Midheaven, 10th house, 2nd house and juicy Jupiter",
       "Your Human Design blueprint for how YOU work, sell and make the big calls",
