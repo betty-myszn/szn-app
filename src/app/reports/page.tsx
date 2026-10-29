@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import QuoteStrip from "@/components/QuoteStrip";
+import HoloShape from "@/components/HoloShape";
 import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -129,7 +130,7 @@ function Btn({ href, external, children, tone = "pink" }: { href: string; extern
     white: { background: "#fff", color: "var(--dark)", border: "2px solid var(--dark)" },
   }[tone];
   return (
-    <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="no-underline" style={{ ...s, fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
+    <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`no-underline ${tone === "pink" ? "btn-pink" : tone === "white" ? "btn-outline" : ""}`} style={{ ...s, fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
       {children}
     </a>
   );
@@ -141,30 +142,38 @@ export default function ReportsPage() {
       <section className="px-5 md:px-8 overflow-hidden" style={{ background: "var(--lav)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
           <div>
-            <div className="tag mb-6">✨ my szn reports</div>
-            <h1 className="display" style={{ fontSize: "clamp(42px, 7.5vw, 96px)", color: "var(--dark)", lineHeight: 0.95 }}>
-              your chart,
-              <br />
-              <span className="pk">in writing.</span>
+            <div className="mb-6"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✨ my szn reports</span></div>
+            <h1 className="display" style={{ fontSize: "clamp(38px, 6.2vw, 80px)", color: "var(--dark)", lineHeight: 0.95 }}>
+              it&apos;s time to remember <span className="pk">who the f*ck you are.</span>
             </h1>
-            <p style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.65, color: "var(--dark)", maxWidth: 620, marginTop: 26, fontWeight: 600 }}>
-              Two personalised reports written from your exact birth chart, one for your money and one for your confidence, because a woman who knows how she&apos;s wired is OBSESSED with herself in the most dangerous possible way.
+            <p style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(20px, 2.6vw, 28px)", lineHeight: 1.2, color: "var(--dark)", marginTop: 18 }}>
+              Then go create a life that&apos;s as BIG as your desires.
             </p>
-            <div className="flex flex-wrap gap-3" style={{ marginTop: 32 }}>
-              <Btn href={BBR_BUY_URL} external>get the bad b*tch report</Btn>
-              <Btn href="#reports" tone="white">see what&apos;s inside ↓</Btn>
+            <div style={{ fontSize: "clamp(16px, 1.9vw, 19px)", lineHeight: 1.65, color: "var(--dark)", maxWidth: 620, marginTop: 24, fontWeight: 600, display: "grid", gap: 14 }}>
+              <p>You&apos;ve spent enough of your life being told to play small, be grateful, lower your expectations and make yourself easier for other people to handle.</p>
+              <p style={{ fontFamily: pp, fontWeight: 900, fontSize: "clamp(26px, 3.6vw, 40px)", lineHeight: 1, letterSpacing: "-0.02em", color: "var(--pink)" }}>F*CK. THAT.</p>
+              <p>You deserve the money, the confidence, the freedom, the pleasure and the audacity to create a big, bold, beautiful life on YOUR terms.</p>
+              <p>These personalised astrology reports help you understand how you&apos;re wired, recognise your strengths, reclaim your worth and turn your biggest desires into something you can actually start building.</p>
+              <p>From making more money to becoming unapologetically yourself, consider these your magical blueprints for getting everything you f*cking want.</p>
+              <p style={{ fontFamily: pp, fontWeight: 900, fontSize: "clamp(18px, 2.2vw, 22px)" }}>Your life. Your rules. Your f*cking SZN.</p>
+            </div>
+            <div className="flex flex-wrap gap-3" style={{ marginTop: 30 }}>
+              <Btn href="#reports">💖 explore your reports ↓</Btn>
             </div>
           </div>
           <div className="relative flex justify-center" style={{ minHeight: 440 }}>
             <div style={{ position: "absolute", left: "4%", top: 0 }}><Cover kind="rich-btch-rising" /></div>
             <div style={{ position: "absolute", right: "2%", top: 60 }}><Cover kind="bad-btch-report" /></div>
+            <HoloShape shape="star" size={74} style={{ position: "absolute", top: -18, right: "0%", zIndex: 10, transform: "rotate(14deg)" }} />
+            <HoloShape shape="moon" size={58} style={{ position: "absolute", bottom: 0, left: "0%", zIndex: 10, transform: "rotate(-18deg)" }} />
+            <HoloShape shape="planet" size={64} style={{ position: "absolute", top: -22, left: "0%", zIndex: 10, transform: "rotate(-8deg)" }} />
           </div>
         </div>
       </section>
 
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-4xl mx-auto" style={{ color: "#fff" }}>
-          <div className="tag mb-5" style={{ color: "var(--pink)" }}>why your chart is sooo powerful</div>
+          <div className="mb-6 flex items-center gap-4"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ why your chart is sooo powerful</span><HoloShape shape="planet" size={48} style={{ transform: "rotate(12deg)" }} /></div>
           <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
             a woman who knows herself <span className="pk">is the patriarchy&apos;s WORST nightmare.</span>
           </h2>
@@ -182,15 +191,13 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <section id="reports"className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
+      <section id="reports" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto" style={{ display: "grid", gap: 28 }}>
           {REPORTS.map((r) => (
-            <article key={r.kind} style={{ background: r.bg, color: r.ink, border: "var(--border)", borderRadius: 24, overflow: "hidden" }}>
+            <article key={r.kind} className="holo-edge" style={{ background: r.bg, color: r.ink, border: "var(--border)", borderRadius: 24, overflow: "hidden" }}>
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
                 <div style={{ padding: "36px 30px 34px" }}>
-                  <span style={{ display: "inline-block", background: r.hot, color: r.bg === "var(--dark)" ? "#fff" : "var(--dark)", border: `1.5px solid ${r.ink}`, fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", padding: "6px 12px", borderRadius: 99 }}>
-                    {r.status}
-                  </span>
+                  <span className="holo-sticker" style={{ fontSize: 12, transform: "rotate(-2deg)" }}>✦ {r.status}</span>
                   <h2 className="display" style={{ fontSize: "clamp(36px, 5vw, 60px)", lineHeight: 0.98, marginTop: 18, color: r.ink }}>{r.name}</h2>
                   <div style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(18px, 2.2vw, 22px)", lineHeight: 1.25, marginTop: 10, color: r.hot }}>{r.promise}</div>
                   <p style={{ fontSize: 16.5, lineHeight: 1.7, marginTop: 18, fontWeight: 500 }}>{r.body}</p>
@@ -232,7 +239,7 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <Band wide tone="pinkLight" tag="what changes" title="the woman who reads hers" accent="moves differently.">
+      <Band wide tone="pinkLight" tag="what it does for you" title="get ready to feel" accent="SO seen it's actually rude. 😘">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
           {CHANGES.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} bg="#fff" />)}
         </div>
@@ -243,7 +250,7 @@ export default function ReportsPage() {
           {TAKE_HOME.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} />)}
         </div>
         <div style={{ marginTop: 44 }}>
-          <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 22 }}>💸 plus, inside rich b*tch rising</div>
+          <span className="holo-sticker" style={{ fontSize: 13, transform: "rotate(-2deg)" }}>💸 plus, inside rich b*tch rising</span>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 14 }}>
             {RBR_TAKE_HOME.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} bg="var(--lav-light)" />)}
           </div>
@@ -252,13 +259,13 @@ export default function ReportsPage() {
 
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-6xl mx-auto">
-          <div className="tag mb-5" style={{ color: "var(--pink)" }}>how it works</div>
+          <div className="mb-6"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ how it works</span></div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: "#fff", lineHeight: 1 }}>
             from your birth time <span className="pk">to your inbox.</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 36 }}>
             {STEPS.map(([n, t, b]) => (
-              <div key={n} style={{ background: "#fff", color: "var(--dark)", border: "2px solid #fff", borderRadius: 18, padding: "24px 22px 26px" }}>
+              <div key={n} className="holo-edge" style={{ background: "#fff", color: "var(--dark)", border: "2px solid #fff", borderRadius: 18, padding: "24px 22px 26px" }}>
                 <div style={{ fontFamily: pp, fontWeight: 900, fontSize: 44, lineHeight: 1, color: "var(--pink)" }}>{n}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, lineHeight: 1.2, textTransform: "uppercase", marginTop: 12 }}>{t}</div>
                 <p style={{ fontSize: 15.5, lineHeight: 1.65, marginTop: 8 }}>{b}</p>
@@ -270,10 +277,11 @@ export default function ReportsPage() {
 
       <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/betty-founder.png" alt="Betty Andrews" style={{ width: "100%", maxWidth: 280, aspectRatio: "4 / 5", objectFit: "cover", objectPosition: "center 20%", border: "var(--border)", borderRadius: 18 }} />
+          <div className="holo-edge" style={{ borderRadius: 18, maxWidth: 280, width: "100%", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/betty-founder.png" alt="Betty Andrews" style={{ width: "100%", maxWidth: 280, aspectRatio: "4 / 5", objectFit: "cover", objectPosition: "center 20%", display: "block", borderRadius: 18 }} /></div>
           <div style={{ color: "var(--dark)" }}>
-            <div className="tag mb-5">who&apos;s writing it</div>
+            <div className="mb-5"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ who&apos;s writing it</span></div>
             <h2 className="display" style={{ fontSize: "clamp(30px, 5vw, 54px)", lineHeight: 1 }}>
               hiii my love, <span className="pk">i&apos;m betty.</span>
             </h2>
@@ -284,7 +292,7 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <Band tone="white" tag="this is for the woman who" title="this is SO" accent="for you if...">
+      <Band tone="white" tag="baddies only" title="this is SO" accent="for you if...">
         <ForYouIf items={FOR_YOU_IF} />
       </Band>
 
@@ -301,6 +309,7 @@ export default function ReportsPage() {
 
       <section className="px-5 md:px-8 bg-glitter" style={{ borderBottom: "var(--border)", paddingTop: 84, paddingBottom: 92 }}>
         <div className="max-w-3xl mx-auto">
+          <div className="mb-6 flex items-center gap-4"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ your main character era</span><HoloShape shape="star" size={52} style={{ transform: "rotate(14deg)" }} /></div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
             your chart has been talking
             <br />
@@ -310,10 +319,10 @@ export default function ReportsPage() {
             Grab The Bad B*tch Report and she&apos;s in your inbox within 48 hours, ready to be highlighted to within an inch of her life, then hop on the Rich B*tch Rising waitlist so you&apos;re first in line the SECOND the money report opens, because a baddie with her chart in her hands is a baddie nobody can talk out of her own life. ✨
           </p>
           <div className="flex flex-wrap gap-3" style={{ marginTop: 30 }}>
-            <a href={BBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
+            <a href={BBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
               get my report · $88
             </a>
-            <Link href="/reports/rich-btch-rising#waitlist" className="no-underline" style={{ background: "#fff", color: "var(--dark)", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
+            <Link href="/reports/rich-btch-rising#waitlist" className="no-underline btn-foil" style={{ color: "var(--dark)", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
               join the money waitlist
             </Link>
           </div>
