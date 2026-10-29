@@ -155,6 +155,37 @@ export default function BaddieSessionsPage() {
         </ul>
       </Band>
 
+      {/* The sessions */}
+      <section id="sessions" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 88, scrollMarginTop: 70 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-5"><span className="holo-sticker">✦ meet your baddie sessions</span></div>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 5.5vw, 66px)", lineHeight: 1 }}>pick what you <span className="pk">need, baddie.</span></h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 40 }}>
+            {BADDIE_SESSIONS.map((s, i) => (
+              <article key={s.slug} id={s.slug} className={`offer-card ${lastOdd(i, BADDIE_SESSIONS.length)}`} style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
+                <div style={{ background: s.accent, color: s.accentInk, padding: "22px 24px", borderBottom: "var(--border)" }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>{s.emoji} {s.number}</div>
+                  <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 3vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>{s.name}</h3>
+                </div>
+                <div style={{ padding: "22px 24px 26px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, lineHeight: 1.3, margin: 0 }}>{s.tagline}</p>
+                  {s.body.map((b) => <p key={b} style={{ fontSize: 15.5, lineHeight: 1.7, margin: "12px 0 0" }}>{b}</p>)}
+                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginTop: 20 }}>What we&apos;ll work on</div>
+                  <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 6 }}>
+                    {s.focus.map((f) => <li key={f} style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5 }}><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>{f}</li>)}
+                  </ul>
+                  <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 16, lineHeight: 1.45, margin: "20px 0 0", padding: "14px 16px", background: "var(--pink-light)", border: "var(--border)", borderRadius: 14 }}>✨ {s.after}</p>
+                  <div style={{ marginTop: "auto", paddingTop: 24 }}>
+                    <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: "0 0 14px" }}>💌 Want more than one? <a href="#package" style={{ color: "var(--dark)", fontWeight: 800, textDecoration: "underline" }}>Get any three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}.</p>
+                    <a href={bookingHref(s.bookingUrl, `Baddie Session: ${s.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{s.cta}</a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Pricing (from lib/baddie-sessions.ts) */}
       <section className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, borderBottom: "var(--border)" }}>
         <div className="max-w-5xl mx-auto">
@@ -166,7 +197,7 @@ export default function BaddieSessionsPage() {
               <div key={o.name} className="holo-edge" style={{ background: i === 0 ? "#fff" : "var(--pink)", color: "var(--dark)", border: "var(--border)", borderRadius: 24, padding: "28px 26px", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{o.name}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
-                <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>Every session below is the same price, and every one comes with your Zoom recording plus your own reports, action plan, guides, journal prompts and exercises. 💌 Pop your birth details in at checkout, then I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine.</p>
+                <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>Every session above is the same price, and every one comes with your Zoom recording plus your own reports, action plan, guides, journal prompts and exercises. 💌 Pop your birth details in at checkout, then I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine.</p>
                 <ul style={{ listStyle: "none", margin: "16px 0 0", padding: 0, display: "grid", gap: 8 }}>
                   {BADDIE_SESSIONS.map((s) => (
                     <li key={s.slug}>
@@ -204,37 +235,6 @@ export default function BaddieSessionsPage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* The sessions */}
-      <section id="sessions" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 88, scrollMarginTop: 70 }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-5"><span className="holo-sticker">✦ meet your baddie sessions</span></div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 5.5vw, 66px)", lineHeight: 1 }}>pick what you <span className="pk">need, baddie.</span></h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 40 }}>
-            {BADDIE_SESSIONS.map((s, i) => (
-              <article key={s.slug} id={s.slug} className={`offer-card ${lastOdd(i, BADDIE_SESSIONS.length)}`} style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
-                <div style={{ background: s.accent, color: s.accentInk, padding: "22px 24px", borderBottom: "var(--border)" }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>{s.emoji} {s.number}</div>
-                  <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 3vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>{s.name}</h3>
-                </div>
-                <div style={{ padding: "22px 24px 26px", display: "flex", flexDirection: "column", flex: 1 }}>
-                  <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, lineHeight: 1.3, margin: 0 }}>{s.tagline}</p>
-                  {s.body.map((b) => <p key={b} style={{ fontSize: 15.5, lineHeight: 1.7, margin: "12px 0 0" }}>{b}</p>)}
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginTop: 20 }}>What we&apos;ll work on</div>
-                  <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 6 }}>
-                    {s.focus.map((f) => <li key={f} style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5 }}><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>{f}</li>)}
-                  </ul>
-                  <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 16, lineHeight: 1.45, margin: "20px 0 0", padding: "14px 16px", background: "var(--pink-light)", border: "var(--border)", borderRadius: 14 }}>✨ {s.after}</p>
-                  <div style={{ marginTop: "auto", paddingTop: 24 }}>
-                    <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: "0 0 14px" }}>💌 Want more than one? <a href="#package" style={{ color: "var(--dark)", fontWeight: 800, textDecoration: "underline" }}>Get any three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}.</p>
-                    <a href={bookingHref(s.bookingUrl, `Baddie Session: ${s.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{s.cta}</a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
       </section>
 
