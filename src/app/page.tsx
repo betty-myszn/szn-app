@@ -196,7 +196,7 @@ export default function Home() {
                 <div style={{ fontSize: 38 }}>{o.emoji}</div>
                 <h3 className="display" style={{ fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1, marginTop: 10, color: ink }}>{o.name}</h3>
                 <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14, fontWeight: 500 }}>{body}</p>
-                <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: o.slug === "bad-btch-report" ? "var(--pink)" : "#fff" }}>join the waitlist →</div>
+                <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: o.slug === "bad-btch-report" ? "var(--pink)" : "#fff" }}>{o.cta} →</div>
               </Link>
             ))}
           </div>

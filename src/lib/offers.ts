@@ -34,7 +34,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     price: "$88",
     brevoEnv: "BREVO_LIST_RICH_BTCH_RISING",
     brevoList: 25,
-    cta: "join the waitlist",
+    cta: "get my report",
   },
   "bad-btch-report": {
     slug: "bad-btch-report",

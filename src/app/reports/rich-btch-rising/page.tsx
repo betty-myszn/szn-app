@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import QuoteStrip from "@/components/QuoteStrip";
-import { OfferHero, Band, Tiles, ForYouIf, WaitlistBand, OfferCards, Cover } from "@/components/Offer";
+import { OfferHero, Band, Tiles, ForYouIf, OfferCards, Cover } from "@/components/Offer";
+import { RBR_REVIEWS } from "@/lib/report-reviews";
 
 // Rich B*tch Rising: the personalised money report (the Money Blueprint, renamed and repriced to
-// $88, Oct 2026). Waitlist only until Betty reopens it; /money-blueprint redirects here.
+// $88, Oct 2026). On sale from 29 Oct 2026, made by hand within 48 hours; /money-blueprint redirects here.
 
 export const metadata: Metadata = {
   title: "Rich B*tch Rising, Your Personalised Astrology Money Report",
   description:
-    "Rich B*tch Rising is your personalised astrology money report: wealth, earning potential, money blocks, financial independence and self-worth, read from your own birth chart. $88. Join the waitlist.",
+    "Rich B*tch Rising is your personalised astrology money report: wealth, earning potential, money blocks, financial independence and self-worth, read from your own birth chart. $88, in your inbox within 48 hours.",
   alternates: { canonical: "/reports/rich-btch-rising" },
   openGraph: {
     title: "Rich B*tch Rising 💸",
-    description: "What your birth chart says about getting PAID. Your personalised money report, waitlist open now.",
+    description: "What your birth chart says about getting PAID. Your personalised money report, in your inbox within 48 hours.",
     url: "/reports/rich-btch-rising",
     type: "website",
   },
@@ -20,6 +20,11 @@ export const metadata: Metadata = {
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
+
+// Stripe Payment Link (plink_1UVxdoJ6s9fRhiJo4QetRK8i). Birth details are collected on the checkout page;
+// the webhook files the buyer on the Brevo "💸 Rich B*tch Rising PAID" list and sends the 48-hour email
+// (src/lib/email/bad-btch-report.ts handles both reports).
+const BUY_URL = "https://buy.stripe.com/bJe3cwf2TaDZalY5KJ7kc0J";
 
 // Betty's own Rich B*tch Rising copy (15 Oct 2026), used word for word.
 
@@ -80,6 +85,7 @@ export default function RichBtchRisingPage() {
     <>
       <OfferHero
         offer="rich-btch-rising"
+        ctaHref={BUY_URL}
         art={<Cover kind="rich-btch-rising" />}
         kicker="rich b*tch rising"
         title="you were born to be"
@@ -98,9 +104,9 @@ export default function RichBtchRisingPage() {
         <p>Money to leave situations that make you miserable, book flights whenever you fancy, build a business, take care of people you love, buy yourself ridiculous things and make decisions without needing anybody&apos;s permission.</p>
         <p><strong>Welcome to Rich B*tch Rising, your personalised astrology, shadow work and money manifestation report.</strong></p>
         <p>Written specifically for YOU, using your actual birth chart, with insights, exercises and practical guidance to help you understand your relationship with money and start changing it.</p>
-        <p><strong>$88 USD | Personalised to your birth chart</strong></p>
-        <a href="#waitlist" className="no-underline" style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
-          💸 get on the rich list
+        <p><strong>$88 USD | Personalised to your birth chart | In your inbox within 48 hours</strong></p>
+        <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
+          💸 get my report
         </a>
       </Band>
 
@@ -152,27 +158,48 @@ export default function RichBtchRisingPage() {
         <p>Because you deserve to enjoy the money you make as much as you enjoy making it.</p>
       </Band>
 
-      <QuoteStrip ids={["jade", "maya"]} label="a little rich b*tch energy from our community" />
-      <p className="px-5 md:px-8 text-center" style={{ fontSize: 13, fontStyle: "italic", color: "var(--grey)", background: "#fff", padding: "0 20px 28px", margin: 0 }}>
-        These are experiences from MY SZN members, rather than reviews of the Rich B*tch Rising report.
-      </p>
+      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-5"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ the reviews</span></div>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: "var(--dark)", lineHeight: 1 }}>
+            the rich b*tches <span className="pk">have spoken. 💸</span>
+          </h2>
+          <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-5 -mx-5 px-5 md:mx-0 md:px-0" style={{ marginTop: 30, paddingBottom: 6, scrollbarWidth: "none" }}>
+            {RBR_REVIEWS.map((r) => (
+              <figure key={r.name} className="holo-edge snap-start shrink-0 w-[84%] md:w-auto" style={{ margin: 0, background: "#fff", border: "var(--border)", borderRadius: 18, padding: "22px 22px 24px", display: "flex", flexDirection: "column", color: "var(--dark)" }}>
+                <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 44, lineHeight: 0.6, color: "var(--pink)" }}>&ldquo;</div>
+                <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, lineHeight: 1.3, marginTop: 12 }}>{r.head}</div>
+                <blockquote style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.65 }}>{r.body}</blockquote>
+                <figcaption style={{ marginTop: "auto", paddingTop: 16, fontFamily: pp, fontWeight: 800, fontSize: 15 }}>
+                  {r.name} <span style={{ fontWeight: 600 }}>| {r.role}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <WaitlistBand
-        offer="rich-btch-rising"
-        title="get on the"
-        accent="rich list. 💸"
-        body={
-          <>
+      <section id="buy" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, borderBottom: "var(--border)", scrollMarginTop: 80 }}>
+        <span id="waitlist" style={{ position: "relative", top: -80 }} />
+        <div className="max-w-3xl mx-auto" style={{ color: "#fff" }}>
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>
+            your rich b*tch era <span className="pk">starts NOW. 💸</span>
+          </h2>
+          <div style={{ fontSize: 17, lineHeight: 1.75, marginTop: 22, fontWeight: 500 }}>
             <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Your rich b*tch era has entered the chat.</p>
             <p style={{ margin: "0 0 14px" }}>Rich B*tch Rising is a personalised money astrology report created around your individual birth chart, with astrology insights, money shadow work, manifestation exercises and practical guidance.</p>
             <p style={{ margin: "0 0 14px" }}>No generic zodiac predictions. No copy-and-paste advice telling every Libra to buy something pink or every Capricorn to work harder.</p>
             <p style={{ margin: "0 0 14px" }}>We&apos;re looking at YOUR placements, YOUR patterns, YOUR relationship with money and the life YOU want to create.</p>
-            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800, fontSize: 20 }}>$88 USD</p>
-            <p style={{ margin: "0 0 14px" }}>The report is currently waitlist-only, and everyone on the list gets first access when it launches.</p>
             <p style={{ margin: 0, color: "#fff", fontWeight: 800 }}>May your bank account be abundant, your boundaries be impeccable and your ambitions be absolutely F*CKING OUTRAGEOUS. 💸💜🪩✨</p>
-          </>
-        }
-      />
+          </div>
+          <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 30 }}>
+            <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>
+              get my report
+            </a>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 · in your inbox within 48 hours</span>
+          </div>
+        </div>
+      </section>
 
       <OfferCards exclude="rich-btch-rising" />
     </>

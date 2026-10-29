@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HoloShape from "@/components/HoloShape";
+import { BBR_REVIEWS, RBR_REVIEWS } from "@/lib/report-reviews";
 import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// The reports hub: The Bad B*tch Report (on sale) and Rich B*tch Rising (waitlist), each shown with its
+// The reports hub: The Bad B*tch Report and Rich B*tch Rising (both on sale), each shown with its
 // cover, what's inside and how it reaches her, then linking through to its own sales page.
 
 export const metadata: Metadata = {
   title: "Personalised Astrology Reports for Money + Confidence",
   description:
-    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($88 intro price, in your inbox within 48 hours) and Rich B*tch Rising for money, wealth and self-worth (waitlist open).",
+    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($88 intro price, in your inbox within 48 hours) and Rich B*tch Rising for money, wealth and self-worth ($88, in your inbox within 48 hours).",
   alternates: { canonical: "/reports" },
   openGraph: {
     title: "MY SZN Reports 💸💜",
@@ -22,8 +23,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-// Same Stripe Payment Link as /reports/bad-btch-report (birth details are collected at checkout).
+// Same Stripe Payment Links as the two report pages (birth details are collected at checkout).
 const BBR_BUY_URL = "https://buy.stripe.com/5kQcN6f2TcM7gKm4GF7kc0A";
+const RBR_BUY_URL = "https://buy.stripe.com/bJe3cwf2TaDZalY5KJ7kc0J";
 
 const REPORTS = [
   {
@@ -44,15 +46,15 @@ const REPORTS = [
   },
   {
     kind: "rich-btch-rising" as const,
-    status: "waitlist open",
+    status: "on sale now",
     name: "rich b*tch rising",
     promise: "what your chart says about getting PAID.",
     body: "Your second, tenth and eighth houses, your Venus and your Jupiter, all read together so you can finally see how you're built to get PAID, where the family money stories and good-girl guilt have been running your bank account for agesss, and what happens when you let yourself be rich, ambitious and VERY pleased with yourself about it. 💸",
     inside: ["How you're built to make money", "Your money shadow", "Self-worth, receiving + being THAT woman", "Money, power + financial independence", "Your rich b*tch era starts here"],
     extras: ["money manifestation practices", "shadow work prompts", "affirmations", "practical next moves"],
     price: "$88",
-    delivery: "waitlist gets first access",
-    cta: { label: "join the waitlist", href: "/reports/rich-btch-rising#waitlist", external: false },
+    delivery: "in your inbox within 48 hours",
+    cta: { label: "get my report", href: RBR_BUY_URL, external: true },
     more: "/reports/rich-btch-rising",
     bg: "var(--pink)",
     ink: "var(--dark)",
@@ -104,49 +106,6 @@ const FOR_YOU_IF = [
   "Wants her chart in her hands before she books a Baddie Session or joins the coven 🦄",
 ];
 
-// Reader reviews per report, word for word as Betty supplied them (29 Oct 2026).
-const BBR_REVIEWS = [
-  {
-    head: "It's like someone handed me back the parts of myself I'd forgotten.",
-    body: "I didn't realise how much I'd been shrinking myself until I read this. The whole thing felt like a conversation with someone who could see the version of me I've been too scared to become. Honestly, every woman needs to read something like this.",
-    name: "Freya Collins",
-    role: "Photographer",
-  },
-  {
-    head: "I finished reading it and immediately applied for the job I'd been talking myself out of.",
-    body: "That probably tells you everything! I loved how specific it was to my chart. It helped me understand why I second-guess myself, but also reminded me of the strengths I completely overlook. It gave me a proper kick up the arse, in the best possible way.",
-    name: "Tessa Whitmore",
-    role: "Project Manager",
-  },
-  {
-    head: "I've never felt so seen by a PDF in my entire life 😂",
-    body: "Seriously though, WOW. The confidence stuff hit hard, especially the parts about people-pleasing and needing everyone to approve of my decisions. I've reread it three times already. It feels like having a little manual for remembering who I am whenever I start doubting myself.",
-    name: "Maya Fletcher",
-    role: "Content Creator",
-  },
-];
-
-const RBR_REVIEWS = [
-  {
-    head: "I genuinely cried reading the part about my relationship with money.",
-    body: "I've spent years feeling guilty for wanting more, especially as a woman running her own business. This report made me look at my patterns in a completely different way. It felt incredibly personal, and I've already started making changes to how I price my work and talk about money.",
-    name: "Imogen Ellis",
-    role: "Business Owner",
-  },
-  {
-    head: "The accuracy was actually ridiculous.",
-    body: "I've had astrology readings before, but nothing that explained my money habits like this. The way it connected my birth chart to how I earn, spend and value myself was WILD. I've got pages highlighted because I keep going back to them.",
-    name: "Priya Dawson",
-    role: "Marketing Consultant",
-  },
-  {
-    head: "For the first time, wanting to be wealthy doesn't feel selfish.",
-    body: "I grew up believing money was something you had to struggle for, and that wanting lots of it was somehow greedy. Reading this gave me so much to think about. I especially loved having practical things to work on instead of just being told I'd be rich one day.",
-    name: "Eliza Morgan",
-    role: "Creative Freelancer",
-  },
-];
-
 const REVIEW_ROWS = [
   { label: "💜 the bad b*tch report", reviews: BBR_REVIEWS },
   { label: "💸 rich b*tch rising", reviews: RBR_REVIEWS },
@@ -155,9 +114,16 @@ const REVIEW_ROWS = [
 const FAQ = [
   ["If you're new to astrology", "Babe, you don't need to know your rising from your elbow. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than half the astrology accounts on your feed. 😘"],
   ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
-  ["How you get it", "The Bad B*tch Report lands in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt."],
-  ["Which one to start with", "If money is the LOUDEST thing in your life right now, hop on the Rich B*tch Rising waitlist. For everything else (confidence, visibility, desire, power and your big, outrageous dream) start with The Bad B*tch Report, which has a whole money chapter of its own anyway. 💸"],
+  ["How you get it", "Both reports land in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt."],
+  ["Which one to start with", "If money is the LOUDEST thing in your life right now, start with Rich B*tch Rising. For everything else (confidence, visibility, desire, power and your big, outrageous dream) start with The Bad B*tch Report, which has a whole money chapter of its own anyway, orrr get both and become completely unstoppable. 💸💜"],
   ["Who writes it", "Me, Betty, hiii. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order, with a LOT of love and a candle lit. 🕯️"],
+] as const;
+
+// The "why your chart" section, as three short cards beside an image (no paragraph walls).
+const MANIFESTO = [
+  ["🙄", "who told you who to be", "For centuries women have been told who to be by literally everyone except themselves: the church, the magazines, the bosses, the diet ads, the dads and the man at the barbecue with VERY strong opinions about your career. A woman who doesn't trust herself is sooo much easier to sell to, manage, underpay and keep busy, which is exactly why nobody ever handed you the manual to YOU."],
+  ["💜", "the manual to YOU", "Your birth chart IS that manual, babe. It shows how you're built to make money, what you actually desire, how you lead, where your power lives and the exact spot where you learned to shrink, all written in the sky the second you took your first breath, long before anybody got the chance to tell you to calm down. Once you can see it, you stop outsourcing your decisions, stop apologising for taking up space and start trusting the one voice that's been right this whole entire time: yoursss."],
+  ["🪐", "your revenge era", "Women who knew the moon, the plants and their own bodies used to get called witches, so reading your chart today is a gorgeous little revenge era, and knowing yourself this deeply is the most rebellious thing a woman can own. Get yours in writing."],
 ] as const;
 
 function Card({ emoji, title, body, bg = "var(--pink-light)" }: { emoji: string; title: string; body: string; bg?: string }) {
@@ -218,22 +184,23 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <section className="px-5 md:px-8" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
-        <div className="max-w-4xl mx-auto" style={{ color: "#fff" }}>
+      <section className="px-5 md:px-8 overflow-hidden" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
+        <div className="max-w-6xl mx-auto" style={{ color: "#fff" }}>
           <div className="mb-6 flex items-center gap-4"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ why your chart is sooo powerful</span><HoloShape shape="planet" size={48} style={{ transform: "rotate(12deg)" }} /></div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98, maxWidth: 960 }}>
             a woman who knows herself <span className="pk">is the patriarchy&apos;s WORST nightmare.</span>
           </h2>
-          <div style={{ fontSize: 18, lineHeight: 1.75, marginTop: 26, maxWidth: 740, fontWeight: 500, display: "grid", gap: 18 }}>
-            <p>
-              For centuries women have been told who to be by literally everyone except themselves: the church, the magazines, the bosses, the diet ads, the dads and the man at the barbecue with VERY strong opinions about your career. A woman who doesn&apos;t trust herself is sooo much easier to sell to, manage, underpay and keep busy, which is exactly why nobody ever handed you the manual to YOU. 🙄
-            </p>
-            <p>
-              Your birth chart IS that manual, babe. It shows how you&apos;re built to make money, what you actually desire, how you lead, where your power lives and the exact spot where you learned to shrink, all written in the sky the second you took your first breath, long before anybody got the chance to tell you to calm down. Once you can see it, you stop outsourcing your decisions, stop apologising for taking up space and start trusting the one voice that&apos;s been right this whole entire time: yoursss. 💜
-            </p>
-            <p>
-              Women who knew the moon, the plants and their own bodies used to get called witches, so reading your chart today is a gorgeous little revenge era, and knowing yourself this deeply is the most rebellious thing a woman can own. Get yours in writing. 🪐
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-8 items-center" style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/libra-moon.png" alt="" aria-hidden="true" style={{ width: "100%", maxWidth: 440, margin: "0 auto", display: "block" }} />
+            <div style={{ display: "grid", gap: 14 }}>
+              {MANIFESTO.map(([e, t, b]) => (
+                <div key={t} className="holo-edge" style={{ background: "#fff", color: "var(--dark)", border: "var(--border)", borderRadius: 18, padding: "18px 20px 20px" }}>
+                  <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, textTransform: "uppercase", letterSpacing: "0.02em" }}>{e} {t}</div>
+                  <p style={{ fontSize: 15, lineHeight: 1.65, marginTop: 6 }}>{b}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -389,15 +356,15 @@ export default function ReportsPage() {
             <span className="pk">about you for yearsss.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500, maxWidth: 620 }}>
-            Grab The Bad B*tch Report and she&apos;s in your inbox within 48 hours, ready to be highlighted to within an inch of her life, then hop on the Rich B*tch Rising waitlist so you&apos;re first in line the SECOND the money report opens, because a baddie with her chart in her hands is a baddie nobody can talk out of her own life. ✨
+            Grab The Bad B*tch Report and she&apos;s in your inbox within 48 hours, ready to be highlighted to within an inch of her life, then grab Rich B*tch Rising and let your bank account get the same treatment, because a baddie with her chart in her hands is a baddie nobody can talk out of her own life. ✨
           </p>
           <div className="flex flex-wrap gap-3" style={{ marginTop: 30 }}>
             <a href={BBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
               get my report · $88
             </a>
-            <Link href="/reports/rich-btch-rising#waitlist" className="no-underline btn-foil" style={{ color: "var(--dark)", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
-              join the money waitlist
-            </Link>
+            <a href={RBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-foil" style={{ color: "var(--dark)", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
+              get rich b*tch rising · $88
+            </a>
           </div>
         </div>
       </section>

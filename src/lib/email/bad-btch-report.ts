@@ -5,24 +5,38 @@ import { adminRecipients } from "@/lib/email/admin-notify";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
-// The Bad B*tch Report is a one-off $88 Payment Link (no membership). Birth details are collected
-// as custom fields on the Stripe checkout page. When it's paid, the Stripe webhook hands the session
-// here, which:
-//   1. files the buyer on the Brevo "💜 Baddie Report PAID" list with her birth details as attributes,
-//   2. sends her the "she's on her way, within 48 hours" transactional (Brevo template, editable in Brevo),
+// The Bad B*tch Report and Rich B*tch Rising are one-off $88 Payment Links (no membership). Birth
+// details are collected as custom fields on the Stripe checkout page. When one is paid, the Stripe
+// webhook hands the session here, which:
+//   1. files the buyer on that report's Brevo PAID list with her birth details as attributes,
+//   2. sends her the "on its way, within 48 hours" transactional (Brevo template, editable in Brevo),
 //   3. emails the team the order with the birth details, since reports are made by hand for now.
 // Every step is best-effort and never throws, and the two emails are exactly-once per checkout via
 // the transactional_emails (stripe_session_id, kind) unique index, so a Stripe retry can't resend.
 
 // Hardcoded like the welcome-email prices so a missing env var can't silently drop an order;
 // env still overrides.
-const PRICE_ID = process.env.STRIPE_PRICE_BAD_BTCH_REPORT?.trim() || "price_1UTmY8J6s9fRhiJoUy8SWs7w";
-const LIST_ID = Number(process.env.BREVO_LIST_BAD_BTCH_REPORT_PAID?.trim() || 30);
-const TEMPLATE_ID = Number(process.env.BREVO_TEMPLATE_BAD_BTCH_REPORT_PAID?.trim() || 77);
-const BUYER_KIND = "bad_btch_report_paid";
-const ADMIN_KIND = "admin_bad_btch_report_order";
+export interface PaidReport { name: string; emoji: string; priceId: string; listId: number; templateId: number; buyerKind: string; adminKind: string }
 
-export const isBadBtchReportPrice = (priceId: string | null | undefined) => !!priceId && priceId.trim() === PRICE_ID;
+const REPORTS: PaidReport[] = [
+  {
+    name: "Bad B*tch Report", emoji: "💜",
+    priceId: process.env.STRIPE_PRICE_BAD_BTCH_REPORT?.trim() || "price_1UTmY8J6s9fRhiJoUy8SWs7w",
+    listId: Number(process.env.BREVO_LIST_BAD_BTCH_REPORT_PAID?.trim() || 30),
+    templateId: Number(process.env.BREVO_TEMPLATE_BAD_BTCH_REPORT_PAID?.trim() || 77),
+    buyerKind: "bad_btch_report_paid", adminKind: "admin_bad_btch_report_order",
+  },
+  {
+    // Payment Link plink_1UVxdoJ6s9fRhiJo4QetRK8i, Brevo list "💸 Rich B*tch Rising PAID" (29 Oct 2026).
+    name: "Rich B*tch Rising", emoji: "💸",
+    priceId: process.env.STRIPE_PRICE_RICH_BTCH_RISING?.trim() || "price_1UVxdnJ6s9fRhiJoBJBhLKyo",
+    listId: Number(process.env.BREVO_LIST_RICH_BTCH_RISING_PAID?.trim() || 31),
+    templateId: Number(process.env.BREVO_TEMPLATE_RICH_BTCH_RISING_PAID?.trim() || 87),
+    buyerKind: "rich_btch_rising_paid", adminKind: "admin_rich_btch_rising_order",
+  },
+];
+
+export const paidReportForPrice = (priceId: string | null | undefined) => (priceId ? REPORTS.find((r) => r.priceId === priceId.trim()) ?? null : null);
 
 interface Birth { date: string; time: string; place: string }
 
@@ -46,7 +60,7 @@ async function logSend(admin: SupabaseAdmin, row: { email: string; kind: string;
   if (error && error.code !== "23505") console.error("transactional_emails: bad b*tch report log insert failed", error.message);
 }
 
-async function addToPaidList(email: string, name: string, birth: Birth): Promise<void> {
+async function addToPaidList(report: PaidReport, email: string, name: string, birth: Birth): Promise<void> {
   const key = process.env.BREVO_API_KEY;
   if (!key) return;
   const brevo = (path: string, body: unknown) => fetch(`https://api.brevo.com/v3${path}`, {
@@ -55,32 +69,32 @@ async function addToPaidList(email: string, name: string, birth: Birth): Promise
   // Brevo only stores attributes that already exist; 400 = already exists.
   for (const a of ["BIRTH_DATE", "BIRTH_TIME", "BIRTH_PLACE"]) await brevo(`/contacts/attributes/normal/${a}`, { type: "text" }).catch(() => null);
   const res = await brevo("/contacts", {
-    email, updateEnabled: true, listIds: [LIST_ID],
+    email, updateEnabled: true, listIds: [report.listId],
     attributes: { FIRSTNAME: name.split(/\s+/)[0] ?? "", BIRTH_DATE: birth.date, BIRTH_TIME: birth.time, BIRTH_PLACE: birth.place },
   });
-  if (!res.ok) console.error("bad b*tch report: Brevo contact upsert failed", res.status, (await res.text().catch(() => "")).slice(0, 200));
+  if (!res.ok) console.error(`${report.name}: Brevo contact upsert failed`, res.status, (await res.text().catch(() => "")).slice(0, 200));
 }
 
-export async function handleBadBtchReportPurchase(admin: SupabaseAdmin, session: Stripe.Checkout.Session): Promise<void> {
+export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: Stripe.Checkout.Session, report: PaidReport): Promise<void> {
   const email = session.customer_details?.email?.toLowerCase() ?? "";
   const name = session.customer_details?.name?.trim() ?? "";
   const birth = birthFrom(session);
   if (!email) {
-    console.error("bad b*tch report: paid with no email on the session", { sessionId: session.id });
+    console.error(`${report.name}: paid with no email on the session`, { sessionId: session.id });
     return;
   }
 
   try {
-    await addToPaidList(email, name, birth);
+    await addToPaidList(report, email, name, birth);
   } catch (e) {
-    console.error("bad b*tch report: Brevo list add threw", e instanceof Error ? e.message : e);
+    console.error(`${report.name}: Brevo list add threw`, e instanceof Error ? e.message : e);
   }
 
   try {
-    if (!(await alreadySent(admin, session.id, BUYER_KIND))) {
+    if (!(await alreadySent(admin, session.id, report.buyerKind))) {
       const r = await sendBrevoTemplateEmail({
         to: { email, name: name || undefined },
-        templateId: TEMPLATE_ID,
+        templateId: report.templateId,
         params: {
           first_name: name.split(/\s+/)[0] ?? "",
           birth_date: birth.date || "not given",
@@ -88,26 +102,26 @@ export async function handleBadBtchReportPurchase(admin: SupabaseAdmin, session:
           birth_place: birth.place || "not given",
         },
       });
-      await logSend(admin, { email, kind: BUYER_KIND, sessionId: session.id, ok: r.ok, messageId: r.ok ? r.messageId : null, error: r.ok ? null : r.error });
-      if (!r.ok) console.error("bad b*tch report: buyer email FAILED", { sessionId: session.id, error: r.error });
+      await logSend(admin, { email, kind: report.buyerKind, sessionId: session.id, ok: r.ok, messageId: r.ok ? r.messageId : null, error: r.ok ? null : r.error });
+      if (!r.ok) console.error(`${report.name}: buyer email FAILED`, { sessionId: session.id, error: r.error });
     }
   } catch (e) {
-    console.error("bad b*tch report: buyer email threw", e instanceof Error ? e.message : e);
+    console.error(`${report.name}: buyer email threw`, e instanceof Error ? e.message : e);
   }
 
   try {
-    if (!(await alreadySent(admin, session.id, ADMIN_KIND))) {
+    if (!(await alreadySent(admin, session.id, report.adminKind))) {
       const amount = session.amount_total != null ? `$${(session.amount_total / 100).toFixed(2)}` : "";
       const rows = [["Name", name], ["Email", email], ["Date of birth", birth.date], ["Time of birth", birth.time], ["Place of birth", birth.place], ["Paid", amount], ["Stripe session", session.id]];
-      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New Bad B*tch Report order 💜</strong> Her report is promised within 48 hours.</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
+      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New ${report.name} order ${report.emoji}</strong> Her report is promised within 48 hours.</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
       let ok = false, lastError = "", messageId: string | null = null;
       for (const to of adminRecipients()) {
-        const r = await sendBrevoEmail({ to: { email: to }, subject: `New Bad B*tch Report order: ${name || email}`, htmlContent });
+        const r = await sendBrevoEmail({ to: { email: to }, subject: `New ${report.name} order: ${name || email}`, htmlContent });
         if (r.ok) { ok = true; messageId = messageId ?? r.messageId; } else lastError = r.error;
       }
-      await logSend(admin, { email: adminRecipients().join(","), kind: ADMIN_KIND, sessionId: session.id, ok, messageId, error: ok ? null : lastError });
+      await logSend(admin, { email: adminRecipients().join(","), kind: report.adminKind, sessionId: session.id, ok, messageId, error: ok ? null : lastError });
     }
   } catch (e) {
-    console.error("bad b*tch report: admin alert threw", e instanceof Error ? e.message : e);
+    console.error(`${report.name}: admin alert threw`, e instanceof Error ? e.message : e);
   }
 }
