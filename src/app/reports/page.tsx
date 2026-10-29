@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import QuoteStrip from "@/components/QuoteStrip";
-import { OfferCards, Cover } from "@/components/Offer";
+import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -65,6 +65,62 @@ const STEPS = [
   ["02", "betty builds your report", "Every placement gets read by sign AND by house from writing I've done for every single combination, then put together by hand for your chart, so two Leos get two completely different reports."],
   ["03", "she lands in your inbox", "A beautifully designed PDF, yours forever, to read in bed, print, highlight and scribble ALLLL over, then actually go and DO."],
 ] as const;
+
+// What changes in her once she's read it; each card written on its own terms (no shared openings).
+const CHANGES = [
+  ["🪞", "You finally see yourself clearly", "The intensity, the big wants, the way you go silent in meetings and LOUD in the group chat, all of it gets named, placed in your chart and handed back to you as the features they always were."],
+  ["💸", "You know where your money's been leaking", "Your Money Era chapter shows where your income is built to come from and where you've been undercharging, overgiving or waiting to be picked, so the next price you set has your whole chart behind it."],
+  ["🔥", "You catch the shrink in real time", "The shadow chapter names the exact pattern that kicks in right before you go big, so next time it shows up you clock it mid-sentence and go anyway, in a great outfit."],
+  ["💋", "Your wants get specific", "Desire + Magnetism reads your Venus by sign AND house, so the life you describe afterwards sounds like YOU instead of a Pinterest board somebody else made for you."],
+  ["🗓️", "Your big moves get dates", "Ninety days of main character dates tell you when to launch, ask, post, pitch and book the flight, so your boldest moves land on the days the sky is backing you."],
+  ["👑", "You meet her", "The last page is a letter from the woman you're becoming, written from a few years ahead, and it's the page you'll reread every single time you forget who you are."],
+] as const;
+
+// Everything inside The Bad B*tch Report, from its own sales page.
+const TAKE_HOME = [
+  ["📕", "A designed PDF, yours forever", "Nine chapters laid out beautifully to read in bed, print, highlight and scribble ALLLL over, saved to your phone for the days you need reminding."],
+  ["🔭", "Fifteen placements, each read twice", "Every placement is read by its sign AND its house, so your pages are built from your exact combination and two women with the same Sun get two completely different reports."],
+  ["✨", "Six affirmations with instructions", "Two each from your Venus, your Saturn and your North Node, each with a line telling you exactly when to say it (usually right before you discount yourself againnn)."],
+  ["✍️", "Six journal prompts that go deep", "Pulled from your South Node, your Chiron and your North Node, so you're journaling about YOUR patterns, and yesss, it gets juicy."],
+  ["👠", "Five Bad B*tch Moves", "One for your money, two for your power and two for your big dream, each a real thing to go and DO this month."],
+  ["🏃‍♀️", "Two 30-day challenges", "Sixty days of becoming her, week by week, built from your North Node sign and house. Accountability, but make it astrology. 🪐"],
+  ["🎬", "Your main character dates", "The days in the next 90 when the sky points straight at YOU, from your new and full moons to the Sun, Venus, Mars and Jupiter crossing your chart."],
+  ["💌", "A letter from her", "Your future self writes the final page from the life your chart says you're building. Keep tissues nearby, she gets emotional."],
+] as const;
+
+// Rich B*tch Rising's practical layer, from its own sales page (15 Oct 2026 copy).
+const RBR_TAKE_HOME = [
+  ["🪄", "Money manifestation practices", "Written for your chart, so the magic matches how you're actually built to receive."],
+  ["🌑", "Shadow work prompts", "For the family money stories and good-girl guilt that have had waaay too much access to your bank account."],
+  ["👑", "Affirmations", "For overgiving less, charging more and being VERY pleased with yourself about it."],
+  ["📈", "Practical next moves", "Things to try, habits to look at, conversations to have and decisions to start making differently."],
+] as const;
+
+const FOR_YOU_IF = [
+  "Has read every horoscope going and wants the version written for HER exact chart, sign and house",
+  "Keeps undercharging, overgiving or shrinking right before the big moment, and wants to know exactly WHY",
+  "Loves a deep dive she can highlight, reread and come back to every single season",
+  "Wants a plan with real dates on it, so this month is the month things start moving",
+  "Wants to start with her chart in her hands before she books a session or joins the coven",
+];
+
+const FAQ = [
+  ["Do I need to know any astrology?", "Not even a little bit, babe. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than most astrology accounts know theirs. 😘"],
+  ["What if I don't know my birth time?", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["How do I get my report?", "The Bad B*tch Report lands in your inbox as a designed PDF within 48 hours of buying, and you'll get a confirmation email with your birth details the second you pay, so you can check we've got them right."],
+  ["Which report should I start with?", "If money is the loudest thing in your life right now, hop on the Rich B*tch Rising waitlist. For everything else (confidence, visibility, desire, power and your big dream) start with The Bad B*tch Report, which has a full money chapter of its own."],
+  ["Who writes it?", "Me, Betty. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order."],
+] as const;
+
+function Card({ emoji, title, body, bg = "var(--pink-light)" }: { emoji: string; title: string; body: string; bg?: string }) {
+  return (
+    <div className="holo-edge" style={{ background: bg, border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px", color: "var(--dark)" }}>
+      <div style={{ fontSize: 30, lineHeight: 1 }}>{emoji}</div>
+      <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 10 }}>{title}</div>
+      <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{body}</p>
+    </div>
+  );
+}
 
 function Btn({ href, external, children, tone = "pink" }: { href: string; external?: boolean; children: React.ReactNode; tone?: "pink" | "dark" | "white" }) {
   const s = {
@@ -156,6 +212,24 @@ export default function ReportsPage() {
         </div>
       </section>
 
+      <Band wide tone="pinkLight" tag="what changes" title="the woman who reads hers" accent="moves differently.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+          {CHANGES.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} bg="#fff" />)}
+        </div>
+      </Band>
+
+      <Band wide tone="white" tag="what lands in your inbox" title="everything inside" accent="the bad b*tch report.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+          {TAKE_HOME.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} />)}
+        </div>
+        <div style={{ marginTop: 44 }}>
+          <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 22 }}>💸 plus, inside rich b*tch rising</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 14 }}>
+            {RBR_TAKE_HOME.map(([e, t, b]) => <Card key={t} emoji={e} title={t} body={b} bg="var(--lav-light)" />)}
+          </div>
+        </div>
+      </Band>
+
       <section className="px-5 md:px-8" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-6xl mx-auto">
           <div className="tag mb-5" style={{ color: "var(--pink)" }}>how it works</div>
@@ -190,7 +264,20 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <QuoteStrip ids={["chloe", "georgia", "lauren"]} label="what becoming her looks like" tone="white" />
+      <Band tone="white" tag="this is for the woman who" title="this is SO" accent="for you if...">
+        <ForYouIf items={FOR_YOU_IF} />
+      </Band>
+
+      <QuoteStrip ids={["chloe", "georgia", "lauren"]} label="what becoming her looks like" tone="lav" />
+
+      <Band tone="white" tag="faq" title="all your" accent="questions.">
+        {FAQ.map(([q, a]) => (
+          <div key={q} style={{ borderTop: "var(--border)", padding: "18px 0" }}>
+            <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, textTransform: "uppercase", letterSpacing: "0.02em" }}>{q}</div>
+            <p style={{ marginTop: 8 }}>{a}</p>
+          </div>
+        ))}
+      </Band>
 
       <section className="px-5 md:px-8 bg-glitter" style={{ borderBottom: "var(--border)", paddingTop: 84, paddingBottom: 92 }}>
         <div className="max-w-3xl mx-auto">
