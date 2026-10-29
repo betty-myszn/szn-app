@@ -228,6 +228,26 @@ export default function BaddieSessionsPage() {
         </div>
       </section>
 
+      {/* Reviews, three per session; each row swipes sideways on a phone so the page doesn't get endless */}
+      <Band tone="lav" tag="the reviews" title="the baddies" accent="have spoken.">
+        <div style={{ marginTop: 30, display: "grid", gap: 34 }}>
+          {BADDIE_SESSIONS.map((s) => (
+            <div key={s.slug}>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 20 }}>{s.emoji} {s.name}</div>
+              <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-5 -mx-5 px-5 md:mx-0 md:px-0" style={{ marginTop: 12, paddingBottom: 6, scrollbarWidth: "none" }}>
+                {s.reviews.map((r) => (
+                  <figure key={r.name} className="holo-edge snap-start shrink-0 w-[82%] md:w-auto" style={{ margin: 0, background: "#fff", border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px", display: "flex", flexDirection: "column" }}>
+                    <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 40, lineHeight: 0.6, color: "var(--pink)" }}>&ldquo;</div>
+                    <blockquote style={{ margin: "10px 0 0", fontSize: 15, lineHeight: 1.65 }}>{r.quote}</blockquote>
+                    <figcaption style={{ marginTop: "auto", paddingTop: 14, fontFamily: pp, fontWeight: 800, fontSize: 15 }}>{r.name} <span style={{ fontWeight: 600 }}>| {r.role}</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Band>
+
       {/* Why book with Betty */}
       <Band tone="pinkLight" tag="why book with me" title="why baddies book" accent="with betty.">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>

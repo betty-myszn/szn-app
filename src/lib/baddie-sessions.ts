@@ -53,6 +53,8 @@ export interface BaddieSession {
   body: string[];
   /** Who she is when she walks out: the card's closing line. */
   after: string;
+  /** Client reviews for this session, word for word as Betty supplied them (29 Oct 2026). */
+  reviews: { name: string; role: string; quote: string }[];
   focus: string[];
   cta: string;
   /** Card accent, brand palette only. */
@@ -72,6 +74,11 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "We dig through your astrology, your identity and the beliefs keeping you small, then we go and find the version of you who's ready to take over the whole operation.",
     ],
     after: "She walks out lighter, louder and back in charge of her own life, with the next chapter already in the diary.",
+    reviews: [
+      { name: "Sophie M.", role: "Marketing manager", quote: "I honestly didn't realise how much I'd lost myself until this session. I'd spent so long doing what everyone expected of me that I couldn't even tell you what I actually wanted. Betty asked questions that really made me think, and looking at my chart helped me understand some patterns I'd never connected before. I came away feeling excited about my future for the first time in ages." },
+      { name: "Rachel T.", role: "Teacher", quote: "Three words. BOOK THE SESSION. I cried, I laughed, I had about seventeen lightbulb moments. Betty is like having a therapist, astrologer and your most brutally honest friend in one Zoom call. I needed someone to give me a loving kick up the bum and she absolutely delivered!" },
+      { name: "Olivia K.", role: "Creative director", quote: "What stood out was how practical the session was. We covered my astrology and Human Design, but we also worked through some big decisions I'd been putting off. I left knowing exactly what I needed to prioritise. It was a really valuable 90 minutes." },
+    ],
     focus: [
       "Where you are right now and what you ACTUALLY want",
       "The limiting beliefs and self-sabotage you keep putting on repeat",
@@ -89,6 +96,11 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "We go through your money astrology, your subconscious money beliefs and your manifestation patterns, then build the practical moves that get the dollars landing in your account.",
     ],
     after: "The woman who leaves this one names her price without flinching and lets the money in like she was always meant to have it.",
+    reviews: [
+      { name: "Jessica R.", role: "Freelance designer", quote: "Turns out my pricing wasn't the only issue. I was genuinely uncomfortable with people paying me well. WHO KNEW?! Betty helped me see how much of that came from old beliefs about money and what I thought I deserved. I've changed my rates and I'm finally quoting clients without having a minor breakdown." },
+      { name: "Priya S.", role: "Business owner", quote: "I've invested in plenty of business and mindset programmes over the years, but I really appreciated how personal this felt. Betty had clearly spent time studying my chart beforehand, and the insights around self-worth and receiving were particularly relevant. We finished with a few concrete financial goals and a plan I felt confident implementing." },
+      { name: "Hannah L.", role: "Photographer", quote: "Okay so I went into this thinking we'd talk about manifesting money and instead we ended up talking about why I feel guilty whenever I make any. Like??? That was unexpected. In the best way. I've been thinking about our conversation pretty much every day since." },
+    ],
     focus: [
       "Your money astrology and wealth placements",
       "The money blocks you inherited from everyone else",
@@ -107,6 +119,11 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "With your astrology, shadow work and personalised coaching we get to know your patterns and take back the parts of you that you've been too scared to let out, because those parts are exactly where your power has been hiding.",
     ],
     after: "Afterwards she stops shrinking to keep the peace, because every part of her finally gets a seat at the table.",
+    reviews: [
+      { name: "Emma W.", role: "Yoga teacher", quote: "I've been doing inner work for years and genuinely thought I understood my patterns. Apparently there were a few more layers! Exploring my Lilith placement with Betty brought up some really interesting things around anger, boundaries and the way I respond to conflict. I felt incredibly supported throughout." },
+      { name: "Natalie B.", role: "HR consultant", quote: "This was a LOT, but in the best possible way. I finally understood why I keep putting everyone else's needs before my own, even when I'm exhausted and resentful. There were some uncomfortable moments, but Betty handled them with so much care. I left feeling like I'd been given permission to stop apologising for existing." },
+      { name: "Chloe D.", role: "Hairstylist", quote: "Didn't expect to spend my Tuesday afternoon discussing why I can't say no to people, but here we are. 💀 Betty clocked me within about ten minutes. Honestly one of the most eye-opening things I've ever done. Still processing some of it!" },
+    ],
     focus: [
       "Black Moon Lilith, Chiron and your 8th house",
       "People-pleasing, shame and good-girl conditioning",
@@ -124,6 +141,11 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Whether you're building a business, changing careers, putting yourself online or finding your voice again, this session is you stepping into your power and staying there.",
     ],
     after: "Hello, main character: the one everyone clocks the second she walks in, posting, speaking and showing up like it was always her stage.",
+    reviews: [
+      { name: "Lauren P.", role: "Content creator", quote: "I'd been sitting on about 50 videos because I was convinced people would judge me. After our session I actually posted one. Then another. I know that sounds small, but for me it was HUGE. Betty helped me understand why being visible felt so uncomfortable and gave me some really useful ways to work through it." },
+      { name: "Danielle C.", role: "Corporate lawyer", quote: "I was looking for support with confidence as I moved into a more senior position at work. The combination of astrology, coaching and practical exercises was different from anything I'd tried previously. Betty challenged some assumptions I'd held about myself for years, particularly around speaking up and taking ownership of my achievements." },
+      { name: "Mia F.", role: "Fashion stylist", quote: "Betty, WHAT HAVE YOU DONE TO ME?! I've gone from overthinking every single thing I say to actually putting myself out there and applying for opportunities I would've talked myself out of six months ago. I'm feeling a little bit unstoppable right now and I LOVE IT." },
+    ],
     focus: [
       "Confidence, visibility and loud self-expression",
       "Your astrology and Human Design for personal power",
@@ -142,6 +164,11 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "We're done with undercharging, playing small and waiting for someone to give you permission. You walk out knowing exactly what to sell, what to charge and when to GO for it.",
     ],
     after: "This baddie leaves as a CEO who knows exactly what she sells, what she charges and the date she's going for it.",
+    reviews: [
+      { name: "Rebecca J.", role: "Founder, skincare brand", quote: "I was completely overwhelmed with ideas and had no idea which direction to take my business. Betty helped me narrow everything down, rethink my offers and identify where I was wasting time. The astrology was an interesting extra dimension, but the business strategy alone made the session worthwhile. She's incredibly knowledgeable." },
+      { name: "Amy S.", role: "Social media consultant", quote: "Can we talk about how I've been charging the same prices for THREE YEARS because I was scared people would say no?! Betty went through my business, my chart and my offers and basically showed me all the ways I'd been making life harder for myself. We worked out new packages and prices during the call. I needed this SO badly." },
+      { name: "Francesca V.", role: "Wellness entrepreneur", quote: "I loved that Betty understood both the spiritual and commercial sides of what I'm building. I've worked with coaches who focus exclusively on mindset and others who only care about numbers, so having both perspectives in one session was refreshing. We mapped out my next launch and I walked away with clear priorities, realistic deadlines and a much stronger sense of direction." },
+    ],
     focus: [
       "Your money-making astrology: your Midheaven, 10th house, 2nd house and juicy Jupiter",
       "Your Human Design blueprint for how YOU work, sell and make the big calls",
