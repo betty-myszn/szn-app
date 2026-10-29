@@ -12,6 +12,8 @@ export interface SessionOption {
   name: string;
   minutes: number;
   priceUsd: number;
+  /** Sessions for two run longer (two hours, Betty 29 Oct 2026), so there's room for both of you. */
+  minutesForTwo: number;
   /** Same session booked for two people (a couple, besties, sisters, business partners). */
   priceForTwoUsd: number;
   /** Shown struck through next to priceForTwoUsd while the for-two special is on; null hides it. */
@@ -28,7 +30,7 @@ export interface SessionOption {
 }
 
 export const SESSION_OPTIONS: SessionOption[] = [
-  { name: "The Baddie Session", minutes: 90, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
+  { name: "The Baddie Session", minutes: 90, minutesForTwo: 120, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
 /** Three sessions, mixed and matched from all five; birth details at checkout like a single. */
@@ -51,6 +53,8 @@ export interface BaddieSession {
   name: string;
   tagline: string;
   body: string[];
+  /** Optional nudge to the for-two booking (links to the for-two panel). */
+  forTwoNote?: string;
   /** Who she is when she walks out: the card's closing line. */
   after: string;
   /** Client reviews for this session, word for word as Betty supplied them (29 Oct 2026). */
@@ -160,9 +164,10 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
     tagline: "Your big dream is about to start paying you, babeeee. 💸",
     body: [
       "For the baddies with a BIG dream they're completely obsessed with, who want to make serious dollars doing it their way, full stop.",
-      "I've spent twenty years as a business consultant and strategist, so I'm bringing the brains, the receipts and the actual plan, then lining every single move up with your astrology and your Human Design, so you launch, sell and charge in a way that feels like YOU and makes you sooo much money.",
+      "I've spent twenty years as a coach, business consultant and strategist, so I'm bringing the brains, the receipts and the actual plan, then lining every single move up with your astrology and your Human Design, so you launch, sell and charge in a way that feels like YOU and makes you sooo much money.",
       "We're done with undercharging, playing small and waiting for someone to give you permission. You walk out knowing exactly what to sell, what to charge and when to GO for it.",
     ],
+    forTwoNote: "Building it with a business partner or your business wifey, babe: book a two-hour session for two",
     after: "This baddie leaves as a CEO who knows exactly what she sells, what she charges and the date she's going for it.",
     reviews: [
       { name: "Rebecca J.", role: "Founder, skincare brand", quote: "I was completely overwhelmed with ideas and had no idea which direction to take my business. Betty helped me narrow everything down, rethink my offers and identify where I was wasting time. The astrology was an interesting extra dimension, but the business strategy alone made the session worthwhile. She's incredibly knowledgeable." },
