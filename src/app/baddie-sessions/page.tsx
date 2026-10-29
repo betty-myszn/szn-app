@@ -33,14 +33,14 @@ const lastOdd = (i: number, n: number, bp: "sm" | "md" = "md") =>
 // Why book with Betty: sits after the session cards, once she knows what's on offer (Betty moved it down, 27 Oct 2026).
 const WHY = [
   { emoji: "🔮", title: "I do my homework on YOU", body: "Before we ever meet I spend two to three hours obsessing over your astrology and your Human Design like it's my favourite group chat, then I build all ninety minutes around how YOU are wired, so every single minute is made for you and you alone." },
-  { emoji: "💸", title: "Twenty years of business brain, babe", body: "I've been a business consultant and strategist for twenty years and I run my own global dream business, so when you want more money, a launch or a big fat career glow-up, you get a proper strategy with the magic poured all over the top." },
+  { emoji: "💸", title: "Twenty years of business brain, babe", body: "I've been a coach, business consultant and strategist for twenty years and I run my own global dream business, so when you want more money, a launch or a big fat career glow-up, you get a proper strategy with the magic poured all over the top." },
   { emoji: "🧠", title: "We go straight for the subconscious", body: "Hypnosis, mindset work and energy work come out whenever your goals call for them, so we get our hands on the gremlins that have been running your life from the basement and evict every last one of them." },
   { emoji: "💖", title: "Thousands of baddies went first", body: "I've been coaching women for over a decade, thousands of them, so whatever you're bringing in, the drama, the fear, the 3am spiral, I've seen it, I LOVE it and I know exactly how to help you move it." },
 ];
 
 // Betty's credentials as she gave them (27 Oct 2026): no member or client headcounts beyond "thousands".
 const STATS = [
-  { big: "20 years", small: "as a business consultant + strategist" },
+  { big: "20 years", small: "as a coach, business consultant + strategist" },
   { big: "a global", small: "dream business I built and run" },
   { big: "2 books", small: "published, babe" },
   { big: "thousands", small: "of clients coached around the world" },
@@ -156,6 +156,13 @@ export default function BaddieSessionsPage() {
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{o.name}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
                 <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>Every session below is the same price. 💌 Pop your birth details in at checkout, then I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine.</p>
+                <ul style={{ listStyle: "none", margin: "16px 0 0", padding: 0, display: "grid", gap: 8 }}>
+                  {BADDIE_SESSIONS.map((s) => (
+                    <li key={s.slug}>
+                      <a href={`#${s.slug}`} className="no-underline" style={{ fontFamily: pp, fontWeight: 700, fontSize: 16, color: "var(--dark)" }}>{s.emoji} {s.name}</a>
+                    </li>
+                  ))}
+                </ul>
                 <div style={{ marginTop: "auto", paddingTop: 22 }}>
                   <a href={bookingHref(o.bookingUrl, `${o.name} (${o.minutes} min)`)} className="no-underline" style={btn("var(--dark)")}>Pick your session</a>
                 </div>
@@ -256,7 +263,7 @@ export default function BaddieSessionsPage() {
               <p>I&apos;m an astrologer, a manifestation coach, a shadow work witch and your new loudest cheerleader, and I help women make more money, take their power back and become MORE of who they actually are.</p>
               <p>I mix astrology, Human Design, hypnosis, subconscious work, manifestation and real coaching, then we take every bit of it straight into how you live, love, earn and show up.</p>
               <p>I&apos;ve been coaching women for over a decade, thousands of them, through the fear, the old beliefs and the &quot;who do I think I am&quot; spiral, all the way out the other side into lives that feel like THEIRS.</p>
-              <p>I&apos;ve also been a business consultant and strategist for twenty years while building and running my own global dream business and publishing two books, so I know exactly what it takes to want something outrageous and then go and get it anyway.</p>
+              <p>I&apos;ve also been a coach, business consultant and strategist for twenty years while building and running my own global dream business and publishing two books, so I know exactly what it takes to want something outrageous and then go and get it anyway.</p>
               <p><strong>You get my full attention, my whole brain and a woman who is rooting for you so hard it&apos;s a little bit unhinged. 💜</strong></p>
             </div>
             <a href="#sessions" className="no-underline btn-pink" style={{ ...btn("var(--pink)"), marginTop: 22 }}>Find your session</a>
