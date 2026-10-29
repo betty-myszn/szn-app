@@ -16,8 +16,9 @@ export const metadata: Metadata = {
     description: "Your coven, in real life, in Los Angeles. Join the LA waitlist.",
     url: "/baddie-coven/la",
     type: "website",
+    images: [{ url: "/coven/og-la-coven.jpg", width: 1200, height: 630, alt: "The LA Baddie Coven: your coven, IRL in LA. First astrology dinner in Sagittarius season." }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/coven/og-la-coven.jpg"] },
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";

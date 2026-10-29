@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     type: "website",
     // A designed share card (her photo + foil "the baddie coven" sticker), so links on Threads,
     // Instagram and WhatsApp look like the page instead of plain text.
-    images: [{ url: "/coven/og-baddie-coven.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 5 November." }],
+    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 5 November for 3 days, $44 founding price." }],
   },
-  twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven-pink.jpg"] },
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
