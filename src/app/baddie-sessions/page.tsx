@@ -60,7 +60,17 @@ const STEPS = [
   { n: "02", title: "Spill the tea", body: "Send me your birth time, date and place, plus what you want, what's blocking you and every juicy detail you want us to crack wide open together." },
   { n: "03", title: "I go DEEP on your chart", body: "I spend two to three hours with your Human Design and your astrology side by side before we meet, building your session around what they're screaming about you and the goals you came in with." },
   { n: "04", title: "Ninety minutes, all about YOU", body: "We meet online and, depending on what you're being guided towards, your session can include hypnosis, mindset work, energy work and coaching, every bit of it led by your goals, your astrology and your Human Design." },
-  { n: "05", title: "Walk out activated AF", body: "You leave with clear next steps, your chart decoded, the tools to keep the shift going long after we hang up and the deeply unhinged feeling that you can do literally anything. 🔥" },
+  { n: "05", title: "Walk out activated AF", body: "You leave with your chart decoded and the deeply unhinged feeling that you can do literally anything, then your recording and your whole after-session pack land in your inbox to keep the shift going. 🔥" },
+];
+
+// What she takes home after the call; each card is written on its own terms (no shared openings).
+const TAKE_HOME = [
+  { emoji: "🎥", title: "Your Zoom recording", body: "Every second of our ninety minutes, yours to rewatch on the days you need reminding exactly who you are." },
+  { emoji: "📖", title: "Your own reports", body: "Written from YOUR astrology, YOUR Human Design and everything we cracked open together, so the breakthroughs live somewhere other than your memory." },
+  { emoji: "🗺️", title: "An action plan with next steps", body: "What to do, in what order and by when, so the momentum from the call turns into real moves in real life." },
+  { emoji: "📚", title: "Guides made for where you're at", body: "Deeper dives into the parts of your chart and your life we're working on, picked for you and nobody else." },
+  { emoji: "✍️", title: "Journal prompts", body: "Questions that keep digging long after we hang up, for the nights you want to go deeper with a candle lit and a pen in your hand." },
+  { emoji: "🔥", title: "Exercises to embody HER", body: "Hypnosis, mindset and energy practices you can come back to whenever the old you tries to sneak back in." },
 ];
 
 const FAQ: { q: string; a: React.ReactNode }[] = [
@@ -156,7 +166,7 @@ export default function BaddieSessionsPage() {
               <div key={o.name} className="holo-edge" style={{ background: i === 0 ? "#fff" : "var(--pink)", color: "var(--dark)", border: "var(--border)", borderRadius: 24, padding: "28px 26px", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 26 }}>{o.name}</div>
                 <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, marginTop: 6 }}>{o.minutes} minutes | ${o.priceUsd} USD</div>
-                <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>Every session below is the same price. 💌 Pop your birth details in at checkout, then I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine.</p>
+                <p style={{ fontSize: 16, lineHeight: 1.65, margin: "14px 0 0" }}>Every session below is the same price, and every one comes with your Zoom recording plus your own reports, action plan, guides, journal prompts and exercises. 💌 Pop your birth details in at checkout, then I&apos;ll be straight in your inbox to lock in a time that works in your time zone AND mine.</p>
                 <ul style={{ listStyle: "none", margin: "16px 0 0", padding: 0, display: "grid", gap: 8 }}>
                   {BADDIE_SESSIONS.map((s) => (
                     <li key={s.slug}>
@@ -269,6 +279,19 @@ export default function BaddieSessionsPage() {
               <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 32, color: "var(--pink)", lineHeight: 1 }}>{st.n}</div>
               <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 8 }}>{st.title}</div>
               <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{st.body}</p>
+            </div>
+          ))}
+        </div>
+      </Band>
+
+      {/* What she takes home */}
+      <Band tone="white" tag="what you take home" title="the magic keeps going" accent="after we hang up.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 30 }}>
+          {TAKE_HOME.map((t) => (
+            <div key={t.title} className="holo-edge" style={{ background: "var(--pink-light)", border: "var(--border)", borderRadius: 18, padding: "20px 20px 22px" }}>
+              <div style={{ fontSize: 30, lineHeight: 1 }}>{t.emoji}</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, marginTop: 10 }}>{t.title}</div>
+              <p style={{ fontSize: 15, lineHeight: 1.65, margin: "6px 0 0" }}>{t.body}</p>
             </div>
           ))}
         </div>
