@@ -156,7 +156,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding witches pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up, so the waitlist gets first dibs. 💸"],
-  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, and you'll want to be there. 🪄"],
+  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -282,7 +282,7 @@ export default function BaddieCovenPage() {
               <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · our first ever event</span>
               <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 700 }}>Founding witches get in at <span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay</span>. Founding spots are limited, and the price goes up after that. 💸</p>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Get on the waitlist so you&apos;re first in.</p>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀 Get on the waitlist so you&apos;re first in.</p>
               <CovenCountdown />
             </div>
           </>
@@ -369,6 +369,10 @@ export default function BaddieCovenPage() {
             <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--pink)" }}>✨ save the f*cking date</div>
             <div style={{ fontFamily: pp, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, lineHeight: 1.1, margin: "8px 0 10px" }}>our FIRST EVER coven event: <span style={{ color: "var(--pink)" }}>the 11/11 manifestation workshop.</span></div>
             <p style={{ ...copy, margin: 0 }}>The most manifest-y moment of the ENTIRE year, and you KNOW we&apos;ll be there with candles lit, intentions SET and the most outrageous version of our lives on ordeeeer. Because of course we are. 🪄</p>
+            <div style={{ marginTop: 16, background: "var(--pink)", color: "var(--dark)", border: "2px solid #fff", borderRadius: 14, padding: "12px 16px" }}>
+              <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>🎀 the dress code</div>
+              <p style={{ margin: "6px 0 0", fontSize: 15.5, lineHeight: 1.6, fontWeight: 700 }}>Come dressed as your FUTURE SELF, babe. Whatever you&apos;re manifesting, show up as the woman who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we&apos;ll call her in together. 💅</p>
+            </div>
             <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Baddie Coven begins, and you&apos;ll want to say you were there. 💜</p>
           </div>
           <HoloStar size={44} style={{ top: -20, right: 30, transform: "rotate(12deg)" }} />

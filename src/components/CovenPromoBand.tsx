@@ -25,6 +25,9 @@ export default function CovenPromoBand() {
           <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, color: "var(--dark)", margin: "14px 0 0" }}>
             🪄 our FIRST EVER event: the 11/11 manifestation workshop
           </p>
+          <p style={{ fontSize: 16, fontWeight: 600, color: "var(--dark)", margin: "6px 0 0" }}>
+            🎀 Dress code: come as your future self, the woman you&apos;re manifesting.
+          </p>
           <div style={{ marginTop: 18 }}>
             <CovenCountdown />
           </div>
