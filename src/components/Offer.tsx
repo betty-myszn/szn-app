@@ -138,29 +138,33 @@ export function OfferCards({ exclude, title = "the rest of the universe", tone =
 
 /** A report or book cover drawn in CSS, styled after the real report PDFs, so it shows the product
  *  without printing anyone's actual birth details. */
-export function Cover({ kind }: { kind: "rich-btch-rising" | "bad-btch-report" | "book" }) {
+export function Cover({ kind, width = "min(320px, 78vw)" }: { kind: "rich-btch-rising" | "bad-btch-report" | "book"; width?: string }) {
   const c = {
-    "rich-btch-rising": { bg: "var(--dark)", ink: "#fff", top: "my szn presents", lines: ["rich", "b*tch", "rising."], hot: 1, sub: "worth · wealth · receiving · purpose", img: "/cosmic-money.png", tilt: -4 },
-    "bad-btch-report": { bg: "var(--pink)", ink: "var(--dark)", top: "my szn presents", lines: ["the bad", "b*tch", "report"], hot: 1, sub: "your personalised astrology blueprint for taking up more space", img: null, tilt: 4 },
-    book: { bg: "var(--lav)", ink: "var(--dark)", top: "betty · my szn", lines: ["becoming", "her."], hot: 1, sub: "out now in paperback + ebook", img: null, tilt: -3 },
+    "rich-btch-rising": { bg: "var(--dark)", ink: "#fff", top: "my szn presents", lines: ["rich", "b*tch", "rising."], hot: 1, sub: "worth · wealth · receiving · purpose", img: null, photo: "/coven/baddie-money-pink.jpg", tilt: -4 },
+    "bad-btch-report": { bg: "var(--pink)", ink: "var(--dark)", top: "my szn presents", lines: ["the bad", "b*tch", "report"], hot: 1, sub: "your personalised astrology blueprint for taking up more space", img: null, photo: "/coven/baddie-pink-email.jpg", tilt: 4 },
+    book: { bg: "var(--lav)", ink: "var(--dark)", top: "betty · my szn", lines: ["becoming", "her."], hot: 1, sub: "out now in paperback + ebook", img: null, photo: null, tilt: -3 },
   }[kind];
   return (
-    <div aria-hidden="true" style={{ width: "min(320px, 78vw)", aspectRatio: "0.707", background: c.bg, color: c.ink, border: "var(--border)", borderRadius: 6, padding: "26px 24px", position: "relative", overflow: "hidden", transform: `rotate(${c.tilt}deg)`, boxShadow: "10px 12px 0 var(--dark)", display: "flex", flexDirection: "column" }}>
+    <div aria-hidden="true" style={{ width, aspectRatio: "0.707", background: c.bg, color: c.ink, border: "var(--border)", borderRadius: 6, padding: "26px 24px", position: "relative", overflow: "hidden", transform: `rotate(${c.tilt}deg)`, boxShadow: "10px 12px 0 var(--dark)", display: "flex", flexDirection: "column" }}>
       <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8 }}>{c.top}</div>
-      <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 44, lineHeight: 0.92, letterSpacing: "-0.03em", marginTop: 22, textTransform: kind === "bad-btch-report" ? "uppercase" : "lowercase" }}>
+      <div style={{ fontFamily: pp, fontWeight: 800, fontSize: c.photo ? 36 : 44, lineHeight: 0.92, letterSpacing: "-0.03em", marginTop: c.photo ? 14 : 22, textTransform: kind === "bad-btch-report" ? "uppercase" : "lowercase" }}>
         {c.lines.map((l, i) => (
           <div key={l} style={{ color: i === c.hot ? (kind === "bad-btch-report" ? "#fff" : "var(--pink)") : undefined, fontStyle: i === c.hot && kind === "bad-btch-report" ? "italic" : undefined }}>{l}</div>
         ))}
       </div>
-      <div style={{ fontSize: 12, lineHeight: 1.5, marginTop: 16, maxWidth: kind === "bad-btch-report" ? 165 : 200, fontWeight: 600, position: "relative", zIndex: 1 }}>{c.sub}</div>
-      {kind === "bad-btch-report" && (
+      <div style={{ fontSize: c.photo ? 10.5 : 12, lineHeight: 1.45, marginTop: c.photo ? 10 : 16, maxWidth: kind === "bad-btch-report" ? 165 : 200, fontWeight: 600, position: "relative", zIndex: 1 }}>{c.sub}</div>
+      {c.photo && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={c.photo} alt="" style={{ margin: "14px -24px 0", width: "calc(100% + 48px)", maxWidth: "none", flex: 1, minHeight: 0, objectFit: "cover", objectPosition: "center 20%", borderTop: "var(--border)", borderBottom: "var(--border)", display: "block" }} />
+      )}
+      {kind === "bad-btch-report" && !c.photo && (
         <div style={{ position: "absolute", right: -18, top: "42%", width: 120, height: 120, background: "var(--lav)", clipPath: "polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%)" }} />
       )}
       {c.img && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={c.img} alt="" style={{ position: "absolute", right: -20, bottom: 40, width: "62%" }} />
       )}
-      <div style={{ marginTop: "auto", borderTop: `1.5px solid ${c.ink}`, paddingTop: 10, fontSize: 9, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase" }}>
+      <div style={{ marginTop: c.photo ? 12 : "auto", borderTop: `1.5px solid ${c.ink}`, paddingTop: 10, fontSize: 9, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase" }}>
         {kind === "book" ? "the my szn book" : "prepared for you"}
       </div>
     </div>

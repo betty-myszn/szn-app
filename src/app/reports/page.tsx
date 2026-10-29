@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import QuoteStrip from "@/components/QuoteStrip";
 import HoloShape from "@/components/HoloShape";
 import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
 
@@ -105,6 +104,54 @@ const FOR_YOU_IF = [
   "Wants her chart in her hands before she books a Baddie Session or joins the coven 🦄",
 ];
 
+// Reader reviews per report, word for word as Betty supplied them (29 Oct 2026).
+const BBR_REVIEWS = [
+  {
+    head: "It's like someone handed me back the parts of myself I'd forgotten.",
+    body: "I didn't realise how much I'd been shrinking myself until I read this. The whole thing felt like a conversation with someone who could see the version of me I've been too scared to become. Honestly, every woman needs to read something like this.",
+    name: "Freya Collins",
+    role: "Photographer",
+  },
+  {
+    head: "I finished reading it and immediately applied for the job I'd been talking myself out of.",
+    body: "That probably tells you everything! I loved how specific it was to my chart. It helped me understand why I second-guess myself, but also reminded me of the strengths I completely overlook. It gave me a proper kick up the arse, in the best possible way.",
+    name: "Tessa Whitmore",
+    role: "Project Manager",
+  },
+  {
+    head: "I've never felt so seen by a PDF in my entire life 😂",
+    body: "Seriously though, WOW. The confidence stuff hit hard, especially the parts about people-pleasing and needing everyone to approve of my decisions. I've reread it three times already. It feels like having a little manual for remembering who I am whenever I start doubting myself.",
+    name: "Maya Fletcher",
+    role: "Content Creator",
+  },
+];
+
+const RBR_REVIEWS = [
+  {
+    head: "I genuinely cried reading the part about my relationship with money.",
+    body: "I've spent years feeling guilty for wanting more, especially as a woman running her own business. This report made me look at my patterns in a completely different way. It felt incredibly personal, and I've already started making changes to how I price my work and talk about money.",
+    name: "Imogen Ellis",
+    role: "Business Owner",
+  },
+  {
+    head: "The accuracy was actually ridiculous.",
+    body: "I've had astrology readings before, but nothing that explained my money habits like this. The way it connected my birth chart to how I earn, spend and value myself was WILD. I've got pages highlighted because I keep going back to them.",
+    name: "Priya Dawson",
+    role: "Marketing Consultant",
+  },
+  {
+    head: "For the first time, wanting to be wealthy doesn't feel selfish.",
+    body: "I grew up believing money was something you had to struggle for, and that wanting lots of it was somehow greedy. Reading this gave me so much to think about. I especially loved having practical things to work on instead of just being told I'd be rich one day.",
+    name: "Eliza Morgan",
+    role: "Creative Freelancer",
+  },
+];
+
+const REVIEW_ROWS = [
+  { label: "💜 the bad b*tch report", reviews: BBR_REVIEWS },
+  { label: "💸 rich b*tch rising", reviews: RBR_REVIEWS },
+];
+
 const FAQ = [
   ["If you're new to astrology", "Babe, you don't need to know your rising from your elbow. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than half the astrology accounts on your feed. 😘"],
   ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
@@ -161,9 +208,9 @@ export default function ReportsPage() {
               <Btn href="#reports">💖 explore your reports ↓</Btn>
             </div>
           </div>
-          <div className="relative flex justify-center" style={{ minHeight: 440 }}>
-            <div style={{ position: "absolute", left: "4%", top: 0 }}><Cover kind="rich-btch-rising" /></div>
-            <div style={{ position: "absolute", right: "2%", top: 60 }}><Cover kind="bad-btch-report" /></div>
+          <div className="relative flex justify-center" style={{ minHeight: 440, maxWidth: 540, width: "100%", marginInline: "auto" }}>
+            <div style={{ position: "absolute", left: 0, top: 0 }}><Cover kind="rich-btch-rising" width="min(255px, 46vw)" /></div>
+            <div style={{ position: "absolute", right: 0, top: 56 }}><Cover kind="bad-btch-report" width="min(255px, 46vw)" /></div>
             <HoloShape shape="star" size={74} style={{ position: "absolute", top: -18, right: "0%", zIndex: 10, transform: "rotate(14deg)" }} />
             <HoloShape shape="moon" size={58} style={{ position: "absolute", bottom: 0, left: "0%", zIndex: 10, transform: "rotate(-18deg)" }} />
             <HoloShape shape="planet" size={64} style={{ position: "absolute", top: -22, left: "0%", zIndex: 10, transform: "rotate(-8deg)" }} />
@@ -296,7 +343,33 @@ export default function ReportsPage() {
         <ForYouIf items={FOR_YOU_IF} />
       </Band>
 
-      <QuoteStrip ids={["chloe", "georgia", "lauren"]} label="what becoming her looks like" tone="lav" />
+      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-5 flex items-center gap-4"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ the reviews</span><HoloShape shape="star" size={46} style={{ transform: "rotate(12deg)" }} /></div>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: "var(--dark)", lineHeight: 1 }}>
+            the baddies <span className="pk">have read theirs.</span>
+          </h2>
+          <div style={{ marginTop: 32, display: "grid", gap: 38 }}>
+            {REVIEW_ROWS.map((row) => (
+              <div key={row.label}>
+                <span className="holo-sticker" style={{ fontSize: 13, transform: "rotate(-1deg)" }}>{row.label}</span>
+              <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-5 -mx-5 px-5 md:mx-0 md:px-0" style={{ marginTop: 14, paddingBottom: 6, scrollbarWidth: "none" }}>
+                {row.reviews.map((r) => (
+                  <figure key={r.name} className="holo-edge snap-start shrink-0 w-[84%] md:w-auto" style={{ margin: 0, background: "#fff", border: "var(--border)", borderRadius: 18, padding: "22px 22px 24px", display: "flex", flexDirection: "column", color: "var(--dark)" }}>
+                    <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 44, lineHeight: 0.6, color: "var(--pink)" }}>&ldquo;</div>
+                    <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, lineHeight: 1.3, marginTop: 12 }}>{r.head}</div>
+                    <blockquote style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.65 }}>{r.body}</blockquote>
+                    <figcaption style={{ marginTop: "auto", paddingTop: 16, fontFamily: pp, fontWeight: 800, fontSize: 15 }}>
+                      {r.name} <span style={{ fontWeight: 600 }}>| {r.role}</span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <Band tone="white" tag="faq" title="all your" accent="questions.">
         {FAQ.map(([q, a]) => (
