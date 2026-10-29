@@ -31,7 +31,7 @@ const REPORTS = [
     status: "on sale now",
     name: "the bad b*tch report",
     promise: "become the main character of your own damn life.",
-    body: "Nine chapters on who you are when nobody's shrinking you, what's been keeping you small, and the big outrageous life your chart has been pointing at this whole time, written for the sign AND the house of all fifteen of your placements, so it reads like YOU and absolutely nobody else. 💜",
+    body: "Nine chapters on the woman you are when nobody's shrinking you, everything that's been keeping you small, and the big, outrageous, slightly unhinged life your chart has been pointing at this WHOLE time, written for the sign AND the house of all fifteen of your placements, so it reads like YOU and absolutely nobody elseee. 💜",
     inside: ["Your Bad B*tch DNA", "Your Money Era", "Your Visibility Power", "Your Desire + Magnetism", "Your F*ck Around & Find Out Energy", "Your Dark Femme + Power", "The Shadow Keeping You Small", "Your Big Dream Energy", "Become That B*tch"],
     extras: ["6 affirmations", "6 journal prompts", "5 bad b*tch moves", "two 30-day challenges", "your main character dates", "a letter from her"],
     price: "$88 intro price",
@@ -47,7 +47,7 @@ const REPORTS = [
     status: "waitlist open",
     name: "rich b*tch rising",
     promise: "what your chart says about getting PAID.",
-    body: "Your second house, tenth house, eighth house, Venus and Jupiter, read together so you can see how you're built to earn, where the family money stories and good-girl guilt have been running your bank account, and what changes when you let yourself be well-paid, ambitious and VERY pleased with yourself. 💸",
+    body: "Your second, tenth and eighth houses, your Venus and your Jupiter, all read together so you can finally see how you're built to get PAID, where the family money stories and good-girl guilt have been running your bank account for agesss, and what happens when you let yourself be rich, ambitious and VERY pleased with yourself about it. 💸",
     inside: ["How you're built to make money", "Your money shadow", "Self-worth, receiving + being THAT woman", "Money, power + financial independence", "Your rich b*tch era starts here"],
     extras: ["money manifestation practices", "shadow work prompts", "affirmations", "practical next moves"],
     price: "$88",
@@ -61,55 +61,55 @@ const REPORTS = [
 ];
 
 const STEPS = [
-  ["01", "you pop in your birth details", "Date, time and place of birth go straight into checkout. No birth time? Write \"unknown\" and we work with everything else, which is still a LOT."],
-  ["02", "betty builds your report", "Every placement gets read by sign AND by house from writing I've done for every single combination, then put together by hand for your chart, so two Leos get two completely different reports."],
-  ["03", "she lands in your inbox", "A beautifully designed PDF, yours forever, to read in bed, print, highlight and scribble ALLLL over, then actually go and DO."],
+  ["01", "you spill your birth details", "Date, time and place go straight into checkout, andddd if you don't know your birth time, write \"unknown\" and we work with everything else, which is still a LOTTT of you."],
+  ["02", "betty gets OBSESSED with your chart", "Every placement gets read by its sign AND its house from writing I've done for every single combination, then I put yours together by hand, so two Leos get two completely different reports and neither of them gets a horoscope-app shrug. 🪐"],
+  ["03", "she lands in your inbox", "A gorgeous designed PDF, yours foreverrr, to read in bed, print, highlight and scribble ALLLL over, then actually go and DO, ideally in a great outfit. 💖"],
 ] as const;
 
 // What changes in her once she's read it; each card written on its own terms (no shared openings).
 const CHANGES = [
-  ["🪞", "You finally see yourself clearly", "The intensity, the big wants, the way you go silent in meetings and LOUD in the group chat, all of it gets named, placed in your chart and handed back to you as the features they always were."],
-  ["💸", "You know where your money's been leaking", "Your Money Era chapter shows where your income is built to come from and where you've been undercharging, overgiving or waiting to be picked, so the next price you set has your whole chart behind it."],
-  ["🔥", "You catch the shrink in real time", "The shadow chapter names the exact pattern that kicks in right before you go big, so next time it shows up you clock it mid-sentence and go anyway, in a great outfit."],
-  ["💋", "Your wants get specific", "Desire + Magnetism reads your Venus by sign AND house, so the life you describe afterwards sounds like YOU instead of a Pinterest board somebody else made for you."],
-  ["🗓️", "Your big moves get dates", "Ninety days of main character dates tell you when to launch, ask, post, pitch and book the flight, so your boldest moves land on the days the sky is backing you."],
-  ["👑", "You meet her", "The last page is a letter from the woman you're becoming, written from a few years ahead, and it's the page you'll reread every single time you forget who you are."],
+  ["🪞", "You see ALL of you, finally", "The intensity, the big wants, the way you go silent in meetings and absolutely FERAL in the group chat, all of it gets named, found in your chart and handed back to you as the power it always was, babe."],
+  ["💸", "You stop leaving money on the table", "Your Money Era chapter shows where your money is built to come from and where you've been undercharging, overgiving or waiting politely to be picked, so the next price you set has your whole chart (and a little audacity) behind it."],
+  ["🔥", "You catch the shrink in real time", "Your shadow chapter names the exact pattern that kicks in right before you go big, so the next time it shows up you clock it mid-sentence, roll your eyes at it and goooo anyway."],
+  ["💋", "You want what YOU want", "Desire + Magnetism reads your Venus by sign AND house, so the life you describe afterwards sounds like YOU, outrageous and specific, instead of the polite brunch-friendly version you've been editing it down to."],
+  ["🗓️", "Your big moves get dates", "Ninety days of main character dates tell you exactly when to launch, ask, post, pitch, flirt and book the flight, so your boldest moves land on the days the sky is SCREAMING your name."],
+  ["👑", "You meet HER", "The last page is a letter from the baddie you're becoming, written from a few years ahead, and it's the page you'll reread every single time the world tries to make you forget who you are. 🦄"],
 ] as const;
 
 // Everything inside The Bad B*tch Report, from its own sales page.
 const TAKE_HOME = [
-  ["📕", "A designed PDF, yours forever", "Nine chapters laid out beautifully to read in bed, print, highlight and scribble ALLLL over, saved to your phone for the days you need reminding."],
-  ["🔭", "Fifteen placements, each read twice", "Every placement is read by its sign AND its house, so your pages are built from your exact combination and two women with the same Sun get two completely different reports."],
+  ["📕", "A gorgeous PDF, yours foreverrr", "Nine chapters laid out to read in bed, print, highlight and scribble ALLLL over, saved on your phone for the days you need reminding exactly how much of a baddie you are."],
+  ["🔭", "Fifteen placements, each read twice", "Every placement is read by its sign AND its house, so your pages are built from your exact combination, and two women with the same Sun get two completely different reports. Sorry to your horoscope app. 😘"],
   ["✨", "Six affirmations with instructions", "Two each from your Venus, your Saturn and your North Node, each with a line telling you exactly when to say it (usually right before you discount yourself againnn)."],
   ["✍️", "Six journal prompts that go deep", "Pulled from your South Node, your Chiron and your North Node, so you're journaling about YOUR patterns, and yesss, it gets juicy."],
-  ["👠", "Five Bad B*tch Moves", "One for your money, two for your power and two for your big dream, each a real thing to go and DO this month."],
+  ["👠", "Five Bad B*tch Moves", "One for your money, two for your power and two for your big dream, each one a real thing to go and DO this month, preferably while everyone else is still talking about it. 🔥"],
   ["🏃‍♀️", "Two 30-day challenges", "Sixty days of becoming her, week by week, built from your North Node sign and house. Accountability, but make it astrology. 🪐"],
-  ["🎬", "Your main character dates", "The days in the next 90 when the sky points straight at YOU, from your new and full moons to the Sun, Venus, Mars and Jupiter crossing your chart."],
+  ["🎬", "Your main character dates", "The days in the next 90 when the sky is pointing straight at YOU, from your new and full moons to the Sun, Venus, Mars and Jupiter crossing your chart. Diary them, then plan your big moves like the CEO you are."],
   ["💌", "A letter from her", "Your future self writes the final page from the life your chart says you're building. Keep tissues nearby, she gets emotional."],
 ] as const;
 
 // Rich B*tch Rising's practical layer, from its own sales page (15 Oct 2026 copy).
 const RBR_TAKE_HOME = [
-  ["🪄", "Money manifestation practices", "Written for your chart, so the magic matches how you're actually built to receive."],
-  ["🌑", "Shadow work prompts", "For the family money stories and good-girl guilt that have had waaay too much access to your bank account."],
-  ["👑", "Affirmations", "For overgiving less, charging more and being VERY pleased with yourself about it."],
-  ["📈", "Practical next moves", "Things to try, habits to look at, conversations to have and decisions to start making differently."],
+  ["🪄", "Money manifestation practices", "Money magic written for YOUR chart, so you manifest the way you're actually built to receive instead of copying some guy's 5am morning routine."],
+  ["🌑", "Shadow work prompts", "For the family money stories and good-girl guilt that have had waaay too much access to your bank account for far too longgg."],
+  ["👑", "Affirmations", "For overgiving less, charging MOREEE and being outrageously pleased with yourself about every single invoice. 💸"],
+  ["📈", "Practical next moves", "Real things to try, habits to side-eye, conversations to have and decisions to start making differently, starting thisss week."],
 ] as const;
 
 const FOR_YOU_IF = [
-  "Has read every horoscope going and wants the version written for HER exact chart, sign and house",
-  "Keeps undercharging, overgiving or shrinking right before the big moment, and wants to know exactly WHY",
-  "Loves a deep dive she can highlight, reread and come back to every single season",
-  "Wants a plan with real dates on it, so this month is the month things start moving",
-  "Wants to start with her chart in her hands before she books a session or joins the coven",
+  "Has read every horoscope going and is DONE with ones written for twelve million other people",
+  "Keeps undercharging, overgiving or shrinking right before the big moment, and wants to know exactly WHY (then stop, immediately)",
+  "Loves a deep dive she can highlight, reread and come back to every single season like a holy text 🪐",
+  "Wants a plan with real dates on it, so this month is the month things start moving, BIGGG",
+  "Wants her chart in her hands before she books a Baddie Session or joins the coven 🦄",
 ];
 
 const FAQ = [
-  ["Do I need to know any astrology?", "Not even a little bit, babe. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than most astrology accounts know theirs. 😘"],
-  ["What if I don't know my birth time?", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
-  ["How do I get my report?", "The Bad B*tch Report lands in your inbox as a designed PDF within 48 hours of buying, and you'll get a confirmation email with your birth details the second you pay, so you can check we've got them right."],
-  ["Which report should I start with?", "If money is the loudest thing in your life right now, hop on the Rich B*tch Rising waitlist. For everything else (confidence, visibility, desire, power and your big dream) start with The Bad B*tch Report, which has a full money chapter of its own."],
-  ["Who writes it?", "Me, Betty. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order."],
+  ["If you're new to astrology", "Babe, you don't need to know your rising from your elbow. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than half the astrology accounts on your feed. 😘"],
+  ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["How you get it", "The Bad B*tch Report lands in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt."],
+  ["Which one to start with", "If money is the LOUDEST thing in your life right now, hop on the Rich B*tch Rising waitlist. For everything else (confidence, visibility, desire, power and your big, outrageous dream) start with The Bad B*tch Report, which has a whole money chapter of its own anyway. 💸"],
+  ["Who writes it", "Me, Betty, hiii. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order, with a LOT of love and a candle lit. 🕯️"],
 ] as const;
 
 function Card({ emoji, title, body, bg = "var(--pink-light)" }: { emoji: string; title: string; body: string; bg?: string }) {
@@ -162,7 +162,27 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <section id="reports" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
+      <section className="px-5 md:px-8" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
+        <div className="max-w-4xl mx-auto" style={{ color: "#fff" }}>
+          <div className="tag mb-5" style={{ color: "var(--pink)" }}>why your chart is sooo powerful</div>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
+            a woman who knows herself <span className="pk">is the patriarchy&apos;s WORST nightmare.</span>
+          </h2>
+          <div style={{ fontSize: 18, lineHeight: 1.75, marginTop: 26, maxWidth: 740, fontWeight: 500, display: "grid", gap: 18 }}>
+            <p>
+              For centuries women have been told who to be by literally everyone except themselves: the church, the magazines, the bosses, the diet ads, the dads and the man at the barbecue with VERY strong opinions about your career. A woman who doesn&apos;t trust herself is sooo much easier to sell to, manage, underpay and keep busy, which is exactly why nobody ever handed you the manual to YOU. 🙄
+            </p>
+            <p>
+              Your birth chart IS that manual, babe. It shows how you&apos;re built to make money, what you actually desire, how you lead, where your power lives and the exact spot where you learned to shrink, all written in the sky the second you took your first breath, long before anybody got the chance to tell you to calm down. Once you can see it, you stop outsourcing your decisions, stop apologising for taking up space and start trusting the one voice that&apos;s been right this whole entire time: yoursss. 💜
+            </p>
+            <p>
+              Women who knew the moon, the plants and their own bodies used to get called witches, so reading your chart today is a gorgeous little revenge era, and knowing yourself this deeply is the most rebellious thing a woman can own. Get yours in writing. 🪐
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="reports"className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto" style={{ display: "grid", gap: 28 }}>
           {REPORTS.map((r) => (
             <article key={r.kind} style={{ background: r.bg, color: r.ink, border: "var(--border)", borderRadius: 24, overflow: "hidden" }}>
@@ -258,7 +278,7 @@ export default function ReportsPage() {
               hiii my love, <span className="pk">i&apos;m betty.</span>
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.75, marginTop: 20, fontWeight: 500 }}>
-              I wrote these reports as the conversation I&apos;d have with you if we sat down with your chart between us, a very large coffee and absolutely zero filter, so every word is mine, every sign and every house got its own writing, and the version you get is matched to YOUR exact placements. Some of it will feel like a compliment, some of it will feel like being caught red-handed, and both are exactly the point. 💖
+              I wrote these reports as the conversation I&apos;d have with you if we sat down with your chart between us, a very large coffee and absolutely zero filterrr, so every word is mine, every sign and every house got its own writing, and the version you get is matched to YOUR exact placements. Some of it will feel like a compliment, some of it will feel like being caught red-handed, and both are EXACTLY the point. 💖
             </p>
           </div>
         </div>
@@ -287,7 +307,7 @@ export default function ReportsPage() {
             <span className="pk">about you for yearsss.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500, maxWidth: 620 }}>
-            Start with The Bad B*tch Report and she&apos;s in your inbox within 48 hours, then hop on the Rich B*tch Rising waitlist so you&apos;re first in line the second the money report opens. ✨
+            Grab The Bad B*tch Report and she&apos;s in your inbox within 48 hours, ready to be highlighted to within an inch of her life, then hop on the Rich B*tch Rising waitlist so you&apos;re first in line the SECOND the money report opens, because a baddie with her chart in her hands is a baddie nobody can talk out of her own life. ✨
           </p>
           <div className="flex flex-wrap gap-3" style={{ marginTop: 30 }}>
             <a href={BBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
