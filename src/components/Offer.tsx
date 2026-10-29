@@ -109,12 +109,13 @@ export function WaitlistBand({ offer, title, accent, body, question, questions, 
 }
 
 /** Small cards linking to the rest of the universe. */
-export function OfferCards({ exclude, title = "the rest of the universe", tone = "lav" }: { exclude?: OfferSlug; title?: string; tone?: Tone }) {
+export function OfferCards({ exclude, title = "the rest of the universe", tone = "lav" }: { exclude?: OfferSlug | OfferSlug[]; title?: string; tone?: Tone }) {
+  const skip: string[] = Array.isArray(exclude) ? exclude : exclude ? [exclude] : [];
   const cards = [
     ...(["rich-btch-rising", "bad-btch-report", "baddie-coven", "mastermind", "retreat"] as OfferSlug[]).map((s) => OFFERS[s]),
     { ...PODCAST, line: "the weekly pep talk your future self would give you", slug: "podcast" },
     OFFERS.book,
-  ].filter((c) => c.slug !== exclude);
+  ].filter((c) => !skip.includes(c.slug));
   return (
     <section className="px-5 md:px-8" style={{ background: BG[tone], borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
       <div className="max-w-6xl mx-auto">
