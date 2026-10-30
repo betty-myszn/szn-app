@@ -190,9 +190,9 @@ export default function ReportsPage() {
           <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 0.98, maxWidth: 960 }}>
             a woman who knows herself <span className="pk">is the patriarchy&apos;s WORST nightmare.</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-8 items-center" style={{ marginTop: 40 }}>
+          <div className="grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] gap-8 items-center" style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/libra-moon.png" alt="" aria-hidden="true" style={{ width: "100%", maxWidth: 440, margin: "0 auto", display: "block" }} />
+            <img src="/libra-moon.png" alt="" aria-hidden="true" style={{ width: "112%", maxWidth: 640, margin: "0 0 0 -6%", display: "block" }} />
             <div style={{ display: "grid", gap: 14 }}>
               {MANIFESTO.map(([e, t, b]) => (
                 <div key={t} className="holo-edge" style={{ background: "#fff", color: "var(--dark)", border: "var(--border)", borderRadius: 18, padding: "18px 20px 20px" }}>
