@@ -163,7 +163,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "the-baddie-coven",
     title: "The Baddie Coven: An Online Coven for Women Who Want BIG, Magical Lives",
-    metaTitle: "The Baddie Coven: An Online Witchy Membership for Women | MY SZN",
+    metaTitle: "The Baddie Coven: An Online Witchy Membership for Women",
     description:
       "The Baddie Coven is an online coven for women into astrology, manifestation, money magic, witchcraft and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
     category: "career-money",
