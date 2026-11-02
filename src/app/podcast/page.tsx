@@ -2,6 +2,8 @@ import Image from "next/image";
 import { OG_IMAGE } from "@/lib/site";
 import { JOIN_CTA } from "@/lib/cta";
 import { OfferCards } from "@/components/Offer";
+import { PODCAST_EPISODES } from "@/lib/podcast-episodes";
+import { EpisodeCards } from "./EpisodeCards";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -126,8 +128,47 @@ export default function PodcastPage() {
                 </svg>
                 Apple Podcasts
               </a>
+
+              <a
+                href="https://youtu.be/jVE_kIFVn68"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "12px 24px",
+                  background: "#FF0000",
+                  color: "#fff",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  transition: "opacity 0.15s",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
+                  <path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 00.5 6.2 31.4 31.4 0 000 12a31.4 31.4 0 00.5 5.8 3 3 0 002.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 002.1-2.1A31.4 31.4 0 0024 12a31.4 31.4 0 00-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
+                </svg>
+                YouTube
+              </a>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Episodes */}
+      <div id="episodes" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", scrollMarginTop: 80 }}>
+        <div className="max-w-4xl mx-auto px-6 py-14 md:py-20">
+          <div className="tag mb-4 text-center">the episodes</div>
+          <h2
+            className="text-center"
+            style={{ fontFamily: pp, fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, color: "var(--dark)", marginBottom: 32 }}
+          >
+            press play, <span style={{ color: "var(--pink)" }}>baddie</span>
+          </h2>
+          <EpisodeCards episodes={PODCAST_EPISODES} />
         </div>
       </div>
 
