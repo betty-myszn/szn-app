@@ -13,6 +13,9 @@ if (dsn && process.env.NODE_ENV === "production") {
     environment: "production",
     dataCollection: DATA_COLLECTION,
     tracesSampleRate: 0,
+    // Bot noise: scanners POST to / and /login then drop the connection ("aborted"), or probe for
+    // server actions that don't exist. Neither is a member hitting a bug.
+    ignoreErrors: [/^(Error: )?aborted$/, /Expected RSC response/, /Failed to find Server Action/],
     beforeSend: scrubEvent,
     beforeBreadcrumb: scrubBreadcrumb,
     integrations: [Sentry.captureConsoleIntegration({ levels: ["error"] })],
