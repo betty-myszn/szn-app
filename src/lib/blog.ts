@@ -481,6 +481,173 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     related: ["reinvent-yourself-gala-darling", "venus-sign-and-how-you-love", "scorpio-season-2026"],
   },
+  // Mercury retrograde in Scorpio. Stations from lib/sky-bank.ts (Rx 20°58' Scorpio 07:12 UTC 24 Oct,
+  // direct 5°02' Scorpio 15:53 UTC 13 Nov); shadow dates and the cazimi (14:30 UTC 4 Nov) computed
+  // from the same Swiss Ephemeris. Backdated to Wednesday 28 Oct on purpose.
+  {
+    slug: "mercury-retrograde-scorpio-2026",
+    title: "Mercury Retrograde in Scorpio 2026: What It Means, What to Do and What to Avoid",
+    metaTitle: "Mercury Retrograde October-November 2026: Dates, Meaning & What to Do",
+    description:
+      "Mercury is retrograde in Scorpio from 24 October to 13 November 2026, with Venus retrograde alongside it. The exact dates, the shadow period, what to look out for, what to do and what not to do, plus what it means for every sign.",
+    category: "moon-transits",
+    publishedAt: "2026-10-28",
+    updatedAt: "2026-10-28",
+    readingMinutes: 9,
+    excerpt:
+      "Mercury is retrograde in Scorpio until 13 November, with Venus retrograde right beside her, so secrets surface, exes text and every conversation goes deeeep. The dates, the do's, the don'ts and what it means for your sign.",
+    intro: [
+      "Mercury is retrograde in Scorpio from Saturday 24 October to Friday 13 November 2026, moving backwards from 20°58' Scorpio to 5°02' Scorpio, which means three weeks of revisiting, rereading, renegotiating and finally saying the things you've been holding in, in the most intense, truth-telling, private-investigator sign of the zodiac.",
+      "Venus is retrograde at the same time, so your love life, your money and your sense of what you're worth are all up for review too, babe, and the trick to this whole period is to stop fighting it, slow down and use it to clean up everything that's been leaking your energy before Mercury turns direct and you get to move FAST again.",
+    ],
+    sections: [
+      {
+        heading: "Mercury retrograde 2026 dates and times",
+        body: [
+          "Every date here comes from the same Swiss Ephemeris that powers every chart inside MY SZN, in New York time first, with the UK and LA alongside.",
+        ],
+        items: [
+          { name: "Pre-shadow begins: 4 October", body: "Mercury first crossed 5° Scorpio on 4 October, so anything that came up from then onwards, a conversation, a contract, a person, a feeling, is part of this story and likely to come back around." },
+          { name: "Mercury stations retrograde: 24 October", body: "Exact at 3:12am in New York on Saturday 24 October (8:12am in the UK and 12:12am in LA), at 20°58' Scorpio." },
+          { name: "The cazimi reset: 4 November", body: "Mercury meets the Sun in the middle of the retrograde on the morning of Wednesday 4 November in New York (afternoon in the UK), the moment the fog lifts and you suddenly SEE what this whole period has been about. Write down every idea you have that day." },
+          { name: "Mercury stations direct: 13 November", body: "Exact at 10:53am in New York on Friday 13 November (3:53pm in the UK and 7:53am in LA), at 5°02' Scorpio, and Venus turns direct later that same day." },
+          { name: "Post-shadow ends: 30 November", body: "Mercury gets back to 20°58' Scorpio on 30 November, so give big launches, signatures and decisions until then to fully settle." },
+        ],
+      },
+      {
+        heading: "What Mercury retrograde actually means",
+        body: [
+          "Mercury rules your mind, your words, your messages, your contracts, your tech, your travel and every deal you make, and roughly three times a year she appears to move backwards through the sky from where we're standing on Earth, so the things she rules slow down, double back and ask for a second look.",
+          "That's why emails go missing, plans change last minute, laptops freeze mid-presentation and people from your past suddenly reappear, and it's also why retrogrades are so powerful for anything that starts with RE: reviewing, revising, reconnecting, renegotiating, rewriting and releasing.",
+        ],
+      },
+      {
+        heading: "Why Mercury retrograde in Scorpio hits different",
+        body: [
+          "Scorpio is the sign of secrets, sex, power, shared money, psychology and transformation, so when the planet of communication goes backwards here, the conversations stop being small talk and start being the ones that change everything, the confession, the money talk with your partner, the truth about why you really left.",
+          "Mercury stays in Scorpio for the entire retrograde, so the whole three weeks has one flavour: depth. Hidden information comes to the surface, you see straight through anyone performing for you, and your intuition gets so sharp it's almost spooky, which makes this a STUNNING time for shadow work, therapy, research and getting to the bottom of anything that's felt murky.",
+          "With Venus retrograde alongside, slipping back from Scorpio into Libra on 25 October, the review covers your relationships and your money too, so expect the past to show up in your heart and your bank account at the same time.",
+        ],
+      },
+      {
+        heading: "What to look out for",
+        body: ["Here's where this retrograde is most likely to show up in your life over the next few weeks."],
+        items: [
+          { name: "Secrets coming out", body: "Scorpio keeps things hidden, and retrograde Mercury digs them back up, so the information you weren't supposed to see, or the truth you've been sitting on yourself, is very likely to surface." },
+          { name: "Exes and old flames", body: "With Venus retrograde too, the person you swore you were over may slide into your DMs looking for closure, a second chance or simply attention, and you get to decide from your power whether they deserve a reply." },
+          { name: "Money miscommunications", body: "Scorpio rules shared money, debts, taxes and investments, so watch for invoice errors, payment delays, surprise fees and confusing conversations about who owes what." },
+          { name: "Power struggles in conversation", body: "Words cut deeper under a Scorpio retrograde, so tempers flare faster and people say things they mean but would usually keep to themselves." },
+          { name: "Tech and travel glitches", body: "The classics still apply, so back up your phone, leave extra time at the airport and keep screenshots of every booking." },
+        ],
+      },
+      {
+        heading: "What to do during Mercury retrograde",
+        body: ["This is your season to go back, clean up and get clear, so use these three weeks on purpose, babe."],
+        items: [
+          { name: "Do shadow work", body: "Journal on the beliefs you inherited about power, sex, money and trust, because Scorpio Mercury helps you find the exact words for the things you've only ever felt in your body." },
+          { name: "Reread every contract", body: "Read the small print twice, ask the awkward questions and get every agreement in writing, especially anything involving shared money, loans or investments." },
+          { name: "Finish what you started", body: "Pick up the half-written book, the course you bought and never opened, the launch you shelved, because unfinished business finally gets finished under a retrograde." },
+          { name: "Reconnect on your terms", body: "Reach out to the old friend, the former client or the mentor you lost touch with, and let the past bring you back something good." },
+          { name: "Review your money", body: "Audit your subscriptions, chase unpaid invoices, look at your debts with total honesty and raise your prices for 2027, all from a place of clarity rather than panic." },
+          { name: "Rest your nervous system", body: "Retrogrades are heavy on the mind, so sleep more, say no more and let your brain catch up with everything that's happened this year." },
+        ],
+      },
+      {
+        heading: "What not to do during Mercury retrograde",
+        body: ["None of these are banned, babe, they just go waaaay more smoothly after 13 November, or even better, after 30 November."],
+        items: [
+          { name: "Signing big contracts in a rush", body: "If you have to sign, read every line, ask every question and get a second pair of eyes on it first." },
+          { name: "Buying new tech or a car", body: "Mercury rules both, so wait for her to turn direct, or keep every receipt and warranty if you absolutely can't." },
+          { name: "Launching something brand new", body: "Relaunching, rebranding or reopening something you've done before is perfect retrograde energy, while a completely new launch loves a direct Mercury." },
+          { name: "Getting back with the ex purely for comfort", body: "The nostalgia is real under a double retrograde, so let the reunion prove itself after 13 November before you hand over your heart again." },
+          { name: "Sending the 2am text", body: "Scorpio Mercury will hand you the most devastating sentence you've ever written, so type it in your notes app, sleep on it and decide in daylight." },
+          { name: "Making assumptions", body: "Clarify everything, confirm every plan and ask what people actually meant, because messages land differently right now." },
+        ],
+      },
+      {
+        heading: "Journal prompts for Mercury retrograde in Scorpio",
+        body: ["Write fast, write messy and keep it completely private, Scorpio style."],
+        items: [
+          { name: "The truth I keep almost saying", body: "Write the thing you've rehearsed in the shower a hundred times, exactly as you'd say it if there were zero consequences." },
+          { name: "What I gave my power to", body: "List the people, habits and money patterns that hold more of your power than they deserve, and write how you're taking each one back." },
+          { name: "The unfinished business", body: "Name the project, conversation or relationship that never got its ending, and write the ending you choose for it now." },
+        ],
+      },
+      {
+        heading: "What Mercury retrograde in Scorpio means for every sign",
+        body: [
+          "Read for your rising sign first, because it tells you which house this retrograde moves through, then read for your sun sign as a second layer.",
+        ],
+        items: [
+          { name: "Aries", body: "Your house of shared money, intimacy and other people's resources gets the retrograde, so debts, taxes, investments and the money conversation with your partner all want revisiting. Go slowly with the numbers and let the deep emotional talk happen too." },
+          { name: "Taurus", body: "Partnership is where this plays out for you, babe, so a relationship, a client or a business partner circles back with unfinished business. Listen more than you speak, then say exactly what you need." },
+          { name: "Gemini", body: "Mercury is your ruler, and she's reviewing your house of work, health and routines, so expect the schedule to wobble and the body to ask for more rest. Fix the systems that keep failing you rather than pushing through." },
+          { name: "Cancer", body: "Romance, creativity and joy are under review, so an old flame, an old hobby or a creative project you abandoned comes back to life. Let yourself play with it again before deciding what stays." },
+          { name: "Leo", body: "Home and family carry this one, so conversations with family, a move, a renovation or something about your roots needs a second look. Old family stories are ready to be rewritten in your own words." },
+          { name: "Virgo", body: "As one of Mercury's own signs, you feel this one loudly in your house of voice, siblings, neighbours and short trips, so messages go astray and your words carry extra weight. Proofread everything and use the time to write something truly honest." },
+          { name: "Libra", body: "Your own money, income and self-worth are in the spotlight, with Venus, your ruler, retrograde too, so invoices, pricing and spending habits need a clear-eyed review. Raise your rates once both planets are direct on 13 November." },
+          { name: "Scorpio", body: "The whole retrograde is happening in your sign, so YOU are the project. How you present yourself, how you speak up and who you're becoming are all being rewritten, so let yourself change your mind about who you want to be." },
+          { name: "Sagittarius", body: "This moves through your most private house of rest, dreams and the subconscious, so old memories and buried feelings rise up, often at 3am. Rest, journal and keep a notebook beside your bed." },
+          { name: "Capricorn", body: "Friends, community and long-term dreams get a review, so an old friendship or a group you left reappears and a goal you shelved starts calling you back. Decide which circles truly deserve your energy in 2027." },
+          { name: "Aquarius", body: "Career and reputation are where Mercury doubles back for you, so a past employer, an old pitch or a professional decision returns for a second round. Polish your plans now and take the public leap after 13 November." },
+          { name: "Pisces", body: "Your beliefs, your studies and your travel plans get rearranged, so double check bookings and revisit the course or teaching you started and never finished. A big idea about your future comes back stronger." },
+        ],
+      },
+      {
+        heading: "Do Mercury retrograde with a coven behind you",
+        body: [
+          "Retrogrades are SO much easier when you understand exactly where they land in your own chart, and that's what the Baddie Coven is for: a platform written for your birth chart and Human Design, so every retrograde, full moon and eclipse is explained for YOU, plus a live coven circle every month, rituals for every new and full moon and a whole coven of baddies to voice note when your ex texts.",
+          "The Baddie Coven opens on 5 November for three days only, the day after the Mercury cazimi, and founding witches lock in $44 a month for as long as they stay. Our first ever event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Baddie Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Your retrograde, read for YOUR chart",
+      body: "Inside the Baddie Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month. Opens 5 November for three days, $44 a month for founding witches.",
+      label: "join the baddie coven",
+      href: "/baddie-coven",
+    },
+    closing: {
+      heading: "do this retrograde with",
+      pink: "your coven.",
+      body: "The Baddie Coven opens 5 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      label: "join the baddie coven 🦄",
+      href: "/baddie-coven",
+    },
+    faqs: [
+      {
+        question: "When is Mercury retrograde in 2026?",
+        answer:
+          "The last Mercury retrograde of 2026 runs from 24 October to 13 November, entirely in Scorpio. It stations retrograde at 20°58' Scorpio at 3:12am New York time on 24 October and turns direct at 5°02' Scorpio at 10:53am New York time on 13 November.",
+      },
+      {
+        question: "When does the Mercury retrograde shadow period end?",
+        answer:
+          "The pre-shadow began on 4 October, when Mercury first reached 5° Scorpio, and the post-shadow ends on 30 November, when Mercury returns to 20°58' Scorpio, the degree where the retrograde began.",
+      },
+      {
+        question: "What does Mercury retrograde in Scorpio mean?",
+        answer:
+          "It brings hidden information, secrets and deep conversations to the surface, and asks you to review shared money, intimacy, power dynamics and anything left unfinished. It's an excellent time for shadow work, research and honest conversations.",
+      },
+      {
+        question: "What should you not do during Mercury retrograde?",
+        answer:
+          "Avoid rushing big contracts, buying new tech or a car, launching something brand new or making assumptions about what people mean. If you have to do any of these, read everything twice and keep every receipt.",
+      },
+      {
+        question: "Is Venus retrograde at the same time?",
+        answer:
+          "Yes. Venus is retrograde from 3 October to 13 November 2026, moving from Scorpio back into Libra, so love, money and self-worth are under review alongside communication. Both planets turn direct on 13 November.",
+      },
+      {
+        question: "Should I read for my sun sign or rising sign?",
+        answer:
+          "Rising sign first, because it tells you which house of your chart the retrograde moves through. Your sun sign works as a second read, or as your main one if you don't know your birth time.",
+      },
+    ],
+    related: ["scorpio-season-2026", "full-moon-in-taurus-2026", "the-baddie-coven"],
+  },
   // Taurus full moon, the first lunation of Scorpio season. Degrees and times from the same Swiss
   // Ephemeris (Moon 2°45' Taurus, exact 04:11 UTC 26 Oct, Pluto 3°06' Aquarius square to the minute).
   {
