@@ -158,6 +158,329 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
+  // The Baddie Coven launch post. Facts match /baddie-coven: opens 5 Nov for 3 days, $44 a month
+  // founding price, the 11/11 workshop with the future-self dress code. Backdated to 26 Oct on purpose.
+  {
+    slug: "the-baddie-coven",
+    title: "The Baddie Coven: An Online Coven for Women Who Want BIG, Magical Lives",
+    metaTitle: "The Baddie Coven: An Online Witchy Membership for Women | MY SZN",
+    description:
+      "The Baddie Coven is an online coven for women into astrology, manifestation, money magic, witchcraft and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
+    category: "career-money",
+    publishedAt: "2026-10-26",
+    updatedAt: "2026-10-26",
+    readingMinutes: 6,
+    excerpt:
+      "An online coven for women who want to live BIG lives, manifest outrageous things and make seriouuuus money, with a monthly circle, a platform written for your chart and a whole coven of baddies doing it with you.",
+    intro: [
+      "The Baddie Coven is my online coven for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live coven circle every month, a personalised platform written for your birth chart and Human Design, and a whole coven of baddies cheering you on from every corner of the world.",
+      "It opens on 5 November for three days only, founding witches get in at $44 a month, locked in for as long as they stay, and our FIRST EVER coven event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
+    ],
+    sections: [
+      {
+        heading: "Why I created the Baddie Coven",
+        body: [
+          "For years I watched brilliant, gifted, wildly magical women shrink themselves to fit into lives that were waaaay too small for them, waiting for permission, ignoring their gut and keeping their weirdest, most magnetic parts hidden because somewhere along the way they learned that being too much was dangerous.",
+          "I wanted somewhere those women could come home to, a place where knowing your chart, casting a money spell, raising your prices and crying at a full moon are all celebrated out loud, so I built it, and I called it the Baddie Coven because that's exactly who we are when we stop hiding.",
+        ],
+      },
+      {
+        heading: "What we do inside the coven",
+        body: ["Everything inside the coven comes back to one thing: becoming MORE of who you already are, and building the life you came here to live."],
+        items: [
+          { name: "🪐 Astrology and self-discovery", body: "Birth chart deep dives, Human Design experiments and the astrology of each month, turned into real decisions about your money, your love life, your career and your creativity, so you go from googling your placements at 1am to understanding exactly how your chart works." },
+          { name: "🌑 Shadow work", body: "We go gently but deeeeply into the beliefs you inherited, the good-girl conditioning and the versions of yourself you've been performing for other people, so you can set the boundary, say the true thing and feel MORE like yourself than you have in years." },
+          { name: "💸 Manifestation and money magic", body: "Money bowls, prosperity rituals and manifestation experiments sit right alongside raising your prices, negotiating your salary, investing and receiving without flinching, because we LOVE a witch with financial independence." },
+          { name: "🕯️ Witchcraft and rituals", body: "Moon rituals, candle magic, tarot, spellwork and seasonal celebrations, with the history and symbolism behind each practice so you can make your own magic with total confidence." },
+          { name: "🪩 Sisterhood", body: "A coven of women who celebrate your wins, get your particular brand of weird and send voice notes screaming YESSSSS every time you level up, through every single reinvention." },
+        ],
+      },
+      {
+        heading: "What you get every month",
+        body: ["Here's what a month inside the coven holds, babe."],
+        items: [
+          { name: "One live coven circle", body: "Once a month the whole coven gathers live to work with that month's magic together, share what's moving and leave with our power turned UP." },
+          { name: "Your personalised platform", body: "A platform built around YOUR birth chart and Human Design, so the astrology of the month, your season and everything you open is written for you, every single day." },
+          { name: "astrotapping™", body: "We take the theme of each month's astrology and tap it into your body with astrotapping™, so you EMBODY the sky instead of just reading about it." },
+          { name: "Moon rituals and shadow work prompts", body: "Lunar rituals for every new and full moon, plus personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion." },
+          { name: "The coven chat rooms", body: "Private chat rooms, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life." },
+        ],
+      },
+      {
+        heading: "Our first ever event: the 11/11 manifestation workshop",
+        body: [
+          "11/11 is my most FAVOURITE date of the entire year, because eleven is a master number and 11/11 is a double master number, which means the universe has her order pad out and she is taking requests at full volume, so of course the coven's very first event is an 11/11 manifestation workshop, with candles lit, wishlists out and the most outrageous version of our lives on ordeeeer.",
+          "The dress code is your FUTURE SELF. Whatever you're manifesting, show up dressed as the version of you who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we'll call her in together. 💅",
+          "The 11/11 workshop is for coven members, so join while the coven is open from 5 November and you're in.",
+        ],
+      },
+      {
+        heading: "You'll feel right at home here if…",
+        body: ["Read these and notice how many make you grin."],
+        items: [
+          { name: "Your ideal evening", body: "Involves tarot cards, a creative project, delicious snacks and women who make you laugh until your face hurts." },
+          { name: "You know your Big Three", body: "By heart, and you're DYING to know what the rest of your chart says about you." },
+          { name: "You want your OWN money", body: "Along with independence, pleasure, ambition and whatever wonderfully unconventional life you want to create." },
+          { name: "You've cried at a full moon", body: "Journalled about it and then sent screenshots of the journal to the group chat." },
+          { name: "You want your people", body: "A group of women who are ambitious, compassionate, creative, interesting and just the right amount of unhinged." },
+        ],
+      },
+      {
+        heading: "Founding witch pricing",
+        body: [
+          "Founding witches pay $44 a month, locked in for as long as you stay, for your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms.",
+          "The coven opens on 5 November for three days only, founding spots are limited and the price goes up once they're gone, so [get on the waitlist](/baddie-coven) and you'll hear the second we open. 🪄",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Your coven is calling, babe",
+      body: "The Baddie Coven opens on 5 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
+      label: "join the waitlist",
+      href: "/baddie-coven",
+    },
+    closing: {
+      heading: "your coven is",
+      pink: "calling.",
+      body: "Opens 5 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      label: "join the waitlist 🦄",
+      href: "/baddie-coven",
+    },
+    faqs: [
+      {
+        question: "What is the Baddie Coven?",
+        answer:
+          "An online coven for women into astrology, Human Design, manifestation, money magic, witchcraft and shadow work, with a live coven circle every month, a personalised platform written for your chart and private chat rooms with the rest of the coven.",
+      },
+      {
+        question: "When does the Baddie Coven open?",
+        answer: "It opens on 5 November 2026 for three days only, and the waitlist hears first.",
+      },
+      {
+        question: "How much does the Baddie Coven cost?",
+        answer: "Founding witches pay $44 a month, locked in for as long as they stay. Founding spots are limited, and the price goes up once they're gone.",
+      },
+      {
+        question: "Is the Baddie Coven online?",
+        answer: "Yes, so you can join from anywhere in the world. We're also bringing it into real life with the LA Baddie Coven, which is priced separately.",
+      },
+      {
+        question: "I'm a total beginner. Can I join?",
+        answer: "YESSS. Curiosity is the only requirement, and you don't need any witchy tools beyond a notebook and that candle you've been saving.",
+      },
+      {
+        question: "What should I wear to the 11/11 workshop?",
+        answer: "Come dressed as your future self, the version of you who already has everything you're manifesting.",
+      },
+    ],
+    related: ["north-node-and-life-purpose", "big-three-sun-moon-rising", "scorpio-season-2026"],
+    heroImage: {
+      src: "/coven/baddie-pink-email.jpg",
+      alt: "A baddie in a pink puff-sleeve top, hand on hip",
+      width: 534,
+      height: 574,
+    },
+    ogImage: {
+      src: "/coven/og-baddie-coven-pink.jpg",
+      alt: "The Baddie Coven: your coven is calling. Opens 5 November for 3 days, $44 founding price.",
+      width: 1200,
+      height: 630,
+    },
+  },
+  // Podcast episode write-ups. Each one sends readers to its /podcast/[slug] page, which holds the
+  // player, and covers the episode's themes in enough depth to rank on its own.
+  {
+    slug: "reinvent-yourself-gala-darling",
+    title: "How to Reinvent Yourself (as Many Times as You Want) with Gala Darling",
+    metaTitle: "How to Reinvent Yourself: Gala Darling on Self-Love, Money & Manifesting",
+    description:
+      "Gala Darling joins the MY SZN podcast for Scorpio season to talk reinvention, radical self-love, tapping, her Sagittarius stellium, being a Manifestor and why money means nothing if you hate your life.",
+    category: "career-money",
+    publishedAt: "2026-11-02",
+    updatedAt: "2026-11-02",
+    readingMinutes: 5,
+    excerpt:
+      "Gala Darling on reinvention, radical self-love, money, freedom and becoming THAT b*tch, plus what her Sagittarius stellium and Manifestor design say about all of it.",
+    heroImage: {
+      src: "/podcast/gala-darling.jpg",
+      alt: "MY SZN the podcast, Scorpio season: Becoming THAT b*tch with Gala Darling and Betty Andrews",
+      width: 1200,
+      height: 675,
+    },
+    ogImage: {
+      src: "/podcast/gala-darling.jpg",
+      alt: "Becoming THAT b*tch with Gala Darling on the MY SZN podcast",
+      width: 1200,
+      height: 675,
+    },
+    intro: [
+      "You can reinvent yourself as many times as you want, babe, and this week's guest on the MY SZN podcast has built a whole life on proving it. [Gala Darling](/podcast/becoming-that-bitch-gala-darling) is a bestselling author, a radical self-love queen, the founder of High Vibe Honey and an OG internet icon who has spent nearly two decades showing women how to live on their own f*cking terms, and in this Scorpio season episode we get into exactly how she keeps doing it.",
+      "This one is a full-circle moment for me, because I have followed Gala since her fashion blogging days, I have been a High Vibe Honey member for years and I have tapped with her for almost as long, and her tapping genuinely changed my life. Having her on the podcast is the universe universe-inggggg in real time.",
+    ],
+    sections: [
+      {
+        heading: "Why Scorpio season is made for reinvention",
+        body: [
+          "Scorpio is the sign of death and rebirth, the eighth house energy that lets an old version of you fall away so a bigger one can rise, which is why we recorded this conversation for [Scorpio season](/blog/scorpio-season-2026). Reinvention in Gala's world means breaking out of the boxes you built for yourself (the niche, the aesthetic, the job title, the version of you everyone got used to) and letting a whole new era of creativity, comedy and self-expression in.",
+          "We talk about moving cities, refusing society's expectations of women, building a personal brand that grows with you, finding your people and why sometimes the most powerful move available is burning down the version of your life you've outgrown.",
+        ],
+      },
+      {
+        heading: "Radical self-love and the power of tapping",
+        body: [
+          "Gala shares her own transformation and how tapping (EFT, the practice of tapping on acupressure points while you speak to what you are feeling) became the backbone of loving every fabulous part of yourself, including the parts you were taught to hide.",
+          "Tapping is also the root of astrotapping™, the way I pair tapping with what is happening in your chart, so if this part of the episode lights you up, start with [your free birth chart](/chart) and see which placements are asking for the most love right now.",
+        ],
+      },
+      {
+        heading: "Gala's chart: a Sagittarius stellium, Aquarius rising and a rebellious Lilith",
+        body: [
+          "A stellium is three or more planets packed into one sign, so Gala's Sagittarius stellium turns up the volume on everything Sagittarius rules: freedom, travel, big ideas, publishing, teaching and saying the outrageous true thing out loud. Put that under an Aquarius rising, the sign of the rebel and the originator, and you get a woman who was always going to do it her own way, in public.",
+          "Her Lilith (the point in the chart that shows where you refuse to be tamed) adds the rebellious streak, and we talk about how all three show up in her life and her work. If you have never looked at your own [big three](/blog/big-three-sun-moon-rising), this is your sign.",
+        ],
+      },
+      {
+        heading: "Two Manifestors on freedom, creativity and REST",
+        body: [
+          "Gala and I are both Manifestors in Human Design, the type built to start things, to move on impulse and to need far more rest than the world expects, so we compare notes on what it is like to have 700 ideas before breakfast. Gala explains what being a Manifestor has taught her about freedom, creativity and resting without guilt.",
+          "Your own Human Design type sits next to your astrology inside MY SZN, so you can see exactly how your energy is built to work.",
+        ],
+      },
+      {
+        heading: "Money, success and freedom (plus Paris Hilton)",
+        body: [
+          "Manifesting the money matters, and Gala is clear that making more of it means very little if you are miserable inside the life you've created. We talk about building success around freedom first, then letting the dollars follow.",
+          "Gala also tells the story of spending time at Paris Hilton's house and what it taught her about magnetic women, who refuse to fit into anyone else's expectations and get richer and more themselves for it.",
+        ],
+      },
+      {
+        heading: "Becoming THAT b*tch",
+        body: [
+          "The whole episode lands here: following your wildest ideas, expressing every single part of your personality and having the audacity to create whatever life you actually want. Your next era is calling, babe, and she has VERY expensive taste. [Watch the full episode here](/podcast/becoming-that-bitch-gala-darling) and follow Gala at @galadarling.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Become THAT b*tch with a whole coven behind you",
+      body: "The Baddie Coven is where you take the podcast into your own life: your chart, your season, your rituals and a circle of baddies cheering on every reinvention.",
+      label: "join the baddie coven",
+      href: "/baddie-coven",
+    },
+    closing: {
+      heading: "your next era, read for",
+      pink: "your chart",
+      body: "Find out where reinvention, money and freedom live in your own birth chart, then bring it into the Baddie Coven with a circle of women doing it with you.",
+      label: "join the baddie coven",
+      href: "/baddie-coven",
+    },
+    faqs: [
+      {
+        question: "Who is Gala Darling?",
+        answer:
+          "Gala Darling is a bestselling author, radical self-love teacher, founder of the High Vibe Honey membership and an OG internet icon who started out as a fashion blogger. She teaches tapping and has spent nearly two decades helping women live on their own terms.",
+      },
+      {
+        question: "Where can I watch the Gala Darling MY SZN podcast episode?",
+        answer:
+          "The full episode, Becoming THAT B*TCH: Be MORE YOU, Manifest $$$ & Give ZERO F*CKS with Gala Darling, is on the MY SZN podcast page at itsmyszn.com/podcast and on YouTube.",
+      },
+      {
+        question: "What is a Manifestor in Human Design?",
+        answer:
+          "A Manifestor is one of the five Human Design types, built to initiate and start new things. Manifestors work in bursts of energy, need plenty of rest and do best when they inform the people around them before they act.",
+      },
+    ],
+    related: ["magnetic-af-ayana-forbes", "scorpio-season-2026", "big-three-sun-moon-rising"],
+  },
+  {
+    slug: "magnetic-af-ayana-forbes",
+    title: "How to Be Magnetic: Dark Feminine Energy, Pleasure and Money with Ayana Forbes",
+    metaTitle: "How to Be Magnetic: Dark Feminine Energy & Glamour Magic with Ayana Forbes",
+    description:
+      "Ayana Forbes, founder of The Risen Goddess Collective, joins the MY SZN podcast for Scorpio season to talk magnetism, money, the dark feminine, glamour magic and letting go of shame.",
+    category: "love",
+    publishedAt: "2026-10-27",
+    updatedAt: "2026-10-27",
+    readingMinutes: 5,
+    excerpt:
+      "Ayana Forbes on becoming magnetic AF: pleasure, money, Lilith and the dark feminine goddesses, glamour magic and dropping shame for good.",
+    heroImage: {
+      src: "/podcast/ayana-forbes.jpg",
+      alt: "MY SZN the podcast, Scorpio season: Magnetic AF with Ayana Forbes and Betty Andrews",
+      width: 1200,
+      height: 670,
+    },
+    ogImage: {
+      src: "/podcast/ayana-forbes.jpg",
+      alt: "How to be magnetic AF with Ayana Forbes on the MY SZN podcast",
+      width: 1200,
+      height: 670,
+    },
+    intro: [
+      "Being magnetic comes from owning your desires, prioritising your pleasure and loving the parts of yourself you were taught to hide, and this Scorpio season episode of the MY SZN podcast goes all the way into how. My guest is [Ayana Forbes](/podcast/magnetic-af-ayana-forbes), spiritual guide and founder of The Risen Goddess Collective, who brings ancient goddess wisdom into real modern life so women can take back their power, their pleasure and their money.",
+      "Ayana has lived multiple lives (exotic dancer, getting sober, building businesses, divorce, then finding the goddess archetypes that healed her) and she shares every bit of it, including how she moved out of shame and into the version of herself who refuses to shrink for anyone.",
+    ],
+    sections: [
+      {
+        heading: "Magnetism, money and manifestation",
+        body: [
+          "Ayana's whole approach starts with pleasure. We talk about why self-worth, enjoying your life and letting yourself feel good are part of how abundance actually finds you, and why a woman who is having a delicious time draws money, people and opportunities towards her.",
+          "This is the same thread that runs through Scorpio season, the eighth house energy of shared money, desire and power, so pair this episode with the [Scorpio season guide](/blog/scorpio-season-2026) and the [Taurus full moon](/blog/full-moon-in-taurus-2026), your money moon of the season.",
+        ],
+      },
+      {
+        heading: "The dark feminine: Lilith, Hecate, Hathor and Aphrodite",
+        body: [
+          "We go deep into working with the goddesses, from Lilith (who shows where you refuse to be tamed) and Hecate (the witch at the crossroads) to Hathor (joy, music and sensual pleasure) and Aphrodite (love, beauty and desire). Ayana explains how each one helps you love the parts of you that were labelled too much.",
+          "Lilith lives in your birth chart too, so once you have [your free chart](/chart), look up her sign and house and you will see exactly where your untamed self is asking to be let out.",
+        ],
+      },
+      {
+        heading: "Glamour magic and sexual power",
+        body: [
+          "Glamour magic is beauty as ritual: getting ready with intention, mirror work and becoming your own muse. Ayana shares how she uses it to step into her sexual power, and how that energy spills into everything else she creates.",
+          "Your Venus sign describes your own style of beauty and pleasure, so [read up on your Venus](/blog/venus-sign-and-how-you-love) and build your rituals around it.",
+        ],
+      },
+      {
+        heading: "F*ck the patriarchy (and people-pleasing)",
+        body: [
+          "We talk about dropping the male gaze, releasing the shame you were handed and setting boundaries without apologising, which is where the magnetism really kicks in. This one is for the witches, the goddesses and every woman who has ever been called TOO MUCH. [Listen to the full episode here](/podcast/magnetic-af-ayana-forbes) and follow Ayana at @therisengoddess.",
+        ],
+      },
+    ],
+    cta: {
+      heading: "Bring your magnetism into the Baddie Coven",
+      body: "Your chart, your season, monthly rituals and a coven of baddies who love you at full volume, all in one place.",
+      label: "join the baddie coven",
+      href: "/baddie-coven",
+    },
+    closing: {
+      heading: "your magnetism, read for",
+      pink: "your chart",
+      body: "See where your Lilith, your Venus and your pleasure live in your own birth chart, then work with them every season inside the Baddie Coven.",
+      label: "join the baddie coven",
+      href: "/baddie-coven",
+    },
+    faqs: [
+      {
+        question: "Who is Ayana Forbes?",
+        answer:
+          "Ayana Forbes is a spiritual guide and the founder of The Risen Goddess Collective. She teaches women to work with goddess archetypes to reclaim their power, pleasure and money.",
+      },
+      {
+        question: "Where can I listen to the Ayana Forbes MY SZN podcast episode?",
+        answer:
+          "How to be MAGNETIC AF: Less Shame, More Pleasure & More Money with Ayana Forbes is on Spotify, Apple Podcasts and the MY SZN podcast page at itsmyszn.com/podcast.",
+      },
+      {
+        question: "What is the dark feminine?",
+        answer:
+          "The dark feminine is the side of feminine energy linked to desire, rage, intuition, sexuality and power, often worked with through goddesses such as Lilith and Hecate. Working with it means accepting the parts of yourself you were taught to hide.",
+      },
+    ],
+    related: ["reinvent-yourself-gala-darling", "venus-sign-and-how-you-love", "scorpio-season-2026"],
+  },
   // Taurus full moon, the first lunation of Scorpio season. Degrees and times from the same Swiss
   // Ephemeris (Moon 2°45' Taurus, exact 04:11 UTC 26 Oct, Pluto 3°06' Aquarius square to the minute).
   {
