@@ -38,7 +38,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "welcome_3mo",
   price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
-  price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Baddie Coven founding price
+  price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Bad B*tch Coven founding price
 };
 
 const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
@@ -48,7 +48,7 @@ const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallb
   welcome_3mo: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_3MO, fallbackTemplate: 32, planName: "3-Month Membership" },
   welcome_vip: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_VIP, fallbackTemplate: 33, planName: "VIP Membership" },
   // Brevo template #91, source in coven-welcome-email.html at the project root.
-  welcome_coven: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_COVEN, fallbackTemplate: 91, planName: "The Baddie Coven" },
+  welcome_coven: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_COVEN, fallbackTemplate: 91, planName: "The Bad B*tch Coven" },
 };
 
 function kindForPrice(priceId: string): WelcomeKind | null {

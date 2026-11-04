@@ -5,7 +5,7 @@ import { COVEN_OPENS, COVEN_CLOSES } from "@/lib/coven-launch";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// The Baddie Coven launch window. November is GMT, so these are midnight UK time.
+// The Bad B*tch Coven launch window. November is GMT, so these are midnight UK time.
 // Before it opens: a countdown to opening. During the three days: "open" plus a countdown to
 // closing. After: nothing, so the page never shows a stale clock.
 const OPENS = COVEN_OPENS;

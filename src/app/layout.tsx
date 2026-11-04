@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | MY SZN",
   },
   description:
-    "MY SZN is a universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and unapologetic: personalised money + confidence reports, The Baddie Coven, the 90-day Mastermind, The Bad B*tch Retreat, the podcast and the book.",
+    "MY SZN is a universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and unapologetic: personalised money + confidence reports, The Bad B*tch Coven, the 90-day Mastermind, The Bad B*tch Retreat, the podcast and the book.",
   // Default canonical for the home page. Every other route overrides it with its own, which is what
   // stops query-string and trailing-slash variants being indexed as separate pages.
   alternates: { canonical: "/" },
@@ -52,12 +52,12 @@ export const metadata: Metadata = {
     url: "/",
     siteName: SITE_NAME,
     title: "MY SZN, a Universe for Women Becoming HER 💜",
-    description: "Astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and completely obsessed with their lives. Reports, The Baddie Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book.",
+    description: "Astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and completely obsessed with their lives. Reports, The Bad B*tch Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book.",
   },
   twitter: {
     card: "summary_large_image",
     title: "MY SZN, a Universe for Women Becoming HER 💜",
-    description: "Astrology, manifestation, creativity and sisterhood for women becoming HER. Reports, The Baddie Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book."
+    description: "Astrology, manifestation, creativity and sisterhood for women becoming HER. Reports, The Bad B*tch Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book."
   },
   robots: {
     index: true,

@@ -7,24 +7,24 @@ import CovenJoinCta from "@/components/CovenJoinCta";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
-// The Baddie Coven: the ongoing creative, magical membership (what the MY SZN membership becomes,
+// The Bad B*tch Coven: the ongoing creative, magical membership (what the MY SZN membership becomes,
 // Oct 2026). Waitlist only, no price or start date confirmed; /membership redirects here.
 // Built as a sales page in twelve sections (Betty's structure, 22 Oct 2026): desire, then
 // transformation, then membership. Each section has one job, so no idea is sold twice.
 
 export const metadata: Metadata = {
-  title: "The Baddie Coven, a Magical Membership for Women",
+  title: "The Bad B*tch Coven, a Magical Membership for Women",
   description:
     "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
   alternates: { canonical: "/baddie-coven" },
   openGraph: {
-    title: "The Baddie Coven 🦄",
+    title: "The Bad B*tch Coven 🦄",
     description: "Become more of who you are. Create the life you came here to live. Waitlist open now.",
     url: "/baddie-coven",
     type: "website",
-    // A designed share card (her photo + foil "the baddie coven" sticker), so links on Threads,
+    // A designed share card (her photo + foil "the bad b*tch coven" sticker), so links on Threads,
     // Instagram and WhatsApp look like the page instead of plain text.
-    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price." }],
+    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Bad B*tch Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price." }],
   },
   twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven-pink.jpg"] },
 };
@@ -152,7 +152,7 @@ const QUOTES = ["maya", "georgia", "aisha", "lauren", "priya", "zara"];
 
 // 11: the practical bits. Nothing here promises a price or a date that isn't confirmed.
 const FAQS = [
-  ["How does the Baddie Coven work?", "Every month brings one live coven circle, plus your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
+  ["How does the Bad B*tch Coven work?", "Every month brings one live coven circle, plus your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
   ["I'm a total beginner. Can I join?", "YESSS. You can be a serious businesswoman who casts spells, an astrologer who loves fashion or somebody who bought her very first tarot deck this week. Curiosity is the only requirement."],
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
@@ -269,11 +269,11 @@ export default function BaddieCovenPage() {
         tone="lav"
         kicker="founding witches · $44 a month"
         ctaButton={(style) => <CovenJoinCta style={style} />}
-        title="the baddie"
+        title="the bad b*tch"
         accent="coven."
         intro={
           <>
-            <p>Baddie Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
+            <p>Bad B*tch Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
               {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🕯️ monthly coven circle", "🌕 moon rituals"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
@@ -334,7 +334,7 @@ export default function BaddieCovenPage() {
 
       {/* 04 · The philosophy: the soul blueprint. */}
       <Section bg="var(--dark)" ink="#fff">
-        <Head n="04" tag="the baddie coven philosophy" title="your soul blueprint is the" accent="assignment." />
+        <Head n="04" tag="the bad b*tch coven philosophy" title="your soul blueprint is the" accent="assignment." />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ marginTop: 24 }}>
           <p style={{ ...copy, fontSize: 18, fontWeight: 700 }}>We&apos;re bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are.</p>
           <p style={copy}>We&apos;re talking about understanding your gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning.</p>
@@ -375,7 +375,7 @@ export default function BaddieCovenPage() {
               <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>🎀 the dress code</div>
               <p style={{ margin: "6px 0 0", fontSize: 15.5, lineHeight: 1.6, fontWeight: 700 }}>Come dressed as your FUTURE SELF, babe. Whatever you&apos;re manifesting, show up as the woman who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we&apos;ll call her in together. 💅</p>
             </div>
-            <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Baddie Coven begins, and you&apos;ll want to say you were there. 💜</p>
+            <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Bad B*tch Coven begins, and you&apos;ll want to say you were there. 💜</p>
           </div>
           <HoloStar size={44} style={{ top: -20, right: 30, transform: "rotate(12deg)" }} />
         </div>
@@ -401,7 +401,7 @@ export default function BaddieCovenPage() {
             <Head n="07" tag="sisterhood" title="find your" accent="people." />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Imagine being able to tell a group of women that you&apos;ve just manifested a new client, pulled the Tower card three times in a week, booked a solo adventure or decided to completely reinvent your life.</p>
             <p style={copy}>They celebrate with you, share their own experiences and encourage you to keep going.</p>
-            <p style={copy}>The Baddie Coven is a place for conversations, creativity, laughter, connection and women who genuinely want to see each other happy.</p>
+            <p style={copy}>The Bad B*tch Coven is a place for conversations, creativity, laughter, connection and women who genuinely want to see each other happy.</p>
             <p style={copy}>You can share your latest project, ask about your astrology, celebrate a breakthrough, recommend a book or simply enjoy having women around who understand your particular brand of weird.</p>
           </div>
         </div>
@@ -436,7 +436,7 @@ export default function BaddieCovenPage() {
             <Head n="09" tag="meet your head witch" title="hi, i'm" accent="betty. 🔮" />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>I&apos;ve spent nearly two decades obsessed with astrology, manifestation, shadow work and the deliciously witchy art of becoming yourself, and I&apos;ve written two published books about it along the way.</p>
             <p style={copy}>The biggest project I&apos;ve ever worked on wasn&apos;t my business. It was me. I spent years rebuilding my self-worth from the ground up, learning to love myself, building confidence, creating a business and healing things I didn&apos;t even know were broken.</p>
-            <p style={copy}>Now my whole mission is helping women become more powerful, more prosperous and more FREE, using their astrology, their Human Design and a whole lot of magic, and the Baddie Coven is where I get to do that with alllll of you at once.</p>
+            <p style={copy}>Now my whole mission is helping women become more powerful, more prosperous and more FREE, using their astrology, their Human Design and a whole lot of magic, and the Bad B*tch Coven is where I get to do that with alllll of you at once.</p>
             <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.3, margin: "18px 0 0" }}>You can&apos;t hate yourself into a version of yourself that you love.</p>
             <div className="flex flex-wrap gap-2" style={{ marginTop: 20 }}>
               {["libra sun", "aquarius moon", "aquarius rising", "manifestor 4/6"].map((c) => (
@@ -450,7 +450,7 @@ export default function BaddieCovenPage() {
       {/* 10 · Proof, clearly labelled as coming from MY SZN, not the coven. */}
       <Section bg="#fff">
         <Head n="10" tag="real women, real results" title="the magic is" accent="already happening." />
-        <p style={{ ...copy, marginTop: 20, maxWidth: 760 }}>These are from women inside MY SZN, my membership and coaching programmes. The Baddie Coven hasn&apos;t opened yet, so think of these as a little taste of what happens when women start working with their blueprint.</p>
+        <p style={{ ...copy, marginTop: 20, maxWidth: 760 }}>These are from women inside MY SZN, my membership and coaching programmes. The Bad B*tch Coven hasn&apos;t opened yet, so think of these as a little taste of what happens when women start working with their blueprint.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 24 }}>
           {QUOTES.map((id) => MEMBER_QUOTES[id]).filter(Boolean).map((q) => (
             <figure key={q.name} className="holo-edge" style={{ ...card, margin: 0, display: "flex", flexDirection: "column", background: "var(--pink-light)" }}>

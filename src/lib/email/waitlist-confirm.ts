@@ -30,16 +30,16 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
     subject: "Welcome to the coven, witch 🦄",
     heading: "your name is in the book",
     body: [
-      "You're on the waitlist for The Baddie Coven, our magical coven, and I'm OBSESSED that you're here.",
+      "You're on the waitlist for The Bad B*tch Coven, our magical coven, and I'm OBSESSED that you're here.",
       "A live coven circle every month, a platform personalised to your birth chart, moon rituals, shadow work, a little witchcraft and a whole community of women bringing more magic into their everyday lives, all in one place.",
       "The doors, the dates and every magical detail come to this list before anyone else hears a whisper.",
     ],
   },
   "baddie-coven-la": {
-    subject: "You're on the LA Baddie Coven list 🌴",
+    subject: "You're on the LA Bad B*tch Coven list 🌴",
     heading: "see you in LA, witch",
     body: [
-      "You just joined the waitlist for the LA Baddie Coven, our in-person coven in Los Angeles, and I am SOOO excited to meet you in real life.",
+      "You just joined the waitlist for the LA Bad B*tch Coven, our in-person coven in Los Angeles, and I am SOOO excited to meet you in real life.",
       "The online coven is for witchy women everywhere, and the LA coven brings it into the room with candles, rituals, creative magic and your girls, face to face. They're priced separately, and you can join one or both.",
       "The dates, the location and the price come to this list first, before anybody else hears a whisper.",
     ],

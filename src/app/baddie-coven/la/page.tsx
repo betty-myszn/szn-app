@@ -2,21 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { OfferHero, Band, Tiles, WaitlistBand, HeroArt } from "@/components/Offer";
 
-// The LA Baddie Coven: the coven in real life, in Los Angeles. Waitlist only. Separate price from the
+// The LA Bad B*tch Coven: the coven in real life, in Los Angeles. Waitlist only. Separate price from the
 // online coven and women can join both; no price, date, venue or frequency is confirmed, so none is
 // printed. The "night in the coven" section describes the feel of a gathering, not a fixed agenda.
 
 export const metadata: Metadata = {
-  title: "The LA Baddie Coven, an In-Person Coven for Women in Los Angeles",
+  title: "The LA Bad B*tch Coven, an In-Person Coven for Women in Los Angeles",
   description:
-    "The Baddie Coven in real life: candlelit rituals, astrology, manifestation and a crew of ambitious, witchy women in Los Angeles. Join the LA waitlist for dates, location and price first.",
+    "The Bad B*tch Coven in real life: candlelit rituals, astrology, manifestation and a crew of ambitious, witchy women in Los Angeles. Join the LA waitlist for dates, location and price first.",
   alternates: { canonical: "/baddie-coven/la" },
   openGraph: {
-    title: "The LA Baddie Coven 🌴",
+    title: "The LA Bad B*tch Coven 🌴",
     description: "Your coven, in real life, in Los Angeles. Join the LA waitlist.",
     url: "/baddie-coven/la",
     type: "website",
-    images: [{ url: "/coven/og-la-coven.jpg", width: 1200, height: 630, alt: "The LA Baddie Coven: your coven, IRL in LA. First astrology dinner in Sagittarius season." }],
+    images: [{ url: "/coven/og-la-coven.jpg", width: 1200, height: 630, alt: "The LA Bad B*tch Coven: your coven, IRL in LA. First astrology dinner in Sagittarius season." }],
   },
   twitter: { card: "summary_large_image", images: ["/coven/og-la-coven.jpg"] },
 };
@@ -69,7 +69,7 @@ export default function LaCovenPage() {
         intro={
           <>
             <p style={{ margin: "0 0 12px" }}>Bring your chart, your best outfit and your biggest dreams.</p>
-            <p style={{ margin: 0, fontWeight: 500 }}>The LA Baddie Coven is where ambitious, witchy, slightly unhinged women in Los Angeles get together in real life to do rituals, decode their astrology, manifest outrageous things and become each other&apos;s favourite people.</p>
+            <p style={{ margin: 0, fontWeight: 500 }}>The LA Bad B*tch Coven is where ambitious, witchy, slightly unhinged women in Los Angeles get together in real life to do rituals, decode their astrology, manifest outrageous things and become each other&apos;s favourite people.</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
               {["🌴 los angeles", "🕯️ candlelit rituals", "🪐 astrology IRL", "💸 money magic", "🪩 your girls"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
@@ -122,7 +122,7 @@ export default function LaCovenPage() {
       </Band>
 
       <Band tone="pinkLight" wide tag="online + IRL" title="one coven," accent="two ways in.">
-        <p>The Baddie Coven lives online, so witchy women everywhere can join from their sofa, and in Los Angeles we&apos;re bringing it into real life too.</p>
+        <p>The Bad B*tch Coven lives online, so witchy women everywhere can join from their sofa, and in Los Angeles we&apos;re bringing it into real life too.</p>
         <Tiles
           tone="pinkLight"
           items={[

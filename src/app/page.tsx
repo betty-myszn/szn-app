@@ -74,7 +74,7 @@ function Button({ href, children, tone = "dark" }: { href: string; children: Rea
 // grid reads as a colour block instead of seven matching boxes. Wide cards break the rhythm.
 const SZN_WAYS: { emoji: string; title: string; body: string; href: string; ctaLabel: string; bg: string; ink: string; head?: string; cta: string; wide?: boolean }[] = [
   { emoji: "🪐", title: "Get your Astro & HD reports", body: "Your birth chart has RECEIPTS, babe. Find out how you're wired, where your money magic lives, what makes you magnetic and how to use your astrology to your advantage.", href: "/reports", ctaLabel: "get your report", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)", wide: true },
-  { emoji: "🦄", title: "Join the Baddie Coven", body: "Witches, weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/baddie-coven", ctaLabel: "join the coven", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
+  { emoji: "🦄", title: "Join the Bad B*tch Coven", body: "Witches, weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/baddie-coven", ctaLabel: "join the coven", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
   { emoji: "💜", title: "Book a 1:1 session", body: "Got big dreams and some sh*t to work through? Let's get into it. Astrology, manifestation, shadow work, money and becoming the most powerful version of YOU.", href: "/baddie-sessions", ctaLabel: "book a session", bg: "var(--dark)", ink: "#fff", head: "var(--pink)", cta: "var(--pink)" },
   { emoji: "🔥", title: "Join the mastermind", body: "Big dreams. Bigger moves. Women who actually want to see you WIN. Get coaching, accountability and a whole room of baddies who refuse to play small.", href: "/mastermind", ctaLabel: "join the mastermind", bg: "var(--pink-light)", ink: "var(--dark)", cta: "var(--pink)", wide: true },
   { emoji: "🌴", title: "Come to our retreat", body: "Pack your bags, b*tch. We're going to MEXICO. Think astrology, witchcraft, shadow work, sisterhood and the kind of experiences you'll be talking about for YEARS.", href: "/retreat", ctaLabel: "come with us", bg: "var(--lav-light)", ink: "var(--dark)", cta: "var(--pink)" },
@@ -128,7 +128,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 1b. THE BADDIE COVEN launch, in the slot the event band (EventPromoBand) used for the full moon ─── */}
+      {/* ─── 1b. THE BAD B*TCH COVEN launch, in the slot the event band (EventPromoBand) used for the full moon ─── */}
       <CovenPromoBand />
 
       {/* ─── 2. TICKER ─── */}
@@ -206,7 +206,7 @@ export default function Home() {
       {/* ─── 6. COVEN ─── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5" style={{ color: "var(--dark)" }}>🦄 the baddie coven</div>
+          <div className="tag mb-5" style={{ color: "var(--dark)" }}>🦄 the bad b*tch coven</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 6.5vw, 80px)", color: "var(--dark)", lineHeight: 0.98 }}>
             a clubhouse <span style={{ color: "#fff" }}>for witches.</span>
           </h2>

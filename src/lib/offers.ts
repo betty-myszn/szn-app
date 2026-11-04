@@ -50,7 +50,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
   "baddie-coven": {
     slug: "baddie-coven",
     emoji: "🦄",
-    name: "The Baddie Coven",
+    name: "The Bad B*tch Coven",
     href: "/baddie-coven",
     line: "our magical coven: a monthly coven circle, your personalised platform, rituals and your girls",
     price: "$44/month founding price",
@@ -63,7 +63,7 @@ export const OFFERS: Record<OfferSlug, Offer> = {
   "baddie-coven-la": {
     slug: "baddie-coven-la",
     emoji: "🌴",
-    name: "The LA Baddie Coven",
+    name: "The LA Bad B*tch Coven",
     href: "/baddie-coven/la",
     line: "the coven in real life: in-person magic, rituals and your girls in Los Angeles",
     price: null,

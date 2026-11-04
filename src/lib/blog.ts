@@ -158,14 +158,14 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
-  // The Baddie Coven launch post. Facts match /baddie-coven: opens 9 Nov for 3 days, $44 a month
+  // The Bad B*tch Coven launch post. Facts match /baddie-coven: opens 9 Nov for 3 days, $44 a month
   // founding price, the 11/11 workshop with the future-self dress code. Backdated to 26 Oct on purpose.
   {
     slug: "the-baddie-coven",
-    title: "The Baddie Coven: An Online Coven for Women Who Want BIG, Magical Lives",
-    metaTitle: "The Baddie Coven: An Online Witchy Membership for Women",
+    title: "The Bad B*tch Coven: An Online Coven for Women Who Want BIG, Magical Lives",
+    metaTitle: "The Bad B*tch Coven: An Online Witchy Membership for Women",
     description:
-      "The Baddie Coven is an online coven for women into astrology, manifestation, money magic, witchcraft and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
+      "The Bad B*tch Coven is an online coven for women into astrology, manifestation, money magic, witchcraft and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
     category: "career-money",
     publishedAt: "2026-10-26",
     updatedAt: "2026-10-26",
@@ -173,15 +173,15 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "An online coven for women who want to live BIG lives, manifest outrageous things and make seriouuuus money, with a monthly circle, a platform written for your chart and a whole coven of baddies doing it with you.",
     intro: [
-      "The Baddie Coven is my online coven for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live coven circle every month, a personalised platform written for your birth chart and Human Design, and a whole coven of baddies cheering you on from every corner of the world.",
+      "The Bad B*tch Coven is my online coven for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live coven circle every month, a personalised platform written for your birth chart and Human Design, and a whole coven of baddies cheering you on from every corner of the world.",
       "It opens on 9 November for three days only, founding witches get in at $44 a month, locked in for as long as they stay, and our FIRST EVER coven event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
     ],
     sections: [
       {
-        heading: "Why I created the Baddie Coven",
+        heading: "Why I created the Bad B*tch Coven",
         body: [
           "For years I watched brilliant, gifted, wildly magical women shrink themselves to fit into lives that were waaaay too small for them, waiting for permission, ignoring their gut and keeping their weirdest, most magnetic parts hidden because somewhere along the way they learned that being too much was dangerous.",
-          "I wanted somewhere those women could come home to, a place where knowing your chart, casting a money spell, raising your prices and crying at a full moon are all celebrated out loud, so I built it, and I called it the Baddie Coven because that's exactly who we are when we stop hiding.",
+          "I wanted somewhere those women could come home to, a place where knowing your chart, casting a money spell, raising your prices and crying at a full moon are all celebrated out loud, so I built it, and I called it the Bad B*tch Coven because that's exactly who we are when we stop hiding.",
         ],
       },
       {
@@ -235,7 +235,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "Your coven is calling, babe",
-      body: "The Baddie Coven opens on 9 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
+      body: "The Bad B*tch Coven opens on 9 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
       label: "join the waitlist",
       href: "/baddie-coven",
     },
@@ -248,21 +248,21 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     faqs: [
       {
-        question: "What is the Baddie Coven?",
+        question: "What is the Bad B*tch Coven?",
         answer:
           "An online coven for women into astrology, Human Design, manifestation, money magic, witchcraft and shadow work, with a live coven circle every month, a personalised platform written for your chart and private chat rooms with the rest of the coven.",
       },
       {
-        question: "When does the Baddie Coven open?",
+        question: "When does the Bad B*tch Coven open?",
         answer: "It opens on 9 November 2026 for three days only, and the waitlist hears first.",
       },
       {
-        question: "How much does the Baddie Coven cost?",
+        question: "How much does the Bad B*tch Coven cost?",
         answer: "Founding witches pay $44 a month, locked in for as long as they stay. Founding spots are limited, and the price goes up once they're gone.",
       },
       {
-        question: "Is the Baddie Coven online?",
-        answer: "Yes, so you can join from anywhere in the world. We're also bringing it into real life with the LA Baddie Coven, which is priced separately.",
+        question: "Is the Bad B*tch Coven online?",
+        answer: "Yes, so you can join from anywhere in the world. We're also bringing it into real life with the LA Bad B*tch Coven, which is priced separately.",
       },
       {
         question: "I'm a total beginner. Can I join?",
@@ -282,7 +282,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     ogImage: {
       src: "/coven/og-baddie-coven-pink.jpg",
-      alt: "The Baddie Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price.",
+      alt: "The Bad B*tch Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price.",
       width: 1200,
       height: 630,
     },
@@ -362,15 +362,15 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     cta: {
       heading: "Become THAT b*tch with a whole coven behind you",
-      body: "The Baddie Coven is where you take the podcast into your own life: your chart, your season, your rituals and a circle of baddies cheering on every reinvention.",
-      label: "join the baddie coven",
+      body: "The Bad B*tch Coven is where you take the podcast into your own life: your chart, your season, your rituals and a circle of baddies cheering on every reinvention.",
+      label: "join the bad b*tch coven",
       href: "/baddie-coven",
     },
     closing: {
       heading: "your next era, read for",
       pink: "your chart",
-      body: "Find out where reinvention, money and freedom live in your own birth chart, then bring it into the Baddie Coven with a circle of women doing it with you.",
-      label: "join the baddie coven",
+      body: "Find out where reinvention, money and freedom live in your own birth chart, then bring it into the Bad B*tch Coven with a circle of women doing it with you.",
+      label: "join the bad b*tch coven",
       href: "/baddie-coven",
     },
     faqs: [
@@ -450,16 +450,16 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     cta: {
-      heading: "Bring your magnetism into the Baddie Coven",
+      heading: "Bring your magnetism into the Bad B*tch Coven",
       body: "Your chart, your season, monthly rituals and a coven of baddies who love you at full volume, all in one place.",
-      label: "join the baddie coven",
+      label: "join the bad b*tch coven",
       href: "/baddie-coven",
     },
     closing: {
       heading: "your magnetism, read for",
       pink: "your chart",
-      body: "See where your Lilith, your Venus and your pleasure live in your own birth chart, then work with them every season inside the Baddie Coven.",
-      label: "join the baddie coven",
+      body: "See where your Lilith, your Venus and your pleasure live in your own birth chart, then work with them every season inside the Bad B*tch Coven.",
+      label: "join the bad b*tch coven",
       href: "/baddie-coven",
     },
     faqs: [
@@ -596,22 +596,22 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Do this retrograde with a coven behind you",
         body: [
-          "Retrogrades are SO much easier when you know exactly where they land in your own chart, and that's what the Baddie Coven is for: a platform written for YOUR birth chart and Human Design, so every retrograde, full moon and eclipse is explained for you, plus a live coven circle every month, rituals for every new and full moon and a whole coven of baddies to voice note the second your ex texts. 📲",
-          "The Baddie Coven opens on 9 November for three days only, and founding witches lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Baddie Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
+          "Retrogrades are SO much easier when you know exactly where they land in your own chart, and that's what the Bad B*tch Coven is for: a platform written for YOUR birth chart and Human Design, so every retrograde, full moon and eclipse is explained for you, plus a live coven circle every month, rituals for every new and full moon and a whole coven of baddies to voice note the second your ex texts. 📲",
+          "The Bad B*tch Coven opens on 9 November for three days only, and founding witches lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Bad B*tch Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
         ],
       },
     ],
     cta: {
       heading: "Your retrograde, read for YOUR chart",
-      body: "Inside the Baddie Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month and a coven of baddies on speed dial. Opens 9 November for three days, $44 a month for founding witches.",
-      label: "join the baddie coven",
+      body: "Inside the Bad B*tch Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month and a coven of baddies on speed dial. Opens 9 November for three days, $44 a month for founding witches.",
+      label: "join the bad b*tch coven",
       href: "/baddie-coven",
     },
     closing: {
       heading: "do this retrograde with",
       pink: "your coven.",
-      body: "The Baddie Coven opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
-      label: "join the baddie coven 🦄",
+      body: "The Bad B*tch Coven opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      label: "join the bad b*tch coven 🦄",
       href: "/baddie-coven",
     },
     faqs: [

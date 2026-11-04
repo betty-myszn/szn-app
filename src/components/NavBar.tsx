@@ -437,7 +437,7 @@ export default function NavBar() {
             </div>
           )}
           {!member && <GuestMenu label="work with me" items={workMenu} isActive={isActive} />}
-          {!member && <GuestMenu label="the baddie coven" items={covenMenu} isActive={isActive} />}
+          {!member && <GuestMenu label="the bad b*tch coven" items={covenMenu} isActive={isActive} />}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -926,7 +926,7 @@ export default function NavBar() {
                   {item.label}
                 </Link>
               ))}
-              <div style={{ fontWeight: 800, color: covenMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>the baddie coven</div>
+              <div style={{ fontWeight: 800, color: covenMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>the bad b*tch coven</div>
               {covenMenu.map((item) => (
                 <Link
                   key={item.href}

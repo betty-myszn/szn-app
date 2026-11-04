@@ -4,7 +4,7 @@ import { OFFERS } from "@/lib/offers";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// The homepage spotlight for the Baddie Coven launch, in the slot under the hero that EventPromoBand
+// The homepage spotlight for the Bad B*tch Coven launch, in the slot under the hero that EventPromoBand
 // fills while an event is on sale. Launch facts (9 Nov, 3 days, $44 founding, 11/11) match the
 // coven page; the countdown hides itself once the doors close.
 export default function CovenPromoBand() {
@@ -15,7 +15,7 @@ export default function CovenPromoBand() {
         <div>
           <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🦄 opens 9 nov · 3 days only</span>
           <h2 className="display" style={{ fontSize: "clamp(42px, 5.2vw, 72px)", color: "var(--dark)", lineHeight: 0.95, marginTop: 22 }}>
-            the baddie
+            the bad b*tch
             <br />
             <span className="pk">coven.</span>
           </h2>
