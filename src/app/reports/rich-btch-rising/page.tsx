@@ -94,7 +94,7 @@ export default function RichBtchRisingPage() {
           <>
             <p style={{ fontFamily: pp, fontWeight: 800, color: "#fff", marginBottom: 16 }}>Now let&apos;s read the F*CKING instructions.</p>
             <p>Your birth chart has A LOT to say about your money, your ambition, your self-worth, your relationship with success and the reasons you might be making life considerably harder for yourself than it needs to be.</p>
-            <p style={{ fontFamily: pp, fontWeight: 800, color: "#fff", marginTop: 16 }}>🚨 Only 15 available, written by hand by Betty.</p>
+            <p style={{ fontFamily: pp, fontWeight: 800, color: "#fff", marginTop: 16 }}>🚨 Only 10 of 15 left (5 already taken), written by hand by Betty.</p>
           </>
         }
       />
@@ -105,7 +105,7 @@ export default function RichBtchRisingPage() {
         <p>Money to leave situations that make you miserable, book flights whenever you fancy, build a business, take care of people you love, buy yourself ridiculous things and make decisions without needing anybody&apos;s permission.</p>
         <p><strong>Welcome to Rich B*tch Rising, your personalised astrology, shadow work and money manifestation report.</strong></p>
         <p>Written specifically for YOU, using your actual birth chart, with insights, exercises and practical guidance to help you understand your relationship with money and start changing it.</p>
-        <p><strong>$88 USD | Only 15 available | Personalised to your birth chart | In your inbox within 48 hours</strong></p>
+        <p><strong>$88 USD | Only 10 of 15 left, 5 taken | Personalised to your birth chart | In your inbox within 48 hours</strong></p>
         <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
           💸 get my report
         </a>
@@ -199,7 +199,7 @@ export default function RichBtchRisingPage() {
             <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>
               get my report
             </a>
-            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 · only 15 available · in your inbox within 48 hours</span>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 · only 10 of 15 left, 5 taken · in your inbox within 48 hours</span>
           </div>
         </div>
       </section>
