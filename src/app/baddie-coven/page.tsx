@@ -3,6 +3,7 @@ import Link from "next/link";
 import { OfferHero, WaitlistBand } from "@/components/Offer";
 import CovenExplorer from "@/components/CovenExplorer";
 import CovenCountdown from "@/components/CovenCountdown";
+import CovenJoinCta from "@/components/CovenJoinCta";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     // A designed share card (her photo + foil "the baddie coven" sticker), so links on Threads,
     // Instagram and WhatsApp look like the page instead of plain text.
-    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 5 November for 3 days, $44 founding price." }],
+    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Baddie Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price." }],
   },
   twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven-pink.jpg"] },
 };
@@ -156,7 +157,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding witches pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up, so the waitlist gets first dibs. 💸"],
-  ["When can I join?", "The coven opens on 5 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+  ["When can I join?", "The coven opens on 9 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -266,7 +267,8 @@ export default function BaddieCovenPage() {
           </div>
         }
         tone="lav"
-        kicker="waitlist open now"
+        kicker="founding witches · $44 a month"
+        ctaButton={(style) => <CovenJoinCta style={style} />}
         title="the baddie"
         accent="coven."
         intro={
@@ -280,9 +282,9 @@ export default function BaddieCovenPage() {
             {/* The launch: a three-day window, then the first big event. */}
             <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
               <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · our first ever event</span>
-              <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 5 November, for 3 days only.</div>
+              <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 9 November, for 3 days only.</div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 700 }}>Founding witches get in at <span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay</span>. Founding spots are limited, and the price goes up after that. 💸</p>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀 Get on the waitlist so you&apos;re first in.</p>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀</p>
               <CovenCountdown />
             </div>
           </>
@@ -422,7 +424,7 @@ export default function BaddieCovenPage() {
         </div>
         <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 28 }}>
           <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.3, margin: 0, maxWidth: 640 }}>If you&apos;ve ever wished you had your own little coven of magical women, you&apos;ve found your invitation.</p>
-          <a href="#waitlist" className="no-underline btn-pink" style={cta}>💜 join the waitlist</a>
+          <CovenJoinCta className="no-underline btn-pink" style={cta} />
         </div>
       </Section>
 

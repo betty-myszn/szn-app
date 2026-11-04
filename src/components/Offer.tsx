@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import WaitlistForm, { type ApplicationQuestion } from "@/components/WaitlistForm";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
@@ -13,11 +13,12 @@ type Tone = "pink" | "white" | "lav" | "dark" | "pinkLight";
 const BG: Record<Tone, string> = { pink: "var(--pink)", white: "#fff", lav: "var(--lav-light)", dark: "var(--dark)", pinkLight: "var(--pink-light)" };
 
 export function OfferHero({
-  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", extraCta, titleSize = "clamp(42px, 7.5vw, 96px)",
-}: { titleSize?: string; offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
+  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", ctaButton, extraCta, titleSize = "clamp(42px, 7.5vw, 96px)",
+}: { titleSize?: string; ctaButton?: (style: CSSProperties) => ReactNode; offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
   const o = OFFERS[offer];
   const ink = tone === "dark" ? "#fff" : "var(--dark)";
   const accentInk = tone === "pink" ? "#fff" : "var(--pink)";
+  const heroCta: CSSProperties = { background: tone === "pink" ? "var(--dark)" : "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block" };
   return (
     <section className="px-5 md:px-8" style={{ background: tone === "dark" ? "var(--dark)" : tone === "lav" ? "var(--lav)" : "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
       <div className={art ? "max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-12 items-center" : "max-w-4xl mx-auto"}>
@@ -32,9 +33,11 @@ export function OfferHero({
         </h1>
         <div style={{ fontSize: "clamp(17px, 2.2vw, 21px)", lineHeight: 1.65, color: ink, maxWidth: 680, marginTop: 26, fontWeight: 600 }}>{intro}</div>
         <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 34 }}>
-          <a href={ctaHref} {...(ctaHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="no-underline" style={{ background: tone === "pink" ? "var(--dark)" : "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block" }}>
-            {o.cta}
-          </a>
+          {ctaButton ? ctaButton(heroCta) : (
+            <a href={ctaHref} {...(ctaHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="no-underline" style={heroCta}>
+              {o.cta}
+            </a>
+          )}
           {extraCta}
           {o.price && <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: ink }}>{o.price}</span>}
         </div>

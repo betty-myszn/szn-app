@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { COVEN_OPENS, COVEN_CLOSES } from "@/lib/coven-launch";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
 // The Baddie Coven launch window. November is GMT, so these are midnight UK time.
 // Before it opens: a countdown to opening. During the three days: "open" plus a countdown to
 // closing. After: nothing, so the page never shows a stale clock.
-const OPENS = new Date("2026-11-05T00:00:00Z").getTime();
-const CLOSES = new Date("2026-11-08T00:00:00Z").getTime();
+const OPENS = COVEN_OPENS;
+const CLOSES = COVEN_CLOSES;
 
 function parts(ms: number) {
   const s = Math.max(0, Math.floor(ms / 1000));

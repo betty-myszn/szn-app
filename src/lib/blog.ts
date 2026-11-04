@@ -158,7 +158,7 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
-  // The Baddie Coven launch post. Facts match /baddie-coven: opens 5 Nov for 3 days, $44 a month
+  // The Baddie Coven launch post. Facts match /baddie-coven: opens 9 Nov for 3 days, $44 a month
   // founding price, the 11/11 workshop with the future-self dress code. Backdated to 26 Oct on purpose.
   {
     slug: "the-baddie-coven",
@@ -174,7 +174,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "An online coven for women who want to live BIG lives, manifest outrageous things and make seriouuuus money, with a monthly circle, a platform written for your chart and a whole coven of baddies doing it with you.",
     intro: [
       "The Baddie Coven is my online coven for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live coven circle every month, a personalised platform written for your birth chart and Human Design, and a whole coven of baddies cheering you on from every corner of the world.",
-      "It opens on 5 November for three days only, founding witches get in at $44 a month, locked in for as long as they stay, and our FIRST EVER coven event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
+      "It opens on 9 November for three days only, founding witches get in at $44 a month, locked in for as long as they stay, and our FIRST EVER coven event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
     ],
     sections: [
       {
@@ -211,7 +211,7 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           "11/11 is my most FAVOURITE date of the entire year, because eleven is a master number and 11/11 is a double master number, which means the universe has her order pad out and she is taking requests at full volume, so of course the coven's very first event is an 11/11 manifestation workshop, with candles lit, wishlists out and the most outrageous version of our lives on ordeeeer.",
           "The dress code is your FUTURE SELF. Whatever you're manifesting, show up dressed as the version of you who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we'll call her in together. 💅",
-          "The 11/11 workshop is for coven members, so join while the coven is open from 5 November and you're in.",
+          "The 11/11 workshop is for coven members, so join while the coven is open from 9 November and you're in.",
         ],
       },
       {
@@ -229,20 +229,20 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Founding witch pricing",
         body: [
           "Founding witches pay $44 a month, locked in for as long as you stay, for your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms.",
-          "The coven opens on 5 November for three days only, founding spots are limited and the price goes up once they're gone, so [get on the waitlist](/baddie-coven) and you'll hear the second we open. 🪄",
+          "The coven opens on 9 November for three days only, founding spots are limited and the price goes up once they're gone, so [get on the waitlist](/baddie-coven) and you'll hear the second we open. 🪄",
         ],
       },
     ],
     cta: {
       heading: "Your coven is calling, babe",
-      body: "The Baddie Coven opens on 5 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
+      body: "The Baddie Coven opens on 9 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
       label: "join the waitlist",
       href: "/baddie-coven",
     },
     closing: {
       heading: "your coven is",
       pink: "calling.",
-      body: "Opens 5 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      body: "Opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
       label: "join the waitlist 🦄",
       href: "/baddie-coven",
     },
@@ -254,7 +254,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         question: "When does the Baddie Coven open?",
-        answer: "It opens on 5 November 2026 for three days only, and the waitlist hears first.",
+        answer: "It opens on 9 November 2026 for three days only, and the waitlist hears first.",
       },
       {
         question: "How much does the Baddie Coven cost?",
@@ -282,7 +282,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     ogImage: {
       src: "/coven/og-baddie-coven-pink.jpg",
-      alt: "The Baddie Coven: your coven is calling. Opens 5 November for 3 days, $44 founding price.",
+      alt: "The Baddie Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price.",
       width: 1200,
       height: 630,
     },
@@ -597,20 +597,20 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Do this retrograde with a coven behind you",
         body: [
           "Retrogrades are SO much easier when you know exactly where they land in your own chart, and that's what the Baddie Coven is for: a platform written for YOUR birth chart and Human Design, so every retrograde, full moon and eclipse is explained for you, plus a live coven circle every month, rituals for every new and full moon and a whole coven of baddies to voice note the second your ex texts. 📲",
-          "The Baddie Coven opens on 5 November for three days only, the day after the Mercury cazimi, and founding witches lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Baddie Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
+          "The Baddie Coven opens on 9 November for three days only, and founding witches lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Baddie Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
         ],
       },
     ],
     cta: {
       heading: "Your retrograde, read for YOUR chart",
-      body: "Inside the Baddie Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month and a coven of baddies on speed dial. Opens 5 November for three days, $44 a month for founding witches.",
+      body: "Inside the Baddie Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month and a coven of baddies on speed dial. Opens 9 November for three days, $44 a month for founding witches.",
       label: "join the baddie coven",
       href: "/baddie-coven",
     },
     closing: {
       heading: "do this retrograde with",
       pink: "your coven.",
-      body: "The Baddie Coven opens 5 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      body: "The Baddie Coven opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
       label: "join the baddie coven 🦄",
       href: "/baddie-coven",
     },

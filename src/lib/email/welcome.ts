@@ -8,7 +8,7 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // membership tier, because two different prices ($111/mo and $333 upfront) share the same 'monthly'
 // tier but get different emails. The branded template for each is designed and hosted in Brevo and
 // referenced here by id via env, so copy and design changes never require a code deploy.
-export type WelcomeKind = "welcome_monthly" | "welcome_plan" | "welcome_3mo" | "welcome_vip";
+export type WelcomeKind = "welcome_monthly" | "welcome_plan" | "welcome_3mo" | "welcome_vip" | "welcome_coven";
 
 interface WelcomeSpec {
   kind: WelcomeKind;
@@ -38,6 +38,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1TwEXMJ6s9fRhiJoRzDMbrQZ: "welcome_3mo",
   price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
+  price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Baddie Coven founding price
 };
 
 const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
@@ -46,6 +47,8 @@ const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallb
   welcome_plan: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_PLAN, fallbackTemplate: 31, planName: "3-Month Plan" },
   welcome_3mo: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_3MO, fallbackTemplate: 32, planName: "3-Month Membership" },
   welcome_vip: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_VIP, fallbackTemplate: 33, planName: "VIP Membership" },
+  // Brevo template #91, source in coven-welcome-email.html at the project root.
+  welcome_coven: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_COVEN, fallbackTemplate: 91, planName: "The Baddie Coven" },
 };
 
 function kindForPrice(priceId: string): WelcomeKind | null {
