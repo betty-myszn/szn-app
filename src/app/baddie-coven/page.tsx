@@ -157,7 +157,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding witches pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up, so the waitlist gets first dibs. 💸"],
-  ["When can I join?", "The coven opens on 9 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+  ["When can I join?", "The coven opens on 9 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 7pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -281,10 +281,10 @@ export default function BaddieCovenPage() {
             </div>
             {/* The launch: a three-day window, then the first big event. */}
             <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
-              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · our first ever event</span>
+              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · 7pm UK · our first ever event</span>
               <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 9 November, for 3 days only.</div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 700 }}>Founding witches get in at <span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay</span>. Founding spots are limited, and the price goes up after that. 💸</p>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀</p>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, live at 7pm UK, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀</p>
               <CovenCountdown />
             </div>
           </>
@@ -360,11 +360,11 @@ export default function BaddieCovenPage() {
       {/* 06 · What a month inside holds. */}
       <Section bg="var(--lav-light)">
         <Head n="06" tag="every month inside" title="your monthly" accent="dose of magic." />
-        {/* The first big event, so nobody misses it. No time is set yet, so only the date. */}
+        {/* The first big event, so nobody misses it. Live at 7pm UK (set by Betty 4 Nov). */}
         <div className="holo-edge grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-center" style={{ ...card, marginTop: 30, padding: "26px 28px", background: "var(--dark)", color: "#fff", boxShadow: "8px 8px 0 var(--pink)", position: "relative" }}>
           <div className="hd-foil" style={{ position: "relative", border: "var(--border)", borderRadius: 18, padding: "16px 22px", textAlign: "center", color: "var(--dark)", transform: "rotate(-3deg)", boxShadow: "4px 4px 0 #fff", justifySelf: "start" }}>
             <div style={{ fontFamily: pp, fontSize: 52, fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>11/11</div>
-            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>save the date</div>
+            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>7pm UK · live</div>
             <span style={{ position: "absolute", top: -16, right: -18, transform: "rotate(10deg)", background: "#fff", border: "var(--border)", borderRadius: 999, padding: "5px 12px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", whiteSpace: "nowrap" }}>✦ first ever ✦</span>
           </div>
           <div>
