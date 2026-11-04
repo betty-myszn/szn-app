@@ -4,6 +4,8 @@
 // password) only. This function NEVER throws: it returns a result object so its caller (a Stripe
 // webhook) can log a failure without ever breaking membership activation.
 
+import { renderTemplate } from "./render-template";
+
 const BREVO_API = "https://api.brevo.com/v3";
 
 export type BrevoSendResult =
@@ -65,7 +67,52 @@ async function postBrevoEmail(key: string, payload: Record<string, unknown>): Pr
   }
 }
 
+// Solstral is the sender now (Brevo ran out of credits, Nov 2026). Every send tries Solstral first and
+// only falls back to Brevo if Solstral refuses it, so a Solstral outage or an unverified domain never
+// loses an email. Brevo templates are rendered locally from brevo-templates.json for the Solstral path.
+// SOLSTRAL_EMAIL=off sends everything through Brevo again without a code change.
+async function postSolstralEmail(msg: {
+  to: { email: string; name?: string };
+  subject: string;
+  html: string;
+  replyTo?: { email: string; name?: string };
+}): Promise<BrevoSendResult> {
+  const key = process.env.SOLSTRAL_API_KEY;
+  if (!key || process.env.SOLSTRAL_EMAIL === "off") return { ok: false, error: "solstral email off" };
+  try {
+    const res = await fetch("https://app.solstral.com/api/v1/transactional/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: msg.to.email,
+        subject: msg.subject,
+        html: msg.html,
+        replyTo: (msg.replyTo ?? DEFAULT_SENDER).email,
+      }),
+    });
+    const data = (await res.json().catch(() => ({}))) as { id?: string; messageId?: string; ok?: boolean };
+    if (!res.ok || data.ok === false) {
+      return { ok: false, error: `solstral ${res.status}: ${JSON.stringify(data).slice(0, 300)}` };
+    }
+    return { ok: true, messageId: data.messageId ?? data.id ?? null };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
 export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<BrevoSendResult> {
+  const rendered = renderTemplate(msg.templateId, msg.params);
+  if (rendered) {
+    const viaSolstral = await postSolstralEmail({
+      to: msg.to,
+      subject: rendered.subject,
+      html: rendered.html,
+      replyTo: msg.replyTo,
+    });
+    if (viaSolstral.ok) return viaSolstral;
+    console.error("email: Solstral send failed, falling back to Brevo", viaSolstral.error, { templateId: msg.templateId });
+  }
+
   const key = process.env.BREVO_API_KEY;
   if (!key) return { ok: false, error: "BREVO_API_KEY not set" };
 
@@ -79,6 +126,15 @@ export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<B
 }
 
 export async function sendBrevoEmail(msg: BrevoRawEmail): Promise<BrevoSendResult> {
+  const viaSolstral = await postSolstralEmail({
+    to: msg.to,
+    subject: msg.subject,
+    html: msg.htmlContent,
+    replyTo: msg.replyTo,
+  });
+  if (viaSolstral.ok) return viaSolstral;
+  console.error("email: Solstral send failed, falling back to Brevo", viaSolstral.error, { subject: msg.subject });
+
   const key = process.env.BREVO_API_KEY;
   if (!key) return { ok: false, error: "BREVO_API_KEY not set" };
 
