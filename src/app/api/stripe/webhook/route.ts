@@ -5,6 +5,7 @@ import { tierForPriceId, ACCESS_GRANTING_STATUSES, PLAN_PRICE_ID, PLAN_COMMITMEN
 import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
 import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
+import { trackOrderInSolstral } from "@/lib/solstral";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
@@ -77,6 +78,26 @@ async function trySyncBrevoContact(args: {
     }
   } catch (e) {
     console.error("stripe webhook: Brevo contact sync threw (membership unaffected)", e instanceof Error ? e.message : e);
+  }
+}
+
+// Fire-and-forget Solstral CRM sync for any completed checkout. The checkout session id is the
+// event's messageId, so Stripe retrying this webhook never logs the order twice. Never throws.
+async function trySyncSolstralOrder(stripe: Stripe, session: Stripe.Checkout.Session): Promise<void> {
+  try {
+    if (!process.env.SOLSTRAL_API_KEY) return;
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
+    const result = await trackOrderInSolstral({
+      email: session.customer_details?.email ?? session.customer_email,
+      name: session.customer_details?.name,
+      checkoutSessionId: session.id,
+      product: lineItems.data[0]?.description ?? null,
+      amount: session.amount_total != null ? session.amount_total / 100 : null,
+      currency: session.currency,
+    });
+    if (!result.ok) console.error("stripe webhook: Solstral sync failed (membership unaffected)", result.error);
+  } catch (e) {
+    console.error("stripe webhook: Solstral sync threw (membership unaffected)", e instanceof Error ? e.message : e);
   }
 }
 
@@ -335,6 +356,10 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        // Every completed checkout (membership, report, session, event ticket) goes to the Solstral
+        // CRM as a buyer + an "Order Completed" event. Fire-and-forget, it never touches access.
+        void trySyncSolstralOrder(stripe, session);
 
         // Event bookings (MOONIFEST and every event after it) are one-off tickets, never membership,
         // so they're handled here and never reach the tier logic below.

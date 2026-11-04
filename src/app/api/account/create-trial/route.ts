@@ -5,6 +5,7 @@ import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { isSignupBlocked } from "@/lib/signup-blocklist";
 import { syncTrialMemberToBrevo } from "@/lib/email/brevo-contact";
+import { syncContactToSolstral } from "@/lib/solstral";
 import { sendNewSignupAdminAlert, sendRepeatTrialAlert } from "@/lib/email/admin-notify";
 import { birthFingerprint, claimTrial, hasUsedTrial, isExemptFromTrialGuard } from "@/lib/trial-fingerprint";
 
@@ -209,6 +210,9 @@ async function retiredCreateTrial(request: NextRequest) {
   // syncTrialMemberToBrevo never throws and logs its own failures.
   void syncTrialMemberToBrevo({ email, name: firstName }).then((r) => {
     if (!r.ok) console.error("account/create-trial: brevo trial sync failed", r.error);
+  });
+  void syncContactToSolstral({ email, name: firstName, list: "trial" }).then((r) => {
+    if (!r.ok) console.error("account/create-trial: solstral sync failed", r.error);
   });
 
   // Tell the team someone started a trial. A trial never touches Stripe, so the webhook's

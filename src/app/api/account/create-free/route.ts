@@ -5,6 +5,7 @@ import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { isSignupBlocked } from "@/lib/signup-blocklist";
 import { syncFreeMemberToBrevo } from "@/lib/email/brevo-contact";
+import { syncContactToSolstral } from "@/lib/solstral";
 import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
 
 export const runtime = "nodejs";
@@ -155,6 +156,11 @@ export async function POST(request: NextRequest) {
   // can't cost her the account she just created.
   const brevoResult = await syncFreeMemberToBrevo({ email, name: firstName });
   if (!brevoResult.ok) console.error("account/create-free: brevo free-member sync failed", brevoResult.error);
+
+  // Same contact into the Solstral CRM's free-members list. Fire-and-forget and never throws.
+  void syncContactToSolstral({ email, name: firstName, list: "free" }).then((r) => {
+    if (!r.ok) console.error("account/create-free: solstral sync failed", r.error);
+  });
 
   // Tell the team. A free signup never touches Stripe, so the webhook's new-member alert never
   // fires for one, which is why these used to arrive silently. Fire-and-forget and non-fatal.
