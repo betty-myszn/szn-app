@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { listIdFor, isWaitlistSource } from "@/lib/subscribe-lists";
+import { syncContactToSolstral } from "@/lib/solstral";
+import { sendBrevoEmail } from "@/lib/email/brevo";
+import { adminRecipients } from "@/lib/email/admin-notify";
 
 export const runtime = "nodejs";
 
@@ -45,6 +48,32 @@ async function ensureAttribute(name: string, type: string): Promise<void> {
     console.error(`Brevo ensureAttribute ${name} failed`, res.status, (await res.text().catch(() => "")).slice(0, 200));
   } catch (e) {
     console.error(`Brevo ensureAttribute ${name} threw`, e instanceof Error ? e.message : e);
+  }
+}
+
+// Mirrors listIdFor: the Solstral list for each source, named after its Brevo list so new sign-ups
+// join the contacts imported from Brevo. Unknown sources land with the free chart leads, never the waitlist.
+function solstralListFor(source: string | undefined): string {
+  if (source === "money-blueprint") return "Money Blueprint";
+  if (isWaitlistSource(source)) return "MY SZN waitlist";
+  return "Free birthchart generator";
+}
+
+const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function sendChartLeadAlert(
+  email: string,
+  name: string | undefined,
+  chart: { sunSign?: string; moonSign?: string; risingSign?: string; placeOfBirth?: string }
+) {
+  const big3 = [chart.sunSign && `${chart.sunSign} Sun`, chart.moonSign && `${chart.moonSign} Moon`, chart.risingSign && `${chart.risingSign} Rising`]
+    .filter(Boolean)
+    .join(", ");
+  const htmlContent = `<p>Someone new just made their free birth chart 🪐</p>
+<p><strong>Name:</strong> ${esc(name || "(not given)")}<br><strong>Email:</strong> ${esc(email)}${big3 ? `<br><strong>Chart:</strong> ${esc(big3)}` : ""}${chart.placeOfBirth ? `<br><strong>Born in:</strong> ${esc(chart.placeOfBirth)}` : ""}</p>`;
+  for (const to of adminRecipients()) {
+    const r = await sendBrevoEmail({ to: { email: to }, subject: `🪐 New free birth chart: ${name || email}`, htmlContent, replyTo: { email, name: name || undefined } });
+    if (!r.ok) console.error("subscribe: chart lead alert failed", { to, error: r.error });
   }
 }
 
@@ -121,6 +150,15 @@ export async function POST(req: NextRequest) {
         console.error("Brevo error:", err);
       }
     }
+
+    // Same person onto the matching Solstral list, and an alert to Betty for every free birth chart
+    // lead (it replaces the Brevo "Notify Admin on List Subscription" automation). Both are
+    // fire-and-forget and never throw, so neither can slow down someone seeing her chart.
+    const solstralList = solstralListFor(source);
+    void syncContactToSolstral({ email, name, list: solstralList }).then((r) => {
+      if (!r.ok) console.error("subscribe: solstral sync failed", r.error, { source });
+    });
+    if (source === "free-chart") void sendChartLeadAlert(email, name, { sunSign, moonSign, risingSign, placeOfBirth });
 
     if (n8nPromise) await n8nPromise;
 

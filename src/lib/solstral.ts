@@ -18,6 +18,20 @@ export const SOLSTRAL_LISTS = {
   buyers: "MY SZN Buyers",
 } as const;
 type SolstralListKey = keyof typeof SOLSTRAL_LISTS;
+// A key above, or any list's exact name (waitlists and the free chart reuse the names the Brevo
+// import created, so new sign-ups land on the same lists as the imported contacts).
+export type SolstralList = SolstralListKey | (string & {});
+
+// Each waitlist offer's Solstral list, named after its Brevo list so imported and new sign-ups share one.
+export const SOLSTRAL_WAITLIST_LISTS: Record<string, string> = {
+  mastermind: "🪐 MY SZN Mastermind waitlist",
+  "rich-btch-rising": "💸 Rich B*tch Rising report",
+  "bad-btch-report": "baddie report",
+  "baddie-coven": "coven waitlist",
+  "baddie-coven-la": "LA coven (IRL) waitlist",
+  retreat: "🌴 The Bad B*tch Retreat",
+  book: "MY SZN Book waitlist",
+};
 
 export type SolstralResult = { ok: true; recordId: string } | { ok: false; error: string };
 
@@ -38,15 +52,18 @@ async function solstral(path: string, body?: unknown, method = "POST") {
 
 // List ids are looked up by name once per process and cached; a missing list is created, so a
 // rename in Solstral just means a new list appears rather than everyone being filed nowhere.
-const listIds = new Map<SolstralListKey, Promise<string>>();
+const listIds = new Map<string, Promise<string>>();
 
-function listId(kind: SolstralListKey): Promise<string> {
-  let pending = listIds.get(kind);
+function listId(list: SolstralList): Promise<string> {
+  const name = SOLSTRAL_LISTS[list as SolstralListKey] ?? list;
+  let pending = listIds.get(name);
   if (!pending) {
     pending = (async () => {
-      const name = SOLSTRAL_LISTS[kind];
       const found = await solstral("/actions/lists.list", {});
-      const existing = found.data?.lists?.find((l: { name: string; id: string }) => l.name === name);
+      // Solstral treats list names case-insensitively, so the match has to as well.
+      const existing = found.data?.lists?.find(
+        (l: { name: string; id: string }) => l.name.toLowerCase() === name.toLowerCase()
+      );
       if (existing) return existing.id as string;
       const created = await solstral("/actions/lists.create", {
         name,
@@ -56,8 +73,8 @@ function listId(kind: SolstralListKey): Promise<string> {
       });
       return (created.data?.id ?? created.data?.list?.id) as string;
     })();
-    pending.catch(() => listIds.delete(kind)); // retry the lookup next time rather than cache a failure
-    listIds.set(kind, pending);
+    pending.catch(() => listIds.delete(name)); // retry the lookup next time rather than cache a failure
+    listIds.set(name, pending);
   }
   return pending;
 }
@@ -81,7 +98,7 @@ async function upsertContact(email: string, name?: string | null): Promise<strin
 export interface SolstralContact {
   email: string | null | undefined;
   name?: string | null;
-  list: SolstralListKey;
+  list: SolstralList;
 }
 
 // Creates or updates the contact by email and adds her to the list for how she joined. Buyers are

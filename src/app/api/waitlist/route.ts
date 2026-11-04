@@ -5,6 +5,7 @@ import { OFFERS, isOfferSlug, waitlistListId } from "@/lib/offers";
 import { sendWaitlistConfirmation } from "@/lib/email/waitlist-confirm";
 import { sendBrevoEmail } from "@/lib/email/brevo";
 import { adminRecipients } from "@/lib/email/admin-notify";
+import { SOLSTRAL_WAITLIST_LISTS, syncContactToSolstral } from "@/lib/solstral";
 
 export const runtime = "nodejs";
 
@@ -83,7 +84,7 @@ async function syncToBrevo(email: string, name: string, offer: string, listId: n
 }
 
 // Waitlists Betty gets an email about the moment someone new joins (sent through Brevo).
-const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "retreat"];
+const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "retreat", "mastermind"];
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -124,6 +125,10 @@ export async function POST(request: NextRequest) {
   // Duplicate = already on this list. Same happy confirmation, no second row.
   const { data: existing } = await admin.from("waitlist_signups").select("id").eq("email", email).eq("offer", offer).maybeSingle();
   const brevoOk = await syncToBrevo(email, name, offer, waitlistListId(offer), birth);
+  // Same person onto the offer's Solstral list. Fire-and-forget, never throws.
+  void syncContactToSolstral({ email, name, list: SOLSTRAL_WAITLIST_LISTS[offer] ?? `${OFFERS[offer].name} waitlist` }).then((r) => {
+    if (!r.ok) console.error("waitlist: solstral sync failed", r.error, { offer });
+  });
 
   if (existing) {
     if (brevoOk) await admin.from("waitlist_signups").update({ brevo_ok: true }).eq("id", existing.id);
