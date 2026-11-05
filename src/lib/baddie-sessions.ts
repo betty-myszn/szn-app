@@ -61,6 +61,12 @@ export interface BaddieSession {
   reviews: { name: string; role: string; quote: string }[];
   focus: string[];
   cta: string;
+  /** Set when this one is a hand-made report instead of a Zoom session: replaces the minutes/Zoom
+   *  lines on the card, pop-up and share preview, and the booking email asks for sizes, not times. */
+  report?: { card: string; popup: string; share: string };
+  /** Card photo in public/baddie-sessions, and where to anchor the crop so faces stay in frame. */
+  image: string;
+  imagePosition: string;
   /** Card accent, brand palette only. */
   accent: string;
   accentInk: string;
@@ -90,6 +96,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Getting your confidence, identity and desire back",
       "A real plan for your next chapter, with dates on it",
     ],
+    image: "/baddie-sessions/card-reset.jpg", imagePosition: "center 55%",
     cta: "Book your reset", accent: "var(--pink)", accentInk: "#fff", bookingUrl: "https://buy.stripe.com/7sY4gAf2TcM70Lo2yx7kc0B", stripePriceId: "price_1UVGzBJ6s9fRhiJoAWw305a8",
   },
   {
@@ -112,6 +119,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Manifestation that fits who you really are",
       "Real-world moves towards your money goals",
     ],
+    image: "/baddie-sessions/card-rich-btch-energy.jpg", imagePosition: "center 30%",
     cta: "Book your money session", accent: "var(--lav)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/8x25kE7Ar8vRalY5KJ7kc0C", stripePriceId: "price_1UVGzCJ6s9fRhiJobkoGzRf4",
   },
   {
@@ -135,6 +143,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Boundaries, self-worth and taking your power back",
       "Living your shadow work out loud in real life",
     ],
+    image: "/baddie-sessions/card-shadow.jpg", imagePosition: "center 20%",
     cta: "Book your shadow session", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/28E6oI2g7fYjbq26ON7kc0D", stripePriceId: "price_1UVGzEJ6s9fRhiJo42IkpGx9",
   },
   {
@@ -157,6 +166,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Identity, self-image and embodiment",
       "Practical ways to start showing up like HER",
     ],
+    image: "/baddie-sessions/card-main-character.jpg", imagePosition: "center 25%",
     cta: "Book your activation", accent: "var(--pink-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/cNi8wQaMDaDZfGic977kc0E", stripePriceId: "price_1UVGzFJ6s9fRhiJofGW99cFk",
   },
   {
@@ -181,26 +191,33 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "Getting seen, selling without the ick and charging what you're WORTH",
       "A plan with real dates on it, so the dream finally moves out of your Notes app",
     ],
+    image: "/baddie-sessions/card-business.jpg", imagePosition: "center 40%",
     cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F", stripePriceId: "price_1UVH2vJ6s9fRhiJo5s9D8Pd7",
   },
   {
     slug: "style", number: "06", emoji: "👗", name: "The Baddie Style Session",
     tagline: "Dress as your BEST self, straight from your astro, babeeee. 👗",
     body: [
-      "Your best self already has a look, babe, and it's written all over your chart. This session is us finding it and getting you dressed in it NOW, before you've 'earned' it.",
-      "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her, so you walk out with real outfits, real pieces and the links to buy every one.",
-      "We sort what stays, what goes and what to buy next, so every time you get dressed you're stepping into the version of you who already has the life you want.",
+      "Your best self already has a look, babe, and it's written all over your chart. This report is me finding it and getting you dressed in it NOW, before you've 'earned' it.",
+      "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her and put it ALL in your own style report: your colours, your shapes, real outfits and the shopping links for every single piece.",
+      "You pop your birth details in at checkout, I email you for your sizes, your budget and your style goals, and your report lands in your inbox ready to shop, with no Zoom call to get camera-ready for. Every time you get dressed after that, you're stepping into the version of you who already has the life you want.",
     ],
     after: "This baddie walks out dressed as her best self, with a signature look so HER that people start asking where she got everything.",
     reviews: [],
     focus: [
-      "How your best self dresses, read from your Venus, Rising, Moon and 1st house",
-      "Your Human Design and how you're built to show up and be seen",
-      "Her signature look, her colours and the shapes that make you feel unreal",
-      "Real outfits and pieces picked for you, with links to shop every one",
+      "Your best-self colour palette, read from your Venus, Rising and Moon",
+      "The shapes, fabrics and silhouettes your chart is BEGGING you to wear",
+      "Real outfits put together for you, from everyday to big night out",
+      "Shopping links for every piece, picked to your sizes and your budget",
       "What stays, what goes and your next-buys list, in order",
     ],
-    cta: "Book your style session", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/9B66oIaMD13p65Iddb7kc0L", stripePriceId: "price_1UYSIlJ6s9fRhiJoKBZWqv0R",
+    report: {
+      card: "Your personal style report | $333 USD",
+      popup: "A personal style report, emailed to you | $333 USD, packed with your colours, your shapes, real outfits and shopping links for every piece. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
+      share: "A personal style report from Betty, with your colours, real outfits and shopping links, built from your astrology and Human Design.",
+    },
+    image: "/baddie-sessions/card-style.jpg", imagePosition: "center 30%",
+    cta: "Get your style report", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/9B66oIaMD13p65Iddb7kc0L", stripePriceId: "price_1UYSIlJ6s9fRhiJoKBZWqv0R",
   },
 ];
 

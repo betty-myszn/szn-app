@@ -82,10 +82,11 @@ export default function SessionCards() {
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>{s.emoji} {s.number}</div>
               <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 3vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>{s.name}</h3>
             </button>
+            <img src={s.image} alt="" loading="lazy" onClick={() => show(s)} style={{ display: "block", width: "100%", aspectRatio: "16 / 10", objectFit: "cover", objectPosition: s.imagePosition, borderBottom: "var(--border)", cursor: "pointer" }} />
             <div style={{ padding: "22px 24px 26px", display: "flex", flexDirection: "column", flex: 1 }}>
               <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, lineHeight: 1.3, margin: 0 }}>{s.tagline}</p>
               <p style={{ fontSize: 15.5, lineHeight: 1.65, margin: "12px 0 0" }}>✨ {s.after}</p>
-              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, margin: "16px 0 12px" }}>{opt.minutes} minutes | ${opt.priceUsd} USD</div>
+              <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, margin: "16px 0 12px" }}>{s.report?.card ?? `${opt.minutes} minutes | $${opt.priceUsd} USD`}</div>
               <Extras s={s} />
               <div style={{ marginTop: "auto", paddingTop: 14, display: "flex", flexWrap: "wrap", gap: 12 }}>
                 <a href={bookingHref(s.bookingUrl, `Baddie Session: ${s.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{s.cta}</a>
@@ -111,15 +112,16 @@ export default function SessionCards() {
               <h3 id="baddie-dialog-title" style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 5vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>{open.name}</h3>
               <button type="button" onClick={close} aria-label="Close" style={{ position: "absolute", top: 16, right: 16, width: 38, height: 38, borderRadius: 999, border: "var(--border)", background: "#fff", color: "var(--dark)", fontFamily: pp, fontWeight: 800, fontSize: 18, lineHeight: 1, cursor: "pointer" }}>✕</button>
             </div>
+            <img src={open.image} alt="" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover", objectPosition: open.imagePosition, borderBottom: "var(--border)" }} />
             <div style={{ padding: "22px 24px 28px" }}>
               <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, lineHeight: 1.3, margin: 0 }}>{open.tagline}</p>
               {open.body.map((b) => <p key={b} style={{ fontSize: 16, lineHeight: 1.7, margin: "12px 0 0" }}>{b}</p>)}
-              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginTop: 22 }}>What we&apos;ll work on</div>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginTop: 22 }}>{open.report ? "What&apos;s in your report" : "What we&apos;ll work on"}</div>
               <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 6 }}>
                 {open.focus.map((f) => <li key={f} style={{ fontSize: 15.5, fontWeight: 600, lineHeight: 1.5 }}><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>{f}</li>)}
               </ul>
               <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 16, lineHeight: 1.45, margin: "22px 0 0", padding: "14px 16px", background: "var(--pink-light)", border: "var(--border)", borderRadius: 14 }}>✨ {open.after}</p>
-              <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}><strong>{opt.minutes} minutes on Zoom | ${opt.priceUsd} USD</strong>, with your recording, reports, action plan, guides, journal prompts and exercises landing after. Pop your birth details in at checkout, then I&apos;ll be in your inbox to lock in a time that works in your time zone AND mine.</p>
+              {open.report ? <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}>{open.report.popup}</p> : <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}><strong>{opt.minutes} minutes on Zoom | ${opt.priceUsd} USD</strong>, with your recording, reports, action plan, guides, journal prompts and exercises landing after. Pop your birth details in at checkout, then I&apos;ll be in your inbox to lock in a time that works in your time zone AND mine.</p>}
               <Extras s={open} onLink={close} />
               <div style={{ paddingTop: 12 }}>
                 <a href={bookingHref(open.bookingUrl, `Baddie Session: ${open.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{open.cta}</a>
