@@ -195,7 +195,7 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
     cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F", stripePriceId: "price_1UVH2vJ6s9fRhiJo5s9D8Pd7",
   },
   {
-    slug: "style", number: "06", emoji: "👗", name: "The Baddie Style Session",
+    slug: "style", number: "06", emoji: "👗", name: "The Baddie Style Report",
     tagline: "Dress as your BEST self, straight from your astro, babeeee. 👗",
     body: [
       "Your best self already has a look, babe, and it's written all over your chart. This report is me finding it and getting you dressed in it NOW, before you've 'earned' it.",
