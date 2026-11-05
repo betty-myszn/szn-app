@@ -1,7 +1,7 @@
-// The Baddie Sessions: Betty's five 1:1 coaching sessions. Everything a visitor sees about price,
+// The Baddie Sessions: Betty's six 1:1 coaching sessions. Everything a visitor sees about price,
 // length and booking lives here, so changing a price or adding a booking link is a one-line edit.
 //
-// One standard session for all five themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each of the five sessions has its own $333 Stripe Payment Link
+// One standard session for all six themes (Style added 5 Nov 2026): 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each session has its own $333 Stripe Payment Link
 // (created 27 Oct 2026); the price card scrolls to them. Sessions for two share one
 // $555 link (special, normally $666) with a dropdown for the session. The 3-session package is one
 // $888 link (saves $111 on three singles, created 29 Oct 2026); she picks her sessions by email.
@@ -33,7 +33,7 @@ export const SESSION_OPTIONS: SessionOption[] = [
   { name: "The Baddie Session", minutes: 90, minutesForTwo: 120, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
-/** Three sessions, mixed and matched from all five; birth details at checkout like a single. */
+/** Three sessions, mixed and matched from all six; birth details at checkout like a single. */
 export const SESSION_PACKAGE = {
   sessions: 3,
   priceUsd: 888,
@@ -182,6 +182,25 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "A plan with real dates on it, so the dream finally moves out of your Notes app",
     ],
     cta: "Book your business session", accent: "var(--lav-light)", accentInk: "var(--dark)", bookingUrl: "https://buy.stripe.com/6oU6oI6wn4fBeCe3CB7kc0F", stripePriceId: "price_1UVH2vJ6s9fRhiJo5s9D8Pd7",
+  },
+  {
+    slug: "style", number: "06", emoji: "👗", name: "The Baddie Style Session",
+    tagline: "Dress as your BEST self, straight from your astro, babeeee. 👗",
+    body: [
+      "Your best self already has a look, babe, and it's written all over your chart. This session is us finding it and getting you dressed in it NOW, before you've 'earned' it.",
+      "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her, so you walk out with real outfits, real pieces and the links to buy every one.",
+      "We sort what stays, what goes and what to buy next, so every time you get dressed you're stepping into the version of you who already has the life you want.",
+    ],
+    after: "This baddie walks out dressed as her best self, with a signature look so HER that people start asking where she got everything.",
+    reviews: [],
+    focus: [
+      "How your best self dresses, read from your Venus, Rising, Moon and 1st house",
+      "Your Human Design and how you're built to show up and be seen",
+      "Her signature look, her colours and the shapes that make you feel unreal",
+      "Real outfits and pieces picked for you, with links to shop every one",
+      "What stays, what goes and your next-buys list, in order",
+    ],
+    cta: "Book your style session", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/9B66oIaMD13p65Iddb7kc0L", stripePriceId: "price_1UYSIlJ6s9fRhiJoKBZWqv0R",
   },
 ];
 
