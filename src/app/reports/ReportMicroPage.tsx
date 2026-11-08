@@ -70,7 +70,7 @@ export default function ReportMicroPage({ hash, name, price, delivery, buyHref, 
 
       <section className="px-5 md:px-8" style={section("#fff")}>
         <div className={INNER}>
-          <Heading title="who you are on" accent={c.shiftAccent} />
+          <Heading title="what changes" accent={c.shiftAccent} />
           <div style={{ marginTop: 28, display: "grid", gap: 12 }}>
             {c.shifts.map(([before, after]) => (
               <div key={after} className="grid grid-cols-1 sm:grid-cols-[0.8fr_1.2fr]" style={{ border: "var(--border)", borderRadius: 16, overflow: "hidden" }}>

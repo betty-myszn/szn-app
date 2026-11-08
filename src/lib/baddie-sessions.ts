@@ -199,7 +199,7 @@ const ALL_OFFERINGS: BaddieSession[] = [
     tagline: "Dress as your BEST self, straight from your astro, babeeee. 👗",
     body: [
       "Your best self already has a look, babe, and it's written all over your chart. This report is me finding it and getting you dressed in it NOW, before you've 'earned' it.",
-      "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her and put it ALL in your own style report: your colours, your shapes, real outfits and the shopping links for every single piece.",
+      "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her and put it ALL in your own style report: your colours, your shapes, a few key outfits and the key items to buy.",
       "You pop your birth details in at checkout, I email you for your sizes, your budget and your style goals, and your report lands in your inbox ready to shop, with no Zoom call to get camera-ready for. Every time you get dressed after that, you're stepping into the version of you who already has the life you want.",
     ],
     after: "This baddie walks out dressed as her best self, with a signature look so HER that people start asking where she got everything.",
@@ -207,14 +207,14 @@ const ALL_OFFERINGS: BaddieSession[] = [
     focus: [
       "Your best-self colour palette, read from your Venus, Rising and Moon",
       "The shapes, fabrics and silhouettes your chart is BEGGING you to wear",
-      "Real outfits put together for you, from everyday to big night out",
-      "Shopping links for every piece, picked to your sizes and your budget",
+      "A few key outfits put together for you, from everyday to big night out",
+      "The key items to buy, with links, picked to your sizes and your budget",
       "What stays, what goes and your next-buys list, in order",
     ],
     report: {
       card: "Your personal style report | $111 USD",
-      popup: "A personal style report, emailed to you | $111 USD, packed with your colours, your shapes, real outfits and shopping links for every piece. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
-      share: "A personal style report from Betty, with your colours, real outfits and shopping links, built from your astrology and Human Design.",
+      popup: "A personal style report, emailed to you | $111 USD, packed with your colours, your shapes, a few key outfits and the key items to buy. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
+      share: "A personal style report from Betty, with your colours, your shapes and a few key outfits, built from your astrology and Human Design.",
     },
     image: "/baddie-sessions/card-style.jpg", imagePosition: "center 30%",
     cta: "Get your style report", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/14AfZibQHh2n79M2yx7kc0M", stripePriceId: "price_1UZU3qJ6s9fRhiJoxMY0BSl6",
