@@ -3,13 +3,13 @@ import Link from "next/link";
 import { OfferHero, Band, WaitlistBand, HeroArt } from "@/components/Offer";
 
 // The Free Money Workshop: a free live online workshop on Sunday 15 November 2026 (Scorpio SZN).
-// Registration runs through the waitlist (offer "money-workshop", Brevo list 32). The start time isn't
-// set yet, so the page promises it by email rather than printing one.
+// Registration runs through the waitlist (offer "money-workshop", Brevo list 32). It starts at 6pm UK
+// time (18:00 GMT): 1pm New York, 10am LA, 5am Monday in Sydney.
 
 export const metadata: Metadata = {
-  title: "The Free Money Workshop with Betty, Sunday 15 November",
+  title: "The Free Money Workshop with Betty, Sunday 15 November, 6pm UK",
   description:
-    "A free live money workshop with Betty Andrews on Sunday 15 November: what your birth chart says about money, the rules that keep you undercharging and the self-worth shift that changes your bank balance. Save your free spot.",
+    "A free live money workshop with Betty Andrews on Sunday 15 November at 6pm UK / 1pm New York / 10am LA: what your birth chart says about money, the rules that keep you undercharging and the self-worth shift that changes your bank balance. Save your free spot.",
   alternates: { canonical: "/money-workshop" },
   openGraph: {
     title: "The Free Money Workshop 💸 Sunday 15 November",
@@ -43,7 +43,7 @@ const FIT = [
 
 const FAQS = [
   ["Is it really free?", "Totally free, babe. Save your spot with your details and your joining link comes to your inbox."],
-  ["What time is it?", "The exact time, shown in your own time zone, comes by email with your joining link before we go live on Sunday 15 November."],
+  ["What time is it?", "Sunday 15 November at 6pm UK, 1pm New York, 10am LA and 5am Monday in Sydney. Your joining link comes by email before we go live."],
   ["Where does it happen?", "Live online, from wherever you're cosiest. Bring a notebook, a drink you love and your biggest money dreams."],
   ["Why do you ask for my birth details?", "So I can show you where money lives in YOUR chart. They're stored privately and never shown anywhere public."],
   ["I don't know my birth time. Can I still come?", "YES. Tick the box when you sign up and you'll still get everything that comes from your planets and signs."],
@@ -70,6 +70,10 @@ export default function MoneyWorkshopPage() {
               {["💸 100% free", "🪐 your chart + money", "💻 live online", "♏ scorpio szn"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
               ))}
+            </div>
+            <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620, color: "var(--dark)" }}>
+              <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>🗓️ Sunday 15 November</div>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 600 }}>6pm UK · 1pm New York · 10am LA · 5am Monday in Sydney</p>
             </div>
           </>
         }
@@ -128,8 +132,8 @@ export default function MoneyWorkshopPage() {
         accent="free spot. 💸"
         body={
           <>
-            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Sunday 15 November, live online, totally free.</p>
-            <p style={{ margin: "0 0 14px" }}>Pop your details in and your joining link, plus the exact time in your time zone, comes straight to your inbox.</p>
+            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Sunday 15 November, 6pm UK, 1pm New York, 10am LA. Live online and totally free.</p>
+            <p style={{ margin: "0 0 14px" }}>Pop your details in and your joining link comes straight to your inbox before we go live.</p>
             <p style={{ margin: 0, fontFamily: pp, fontWeight: 800, color: "#fff" }}>See you Sunday, rich b*tch. 💜</p>
           </>
         }

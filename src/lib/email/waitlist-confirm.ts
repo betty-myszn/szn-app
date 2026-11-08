@@ -73,12 +73,12 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
     ],
   },
   "money-workshop": {
-    subject: "Your spot is saved for the Free Money Workshop 💸 Sunday 15 November",
+    subject: "Your spot is saved for the Free Money Workshop 💸 Sunday 15 November, 6pm UK",
     heading: "your money glow up starts sunday",
     body: [
       "You just saved your spot for my free money workshop on Sunday 15 November, and I am SOOOO excited to have you there, because the women who show up for their money are the women who end up with LOTS of it.",
       "We're getting into what your birth chart says about how money wants to come to you, the old good-girl rules that keep you undercharging and playing small, and the self-worth shift that changes what lands in your bank account.",
-      "Your joining link and the exact time in your time zone come to this inbox before we go live, so keep an eye out for me.",
+      "We go live on Sunday 15 November at 6pm UK, 1pm New York, 10am LA and 5am Monday in Sydney. Your joining link comes to this inbox before we start, so keep an eye out for me.",
     ],
   },
 };

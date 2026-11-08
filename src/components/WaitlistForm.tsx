@@ -42,7 +42,7 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
   },
   "money-workshop": {
     title: "YESSS, your spot is saved 💸",
-    body: "See you on Sunday 15 November, babe. Your joining link and the exact time in your time zone are on their way to your inbox, so bring a notebook and your biggest money dreams.",
+    body: "See you on Sunday 15 November at 6pm UK, 1pm New York or 10am LA, babe. Your joining link is on its way to your inbox, so bring a notebook and your biggest money dreams.",
   },
 };
 
