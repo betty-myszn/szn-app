@@ -4,6 +4,8 @@ import HoloShape from "@/components/HoloShape";
 import { BBR_REVIEWS, RBR_REVIEWS } from "@/lib/report-reviews";
 import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
 import { BADDIE_STYLE_REPORT } from "@/lib/baddie-sessions";
+import { MICRO_PAGES } from "@/lib/report-micro-pages";
+import ReportMicroPage from "./ReportMicroPage";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -248,11 +250,9 @@ export default function ReportsPage() {
                         {r.cta.label}
                       </Link>
                     )}
-                    {r.more && (
-                      <Link href={r.more} style={{ color: r.ink, fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                        read everything inside →
-                      </Link>
-                    )}
+                    <a href={`#${r.kind}`} className="no-underline" style={{ color: r.ink, border: `2px solid ${r.ink}`, fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "16px 24px", display: "inline-block" }}>
+                      see everything you get →
+                    </a>
                   </div>
                 </div>
                 <div style={{ borderTop: "var(--border)", padding: "32px 30px 30px", background: r.bg === "var(--dark)" ? "var(--pink-light)" : "#fff", color: "var(--dark)" }} className="lg:!border-t-0 lg:border-l-2">
@@ -389,6 +389,26 @@ export default function ReportsPage() {
       </section>
 
       <OfferCards exclude={["bad-btch-report", "rich-btch-rising"]} title="more ways into my szn" />
+
+      {REPORTS.map((r) => (
+        <ReportMicroPage
+          key={r.kind}
+          hash={r.kind}
+          name={r.name}
+          price={r.price}
+          delivery={r.delivery}
+          buyHref={r.cta.href}
+          more={r.more}
+          copy={MICRO_PAGES[r.kind]}
+          reviews={r.kind === "bad-btch-report" ? BBR_REVIEWS : r.kind === "rich-btch-rising" ? RBR_REVIEWS : []}
+          art={
+            r.kind === "style-report"
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={BADDIE_STYLE_REPORT.image} alt="" style={{ width: "100%", maxWidth: 420, aspectRatio: "4 / 5", objectFit: "cover", objectPosition: BADDIE_STYLE_REPORT.imagePosition, border: "var(--border)", borderRadius: 20, display: "block" }} />
+              : <Cover kind={r.kind} width="min(340px, 78vw)" />
+          }
+        />
+      ))}
     </>
   );
 }
