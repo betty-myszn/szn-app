@@ -13,15 +13,15 @@ type Tone = "pink" | "white" | "lav" | "dark" | "pinkLight";
 const BG: Record<Tone, string> = { pink: "var(--pink)", white: "#fff", lav: "var(--lav-light)", dark: "var(--dark)", pinkLight: "var(--pink-light)" };
 
 export function OfferHero({
-  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", ctaButton, extraCta, titleSize = "clamp(42px, 7.5vw, 96px)",
-}: { titleSize?: string; ctaButton?: (style: CSSProperties) => ReactNode; offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
+  offer, kicker, title, accent, intro, tone = "pink", art, ctaHref = "#waitlist", ctaButton, extraCta, titleSize = "clamp(42px, 7.5vw, 96px)", bigArt = false,
+}: { bigArt?: boolean; titleSize?: string; ctaButton?: (style: CSSProperties) => ReactNode; offer: OfferSlug; kicker: string; title: string; accent: string; intro: ReactNode; tone?: "pink" | "dark" | "lav"; art?: ReactNode; ctaHref?: string; extraCta?: ReactNode }) {
   const o = OFFERS[offer];
   const ink = tone === "dark" ? "#fff" : "var(--dark)";
   const accentInk = tone === "pink" ? "#fff" : "var(--pink)";
   const heroCta: CSSProperties = { background: tone === "pink" ? "var(--dark)" : "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block" };
   return (
     <section className="px-5 md:px-8" style={{ background: tone === "dark" ? "var(--dark)" : tone === "lav" ? "var(--lav)" : "var(--pink)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
-      <div className={art ? "max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-12 items-center" : "max-w-4xl mx-auto"}>
+      <div className={art ? (bigArt ? "max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start" : "max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-12 items-center") : "max-w-4xl mx-auto"}>
         <div>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: tone === "pink" ? "#fff" : "var(--pink)", marginBottom: 22 }}>
           {o.emoji} {kicker}
@@ -42,7 +42,7 @@ export function OfferHero({
           {o.price && <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: ink }}>{o.price}</span>}
         </div>
         </div>
-        {art && <div className="flex justify-center">{art}</div>}
+        {art && <div className={bigArt ? "flex justify-center md:pt-11" : "flex justify-center"}>{art}</div>}
       </div>
     </section>
   );

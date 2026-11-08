@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 const DISMISS_KEY = "myszn_pwa_prompt_dismissed";
@@ -40,6 +41,7 @@ export default function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [isIOS, setIsIOS] = useState(false);
   const [show, setShow] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -85,7 +87,8 @@ export default function InstallPrompt() {
     dismiss();
   };
 
-  if (!show) return null;
+  // The coven page has its own join bar in this spot during the launch.
+  if (!show || pathname === "/baddie-coven") return null;
 
   return (
     <div

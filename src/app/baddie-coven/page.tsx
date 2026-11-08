@@ -4,6 +4,8 @@ import { OfferHero, WaitlistBand } from "@/components/Offer";
 import CovenExplorer from "@/components/CovenExplorer";
 import CovenCountdown from "@/components/CovenCountdown";
 import CovenJoinCta from "@/components/CovenJoinCta";
+import CovenOpenSwitch from "@/components/CovenOpenSwitch";
+import CovenStickyBar from "@/components/CovenStickyBar";
 import { MEMBER_QUOTES } from "@/lib/member-quotes";
 import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 
@@ -15,11 +17,11 @@ import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 export const metadata: Metadata = {
   title: "The Bad B*tch Coven, a Magical Membership for Women",
   description:
-    "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Join the waitlist.",
+    "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Opens 9 November for 3 days only, $44 a month founding price.",
   alternates: { canonical: "/baddie-coven" },
   openGraph: {
     title: "The Bad B*tch Coven 🦄",
-    description: "Become more of who you are. Create the life you came here to live. Waitlist open now.",
+    description: "Become more of who you are. Create the life you came here to live. Opens 9 November for 3 days only.",
     url: "/baddie-coven",
     type: "website",
     // A designed share card (her photo + foil "the bad b*tch coven" sticker), so links on Threads,
@@ -44,14 +46,6 @@ const PICS = {
   betty: "/betty-founder.png",
 };
 
-// 02: the shrinking habits she'll recognise herself in.
-const SMALL = [
-  ["🙊", "You've got the idea, the instinct and the vision, buttt you keep waiting for somebody to hand you a permission slip before you let yourself go for it."],
-  ["🫠", "You're the one everybody calls when they need something, which is lovely, except your own dreams have been sitting in the waiting room for YEARS."],
-  ["🔮", "You get a gut hit, ignore it, ask four friends what they think, then watch everything play out exactly how your intuition told you it would. Every. Single. Time."],
-  ["🤐", "You tone yourself down in rooms that should be thrilled to have you, because somewhere along the way you learned that being too much was dangerous."],
-];
-
 // 03: her future self, one trait per card.
 const HER = [
   ["✨", "She trusts her gut the first time, makes the decision and gets on with her day while everyone else is still drafting pros and cons lists."],
@@ -64,11 +58,11 @@ const HER = [
 
 // 04: what the blueprint shows, and which part of the chart or design shows it.
 const BLUEPRINT = [
-  ["your gifts", "Your Sun, Moon, rising and the planets clustered in your chart show the talents you were literally born holding, the stuff that comes sooo easily you've assumed everybody can do it (they can't, babe)."],
-  ["your desires", "Venus shows what you're magnetised to and what you find beautiful, so you stop chasing what you were told to want and start going after what actually lights you up."],
-  ["your patterns", "Saturn, Chiron, Pluto and your open centres in Human Design point straight at where you shrink, overgive or overthink, which turns shadow work into a verrrry precise treasure map."],
-  ["your purpose", "Your North Node and Midheaven show the direction your soul is growing in and the legacy you're here to build, which feels waaaay better than chasing goals off somebody else's vision board."],
-  ["your way of winning", "Your Human Design type and strategy show how you're built to decide and create momentum, so a Generator follows what she responds to, a Projector stops hustling for scraps of recognition and a Manifestor finally just MOVES."],
+  ["your gifts", "Your Sun, Moon and rising show the talents you were literally born holding."],
+  ["your desires", "Venus shows what you actually want, instead of what you were told to want."],
+  ["your patterns", "Saturn, Chiron and your open centres point straight at where you shrink."],
+  ["your purpose", "Your North Node and Midheaven show the direction your soul is growing in."],
+  ["your way of winning", "Your Human Design type shows how you're built to decide and create momentum."],
 ];
 
 // 05: the six pillars, sharpened to what changes in her.
@@ -152,12 +146,22 @@ const QUOTES = ["maya", "georgia", "aisha", "lauren", "priya", "zara"];
 
 // 11: the practical bits. Nothing here promises a price or a date that isn't confirmed.
 const FAQS = [
-  ["How does the Bad B*tch Coven work?", "Every month brings one live coven circle, plus your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and private chat rooms to talk it all through with the rest of the coven. The full membership details go to the waitlist first."],
+  ["How does the Bad B*tch Coven work?", "Every month brings one live coven circle, plus your personalised platform with the astrology of the month, astrotapping™, moon rituals and shadow work prompts, and private chat rooms to talk it all through with the rest of the coven."],
   ["I'm a total beginner. Can I join?", "YESSS. You can be a serious businesswoman who casts spells, an astrologer who loves fashion or somebody who bought her very first tarot deck this week. Curiosity is the only requirement."],
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
-  ["How much will it cost?", "Founding witches pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up, so the waitlist gets first dibs. 💸"],
-  ["When can I join?", "The coven opens on 9 November for three days only, and the waitlist hears first. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 6pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+  ["How much will it cost?", "Founding baddies pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up. 💸"],
+  ["When can I join?", "The coven opens at midnight UK on 9 November for three days only. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 6pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+];
+
+// The offer block: everything in one list, so she never has to piece the membership together.
+const EVERYTHING = [
+  "A LIVE workshop with me every month.",
+  "Your own personalised astrology platform.",
+  "Full + new moon rituals created for YOUR chart.",
+  "Astrotapping™ + shadow work exercises.",
+  "Private chat rooms to find your new besties.",
+  "A whole community of baddies who want you to WINNNNN.",
 ];
 
 const wrap = "max-w-6xl mx-auto";
@@ -229,6 +233,83 @@ function Pic({ src, ratio = "4 / 5", label }: { src: string; ratio?: string; lab
   );
 }
 
+/** The line the whole coven is built around. */
+function MoreLine({ size = "clamp(21px, 2.7vw, 30px)", ink, accent = "var(--pink)" }: { size?: string; ink?: string; accent?: string }) {
+  return (
+    <p style={{ fontFamily: pp, fontSize: size, fontWeight: 800, lineHeight: 1.18, letterSpacing: "-0.02em", color: ink, margin: 0 }}>
+      <span style={{ whiteSpace: "nowrap" }}>MORE $$$$.</span> <span style={{ whiteSpace: "nowrap" }}>MORE FRIENDS.</span> <span style={{ whiteSpace: "nowrap" }}>MORE MAGIC.</span> <span style={{ color: accent, whiteSpace: "nowrap" }}>MORE YOUUUUU.</span>
+    </p>
+  );
+}
+
+/** A join button mid-page, so she never has to scroll to act. */
+function JoinRow({ line }: { line: string }) {
+  return (
+    <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 28 }}>
+      <p style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.3, margin: 0, maxWidth: 640 }}>{line}</p>
+      <CovenJoinCta className="no-underline btn-pink" style={cta} />
+    </div>
+  );
+}
+
+/** The offer: what she gets on the left, the price and the deadline on the right. */
+function OfferBlock() {
+  return (
+    <Section bg="var(--pink)">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        <div>
+          <div className="mb-5"><span className="holo-sticker" style={{ transform: "rotate(-3deg)" }}>12 · founding baddies</span></div>
+          <h2 className="display" style={h2}>everything you get, <span style={{ color: "#fff" }}>babe. 💖</span></h2>
+          <div className="grid gap-3" style={{ marginTop: 26 }}>
+            {EVERYTHING.map((t) => (
+              <div key={t} className="flex items-center gap-3" style={{ background: "#fff", border: "var(--border)", borderRadius: 16, boxShadow: "5px 5px 0 var(--dark)", padding: "13px 16px" }}>
+                <span aria-hidden="true" className="hd-foil" style={{ flexShrink: 0, width: 30, height: 30, borderRadius: 9, border: "var(--border)", color: "var(--dark)", display: "grid", placeItems: "center", fontSize: 15, fontWeight: 800 }}>✓</span>
+                <span style={{ fontSize: 16.5, fontWeight: 700, lineHeight: 1.35, color: "var(--dark)" }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: "#fff", color: "var(--dark)", border: "var(--border)", borderRadius: 26, boxShadow: "10px 12px 0 var(--dark)", padding: "28px 28px 30px" }}>
+          <div style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>💸 founding baddie price</div>
+          <div className="flex items-baseline gap-2" style={{ marginTop: 6 }}>
+            <span style={{ fontFamily: pp, fontSize: "clamp(84px, 11vw, 124px)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.05em" }}>$44</span>
+            <span style={{ fontFamily: pp, fontSize: 28, fontWeight: 800 }}>/month</span>
+          </div>
+          <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, marginTop: 6 }}>locked in for as long as you stay a member</div>
+          <div className="hd-foil" style={{ marginTop: 18, border: "var(--border)", borderRadius: 14, padding: "12px 14px", fontFamily: pp, fontSize: 15.5, fontWeight: 800, color: "var(--dark)" }}>🪄 your 11/11 manifestation workshop is INCLUDED</div>
+          <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.2, margin: "20px 0 4px" }}>
+            <CovenOpenSwitch open={<>OPEN NOW, FOR 3 DAYS ONLY.</>} closed={<>OPENS 9 NOV FOR 3 DAYS ONLY.</>} />
+          </p>
+          <p style={{ fontSize: 15.5, lineHeight: 1.5, fontWeight: 700, margin: 0 }}>⏳ Limited founding spots. Once they&apos;re gone, the price goes UP.</p>
+          <CovenCountdown />
+          <div style={{ marginTop: 18 }}><CovenJoinCta className="no-underline btn-pink" style={{ ...cta, display: "block", textAlign: "center", padding: "20px 14px" }} /></div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/** The last section during the founding window: the same close, but she can actually buy. */
+function JoinBand() {
+  return (
+    <section id="join" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, scrollMarginTop: 80 }}>
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        <div style={{ color: "#fff" }}>
+          <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "#fff", lineHeight: 0.98 }}>your people are<br /><span className="pk">in here. 💖</span></h2>
+          <p style={{ fontSize: 17, lineHeight: 1.75, fontWeight: 600, margin: "22px 0 18px" }}>The girls who celebrate your wins, encourage your wildest dreams, love you exactly as you are and remind you that you deserve a BIG, beautiful, outrageously FUN life.</p>
+          <MoreLine ink="#fff" />
+        </div>
+        <div style={{ background: "#fff", color: "var(--dark)", border: "var(--border)", borderRadius: 24, boxShadow: "8px 10px 0 var(--pink)", padding: "26px 26px 28px" }}>
+          <div style={{ fontFamily: pp, fontSize: "clamp(30px, 4vw, 42px)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.03em" }}>$44 a month, <span className="pk">locked in for as long as you stay.</span></div>
+          <CovenCountdown />
+          <div style={{ marginTop: 18 }}><CovenJoinCta className="no-underline btn-pink" style={{ ...cta, display: "block", textAlign: "center", padding: "20px 14px" }} /></div>
+          <p style={{ fontSize: 15, lineHeight: 1.5, fontWeight: 600, fontStyle: "italic", margin: "16px 0 0" }}>No pointy hat required, although fabulous accessories are very much encouraged.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /** The rest of MY SZN, kept small so it never competes with the waitlist. */
 function MoreMySzn() {
   const links = [
@@ -255,60 +336,54 @@ export default function BaddieCovenPage() {
       {/* 01 · The hero */}
       <OfferHero
         offer="baddie-coven"
+        bigArt
         art={
-          <div style={{ position: "relative" }}>
-            <div className="holo-edge" style={{ width: "min(380px, 82vw)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
+          <div style={{ position: "relative", width: "100%" }}>
+            <div className="holo-edge" style={{ width: "100%", borderRadius: 22, overflow: "hidden", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src="/coven/betty-coven-email-hero-3.jpg" alt="Betty, head bad b*tch, in a pink witch hat with disco planets and stickers" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
-            <span className="holo-sticker" style={{ position: "absolute", top: -12, right: -6, zIndex: 5, transform: "rotate(7deg)", fontSize: 12 }}>🦄 baddies only</span>
             <HoloStar size={58} style={{ bottom: -24, left: -26, transform: "rotate(-10deg)" }} />
             <HoloStar size={28} style={{ top: 70, left: -18 }} />
           </div>
         }
         tone="lav"
-        kicker="founding witches · $44 a month"
+        kicker="founding baddies · $44 a month"
         ctaButton={(style) => <CovenJoinCta style={style} />}
         title="the bad b*tch"
         accent="coven."
         intro={
           <>
-            <p>Bad B*tch Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
-            <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
-              {["🔮 witchcraft", "🪐 astrology", "💸 money magic", "🕯️ monthly coven circle", "🌕 moon rituals"].map((t) => (
+            <MoreLine ink="var(--dark)" />
+            <p style={{ marginTop: 14 }}>Bad B*tch Coven is for women who want to live BIG lives, manifest outrageous things, heal their sh*t, make seriouuuus money, explore their magic and become completely obsessed with their own lives.</p>
+            <div className="hidden md:flex flex-wrap gap-3" style={{ marginTop: 20 }}>
+              {["💸 money magic", "🪩 your new girl gang", "🪐 astrology", "🔮 witchcraft", "👑 radical self-expression"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
               ))}
             </div>
-            {/* The launch: a three-day window, then the first big event. */}
-            <div className="holo-edge" style={{ marginTop: 22, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620 }}>
-              <span className="holo-sticker" style={{ fontSize: 12, marginBottom: 10, transform: "rotate(-2deg)" }}>🪄 11/11 · 6pm UK · our first ever event</span>
-              <div style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ The coven opens 9 November, for 3 days only.</div>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 700 }}>Founding witches get in at <span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay</span>. Founding spots are limited, and the price goes up after that. 💸</p>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.6, fontWeight: 500 }}>Our FIRST EVER event is the <strong>11/11 manifestation workshop</strong>, live at 6pm UK, because of course we&apos;re spending the most magical date of the year manifesting baddies. Dress code: come as your future self, the woman you&apos;re calling in. 🎀</p>
+            {/* The launch in one glance: deadline, price, countdown. The 11/11 detail lives in section 06. */}
+            <div className="holo-edge" style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "14px 18px", maxWidth: 620 }}>
+              <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ <CovenOpenSwitch open={<>The coven is OPEN, for 3 days only.</>} closed={<>The coven opens 9 November, for 3 days only.</>} /></div>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.5, fontWeight: 700 }}><span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay.</span> Founding spots are limited, and the price goes up after that. 💸</p>
               <CovenCountdown />
             </div>
           </>
         }
       />
 
-      {/* 02 · Make her feel understood. */}
-      <Section bg="#fff">
-        <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
+      {/* 02 · The manifesto. */}
+      <Section bg="var(--dark)" ink="#fff">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
-            <Head n="02" tag="sound familiar" title="you've been playing small for" accent="far too f*cking long." />
-            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>You&apos;ve spent enough of your life making yourself smaller, questioning your intuition, hiding your gifts, worrying what people think and putting your biggest dreams on hold while you try to become the woman everyone else expects you to be.</p>
-            <p style={copy}>That shrinking is conditioning you picked up from a world that rewards good girls for staying small, and conditioning can be unlearned, one witchy, chart-informed, deeply satisfying step at a time.</p>
+            <Head n="02" tag="the manifesto" title="good girls get told" accent="to be quiet." />
+            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>To be grateful. To be reasonable. To be pretty, but never too confident. Successful, but never too ambitious.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {SMALL.map(([e, t]) => (
-              <div key={e} className="holo-edge" style={{ ...card, background: "var(--pink-light)" }}>
-                <FoilEmoji e={e} />
-                <p style={{ ...copy, fontSize: 15.5, margin: "10px 0 0" }}>{t}</p>
-              </div>
-            ))}
+          <div>
+            <div className="display" style={{ fontSize: "clamp(70px, 10vw, 128px)", lineHeight: 0.95, color: "var(--pink)", transform: "rotate(-2deg)", textTransform: "uppercase" }}>F*ck that.</div>
+            <p style={{ ...copy, marginTop: 26, fontWeight: 700, fontSize: 18 }}>We want BIG lives, BIG personalities, BIG dreams and the freedom to be exactly who we are.</p>
+            <p style={{ fontFamily: pp, fontSize: 22, fontWeight: 800, margin: 0 }}>Your life belongs to YOU, babe. 🪩</p>
           </div>
         </div>
-        <Statement tone="pink">F*CK THAT. WE&apos;VE GOT BIGGER PLANS FOR YOU. 🔥</Statement>
       </Section>
 
       {/* 03 · Paint her future self. */}
@@ -335,10 +410,7 @@ export default function BaddieCovenPage() {
       {/* 04 · The philosophy: the soul blueprint. */}
       <Section bg="var(--dark)" ink="#fff">
         <Head n="04" tag="the bad b*tch coven philosophy" title="your soul blueprint is the" accent="assignment." />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ marginTop: 24 }}>
-          <p style={{ ...copy, fontSize: 18, fontWeight: 700 }}>We&apos;re bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are.</p>
-          <p style={copy}>We&apos;re talking about understanding your gifts, healing the patterns that keep you playing small, expressing yourself without apology, making your own money, trusting your intuition and creating a life that makes you ridiculously excited to wake up every morning.</p>
-        </div>
+        <p style={{ ...copy, marginTop: 24, fontSize: 18, fontWeight: 700, maxWidth: 820 }}>We&apos;re bringing together astrology, Human Design, manifestation, shadow work, creativity, witchcraft and a fabulous community of women to help you discover your unique soul blueprint and become MORE of who you truly are.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" style={{ marginTop: 26 }}>
           {BLUEPRINT.map(([t, b]) => (
             <div key={t} className="holo-edge" style={{ ...card, overflow: "hidden" }}>
@@ -348,7 +420,6 @@ export default function BaddieCovenPage() {
             </div>
           ))}
         </div>
-        <Statement tone="pink">Every woman in the coven grows from her OWN blueprint, so your chart, your design and your magic decide how you rise, instead of a one-size-fits-all programme telling you who to be.</Statement>
       </Section>
 
       {/* 05 · The six pillars, one tabbed panel. */}
@@ -390,7 +461,8 @@ export default function BaddieCovenPage() {
             </div>
           ))}
         </div>
-        <p style={{ ...copy, fontWeight: 700, margin: "24px 0 0" }}>A little pocket of magic in the middle of your everyday life, with the full calendar going to the waitlist first. 🗓️</p>
+        <p style={{ ...copy, fontWeight: 700, margin: "24px 0 0" }}>A little pocket of magic in the middle of your everyday life. 🗓️</p>
+        <JoinRow line="All of that, every single month, with your new favourite girl gang." />
       </Section>
 
       {/* 07 · Sisterhood gets its own big section. */}
@@ -450,7 +522,7 @@ export default function BaddieCovenPage() {
       {/* 10 · Proof, clearly labelled as coming from MY SZN, not the coven. */}
       <Section bg="#fff">
         <Head n="10" tag="real women, real results" title="the magic is" accent="already happening." />
-        <p style={{ ...copy, marginTop: 20, maxWidth: 760 }}>These are from women inside MY SZN, my membership and coaching programmes. The Bad B*tch Coven hasn&apos;t opened yet, so think of these as a little taste of what happens when women start working with their blueprint.</p>
+        <p style={{ ...copy, marginTop: 20, maxWidth: 760 }}>These are from women inside MY SZN, my membership and coaching programmes, so think of them as a little taste of what happens when women start working with their blueprint.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ marginTop: 24 }}>
           {QUOTES.map((id) => MEMBER_QUOTES[id]).filter(Boolean).map((q) => (
             <figure key={q.name} className="holo-edge" style={{ ...card, margin: 0, display: "flex", flexDirection: "column", background: "var(--pink-light)" }}>
@@ -462,6 +534,7 @@ export default function BaddieCovenPage() {
             </figure>
           ))}
         </div>
+        <JoinRow line="Your wins belong on this page next, babe." />
       </Section>
 
       {/* 11 · The practical questions. */}
@@ -481,24 +554,33 @@ export default function BaddieCovenPage() {
         </div>
       </Section>
 
-      {/* 12 · The invitation. */}
-      <WaitlistBand
-        offer="baddie-coven"
-        title="the coven"
-        accent="is calling. 🦄"
-        body={
-          <>
-            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>You&apos;ve hidden your magic for long enough, my love.</p>
-            <p style={{ margin: "0 0 14px" }}>Your soul blueprint is waiting, your coven is waiting and the woman you&apos;re becoming is SOOOO ready to meet you. Put your name in the book, witch.</p>
-            <p style={{ margin: "0 0 14px", fontStyle: "italic" }}>No pointy hat required, although fabulous accessories are very much encouraged.</p>
-            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>More magic. More money. More creativity. More friendship. More F*CKING FUN.</p>
-            <p style={{ margin: 0 }}>Welcome to your coven. 💜🪩🦄✨</p>
-          </>
+      {/* 12 · The offer, all in one place. */}
+      <OfferBlock />
+
+      {/* 13 · The close: the join button during the founding window, the waitlist the rest of the time. */}
+      <CovenOpenSwitch
+        open={<JoinBand />}
+        closed={
+          <WaitlistBand
+            offer="baddie-coven"
+            title="the coven"
+            accent="is calling. 🦄"
+            body={
+              <>
+                <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>You&apos;ve hidden your magic for long enough, my love.</p>
+                <p style={{ margin: "0 0 14px" }}>Your soul blueprint is waiting, your coven is waiting and the woman you&apos;re becoming is SOOOO ready to meet you. Put your name in the book, witch.</p>
+                <p style={{ margin: "0 0 14px", fontStyle: "italic" }}>No pointy hat required, although fabulous accessories are very much encouraged.</p>
+                <div style={{ margin: "0 0 14px" }}><MoreLine ink="#fff" /></div>
+                <p style={{ margin: 0 }}>Welcome to your coven. 💜🪩🦄✨</p>
+              </>
+            }
+            question="What kind of magic would you love to explore with us?"
+          />
         }
-        question="What kind of magic would you love to explore with us?"
       />
 
       <MoreMySzn />
+      <CovenStickyBar />
     </>
   );
 }
