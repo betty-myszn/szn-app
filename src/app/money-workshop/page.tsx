@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { OfferHero, Band, WaitlistBand, HeroArt } from "@/components/Offer";
 
 // The Free Money Workshop: a free live online workshop on Sunday 15 November 2026 (Scorpio SZN).
@@ -21,12 +22,14 @@ export const metadata: Metadata = {
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// What we cover live. Each card does its own job, so no two read alike.
+// What we cover live (Betty, 8 Nov 2026). Each card does its own job, so no two read alike.
 const COVER = [
-  ["🪐", "Your money in your chart", "Where money is written into YOUR birth chart, the houses and planets that run your income, and the kind of work that pays you best."],
-  ["🫦", "The good-girl money rules", "The inherited rules about being humble, being grateful and never asking for too much, and how they show up every time you send an invoice."],
-  ["💎", "Worth before wealth", "The self-worth shift that decides what you charge, what you accept and what you let yourself receive, worked through live, together."],
-  ["🔮", "Scorpio SZN money magic", "Scorpio season rules power, investments and other people's money, so we use it for a money ritual you can keep doing long after Sunday."],
+  ["💰", "Your 2nd + 8th house axis", "The 2nd house is the money you earn and what you believe you're worth, and the 8th is the money that comes through other people: investments, inheritance, partners and clients. Together they show how money moves in and out of your life."],
+  ["🍀", "Jupiter, your luck planet", "Where Jupiter sits in your chart is where abundance comes easiest for you, so we find the place where saying YES makes you money."],
+  ["🪐", "Saturn, your slow-build wealth", "Saturn shows where money takes patience and structure, and where the long game turns into the kind of wealth that actually stays."],
+  ["🩹", "Chiron, your money wound", "Chiron points at the old hurt around money and worth, the one that makes you undercharge, and how that same wound becomes your gift."],
+  ["🗺️", "Your path to money", "We pull it all together into your own path to money: how it wants to come to you, the work that pays you best and what to focus on next."],
+  ["🖤", "A money shadow work exercise", "Then we go deep with a shadow work exercise built on your chart, so you can see the beliefs blocking your money and start letting them go, live, together."],
 ];
 
 // She should see herself in at least three of these.
@@ -44,7 +47,7 @@ const FAQS = [
   ["Where does it happen?", "Live online, from wherever you're cosiest. Bring a notebook, a drink you love and your biggest money dreams."],
   ["Why do you ask for my birth details?", "So I can show you where money lives in YOUR chart. They're stored privately and never shown anywhere public."],
   ["I don't know my birth time. Can I still come?", "YES. Tick the box when you sign up and you'll still get everything that comes from your planets and signs."],
-  ["Do I need to know astrology?", "Not even a little. Everything is explained in plain English, step by step."],
+  ["Do I need to know astrology?", "Not even a little. Everything is explained in plain English, step by step, and you can grab your free birth chart on MY SZN before Sunday."],
 ];
 
 const card = { border: "2px solid var(--dark)", borderRadius: 18, background: "#fff", padding: "20px 20px 22px", color: "var(--dark)" } as const;
@@ -62,7 +65,7 @@ export default function MoneyWorkshopPage() {
         intro={
           <>
             <p style={{ margin: "0 0 12px" }}>Come and meet the version of you who charges her worth, receives without flinching and watches her bank balance catch up with her dreams.</p>
-            <p style={{ margin: 0, fontWeight: 500 }}>This is my free live money workshop, where we get into what your birth chart says about money, the old rules that keep you undercharging and the self-worth shift that changes what lands in your account.</p>
+            <p style={{ margin: 0, fontWeight: 500 }}>This is my free live money workshop, where we talk about everything you need to know about creating more money in your life with astrology, from your 2nd and 8th houses to Jupiter, Saturn and Chiron, and then do a shadow work exercise based on your own chart.</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
               {["💸 100% free", "🪐 your chart + money", "💻 live online", "♏ scorpio szn"].map((t) => (
                 <span key={t} className="holo-sticker">{t}</span>
@@ -79,7 +82,8 @@ export default function MoneyWorkshopPage() {
       </Band>
 
       <Band tone="lav" wide tag="what we get into" title="sunday is all" accent="money magic.">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginTop: 26 }}>
+        <p>Everything you need to know about creating more money in your life with astrology, read straight from your own birth chart.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 26 }}>
           {COVER.map(([e, t, b]) => (
             <div key={t} className="holo-edge" style={card}>
               <span style={{ fontSize: 28 }}>{e}</span>
@@ -99,6 +103,12 @@ export default function MoneyWorkshopPage() {
             </div>
           ))}
         </div>
+      </Band>
+
+      <Band tone="pinkLight" tag="bring your chart" title="get your birth chart," accent="free.">
+        <p>You&apos;ll get SO much more out of Sunday with your chart in front of you, so you can find your own 2nd house, 8th house, Jupiter, Saturn and Chiron as we go.</p>
+        <p>Pop in your birth date, time and place and your full birth chart is yours in seconds, totally free, right here on MY SZN.</p>
+        <Link href="/chart" className="no-underline" style={{ display: "inline-block", marginTop: 10, background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 34px" }}>get my free birth chart</Link>
       </Band>
 
       <Band wide tag="faqs" title="the little" accent="details.">
