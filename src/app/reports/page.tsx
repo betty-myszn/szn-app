@@ -3,6 +3,7 @@ import Link from "next/link";
 import HoloShape from "@/components/HoloShape";
 import { BBR_REVIEWS, RBR_REVIEWS } from "@/lib/report-reviews";
 import { OfferCards, Cover, Band, ForYouIf } from "@/components/Offer";
+import { BADDIE_STYLE_REPORT } from "@/lib/baddie-sessions";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -60,6 +61,22 @@ const REPORTS = [
     ink: "var(--dark)",
     hot: "#fff",
   },
+  {
+    kind: "style-report" as const,
+    status: "on sale now",
+    name: "the baddie style report",
+    promise: "dress as your BEST self, straight from your astro, babeeee. 👗",
+    body: "Your best self already has a look, babe, and it's written all over your chart. I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, then I go shopping for her and put it ALL in your own style report, with no Zoom call to get camera-ready for.",
+    inside: BADDIE_STYLE_REPORT.focus,
+    extras: ["your colours", "your shapes", "real outfits", "shopping links for every piece"],
+    price: "$111",
+    delivery: "emailed to you once i've got your sizes + budget",
+    cta: { label: "get your style report", href: BADDIE_STYLE_REPORT.bookingUrl!, external: true },
+    more: null,
+    bg: "var(--lav)",
+    ink: "var(--dark)",
+    hot: "var(--dark)",
+  },
 ];
 
 const STEPS = [
@@ -114,7 +131,7 @@ const REVIEW_ROWS = [
 const FAQ = [
   ["If you're new to astrology", "Babe, you don't need to know your rising from your elbow. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than half the astrology accounts on your feed. 😘"],
   ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
-  ["How you get it", "Both reports land in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt."],
+  ["How you get it", "The Bad B*tch Report and Rich B*tch Rising land in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt. For The Baddie Style Report I email you first for your sizes, your budget and your style goals, then I go shopping and send it over. 👗"],
   ["Which one to start with", "If money is the LOUDEST thing in your life right now, start with Rich B*tch Rising. For everything else (confidence, visibility, desire, power and your big, outrageous dream) start with The Bad B*tch Report, which has a whole money chapter of its own anyway, orrr get both and become completely unstoppable. 💸💜"],
   ["Who writes it", "Me, Betty, hiii. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order, with a LOT of love and a candle lit. 🕯️"],
 ] as const;
@@ -208,7 +225,7 @@ export default function ReportsPage() {
       <section id="reports" className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto" style={{ display: "grid", gap: 28 }}>
           {REPORTS.map((r) => (
-            <article key={r.kind} className="holo-edge" style={{ background: r.bg, color: r.ink, border: "var(--border)", borderRadius: 24, overflow: "hidden" }}>
+            <article key={r.kind} id={r.kind} className="holo-edge" style={{ background: r.bg, color: r.ink, border: "var(--border)", borderRadius: 24, overflow: "hidden", scrollMarginTop: 80 }}>
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
                 <div style={{ padding: "36px 30px 34px" }}>
                   <span className="holo-sticker" style={{ fontSize: 12, transform: "rotate(-2deg)" }}>✦ {r.status}</span>
@@ -231,9 +248,11 @@ export default function ReportsPage() {
                         {r.cta.label}
                       </Link>
                     )}
-                    <Link href={r.more} style={{ color: r.ink, fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                      read everything inside →
-                    </Link>
+                    {r.more && (
+                      <Link href={r.more} style={{ color: r.ink, fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                        read everything inside →
+                      </Link>
+                    )}
                   </div>
                 </div>
                 <div style={{ borderTop: "var(--border)", padding: "32px 30px 30px", background: r.bg === "var(--dark)" ? "var(--pink-light)" : "#fff", color: "var(--dark)" }} className="lg:!border-t-0 lg:border-l-2">

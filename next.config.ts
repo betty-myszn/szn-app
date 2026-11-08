@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/membership", destination: "/baddie-coven", permanent: false },
       { source: "/money-blueprint", destination: "/reports/rich-btch-rising", permanent: false },
+      // The Baddie Style Report moved from the 1:1 sessions to the reports hub (8 Nov 2026).
+      { source: "/baddie-sessions/style", destination: "/reports#style-report", permanent: false },
     ];
   },
 };

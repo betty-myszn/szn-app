@@ -1,7 +1,7 @@
-// The Baddie Sessions: Betty's six 1:1 coaching sessions. Everything a visitor sees about price,
+// The Baddie Sessions: Betty's five 1:1 coaching sessions, plus the Baddie Style Report ($111, sold from /reports). Everything a visitor sees about price,
 // length and booking lives here, so changing a price or adding a booking link is a one-line edit.
 //
-// One standard session for all six themes (Style added 5 Nov 2026): 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each session has its own $333 Stripe Payment Link
+// One standard session for all five themes: 90 minutes, $333 USD (raised from $222 by Betty 27 Oct 2026). Each session has its own $333 Stripe Payment Link
 // (created 27 Oct 2026); the price card scrolls to them. Sessions for two share one
 // $555 link (special, normally $666) with a dropdown for the session. The 3-session package is one
 // $888 link (saves $111 on three singles, created 29 Oct 2026); she picks her sessions by email.
@@ -33,7 +33,7 @@ export const SESSION_OPTIONS: SessionOption[] = [
   { name: "The Baddie Session", minutes: 90, minutesForTwo: 120, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
-/** Three sessions, mixed and matched from all six; birth details at checkout like a single. */
+/** Three sessions, mixed and matched from all five; birth details at checkout like a single. */
 export const SESSION_PACKAGE = {
   sessions: 3,
   priceUsd: 888,
@@ -75,7 +75,7 @@ export interface BaddieSession {
   stripePriceId: string | null;
 }
 
-export const BADDIE_SESSIONS: BaddieSession[] = [
+const ALL_OFFERINGS: BaddieSession[] = [
   {
     slug: "reset", number: "01", emoji: "💖", name: "The Bad B*tch Reset",
     tagline: "For when you're ready to burn it all down and start again, hotter. 🔥",
@@ -212,14 +212,23 @@ export const BADDIE_SESSIONS: BaddieSession[] = [
       "What stays, what goes and your next-buys list, in order",
     ],
     report: {
-      card: "Your personal style report | $333 USD",
-      popup: "A personal style report, emailed to you | $333 USD, packed with your colours, your shapes, real outfits and shopping links for every piece. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
+      card: "Your personal style report | $111 USD",
+      popup: "A personal style report, emailed to you | $111 USD, packed with your colours, your shapes, real outfits and shopping links for every piece. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
       share: "A personal style report from Betty, with your colours, real outfits and shopping links, built from your astrology and Human Design.",
     },
     image: "/baddie-sessions/card-style.jpg", imagePosition: "center 30%",
-    cta: "Get your style report", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/9B66oIaMD13p65Iddb7kc0L", stripePriceId: "price_1UYSIlJ6s9fRhiJoKBZWqv0R",
+    cta: "Get your style report", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/14AfZibQHh2n79M2yx7kc0M", stripePriceId: "price_1UZU3qJ6s9fRhiJoxMY0BSl6",
   },
 ];
+
+/** The five 1:1 sessions shown on /baddie-sessions. */
+export const BADDIE_SESSIONS = ALL_OFFERINGS.filter((s) => !s.report);
+
+/** Sold from /reports since 8 Nov 2026. Stays in the list above so the webhook still sends its order email. */
+export const BADDIE_STYLE_REPORT = ALL_OFFERINGS.find((s) => s.slug === "style")!;
+
+/** The old $333 price: anyone mid-checkout on the old link still gets the style report email. */
+const STYLE_REPORT_RETIRED_PRICE_ID = "price_1UYSIlJ6s9fRhiJoKBZWqv0R";
 
 /** The for-two checkout's "which session" dropdown values (Stripe only allows alphanumerics). */
 export const sessionForDropdownValue = (value: string | null | undefined): BaddieSession | null =>
@@ -233,7 +242,8 @@ export const isGiftPrice = (priceId: string | null | undefined) =>
 
 /** The session a paid Stripe price belongs to, or null if it isn't a Baddie Session. */
 export function baddieSessionForPrice(priceId: string | null | undefined): BaddieSession | null {
-  return (priceId && BADDIE_SESSIONS.find((s) => s.stripePriceId === priceId.trim())) || null;
+  if (priceId?.trim() === STYLE_REPORT_RETIRED_PRICE_ID) return BADDIE_STYLE_REPORT;
+  return (priceId && ALL_OFFERINGS.find((s) => s.stripePriceId === priceId.trim())) || null;
 }
 
 /** Where a booking button goes: the real booking link once set, otherwise an email to Betty. */
