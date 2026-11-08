@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EventArt, { EventPoster } from "@/components/EventArt";
 import WorkshopsClient from "./WorkshopsClient";
-import { upcomingEvents, pastEvents, priceLabel, type CosmicEvent } from "@/lib/events";
+import { upcomingEvents, pastEvents, priceLabel, eventHref, type CosmicEvent } from "@/lib/events";
 import { OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Events: Moon Workshops, Manifestation Classes and IRL Magic",
   description:
-    "MY SZN events: Full Moon workshops, manifestation magic, astrology classes and IRL experiences for women who want more from life. Book BAD B*TCHES MOONIFEST now.",
+    "MY SZN events: Full Moon workshops, manifestation magic, astrology classes and IRL experiences for women who want more from life. Save your free spot at The Free Money Workshop.",
   alternates: { canonical: "/events" },
   openGraph: { title: "YOUR NEXT COSMIC OBSESSION 🪩", description: "Workshops, moon rituals, manifestation magic and IRL experiences from MY SZN.", url: "/events", type: "website", images: [OG_IMAGE] },
   twitter: { card: "summary_large_image" },
@@ -19,7 +19,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 const button = { display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" as const };
 
 function EventCard({ event }: { event: CosmicEvent }) {
-  const href = `/events/${event.slug}`;
+  const href = eventHref(event);
   return (
     <article className="offer-card" style={{ background: "#fff", border: "var(--border)", borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <Link href={href} className="no-underline"><EventArt event={event} /></Link>
@@ -68,7 +68,7 @@ export default function EventsPage() {
       {featured && (
         <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 84 }}>
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-12 items-center">
-            <Link href={`/events/${featured.slug}`} className="no-underline flex justify-center" style={{ paddingBottom: 12 }}>
+            <Link href={eventHref(featured)} className="no-underline flex justify-center" style={{ paddingBottom: 12 }}>
               <EventPoster event={featured} priority tilt={3} />
             </Link>
             <div>
@@ -80,7 +80,7 @@ export default function EventsPage() {
               <p style={{ fontSize: 17, lineHeight: 1.75, margin: "12px 0 0", maxWidth: 560 }}>{featured.shortDescription}</p>
               <p style={{ fontWeight: 700, fontSize: 15, margin: "12px 0 0" }}>{featured.format}</p>
               <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 26 }}>
-                <Link href={`/events/${featured.slug}`} className="no-underline" style={{ ...button, fontSize: 15, padding: "20px 36px" }}>{featured.cta}</Link>
+                <Link href={eventHref(featured)} className="no-underline" style={{ ...button, fontSize: 15, padding: "20px 36px" }}>{featured.cta}</Link>
                 <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>{priceLabel(featured)}</span>
               </div>
             </div>

@@ -51,9 +51,9 @@ const freeLinks = [
 
 // The guest menu (13 Oct 2026): WORK WITH ME holds every offer, then the podcast and the book stand
 // alone, then EXPLORE for browsing. The logo is home, so there's no separate home link.
-// Podcast and book now live in the explore menu. The retreat stands alone in the bar (Betty,
-// 26 Oct 2026), between the coven and explore, so it has left the WORK WITH ME menu.
-const guestLinks: { href: string; label: string }[] = [{ href: "/retreat", label: "the retreat 🌴" }];
+// Podcast and book now live in the explore menu. The retreat came off the bar (Betty, 8 Nov 2026);
+// its page still works at /retreat.
+const guestLinks: { href: string; label: string }[] = [];
 
 type MenuItem = { href: string; label: string; indent?: boolean; children?: MenuItem[] };
 

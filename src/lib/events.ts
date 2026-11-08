@@ -46,9 +46,39 @@ export interface CosmicEvent {
   brevoListId?: number;
   joinUrl?: string;
   replayUrl?: string;
+  /** The event's own page when it lives outside /events (e.g. /money-workshop). */
+  href?: string;
 }
 
 export const EVENTS: CosmicEvent[] = [
+  // The free money workshop has its own page and signup at /money-workshop (waitlist offer
+  // "money-workshop"); this entry just lists it on /events. 6pm UK = 18:00 GMT on 15 Nov 2026.
+  {
+    slug: "money-workshop",
+    href: "/money-workshop",
+    title: "The Free Money Workshop",
+    subtitle: "Creating More Money With Astrology",
+    edition: "Scorpio SZN",
+    badge: "Free Live Money Workshop",
+    kind: "class",
+    status: "published",
+    dateLabel: "Sunday 15 November 2026 · 6pm UK",
+    startsAt: "2026-11-15T18:00:00Z",
+    localTimes: [
+      "🇬🇧 UK: Sun 15 Nov, 6pm",
+      "🇺🇸 New York: Sun 15 Nov, 1pm",
+      "🇺🇸 Los Angeles: Sun 15 Nov, 10am",
+      "🇦🇺 Sydney: Mon 16 Nov, 5am",
+    ],
+    price: 0,
+    format: "Live online workshop + money shadow work exercise",
+    image: "/cosmic-money.png",
+    imageAlt: "A roll of pink hundred-dollar bills",
+    shortDescription:
+      "Everything you need to know about creating more money with astrology: your 2nd and 8th houses, Jupiter, Saturn, Chiron and your path to money, then a shadow work exercise built on your own chart.",
+    cta: "SAVE MY FREE SPOT 💸",
+    collectsBirth: true,
+  },
   {
     slug: "bad-bitches-moonifest",
     title: "BAD B*TCHES MOONIFEST",
@@ -56,7 +86,7 @@ export const EVENTS: CosmicEvent[] = [
     edition: "Taurus Full Moon Edition",
     badge: "Live Taurus Full Moon Workshop",
     kind: "full-moon",
-    status: "published",
+    status: "past",
     // The Full Moon is exact at 2°45' Taurus on 26 Oct 2026, 04:11 UTC (Sun 25 Oct 9:11pm PT,
     // 00:11 ET on the 26th), checked against swisseph. The workshop is the evening after, UK time.
     dateLabel: "Monday 26 October 2026 · 6:30pm UK",
@@ -89,4 +119,5 @@ export const EVENTS: CosmicEvent[] = [
 export const getEvent = (slug: string) => EVENTS.find((e) => e.slug === slug && e.status !== "draft");
 export const upcomingEvents = () => EVENTS.filter((e) => e.status === "published");
 export const pastEvents = () => EVENTS.filter((e) => e.status === "past");
+export const eventHref = (e: CosmicEvent) => e.href ?? `/events/${e.slug}`;
 export const priceLabel = (e: CosmicEvent) => (e.price === 0 ? "FREE" : `$${e.price} USD`);

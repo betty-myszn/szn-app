@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { upcomingEvents } from "@/lib/events";
+import { upcomingEvents, eventHref } from "@/lib/events";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -9,7 +9,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 export default function EventPromoBand() {
   const event = upcomingEvents()[0];
   if (!event) return null;
-  const href = `/events/${event.slug}`;
+  const href = eventHref(event);
   const words = event.title.toLowerCase().split(" ");
   return (
     <section className="px-5 md:px-8 overflow-hidden" style={{ background: event.heroBg ?? "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 48 }}>
