@@ -48,9 +48,43 @@ export interface CosmicEvent {
   replayUrl?: string;
   /** The event's own page when it lives outside /events (e.g. /money-workshop). */
   href?: string;
+  /** Replaces the dollar price where the event isn't sold on its own (e.g. "included in the coven"). */
+  priceText?: string;
+  /** CSS object-position for the listing card crop, when the subject isn't centred. */
+  imagePosition?: string;
 }
 
 export const EVENTS: CosmicEvent[] = [
+  // The coven's first ever event, for coven members (joining is on /baddie-coven, $44/month founding
+  // price). 6pm UK = 18:00 GMT on Wed 11 Nov 2026 (moved from 7pm by Betty, 8 Nov).
+  {
+    slug: "coven-11-11",
+    href: "/baddie-coven",
+    title: "The 11/11 Manifestation Workshop",
+    subtitle: "Our First Ever Coven Event",
+    edition: "11/11 Portal",
+    badge: "Live 11/11 Coven Workshop",
+    kind: "coven",
+    status: "published",
+    dateLabel: "Wednesday 11 November 2026 · 6pm UK",
+    startsAt: "2026-11-11T18:00:00Z",
+    localTimes: [
+      "🇬🇧 UK: Wed 11 Nov, 6pm",
+      "🇺🇸 New York: Wed 11 Nov, 1pm",
+      "🇺🇸 Los Angeles: Wed 11 Nov, 10am",
+      "🇦🇺 Sydney: Thu 12 Nov, 5am",
+    ],
+    price: 44,
+    priceText: "Included in the coven",
+    format: "Live online coven workshop · dress code: your future self",
+    image: "/coven/betty-witch-email.jpg",
+    imageAlt: "Betty in a pink witch hat, black corset dress and pink feather gloves",
+    imagePosition: "50% 28%",
+    shortDescription:
+      "The most manifest-y date of the whole year, with candles lit and intentions set. Come dressed as your future self, the woman who already has it all, and we call her in together.",
+    cta: "JOIN THE COVEN 🪄",
+    collectsBirth: false,
+  },
   // The free money workshop has its own page and signup at /money-workshop (waitlist offer
   // "money-workshop"); this entry just lists it on /events. 6pm UK = 18:00 GMT on 15 Nov 2026.
   {
@@ -120,4 +154,4 @@ export const getEvent = (slug: string) => EVENTS.find((e) => e.slug === slug && 
 export const upcomingEvents = () => EVENTS.filter((e) => e.status === "published");
 export const pastEvents = () => EVENTS.filter((e) => e.status === "past");
 export const eventHref = (e: CosmicEvent) => e.href ?? `/events/${e.slug}`;
-export const priceLabel = (e: CosmicEvent) => (e.price === 0 ? "FREE" : `$${e.price} USD`);
+export const priceLabel = (e: CosmicEvent) => e.priceText ?? (e.price === 0 ? "FREE" : `$${e.price} USD`);

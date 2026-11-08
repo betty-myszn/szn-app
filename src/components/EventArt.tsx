@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Image from "next/image";
-import type { CosmicEvent } from "@/lib/events";
+import { priceLabel, type CosmicEvent } from "@/lib/events";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -17,7 +17,7 @@ export default function EventArt({ event, priority = false }: { event: CosmicEve
   return (
     <div style={{ position: "relative", aspectRatio: "854 / 496", overflow: "hidden", background: "var(--lav-light)", borderBottom: "var(--border)" }}>
       {hasImage(event) ? (
-        <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 420px" priority={priority} style={{ objectFit: "cover" }} />
+        <Image src={event.image!} alt={event.imageAlt ?? event.title} fill sizes="(max-width: 768px) 100vw, 420px" priority={priority} style={{ objectFit: "cover", objectPosition: event.imagePosition ?? "50% 50%" }} />
       ) : (
         <Placeholder />
       )}
@@ -50,7 +50,7 @@ export function EventPoster({ event, priority = false, tilt = -3 }: { event: Cos
         <div style={{ fontSize: 12, fontWeight: 600, marginTop: 10, textTransform: "lowercase" }}>{event.subtitle}</div>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginTop: 14, borderTop: "1.5px solid #fff", paddingTop: 10, fontSize: 9, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase" }}>
           <span>{event.edition ?? event.dateLabel}</span>
-          <span>{event.price === 0 ? "free" : `$${event.price} usd`}</span>
+          <span>{priceLabel(event).toLowerCase()}</span>
         </div>
       </div>
     </div>
