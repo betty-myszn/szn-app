@@ -6,7 +6,7 @@
 // Prices are Betty's confirmed numbers only. Nothing here invents dates, locations or availability:
 // every upcoming offer is waitlist-only until she says it's launching.
 
-export type OfferSlug = "mastermind" | "rich-btch-rising" | "bad-btch-report" | "baddie-coven" | "baddie-coven-la" | "retreat" | "book";
+export type OfferSlug = "mastermind" | "rich-btch-rising" | "bad-btch-report" | "baddie-coven" | "baddie-coven-la" | "retreat" | "book" | "money-workshop";
 
 export interface Offer {
   slug: OfferSlug;
@@ -103,6 +103,19 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     brevoEnv: "BREVO_LIST_BOOK",
     brevoList: 27,
     cta: "get the paperback",
+  },
+  // The free live money workshop, Sunday 15 November 2026. A one-off free event, so it stays out of the
+  // OfferCards grid; the waitlist is its registration list (Brevo list 32, created 8 Nov 2026).
+  "money-workshop": {
+    slug: "money-workshop",
+    emoji: "💸",
+    name: "The Free Money Workshop",
+    href: "/money-workshop",
+    line: "a free live money workshop with Betty, Sunday 15 November",
+    price: null,
+    brevoEnv: "BREVO_LIST_MONEY_WORKSHOP",
+    brevoList: 32,
+    cta: "save my free spot",
   },
 };
 

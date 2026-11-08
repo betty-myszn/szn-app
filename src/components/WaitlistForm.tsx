@@ -40,6 +40,10 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     title: "SOOOO happy you're here 📚",
     body: "You're on the list for the MY SZN book. We'll tell you the moment there's a cover to swoon over, a date to circle and a way to get your hands on it.",
   },
+  "money-workshop": {
+    title: "YESSS, your spot is saved 💸",
+    body: "See you on Sunday 15 November, babe. Your joining link and the exact time in your time zone are on their way to your inbox, so bring a notebook and your biggest money dreams.",
+  },
 };
 
 /** An application question. Answers are saved together in the signup's one answer field. */

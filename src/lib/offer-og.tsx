@@ -16,6 +16,7 @@ const PALETTE: Record<OfferSlug | "reports", { bg: string; ink: string; accent: 
   mastermind: { bg: "#1a1a1a", ink: "#ffffff", accent: "#FF2D87", kicker: "90-day mastermind", tagline: "you didn't come here to play small" },
   retreat: { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "in real life", tagline: "all of you, in real life" },
   book: { bg: "#E8DFFE", ink: "#1a1a1a", accent: "#FF2D87", kicker: "out now on amazon", tagline: "becoming her, in print" },
+  "money-workshop": { bg: "#1a1a1a", ink: "#ffffff", accent: "#FF2D87", kicker: "free live workshop, sunday 15 november", tagline: "your money era starts sunday" },
   reports: { bg: "#C8B4F8", ink: "#1a1a1a", accent: "#FF2D87", kicker: "personalised astrology reports", tagline: "your chart, in writing" },
 };
 

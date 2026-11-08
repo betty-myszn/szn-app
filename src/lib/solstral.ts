@@ -31,6 +31,7 @@ export const SOLSTRAL_WAITLIST_LISTS: Record<string, string> = {
   "baddie-coven-la": "LA coven (IRL) waitlist",
   retreat: "🌴 The Bad B*tch Retreat",
   book: "MY SZN Book waitlist",
+  "money-workshop": "💸 Free Money Workshop 15 Nov",
 };
 
 export type SolstralResult = { ok: true; recordId: string } | { ok: false; error: string };

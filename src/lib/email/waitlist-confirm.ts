@@ -72,6 +72,15 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
       "You'll be the first to know the moment there's a cover to swoon over, a date to circle and a way to get your hands on a copy.",
     ],
   },
+  "money-workshop": {
+    subject: "Your spot is saved for the Free Money Workshop 💸 Sunday 15 November",
+    heading: "your money glow up starts sunday",
+    body: [
+      "You just saved your spot for my free money workshop on Sunday 15 November, and I am SOOOO excited to have you there, because the women who show up for their money are the women who end up with LOTS of it.",
+      "We're getting into what your birth chart says about how money wants to come to you, the old good-girl rules that keep you undercharging and playing small, and the self-worth shift that changes what lands in your bank account.",
+      "Your joining link and the exact time in your time zone come to this inbox before we go live, so keep an eye out for me.",
+    ],
+  },
 };
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
