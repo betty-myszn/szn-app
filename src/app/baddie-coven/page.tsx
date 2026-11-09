@@ -126,7 +126,7 @@ const MONTH = [
   ["🫶", "astrotapping™", "We take the theme of each month's astrology and tap it into your body with astrotapping™, so you EMBODY the sky instead of just reading about it."],
   ["🌙", "moon rituals", "Lunar rituals waiting in your platform for every new and full moon, to set intentions, release what you're done carrying and manifest in rhythm with the moon."],
   ["🌑", "shadow work prompts", "Personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion."],
-  ["💬", "coven chat rooms", "Private chat rooms for the coven, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
+  ["💬", "the baddie chat", "Private chat rooms for the coven, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life."],
 ];
 
 // 08: the checklist she recognises herself in.

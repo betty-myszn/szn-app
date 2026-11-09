@@ -95,7 +95,7 @@ describe("membership tier access gates", () => {
       expect(postAuthDestination({ ...active("monthly"), onboarded: false })).toBe("/onboarding");
     });
     it("full access and onboarded -> dashboard", () => {
-      expect(postAuthDestination(active("vip"))).toBe("/dashboard");
+      expect(postAuthDestination(active("vip"))).toBe("/coven");
     });
   });
 });

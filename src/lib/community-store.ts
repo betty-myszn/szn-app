@@ -10,6 +10,7 @@ export interface SpaceMeta {
 }
 
 export const SPACES: SpaceMeta[] = [
+  { id: "coven", label: "the coven", emoji: "🦄", desc: "your witches, your wins, what we're calling in" },
   { id: "general", label: "general chat", emoji: "✦", desc: "the group chat, everything and anything" },
   { id: "wins", label: "wins & celebrations", emoji: "🏆", desc: "brag loudly, we insist" },
   { id: "astrology", label: "astrology", emoji: "☾", desc: "charts, transits and cosmic questions" },
@@ -26,7 +27,7 @@ export const SPACES: SpaceMeta[] = [
 // belong to MY SZN ($88) now that the $33 social tier is retired from sale, though grandfathered
 // social members still reach them via hasAccessFromRow.
 // A single source of truth so the community hub and the individual room page gate identically.
-export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events"]);
+export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events", "coven"]);
 
 export function isRitualSpace(id: string): boolean {
   return RITUAL_SPACE_IDS.has(id);

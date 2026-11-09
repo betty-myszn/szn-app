@@ -223,7 +223,7 @@ export default function Home() {
               ["🫶", "astrotapping™", "Each month's astrology, tapped into your body so you EMBODY it."],
               ["🌙", "moon rituals", "A ritual for every new and full moon, ready and waiting for you."],
               ["🌑", "shadow work prompts", "Personalised prompts for the parts of yourself you've kept hidden."],
-              ["💬", "the chat rooms", "Your new besties, open all month long, hyping your wins."],
+              ["💬", "the baddie chat", "Your new besties, open all month long, hyping your wins."],
             ].map(([emoji, title, body]) => (
               <div key={title} style={{ background: "#fff", border: "var(--border)", padding: "18px 18px 20px", color: "var(--dark)" }}>
                 <div style={{ fontSize: 24, lineHeight: 1 }}>{emoji}</div>

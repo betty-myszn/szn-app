@@ -302,6 +302,15 @@ export default function NavBar() {
         >
           {paidMember && (
             <Link
+              href="/coven"
+              className="no-underline hover:text-[var(--pink)] transition-colors"
+              style={{ color: isActive("/coven") ? "var(--pink)" : "var(--dark)", fontWeight: isActive("/coven") ? 800 : undefined }}
+            >
+              coven
+            </Link>
+          )}
+          {paidMember && (
+            <Link
               href="/dashboard"
               className="no-underline hover:text-[var(--pink)] transition-colors"
               style={{
@@ -377,7 +386,7 @@ export default function NavBar() {
                 fontWeight: isActive("/community") ? 800 : undefined,
               }}
             >
-              chat rooms
+              baddie chat
             </Link>
           )}
           {paidMember && (
@@ -815,6 +824,11 @@ export default function NavBar() {
           }}
         >
           {paidMember && (
+            <Link href="/coven" onClick={() => setOpen(false)} className="no-underline hover:text-[var(--pink)]" style={{ color: isActive("/coven") ? "var(--pink)" : "var(--dark)" }}>
+              coven
+            </Link>
+          )}
+          {paidMember && (
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}
@@ -879,7 +893,7 @@ export default function NavBar() {
               className="no-underline hover:text-[var(--pink)]"
               style={{ color: isActive("/community") ? "var(--pink)" : "var(--dark)" }}
             >
-              chat rooms
+              baddie chat
             </Link>
           )}
           {paidMember && (

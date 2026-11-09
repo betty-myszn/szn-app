@@ -52,8 +52,8 @@ describe("listed rooms", () => {
     }
   });
 
-  it("still knows about all twenty rooms for lookups and moderation", () => {
-    expect(ALL_ROOMS.length).toBe(20);
+  it("still knows about every room for lookups and moderation", () => {
+    expect(ALL_ROOMS.length).toBe(21);
     expect(SIGN_ROOMS.length).toBe(12);
   });
 });

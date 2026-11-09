@@ -1064,6 +1064,10 @@ function Tapping({ ex, index, sign }: { ex: TappingExercise; index: number; sign
 // ── Page ─────────────────────────────────────────────────────────────────────────────────────
 
 function Spells({ spells, sign, house, title }: { spells: Spell[]; sign: string; house: string; title: string }) {
+  // The page renders after its data loads, so the browser can't jump to #spells on its own.
+  useEffect(() => {
+    if (window.location.hash === "#spells") document.getElementById("spells")?.scrollIntoView();
+  }, []);
   return (
     <section id="spells" className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: RULE, paddingTop: 44, paddingBottom: 48, scrollMarginTop: 64 }}>
       <div className="max-w-6xl mx-auto">

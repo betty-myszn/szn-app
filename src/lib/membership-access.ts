@@ -89,10 +89,10 @@ export function isFreeMember(member: Member | null): boolean {
 // can never drift into disagreeing about where a given tier belongs.
 export function memberHomeHref(member: Member | null): string {
   if (!member) return "/";
-  if (member.isAdmin && !member.blocked) return "/dashboard"; // the owner always lands in her portal
+  if (member.isAdmin && !member.blocked) return "/coven"; // the owner always lands in her portal
   if (isFreeMember(member)) return "/home"; // free tier, and expired trials (rooms + chart)
   if (!isMember(member)) return "/community"; // $33 social: the rooms and rituals she paid for
-  return "/dashboard";
+  return "/coven";
 }
 
 // True specifically for the "still has access but Stripe is struggling to charge her" state,

@@ -13,6 +13,7 @@ import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow, isExpired
 // onboarding. The $33 social tier does NOT reach these, it's redirected to upgrade.
 const FULL_PLATFORM = [
   "/dashboard",
+  "/coven",
   "/my-chart",
   "/your-season",
   "/goals",

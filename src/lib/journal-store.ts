@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/client";
 
 const ENTRIES_KEY = "myszn_journal_entries";
 
-export type JournalEntryType = "shadow work" | "reflection" | "free write" | "experiment" | "win";
+export type JournalEntryType = "shadow work" | "reflection" | "free write" | "experiment" | "win" | "manifestation" | "synchronicity";
 
 export interface JournalEntry {
   id: string;
