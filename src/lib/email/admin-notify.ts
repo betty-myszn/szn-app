@@ -223,7 +223,7 @@ export async function sendNewSignupAdminAlert(
     kind: SIGNUP_ALERT_KIND,
     stripe_session_id: idempotencyKey,
     status: anyOk ? "sent" : "failed",
-    provider: "brevo",
+    provider: "solstral",
     provider_message_id: messageId,
     error: anyOk ? null : lastError,
   });
@@ -296,7 +296,7 @@ export async function sendNewMemberAdminAlert(
     kind: ADMIN_ALERT_KIND,
     stripe_session_id: sessionId,
     status: anyOk ? "sent" : "failed",
-    provider: "brevo",
+    provider: "solstral",
     provider_message_id: messageId,
     error: anyOk ? null : lastError,
   });

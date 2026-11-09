@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { isSignupBlocked } from "@/lib/signup-blocklist";
-import { syncTrialMemberToBrevo } from "@/lib/email/brevo-contact";
 import { syncContactToSolstral } from "@/lib/solstral";
 import { sendNewSignupAdminAlert, sendRepeatTrialAlert } from "@/lib/email/admin-notify";
 import { birthFingerprint, claimTrial, hasUsedTrial, isExemptFromTrialGuard } from "@/lib/trial-fingerprint";
@@ -203,14 +202,6 @@ async function retiredCreateTrial(request: NextRequest) {
   // behind, or a real person would be locked out of a trial she never got.
   await claimTrial(admin, fingerprint, created.user.id);
 
-  // File her on the Brevo "free trial my szn" list (id 18) so trial signups are segmented apart from
-  // free and paid contacts. Fire-and-forget on purpose: filing a marketing contact is not worth
-  // making her wait on an external API (2-3 Brevo round-trips) before she gets inside. This runs on
-  // Railway's persistent Node server, so the promise finishes after the response is sent;
-  // syncTrialMemberToBrevo never throws and logs its own failures.
-  void syncTrialMemberToBrevo({ email, name: firstName }).then((r) => {
-    if (!r.ok) console.error("account/create-trial: brevo trial sync failed", r.error);
-  });
   void syncContactToSolstral({ email, name: firstName, list: "trial" }).then((r) => {
     if (!r.ok) console.error("account/create-trial: solstral sync failed", r.error);
   });

@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { checkAndRecordRate, releaseRate, clientIp } from "@/lib/rate-limit";
 import { validatePassword } from "@/lib/password";
 import { isSignupBlocked } from "@/lib/signup-blocklist";
-import { syncFreeMemberToBrevo } from "@/lib/email/brevo-contact";
 import { syncContactToSolstral } from "@/lib/solstral";
 import { sendNewSignupAdminAlert } from "@/lib/email/admin-notify";
 
@@ -147,15 +146,6 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-
-  // File her on the Brevo "my szn free members" list (id 15) now that she's a confirmed free member,
-  // so free joiners can be emailed and segmented apart from paid members and from the free birth
-  // chart list. Only this free-signup path does it; free-chart signups go through /api/subscribe to
-  // their own list and are deliberately left off this one. Awaited because serverless can kill work
-  // that outlives the response, but non-fatal: syncFreeMemberToBrevo never throws, so a Brevo hiccup
-  // can't cost her the account she just created.
-  const brevoResult = await syncFreeMemberToBrevo({ email, name: firstName });
-  if (!brevoResult.ok) console.error("account/create-free: brevo free-member sync failed", brevoResult.error);
 
   // Same contact into the Solstral CRM's free-members list. Fire-and-forget and never throws.
   void syncContactToSolstral({ email, name: firstName, list: "free" }).then((r) => {

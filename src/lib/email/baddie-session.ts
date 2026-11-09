@@ -39,7 +39,7 @@ async function alreadySent(admin: SupabaseAdmin, sessionId: string, kind: string
 async function logSend(admin: SupabaseAdmin, row: { email: string; kind: string; sessionId: string; ok: boolean; messageId: string | null; error: string | null }) {
   const { error } = await admin.from("transactional_emails").insert({
     email: row.email, kind: row.kind, stripe_session_id: row.sessionId, status: row.ok ? "sent" : "failed",
-    provider: "brevo", provider_message_id: row.messageId, error: row.error,
+    provider: "solstral", provider_message_id: row.messageId, error: row.error,
   });
   if (error && error.code !== "23505") console.error("transactional_emails: baddie session log insert failed", error.message);
 }

@@ -24,16 +24,16 @@ export async function GET(request: NextRequest) {
   const offer = p.get("offer");
   const admin = createAdminClient();
 
-  let q = admin.from("waitlist_signups").select("email, name, offer, answer, birth_date, birth_time, birth_place, brevo_ok, created_at").order("created_at", { ascending: false });
+  let q = admin.from("waitlist_signups").select("email, name, offer, answer, birth_date, birth_time, birth_place, created_at").order("created_at", { ascending: false });
   if (isOfferSlug(offer)) q = q.eq("offer", offer);
   const { data, error } = await q.limit(10000);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   const rows = data ?? [];
 
   if (p.get("format") === "csv") {
-    const header = ["email", "name", "offer", "answer", "birth_date", "birth_time", "birth_place", "signed_up", "in_brevo"];
+    const header = ["email", "name", "offer", "answer", "birth_date", "birth_time", "birth_place", "signed_up"];
     const lines = [header.join(",")].concat(
-      rows.map((r) => [r.email, r.name, OFFERS[r.offer as keyof typeof OFFERS]?.name ?? r.offer, r.answer, r.birth_date, r.birth_time, r.birth_place, r.created_at, r.brevo_ok ? "yes" : "no"].map(csvCell).join(","))
+      rows.map((r) => [r.email, r.name, OFFERS[r.offer as keyof typeof OFFERS]?.name ?? r.offer, r.answer, r.birth_date, r.birth_time, r.birth_place, r.created_at].map(csvCell).join(","))
     );
     const file = `myszn-waitlist-${isOfferSlug(offer) ? offer : "all"}-${new Date().toISOString().slice(0, 10)}.csv`;
     return new NextResponse(lines.join("\n"), {

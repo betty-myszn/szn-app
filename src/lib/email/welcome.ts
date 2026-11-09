@@ -72,9 +72,8 @@ function specForPrice(priceId: string | null | undefined): WelcomeSpec | null {
   return { kind, templateId: numericEnv(s.templateEnv) ?? s.fallbackTemplate, planName: s.planName };
 }
 
-// The human-readable plan name for a price, exported so the Brevo contact sync (brevo-contact.ts)
-// files the same PLAN_NAME the welcome email uses for {{ params.plan_name }}. Returns null for an
-// unmapped price so the caller can fall back.
+// The human-readable plan name for a price, the same value the welcome email uses for
+// {{ params.plan_name }}. Returns null for an unmapped price so the caller can fall back.
 export function planNameForPrice(priceId: string | null | undefined): string | null {
   return specForPrice(priceId)?.planName ?? null;
 }
@@ -161,7 +160,7 @@ export async function sendWelcomeEmail(
     kind: spec.kind,
     stripe_session_id: sessionId,
     status: result.ok ? "sent" : "failed",
-    provider: "brevo",
+    provider: "solstral",
     provider_message_id: result.ok ? result.messageId : null,
     error: result.ok ? null : result.error,
   });

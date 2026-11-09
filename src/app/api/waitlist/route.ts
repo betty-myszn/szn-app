@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { checkAndRecordRate, clientIp } from "@/lib/rate-limit";
-import { OFFERS, isOfferSlug, waitlistListId } from "@/lib/offers";
+import { OFFERS, isOfferSlug } from "@/lib/offers";
 import { sendWaitlistConfirmation } from "@/lib/email/waitlist-confirm";
 import { sendBrevoEmail } from "@/lib/email/brevo";
 import { adminRecipients } from "@/lib/email/admin-notify";
@@ -9,22 +9,11 @@ import { SOLSTRAL_WAITLIST_LISTS, syncContactToSolstral } from "@/lib/solstral";
 
 export const runtime = "nodejs";
 
-const BREVO_API = "https://api.brevo.com/v3";
-
-// One endpoint for every offer waitlist. Two writes, in this order:
+// One endpoint for every offer waitlist. Two writes:
 //   1. Supabase waitlist_signups, our own record (unique on email + offer, so a repeat is a no-op)
-//   2. Brevo: the contact is upserted, tagged SIGNUP_SOURCE "waitlist-<offer>", and WAITLIST_INTERESTS
-//      accumulates every offer she's joined, so one contact can be segmented by any of them. Filed on
-//      the offer's own list once Betty sets its id (BREVO_LIST_<OFFER>); until then she's saved + tagged.
+//   2. Solstral: the contact is upserted and filed on the offer's list.
 // Deliberately separate from /api/subscribe: that route's "waitlist" sources fire the old membership
 // n8n workflow, which must never see these.
-
-async function brevo(path: string, opts: RequestInit = {}) {
-  return fetch(`${BREVO_API}${path}`, {
-    ...opts,
-    headers: { "api-key": process.env.BREVO_API_KEY!, "Content-Type": "application/json", ...opts.headers },
-  });
-}
 
 interface Birth { dateOfBirth: string; birthTime: string; birthTimeApproximate: boolean; place: string; location: Record<string, unknown> | null }
 
@@ -40,50 +29,7 @@ function parseBirth(b: unknown): Birth | null {
   return { dateOfBirth, birthTime, birthTimeApproximate: o.birthTimeApproximate === true, place, location: loc };
 }
 
-async function syncToBrevo(email: string, name: string, offer: string, listId: number | null, birth: Birth | null): Promise<boolean> {
-  if (!process.env.BREVO_API_KEY) {
-    console.error("waitlist: BREVO_API_KEY not set", { offer });
-    return false;
-  }
-  try {
-    for (const a of ["SIGNUP_SOURCE", "WAITLIST_INTERESTS", "DATE_OF_BIRTH", "BIRTH_TIME", "PLACE_OF_BIRTH"]) {
-      await brevo(`/contacts/attributes/normal/${a}`, { method: "POST", body: JSON.stringify({ type: "text" }) }).catch(() => null);
-    }
-    let interests: string[] = [];
-    const existing = await brevo(`/contacts/${encodeURIComponent(email)}`);
-    if (existing.ok) {
-      const c = await existing.json().catch(() => ({}));
-      const prev = c?.attributes?.WAITLIST_INTERESTS;
-      if (typeof prev === "string" && prev) interests = prev.split(",").map((s: string) => s.trim()).filter(Boolean);
-    }
-    if (!interests.includes(offer)) interests.push(offer);
-
-    const attributes: Record<string, string> = { SIGNUP_SOURCE: `waitlist-${offer}`, WAITLIST_INTERESTS: interests.join(",") };
-    if (birth) {
-      attributes.DATE_OF_BIRTH = birth.dateOfBirth;
-      if (birth.birthTime) attributes.BIRTH_TIME = birth.birthTimeApproximate ? `${birth.birthTime} (approx)` : birth.birthTime;
-      if (birth.place) attributes.PLACE_OF_BIRTH = birth.place;
-    }
-    if (name) {
-      attributes.FIRSTNAME = name.split(" ")[0];
-      if (name.includes(" ")) attributes.LASTNAME = name.split(" ").slice(1).join(" ");
-    }
-    const res = await brevo("/contacts", {
-      method: "POST",
-      body: JSON.stringify({ email, attributes, ...(listId ? { listIds: [listId] } : {}), updateEnabled: true }),
-    });
-    if (res.ok) return true;
-    const err = await res.json().catch(() => ({}));
-    if (err.code === "duplicate_parameter") return true;
-    console.error("waitlist: Brevo error", res.status, JSON.stringify(err).slice(0, 300), { offer, listId });
-    return false;
-  } catch (e) {
-    console.error("waitlist: Brevo threw", e instanceof Error ? e.message : e);
-    return false;
-  }
-}
-
-// Waitlists Betty gets an email about the moment someone new joins (sent through Brevo).
+// Waitlists Betty gets an email about the moment someone new joins.
 const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "retreat", "mastermind"];
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -124,19 +70,17 @@ export async function POST(request: NextRequest) {
 
   // Duplicate = already on this list. Same happy confirmation, no second row.
   const { data: existing } = await admin.from("waitlist_signups").select("id").eq("email", email).eq("offer", offer).maybeSingle();
-  const brevoOk = await syncToBrevo(email, name, offer, waitlistListId(offer), birth);
   // Same person onto the offer's Solstral list. Fire-and-forget, never throws.
   void syncContactToSolstral({ email, name, list: SOLSTRAL_WAITLIST_LISTS[offer] ?? `${OFFERS[offer].name} waitlist` }).then((r) => {
     if (!r.ok) console.error("waitlist: solstral sync failed", r.error, { offer });
   });
 
   if (existing) {
-    if (brevoOk) await admin.from("waitlist_signups").update({ brevo_ok: true }).eq("id", existing.id);
     return NextResponse.json({ ok: true, already: true });
   }
 
   const { error } = await admin.from("waitlist_signups").insert({
-    email, name: name || null, offer, answer: answer || null, brevo_ok: brevoOk,
+    email, name: name || null, offer, answer: answer || null,
     ...(birth ? {
       birth_date: birth.dateOfBirth, birth_time: birth.birthTime || null,
       birth_time_approximate: birth.birthTimeApproximate, birth_place: birth.place || null, birth_location: birth.location,
@@ -144,8 +88,7 @@ export async function POST(request: NextRequest) {
   });
   if (error && error.code !== "23505") {
     console.error("waitlist: insert failed", error.message, { offer });
-    // Brevo still has her, so she isn't lost; only fail the request if neither write landed.
-    if (!brevoOk) return NextResponse.json({ error: "Something glitched, try again in a sec" }, { status: 500 });
+    return NextResponse.json({ error: "Something glitched, try again in a sec" }, { status: 500 });
   }
   // First signup only (a duplicate returned above, and a 23505 race means another request already
   // sent it). Never blocks the confirmation on screen: a failed send is logged, not surfaced.
@@ -154,6 +97,6 @@ export async function POST(request: NextRequest) {
     if (!sent.ok) console.error("waitlist: confirmation email failed", sent.error, { offer });
     if (ALERT_OFFERS.includes(offer)) await sendSignupAlert(offer, email, name, answer, birth?.place ?? "");
   }
-  console.log("waitlist: signup", { offer: OFFERS[offer].slug, brevoOk });
+  console.log("waitlist: signup", { offer: OFFERS[offer].slug });
   return NextResponse.json({ ok: true, already: error?.code === "23505" });
 }

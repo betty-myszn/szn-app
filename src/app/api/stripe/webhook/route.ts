@@ -2,13 +2,12 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { tierForPriceId, ACCESS_GRANTING_STATUSES, PLAN_PRICE_ID, PLAN_COMMITMENT_FROM } from "@/lib/stripe-tiers";
-import { sendWelcomeEmail, planNameForPrice } from "@/lib/email/welcome";
+import { sendWelcomeEmail } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
-import { syncPaidMemberToBrevo } from "@/lib/email/brevo-contact";
 import { trackOrderInSolstral } from "@/lib/solstral";
 import { logStripeEvent } from "@/lib/stripe/event-log";
 import { EVENTS } from "@/lib/events";
-import { sendEventBookingConfirmation, sendEventBookingAdminAlert, addEventBookerToBrevo } from "@/lib/email/event-booking";
+import { sendEventBookingConfirmation, sendEventBookingAdminAlert } from "@/lib/email/event-booking";
 import { paidReportForPrice, handlePaidReportPurchase } from "@/lib/email/bad-btch-report";
 import { handleBaddieSessionPurchase, handleBaddieGiftPurchase } from "@/lib/email/baddie-session";
 import { baddieSessionForPrice, isForTwoPrice, isGiftPrice, isPackagePrice, sessionForDropdownValue } from "@/lib/baddie-sessions";
@@ -42,42 +41,6 @@ async function trySendAdminAlert(admin: SupabaseAdmin, args: NewMemberAlertArgs)
     await sendNewMemberAdminAlert(admin, args);
   } catch (e) {
     console.error("stripe webhook: admin new-member alert threw (membership unaffected)", e instanceof Error ? e.message : e);
-  }
-}
-
-// Fire-and-forget Brevo CONTACT upsert, called only AFTER the membership has been stored (parked or
-// applied) and before the welcome email. This is the step that explicitly tells Brevo the buyer has
-// paid: it creates/updates their contact by email, sets the paid membership attributes + Stripe
-// subscription status, and files them on the paid-members list. Like trySendWelcome it is decoupled
-// from the 2xx we return, a Brevo problem can never fail the webhook or make Stripe retry a good
-// payment. planName is resolved from the price so it matches the welcome email's plan_name exactly.
-async function trySyncBrevoContact(args: {
-  email: string | null | undefined;
-  name?: string | null;
-  membershipLevel: string;
-  priceId: string | null | undefined;
-  subscriptionStatus: string;
-  stripeCustomerId: string | null | undefined;
-}): Promise<void> {
-  try {
-    if (!args.email) {
-      console.error("stripe webhook: cannot sync Brevo contact, no email on the Stripe object");
-      return;
-    }
-    const planName = planNameForPrice(args.priceId) ?? `${args.membershipLevel} membership`;
-    const result = await syncPaidMemberToBrevo({
-      email: args.email,
-      name: args.name,
-      membershipLevel: args.membershipLevel,
-      planName,
-      subscriptionStatus: args.subscriptionStatus,
-      stripeCustomerId: args.stripeCustomerId,
-    });
-    if (!result.ok) {
-      console.error("stripe webhook: Brevo contact sync failed (membership unaffected)", result.error);
-    }
-  } catch (e) {
-    console.error("stripe webhook: Brevo contact sync threw (membership unaffected)", e instanceof Error ? e.message : e);
   }
 }
 
@@ -157,7 +120,6 @@ async function handleEventBooking(admin: ReturnType<typeof createAdminClient>, s
   const sent = await sendEventBookingConfirmation(ev, to, name);
   if (sent.ok) await admin.from("event_bookings").update({ confirmation_sent_at: new Date().toISOString() }).eq("id", row.id);
   else console.error("event booking confirmation failed", { bookingId: row.id, error: sent.error });
-  await addEventBookerToBrevo(ev, to, name);
   await sendEventBookingAdminAlert(ev, { email: to, name, birthPlace: row.birth_place, hasBirth: !!row.birth_date });
   return true;
 }
@@ -435,16 +397,7 @@ export async function POST(request: Request) {
               .eq("id", profileId);
           }
 
-          // Membership is now stored (parked or applied). Tell Brevo the buyer has paid (contact +
-          // paid attributes + subscription status on the paid list), then send the welcome email.
-          await trySyncBrevoContact({
-            email: session.customer_details?.email,
-            name: session.customer_details?.name,
-            membershipLevel: tier,
-            priceId,
-            subscriptionStatus: subscription.status,
-            stripeCustomerId: customerId,
-          });
+          // Membership is now stored (parked or applied), so send the welcome email.
           await trySendWelcome(admin, {
             sessionId: session.id,
             email: session.customer_details?.email,
@@ -545,17 +498,7 @@ export async function POST(request: Request) {
             console.log("stripe webhook: one-time payment granted membership", { profileId, matchedBy, tier, periodEnd: periodEnd.toISOString() });
           }
 
-          // Membership is now stored (parked or applied). Tell Brevo the buyer has paid, then send
-          // the welcome email. A one-time payment has no subscription object, so the status filed on
-          // the contact is "active", matching the membership facts written above.
-          await trySyncBrevoContact({
-            email: session.customer_details?.email,
-            name: session.customer_details?.name,
-            membershipLevel: tier,
-            priceId,
-            subscriptionStatus: "active",
-            stripeCustomerId: customerId,
-          });
+          // Membership is now stored (parked or applied), so send the welcome email.
           await trySendWelcome(admin, {
             sessionId: session.id,
             email: session.customer_details?.email,

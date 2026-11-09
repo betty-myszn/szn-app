@@ -16,13 +16,12 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
 // Hardcoded like the welcome-email prices so a missing env var can't silently drop an order;
 // env still overrides.
-export interface PaidReport { name: string; emoji: string; priceId: string; listId: number; templateId: number; buyerKind: string; adminKind: string }
+export interface PaidReport { name: string; emoji: string; priceId: string; templateId: number; buyerKind: string; adminKind: string }
 
 const REPORTS: PaidReport[] = [
   {
     name: "Bad B*tch Report", emoji: "💜",
     priceId: process.env.STRIPE_PRICE_BAD_BTCH_REPORT?.trim() || "price_1UTmY8J6s9fRhiJoUy8SWs7w",
-    listId: Number(process.env.BREVO_LIST_BAD_BTCH_REPORT_PAID?.trim() || 30),
     templateId: Number(process.env.BREVO_TEMPLATE_BAD_BTCH_REPORT_PAID?.trim() || 77),
     buyerKind: "bad_btch_report_paid", adminKind: "admin_bad_btch_report_order",
   },
@@ -30,7 +29,6 @@ const REPORTS: PaidReport[] = [
     // Payment Link plink_1UVxdoJ6s9fRhiJo4QetRK8i, Brevo list "💸 Rich B*tch Rising PAID" (29 Oct 2026).
     name: "Rich B*tch Rising", emoji: "💸",
     priceId: process.env.STRIPE_PRICE_RICH_BTCH_RISING?.trim() || "price_1UVxdnJ6s9fRhiJoBJBhLKyo",
-    listId: Number(process.env.BREVO_LIST_RICH_BTCH_RISING_PAID?.trim() || 31),
     templateId: Number(process.env.BREVO_TEMPLATE_RICH_BTCH_RISING_PAID?.trim() || 87),
     buyerKind: "rich_btch_rising_paid", adminKind: "admin_rich_btch_rising_order",
   },
@@ -55,24 +53,9 @@ async function alreadySent(admin: SupabaseAdmin, sessionId: string, kind: string
 async function logSend(admin: SupabaseAdmin, row: { email: string; kind: string; sessionId: string; ok: boolean; messageId: string | null; error: string | null }) {
   const { error } = await admin.from("transactional_emails").insert({
     email: row.email, kind: row.kind, stripe_session_id: row.sessionId, status: row.ok ? "sent" : "failed",
-    provider: "brevo", provider_message_id: row.messageId, error: row.error,
+    provider: "solstral", provider_message_id: row.messageId, error: row.error,
   });
   if (error && error.code !== "23505") console.error("transactional_emails: bad b*tch report log insert failed", error.message);
-}
-
-async function addToPaidList(report: PaidReport, email: string, name: string, birth: Birth): Promise<void> {
-  const key = process.env.BREVO_API_KEY;
-  if (!key) return;
-  const brevo = (path: string, body: unknown) => fetch(`https://api.brevo.com/v3${path}`, {
-    method: "POST", headers: { "api-key": key, "Content-Type": "application/json", accept: "application/json" }, body: JSON.stringify(body),
-  });
-  // Brevo only stores attributes that already exist; 400 = already exists.
-  for (const a of ["BIRTH_DATE", "BIRTH_TIME", "BIRTH_PLACE"]) await brevo(`/contacts/attributes/normal/${a}`, { type: "text" }).catch(() => null);
-  const res = await brevo("/contacts", {
-    email, updateEnabled: true, listIds: [report.listId],
-    attributes: { FIRSTNAME: name.split(/\s+/)[0] ?? "", BIRTH_DATE: birth.date, BIRTH_TIME: birth.time, BIRTH_PLACE: birth.place },
-  });
-  if (!res.ok) console.error(`${report.name}: Brevo contact upsert failed`, res.status, (await res.text().catch(() => "")).slice(0, 200));
 }
 
 export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: Stripe.Checkout.Session, report: PaidReport): Promise<void> {
@@ -82,12 +65,6 @@ export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: St
   if (!email) {
     console.error(`${report.name}: paid with no email on the session`, { sessionId: session.id });
     return;
-  }
-
-  try {
-    await addToPaidList(report, email, name, birth);
-  } catch (e) {
-    console.error(`${report.name}: Brevo list add threw`, e instanceof Error ? e.message : e);
   }
 
   try {

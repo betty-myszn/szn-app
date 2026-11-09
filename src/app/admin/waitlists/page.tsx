@@ -62,7 +62,7 @@ export default function WaitlistsAdminPage() {
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
           <thead>
             <tr style={{ background: "var(--lav-light)", textAlign: "left" }}>
-              {["Signed up", "Name", "Email", "Waitlist", "Answer", "Birth", "In Brevo"].map((h) => <th key={h} style={{ padding: "10px 12px" }}>{h}</th>)}
+              {["Signed up", "Name", "Email", "Waitlist", "Answer", "Birth"].map((h) => <th key={h} style={{ padding: "10px 12px" }}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -74,10 +74,9 @@ export default function WaitlistsAdminPage() {
                 <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{OFFERS[r.offer]?.name ?? r.offer}</td>
                 <td style={{ padding: "10px 12px", maxWidth: 320 }}>{r.answer ?? ""}</td>
                 <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{r.birth_date ? [r.birth_date, r.birth_time, r.birth_place].filter(Boolean).join(" · ") : ""}</td>
-                <td style={{ padding: "10px 12px" }}>{r.brevo_ok ? "yes" : "no"}</td>
               </tr>
             ))}
-            {!shown.length && <tr><td colSpan={7} style={{ padding: 20, textAlign: "center", color: "var(--grey)" }}>Nobody here yet.</td></tr>}
+            {!shown.length && <tr><td colSpan={6} style={{ padding: 20, textAlign: "center", color: "var(--grey)" }}>Nobody here yet.</td></tr>}
           </tbody>
         </table>
       </div>

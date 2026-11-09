@@ -78,7 +78,7 @@ export async function sendTrialEndedEmail(
     kind: TRIAL_ENDED_KIND,
     stripe_session_id: key,
     status: result.ok ? "sent" : "failed",
-    provider: "brevo",
+    provider: "solstral",
     provider_message_id: result.ok ? result.messageId : null,
     error: result.ok ? null : result.error,
   });
