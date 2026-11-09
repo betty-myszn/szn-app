@@ -105,7 +105,7 @@ export default function CovenHomePage() {
   const replays = WORKSHOPS.filter((w) => w.hasReplay).slice(-3).reverse();
 
   const firstName = member?.name?.trim().split(/\s+/)[0] ?? "";
-  const heroArt = (season && HERO_ART[season.sign]) || "/coven/betty-coven-email-hero-3.jpg";
+  const heroArt = (season && HERO_ART[season.sign]) || "/coven/betty-witch-email.jpg";
 
   return (
     <main style={{ background: "#fff", color: "var(--dark)" }}>
@@ -147,7 +147,7 @@ export default function CovenHomePage() {
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/betty-coven-card.jpg" alt="Betty, head bad b*tch, in a pink witch hat with disco planets and stickers" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
+            <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
           </section>
         ) : (
           <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(26px, 4vw, 44px)", background: "var(--pink-light)" }}>

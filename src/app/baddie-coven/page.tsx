@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     type: "website",
     // A designed share card (her photo + foil "the bad b*tch coven" sticker), so links on Threads,
     // Instagram and WhatsApp look like the page instead of plain text.
-    images: [{ url: "/coven/og-baddie-coven-pink.jpg", width: 1200, height: 630, alt: "The Bad B*tch Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price." }],
+    images: [{ url: "/coven/og-my-szn-women.jpg", width: 1200, height: 630, alt: "Your people are in here. For women who want big lives, outrageous manifestations and serious money. $44 founding price." }],
   },
-  twitter: { card: "summary_large_image", images: ["/coven/og-baddie-coven-pink.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/coven/og-my-szn-women.jpg"] },
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -42,7 +42,7 @@ const PICS = {
   money: "/cosmic-money.png",
   witchy: "/eclipse-moon.png",
   shadow: "/libra-moon.png",
-  people: "/waitlist-email-hero.jpg",
+  people: "/coven/baddie-moon-crown.jpg",
   betty: "/betty-founder.png",
 };
 
@@ -341,7 +341,7 @@ export default function BaddieCovenPage() {
           <div style={{ position: "relative", width: "100%" }}>
             <div className="holo-edge" style={{ width: "100%", borderRadius: 22, overflow: "hidden", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/coven/betty-coven-email-hero-3.jpg" alt="Betty, head bad b*tch, in a pink witch hat with disco planets and stickers" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
             <HoloStar size={58} style={{ bottom: -24, left: -26, transform: "rotate(-10deg)" }} />
             <HoloStar size={28} style={{ top: 70, left: -18 }} />

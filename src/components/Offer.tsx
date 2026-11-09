@@ -144,7 +144,7 @@ export function OfferCards({ exclude, title = "the rest of the universe", tone =
 export function Cover({ kind, width = "min(320px, 78vw)" }: { kind: "rich-btch-rising" | "bad-btch-report" | "book"; width?: string }) {
   const c = {
     "rich-btch-rising": { bg: "var(--dark)", ink: "#fff", top: "my szn presents", lines: ["rich", "b*tch", "rising."], hot: 1, sub: "worth · wealth · receiving · purpose", img: null, photo: "/coven/baddie-money-pink.jpg", tilt: -4 },
-    "bad-btch-report": { bg: "var(--pink)", ink: "var(--dark)", top: "my szn presents", lines: ["the bad", "b*tch", "report"], hot: 1, sub: "your personalised astrology blueprint for taking up more space", img: null, photo: "/coven/baddie-pink-email.jpg", tilt: 4 },
+    "bad-btch-report": { bg: "var(--pink)", ink: "var(--dark)", top: "my szn presents", lines: ["the bad", "b*tch", "report"], hot: 1, sub: "your personalised astrology blueprint for taking up more space", img: null, photo: "/coven/baddie-moon-crown.jpg", tilt: 4 },
     book: { bg: "var(--lav)", ink: "var(--dark)", top: "betty · my szn", lines: ["becoming", "her."], hot: 1, sub: "out now in paperback + ebook", img: null, photo: null, tilt: -3 },
   }[kind];
   return (

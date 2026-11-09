@@ -275,13 +275,13 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     related: ["north-node-and-life-purpose", "big-three-sun-moon-rising", "scorpio-season-2026"],
     heroImage: {
-      src: "/coven/baddie-pink-email.jpg",
+      src: "/coven/baddie-moon-crown.jpg",
       alt: "A baddie in a pink puff-sleeve top, hand on hip",
       width: 534,
       height: 574,
     },
     ogImage: {
-      src: "/coven/og-baddie-coven-pink.jpg",
+      src: "/coven/og-my-szn-women.jpg",
       alt: "The Bad B*tch Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price.",
       width: 1200,
       height: 630,
