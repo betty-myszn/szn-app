@@ -30,7 +30,6 @@ import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
 import MoneyMeditationBand from "@/components/MoneyMeditationBand";
-import Coven1111Band from "@/components/Coven1111Band";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
@@ -57,6 +56,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 const HERO_ART: Record<string, string> = {
   Leo: "/leo-lion.png",
   Libra: "/libra-moon-full.png",
+  Scorpio: "/scorpio-hero.jpg",
 };
 
 function heroImageForSign(sign: string): string | null {
@@ -390,8 +390,6 @@ export default function DashboardPage() {
         items={[`it's ${sign} szn, baby`, ...season.tickerLines]}
       />
 
-      <Coven1111Band />
-
       {/* ── HERO: light pastel card, per-season cut-out on the right ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>
         <div className="max-w-6xl mx-auto">
@@ -448,9 +446,9 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
-            <div style={{ position: "relative", minHeight: 300, display: "grid", placeItems: "end center" }}>
+            <div className={heroImg?.endsWith(".jpg") ? "min-h-[122vw] md:min-h-[300px]" : undefined} style={{ position: "relative", minHeight: heroImg?.endsWith(".jpg") ? undefined : 300, display: "grid", placeItems: "end center" }}>
               {heroImg ? (
-                <Image src={heroImg} alt="" aria-hidden fill priority sizes="(min-width: 768px) 500px, 100vw" style={{ objectFit: "contain", objectPosition: "center top" }} />
+                <Image src={heroImg} alt="" aria-hidden fill priority sizes="(min-width: 768px) 500px, 100vw" style={{ objectFit: heroImg.endsWith(".jpg") ? "cover" : "contain", objectPosition: "center top" }} />
               ) : (
                 <div style={{ fontSize: 150, alignSelf: "center", opacity: 0.9 }}>{season.symbol}</div>
               )}

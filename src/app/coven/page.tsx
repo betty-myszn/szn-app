@@ -90,33 +90,45 @@ export default function CovenHomePage() {
           </div>
           <div className="holo-edge" style={{ borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto" }} />
+            <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
           </div>
         </div>
       </section>
 
       {/* Next circle */}
-      <section className="px-5 md:px-8" style={{ background: "var(--pink)", paddingTop: 40, paddingBottom: 44, borderBottom: RULE }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={label}>🕯️ your next circle</div>
-          {circleUpcoming && now !== null ? (
-            <>
-              <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 72px)", lineHeight: 0.98, marginTop: 10 }}>{COVEN_CIRCLE.title}.</h2>
-              <p style={{ fontSize: "clamp(18px, 2vw, 21px)", lineHeight: 1.45, fontWeight: 700, margin: "12px 0 0" }}>{COVEN_CIRCLE.when}. {COVEN_CIRCLE.note}</p>
+      <section className="px-5 md:px-8" style={{ background: "var(--pink)", paddingTop: 36, paddingBottom: 40, borderBottom: RULE }}>
+        {circleUpcoming && now !== null ? (
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] gap-7 items-start">
+            <div>
+              <span style={{ display: "inline-block", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "7px 13px", transform: "rotate(-2deg)" }}>
+                🪄 live this wednesday, 6pm uk
+              </span>
+              <h2 className="display" style={{ fontSize: "clamp(38px, 6vw, 72px)", lineHeight: 0.98, marginTop: 16 }}>{COVEN_CIRCLE.title}.</h2>
+              <p style={{ fontSize: "clamp(17px, 1.8vw, 20px)", lineHeight: 1.5, fontWeight: 700, margin: "14px 0 0" }}>
+                Our FIRST EVER coven event, babe. Come dressed as your future self, bring your most delusional wishlist and we call it ALL in together. 🎀
+              </p>
               {!circleStarted && <Countdown to={COVEN_CIRCLE.startsAt} now={now} />}
-              <div style={{ marginTop: 20 }}>
+              <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 20 }}>
                 <WorkshopJoin
                   workshopId={COVEN_CIRCLE.workshopId}
                   enabled={hasActiveAccess(member)}
                   label="join the circle on zoom"
                   fallback={<p style={{ fontSize: 17, fontWeight: 800, margin: 0 }}>💜 Your join button lands right here before we go live.</p>}
                 />
+                <Link href="/events" className="no-underline" style={blackBtn}>get all the details →</Link>
               </div>
-            </>
-          ) : (
+            </div>
+            <div style={{ border: RULE, overflow: "hidden", aspectRatio: "4 / 3" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 28%" }} />
+            </div>
+          </div>
+        ) : (
+          <div className="max-w-6xl mx-auto">
+            <div style={label}>🕯️ your next circle</div>
             <h2 className="display" style={{ fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1, marginTop: 10 }}>your next date is landing here soon, babe.</h2>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Everything in the membership, one tap away */}
