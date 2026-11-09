@@ -53,7 +53,7 @@ describe("listed rooms", () => {
   });
 
   it("still knows about every room for lookups and moderation", () => {
-    expect(ALL_ROOMS.length).toBe(21);
+    expect(ALL_ROOMS.length).toBe(20);
     expect(SIGN_ROOMS.length).toBe(12);
   });
 });

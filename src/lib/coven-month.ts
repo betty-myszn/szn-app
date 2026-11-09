@@ -22,4 +22,4 @@ export const COVEN_MOONS = [
   { name: "full moon in cancer", type: "full_moon", date: "2026-12-23", sign: "Cancer", degree: 2, when: "wednesday 23 december", at: Date.parse("2026-12-24T01:28:00Z") },
 ];
 
-export const COVEN_ROOM_ID = "coven";
+export const COVEN_ROOM_ID = "general";

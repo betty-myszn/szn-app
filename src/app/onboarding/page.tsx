@@ -417,7 +417,7 @@ export default function OnboardingPage() {
                 </p>
                 <form onSubmit={handleIntroStep} className="flex flex-col gap-5">
                   <div>
-                    <label htmlFor="onboarding-intro" style={labelStyle}>your hello, straight into the general chat</label>
+                    <label htmlFor="onboarding-intro" style={labelStyle}>your hello, straight into the coven</label>
                     <textarea
                       id="onboarding-intro"
                       value={intro}

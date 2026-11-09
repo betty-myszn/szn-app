@@ -10,15 +10,14 @@ export interface SpaceMeta {
 }
 
 export const SPACES: SpaceMeta[] = [
-  { id: "coven", label: "the coven", emoji: "🦄", desc: "your witches, your wins, what we're calling in" },
-  { id: "general", label: "general chat", emoji: "✦", desc: "the group chat, everything and anything" },
-  { id: "wins", label: "wins & celebrations", emoji: "🏆", desc: "brag loudly, we insist" },
-  { id: "astrology", label: "astrology", emoji: "☾", desc: "charts, transits and cosmic questions" },
+  { id: "general", label: "the coven", emoji: "🦄", desc: "your witches, your wins, what we're calling in" },
+  { id: "wins", label: "wins + signs", emoji: "🏆", desc: "brags, things that came true and synchronicities" },
+  { id: "astrology", label: "ask the astrology", emoji: "🪐", desc: "chart questions and what this transit is doing to you" },
   { id: "business", label: "business", emoji: "💼", desc: "launches, offers, visibility and getting paid" },
   { id: "mce", label: "main character energy", emoji: "👑", desc: "confidence, glow-ups and being seen" },
   { id: "bookclub", label: "book club", emoji: "📖", desc: "this szn's featured read, discussed together" },
   { id: "challenges", label: "seasonal challenges", emoji: "🔥", desc: "this szn's missions, done together" },
-  { id: "events", label: "events & workshops", emoji: "🎟️", desc: "live class chat, questions and replays" },
+  { id: "events", label: "circle chat", emoji: "🕯️", desc: "live workshop chat, replays and spell check-ins" },
 ];
 
 // The paid "rituals": the seasonal programming a paid membership buys, as opposed to the open chat
@@ -27,7 +26,7 @@ export const SPACES: SpaceMeta[] = [
 // belong to MY SZN ($88) now that the $33 social tier is retired from sale, though grandfathered
 // social members still reach them via hasAccessFromRow.
 // A single source of truth so the community hub and the individual room page gate identically.
-export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events", "coven"]);
+export const RITUAL_SPACE_IDS = new Set(["bookclub", "challenges", "events"]);
 
 export function isRitualSpace(id: string): boolean {
   return RITUAL_SPACE_IDS.has(id);
