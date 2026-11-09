@@ -37,7 +37,7 @@ export default function CovenCountdown() {
   return (
     <div style={{ marginTop: 14 }}>
       <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)", marginBottom: 8 }}>
-        {open ? "🔓 the coven is OPEN · closes in" : "⏳ the coven opens in"}
+        {open ? "🔓 the club is OPEN · closes in" : "⏳ the club opens in"}
       </div>
       <div className="flex gap-2" role="timer" aria-live="off">
         {parts((open ? CLOSES : OPENS) - now).map((p) => (

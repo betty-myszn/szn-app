@@ -5,7 +5,7 @@ import CovenOpenSwitch from "@/components/CovenOpenSwitch";
 // Where the $44 Coven Stripe checkout sends a buyer the moment they've paid. Its one job is to
 // celebrate them and send them to their inbox, where the welcome email creates their account.
 export const metadata: Metadata = {
-  title: "YOU'RE IN | The Bad B*tch Coven",
+  title: "YOU'RE IN | The Bad B*tch Club",
   robots: { index: false, follow: false },
 };
 
@@ -14,7 +14,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 const CONFETTI = ["💜", "🦄", "✨", "🔮", "💖", "🪄", "⭐", "💜", "✨", "🦄", "💖", "🔮", "✨", "🪄", "💜", "⭐"];
 
 const STEPS = [
-  ["1", "open the email", "It's called YOU'RE IN THE COVEN, WITCH 🦄"],
+  ["1", "open the email", "It's called YOU'RE IN THE CLUB, BABE 🦄"],
   ["2", "create your account", "Tap the button, pop in your name and choose a password."],
   ["3", "add your birth details", "Your whole platform builds itself around YOUR chart."],
 ];
@@ -41,7 +41,7 @@ export default function CovenWelcomePage() {
       <div className="max-w-5xl mx-auto" style={{ position: "relative" }}>
         <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-start">
           <div>
-            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🦄 founding witch: CONFIRMED</span>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🦄 founding member: CONFIRMED</span>
             <h1 className="display" style={{ fontSize: "clamp(48px, 7.5vw, 92px)", lineHeight: 0.95, marginTop: 22 }}>
               oh my godddd, b*tch. yes.{" "}
               <span className="pk">you&apos;re in.</span>

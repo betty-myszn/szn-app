@@ -105,7 +105,7 @@ export default function CovenHomePage() {
   const replays = WORKSHOPS.filter((w) => w.hasReplay).slice(-3).reverse();
 
   const firstName = member?.name?.trim().split(/\s+/)[0] ?? "";
-  const heroArt = (season && HERO_ART[season.sign]) || "/coven/betty-witch-email.jpg";
+  const heroArt = (season && HERO_ART[season.sign]) || "/betty-founder.png";
 
   return (
     <main style={{ background: "#fff", color: "var(--dark)" }}>
@@ -113,9 +113,9 @@ export default function CovenHomePage() {
         {/* Welcome + this month's theme */}
         <section className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr]" style={{ borderRadius: 26, overflow: "hidden", border: "var(--border)", boxShadow: "8px 8px 0 var(--dark)" }}>
           <div className="hd-foil" style={{ padding: "clamp(26px, 4vw, 44px)" }}>
-            <span style={{ display: "inline-block", background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "7px 14px", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", transform: "rotate(-2deg)" }}>🦄 founding witch</span>
+            <span style={{ display: "inline-block", background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "7px 14px", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", transform: "rotate(-2deg)" }}>🦄 founding member</span>
             <h1 className="display" style={{ fontSize: "clamp(46px, 7vw, 88px)", lineHeight: 0.95, marginTop: 18 }}>
-              welcome back, {firstName || "witch"}.
+              welcome back, {firstName || "babe"}.
             </h1>
             <div style={{ ...label, marginTop: 26 }}>✨ the {COVEN_THEME.month} theme{season ? ` · ${season.sign.toLowerCase()} szn` : ""}</div>
             <div className="display" style={{ fontSize: "clamp(32px, 4.4vw, 50px)", lineHeight: 1, marginTop: 8 }}>{COVEN_THEME.title}</div>
@@ -133,7 +133,7 @@ export default function CovenHomePage() {
               <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🪄 live this wednesday, 6pm uk</span>
               <h2 className="display" style={{ fontSize: "clamp(38px, 5.4vw, 66px)", lineHeight: 0.98, marginTop: 16, color: "#fff" }}>{COVEN_CIRCLE.title}.</h2>
               <p style={{ fontSize: "clamp(17px, 1.7vw, 19px)", lineHeight: 1.5, fontWeight: 700, margin: "14px 0 0", color: "#fff" }}>
-                Our FIRST EVER coven event, babe. Come dressed as your future self, bring your most delusional wishlist and we call it ALL in together. 🎀
+                Our FIRST EVER club event, babe. Come dressed as your future self, bring your most delusional wishlist and we call it ALL in together. 🎀
               </p>
               {!circleStarted && <Countdown to={COVEN_CIRCLE.startsAt} now={now} />}
               <div className="flex flex-wrap items-center gap-4" style={{ marginTop: 22 }}>
@@ -147,7 +147,7 @@ export default function CovenHomePage() {
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
+            <img src="/betty-founder.png" alt="Betty in a pink blazer at a cafe table" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
           </section>
         ) : (
           <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(26px, 4vw, 44px)", background: "var(--pink-light)" }}>
@@ -158,8 +158,8 @@ export default function CovenHomePage() {
 
         {/* Everything in the membership, one tap away */}
         <section>
-          <h2 className="display" style={sectionTitle}>everything in <span className="pk">your coven.</span></h2>
-          <nav aria-label="Everything in your coven" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
+          <h2 className="display" style={sectionTitle}>everything in <span className="pk">your club.</span></h2>
+          <nav aria-label="Everything in your club" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
             {HUB_LINKS.map(([emoji, name, href], i) => (
               <Link key={href} href={href} className="no-underline" style={{ ...card, ...TILE_COLOURS[i % TILE_COLOURS.length], border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
                 <span style={{ background: "#fff", width: 62, height: 62, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 30, margin: "0 auto", boxShadow: "3px 3px 0 var(--dark)" }}>{emoji}</span>
@@ -195,8 +195,8 @@ export default function CovenHomePage() {
         {/* Tools */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {[
-            { href: "/coven/calendar", img: "/libra-moon-full.png", title: "the manifestation calendar.", line: "Every big astrology date, with your intention, mini ritual and journal prompt." },
-            { href: "/coven/diary", img: "/astrology-journaling.png", title: "your manifestation diary.", line: "Track your goals, log your weekly moves and keep every sign and win in one place." },
+            { href: "/club/calendar", img: "/libra-moon-full.png", title: "the manifestation calendar.", line: "Every big astrology date, with your intention, mini ritual and journal prompt." },
+            { href: "/club/diary", img: "/astrology-journaling.png", title: "your manifestation diary.", line: "Track your goals, log your weekly moves and keep every sign and win in one place." },
           ].map((t) => (
             <Link key={t.href} href={t.href} className="no-underline holo-edge" style={card}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -210,7 +210,7 @@ export default function CovenHomePage() {
           ))}
           <div className="hd-foil sm:col-span-2 flex flex-wrap items-center gap-4" style={{ borderRadius: 20, padding: "18px 22px", border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }}>
             <span style={{ background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 11px", transform: "rotate(-2deg)" }}>coming soon</span>
-            <span className="display" style={{ fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>witchy bestie matching.</span>
+            <span className="display" style={{ fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>bestie matching.</span>
           </div>
         </section>
 

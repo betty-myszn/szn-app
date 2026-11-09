@@ -353,7 +353,7 @@ export default function DashboardPage() {
   const pad2 = (n: number) => String(n).padStart(2, "0");
 
   const ROOMS = [
-    { lab: "the coven", href: "/community" },
+    { lab: "the club", href: "/community" },
     { lab: `${sign} chat`, href: "/community" },
     { lab: "business + money", href: "/community" },
     { lab: "manifestation", href: "/community" },

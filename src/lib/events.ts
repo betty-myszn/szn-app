@@ -55,15 +55,15 @@ export interface CosmicEvent {
 }
 
 export const EVENTS: CosmicEvent[] = [
-  // The coven's first ever event, for coven members (joining is on /baddie-coven, $44/month founding
+  // The coven's first ever event, for coven members (joining is on /bad-btch-club, $44/month founding
   // price). 6pm UK = 18:00 GMT on Wed 11 Nov 2026 (moved from 7pm by Betty, 8 Nov).
   {
-    slug: "coven-11-11",
-    href: "/baddie-coven",
+    slug: "club-11-11",
+    href: "/bad-btch-club",
     title: "The 11/11 Manifestation Workshop",
-    subtitle: "Our First Ever Coven Event",
+    subtitle: "Our First Ever Club Event",
     edition: "11/11 Portal",
-    badge: "Live 11/11 Coven Workshop",
+    badge: "Live 11/11 Club Workshop",
     kind: "coven",
     status: "published",
     dateLabel: "Wednesday 11 November 2026 · 6pm UK",
@@ -75,14 +75,14 @@ export const EVENTS: CosmicEvent[] = [
       "🇦🇺 Sydney: Thu 12 Nov, 5am",
     ],
     price: 44,
-    priceText: "Included in the coven",
-    format: "Live online coven workshop · dress code: your future self",
+    priceText: "Included in the club",
+    format: "Live online club workshop · dress code: your future self",
     image: "/coven/betty-witch-email.jpg",
     imageAlt: "Betty in a pink witch hat, black corset dress and pink feather gloves",
     imagePosition: "50% 28%",
     shortDescription:
       "The most manifest-y date of the whole year, with candles lit and intentions set. Come dressed as your future self, the woman who already has it all, and we call her in together.",
-    cta: "JOIN THE COVEN 🪄",
+    cta: "JOIN THE CLUB 🪄",
     collectsBirth: false,
   },
   // The free money workshop has its own page and signup at /money-workshop (waitlist offer

@@ -72,7 +72,7 @@ const workMenu: MenuItem[] = [
 
 // The coven has its own menu: online (anywhere) and in person in LA, priced separately.
 const covenMenu: MenuItem[] = [
-  { href: "/baddie-coven", label: "online coven" },
+  { href: "/bad-btch-club", label: "online club" },
   { href: "/baddie-coven/la", label: "LA coven (IRL)" },
 ];
 
@@ -301,11 +301,11 @@ export default function NavBar() {
         >
           {paidMember && (
             <Link
-              href="/coven"
+              href="/club"
               className="no-underline hover:text-[var(--pink)] transition-colors"
-              style={{ color: isActive("/coven") ? "var(--pink)" : "var(--dark)", fontWeight: isActive("/coven") ? 800 : undefined }}
+              style={{ color: isActive("/club") ? "var(--pink)" : "var(--dark)", fontWeight: isActive("/club") ? 800 : undefined }}
             >
-              coven
+              club
             </Link>
           )}
           {paidMember && (
@@ -445,7 +445,7 @@ export default function NavBar() {
             </div>
           )}
           {!member && <GuestMenu label="work with me" items={workMenu} isActive={isActive} />}
-          {!member && <GuestMenu label="the bad b*tch coven" items={covenMenu} isActive={isActive} />}
+          {!member && <GuestMenu label="the bad b*tch club" items={covenMenu} isActive={isActive} />}
           {links.map((link) => (
             <Link
               key={link.href}
@@ -823,8 +823,8 @@ export default function NavBar() {
           }}
         >
           {paidMember && (
-            <Link href="/coven" onClick={() => setOpen(false)} className="no-underline hover:text-[var(--pink)]" style={{ color: isActive("/coven") ? "var(--pink)" : "var(--dark)" }}>
-              coven
+            <Link href="/club" onClick={() => setOpen(false)} className="no-underline hover:text-[var(--pink)]" style={{ color: isActive("/club") ? "var(--pink)" : "var(--dark)" }}>
+              club
             </Link>
           )}
           {paidMember && (
@@ -954,7 +954,7 @@ export default function NavBar() {
                   {item.label}
                 </Link>
               ))}
-              <div style={{ fontWeight: 800, color: covenMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>the bad b*tch coven</div>
+              <div style={{ fontWeight: 800, color: covenMenu.some((w) => isActive(w.href)) ? "var(--pink)" : "var(--dark)" }}>the bad b*tch club</div>
               {covenMenu.map((item) => (
                 <Link
                   key={item.href}

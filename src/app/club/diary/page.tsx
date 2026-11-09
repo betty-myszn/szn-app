@@ -92,7 +92,7 @@ export default function ManifestationDiaryPage() {
   return (
     <main className="px-5 md:px-8" style={{ background: "var(--lav-light)", color: "var(--dark)", paddingTop: 40, paddingBottom: 70 }}>
       <div className="max-w-4xl mx-auto">
-        <Link href="/coven" style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, color: "var(--dark)" }}>← back to the coven</Link>
+        <Link href="/club" style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, color: "var(--dark)" }}>← back to the club</Link>
         <h1 className="display" style={{ fontSize: "clamp(46px, 8vw, 92px)", lineHeight: 0.96, marginTop: 18 }}>
           your manifestation <span className="pk">diary.</span>
         </h1>

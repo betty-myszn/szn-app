@@ -10,7 +10,7 @@ export interface SpaceMeta {
 }
 
 export const SPACES: SpaceMeta[] = [
-  { id: "general", label: "the coven", emoji: "🦄", desc: "your witches, your wins, what we're calling in" },
+  { id: "general", label: "the club", emoji: "🦄", desc: "your people, your wins, what we're calling in" },
   { id: "wins", label: "wins + signs", emoji: "🏆", desc: "brags, things that came true and synchronicities" },
   { id: "astrology", label: "ask the astrology", emoji: "🪐", desc: "chart questions and what this transit is doing to you" },
   { id: "business", label: "business", emoji: "💼", desc: "launches, offers, visibility and getting paid" },

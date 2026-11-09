@@ -184,7 +184,7 @@ export default function ProfilePage() {
           )}
           {!isMe && (
             <div className="mt-8">
-              <Link href="/community/room/general" className="btn-pink">say hi in the coven</Link>
+              <Link href="/community/room/general" className="btn-pink">say hi in the club</Link>
             </div>
           )}
         </div>

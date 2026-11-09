@@ -13,7 +13,7 @@ import { hasRoomAccessFromRow, hasAccessFromRow, hasFullAccessFromRow, isExpired
 // onboarding. The $33 social tier does NOT reach these, it's redirected to upgrade.
 const FULL_PLATFORM = [
   "/dashboard",
-  "/coven",
+  "/club",
   "/my-chart",
   "/your-season",
   "/goals",
@@ -162,7 +162,7 @@ export async function proxy(request: NextRequest) {
   // The chat rooms are paying members only (Betty, 9 Nov 2026). Free accounts and expired trials go
   // to the Coven page to join.
   if (inCommunity) {
-    if (!access) return redirectPreservingSession(request, response, "/baddie-coven");
+    if (!access) return redirectPreservingSession(request, response, "/bad-btch-club");
     return response;
   }
 
