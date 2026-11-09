@@ -30,6 +30,7 @@ import SeasonDesignInline from "@/components/SeasonDesignInline";
 import SkyAlert from "@/components/SkyAlert";
 import SeasonMeditation from "@/components/SeasonMeditation";
 import MoneyMeditationBand from "@/components/MoneyMeditationBand";
+import Coven1111Band from "@/components/Coven1111Band";
 import ReplayHighlight from "@/components/ReplayHighlight";
 import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
@@ -388,6 +389,8 @@ export default function DashboardPage() {
         variant="lav"
         items={[`it's ${sign} szn, baby`, ...season.tickerLines]}
       />
+
+      <Coven1111Band />
 
       {/* ── HERO: light pastel card, per-season cut-out on the right ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--cream)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>

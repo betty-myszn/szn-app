@@ -186,6 +186,28 @@ export const WORKSHOPS: Workshop[] = [
       pink: "Let's make her expensive.",
     },
   },
+  {
+    id: "coven-11-11",
+    season: "Scorpio",
+    label: "our first ever coven event",
+    kind: "masterclass",
+    blurb: "The 11/11 portal, candles lit and intentions set.",
+    meta: "wed 11 november · 6pm uk · dress code: your future self",
+    title: "The 11/11 Manifestation Workshop",
+    dark: false,
+    startIso: "2026-11-11T18:00:00Z",
+    durationMinutes: 90,
+    location: "live on zoom",
+    hasJoinLink: false,
+    hasReplay: false,
+    replayPublishedAt: null,
+    paragraphs: [
+      "The most manifest-y date of the whole year, with candles lit and intentions set.",
+      "Come dressed as your future self, bring your most delusional wishlist and we call it ALL in together. 🪄",
+    ],
+    callout: null,
+    coverImage: "/coven/betty-witch-email.jpg",
+  },
 ];
 
 export type WorkshopStatus = "tbc" | "upcoming" | "live" | "past";
