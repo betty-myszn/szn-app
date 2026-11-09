@@ -41,6 +41,20 @@ const HUB_LINKS = [
   ["🎧", "subliminals", "/subliminals"],
 ];
 
+// Solid brand colours for the hub tiles, so the foil stays special on the cards around them.
+const TILE_COLOURS: CSSProperties[] = [
+  { background: "var(--pink)", color: "var(--dark)" },
+  { background: "var(--lav)", color: "var(--dark)" },
+  { background: "var(--dark)", color: "#fff" },
+  { background: "var(--pink-light)", color: "var(--dark)" },
+  { background: "var(--lav-light)", color: "var(--dark)" },
+  { background: "var(--dark)", color: "#fff" },
+  { background: "var(--pink-light)", color: "var(--dark)" },
+  { background: "var(--pink)", color: "var(--dark)" },
+  { background: "var(--lav)", color: "var(--dark)" },
+  { background: "var(--dark)", color: "#fff" },
+];
+
 function spellArt(name: string): string {
   if (/money/i.test(name)) return "/cosmic-money.png";
   if (/cord/i.test(name)) return "/eclipse-moon.png";
@@ -114,8 +128,8 @@ export default function CovenHomePage() {
 
         {/* Next circle */}
         {circleUpcoming && now !== null ? (
-          <section className="holo-edge bg-glitter grid grid-cols-1 md:grid-cols-2 items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff" }}>
-            <div style={{ padding: "clamp(26px, 4vw, 44px)" }}>
+          <section className="holo-edge bg-glitter grid grid-cols-1 md:grid-cols-2" style={{ borderRadius: 26, overflow: "hidden", color: "#fff" }}>
+            <div style={{ padding: "clamp(26px, 4vw, 44px)", alignSelf: "center" }}>
               <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🪄 live this wednesday, 6pm uk</span>
               <h2 className="display" style={{ fontSize: "clamp(38px, 5.4vw, 66px)", lineHeight: 0.98, marginTop: 16, color: "#fff" }}>{COVEN_CIRCLE.title}.</h2>
               <p style={{ fontSize: "clamp(17px, 1.7vw, 19px)", lineHeight: 1.5, fontWeight: 700, margin: "14px 0 0", color: "#fff" }}>
@@ -133,7 +147,7 @@ export default function CovenHomePage() {
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/betty-coven-email-hero-3.jpg" alt="Betty, head bad b*tch, in a pink witch hat with disco planets and stickers" style={{ display: "block", width: "100%", height: "auto" }} />
+            <img src="/coven/betty-coven-card.jpg" alt="Betty, head bad b*tch, in a pink witch hat with disco planets and stickers" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
           </section>
         ) : (
           <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(26px, 4vw, 44px)", background: "var(--pink-light)" }}>
@@ -146,8 +160,8 @@ export default function CovenHomePage() {
         <section>
           <h2 className="display" style={sectionTitle}>everything in <span className="pk">your coven.</span></h2>
           <nav aria-label="Everything in your coven" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
-            {HUB_LINKS.map(([emoji, name, href]) => (
-              <Link key={href} href={href} className="no-underline hd-foil" style={{ ...card, background: undefined, border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
+            {HUB_LINKS.map(([emoji, name, href], i) => (
+              <Link key={href} href={href} className="no-underline" style={{ ...card, ...TILE_COLOURS[i % TILE_COLOURS.length], border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
                 <span style={{ background: "#fff", width: 62, height: 62, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 30, margin: "0 auto", boxShadow: "3px 3px 0 var(--dark)" }}>{emoji}</span>
                 <span style={{ display: "block", fontFamily: pp, fontSize: 18, fontWeight: 800, lineHeight: 1.1, marginTop: 12 }}>{name}</span>
               </Link>
