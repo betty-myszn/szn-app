@@ -14,6 +14,7 @@ import {
   VENUS_HOUSE,
   VENUS_RECEIVING,
   type SeasonEmbodiment,
+  type Spell,
   type EmbodimentExercise,
   type DialExercise,
   type AuditExercise,
@@ -1062,6 +1063,40 @@ function Tapping({ ex, index, sign }: { ex: TappingExercise; index: number; sign
 
 // ── Page ─────────────────────────────────────────────────────────────────────────────────────
 
+function Spells({ spells, sign, house, title }: { spells: Spell[]; sign: string; house: string; title: string }) {
+  return (
+    <section id="spells" className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: RULE, paddingTop: 44, paddingBottom: 48, scrollMarginTop: 64 }}>
+      <div className="max-w-6xl mx-auto">
+        <h2 className="display" style={{ fontSize: "clamp(40px, 6.5vw, 76px)", lineHeight: 0.98, color: "var(--dark)", margin: 0 }}>
+          your {sign.toLowerCase()} szn spells.
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 18, marginTop: 26, alignItems: "start" }}>
+          {spells.map((spell) => (
+            <article key={spell.id} style={{ background: "#fff", border: RULE, padding: "22px 20px 22px", color: "var(--dark)" }}>
+              <div style={{ fontSize: 32, lineHeight: 1 }}>{spell.emoji}</div>
+              <h3 style={{ fontFamily: poppins, fontSize: 25, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em", margin: "10px 0 0" }}>{spell.name}</h3>
+              <div style={{ fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink)", marginTop: 8 }}>{spell.date}</div>
+              <p style={{ fontSize: 15.5, lineHeight: 1.55, margin: "12px 0 0" }}>{spell.why}</p>
+              <p style={{ fontSize: 15.5, lineHeight: 1.55, fontWeight: 800, margin: "12px 0 0" }}>{spell.personal(house, title)}</p>
+              <div style={{ background: LILAC, padding: "12px 14px", marginTop: 14, fontSize: 15, lineHeight: 1.5 }}>
+                <strong>You need:</strong> {spell.need}
+              </div>
+              <ol style={{ margin: "14px 0 0", paddingLeft: 22, fontSize: 15.5, lineHeight: 1.55, listStyle: "decimal" }}>
+                {spell.steps.map((step) => <li key={step} style={{ marginTop: 8 }}>{step}</li>)}
+              </ol>
+              <div style={{ background: "var(--dark)", color: "#fff", padding: "16px 16px 18px", marginTop: 16 }}>
+                <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>say</div>
+                <p style={{ fontSize: 17, lineHeight: 1.4, fontWeight: 700, margin: "6px 0 0" }}>{spell.say}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p style={{ fontSize: 15.5, fontWeight: 800, color: "var(--dark)", margin: "18px 0 0" }}>🕯️ Never leave a candle burning on its own, babe.</p>
+      </div>
+    </section>
+  );
+}
+
 export default function EmbodyPage() {
   const { member, ready } = useMember();
   const { chart, loading } = useChart();
@@ -1120,6 +1155,7 @@ export default function EmbodyPage() {
   return (
     <>
       <Hero set={set} houseLine={houseLine} />
+      {set.spells && <Spells spells={set.spells} sign={set.sign} house={ordinalHouse(activatedHouse)} title={houseMeaning.title} />}
       <Arrive set={set} />
       {set.exercises.map((ex, i) => {
         switch (ex.kind) {

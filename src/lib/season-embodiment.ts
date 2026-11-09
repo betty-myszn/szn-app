@@ -82,6 +82,19 @@ export type EmbodimentExercise =
   | RetireExercise
   | TappingExercise;
 
+export interface Spell {
+  id: string;
+  emoji: string;
+  name: string;
+  date: string;
+  why: string;
+  need: string;
+  steps: string[];
+  say: string;
+  /** Her one personal line, from the house the season is moving through. */
+  personal: (house: string, title: string) => string;
+}
+
 export interface SeasonEmbodiment {
   sign: string;
   /** Where the set comes from, with the replay to point at. A set written for the szn rather
@@ -99,6 +112,8 @@ export interface SeasonEmbodiment {
     band: string;
   };
   exercises: EmbodimentExercise[];
+  /** Dated spells for the season, shown straight after the hero. */
+  spells?: Spell[];
 }
 
 const LIBRA: SeasonEmbodiment = {
@@ -245,12 +260,65 @@ const LIBRA: SeasonEmbodiment = {
   ],
 };
 
+const SCORPIO_SPELLS: Spell[] = [
+  {
+    id: "money",
+    emoji: "🤑",
+    name: "the money spell",
+    date: "friday 13 november",
+    why: "Friday is Venus's day, the moon is growing and she's in Capricorn, the sign of serious money.",
+    need: "a green or gold candle, a bay leaf, a pen and a coin",
+    steps: [
+      "Write the exact amount you're calling in on the bay leaf. A REAL number, babyyyy, with all the zeros.",
+      "Light the candle, hold the leaf and coin to your chest and say the words three times.",
+      "Burn the leaf in a heatproof dish, or tuck it in your purse. The coin lives in your purse until the Full Moon on 24 November.",
+      "Within 24 hours, make one real money move: send the invoice, raise the price or ask for the raise.",
+    ],
+    say: "Money loves me, money finds me, money stays. I am ready for $[your number]. So it is.",
+    personal: (house, title) => `Scorpio szn is moving through your ${house} house of ${title}, so look there first for the money you've been leaving on the table.`,
+  },
+  {
+    id: "power",
+    emoji: "🔥",
+    name: "the power spell",
+    date: "tuesday 17 november",
+    why: "Tuesday is Mars's day, Mars is Scorpio's original ruler, and today's half moon is all about taking action.",
+    need: "a red or black candle, paper, a pen and a mirror",
+    steps: [
+      "Write down everyone and everything you've handed your power to this year. The ex, the boss, the group chat, the number on the scale, ALL of it.",
+      "Light the candle, stand at the mirror and read each one out loud, saying \"I'm taking it back\" after every name. Look yourself in the eye, babe, even when it's awkward.",
+      "Flip the paper and write three things you'll do now your power is home.",
+      "Put your hand on your belly and say the words. Do one of the three within 24 hours.",
+    ],
+    say: "What I gave away comes home to me. My voice, my body, my money, my magic. All of it is MINE.",
+    personal: (house, title) => `Your ${house} house of ${title} is where this szn wants your power back first, babe.`,
+  },
+  {
+    id: "cord",
+    emoji: "✂️",
+    name: "the cut the cord spell",
+    date: "saturday 21 november",
+    why: "Saturday is Saturn's day, the planet of boundaries. It's the last night of Scorpio szn, and the Aries moon gives you the guts.",
+    need: "a white candle, paper, a pen, black thread and scissors",
+    steps: [
+      "Write the name of the person, habit or old version of you that's DONE.",
+      "Light the candle. Tie one end of the thread around the paper and hold the other end.",
+      "Say everything you've never said, out loud. Swear, cry, go offfff.",
+      "Cut the thread and say the words.",
+      "Put the paper and thread in an outside bin. Before bed, block, delete or cancel whatever needs it.",
+    ],
+    say: "I thank you, I release you, I'm done. What's mine stays with me. What's yours goes with you.",
+    personal: (house, title) => `Anything draining your ${house} house of ${title} goes on that paper first.`,
+  },
+];
+
 // Scorpio's set was written for the szn itself rather than taken from a workshop deck, so it has no
 // source. It reuses the dial, audit, retire and tapping kinds around Bad B*tch SZN: where you hand
 // your power away, where you white-knuckle it, the versions of you that kept you small, and the
 // "too intense" feeling that shows up the second you stop hiding.
 const SCORPIO: SeasonEmbodiment = {
   sign: "Scorpio",
+  spells: SCORPIO_SPELLS,
   ticker: ["scorpio szn", "bad b*tch szn", "your power", "no more hiding", "astrotapping™"],
   title: ["take it back.", "all of it."],
   lede:
