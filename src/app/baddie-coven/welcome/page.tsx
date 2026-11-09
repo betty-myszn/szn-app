@@ -61,7 +61,7 @@ export default function CovenWelcomePage() {
           </div>
           <div className="holo-edge" style={{ borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+            <img src="/coven/baddie-money-saturn.jpg" alt="A baddie in a black jacket with Saturn and gold dollar signs" style={{ display: "block", width: "100%", height: "auto" }} />
           </div>
         </div>
 

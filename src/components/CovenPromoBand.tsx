@@ -45,7 +45,7 @@ export default function CovenPromoBand() {
         <Link href={coven.href} aria-label={coven.name} className="block" style={{ position: "relative", justifySelf: "center" }}>
           <div className="holo-edge" style={{ width: "min(360px, 80vw)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/baddie-pink-email.jpg" alt="A baddie in a pink puff-sleeve top, hand on hip" style={{ display: "block", width: "100%", height: "auto" }} />
+            <img src="/coven/baddie-moon-crown.jpg" alt="A baddie with a gold crown in front of a full moon, with a lion tattoo on her shoulder" style={{ display: "block", width: "100%", height: "auto" }} />
           </div>
           <span className="holo-sticker" style={{ position: "absolute", top: -12, right: -8, zIndex: 5, transform: "rotate(7deg)", fontSize: 12 }}>✨ baddies only</span>
         </Link>

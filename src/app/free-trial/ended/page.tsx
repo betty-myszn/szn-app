@@ -83,7 +83,6 @@ const css = `
 
 // What an expired trial keeps for free, versus what becoming a member unlocks again.
 const STILL_YOURS = [
-  "the chat rooms",
   "your birth chart",
   "your human design chart",
 ];
@@ -131,9 +130,9 @@ export default async function TrialEndedPage() {
           <span className="ey">your free week</span>
           <h1 className="disp">your free week<br />is over.</h1>
           <p className="lead">
-            {"The chat rooms and your chart are still yours to keep. Your personalised platform, the workshops and the meditations are the part that's for members."}
+            {"Your chart is still yours to keep. The baddie chat, your personalised platform, the workshops and the meditations are the part that's for members."}
           </p>
-          <Link href="/community" className="backlink">back to the chat rooms →</Link>
+          <Link href="/home" className="backlink">back to my charts →</Link>
         </div>
       </header>
 

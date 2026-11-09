@@ -82,7 +82,7 @@ const PILLARS = [
     title: "02. Shadow work",
     img: PICS.shadow,
     body: [
-      "We go gently but deeeeply into the beliefs you inherited, the good-girl conditioning and the versions of yourself you've been performing for other people.",
+      "We go gently but deeeeply into the beliefs you inherited, the conditioning women get handed and the versions of yourself you've been performing for other people.",
       "Month by month you stop abandoning yourself to keep the peace, set the boundary, say the true thing and feel MORE like yourself than you have in years.",
       "Expect the occasional extremely satisfying revelation.",
     ],
@@ -375,7 +375,7 @@ export default function BaddieCovenPage() {
       <Section bg="var(--dark)" ink="#fff">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
-            <Head n="02" tag="the manifesto" title="good girls get told" accent="to be quiet." />
+            <Head n="02" tag="the manifesto" title="women get told" accent="to be quiet." />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>To be grateful. To be reasonable. To be pretty, but never too confident. Successful, but never too ambitious.</p>
           </div>
           <div>
