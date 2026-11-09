@@ -56,37 +56,37 @@ export default function FreeHomePage() {
         <div className="tag mb-3">{isExpiredTrial(member) ? "your free week has ended" : "your free account"}</div>
         <h1 style={{ fontFamily: poppins, fontSize: 38, fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.05, marginBottom: 12 }}>
           hey {firstName},<br />
-          <span className="pk">{isExpiredTrial(member) ? "your week is up, the rooms aren't." : "the girls are in the rooms."}</span>
+          <span className="pk">{isExpiredTrial(member) ? "your week is up." : "your charts are waiting."}</span>
         </h1>
         {isExpiredTrial(member) ? (
           <>
             <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 20 }}>
-              Your free week is over, but the chat rooms and your charts are still yours. Your personalised platform, the workshops and the meditations are members-only now. Become a member to get them back and pick up exactly where you left off.
+              Your free week is over, but your charts are still yours. The baddie chat, your personalised platform, the workshops and the meditations are for paying members. Join the coven to get them back and pick up exactly where you left off.
             </p>
-            <Link href="/membership" className="btn-pink no-underline" style={{ display: "inline-block", marginBottom: 32 }}>
-              become a member
+            <Link href="/baddie-coven" className="btn-pink no-underline" style={{ display: "inline-block", marginBottom: 32 }}>
+              join the coven
             </Link>
           </>
         ) : (
           <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 32 }}>
-            This is yours for free, for as long as you want it. The chat rooms are open all day, the blog keeps you across what the sky is doing, and your charts are sitting below whenever you want to read yourself.
+            This is yours for free, for as long as you want it. The blog keeps you across what the sky is doing, and your charts are sitting below whenever you want to read yourself.
           </p>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Link
-            href="/community"
+            href="/baddie-coven"
             className="no-underline p-7 block"
             style={{ border: "var(--border)", background: "var(--pink)", color: "#fff" }}
           >
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 12, opacity: 0.85 }}>
-              open now
+              paying members only
             </div>
             <div style={{ fontFamily: poppins, fontSize: 24, fontWeight: 800, letterSpacing: "-0.8px", marginBottom: 8 }}>
-              the chat rooms
+              the baddie chat
             </div>
             <p style={{ fontSize: 14, lineHeight: 1.6, opacity: 0.92 }}>
-              General, wins, astrology, business and MCE. Go and say hi, someone is always in there.
+              Your coven is in here, babe. Join to get inside.
             </p>
           </Link>
 

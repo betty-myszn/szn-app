@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendMemberNotifications } from "@/lib/notify/send";
 import { findRoom } from "@/lib/community-store";
+import { hasAccessFromRow } from "@/lib/membership-gate";
 import { resolveMentionedUserIds } from "@/lib/notify/mentions";
 import { mentionsAll } from "@/lib/community/mention-tokens";
 
@@ -44,7 +45,13 @@ export async function POST(request: NextRequest) {
   if (!findRoom(spaceId)) return NextResponse.json({ error: "unknown_room" }, { status: 400 });
   if (content.length > 4000) return NextResponse.json({ error: "too_long" }, { status: 400 });
 
-  const { data: me } = await supabase.from("profiles").select("name, is_admin").eq("id", user.id).maybeSingle();
+  const { data: me } = await supabase
+    .from("profiles")
+    .select("name, is_admin, blocked, membership_level, subscription_status, subscription_current_period_end, subscription_cancel_at_period_end, trial_expires_at")
+    .eq("id", user.id)
+    .maybeSingle();
+  // Paying members only, decided here on the server whatever the browser shows.
+  if (!hasAccessFromRow(me)) return NextResponse.json({ error: "members_only" }, { status: 403 });
   const author = ((me?.name as string | null) ?? "").trim() || "babe";
 
   const id = `${Date.now()}-${user.id.slice(0, 8)}`;

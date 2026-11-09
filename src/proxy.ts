@@ -159,9 +159,15 @@ export async function proxy(request: NextRequest) {
   const access = hasAccessFromRow(profile); // any active paid tier, incl. social
   const fullAccess = hasFullAccessFromRow(profile); // monthly or vip only
 
-  // Community rooms: the free front-door tier and every paying member get in. Someone with no
-  // access at all (not even free) hasn't got an account reason to be here, so she goes to pricing.
-  if (inCommunity || inFreeHome) {
+  // The chat rooms are paying members only (Betty, 9 Nov 2026). Free accounts and expired trials go
+  // to the Coven page to join.
+  if (inCommunity) {
+    if (!access) return redirectPreservingSession(request, response, "/baddie-coven");
+    return response;
+  }
+
+  // The free home needs a real free or paid account.
+  if (inFreeHome) {
     if (!roomAccess) return redirectPreservingSession(request, response, "/membership?reason=none");
     return response;
   }
