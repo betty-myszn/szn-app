@@ -9,6 +9,7 @@ import { HOUSE_MEANINGS, ordinalHouse, houseForSign } from "@/lib/interpretation
 import { addJournalEntry } from "@/lib/journal-store";
 import {
   getSeasonEmbodiment,
+  exerciseSpellTag,
   venusElement,
   VENUS_SIGN,
   VENUS_HOUSE,
@@ -136,8 +137,14 @@ function Slide({
 }
 
 function ExerciseHead({ ex, index, dark = false }: { ex: EmbodimentExercise; index: number; dark?: boolean }) {
+  const spellTag = exerciseSpellTag(ex.id);
   return (
     <>
+      {spellTag && (
+        <a href="#spells" className="no-underline" style={{ display: "inline-block", background: "var(--pink)", color: "var(--dark)", fontFamily: poppins, fontSize: 13, fontWeight: 800, padding: "9px 13px", marginBottom: 16 }}>
+          {spellTag} ↑
+        </a>
+      )}
       <div className="flex items-center gap-3 flex-wrap" style={{ marginBottom: 14 }}>
         <span style={eyebrow}>
           {String(index + 1).padStart(2, "0")} · {ex.eyebrow}
@@ -262,6 +269,12 @@ function Hero({ set, houseLine }: { set: SeasonEmbodiment; houseLine: string }) 
                   {set.asks}
                 </div>
               </div>
+              {set.spells && (
+                <a href="#spells" className="no-underline flex items-center gap-4" style={{ padding: "13px 22px", borderBottom: DARK_RULE, background: "var(--pink)", color: "var(--dark)" }}>
+                  <span style={{ fontSize: 18 }}>🔮</span>
+                  <span style={{ ...smallCaps, flex: 1, color: "var(--dark)" }}>your spells + how to do them ↓</span>
+                </a>
+              )}
               {set.exercises.map((ex, i) => (
                 <a
                   key={ex.id}
@@ -340,10 +353,10 @@ function BreatheWithMe() {
 function Arrive({ set }: { set: SeasonEmbodiment }) {
   const a = set.arrive;
   return (
-    <Slide ticker={["before we begin", "arrive", "breathe", "the container"]} band={a.band} bg="var(--pink-bg)">
+    <Slide id="arrive" ticker={[set.spells ? "before every spell" : "before we begin", "arrive", "breathe", "the container"]} band={a.band} bg="var(--pink-bg)">
       <div className="grid md:grid-cols-2 gap-8 md:gap-12">
         <div>
-          <div style={{ ...eyebrow, marginBottom: 14 }}>before we begin</div>
+          <div style={{ ...eyebrow, marginBottom: 14 }}>{set.spells ? "step 1 · before every spell" : "before we begin"}</div>
           <h2 style={headline()}>
             {a.title[0]}
             <br />
@@ -1063,7 +1076,7 @@ function Tapping({ ex, index, sign }: { ex: TappingExercise; index: number; sign
 
 // ── Page ─────────────────────────────────────────────────────────────────────────────────────
 
-function Spells({ spells, sign, house, title }: { spells: Spell[]; sign: string; house: string; title: string }) {
+function Spells({ spells, exercises, sign, house, title }: { spells: Spell[]; exercises: EmbodimentExercise[]; sign: string; house: string; title: string }) {
   // The page renders after its data loads, so the browser can't jump to #spells on its own.
   useEffect(() => {
     if (window.location.hash === "#spells") document.getElementById("spells")?.scrollIntoView();
@@ -1074,6 +1087,18 @@ function Spells({ spells, sign, house, title }: { spells: Spell[]; sign: string;
         <h2 className="display" style={{ fontSize: "clamp(40px, 6.5vw, 76px)", lineHeight: 0.98, color: "var(--dark)", margin: 0 }}>
           your {sign.toLowerCase()} szn spells.
         </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginTop: 20 }}>
+          {[
+            ["1", "breathe", "Three slow breaths, right below the spells."],
+            ["2", "prep", "Do the exercise matched to your spell."],
+            ["3", "cast", "Do the spell on its date, babe."],
+          ].map(([n, step, text]) => (
+            <div key={n} style={{ background: "var(--dark)", color: "#fff", padding: "14px 15px" }}>
+              <div style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800 }}><span style={{ color: "var(--pink)" }}>{n}.</span> {step}</div>
+              <div style={{ fontSize: 14.5, lineHeight: 1.4, marginTop: 4 }}>{text}</div>
+            </div>
+          ))}
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 18, marginTop: 26, alignItems: "start" }}>
           {spells.map((spell) => (
             <article key={spell.id} style={{ background: "#fff", border: RULE, padding: "22px 20px 22px", color: "var(--dark)" }}>
@@ -1084,6 +1109,13 @@ function Spells({ spells, sign, house, title }: { spells: Spell[]; sign: string;
               <p style={{ fontSize: 15.5, lineHeight: 1.55, fontWeight: 800, margin: "12px 0 0" }}>{spell.personal(house, title)}</p>
               <div style={{ background: LILAC, padding: "12px 14px", marginTop: 14, fontSize: 15, lineHeight: 1.5 }}>
                 <strong>You need:</strong> {spell.need}
+              </div>
+              <div style={{ border: RULE, padding: "12px 14px", marginTop: 10 }}>
+                <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>before you cast</div>
+                <a href="#arrive" style={{ display: "block", color: "var(--dark)", fontSize: 15.5, fontWeight: 800, marginTop: 6 }}>1. breathe with me ↓</a>
+                <a href={`#${spell.prep}`} style={{ display: "block", color: "var(--dark)", fontSize: 15.5, fontWeight: 800, marginTop: 4 }}>
+                  2. {exercises.find((e) => e.id === spell.prep)?.label} ({exercises.find((e) => e.id === spell.prep)?.minutes} min) ↓
+                </a>
               </div>
               <ol style={{ margin: "14px 0 0", paddingLeft: 22, fontSize: 15.5, lineHeight: 1.55, listStyle: "decimal" }}>
                 {spell.steps.map((step) => <li key={step} style={{ marginTop: 8 }}>{step}</li>)}
@@ -1159,7 +1191,7 @@ export default function EmbodyPage() {
   return (
     <>
       <Hero set={set} houseLine={houseLine} />
-      {set.spells && <Spells spells={set.spells} sign={set.sign} house={ordinalHouse(activatedHouse)} title={houseMeaning.title} />}
+      {set.spells && <Spells spells={set.spells} exercises={set.exercises} sign={set.sign} house={ordinalHouse(activatedHouse)} title={houseMeaning.title} />}
       <Arrive set={set} />
       {set.exercises.map((ex, i) => {
         switch (ex.kind) {

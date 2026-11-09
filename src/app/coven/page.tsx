@@ -19,16 +19,16 @@ const label: CSSProperties = { fontFamily: pp, fontSize: 13, fontWeight: 800, le
 const blackBtn: CSSProperties = { display: "inline-block", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "16px 24px" };
 
 const HUB_LINKS = [
-  ["🪐", "my szn", "/dashboard"],
-  ["💬", "baddie chat", "/community"],
-  ["⭐", "my chart", "/my-chart"],
-  ["🔆", "human design", "/human-design"],
-  ["🎟️", "workshops", "/events"],
-  ["▶️", "replays", "/events/replays"],
-  ["📓", "journal", "/journal"],
-  ["🎯", "goals", "/goals"],
-  ["🧘‍♀️", "meditations", "/meditations"],
-  ["🎧", "subliminals", "/subliminals"],
+  ["my szn", "/dashboard"],
+  ["baddie chat", "/community"],
+  ["my chart", "/my-chart"],
+  ["human design", "/human-design"],
+  ["workshops", "/events"],
+  ["replays", "/events/replays"],
+  ["journal", "/journal"],
+  ["goals", "/goals"],
+  ["meditations", "/meditations"],
+  ["subliminals", "/subliminals"],
 ];
 
 function Countdown({ to, now }: { to: number; now: number }) {
@@ -120,17 +120,17 @@ export default function CovenHomePage() {
       </section>
 
       {/* Everything in the membership, one tap away */}
-      <section className="px-5 md:px-8" style={{ paddingTop: 44, paddingBottom: 46, borderBottom: RULE, background: "#fff" }}>
+      <section className="px-5 md:px-8" style={{ paddingTop: 52, paddingBottom: 58, borderBottom: RULE, background: "var(--dark)" }}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="display" style={{ fontSize: "clamp(36px, 5.5vw, 64px)", lineHeight: 1 }}>everything in <span className="pk">your coven.</span></h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12, marginTop: 22 }}>
-            {HUB_LINKS.map(([emoji, name, href]) => (
-              <Link key={href} href={href} className="no-underline" style={{ background: "var(--lav-light)", border: RULE, color: "var(--dark)", padding: "16px 14px", display: "block" }}>
-                <div style={{ fontSize: 26, lineHeight: 1 }}>{emoji}</div>
-                <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.15, marginTop: 8 }}>{name}</div>
-              </Link>
+          <div style={{ ...label, color: "var(--pink)" }}>✨ everything in your coven</div>
+          <nav aria-label="Everything in your coven" className="display flex flex-wrap" style={{ fontSize: "clamp(36px, 6.4vw, 78px)", lineHeight: 1.12, marginTop: 16 }}>
+            {HUB_LINKS.map(([name, href], i) => (
+              <span key={href} style={{ whiteSpace: "nowrap" }}>
+                <Link href={href} className="no-underline hover:text-[var(--pink)] transition-colors" style={{ color: "#fff" }}>{name}</Link>
+                {i < HUB_LINKS.length - 1 && <span aria-hidden="true" style={{ color: "var(--pink)", margin: "0 0.22em" }}>✦</span>}
+              </span>
             ))}
-          </div>
+          </nav>
         </div>
       </section>
 

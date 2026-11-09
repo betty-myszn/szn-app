@@ -91,6 +91,8 @@ export interface Spell {
   need: string;
   steps: string[];
   say: string;
+  /** The exercise on this page that prepares her for this spell. */
+  prep: string;
   /** Her one personal line, from the house the season is moving through. */
   personal: (house: string, title: string) => string;
 }
@@ -263,6 +265,7 @@ const LIBRA: SeasonEmbodiment = {
 const SCORPIO_SPELLS: Spell[] = [
   {
     id: "money",
+    prep: "grip-or-give",
     emoji: "🤑",
     name: "the money spell",
     date: "friday 13 november",
@@ -279,6 +282,7 @@ const SCORPIO_SPELLS: Spell[] = [
   },
   {
     id: "power",
+    prep: "power-audit",
     emoji: "🔥",
     name: "the power spell",
     date: "tuesday 17 november",
@@ -295,6 +299,7 @@ const SCORPIO_SPELLS: Spell[] = [
   },
   {
     id: "cord",
+    prep: "retire-the-nice-girl",
     emoji: "✂️",
     name: "the cut the cord spell",
     date: "saturday 21 november",
@@ -311,6 +316,13 @@ const SCORPIO_SPELLS: Spell[] = [
     personal: (house, title) => `Anything draining your ${house} house of ${title} goes on that paper first.`,
   },
 ];
+
+/** The sticker on an exercise that says which spell it belongs to. */
+export function exerciseSpellTag(exerciseId: string): string | null {
+  if (exerciseId === "tap-out-too-intense") return "🪄 tap this in after any spell";
+  const spell = SCORPIO_SPELLS.find((s) => s.prep === exerciseId);
+  return spell ? `${spell.emoji} prep for ${spell.name} · ${spell.date}` : null;
+}
 
 // Scorpio's set was written for the szn itself rather than taken from a workshop deck, so it has no
 // source. It reuses the dial, audit, retire and tapping kinds around Bad B*tch SZN: where you hand
