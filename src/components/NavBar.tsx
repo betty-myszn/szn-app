@@ -725,6 +725,21 @@ export default function NavBar() {
           ) : (
             <>
               <Link
+                href="/login"
+                className="no-underline"
+                style={{
+                  color: "var(--dark)",
+                  fontSize: 10,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "8px 4px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                log in
+              </Link>
+              <Link
                 href="/chart"
                 className="no-underline hidden md:block"
                 style={{
@@ -1032,6 +1047,9 @@ export default function NavBar() {
             </>
           ) : (
             <>
+              <Link href="/login" onClick={() => setOpen(false)} className="no-underline" style={{ color: "var(--dark)", fontWeight: 800 }}>
+                🔑 log in
+              </Link>
               <Link href="/chart" onClick={() => setOpen(false)} className="no-underline" style={{ color: "var(--dark)", fontWeight: 800 }}>
                 ✨ free birth chart
               </Link>

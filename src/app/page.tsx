@@ -213,8 +213,30 @@ export default function Home() {
           <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 24, maxWidth: 740, fontWeight: 600 }}>
             Our ongoing magical membership, with a live coven circle every month, a platform personalised to your birth chart and Human Design, moon rituals, shadow work, chat rooms and a community of women who bring a ridiculous amount of magic into their everyday lives together.
           </p>
-          <div style={{ marginTop: 30 }}>
-            <Button href="/baddie-coven">join the coven waitlist</Button>
+          <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", marginTop: 34 }}>
+            what you get every month
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 14, marginTop: 14 }}>
+            {[
+              ["🕯️", "one live coven circle", "The whole coven gathers live with me, every single month."],
+              ["📱", "your personalised platform", "Your season and the astrology of the month, written for YOUR chart and Human Design."],
+              ["🫶", "astrotapping™", "Each month's astrology, tapped into your body so you EMBODY it."],
+              ["🌙", "moon rituals", "A ritual for every new and full moon, ready and waiting for you."],
+              ["🌑", "shadow work prompts", "Personalised prompts for the parts of yourself you've kept hidden."],
+              ["💬", "the chat rooms", "Your new besties, open all month long, hyping your wins."],
+            ].map(([emoji, title, body]) => (
+              <div key={title} style={{ background: "#fff", border: "var(--border)", padding: "18px 18px 20px", color: "var(--dark)" }}>
+                <div style={{ fontSize: 24, lineHeight: 1 }}>{emoji}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, marginTop: 10, lineHeight: 1.25 }}>{title}</div>
+                <div style={{ fontSize: 15, lineHeight: 1.55, marginTop: 6 }}>{body}</div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center" style={{ marginTop: 30, gap: 20 }}>
+            <Button href="/baddie-coven">join the coven</Button>
+            <a href="/login" style={{ color: "var(--dark)", fontSize: 16, fontWeight: 800, textDecoration: "underline" }}>
+              already in the coven? log in here 🔑
+            </a>
           </div>
         </div>
       </section>
