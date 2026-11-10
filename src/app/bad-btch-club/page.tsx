@@ -470,7 +470,7 @@ export default function BaddieCovenPage() {
         <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-10 items-center">
           <Pic src={PICS.people} label="🪩 your people" />
           <div>
-            <Head n="07" tag="sisterhood" title="find your" accent="people." />
+            <Head n="07" tag="sisterhood" title="find your" accent="new bffs." />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>Imagine being able to tell a group of women that you&apos;ve just manifested a new client, pulled the Tower card three times in a week, booked a solo adventure or decided to completely reinvent your life.</p>
             <p style={copy}>They celebrate with you, share their own experiences and encourage you to keep going.</p>
             <p style={copy}>The Bad B*tch Club is a place for conversations, creativity, laughter, connection and women who genuinely want to see each other happy.</p>
