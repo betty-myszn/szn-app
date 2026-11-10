@@ -341,7 +341,7 @@ export default function BaddieCovenPage() {
           <div style={{ position: "relative", width: "100%" }}>
             <div className="holo-edge" style={{ width: "100%", borderRadius: 22, overflow: "hidden", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/betty-founder.png" alt="Betty in a pink blazer at a cafe table" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
             <HoloStar size={58} style={{ bottom: -24, left: -26, transform: "rotate(-10deg)" }} />
             <HoloStar size={28} style={{ top: 70, left: -18 }} />
