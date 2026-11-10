@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: "website",
     // A designed share card (her photo + foil "the bad b*tch coven" sticker), so links on Threads,
     // Instagram and WhatsApp look like the page instead of plain text.
-    images: [{ url: "/coven/og-my-szn-women.jpg", width: 1200, height: 630, alt: "Your people are in here. For women who want big lives, outrageous manifestations and serious money. $44 founding price." }],
+    images: [{ url: "/coven/og-my-szn-women.jpg", width: 1200, height: 630, alt: "The Bad B*tch Coven. More money, more friends, more magic, more you. $44 founding price." }],
   },
   twitter: { card: "summary_large_image", images: ["/coven/og-my-szn-women.jpg"] },
 };
