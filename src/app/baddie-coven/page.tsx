@@ -17,11 +17,11 @@ import { OFFERS, PODCAST, type OfferSlug } from "@/lib/offers";
 export const metadata: Metadata = {
   title: "The Bad B*tch Coven, a Magical Membership for Women",
   description:
-    "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Opens 9 November for 3 days only, $44 a month founding price.",
+    "A coven for women who are done hiding their magic and ready to discover their soul blueprint, reclaim their power, make their own money, express themselves wildly and create their most extraordinary lives. Opens 9 November for 4 days only, $44 a month founding price.",
   alternates: { canonical: "/baddie-coven" },
   openGraph: {
     title: "The Bad B*tch Coven 🦄",
-    description: "Become more of who you are. Create the life you came here to live. Opens 9 November for 3 days only.",
+    description: "Become more of who you are. Create the life you came here to live. Opens 9 November for 4 days only.",
     url: "/baddie-coven",
     type: "website",
     // A designed share card (her photo + foil "the bad b*tch coven" sticker), so links on Threads,
@@ -151,7 +151,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding baddies pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up. 💸"],
-  ["When can I join?", "The coven opens at midnight UK on 9 November for three days only. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 6pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+  ["When can I join?", "The coven opens at midnight UK on 9 November for four days only. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 6pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
 ];
 
 // The offer block: everything in one list, so she never has to piece the membership together.
@@ -278,7 +278,7 @@ function OfferBlock() {
           <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, marginTop: 6 }}>locked in for as long as you stay a member</div>
           <div className="hd-foil" style={{ marginTop: 18, border: "var(--border)", borderRadius: 14, padding: "12px 14px", fontFamily: pp, fontSize: 15.5, fontWeight: 800, color: "var(--dark)" }}>🪄 your 11/11 manifestation workshop is INCLUDED</div>
           <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.2, margin: "20px 0 4px" }}>
-            <CovenOpenSwitch open={<>OPEN NOW, FOR 3 DAYS ONLY.</>} closed={<>OPENS 9 NOV FOR 3 DAYS ONLY.</>} />
+            <CovenOpenSwitch open={<>OPEN NOW, FOR 4 DAYS ONLY.</>} closed={<>OPENS 9 NOV FOR 4 DAYS ONLY.</>} />
           </p>
           <p style={{ fontSize: 15.5, lineHeight: 1.5, fontWeight: 700, margin: 0 }}>⏳ Limited founding spots. Once they&apos;re gone, the price goes UP.</p>
           <CovenCountdown />
@@ -363,7 +363,7 @@ export default function BaddieCovenPage() {
             </div>
             {/* The launch in one glance: deadline, price, countdown. The 11/11 detail lives in section 06. */}
             <div className="holo-edge" style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "14px 18px", maxWidth: 620 }}>
-              <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ <CovenOpenSwitch open={<>The coven is OPEN, for 3 days only.</>} closed={<>The coven opens 9 November, for 3 days only.</>} /></div>
+              <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ <CovenOpenSwitch open={<>The coven is OPEN, for 4 days only.</>} closed={<>The coven opens 9 November, for 4 days only.</>} /></div>
               <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.5, fontWeight: 700 }}><span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay.</span> Founding spots are limited, and the price goes up after that. 💸</p>
               <CovenCountdown />
             </div>
