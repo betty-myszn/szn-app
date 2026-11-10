@@ -8,13 +8,15 @@ const nextConfig: NextConfig = {
   // Rising. Both old pages are kept in the codebase untouched.
   async redirects() {
     return [
-      { source: "/membership", destination: "/bad-btch-club", permanent: false },
-      // Renamed The Bad B*tch Club (9 Nov 2026). Only these exact pages: /coven/*.jpg are still images.
-      { source: "/baddie-coven", destination: "/bad-btch-club", permanent: false },
-      { source: "/baddie-coven/welcome", destination: "/bad-btch-club/welcome", permanent: false },
-      { source: "/coven", destination: "/club", permanent: false },
-      { source: "/coven/calendar", destination: "/club/calendar", permanent: false },
-      { source: "/coven/diary", destination: "/club/diary", permanent: false },
+      { source: "/membership", destination: "/baddie-coven", permanent: false },
+      // Back to The Bad B*tch Coven (10 Nov 2026) after a day as "The Bad B*tch Club". Links already
+      // sent with the club addresses land on the coven pages. Only these exact pages.
+      { source: "/bad-btch-club", destination: "/baddie-coven", permanent: false },
+      { source: "/bad-btch-club/welcome", destination: "/baddie-coven/welcome", permanent: false },
+      { source: "/bad-btch-club/la", destination: "/baddie-coven/la", permanent: false },
+      { source: "/club", destination: "/coven", permanent: false },
+      { source: "/club/calendar", destination: "/coven/calendar", permanent: false },
+      { source: "/club/diary", destination: "/coven/diary", permanent: false },
       { source: "/money-blueprint", destination: "/reports/rich-btch-rising", permanent: false },
       // The Baddie Style Report moved from the 1:1 sessions to the reports hub (8 Nov 2026).
       { source: "/baddie-sessions/style", destination: "/reports#style-report", permanent: false },

@@ -138,5 +138,5 @@ export function postAuthDestination(row: MembershipRow | null | undefined): stri
   if (!hasAccessFromRow(row)) return "/membership?reason=none";
   if (!hasFullAccessFromRow(row)) return "/community";
   if (!row?.onboarded) return "/onboarding";
-  return "/club";
+  return "/coven";
 }

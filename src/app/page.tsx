@@ -74,7 +74,7 @@ function Button({ href, children, tone = "dark" }: { href: string; children: Rea
 // grid reads as a colour block instead of seven matching boxes. Wide cards break the rhythm.
 const SZN_WAYS: { emoji: string; title: string; body: string; href: string; ctaLabel: string; bg: string; ink: string; head?: string; cta: string; wide?: boolean }[] = [
   { emoji: "🪐", title: "Get your Astro & HD reports", body: "Your birth chart has RECEIPTS, babe. Find out how you're wired, where your money magic lives, what makes you magnetic and how to use your astrology to your advantage.", href: "/reports", ctaLabel: "get your report", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)", wide: true },
-  { emoji: "🦄", title: "Join the Bad B*tch Club", body: "Weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/bad-btch-club", ctaLabel: "join the club", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
+  { emoji: "🦄", title: "Join the Bad B*tch Coven", body: "Witches, weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/baddie-coven", ctaLabel: "join the coven", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
   { emoji: "💜", title: "Book a 1:1 session", body: "Got big dreams and some sh*t to work through? Let's get into it. Astrology, manifestation, shadow work, money and becoming the most powerful version of YOU.", href: "/baddie-sessions", ctaLabel: "book a session", bg: "var(--dark)", ink: "#fff", head: "var(--pink)", cta: "var(--pink)" },
   { emoji: "🔥", title: "Join the mastermind", body: "Big dreams. Bigger moves. Women who actually want to see you WIN. Get coaching, accountability and a whole room of baddies who refuse to play small.", href: "/mastermind", ctaLabel: "join the mastermind", bg: "var(--pink-light)", ink: "var(--dark)", cta: "var(--pink)", wide: true },
   { emoji: "🌴", title: "Come to our retreat", body: "Pack your bags, b*tch. We're going to MEXICO. Think astrology, witchcraft, shadow work, sisterhood and the kind of experiences you'll be talking about for YEARS.", href: "/retreat", ctaLabel: "come with us", bg: "var(--lav-light)", ink: "var(--dark)", cta: "var(--pink)" },
@@ -142,7 +142,7 @@ export default function Home() {
           </h2>
           <div style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 22, fontWeight: 600, maxWidth: 760 }}>
             <p style={{ margin: "0 0 12px" }}>There&apos;s more than one way to be a bad b*tch, babe.</p>
-            <p style={{ margin: "0 0 12px" }}>Wanna make more money, understand your astrology, find your people or completely reinvent your f*cking life? You&apos;re in the right place.</p>
+            <p style={{ margin: "0 0 12px" }}>Wanna make more money, understand your astrology, find your fellow witches or completely reinvent your f*cking life? You&apos;re in the right place.</p>
             <p style={{ margin: 0, fontFamily: poppins, fontWeight: 800 }}>Pick your pleasure. Your SZN starts here.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginTop: 34 }}>
@@ -206,19 +206,19 @@ export default function Home() {
       {/* ─── 6. COVEN ─── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
         <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5" style={{ color: "var(--dark)" }}>🦄 the bad b*tch club</div>
+          <div className="tag mb-5" style={{ color: "var(--dark)" }}>🦄 the bad b*tch coven</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 6.5vw, 80px)", color: "var(--dark)", lineHeight: 0.98 }}>
-            the club <span className="pk">for big lives.</span>
+            a clubhouse <span style={{ color: "#fff" }}>for witches.</span>
           </h2>
           <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 24, maxWidth: 740, fontWeight: 600 }}>
-            Our ongoing magical membership, with a live circle every month, a platform personalised to your birth chart and Human Design, moon rituals, shadow work, chat rooms and a community of women who bring a ridiculous amount of magic into their everyday lives together.
+            Our ongoing magical membership, with a live coven circle every month, a platform personalised to your birth chart and Human Design, moon rituals, shadow work, chat rooms and a community of women who bring a ridiculous amount of magic into their everyday lives together.
           </p>
           <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", marginTop: 34 }}>
             what you get every month
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 14, marginTop: 14 }}>
             {[
-              ["🕯️", "one live circle", "The whole club gathers live with me, every single month."],
+              ["🕯️", "one live coven circle", "The whole coven gathers live with me, every single month."],
               ["📱", "your personalised platform", "Your season and the astrology of the month, written for YOUR chart and Human Design."],
               ["🫶", "astrotapping™", "Each month's astrology, tapped into your body so you EMBODY it."],
               ["🌙", "moon rituals", "A ritual for every new and full moon, ready and waiting for you."],
@@ -233,9 +233,9 @@ export default function Home() {
             ))}
           </div>
           <div className="flex flex-wrap items-center" style={{ marginTop: 30, gap: 20 }}>
-            <Button href="/bad-btch-club">join the club</Button>
+            <Button href="/baddie-coven">join the coven</Button>
             <a href="/login" style={{ color: "var(--dark)", fontSize: 16, fontWeight: 800, textDecoration: "underline" }}>
-              already in the club? log in here 🔑
+              already in the coven? log in here 🔑
             </a>
           </div>
         </div>

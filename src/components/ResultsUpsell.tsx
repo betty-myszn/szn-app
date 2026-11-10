@@ -62,10 +62,10 @@ export default function ResultsUpsell({ name }: { name?: string }) {
           </span>
           <div className="md:flex md:items-center md:justify-between gap-8">
             <div style={{ maxWidth: 600 }}>
-              <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>{coven.emoji} founding members · {coven.price}</div>
+              <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>{coven.emoji} founding witches · {coven.price}</div>
               <h3 style={{ fontFamily: pp, fontSize: "clamp(26px, 4vw, 36px)", fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.05, margin: "10px 0 10px" }}>{coven.name.toLowerCase()}.</h3>
               <p style={{ fontSize: 16, lineHeight: 1.65, margin: 0, fontWeight: 600 }}>
-                Your monthly live circle, personal guidance for every single season on the platform I built, rituals, money magic and a whole club of baddies doing it with you. Founding members lock in $44 a month for as long as they stay, and our FIRST EVER event is the 11/11 manifestation workshop. 🪄
+                Your monthly coven circle, personal guidance for every single season on the platform I built, rituals, money magic and a whole coven of baddies doing it with you. Founding witches lock in $44 a month for as long as they stay, and our FIRST EVER event is the 11/11 manifestation workshop. 🪄
               </p>
             </div>
             <Link href={coven.href} onClick={() => click("baddie_coven")} className="no-underline inline-block" style={{ marginTop: 20, flexShrink: 0, background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 999, whiteSpace: "nowrap" }}>

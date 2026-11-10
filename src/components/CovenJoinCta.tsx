@@ -18,7 +18,7 @@ export default function CovenJoinCta({ style, className = "no-underline" }: { st
   if (!open) return <a href="#waitlist" className={className} style={style}>💜 join the waitlist</a>;
   return (
     <a href={COVEN_CHECKOUT_URL} className={className} style={style}>
-      🔮 join the club · $44/month
+      🔮 join the coven · $44/month
     </a>
   );
 }

@@ -122,7 +122,7 @@ const FOR_YOU_IF = [
   "Keeps undercharging, overgiving or shrinking right before the big moment, and wants to know exactly WHY (then stop, immediately)",
   "Loves a deep dive she can highlight, reread and come back to every single season like a holy text 🪐",
   "Wants a plan with real dates on it, so this month is the month things start moving, BIGGG",
-  "Wants her chart in her hands before she books a Baddie Session or joins the club 🦄",
+  "Wants her chart in her hands before she books a Baddie Session or joins the coven 🦄",
 ];
 
 const REVIEW_ROWS = [

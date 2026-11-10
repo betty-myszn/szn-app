@@ -61,10 +61,10 @@ export default function FreeHomePage() {
         {isExpiredTrial(member) ? (
           <>
             <p style={{ fontSize: 15, color: "var(--grey)", lineHeight: 1.7, maxWidth: 560, marginBottom: 20 }}>
-              Your free week is over, but your charts are still yours. The baddie chat, your personalised platform, the workshops and the meditations are for paying members. Join the club to get them back and pick up exactly where you left off.
+              Your free week is over, but your charts are still yours. The baddie chat, your personalised platform, the workshops and the meditations are for paying members. Join the coven to get them back and pick up exactly where you left off.
             </p>
-            <Link href="/bad-btch-club" className="btn-pink no-underline" style={{ display: "inline-block", marginBottom: 32 }}>
-              join the club
+            <Link href="/baddie-coven" className="btn-pink no-underline" style={{ display: "inline-block", marginBottom: 32 }}>
+              join the coven
             </Link>
           </>
         ) : (
@@ -75,7 +75,7 @@ export default function FreeHomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Link
-            href="/bad-btch-club"
+            href="/baddie-coven"
             className="no-underline p-7 block"
             style={{ border: "var(--border)", background: "var(--pink)", color: "#fff" }}
           >
@@ -86,7 +86,7 @@ export default function FreeHomePage() {
               the baddie chat
             </div>
             <p style={{ fontSize: 14, lineHeight: 1.6, opacity: 0.92 }}>
-              Your club is in here, babe. Join to get inside.
+              Your coven is in here, babe. Join to get inside.
             </p>
           </Link>
 

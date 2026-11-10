@@ -27,7 +27,7 @@ const inputStyle: React.CSSProperties = {
 // Only ever redirect back into our own app, an open redirect here would let a crafted
 // /login?redirect=https://evil.example link send someone off-site right after they authenticate.
 function safeRedirectPath(raw: string | null): string {
-  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/club";
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/coven";
   return raw;
 }
 
@@ -68,7 +68,7 @@ function LoginPageContent() {
       if (res.ok && data.destination) {
         // A full member (destination /dashboard) keeps any specific place she was heading to;
         // otherwise the membership/onboarding gate decides where she must go first.
-        dest = data.destination === "/club" ? redirect : data.destination;
+        dest = data.destination === "/coven" ? redirect : data.destination;
       }
     } catch {
       // Fall back to the requested redirect, proxy.ts still enforces access on arrival.

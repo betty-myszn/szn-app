@@ -50,9 +50,9 @@ export const OFFERS: Record<OfferSlug, Offer> = {
   "baddie-coven": {
     slug: "baddie-coven",
     emoji: "🦄",
-    name: "The Bad B*tch Club",
-    href: "/bad-btch-club",
-    line: "our magical club: a monthly live circle, your personalised platform, rituals and your girls",
+    name: "The Bad B*tch Coven",
+    href: "/baddie-coven",
+    line: "our magical coven: a monthly coven circle, your personalised platform, rituals and your girls",
     price: "$44/month founding price",
     brevoEnv: "BREVO_LIST_BADDIE_COVEN",
     brevoList: 23,

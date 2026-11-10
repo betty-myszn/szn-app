@@ -88,7 +88,7 @@ export default function InstallPrompt() {
   };
 
   // The coven page has its own join bar in this spot during the launch.
-  if (!show || pathname === "/bad-btch-club") return null;
+  if (!show || pathname === "/baddie-coven") return null;
 
   return (
     <div

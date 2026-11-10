@@ -25,7 +25,7 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     body: "Consider this your first act of taking up MORE space. The moment The Bad B*tch Report opens, you'll hear it from us before anyone else does.",
   },
   "baddie-coven": {
-    title: "Welcome to the club, babe 🦄",
+    title: "Welcome to the coven, witch 🦄",
     body: "Your name is written in the book (glitter pen, obviously). We'll send the doors, the dates and the first spell straight to your inbox before anyone else hears a thing.",
   },
   mastermind: {

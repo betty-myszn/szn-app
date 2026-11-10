@@ -199,7 +199,7 @@ export default function OnboardingPage() {
     // chart and the goal she just typed, because the only members who stay are the ones who talk.
     // Without a revealed chart there is nothing to write it from, so go straight in.
     if (!revealPlacements) {
-      window.location.href = "/club";
+      window.location.href = "/coven";
       return;
     }
     setIntro(
@@ -233,7 +233,7 @@ export default function OnboardingPage() {
         // Offline or the request threw. Nothing to show her, the portal is the next screen anyway.
       }
     }
-    window.location.href = "/club";
+    window.location.href = "/coven";
   };
 
   if (!checkedExisting) return null;
@@ -417,7 +417,7 @@ export default function OnboardingPage() {
                 </p>
                 <form onSubmit={handleIntroStep} className="flex flex-col gap-5">
                   <div>
-                    <label htmlFor="onboarding-intro" style={labelStyle}>your hello, straight into the club</label>
+                    <label htmlFor="onboarding-intro" style={labelStyle}>your hello, straight into the coven</label>
                     <textarea
                       id="onboarding-intro"
                       value={intro}
@@ -437,7 +437,7 @@ export default function OnboardingPage() {
                     type="button"
                     disabled={loading}
                     onClick={() => {
-                      window.location.href = "/club";
+                      window.location.href = "/coven";
                     }}
                     style={{
                       background: "none",

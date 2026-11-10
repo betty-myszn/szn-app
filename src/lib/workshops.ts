@@ -187,9 +187,9 @@ export const WORKSHOPS: Workshop[] = [
     },
   },
   {
-    id: "club-11-11",
+    id: "coven-11-11",
     season: "Scorpio",
-    label: "our first ever club event",
+    label: "our first ever coven event",
     kind: "masterclass",
     blurb: "The 11/11 portal, candles lit and intentions set.",
     meta: "wed 11 november · 6pm uk · dress code: your future self",

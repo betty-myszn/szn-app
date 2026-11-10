@@ -158,60 +158,60 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
-  // The Bad B*tch Club launch post. Facts match /bad-btch-club: opens 9 Nov for 3 days, $44 a month
+  // The Bad B*tch Coven launch post. Facts match /baddie-coven: opens 9 Nov for 3 days, $44 a month
   // founding price, the 11/11 workshop with the future-self dress code. Backdated to 26 Oct on purpose.
   {
     slug: "the-baddie-coven",
-    title: "The Bad B*tch Club: An Online Club for Women Who Want BIG, Magical Lives",
-    metaTitle: "The Bad B*tch Club: An Online Magical Membership for Women",
+    title: "The Bad B*tch Coven: An Online Coven for Women Who Want BIG, Magical Lives",
+    metaTitle: "The Bad B*tch Coven: An Online Witchy Membership for Women",
     description:
-      "The Bad B*tch Club is an online club for women into astrology, manifestation, money magic, ritual and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
+      "The Bad B*tch Coven is an online coven for women into astrology, manifestation, money magic, witchcraft and shadow work. What's inside, the 11/11 manifestation workshop and the $44 founding price.",
     category: "career-money",
     publishedAt: "2026-10-26",
     updatedAt: "2026-10-26",
     readingMinutes: 6,
     excerpt:
-      "An online club for women who want to live BIG lives, manifest outrageous things and make seriouuuus money, with a monthly circle, a platform written for your chart and a whole club of baddies doing it with you.",
+      "An online coven for women who want to live BIG lives, manifest outrageous things and make seriouuuus money, with a monthly circle, a platform written for your chart and a whole coven of baddies doing it with you.",
     intro: [
-      "The Bad B*tch Club is my online club for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live circle every month, a personalised platform written for your birth chart and Human Design, and a whole club of baddies cheering you on from every corner of the world.",
-      "It opens on 9 November for three days only, founding members get in at $44 a month, locked in for as long as they stay, and our FIRST EVER club event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
+      "The Bad B*tch Coven is my online coven for women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a live coven circle every month, a personalised platform written for your birth chart and Human Design, and a whole coven of baddies cheering you on from every corner of the world.",
+      "It opens on 9 November for three days only, founding witches get in at $44 a month, locked in for as long as they stay, and our FIRST EVER coven event is the 11/11 manifestation workshop, so if you've been craving magic, money and women who actually GET you, babe, this is your invitation. 🦄",
     ],
     sections: [
       {
-        heading: "Why I created the Bad B*tch Club",
+        heading: "Why I created the Bad B*tch Coven",
         body: [
           "For years I watched brilliant, gifted, wildly magical women shrink themselves to fit into lives that were waaaay too small for them, waiting for permission, ignoring their gut and keeping their weirdest, most magnetic parts hidden because somewhere along the way they learned that being too much was dangerous.",
-          "I wanted somewhere those women could come home to, a place where knowing your chart, casting a money spell, raising your prices and crying at a full moon are all celebrated out loud, so I built it, and I called it the Bad B*tch Club because that's exactly who we are when we stop hiding.",
+          "I wanted somewhere those women could come home to, a place where knowing your chart, casting a money spell, raising your prices and crying at a full moon are all celebrated out loud, so I built it, and I called it the Bad B*tch Coven because that's exactly who we are when we stop hiding.",
         ],
       },
       {
-        heading: "What we do inside the club",
-        body: ["Everything inside the club comes back to one thing: becoming MORE of who you already are, and building the life you came here to live."],
+        heading: "What we do inside the coven",
+        body: ["Everything inside the coven comes back to one thing: becoming MORE of who you already are, and building the life you came here to live."],
         items: [
           { name: "🪐 Astrology and self-discovery", body: "Birth chart deep dives, Human Design experiments and the astrology of each month, turned into real decisions about your money, your love life, your career and your creativity, so you go from googling your placements at 1am to understanding exactly how your chart works." },
           { name: "🌑 Shadow work", body: "We go gently but deeeeply into the beliefs you inherited, the good-girl conditioning and the versions of yourself you've been performing for other people, so you can set the boundary, say the true thing and feel MORE like yourself than you have in years." },
           { name: "💸 Manifestation and money magic", body: "Money bowls, prosperity rituals and manifestation experiments sit right alongside raising your prices, negotiating your salary, investing and receiving without flinching, because we LOVE a witch with financial independence." },
           { name: "🕯️ Witchcraft and rituals", body: "Moon rituals, candle magic, tarot, spellwork and seasonal celebrations, with the history and symbolism behind each practice so you can make your own magic with total confidence." },
-          { name: "🪩 Sisterhood", body: "A club of women who celebrate your wins, get your particular brand of weird and send voice notes screaming YESSSSS every time you level up, through every single reinvention." },
+          { name: "🪩 Sisterhood", body: "A coven of women who celebrate your wins, get your particular brand of weird and send voice notes screaming YESSSSS every time you level up, through every single reinvention." },
         ],
       },
       {
         heading: "What you get every month",
-        body: ["Here's what a month inside the club holds, babe."],
+        body: ["Here's what a month inside the coven holds, babe."],
         items: [
-          { name: "One live circle", body: "Once a month the whole club gathers live to work with that month's magic together, share what's moving and leave with our power turned UP." },
+          { name: "One live coven circle", body: "Once a month the whole coven gathers live to work with that month's magic together, share what's moving and leave with our power turned UP." },
           { name: "Your personalised platform", body: "A platform built around YOUR birth chart and Human Design, so the astrology of the month, your season and everything you open is written for you, every single day." },
           { name: "astrotapping™", body: "We take the theme of each month's astrology and tap it into your body with astrotapping™, so you EMBODY the sky instead of just reading about it." },
           { name: "Moon rituals and shadow work prompts", body: "Lunar rituals for every new and full moon, plus personalised reflection prompts for the parts of yourself you've kept hidden, with plenty of self-compassion." },
-          { name: "The baddie chat", body: "Private chat rooms, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life." },
+          { name: "The coven chat rooms", body: "Private chat rooms, open all month long, where you share your wins, ask about your astrology, celebrate breakthroughs and recommend the book that changed your life." },
         ],
       },
       {
         heading: "Our first ever event: the 11/11 manifestation workshop",
         body: [
-          "11/11 is my most FAVOURITE date of the entire year, because eleven is a master number and 11/11 is a double master number, which means the universe has her order pad out and she is taking requests at full volume, so of course the club's very first event is an 11/11 manifestation workshop, with candles lit, wishlists out and the most outrageous version of our lives on ordeeeer.",
+          "11/11 is my most FAVOURITE date of the entire year, because eleven is a master number and 11/11 is a double master number, which means the universe has her order pad out and she is taking requests at full volume, so of course the coven's very first event is an 11/11 manifestation workshop, with candles lit, wishlists out and the most outrageous version of our lives on ordeeeer.",
           "The dress code is your FUTURE SELF. Whatever you're manifesting, show up dressed as the version of you who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we'll call her in together. 💅",
-          "The 11/11 workshop is for club members, so join while the club is open from 9 November and you're in.",
+          "The 11/11 workshop is for coven members, so join while the coven is open from 9 November and you're in.",
         ],
       },
       {
@@ -228,45 +228,45 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Founding witch pricing",
         body: [
-          "Founding members pay $44 a month, locked in for as long as you stay, for your monthly live circle, your personalised platform with the astrology of every season, the rituals, the prompts and the baddie chat.",
-          "The club opens on 9 November for three days only, founding spots are limited and the price goes up once they're gone, so [get on the waitlist](/bad-btch-club) and you'll hear the second we open. 🪄",
+          "Founding witches pay $44 a month, locked in for as long as you stay, for your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms.",
+          "The coven opens on 9 November for three days only, founding spots are limited and the price goes up once they're gone, so [get on the waitlist](/baddie-coven) and you'll hear the second we open. 🪄",
         ],
       },
     ],
     cta: {
-      heading: "Your club is calling, babe",
-      body: "The Bad B*tch Club opens on 9 November for three days only, at $44 a month for founding members, with the 11/11 manifestation workshop as our first ever event.",
+      heading: "Your coven is calling, babe",
+      body: "The Bad B*tch Coven opens on 9 November for three days only, at $44 a month for founding witches, with the 11/11 manifestation workshop as our first ever event.",
       label: "join the waitlist",
-      href: "/bad-btch-club",
+      href: "/baddie-coven",
     },
     closing: {
-      heading: "your club is",
+      heading: "your coven is",
       pink: "calling.",
-      body: "Opens 9 November for three days only. Founding members lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      body: "Opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
       label: "join the waitlist 🦄",
-      href: "/bad-btch-club",
+      href: "/baddie-coven",
     },
     faqs: [
       {
-        question: "What is the Bad B*tch Club?",
+        question: "What is the Bad B*tch Coven?",
         answer:
-          "An online club for women into astrology, Human Design, manifestation, money magic, ritual and shadow work, with a live circle every month, a personalised platform written for your chart and private chat rooms with the rest of the club.",
+          "An online coven for women into astrology, Human Design, manifestation, money magic, witchcraft and shadow work, with a live coven circle every month, a personalised platform written for your chart and private chat rooms with the rest of the coven.",
       },
       {
-        question: "When does the Bad B*tch Club open?",
+        question: "When does the Bad B*tch Coven open?",
         answer: "It opens on 9 November 2026 for three days only, and the waitlist hears first.",
       },
       {
-        question: "How much does the Bad B*tch Club cost?",
-        answer: "Founding members pay $44 a month, locked in for as long as they stay. Founding spots are limited, and the price goes up once they're gone.",
+        question: "How much does the Bad B*tch Coven cost?",
+        answer: "Founding witches pay $44 a month, locked in for as long as they stay. Founding spots are limited, and the price goes up once they're gone.",
       },
       {
-        question: "Is the Bad B*tch Club online?",
+        question: "Is the Bad B*tch Coven online?",
         answer: "Yes, so you can join from anywhere in the world. We're also bringing it into real life with the LA Bad B*tch Coven, which is priced separately.",
       },
       {
         question: "I'm a total beginner. Can I join?",
-        answer: "YESSS. Curiosity is the only requirement, and you don't need any magical tools beyond a notebook and that candle you've been saving.",
+        answer: "YESSS. Curiosity is the only requirement, and you don't need any witchy tools beyond a notebook and that candle you've been saving.",
       },
       {
         question: "What should I wear to the 11/11 workshop?",
@@ -282,7 +282,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     ogImage: {
       src: "/coven/og-my-szn-women.jpg",
-      alt: "The Bad B*tch Club: your club is calling. Opens 9 November for 3 days, $44 founding price.",
+      alt: "The Bad B*tch Coven: your coven is calling. Opens 9 November for 3 days, $44 founding price.",
       width: 1200,
       height: 630,
     },
@@ -361,17 +361,17 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     cta: {
-      heading: "Become THAT b*tch with a whole club behind you",
-      body: "The Bad B*tch Club is where you take the podcast into your own life: your chart, your season, your rituals and a circle of baddies cheering on every reinvention.",
-      label: "join the bad b*tch club",
-      href: "/bad-btch-club",
+      heading: "Become THAT b*tch with a whole coven behind you",
+      body: "The Bad B*tch Coven is where you take the podcast into your own life: your chart, your season, your rituals and a circle of baddies cheering on every reinvention.",
+      label: "join the bad b*tch coven",
+      href: "/baddie-coven",
     },
     closing: {
       heading: "your next era, read for",
       pink: "your chart",
-      body: "Find out where reinvention, money and freedom live in your own birth chart, then bring it into the Bad B*tch Club with a circle of women doing it with you.",
-      label: "join the bad b*tch club",
-      href: "/bad-btch-club",
+      body: "Find out where reinvention, money and freedom live in your own birth chart, then bring it into the Bad B*tch Coven with a circle of women doing it with you.",
+      label: "join the bad b*tch coven",
+      href: "/baddie-coven",
     },
     faqs: [
       {
@@ -450,17 +450,17 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     cta: {
-      heading: "Bring your magnetism into the Bad B*tch Club",
-      body: "Your chart, your season, monthly rituals and a club of baddies who love you at full volume, all in one place.",
-      label: "join the bad b*tch club",
-      href: "/bad-btch-club",
+      heading: "Bring your magnetism into the Bad B*tch Coven",
+      body: "Your chart, your season, monthly rituals and a coven of baddies who love you at full volume, all in one place.",
+      label: "join the bad b*tch coven",
+      href: "/baddie-coven",
     },
     closing: {
       heading: "your magnetism, read for",
       pink: "your chart",
-      body: "See where your Lilith, your Venus and your pleasure live in your own birth chart, then work with them every season inside the Bad B*tch Club.",
-      label: "join the bad b*tch club",
-      href: "/bad-btch-club",
+      body: "See where your Lilith, your Venus and your pleasure live in your own birth chart, then work with them every season inside the Bad B*tch Coven.",
+      label: "join the bad b*tch coven",
+      href: "/baddie-coven",
     },
     faqs: [
       {
@@ -525,7 +525,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "Why Mercury retrograde in Scorpio hits different",
         body: [
           "Scorpio is the sign of secrets, sex, power, shared money, psychology and total transformation, so when the planet of communication goes backwards here, the small talk is OVER and the conversations become the ones that change everything: the confession, the money talk with your partner, the truth about why you really walked away. 🖤",
-          "Mercury stays in Scorpio for the entire retrograde, so these three weeks have ONE flavour, and it's depth. Hidden information floats to the surface, you can see straight through anyone performing for you and your intuition gets so sharp it's borderline magical, which makes this a STUNNING time for shadow work, therapy, research and getting to the bottom of anything that's felt murky.",
+          "Mercury stays in Scorpio for the entire retrograde, so these three weeks have ONE flavour, and it's depth. Hidden information floats to the surface, you can see straight through anyone performing for you and your intuition gets so sharp it's borderline witchy, which makes this a STUNNING time for shadow work, therapy, research and getting to the bottom of anything that's felt murky.",
           "With Venus retrograde alongside her, slipping back from Scorpio into Libra on 25 October, the review covers your relationships and your money too, so expect the past to show up in your heart AND your bank account at the same time, babe.",
         ],
       },
@@ -594,25 +594,25 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
       {
-        heading: "Do this retrograde with a club behind you",
+        heading: "Do this retrograde with a coven behind you",
         body: [
-          "Retrogrades are SO much easier when you know exactly where they land in your own chart, and that's what the Bad B*tch Club is for: a platform written for YOUR birth chart and Human Design, so every retrograde, full moon and eclipse is explained for you, plus a live circle every month, rituals for every new and full moon and a whole club of baddies to voice note the second your ex texts. 📲",
-          "The Bad B*tch Club opens on 9 November for three days only, and founding members lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Bad B*tch Club](/bad-btch-club) and do this retrograde with us, babe. 🦄",
+          "Retrogrades are SO much easier when you know exactly where they land in your own chart, and that's what the Bad B*tch Coven is for: a platform written for YOUR birth chart and Human Design, so every retrograde, full moon and eclipse is explained for you, plus a live coven circle every month, rituals for every new and full moon and a whole coven of baddies to voice note the second your ex texts. 📲",
+          "The Bad B*tch Coven opens on 9 November for three days only, and founding witches lock in $44 a month for as long as they stay. Our FIRST EVER event is the 11/11 manifestation workshop, two days before Mercury and Venus both turn direct, so you get to call in everything you want for 2027 right as the sky starts moving forward again. [Join the Bad B*tch Coven](/baddie-coven) and do this retrograde with us, babe. 🦄",
         ],
       },
     ],
     cta: {
       heading: "Your retrograde, read for YOUR chart",
-      body: "Inside the Bad B*tch Club every retrograde, full moon and eclipse is written for your birth chart, with a live circle every month and a club of baddies on speed dial. Opens 9 November for three days, $44 a month for founding members.",
-      label: "join the bad b*tch club",
-      href: "/bad-btch-club",
+      body: "Inside the Bad B*tch Coven every retrograde, full moon and eclipse is written for your birth chart, with a live coven circle every month and a coven of baddies on speed dial. Opens 9 November for three days, $44 a month for founding witches.",
+      label: "join the bad b*tch coven",
+      href: "/baddie-coven",
     },
     closing: {
       heading: "do this retrograde with",
-      pink: "your club.",
-      body: "The Bad B*tch Club opens 9 November for three days only. Founding members lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
-      label: "join the bad b*tch club 🦄",
-      href: "/bad-btch-club",
+      pink: "your coven.",
+      body: "The Bad B*tch Coven opens 9 November for three days only. Founding witches lock in $44 a month for as long as they stay, and our first ever event is the 11/11 manifestation workshop.",
+      label: "join the bad b*tch coven 🦄",
+      href: "/baddie-coven",
     },
     faqs: [
       {
@@ -853,7 +853,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Journal prompts for Scorpio season",
         body: [
-          "Write these fast, by candlelight if you are feeling magical, and without editing. Take them into [your MY SZN journal](/journal), where every entry sits next to your chart and your season.",
+          "Write these fast, by candlelight if you are feeling witchy, and without editing. Take them into [your MY SZN journal](/journal), where every entry sits next to your chart and your season.",
         ],
         items: [
           { name: "The want you keep private", body: "Write about the desire you have never said out loud, and what your life would look like if you went after it fully." },

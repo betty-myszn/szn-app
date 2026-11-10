@@ -96,7 +96,7 @@ export default function MessagesPage() {
           {unavailable ? (
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.7 }}>
               Messages are just being switched on, check back in a little bit. In the meantime you can always find me in the{" "}
-              <Link href="/community/room/general" style={{ color: "var(--pink)", fontWeight: 700 }}>the club</Link>.
+              <Link href="/community/room/general" style={{ color: "var(--pink)", fontWeight: 700 }}>the coven</Link>.
             </p>
           ) : messages === null ? (
             <p style={{ fontSize: 14, color: "var(--grey)" }}>loading your messages...</p>
