@@ -390,7 +390,7 @@ export default function BaddieCovenPage() {
       <Section bg="var(--pink-light)">
         <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
           <div>
-            <Head n="03" tag="your future self" title="meet the woman you're" accent="here to become." />
+            <Head n="03" tag="your future self" title="become your" accent="future self." />
             <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>The kind of life where you&apos;re following your wildest ideas, doing things that scare you in the best possible way, exploring your creativity, making incredible friends and finally giving yourself permission to want absolutely EVERYTHING.</p>
             <p style={copy}>She already lives in you, my love, and she&apos;s been waiting sooooo patiently for you to let her out.</p>
           </div>
