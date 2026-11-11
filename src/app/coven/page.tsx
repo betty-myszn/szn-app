@@ -29,6 +29,7 @@ const HERO_ART: Record<string, string> = {
 };
 
 const HUB_LINKS = [
+  ["🔮", "11/11 portal", "/your-season/11-11"],
   ["🪐", "my szn", "/dashboard"],
   ["💬", "baddie chat", "/community"],
   ["✨", "my chart", "/my-chart"],
@@ -125,6 +126,18 @@ export default function CovenHomePage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={heroArt} alt="" style={{ display: "block", width: "100%", height: "100%", minHeight: 320, objectFit: "cover", objectPosition: "50% 12%" }} />
         </section>
+
+        {/* The 11/11 portal hub */}
+        <Link href="/your-season/11-11" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
+          <div>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🔮 new · the 11/11 portal</span>
+            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>step through the portal.</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your message from the universe, what 11/11 opens in YOUR chart, and all 17 workshop exercises to walk through at your own pace.</p>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>open my portal →</span>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/disco-planet-logo.png" alt="" style={{ display: "block", width: "min(320px, 80%)", justifySelf: "center" }} />
+        </Link>
 
         {/* Next circle */}
         {circleUpcoming && now !== null ? (
