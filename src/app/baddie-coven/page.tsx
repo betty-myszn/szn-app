@@ -350,8 +350,8 @@ export default function BaddieCovenPage() {
         tone="lav"
         kicker="founding baddies · $44 a month"
         ctaButton={(style) => <CovenJoinCta style={style} />}
-        title="the bad b*tch"
-        accent="coven."
+        title="welcome to the coven,"
+        accent="babe!"
         intro={
           <>
             <MoreLine ink="var(--dark)" />
