@@ -141,7 +141,7 @@ export default function CovenHomePage() {
                   workshopId={COVEN_CIRCLE.workshopId}
                   enabled={hasActiveAccess(member)}
                   label="join the circle on zoom"
-                  fallback={<p style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#fff" }}>💜 Your Zoom button lands right here before we go live.</p>}
+                  fallback={<p style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#fff" }}>💜 Your Zoom link lands right here tonight, before we go live at 6pm UK.</p>}
                 />
                 <Link href="/events" className="no-underline btn-pink" style={pinkBtn}>get all the details →</Link>
               </div>
