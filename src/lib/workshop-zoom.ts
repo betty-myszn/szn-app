@@ -31,6 +31,12 @@ const ZOOM: Record<string, ZoomDetails> = {
     meetingId: "841 1929 4738",
     passcode: "976617",
   },
+  // The 11/11 Manifestation Workshop, Wed 11 Nov 6pm UK = 7pm Prague.
+  "coven-11-11": {
+    url: "https://us06web.zoom.us/j/89759491379?pwd=jiXOOmIID7m0su854hzc5SAdIr9Cub.1",
+    meetingId: "897 5949 1379",
+    passcode: "338922",
+  },
 };
 
 export function zoomFor(workshopId: string): ZoomDetails | null {
