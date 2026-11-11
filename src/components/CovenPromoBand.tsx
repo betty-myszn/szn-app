@@ -27,10 +27,10 @@ export default function CovenPromoBand() {
             For women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a monthly coven circle, personal guidance every season and a whole coven of baddies doing it with you.
           </p>
           <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, color: "var(--dark)", margin: "14px 0 0" }}>
-            🪄 our FIRST EVER event: the 11/11 manifestation workshop, 6pm UK
+            🎥 the 11/11 manifestation workshop replay is inside for members
           </p>
           <p style={{ fontSize: 16, fontWeight: 600, color: "var(--dark)", margin: "6px 0 0" }}>
-            🎀 Dress code: come as your future self, the woman you&apos;re manifesting.
+            🔒 Join the coven and you can watch it tonight.
           </p>
           <div style={{ marginTop: 18 }}>
             <CovenCountdown />

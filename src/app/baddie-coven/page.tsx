@@ -151,7 +151,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding baddies pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up. 💸"],
-  ["When can I join?", "The coven opens at midnight UK on 9 November for four days only. Our FIRST EVER coven event is the 11/11 manifestation workshop, live at 6pm UK, where the dress code is your future self, so come as the woman you're manifesting. 🪄"],
+  ["When can I join?", "The coven opens at midnight UK on 9 November for four days only. Our FIRST EVER coven event was the 11/11 manifestation workshop, and the full replay is waiting inside for you the moment you join. 🪄"],
 ];
 
 // The offer block: everything in one list, so she never has to piece the membership together.
@@ -276,7 +276,7 @@ function OfferBlock() {
             <span style={{ fontFamily: pp, fontSize: 28, fontWeight: 800 }}>/month</span>
           </div>
           <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, marginTop: 6 }}>locked in for as long as you stay a member</div>
-          <div className="hd-foil" style={{ marginTop: 18, border: "var(--border)", borderRadius: 14, padding: "12px 14px", fontFamily: pp, fontSize: 15.5, fontWeight: 800, color: "var(--dark)" }}>🪄 your 11/11 manifestation workshop is INCLUDED</div>
+          <div className="hd-foil" style={{ marginTop: 18, border: "var(--border)", borderRadius: 14, padding: "12px 14px", fontFamily: pp, fontSize: 15.5, fontWeight: 800, color: "var(--dark)" }}>🎥 the 11/11 workshop replay is INCLUDED</div>
           <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.2, margin: "20px 0 4px" }}>
             <CovenOpenSwitch open={<>OPEN NOW, FOR 4 DAYS ONLY.</>} closed={<>OPENS 9 NOV FOR 4 DAYS ONLY.</>} />
           </p>
@@ -431,22 +431,25 @@ export default function BaddieCovenPage() {
       {/* 06 · What a month inside holds. */}
       <Section bg="var(--lav-light)">
         <Head n="06" tag="every month inside" title="your monthly" accent="dose of magic." />
-        {/* The first big event, so nobody misses it. Live at 6pm UK (set by Betty 4 Nov). */}
+        {/* The first big event, now a replay inside the coven (workshop ran 11 Nov). */}
         <div className="holo-edge grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-center" style={{ ...card, marginTop: 30, padding: "26px 28px", background: "var(--dark)", color: "#fff", boxShadow: "8px 8px 0 var(--pink)", position: "relative" }}>
           <div className="hd-foil" style={{ position: "relative", border: "var(--border)", borderRadius: 18, padding: "16px 22px", textAlign: "center", color: "var(--dark)", transform: "rotate(-3deg)", boxShadow: "4px 4px 0 #fff", justifySelf: "start" }}>
             <div style={{ fontFamily: pp, fontSize: 52, fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>11/11</div>
-            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>6pm UK · live</div>
-            <span style={{ position: "absolute", top: -16, right: -18, transform: "rotate(10deg)", background: "#fff", border: "var(--border)", borderRadius: 999, padding: "5px 12px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", whiteSpace: "nowrap" }}>✦ first ever ✦</span>
+            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 6 }}>replay inside</div>
+            <span style={{ position: "absolute", top: -16, right: -18, transform: "rotate(10deg)", background: "#fff", border: "var(--border)", borderRadius: 999, padding: "5px 12px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dark)", whiteSpace: "nowrap" }}>✦ watch now ✦</span>
           </div>
           <div>
-            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--pink)" }}>✨ save the f*cking date</div>
+            <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--pink)" }}>🎥 the replay is waiting</div>
             <div style={{ fontFamily: pp, fontSize: "clamp(24px, 3.4vw, 34px)", fontWeight: 800, lineHeight: 1.1, margin: "8px 0 10px" }}>our FIRST EVER coven event: <span style={{ color: "var(--pink)" }}>the 11/11 manifestation workshop.</span></div>
-            <p style={{ ...copy, margin: 0 }}>The most manifest-y moment of the ENTIRE year, and you KNOW we&apos;ll be there with candles lit, intentions SET and the most outrageous version of our lives on ordeeeer. Because of course we are. 🪄</p>
-            <div style={{ marginTop: 16, background: "var(--pink)", color: "var(--dark)", border: "2px solid #fff", borderRadius: 14, padding: "12px 16px" }}>
-              <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>🎀 the dress code</div>
-              <p style={{ margin: "6px 0 0", fontSize: 15.5, lineHeight: 1.6, fontWeight: 700 }}>Come dressed as your FUTURE SELF, babe. Whatever you&apos;re manifesting, show up as the woman who already has it, the CEO, the millionaire, the bride, the one sipping champagne on her villa balcony, and we&apos;ll call her in together. 💅</p>
+            <p style={{ ...copy, margin: 0 }}>We closed down one timeline and tuned into another, worked with the collective North Node and South Node, then went deep into what each of our own nodes means. The replay lives inside the coven, so join today and you can press play tonight, candle lit, journal open. 🪄</p>
+            {/* A picture of the replay, not the video: members watch it inside the platform. */}
+            <div style={{ position: "relative", maxWidth: 560, marginTop: 16 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/coven/replay-laptop.jpg" alt="The 11/11 workshop replay, for coven members" style={{ display: "block", width: "100%", border: "2px solid #fff", borderRadius: 14 }} />
+              <span style={{ position: "absolute", left: "50%", top: "60%", transform: "translateX(-50%)", background: "var(--dark)", color: "#fff", border: "2px solid #fff", borderRadius: 999, padding: "8px 16px", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>🔒 members only · join to watch</span>
             </div>
-            <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Bad B*tch Coven begins, and you&apos;ll want to say you were there. 💜</p>
+            <div style={{ marginTop: 16 }}><CovenJoinCta className="no-underline btn-pink" style={cta} /></div>
+            <p style={{ ...copy, margin: "12px 0 0", fontFamily: pp, fontWeight: 800 }}>The night the Bad B*tch Coven began, and it&apos;s yours to watch the moment you join. 💜</p>
           </div>
           <HoloStar size={44} style={{ top: -20, right: 30, transform: "rotate(12deg)" }} />
         </div>

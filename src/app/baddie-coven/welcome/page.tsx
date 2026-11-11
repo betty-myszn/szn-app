@@ -86,12 +86,12 @@ export default function CovenWelcomePage() {
           closed={null}
           open={
             <section style={{ background: "var(--pink)", border: "var(--border)", marginTop: 34, padding: "26px 26px 28px", color: "var(--dark)" }}>
-              <div style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>🪄 put this in your calendar</div>
+              <div style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>🎥 waiting for you inside</div>
               <h2 className="display" style={{ fontSize: "clamp(30px, 4.6vw, 50px)", lineHeight: 1.02, marginTop: 10 }}>
-                see you at the 11/11 manifestation workshop.
+                your 11/11 workshop replay is ready.
               </h2>
               <p style={{ fontSize: 18, lineHeight: 1.55, fontWeight: 700, marginTop: 12 }}>
-                Wednesday 11 November, 6pm UK, included in your membership. Come dressed as your future self, babe. 🎀
+                It&apos;s in your 11/11 portal on the platform, so light a candle, grab your journal and press play, babe. 🎀
               </p>
             </section>
           }
