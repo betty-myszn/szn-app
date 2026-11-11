@@ -1,5 +1,6 @@
 "use client";
 
+import Replay from "@/components/eleven-eleven/Replay";
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import WorkshopJoin from "@/components/WorkshopJoin";
@@ -126,6 +127,8 @@ export default function CovenHomePage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={heroArt} alt="" style={{ display: "block", width: "100%", height: "100%", minHeight: 320, objectFit: "cover", objectPosition: "50% 12%" }} />
         </section>
+
+        <Replay compact />
 
         {/* The 11/11 portal hub */}
         <Link href="/your-season/11-11" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>

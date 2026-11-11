@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useChart } from "@/lib/use-chart";
 import { MembersOnly, HoloStar, PortalNav } from "@/components/eleven-eleven/Shared";
 import UniverseMessage from "@/components/eleven-eleven/UniverseMessage";
+import Replay from "@/components/eleven-eleven/Replay";
 import { ORD, PORTAL_HOUSES, NODE_SHIFT, portalChart, savedStep, card, sectionTitle, label, pinkBtn, blackBtn, TILE_COLOURS, pp } from "@/lib/eleven-eleven-hub";
 
 // The 11/11 portal hub home: what the portal is, her portal at a glance, and doorways into the
@@ -56,6 +57,8 @@ export default function ElevenElevenHome() {
             </div>
             <HoloStar size={58} style={{ top: 18, right: "38%" }} />
           </section>
+
+          <Replay />
 
           <UniverseMessage />
 
