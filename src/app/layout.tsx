@@ -6,6 +6,7 @@ import TrialBar from "@/components/TrialBar";
 import Analytics from "@/components/Analytics";
 import ActivityLogger from "@/components/ActivityLogger";
 import SznLaunchModal from "@/components/SznLaunchModal";
+import CheckoutEmailGate from "@/components/CheckoutEmailGate";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
 import CookieConsent from "@/components/CookieConsent";
@@ -124,6 +125,8 @@ export default function RootLayout({
         <InstallPrompt />
         {/* The one-time "customise my szn" launch, for every member who hasn't picked yet. */}
         <SznLaunchModal />
+        {/* Asks for an email before any Stripe payment link opens, so drop-offs can be followed up. */}
+        <CheckoutEmailGate />
 
         {/* Nav */}
         <NavBar />

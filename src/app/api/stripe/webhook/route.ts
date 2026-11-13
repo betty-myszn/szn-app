@@ -6,6 +6,7 @@ import { sendWelcomeEmail } from "@/lib/email/welcome";
 import { sendNewMemberAdminAlert, type NewMemberAlertArgs } from "@/lib/email/admin-notify";
 import { trackOrderInSolstral } from "@/lib/solstral";
 import { logStripeEvent } from "@/lib/stripe/event-log";
+import { markCheckoutLeadPaid } from "@/lib/checkout-leads";
 import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert } from "@/lib/email/event-booking";
 import { paidReportForPrice, handlePaidReportPurchase } from "@/lib/email/bad-btch-report";
@@ -322,6 +323,9 @@ export async function POST(request: Request) {
         // Every completed checkout (membership, report, session, event ticket) goes to the Solstral
         // CRM as a buyer + an "Order Completed" event. Fire-and-forget, it never touches access.
         void trySyncSolstralOrder(stripe, session);
+
+        // She finished, so she comes off the checkout drop-off list. Fire-and-forget, never throws.
+        void markCheckoutLeadPaid(admin, stripe, session);
 
         // Event bookings (MOONIFEST and every event after it) are one-off tickets, never membership,
         // so they're handled here and never reach the tier logic below.
