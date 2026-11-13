@@ -121,7 +121,7 @@ export default function SessionCards() {
                 {open.focus.map((f) => <li key={f} style={{ fontSize: 15.5, fontWeight: 600, lineHeight: 1.5 }}><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>{f}</li>)}
               </ul>
               <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 16, lineHeight: 1.45, margin: "22px 0 0", padding: "14px 16px", background: "var(--pink-light)", border: "var(--border)", borderRadius: 14 }}>✨ {open.after}</p>
-              {open.report ? <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}>{open.report.popup}</p> : <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}><strong>{opt.minutes} minutes on Zoom | ${opt.priceUsd} USD</strong>, with your recording, reports, action plan, guides, journal prompts and exercises landing after. Pop your birth details in at checkout, then I&apos;ll be in your inbox to lock in a time that works in your time zone AND mine.</p>}
+              {open.report ? <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}>{open.report.popup}</p> : <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "20px 0 12px" }}><strong>{opt.minutes} minutes on Zoom | ${opt.priceUsd} USD</strong>, with your recording, reports, action plan, guides, journal prompts and exercises landing after. Pop your birth details in straight after you pay, then I&apos;ll be in your inbox to lock in a time that works in your time zone AND mine.</p>}
               <Extras s={open} onLink={close} />
               <div style={{ paddingTop: 12 }}>
                 <a href={bookingHref(open.bookingUrl, `Baddie Session: ${open.name}`)} className="no-underline btn-pink" style={btn("var(--pink)")}>{open.cta}</a>

@@ -79,7 +79,7 @@ const NUMBERS = [
 
 const FAQ = [
   ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports. Sorry to your horoscope app. 😘"],
-  ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["If you don't know your birth time", "Tick \"I don't know my birth time\" on the page after you pay and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
   ["How you get it", "Your report lands in your inbox within 48 hours of buying, as a beautifully designed PDF to read in bed, print, highlight and scribble ALLLL over. You'll get a confirmation email with your birth details the second you pay, so you can check we've got them right."],
   ["What it costs", "$88 at the introductory price, one payment, yours forever. Being early has its perks, babe. 💖"],
 ] as const;
@@ -245,7 +245,7 @@ export default function BadBtchReportPage() {
             <span className="pk">go meet her.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500, maxWidth: 640 }}>
-            Pop your birth details in at checkout and your Bad B*tch Report lands in your inbox within 48 hours, written for your chart, sign AND house, every single page. Your main character era starts HERE, my love. ✨
+            Pop your birth details in straight after you pay and your Bad B*tch Report lands in your inbox within 48 hours, written for your chart, sign AND house, every single page. Your main character era starts HERE, my love. ✨
           </p>
           <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 32 }}>
             <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>

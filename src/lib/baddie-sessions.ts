@@ -33,7 +33,7 @@ export const SESSION_OPTIONS: SessionOption[] = [
   { name: "The Baddie Session", minutes: 90, minutesForTwo: 120, priceUsd: 333, priceForTwoUsd: 555, priceForTwoWasUsd: 666, forTwoBookingUrl: "https://buy.stripe.com/cNieVe7ArdQb65I8WV7kc0G", forTwoStripePriceId: "price_1UVIq2J6s9fRhiJoa2lZJlrr", giftBookingUrl: "https://buy.stripe.com/00w5kE07Z6nJ1Ps0qp7kc0H", giftStripePriceId: "price_1UVIwpJ6s9fRhiJow8XNHjYe", blurb: "Ninety minutes of private 1:1 coaching with me, plus the two to three hours I spend beforehand obsessing over your astrology and Human Design, with hypnosis, mindset work and energy work thrown in wherever your goals need them. 💅", bookingUrl: "#sessions" },
 ];
 
-/** Three sessions, mixed and matched from all five; birth details at checkout like a single. */
+/** Three sessions, mixed and matched from all five; birth details straight after payment like a single. */
 export const SESSION_PACKAGE = {
   sessions: 3,
   priceUsd: 888,
@@ -200,7 +200,7 @@ const ALL_OFFERINGS: BaddieSession[] = [
     body: [
       "Your best self already has a look, babe, and it's written all over your chart. This report is me finding it and getting you dressed in it NOW, before you've 'earned' it.",
       "I read your Venus (your taste), your Rising (how the world clocks you the second you walk in) and your Moon (what you feel amazing in), plus your Human Design, to work out exactly how your best self dresses. Then I go shopping for her and put it ALL in your own style report: your colours, your shapes, a few key outfits and the key items to buy.",
-      "You pop your birth details in at checkout, I email you for your sizes, your budget and your style goals, and your report lands in your inbox ready to shop, with no Zoom call to get camera-ready for. Every time you get dressed after that, you're stepping into the version of you who already has the life you want.",
+      "You pop your birth details in straight after you pay, I email you for your sizes, your budget and your style goals, and your report lands in your inbox ready to shop, with no Zoom call to get camera-ready for. Every time you get dressed after that, you're stepping into the version of you who already has the life you want.",
     ],
     after: "This baddie walks out dressed as her best self, with a signature look so HER that people start asking where she got everything.",
     reviews: [],
@@ -213,7 +213,7 @@ const ALL_OFFERINGS: BaddieSession[] = [
     ],
     report: {
       card: "Your personal style report | $111 USD",
-      popup: "A personal style report, emailed to you | $111 USD, packed with your colours, your shapes, a few key outfits and the key items to buy. Pop your birth details in at checkout, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
+      popup: "A personal style report, emailed to you | $111 USD, packed with your colours, your shapes, a few key outfits and the key items to buy. Pop your birth details in straight after you pay, then I'll be in your inbox to grab your sizes, your budget and your style goals so I can go shopping for you.",
       share: "A personal style report from Betty, with your colours, your shapes and a few key outfits, built from your astrology and Human Design.",
     },
     image: "/baddie-sessions/card-style.jpg", imagePosition: "center 30%",

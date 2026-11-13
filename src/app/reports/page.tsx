@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-// Same Stripe Payment Links as the two report pages (birth details are collected at checkout).
+// Same Stripe Payment Links as the two report pages (birth details are collected on /order/details straight after payment).
 const BBR_BUY_URL = "https://buy.stripe.com/5kQcN6f2TcM7gKm4GF7kc0A";
 const RBR_BUY_URL = "https://buy.stripe.com/bJe3cwf2TaDZalY5KJ7kc0J";
 
@@ -132,7 +132,7 @@ const REVIEW_ROWS = [
 
 const FAQ = [
   ["If you're new to astrology", "Babe, you don't need to know your rising from your elbow. Every placement is explained in plain bestie language as you read, so you'll finish knowing your chart better than half the astrology accounts on your feed. 😘"],
-  ["If you don't know your birth time", "Write \"unknown\" in the birth time box at checkout and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
+  ["If you don't know your birth time", "Tick \"I don't know my birth time\" on the page after you pay and we work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
   ["How you get it", "The Bad B*tch Report and Rich B*tch Rising land in your inbox as a gorgeous PDF within 48 hours of buying, and a confirmation email with your birth details hits the second you pay, so you can double-check we've got them righttt. For The Baddie Style Report I email you first for your sizes, your budget and your style goals, then I go shopping and send it over. 👗"],
   ["Which one to start with", "If money is the LOUDEST thing in your life right now, start with Rich B*tch Rising. For everything else (confidence, visibility, desire, power and your big, outrageous dream) start with The Bad B*tch Report, which has a whole money chapter of its own anyway, orrr get both and become completely unstoppable. 💸💜"],
   ["Who writes it", "Me, Betty, hiii. Every word comes from writing I've done for every sign and every house, matched to your exact chart and put together by hand for every single order, with a LOT of love and a candle lit. 🕯️"],
