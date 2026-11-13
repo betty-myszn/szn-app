@@ -3,6 +3,7 @@ import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail, sendBrevoTemplateEmail } from "@/lib/email/brevo";
 import { adminRecipients } from "@/lib/email/admin-notify";
 import type { BaddieSession } from "@/lib/baddie-sessions";
+import { detailsUrl, ensurePendingOrder, sessionHasBirth } from "@/lib/order-details";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -77,6 +78,12 @@ export async function handleBaddieSessionPurchase(admin: SupabaseAdmin, session:
     return;
   }
 
+  // New flow: nothing was asked on the Stripe page, so she gives her birth details on /order/details
+  // (straight after paying, or from the button in this confirmation email). For-two bookings never
+  // collected birth details at checkout and still don't.
+  const needsDetails = !forTwo && !sessionHasBirth(session);
+  if (needsDetails) await ensurePendingOrder(admin, session, { name: isPackage ? "Baddie Session Package" : baddie?.report ? "Baddie Style Report" : `Baddie Session: ${sessionName}`, promises48h: false });
+
   try {
     if (!(await alreadySent(admin, session.id, BUYER_KIND))) {
       const r = await sendBrevoTemplateEmail({
@@ -87,6 +94,7 @@ export async function handleBaddieSessionPurchase(admin: SupabaseAdmin, session:
           : {
               first_name: name.split(/\s+/)[0] ?? "", session_name: sessionName,
               birth_date: birth.date || "not given", birth_time: birth.time || "not given", birth_place: birth.place || "not given",
+              ...(needsDetails ? { details_url: detailsUrl(session.id) } : {}),
             },
       });
       await logSend(admin, { email, kind: BUYER_KIND, sessionId: session.id, ok: r.ok, messageId: r.ok ? r.messageId : null, error: r.ok ? null : r.error });
@@ -101,9 +109,9 @@ export async function handleBaddieSessionPurchase(admin: SupabaseAdmin, session:
       const amount = session.amount_total != null ? `$${(session.amount_total / 100).toFixed(2)}` : "";
       const rows = forTwo
         ? [["Session", `${sessionName || "(not picked)"} for two`], ["Name", name], ["Bringing", partner], ["Email", email], ["Paid", amount], ["Stripe session", session.id]]
-        : [["Session", sessionName], ["Name", name], ["Email", email], ["Date of birth", birth.date], ["Time of birth", birth.time], ["Place of birth", birth.place], ["Paid", amount], ["Stripe session", session.id]];
+        : [["Session", sessionName], ["Name", name], ["Email", email], ["Date of birth", needsDetails ? "to follow" : birth.date], ["Time of birth", needsDetails ? "to follow" : birth.time], ["Place of birth", needsDetails ? "to follow" : birth.place], ["Paid", amount], ["Stripe session", session.id]];
       const asked = forTwo ? "both of their birth details, their time zones, a few times that suit and their goals" : isPackage ? "her time zone, a few times that suit, which session she wants first and her goals" : baddie?.report ? "her sizes, her budget, her style goals and a few outfit photos" : "her time zone, a few times that suit and her goals";
-      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New Baddie Session${forTwo ? " for two" : ""} booked 💖</strong> She's been emailed to reply with ${asked}, so watch for her reply and ${baddie?.report && !forTwo ? "start shopping for her report" : "send the Zoom link"}.</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
+      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New Baddie Session${forTwo ? " for two" : ""} booked 💖</strong> She's been emailed to reply with ${asked}, so watch for her reply and ${baddie?.report && !forTwo ? "start shopping for her report" : "send the Zoom link"}.${needsDetails ? " Her birth details come in on the page after payment, and you'll get a second email the moment they land." : ""}</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
       let ok = false, lastError = "", messageId: string | null = null;
       for (const to of adminRecipients()) {
         const r = await sendBrevoEmail({ to: { email: to }, subject: `New Baddie Session${forTwo ? " for two" : ""} booked: ${sessionName || "session not picked"} for ${name || email}`, htmlContent });

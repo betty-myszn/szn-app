@@ -2,6 +2,7 @@ import type Stripe from "stripe";
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail, sendBrevoTemplateEmail } from "@/lib/email/brevo";
 import { adminRecipients } from "@/lib/email/admin-notify";
+import { detailsUrl, ensurePendingOrder, sessionHasBirth } from "@/lib/order-details";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -67,6 +68,11 @@ export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: St
     return;
   }
 
+  // New flow: nothing was asked on the Stripe page, so she gives her birth details on /order/details
+  // (straight after paying, or from the button in this confirmation email). Her 48 hours start then.
+  const needsDetails = !sessionHasBirth(session);
+  if (needsDetails) await ensurePendingOrder(admin, session, { name: report.name, promises48h: true });
+
   try {
     if (!(await alreadySent(admin, session.id, report.buyerKind))) {
       const r = await sendBrevoTemplateEmail({
@@ -77,6 +83,7 @@ export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: St
           birth_date: birth.date || "not given",
           birth_time: birth.time || "not given",
           birth_place: birth.place || "not given",
+          ...(needsDetails ? { details_url: detailsUrl(session.id) } : {}),
         },
       });
       await logSend(admin, { email, kind: report.buyerKind, sessionId: session.id, ok: r.ok, messageId: r.ok ? r.messageId : null, error: r.ok ? null : r.error });
@@ -89,8 +96,8 @@ export async function handlePaidReportPurchase(admin: SupabaseAdmin, session: St
   try {
     if (!(await alreadySent(admin, session.id, report.adminKind))) {
       const amount = session.amount_total != null ? `$${(session.amount_total / 100).toFixed(2)}` : "";
-      const rows = [["Name", name], ["Email", email], ["Date of birth", birth.date], ["Time of birth", birth.time], ["Place of birth", birth.place], ["Paid", amount], ["Stripe session", session.id]];
-      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New ${report.name} order ${report.emoji}</strong> Her report is promised within 48 hours.</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
+      const rows = [["Name", name], ["Email", email], ["Date of birth", needsDetails ? "to follow" : birth.date], ["Time of birth", needsDetails ? "to follow" : birth.time], ["Place of birth", needsDetails ? "to follow" : birth.place], ["Paid", amount], ["Stripe session", session.id]];
+      const htmlContent = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1a1a1a;"><p><strong>New ${report.name} order ${report.emoji}</strong> ${needsDetails ? "She gives her birth details on the page after payment. You'll get a second email the moment they land, and her 48 hours start then." : "Her report is promised within 48 hours."}</p><table cellpadding="6" style="border-collapse:collapse;">${rows.map(([k, v]) => `<tr><td style="border:1px solid #1a1a1a;font-weight:700;">${k}</td><td style="border:1px solid #1a1a1a;">${esc(v || "(not given)")}</td></tr>`).join("")}</table></div>`;
       let ok = false, lastError = "", messageId: string | null = null;
       for (const to of adminRecipients()) {
         const r = await sendBrevoEmail({ to: { email: to }, subject: `New ${report.name} order: ${name || email}`, htmlContent });

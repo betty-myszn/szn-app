@@ -144,6 +144,9 @@ export default function CheckoutEmailGate() {
         >
           {sending ? "Taking you to checkout" : "Continue to checkout"}
         </button>
+        <p style={{ fontSize: 13, lineHeight: 1.5, margin: "14px 0 0" }}>
+          🔒 Secure checkout with Stripe. MY SZN is part of The Cosmic Co, so that&apos;s the name you&apos;ll see on the payment page and on your statement.
+        </p>
       </form>
     </div>
   );
