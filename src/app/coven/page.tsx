@@ -1,6 +1,5 @@
 "use client";
 
-import Replay from "@/components/eleven-eleven/Replay";
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import WorkshopJoin from "@/components/WorkshopJoin";
@@ -30,7 +29,8 @@ const HERO_ART: Record<string, string> = {
 };
 
 const HUB_LINKS = [
-  ["🔮", "11/11 portal", "/your-season/11-11"],
+  ["♀", "the goddess day", "/your-season/friday-13"],
+  ["🔮", "11/11 portal + replay", "/your-season/11-11"],
   ["🪐", "my szn", "/dashboard"],
   ["💬", "baddie chat", "/community"],
   ["✨", "my chart", "/my-chart"],
@@ -125,21 +125,27 @@ export default function CovenHomePage() {
             <DailyMagicButton />
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={heroArt} alt="" style={{ display: "block", width: "100%", height: "100%", minHeight: 320, objectFit: "cover", objectPosition: "50% 12%" }} />
+          <img src={heroArt} alt="" className="block w-full aspect-[4/5] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 12%", minHeight: 320 }} />
         </section>
 
-        <Replay compact />
-
-        {/* The 11/11 portal hub */}
-        <Link href="/your-season/11-11" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
+        {/* Friday 13th + the double direct (13 Nov 2026) */}
+        <Link href="/your-season/friday-13" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
           <div>
-            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🔮 new · the 11/11 portal</span>
-            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>step through the portal.</h2>
-            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your message from the universe, what 11/11 opens in YOUR chart, and all 17 workshop exercises to walk through at your own pace.</p>
-            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>open my portal →</span>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♀ the day of the goddess</span>
+            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>HAPPY FRIDAY THE F*CKING 13TH, WITCHES! 🖤🔮</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Friday is Venus&apos;s day, 13 is the number of the moon, and today Venus herself goes direct, with Mercury right beside her. The goddess is taking her power back, babe, and so are you. 🔮</p>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>enter the goddess&apos;s day →</span>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/disco-planet-logo.png" alt="" style={{ display: "block", width: "min(320px, 80%)", justifySelf: "center" }} />
+          <div className="hd-foil" style={{ justifySelf: "center", border: "var(--border)", borderRadius: 22, padding: "18px 28px", textAlign: "center", color: "var(--dark)", transform: "rotate(3deg)", boxShadow: "6px 6px 0 #fff" }}>
+            <div className="display" style={{ fontSize: "clamp(72px, 10vw, 112px)", lineHeight: 0.9 }}>13</div>
+            <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>☿ direct · ♀ direct</div>
+          </div>
+        </Link>
+
+        {/* 11/11, now small: the portal hub and the replay */}
+        <Link href="/your-season/11-11" className="no-underline flex flex-wrap items-center justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--lav-light)", color: "var(--dark)", padding: "16px 20px", gap: 12 }}>
+          <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>🔮 the 11/11 portal + workshop replay</span>
+          <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>watch + open →</span>
         </Link>
 
         {/* Next circle */}
