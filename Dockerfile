@@ -42,7 +42,10 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+# 13 Nov 2026: Turbopack builds started dying on Railway mid-compile with exit 1 and no error
+# printed (the same commit builds fine locally). If it fails, print Turbopack's panic log so the
+# cause shows up in Railway's build logs, then fall back to the webpack build, which works.
+RUN npm run build || (cat /tmp/next-panic-*.log 2>/dev/null; echo "Turbopack build failed, retrying with webpack"; NODE_OPTIONS=--max-old-space-size=4096 npx next build --webpack)
 
 FROM node:22-bookworm-slim AS run
 WORKDIR /app
