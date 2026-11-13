@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import CovenOpenSwitch from "@/components/CovenOpenSwitch";
 import { OFFERS, type OfferSlug } from "@/lib/offers";
 import { SESSION_OPTIONS } from "@/lib/baddie-sessions";
 import { track, EVENTS } from "@/lib/analytics";
@@ -58,7 +59,7 @@ export default function ResultsUpsell({ name }: { name?: string }) {
         {/* The coven, featured: foil card, so everything on it stays solid black (no holo on holo). */}
         <div className="hd-foil" style={{ position: "relative", marginTop: 40, border: "var(--border)", borderRadius: 24, padding: "30px 28px", boxShadow: "10px 12px 0 var(--dark)", color: "var(--dark)" }}>
           <span style={{ position: "absolute", top: -14, right: 18, transform: "rotate(4deg)", background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "7px 14px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            opens 9 nov · 4 days only
+            <CovenOpenSwitch open={<>open for friday the 13th · until sunday</>} closed={<>founding price · join the waitlist</>} />
           </span>
           <div className="md:flex md:items-center md:justify-between gap-8">
             <div style={{ maxWidth: 600 }}>

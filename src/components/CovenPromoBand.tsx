@@ -15,7 +15,7 @@ export default function CovenPromoBand() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
         <div>
           <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>
-            <CovenOpenSwitch open={<>🦄 the bad b*tch coven · 4 days only</>} closed={<>🦄 opens 9 nov · 4 days only</>} />
+            <CovenOpenSwitch open={<>🦄 the bad b*tch coven · open for friday the 13th, until sunday</>} closed={<>🦄 opens 9 nov · 4 days only</>} />
           </span>
           <h2 className="display" style={{ fontSize: "clamp(42px, 5.2vw, 72px)", color: "var(--dark)", lineHeight: 0.95, marginTop: 22 }}>
             <CovenOpenSwitch
