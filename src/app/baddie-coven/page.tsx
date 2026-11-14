@@ -151,6 +151,7 @@ const FAQS = [
   ["Is it online?", "It is, so you can join from anywhere in the world and connect with witchy women everywhere, wearing whatever you like."],
   ["Do I need art supplies or witchy tools?", "You don't need to be an artist, own expensive supplies or make anything remotely Instagram-worthy. Bring a notebook, your curiosity and that candle you've been saving."],
   ["How much will it cost?", "Founding baddies pay $44 a month, locked in for as long as you stay. That's your monthly coven circle, your personalised platform with the astrology of every season, the rituals, the prompts and the coven chat rooms. Founding spots are limited, and once they're gone the price goes up. 💸"],
+  ["Can I cancel?", "Anytime, babe. Cancel in a couple of clicks from your settings, with no calls, no forms and no guilt trips. Your founding price stays yours for as long as you stay. 💜"],
   ["When can I join?", "Right now, babe! We've opened the coven again especially for Friday the 13th, until midnight UK on Sunday 15 November. Our FIRST EVER coven event was the 11/11 manifestation workshop, and the full replay is waiting inside for you the moment you join. 🪄"],
 ];
 
@@ -275,7 +276,7 @@ function OfferBlock() {
             <span style={{ fontFamily: pp, fontSize: "clamp(84px, 11vw, 124px)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.05em" }}>$44</span>
             <span style={{ fontFamily: pp, fontSize: 28, fontWeight: 800 }}>/month</span>
           </div>
-          <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, marginTop: 6 }}>locked in for as long as you stay a member</div>
+          <div style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, marginTop: 6 }}>locked in for as long as you stay a member · cancel anytime</div>
           <div className="hd-foil" style={{ marginTop: 18, border: "var(--border)", borderRadius: 14, padding: "12px 14px", fontFamily: pp, fontSize: 15.5, fontWeight: 800, color: "var(--dark)" }}>🎥 the 11/11 workshop replay is INCLUDED</div>
           <p style={{ fontFamily: pp, fontSize: 19, fontWeight: 800, lineHeight: 1.2, margin: "20px 0 4px" }}>
             <CovenOpenSwitch open={<>OPEN AGAIN FOR FRIDAY THE 13TH, UNTIL SUNDAY.</>} closed={<>OPENS 9 NOV FOR 4 DAYS ONLY.</>} />
@@ -364,7 +365,7 @@ export default function BaddieCovenPage() {
             {/* The launch in one glance: deadline, price, countdown. The 11/11 detail lives in section 06. */}
             <div className="holo-edge" style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "14px 18px", maxWidth: 620 }}>
               <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>✨ <CovenOpenSwitch open={<>The coven is OPEN again especially for Friday the 13th, until midnight UK on Sunday.</>} closed={<>The coven opens 9 November, for 4 days only.</>} /></div>
-              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.5, fontWeight: 700 }}><span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay.</span> Founding spots are limited, and the price goes up after that. 💸</p>
+              <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.5, fontWeight: 700 }}><span style={{ color: "var(--pink)" }}>$44 a month, locked in for as long as you stay, and you can cancel anytime.</span> Founding spots are limited, and the price goes up after that. 💸</p>
               <CovenCountdown />
             </div>
           </>
