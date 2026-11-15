@@ -78,6 +78,24 @@ export interface ChartData {
   rulerships: PlanetaryRulership[];
   calculatedAt: string;
   approximate: boolean;
+  /** Every Lilith point in the chart (mean Black Moon, True, Asteroid 1181 when its ephemeris
+   * file is present, Dark Moon), each with its own aspects. Optional because charts cached before
+   * this existed don't carry it. Mean Lilith also stays in `planets` as before. */
+  liliths?: LilithPoint[];
+}
+
+export type LilithId = "lilith" | "true_lilith" | "asteroid_lilith" | "dark_moon_lilith";
+
+export interface LilithAspect {
+  /** Name of the planet or angle she touches, e.g. "Pluto", "Ascendant". */
+  body: string;
+  type: AspectType;
+  orb: number;
+}
+
+export interface LilithPoint extends PlanetPosition {
+  id: LilithId;
+  aspects: LilithAspect[];
 }
 
 export const ZODIAC_SIGNS = [

@@ -9,6 +9,8 @@ import { PLANET_SYMBOLS } from "@/types/chart";
 import { getSymbol } from "@/lib/style-data";
 import { glossify } from "@/components/AstroTerm";
 import { Box, SectionHead, makeLead } from "@/components/learn/LearnKit";
+import { LilithFamily } from "@/components/learn/LilithFamily";
+import { LilithMeditation } from "@/components/learn/LilithMeditation";
 import { DeepDiveBody, DeepDiveHero, DeepDivePage, PinkLink, Pill, Stack, goDeeper, toneFromBg } from "@/components/learn/DeepDive";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -168,6 +170,9 @@ export default function PlacementPage() {
             </Box>
           )}
         </Stack>
+
+        {bodyId === "lilith" && <LilithFamily chart={chart} />}
+        {bodyId === "lilith" && <LilithMeditation chart={chart} isAdmin={member.isAdmin} />}
 
         <SectionHead title="the real talk" />
         <Stack>

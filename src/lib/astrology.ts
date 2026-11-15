@@ -9,6 +9,9 @@ import {
   type PlanetaryRulership,
   type ChartData,
   type BirthData,
+  type LilithPoint,
+  type LilithAspect,
+  type LilithId,
   ZODIAC_SIGNS,
   ASPECT_CONFIG,
 } from "@/types/chart";
@@ -31,6 +34,56 @@ const PLANETS = [
   { id: "north_node", name: "North Node", swissId: swisseph.SE_TRUE_NODE },
   { id: "lilith", name: "Lilith", swissId: swisseph.SE_MEAN_APOG },
 ];
+
+// The four Liliths. Mean Black Moon is also in PLANETS (it drives the rest of the app); the others
+// only live in chart.liliths so they never change the wheel, aspects grid or synthesis.
+// Asteroid 1181 needs ephe/ast1/se01181s.se1; without that file it is skipped, never faked.
+// Dark Moon is Waldemath's hypothetical second moon, from the elements in ephe/seorbel.txt.
+const LILITH_POINTS: { id: LilithId; name: string; swissId: number }[] = [
+  { id: "lilith", name: "Black Moon Lilith", swissId: swisseph.SE_MEAN_APOG },
+  { id: "true_lilith", name: "True Lilith", swissId: swisseph.SE_OSCU_APOG },
+  { id: "asteroid_lilith", name: "Asteroid Lilith", swissId: swisseph.SE_AST_OFFSET + 1181 },
+  { id: "dark_moon_lilith", name: "Dark Moon Lilith", swissId: swisseph.SE_WALDEMATH },
+];
+
+// Lilith is a sensitive point, not a planet, so her aspects get tighter orbs than planet-to-planet.
+const LILITH_ORBS: Record<string, number> = {
+  conjunction: 5,
+  opposition: 5,
+  square: 4,
+  trine: 4,
+  sextile: 3,
+};
+const LILITH_ASPECT_TARGETS = [
+  "sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn",
+  "uranus", "neptune", "pluto", "chiron", "north_node",
+];
+
+function lilithAspects(
+  lng: number,
+  planets: PlanetPosition[],
+  angles: { name: string; longitude: number }[],
+): LilithAspect[] {
+  const targets = [
+    ...planets
+      .filter((p) => LILITH_ASPECT_TARGETS.includes(p.id))
+      .map((p) => ({ name: p.name, longitude: p.longitude })),
+    ...angles,
+  ];
+  const out: LilithAspect[] = [];
+  for (const t of targets) {
+    let diff = Math.abs(lng - t.longitude);
+    if (diff > 180) diff = 360 - diff;
+    for (const [type, config] of Object.entries(ASPECT_CONFIG) as [AspectType, { angle: number }][]) {
+      const orb = Math.abs(diff - config.angle);
+      if (orb <= LILITH_ORBS[type]) {
+        out.push({ body: t.name, type, orb: Math.round(orb * 10) / 10 });
+        break;
+      }
+    }
+  }
+  return out.sort((a, b) => a.orb - b.orb);
+}
 
 const RULERSHIPS: PlanetaryRulership[] = [
   { sign: "Aries", traditionalRuler: "Mars", modernRuler: "Mars" },
@@ -289,6 +342,36 @@ export function calculateChart(birthData: BirthData): ChartData {
 
   const aspects = calculateAspects(planets);
 
+  // Angles only count when the birth time is trusted; an approximate time moves them too far.
+  const angles = birthData.birthTimeApproximate
+    ? []
+    : [
+        { name: "Ascendant", longitude: ascendant },
+        { name: "Midheaven", longitude: midheaven },
+      ];
+  const liliths: LilithPoint[] = [];
+  for (const point of LILITH_POINTS) {
+    const result = swisseph.swe_calc_ut(julianDay, point.swissId, flags) as {
+      longitude?: number;
+      latitude?: number;
+      longitudeSpeed?: number;
+      error?: string;
+    };
+    if (typeof result.longitude !== "number") continue; // e.g. asteroid file not installed
+    const lng = result.longitude;
+    liliths.push({
+      id: point.id,
+      name: point.name,
+      longitude: lng,
+      latitude: result.latitude ?? 0,
+      ...longitudeToSign(lng),
+      house: findHouse(lng, cusps),
+      retrograde: (result.longitudeSpeed ?? 0) < 0,
+      longitudeSpeed: result.longitudeSpeed,
+      aspects: lilithAspects(lng, planets, angles),
+    });
+  }
+
   const localFormatted = localDateTime.toFormat("yyyy-MM-dd HH:mm:ss ZZZZ");
   const utcFormatted = utcDateTime.toFormat("yyyy-MM-dd HH:mm:ss 'UTC'");
 
@@ -305,5 +388,6 @@ export function calculateChart(birthData: BirthData): ChartData {
     rulerships: RULERSHIPS,
     calculatedAt: new Date().toISOString(),
     approximate: birthData.birthTimeApproximate,
+    liliths,
   };
 }

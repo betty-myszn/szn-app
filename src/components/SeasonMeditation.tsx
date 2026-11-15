@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { meditationBySlug, meditationForSign } from "@/lib/meditations";
+import { canvaEmbedSrc, meditationBySlug, meditationForSign, type Meditation } from "@/lib/meditations";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -19,8 +19,19 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export default function SeasonMeditation({ sign, slug, tag = "this szn's meditation" }: { sign?: string; slug?: string; tag?: string }) {
-  const meditation = slug ? meditationBySlug(slug) : sign ? meditationForSign(sign) : undefined;
+export default function SeasonMeditation({
+  sign,
+  slug,
+  meditation: given,
+  tag = "this szn's meditation",
+}: {
+  sign?: string;
+  slug?: string;
+  /** Pass a meditation directly, for ones that live on a page rather than in the library. */
+  meditation?: Meditation;
+  tag?: string;
+}) {
+  const meditation = given ?? (slug ? meditationBySlug(slug) : sign ? meditationForSign(sign) : undefined);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -135,7 +146,18 @@ export default function SeasonMeditation({ sign, slug, tag = "this szn's meditat
           </div>
         )}
 
-        {meditation.youtubeId ? (
+        {meditation.canvaUrl ? (
+          <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", border: "1px solid rgba(255,255,255,0.15)" }}>
+            <iframe
+              src={canvaEmbedSrc(meditation.canvaUrl)}
+              title={meditation.title}
+              loading="lazy"
+              allow="fullscreen; autoplay"
+              allowFullScreen
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
+            />
+          </div>
+        ) : meditation.youtubeId ? (
           <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", border: "1px solid rgba(255,255,255,0.15)" }}>
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${meditation.youtubeId}?rel=0&modestbranding=1`}

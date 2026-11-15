@@ -29,6 +29,8 @@ export interface Meditation {
   image?: string;
   /** YouTube video id, for meditations hosted there. */
   youtubeId?: string;
+  /** A Canva design's public view link (Share → "View only" link), played as an embed. */
+  canvaUrl?: string;
   /** Longer framing, shown on the player. */
   intro: string[];
   /** Optional "inside this meditation" list. */
@@ -114,6 +116,80 @@ export const MEDITATIONS: Meditation[] = [
     publishedAt: "2026-10-01",
   },
 ];
+
+// The Lilith activation meditation lives on the member's own Lilith page (/my-chart/lilith), not in
+// the library, so it sits outside MEDITATIONS on purpose. The section stays hidden from members
+// until Betty's recording is in: set `src` (an mp3 in /public/meditations) or `youtubeId`.
+export const LILITH_MEDITATION: Meditation = {
+  slug: "lilith-activation",
+  title: "Lilith: Money & Power Activation",
+  purpose: "Reclaim your power. Embody your dark feminine. Manifest more $$$.",
+  theme: "lilith",
+  image: "/meditations/lilith-activation.png",
+  // Betty's Canva video (share link canva.link/lilith-meditation-and-activation).
+  canvaUrl: "https://www.canva.com/design/DAHbBWhpDg4/RspiYPOxK52FpBtH0rJMNg/watch",
+  intro: [
+    "A guided hypnosis, goddess invocation and energetic activation for the woman who's ready to stop playing small and start owning her power. Welcome to your Lilith era, baddie. 🌑💸",
+    "We're working with the energy of Lilith, the powerful feminine archetype associated with sovereignty, independence, desire and rebellion, to explore your relationship with money, success, visibility and personal freedom.",
+  ],
+  workingWith: [
+    "✨ Connect with the goddess Lilith: work with her symbolic energy of feminine sovereignty, courage, protection and independence.",
+    "🖤 Explore your money shadows: identify inherited beliefs around wealth, ambition, receiving and financial independence.",
+    "🔥 Reclaim your personal power: explore where you've silenced your voice, abandoned your desires or compromised your boundaries.",
+    "💸 Activate your wealthy future self: visualise the woman who feels confident receiving money, expressing her ambition and making powerful financial decisions.",
+    "👑 Embody your highest self: use hypnotic suggestions, affirmations and future-self visualisation to practise new beliefs about success, visibility and self-worth.",
+    "💜 Reconnect with your voice: a heart-centred humming ritual designed to help you feel grounded and connected to your body.",
+  ],
+  howTo: [
+    "Find somewhere comfortable where you won't be disturbed, put your phone on silent and allow yourself this time.",
+    "You don't need candles, crystals or anything fancy. Just yourself, your intention and a willingness to explore what you're ready to change.",
+    "Listen while seated or lying somewhere safe, never while driving.",
+  ],
+  publishedAt: "2026-11-15",
+};
+
+/** Betty's extra sections for the Lilith activation, shown as tap-to-open panels on the Lilith page. */
+export const LILITH_ACTIVATION_EXTRAS = {
+  forYouIf: [
+    "You feel guilty about wanting more $$$.",
+    "You're afraid of becoming too successful or visible.",
+    "You've been taught that powerful women are selfish, intimidating or dangerous.",
+    "You've made yourself smaller to receive love or approval.",
+    "You feel uncomfortable receiving, charging or asking for money.",
+    "You've given away your power in relationships, business or friendships.",
+    "You associate independence with rejection or abandonment.",
+  ],
+  shadowWork: [
+    { label: "the belief", q: "What have I been taught about wealthy, ambitious or powerful women, and how have those beliefs influenced my choices?" },
+    { label: "the power", q: "Where have I been making myself smaller, silencing my desires or giving away my authority to keep other people comfortable?" },
+    { label: "the money", q: "What would change in my life if I felt completely comfortable receiving, earning, managing and asking for more money?" },
+    { label: "the future self", q: "How does the wealthiest, most confident and most independent version of me behave, and what can I start doing differently today?" },
+    { label: "the activation", q: "What's one concrete action I can take in the next 24 hours to strengthen my financial independence or reclaim my power?" },
+  ],
+  affirmations: [
+    "I am allowed to be wealthy, powerful and free.",
+    "My ambition is sacred.",
+    "I refuse to shrink to make others comfortable.",
+    "My voice, my desires and my boundaries matter.",
+    "I am worthy of receiving extraordinary opportunities.",
+    "I trust myself to create financial independence.",
+    "My success doesn't require anybody else's permission.",
+    "I am the authority in my own life.",
+  ],
+  communityHref: "/community/room/general",
+};
+
+/** True once the Lilith meditation has a recording to play. */
+export function lilithMeditationReady(): boolean {
+  return Boolean(LILITH_MEDITATION.src || LILITH_MEDITATION.youtubeId || LILITH_MEDITATION.canvaUrl);
+}
+
+/** Canva's embed address for a design's public link: keeps /watch (video) or /view, adds ?embed and
+ * drops the share-tracking query. */
+export function canvaEmbedSrc(url: string): string {
+  const base = url.split("?")[0].replace(/\/edit$/, "/view").replace(/\/$/, "");
+  return `${/\/(watch|view)$/.test(base) ? base : `${base}/view`}?embed`;
+}
 
 export function meditationBySlug(slug: string): Meditation | undefined {
   return MEDITATIONS.find((m) => m.slug === slug);
