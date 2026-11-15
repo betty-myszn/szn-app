@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ChartData } from "@/types/chart";
 import { HOUSE_MEANINGS, ordinalHouse } from "@/lib/interpretations";
-import { lilithPersonalReading } from "@/lib/lilith-reading";
+import { lilithDeepReading, lilithMoneyExercise } from "@/lib/lilith-reading";
 import { lilithSerif } from "@/lib/lilith-font";
 import { LilithFamily } from "@/components/learn/LilithFamily";
 import { LilithMeditation } from "@/components/learn/LilithMeditation";
@@ -150,36 +150,96 @@ function MeetHer() {
 
 type Tile = "shamed" | "where" | "money" | "shadow" | "affirm" | "move";
 
+// A labelled block inside an opened tile; tiles hold several of these side by side.
+function Block({ label, dark, children }: { label: string; dark?: boolean; children: React.ReactNode }) {
+  return (
+    <div style={{ background: dark ? "rgba(255,255,255,.06)" : "rgba(255,255,255,.65)", border: dark ? "1px solid rgba(255,255,255,.15)" : "1px solid rgba(26,26,26,.15)", borderRadius: 14, padding: "14px 16px" }}>
+      <div style={{ fontFamily: poppins, fontSize: 11.5, fontWeight: 800, letterSpacing: 1.3, textTransform: "uppercase", marginBottom: 6, color: dark ? "var(--pink)" : "var(--dark)" }}>{label}</div>
+      <div style={{ fontSize: 15.5, lineHeight: 1.6 }}>{children}</div>
+    </div>
+  );
+}
+
+const grid: React.CSSProperties = { display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" };
+const list: React.CSSProperties = { margin: 0, paddingLeft: 18, display: "grid", gap: 6 };
+
 function YourLilith({ chart }: { chart: ChartData }) {
   const mean = chart.liliths?.find((l) => l.id === "lilith") ?? chart.planets.find((p) => p.id === "lilith");
   const [open, setOpen] = useState<Tile | null>("shamed");
   if (!mean) return null;
-  const r = lilithPersonalReading(mean.sign, mean.house);
-  if (!r) return null;
-  const hm = HOUSE_MEANINGS[mean.house - 1];
   const ord = ordinalHouse(mean.house);
+  const r = lilithDeepReading(mean.sign, mean.house, ord);
+  const ex = lilithMoneyExercise(mean.sign, mean.house);
+  if (!r || !ex) return null;
+  const hm = HOUSE_MEANINGS[mean.house - 1];
 
-  const tiles: { id: Tile; emoji: string; title: string; teaser: string; tone: "pink" | "lav" | "dark" | "white"; body: React.ReactNode }[] = [
-    { id: "shamed", emoji: "🖤", title: "what they shamed outta you", teaser: `Your ${mean.sign} Lilith, the part that got called too much.`, tone: "dark", body: <p style={{ margin: 0 }}>{r.shamed}</p> },
-    { id: "where", emoji: "🏠", title: `where she's been hiding`, teaser: `Your ${ord} house${hm ? ` of ${hm.title}` : ""}.`, tone: "pink", body: <p style={{ margin: 0 }}>{r.where}</p> },
-    { id: "money", emoji: "💸", title: "your lilith money era", teaser: "How she prices, negotiates and leads.", tone: "lav", body: <p style={{ margin: 0 }}>{r.money}</p> },
+  const tiles: { id: Tile; emoji: string; title: string; teaser: string; tone: "pink" | "lav" | "dark" | "white"; body: (dark: boolean) => React.ReactNode }[] = [
     {
-      id: "shadow", emoji: "🌑", title: "shadow work, babe", teaser: "Three questions written for your placement.", tone: "white",
-      body: (
-        <ol style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 10 }}>
-          {r.prompts.map((q) => <li key={q} style={{ fontWeight: 700 }}>{q}</li>)}
-        </ol>
-      ),
-    },
-    {
-      id: "affirm", emoji: "👑", title: "say it like you mean it", teaser: "Your Lilith affirmations.", tone: "pink",
-      body: (
-        <div style={{ display: "grid", gap: 10 }}>
-          {r.affirmations.map((a) => <p key={a} style={{ fontFamily: poppins, fontSize: 22, lineHeight: 1.25, margin: 0, fontWeight: 800 }}>&ldquo;{a}&rdquo;</p>)}
+      id: "shamed", emoji: "🖤", title: "what they shamed outta you", teaser: `Your ${mean.sign} Lilith, the part that got called too much.`, tone: "dark",
+      body: (d) => (
+        <div style={grid}>
+          <Block dark={d} label="what got shamed">{r.shamed.exiled}</Block>
+          <Block dark={d} label="what they called you">{r.shamed.called}</Block>
+          <Block dark={d} label="when she's buried">{r.shamed.buried}</Block>
+          <Block dark={d} label="when she's reclaimed">{r.shamed.reclaimed}</Block>
         </div>
       ),
     },
-    { id: "move", emoji: "🔥", title: "your move this week", teaser: "One real-life step.", tone: "lav", body: <p style={{ margin: 0, fontWeight: 700 }}>{r.step}</p> },
+    {
+      id: "where", emoji: "🏠", title: "where she's been hiding", teaser: `Your ${ord} house${hm ? ` of ${hm.title}` : ""}.`, tone: "pink",
+      body: (d) => (
+        <div style={grid}>
+          <Block dark={d} label="where she lives">{r.where.lives}</Block>
+          <Block dark={d} label="sign + house together">{r.where.together}</Block>
+          <Block dark={d} label="buried here">{r.where.buried}</Block>
+          <Block dark={d} label="reclaimed here">{r.where.reclaimed}</Block>
+        </div>
+      ),
+    },
+    {
+      id: "money", emoji: "💸", title: "your lilith money era", teaser: "Your money pattern, blocks, moves and an exercise.", tone: "lav",
+      body: (d) => (
+        <div style={{ display: "grid", gap: 12 }}>
+          <div style={grid}>
+            <Block dark={d} label="your money pattern">{r.money.pattern}</Block>
+            <Block dark={d} label="where the money is">{r.money.house}</Block>
+            <Block dark={d} label="money blocks to watch"><ul style={list}>{r.money.blocks.map((x) => <li key={x}>{x}</li>)}</ul></Block>
+            <Block dark={d} label="money moves"><ul style={list}>{r.money.moves.map((x) => <li key={x}>{x}</li>)}</ul></Block>
+          </div>
+          <div style={{ background: "#08070a", color: "#fff", borderRadius: 16, padding: "18px 18px" }}>
+            <div style={{ fontFamily: poppins, fontSize: 11.5, fontWeight: 800, letterSpacing: 1.3, textTransform: "uppercase", color: "var(--pink)" }}>💸 your money exercise</div>
+            <div style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, margin: "4px 0 10px" }}>{ex.title}</div>
+            <ol style={{ ...list, gap: 8 }}>{ex.steps.map((x) => <li key={x}>{x}</li>)}</ol>
+            <p style={{ margin: "10px 0 0", fontWeight: 700 }}>{ex.focus}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "shadow", emoji: "🌑", title: "shadow work, babe", teaser: "Seven questions written for your placement.", tone: "white",
+      body: () => (
+        <div>
+          <ol style={{ ...list, gap: 10, paddingLeft: 22 }}>{r.prompts.map((q) => <li key={q} style={{ fontWeight: 700 }}>{q}</li>)}</ol>
+          <p style={{ margin: "14px 0 0" }}>Pick one a day. Write until you surprise yourself, then read back what you wrote out loud.</p>
+        </div>
+      ),
+    },
+    {
+      id: "affirm", emoji: "👑", title: "say it like you mean it", teaser: "Eight Lilith affirmations, yours to keep.", tone: "pink",
+      body: () => (
+        <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+          {r.affirmations.map((a) => <p key={a} style={{ fontFamily: poppins, fontSize: 18, lineHeight: 1.3, margin: 0, fontWeight: 800 }}>&ldquo;{a}&rdquo;</p>)}
+        </div>
+      ),
+    },
+    {
+      id: "move", emoji: "🔥", title: "your move this week", teaser: "Four real-life steps.", tone: "lav",
+      body: (d) => (
+        <div style={grid}>
+          {r.moves.map((m, i) => <Block key={m} dark={d} label={`move 0${i + 1}`}><strong>{m}</strong></Block>)}
+        </div>
+      ),
+    },
   ];
 
   const toneStyle = (t: string) =>
@@ -214,11 +274,11 @@ function YourLilith({ chart }: { chart: ChartData }) {
         })}
       </div>
       {active && (
-        <div style={{ ...toneStyle(active.tone), marginTop: 14, border: "1.5px solid var(--dark)", borderRadius: 20, padding: "22px 22px", fontSize: 16.5, lineHeight: 1.65 }}>
-          <div style={{ fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 10, color: active.tone === "dark" ? "var(--pink)" : "var(--dark)" }}>
+        <div style={{ ...toneStyle(active.tone), marginTop: 14, border: "1.5px solid var(--dark)", borderRadius: 20, padding: "22px 22px" }}>
+          <div style={{ fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 12, color: active.tone === "dark" ? "var(--pink)" : "var(--dark)" }}>
             {active.emoji} {active.title}
           </div>
-          {active.body}
+          {active.body(active.tone === "dark")}
           {active.id === "shadow" && (
             <Link href="/journal" className="no-underline" style={{ display: "inline-block", marginTop: 14, fontWeight: 700, color: "var(--dark)" }}>journal on this →</Link>
           )}

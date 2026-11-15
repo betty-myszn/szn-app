@@ -131,7 +131,19 @@ export default function CovenHomePage() {
           <img src={heroArt} alt="" className="block w-full aspect-[4/5] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 12%", minHeight: 320 }} />
         </section>
 
-        {geminiLive ? (
+        {/* Lilith: Money & Power Activation + the members' Lilith page (15 Nov 2026) */}
+        <Link href="/my-chart/lilith" className="no-underline grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", background: "#08070a", border: "var(--border)", boxShadow: "6px 6px 0 var(--pink)" }}>
+          <div style={{ padding: "clamp(24px, 3.6vw, 40px)", alignSelf: "center" }}>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🖤 new in your coven</span>
+            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>LILITH: MONEY &amp; POWER ACTIVATION 💸</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your guided hypnosis and goddess activation is HERE, babe, plus your own Lilith page: all four of your Liliths, your shadow work, your Lilith money era and a money exercise written for your placement. 🔮</p>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>meet your lilith →</span>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/lilith/lilith-hero.jpg" alt="Lilith under a glitter crescent moon" className="block w-full aspect-[4/3] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 15%", minHeight: 260 }} />
+        </Link>
+
+        {geminiLive && (
           <>
             {/* Full Moon in Gemini (24 Nov 2026) */}
             <Link href="/your-season/gemini-full-moon" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
@@ -146,36 +158,25 @@ export default function CovenHomePage() {
                 <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>2° gemini · 2:53pm UK</div>
               </div>
             </Link>
-
-            {/* Friday 13th, now small */}
-            <Link href="/your-season/friday-13" className="no-underline flex flex-wrap items-center justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--pink-light)", color: "var(--dark)", padding: "16px 20px", gap: 12 }}>
-              <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>♀ friday the 13th: the goddess day ritual + spell</span>
-              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>open →</span>
-            </Link>
-          </>
-        ) : (
-          <>
-            {/* Friday 13th + the double direct (13 Nov 2026) */}
-            <Link href="/your-season/friday-13" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
-              <div>
-                <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♀ the day of the goddess</span>
-                <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>HAPPY FRIDAY THE F*CKING 13TH, WITCHES! 🖤🔮</h2>
-                <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Friday is Venus&apos;s day, 13 is the number of the moon, and today Venus herself goes direct, with Mercury right beside her. The goddess is taking her power back, babe, and so are you. 🔮</p>
-                <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>enter the goddess&apos;s day →</span>
-              </div>
-              <div className="hd-foil" style={{ justifySelf: "center", border: "var(--border)", borderRadius: 22, padding: "18px 28px", textAlign: "center", color: "var(--dark)", transform: "rotate(3deg)", boxShadow: "6px 6px 0 #fff" }}>
-                <div className="display" style={{ fontSize: "clamp(72px, 10vw, 112px)", lineHeight: 0.9 }}>13</div>
-                <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>☿ direct · ♀ direct</div>
-              </div>
-            </Link>
           </>
         )}
 
-        {/* 11/11, now small: the portal hub and the replay */}
-        <Link href="/your-season/11-11" className="no-underline flex flex-wrap items-center justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--lav-light)", color: "var(--dark)", padding: "16px 20px", gap: 12 }}>
-          <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>🔮 the 11/11 portal + workshop replay</span>
-          <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>watch + open →</span>
-        </Link>
+        {/* What you might've missed: the last few days' portals, now small and side by side */}
+        <section>
+          <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>✨ what you might&apos;ve missed, babe</div>
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
+            <Link href="/your-season/friday-13" className="no-underline flex flex-col justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--pink-light)", color: "var(--dark)", padding: "18px 20px", gap: 10 }}>
+              <span style={{ fontFamily: pp, fontSize: 17, fontWeight: 800 }}>♀ friday the 13th: the goddess day portal</span>
+              <span style={{ fontSize: 15, lineHeight: 1.45 }}>Venus and Mercury went direct together. The ritual and spell are still waiting for you.</span>
+              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>open the portal →</span>
+            </Link>
+            <Link href="/your-season/11-11" className="no-underline flex flex-col justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--lav-light)", color: "var(--dark)", padding: "18px 20px", gap: 10 }}>
+              <span style={{ fontFamily: pp, fontSize: 17, fontWeight: 800 }}>🔮 the 11/11 portal + workshop replay</span>
+              <span style={{ fontSize: 15, lineHeight: 1.45 }}>Your North and South Node reading, the 17 exercises and the full manifestation workshop replay.</span>
+              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>watch + open →</span>
+            </Link>
+          </div>
+        </section>
 
         {/* Next circle */}
         {circleUpcoming && now !== null ? (
