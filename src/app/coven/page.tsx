@@ -10,7 +10,7 @@ import { hasActiveAccess } from "@/lib/membership-access";
 import { getSeasonEmbodiment } from "@/lib/season-embodiment";
 import { loadRoomMessages, type ChatMessage } from "@/lib/chat-rooms";
 import { WORKSHOPS } from "@/lib/workshops";
-import { COVEN_CIRCLE, COVEN_MOONS, COVEN_ROOM_ID, COVEN_THEME } from "@/lib/coven-month";
+import { COVEN_CIRCLE, COVEN_MOONS, COVEN_ROOM_ID, COVEN_THEME, moonVisible } from "@/lib/coven-month";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -29,6 +29,7 @@ const HERO_ART: Record<string, string> = {
 };
 
 const HUB_LINKS = [
+  ["🌕", "gemini full moon", "/your-season/gemini-full-moon"],
   ["♀", "the goddess day", "/your-season/friday-13"],
   ["🔮", "11/11 portal + replay", "/your-season/11-11"],
   ["🪐", "my szn", "/dashboard"],
@@ -101,7 +102,9 @@ export default function CovenHomePage() {
   }, []);
 
   const spells = season ? getSeasonEmbodiment(season.sign)?.spells ?? [] : [];
-  const nextMoon = now === null ? null : COVEN_MOONS.find((m) => m.at > now) ?? null;
+  // Moons stay off the coven home until the day before (UK), then show for three days after.
+  const nextMoon = now === null ? null : COVEN_MOONS.find((m) => moonVisible(m.at, now)) ?? null;
+  const geminiLive = nextMoon?.sign === "Gemini" && nextMoon.date === "2026-11-24";
   const circleUpcoming = now !== null && now < COVEN_CIRCLE.endsAt;
   const circleStarted = now !== null && now >= COVEN_CIRCLE.startsAt;
   const replays = WORKSHOPS.filter((w) => w.hasReplay).slice(-3).reverse();
@@ -128,19 +131,45 @@ export default function CovenHomePage() {
           <img src={heroArt} alt="" className="block w-full aspect-[4/5] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 12%", minHeight: 320 }} />
         </section>
 
-        {/* Friday 13th + the double direct (13 Nov 2026) */}
-        <Link href="/your-season/friday-13" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
-          <div>
-            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♀ the day of the goddess</span>
-            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>HAPPY FRIDAY THE F*CKING 13TH, WITCHES! 🖤🔮</h2>
-            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Friday is Venus&apos;s day, 13 is the number of the moon, and today Venus herself goes direct, with Mercury right beside her. The goddess is taking her power back, babe, and so are you. 🔮</p>
-            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>enter the goddess&apos;s day →</span>
-          </div>
-          <div className="hd-foil" style={{ justifySelf: "center", border: "var(--border)", borderRadius: 22, padding: "18px 28px", textAlign: "center", color: "var(--dark)", transform: "rotate(3deg)", boxShadow: "6px 6px 0 #fff" }}>
-            <div className="display" style={{ fontSize: "clamp(72px, 10vw, 112px)", lineHeight: 0.9 }}>13</div>
-            <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>☿ direct · ♀ direct</div>
-          </div>
-        </Link>
+        {geminiLive ? (
+          <>
+            {/* Full Moon in Gemini (24 Nov 2026) */}
+            <Link href="/your-season/gemini-full-moon" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
+              <div>
+                <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🌕 tuesday 24th of november</span>
+                <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>FULL MOON IN GEMINI, BABYYYY! 🌕💬</h2>
+                <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Gemini rules your words and the stories you tell about yourself, and with Mercury freshly direct, everything that got stuck in your throat is ready to come OUT. See where it lands in your chart, rewrite the old story and do the twins ritual. ✨</p>
+                <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>enter the full moon portal →</span>
+              </div>
+              <div className="hd-foil" style={{ justifySelf: "center", border: "var(--border)", borderRadius: 22, padding: "18px 28px", textAlign: "center", color: "var(--dark)", transform: "rotate(3deg)", boxShadow: "6px 6px 0 #fff" }}>
+                <div className="display" style={{ fontSize: "clamp(72px, 10vw, 112px)", lineHeight: 0.9 }}>{"\u264A\uFE0E"}</div>
+                <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>2° gemini · 2:53pm UK</div>
+              </div>
+            </Link>
+
+            {/* Friday 13th, now small */}
+            <Link href="/your-season/friday-13" className="no-underline flex flex-wrap items-center justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--pink-light)", color: "var(--dark)", padding: "16px 20px", gap: 12 }}>
+              <span style={{ fontFamily: pp, fontSize: 16, fontWeight: 800 }}>♀ friday the 13th: the goddess day ritual + spell</span>
+              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>open →</span>
+            </Link>
+          </>
+        ) : (
+          <>
+            {/* Friday 13th + the double direct (13 Nov 2026) */}
+            <Link href="/your-season/friday-13" className="no-underline holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", padding: "clamp(24px, 3.6vw, 40px)", gap: 18 }}>
+              <div>
+                <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♀ the day of the goddess</span>
+                <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>HAPPY FRIDAY THE F*CKING 13TH, WITCHES! 🖤🔮</h2>
+                <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Friday is Venus&apos;s day, 13 is the number of the moon, and today Venus herself goes direct, with Mercury right beside her. The goddess is taking her power back, babe, and so are you. 🔮</p>
+                <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>enter the goddess&apos;s day →</span>
+              </div>
+              <div className="hd-foil" style={{ justifySelf: "center", border: "var(--border)", borderRadius: 22, padding: "18px 28px", textAlign: "center", color: "var(--dark)", transform: "rotate(3deg)", boxShadow: "6px 6px 0 #fff" }}>
+                <div className="display" style={{ fontSize: "clamp(72px, 10vw, 112px)", lineHeight: 0.9 }}>13</div>
+                <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 8 }}>☿ direct · ♀ direct</div>
+              </div>
+            </Link>
+          </>
+        )}
 
         {/* 11/11, now small: the portal hub and the replay */}
         <Link href="/your-season/11-11" className="no-underline flex flex-wrap items-center justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--lav-light)", color: "var(--dark)", padding: "16px 20px", gap: 12 }}>
@@ -182,7 +211,7 @@ export default function CovenHomePage() {
         <section>
           <h2 className="display" style={sectionTitle}>everything in <span className="pk">your coven.</span></h2>
           <nav aria-label="Everything in your coven" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
-            {HUB_LINKS.map(([emoji, name, href], i) => (
+            {HUB_LINKS.filter(([, , href]) => href !== "/your-season/gemini-full-moon" || geminiLive).map(([emoji, name, href], i) => (
               <Link key={href} href={href} className="no-underline" style={{ ...card, ...TILE_COLOURS[i % TILE_COLOURS.length], border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
                 <span style={{ background: "#fff", width: 62, height: 62, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 30, margin: "0 auto", boxShadow: "3px 3px 0 var(--dark)" }}>{emoji}</span>
                 <span style={{ display: "block", fontFamily: pp, fontSize: 18, fontWeight: 800, lineHeight: 1.1, marginTop: 12 }}>{name}</span>

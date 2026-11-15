@@ -23,3 +23,13 @@ export const COVEN_MOONS = [
 ];
 
 export const COVEN_ROOM_ID = "general";
+
+// A moon appears on the homepages from midnight UK the day before it, and stays for the three days
+// its glow lasts. UK is on GMT from late October to late March, which covers every moon above.
+const DAY = 86_400_000;
+export function moonShowsFrom(at: number): number {
+  return Math.floor((at - DAY) / DAY) * DAY;
+}
+export function moonVisible(at: number, now: number): boolean {
+  return now >= moonShowsFrom(at) && now < at + 3 * DAY;
+}
