@@ -82,7 +82,7 @@ function Hero({ sign, house, degree, onGo }: { sign: string; house: number; degr
             your black moon lilith · {sign.toLowerCase()} · {ordinalHouse(house)} house · {degree}
           </p>
           <h1 style={{ fontFamily: serif, fontWeight: 300, fontSize: "clamp(72px, 13vw, 132px)", lineHeight: 0.9, letterSpacing: "0.04em", margin: 0 }}>LILITH</h1>
-          <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: "clamp(22px, 3vw, 30px)", lineHeight: 1.2, color: "var(--lav)", margin: "10px 0 14px" }}>
+          <p style={{ fontFamily: poppins, fontWeight: 700, fontSize: "clamp(18px, 2.4vw, 24px)", lineHeight: 1.25, color: "var(--lav)", margin: "12px 0 14px" }}>
             The dark goddess of power, protection &amp; feminine sovereignty
           </p>
           <p style={{ fontSize: 17, lineHeight: 1.6, margin: "0 0 22px", maxWidth: 520 }}>
@@ -119,7 +119,7 @@ function FlipCard({ c }: { c: (typeof MEET)[number] }) {
         <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "12px 0 0" }}>{c.body}</p>
       ) : (
         <>
-          <p style={{ fontFamily: serif, fontSize: 30, lineHeight: 1.1, margin: "18px 0 0", fontWeight: 500 }}>{c.teaser}</p>
+          <p style={{ fontFamily: poppins, fontSize: 22, lineHeight: 1.25, margin: "18px 0 0", fontWeight: 800 }}>{c.teaser}</p>
           <span style={{ marginTop: "auto", paddingTop: 18, fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "var(--lav)" }}>tap to meet her →</span>
         </>
       )}
@@ -131,8 +131,8 @@ function MeetHer() {
   const [older, setOlder] = useState(false);
   return (
     <Band dark>
-      <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: "clamp(40px, 6vw, 60px)", lineHeight: 1, margin: "0 0 6px" }}>Meet Lilith</h2>
-      <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: 24, color: "var(--lav)", margin: "0 0 22px" }}>Goddess of the night, feminine sovereignty and untamed power.</p>
+      <h2 style={{ fontFamily: poppins, fontWeight: 800, fontSize: "clamp(32px, 5vw, 48px)", lineHeight: 1.05, letterSpacing: "-1px", margin: "0 0 8px" }}>meet lilith<span className="pk">.</span></h2>
+      <p style={{ fontFamily: poppins, fontWeight: 700, fontSize: 18, lineHeight: 1.35, color: "var(--lav)", margin: "0 0 22px" }}>Goddess of the night, feminine sovereignty and untamed power.</p>
       <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
         {MEET.map((c) => <FlipCard key={c.label} c={c} />)}
       </div>
@@ -175,7 +175,7 @@ function YourLilith({ chart }: { chart: ChartData }) {
       id: "affirm", emoji: "👑", title: "say it like you mean it", teaser: "Your Lilith affirmations.", tone: "pink",
       body: (
         <div style={{ display: "grid", gap: 10 }}>
-          {r.affirmations.map((a) => <p key={a} style={{ fontFamily: serif, fontSize: 28, lineHeight: 1.15, margin: 0, fontWeight: 600 }}>&ldquo;{a}&rdquo;</p>)}
+          {r.affirmations.map((a) => <p key={a} style={{ fontFamily: poppins, fontSize: 22, lineHeight: 1.25, margin: 0, fontWeight: 800 }}>&ldquo;{a}&rdquo;</p>)}
         </div>
       ),
     },
@@ -188,8 +188,8 @@ function YourLilith({ chart }: { chart: ChartData }) {
 
   return (
     <Band>
-      <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: "clamp(40px, 6vw, 60px)", lineHeight: 1, margin: "0 0 6px" }}>
-        Your Lilith in <span className="pk">{mean.sign}</span>
+      <h2 style={{ fontFamily: poppins, fontWeight: 800, fontSize: "clamp(32px, 5vw, 48px)", lineHeight: 1.05, letterSpacing: "-1px", margin: "0 0 8px" }}>
+        your lilith in <span className="pk">{mean.sign.toLowerCase()}</span>
       </h2>
       <p style={{ fontFamily: poppins, fontWeight: 700, fontSize: 15, margin: "0 0 20px" }}>
         {ord} house · {mean.formattedDegree} · tap a tile to open it up
@@ -240,7 +240,7 @@ export function LilithPage({ chart, isAdmin }: { chart: ChartData; isAdmin: bool
   };
 
   return (
-    <div className={lilithSerif.className} style={{ fontFamily: "var(--font-dm-sans), DM Sans, sans-serif", background: "#fff" }}>
+    <div style={{ fontFamily: poppins, background: "#fff" }}>
       <LilithMotionStyles />
       <Hero sign={mean.sign} house={mean.house} degree={mean.formattedDegree} onGo={go} />
 
@@ -271,7 +271,7 @@ export function LilithPage({ chart, isAdmin }: { chart: ChartData; isAdmin: bool
       {/* Next-chapter nudge so nobody hits a dead end */}
       <Band dark>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-          <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: 26, margin: 0 }}>She was never the problem, babe. 🖤</p>
+          <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 22, margin: 0 }}>She was never the problem, babe. 🖤</p>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {CHAPTERS.filter((c) => c.id !== chapter).map((c) => (
               <button key={c.id} type="button" style={btn(false, true)} onClick={() => go(c.id)}>{c.label} →</button>
