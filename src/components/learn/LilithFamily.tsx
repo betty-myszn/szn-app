@@ -338,7 +338,7 @@ export function LilithFamily({ chart }: { chart: ChartData }) {
       <div style={{ marginBottom: 14 }}>
         <Box tone="white" label="why there's more than one">
           <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, lineHeight: 1.35, margin: "0 0 10px" }}>
-            The Moon&apos;s orbit wobbles, so astrology tracks four Liliths, and each one answers a different question.
+            Four Liliths, four different questions: Black Moon and True Lilith are two ways of measuring the Moon&apos;s farthest point, Asteroid Lilith is a real asteroid and Dark Moon Lilith is a hypothetical moon read symbolically.
           </p>
           {compare && <p style={{ margin: 0 }}>{glossify(compare)}</p>}
           <p style={{ margin: "10px 0 0", fontWeight: 700 }}>Open each one for her meaning, how to reclaim her power, her aspects, affirmations and journal prompts.</p>
