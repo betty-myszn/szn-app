@@ -9,6 +9,7 @@ import { glossify } from "@/components/AstroTerm";
 import { Box, SectionHead } from "@/components/learn/LearnKit";
 import { Pill, Stack } from "@/components/learn/DeepDive";
 import { LilithBanner, LilithGlyph, LilithMotionStyles } from "@/components/learn/LilithMotif";
+import { lilithHouseLine, lilithSignLine } from "@/lib/lilith-placements";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -46,11 +47,11 @@ const LILITHS: Record<LilithId, LilithCopy> = {
   true_lilith: {
     role: "how she erupts",
     tone: "pink",
-    short: "How she bursts out when someone presses the button.",
+    short: "How she reacts in the moment, when someone presses the button.",
     what:
       "The Moon's real farthest point at the minute you were born, wobble and all, so she can sit up to 30 degrees from your Black Moon. She's the snap, the walkout, the thing you say before you've decided to say it.",
     affirmations: (sign) => [
-      `My ${sign} fire is safe to come out on purpose, so it never has to explode.`,
+      `My ${sign} energy is safe to come out on purpose, so it never has to explode.`,
       "My reactions are information, and I'm allowed to feel every one of them.",
     ],
     prompts: () => [
@@ -64,9 +65,9 @@ const LILITHS: Record<LilithId, LilithCopy> = {
     short: "The women who trigger you and the people who bring her out.",
     what:
       "A real asteroid between Mars and Jupiter, the only Lilith you could see through a telescope. She shows up in the women who trigger you and the partners who bring your wild side out.",
-    affirmations: (sign) => [
+    affirmations: () => [
       "The women who trigger me are showing me what I'm ready to claim.",
-      `I let other people's ${sign} wildness give me permission instead of making me jealous.`,
+      "I let other women's wildness give me permission instead of making me jealous.",
     ],
     prompts: (sign, area) => [
       "Who triggers me most right now, and what does she have that I want?",
@@ -151,6 +152,8 @@ function LilithCard({ p }: { p: LilithPoint }) {
   const hm = HOUSE_MEANINGS[p.house - 1];
   const area = hm ? hm.title : `${ordinalHouse(p.house)} house`;
   const pillTone = dark ? "pink" : "white";
+  const signLine = lilithSignLine(p.id, p.sign);
+  const houseLine = lilithHouseLine(p.id, p.house);
 
   return (
     <div className="lil-card" style={{ position: "relative" }}>
@@ -171,6 +174,19 @@ function LilithCard({ p }: { p: LilithPoint }) {
       {open && (
         <div>
           <p style={{ marginTop: 12 }}>{glossify(info.what)}</p>
+
+          {signLine && (
+            <>
+              <MiniLabel dark={dark}>{`what ${p.sign.toLowerCase()} means for her`}</MiniLabel>
+              <p style={{ margin: 0 }}>{glossify(signLine)}</p>
+            </>
+          )}
+          {houseLine && (
+            <>
+              <MiniLabel dark={dark}>{`what your ${ordinalHouse(p.house)} house means for her`}</MiniLabel>
+              <p style={{ margin: 0 }}>{glossify(houseLine)}</p>
+            </>
+          )}
 
           <MiniLabel dark={dark}>her aspects</MiniLabel>
           {p.aspects.length ? (
