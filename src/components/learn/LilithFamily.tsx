@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import type { ChartData, LilithId, LilithPoint, AspectType } from "@/types/chart";
 import { HOUSE_MEANINGS, ordinalHouse } from "@/lib/interpretations";
@@ -9,7 +8,7 @@ import { glossify } from "@/components/AstroTerm";
 import { Box, SectionHead } from "@/components/learn/LearnKit";
 import { Pill, Stack } from "@/components/learn/DeepDive";
 import { LilithBanner, LilithGlyph, LilithMotionStyles } from "@/components/learn/LilithMotif";
-import { lilithHouseLine, lilithSignLine } from "@/lib/lilith-placements";
+import { lilithAspectMeaning, lilithConnectedReading, lilithHouseLine, lilithReclaim, lilithSignLine } from "@/lib/lilith-placements";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
@@ -49,7 +48,7 @@ const LILITHS: Record<LilithId, LilithCopy> = {
     tone: "pink",
     short: "How she reacts in the moment, when someone presses the button.",
     what:
-      "The Moon's real farthest point at the minute you were born, wobble and all, so she can sit up to 30 degrees from your Black Moon. She's the snap, the walkout, the thing you say before you've decided to say it.",
+      "The Moon's real farthest point at the minute you were born, wobble and all, which astrologically is another way of calculating the same point as your Black Moon. MY SZN reads her as your in-the-moment reactions: the snap, the walkout, the thing you say before you've decided to.",
     affirmations: (sign) => [
       `My ${sign} energy is safe to come out on purpose, so it never has to explode.`,
       "My reactions are information, and I'm allowed to feel every one of them.",
@@ -62,9 +61,9 @@ const LILITHS: Record<LilithId, LilithCopy> = {
   asteroid_lilith: {
     role: "where you meet her in others",
     tone: "lav",
-    short: "The women who trigger you and the people who bring her out.",
+    short: "How she plays out in your relationships, attractions and triggers.",
     what:
-      "A real asteroid between Mars and Jupiter, the only Lilith you could see through a telescope. She shows up in the women who trigger you and the partners who bring your wild side out.",
+      "A real asteroid between Mars and Jupiter, the only Lilith you could see through a telescope. She shows how Lilith plays out in your relationships: who you're drawn to, who triggers you and who mirrors your wild side.",
     affirmations: () => [
       "The women who trigger me are showing me what I'm ready to claim.",
       "I let other women's wildness give me permission instead of making me jealous.",
@@ -79,7 +78,7 @@ const LILITHS: Record<LilithId, LilithCopy> = {
     tone: "lav",
     short: "The layer you hide even from yourself.",
     what:
-      "A second moon the astronomer Georg Waldemath reported in 1898, never confirmed, still calculated from his figures. She's the shadow underneath the shadow, so go gently and come back to her last.",
+      "A hypothetical second moon the astronomer Georg Waldemath reported in 1898 and nobody has confirmed, so she's read symbolically. She's the shadow underneath the shadow, so go gently and come back to her last.",
     affirmations: (sign, area) => [
       "I'm safe to see the parts of me I've hidden, even from myself.",
       `I stop pulling back around my ${area} right before the good thing lands.`,
@@ -145,15 +144,28 @@ function MiniLabel({ children, dark }: { children: React.ReactNode; dark: boolea
   );
 }
 
+type Tab = "meaning" | "reclaim" | "aspects" | "practise";
+const TABS: { id: Tab; label: string }[] = [
+  { id: "meaning", label: "her meaning" },
+  { id: "reclaim", label: "👑 reclaim your power" },
+  { id: "aspects", label: "her aspects" },
+  { id: "practise", label: "affirmations & prompts" },
+];
+
 function LilithCard({ p }: { p: LilithPoint }) {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<Tab>("meaning");
   const info = LILITHS[p.id];
   const dark = info.tone === "dark";
   const hm = HOUSE_MEANINGS[p.house - 1];
   const area = hm ? hm.title : `${ordinalHouse(p.house)} house`;
   const pillTone = dark ? "pink" : "white";
+  const ord = ordinalHouse(p.house);
   const signLine = lilithSignLine(p.id, p.sign);
   const houseLine = lilithHouseLine(p.id, p.house);
+  const connected = lilithConnectedReading(p.id, p.sign, p.house, ord);
+  const reclaim = lilithReclaim(p.id, p.sign, p.house);
+  const ink = dark ? "var(--pink)" : "var(--dark)";
 
   return (
     <div className="lil-card" style={{ position: "relative" }}>
@@ -162,12 +174,13 @@ function LilithCard({ p }: { p: LilithPoint }) {
     </div>
     <Box tone={info.tone} label={`${p.name.toLowerCase()} · ${info.role}`}>
       <p style={{ fontFamily: poppins, fontSize: 22, fontWeight: 800, lineHeight: 1.2, margin: "0 0 10px" }}>
-        {p.sign.toLowerCase()}, {ordinalHouse(p.house)} house
+        {p.sign.toLowerCase()}, {ord} house
       </p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
         <Pill tone={pillTone}>{p.formattedDegree}</Pill>
         {hm && <Pill tone={pillTone}>{hm.title}</Pill>}
         {p.id === "true_lilith" && p.retrograde && <Pill tone={pillTone}>moving backwards</Pill>}
+        {p.id === "dark_moon_lilith" && <Pill tone={pillTone}>symbolic point</Pill>}
       </div>
       <p style={{ fontWeight: 700, margin: 0 }}>{info.short}</p>
 
@@ -175,53 +188,105 @@ function LilithCard({ p }: { p: LilithPoint }) {
         <div>
           <p style={{ marginTop: 12 }}>{glossify(info.what)}</p>
 
-          {signLine && (
-            <>
-              <MiniLabel dark={dark}>{`what ${p.sign.toLowerCase()} means for her`}</MiniLabel>
-              <p style={{ margin: 0 }}>{glossify(signLine)}</p>
-            </>
-          )}
-          {houseLine && (
-            <>
-              <MiniLabel dark={dark}>{`what your ${ordinalHouse(p.house)} house means for her`}</MiniLabel>
-              <p style={{ margin: 0 }}>{glossify(houseLine)}</p>
-            </>
-          )}
-
-          <MiniLabel dark={dark}>her aspects</MiniLabel>
-          {p.aspects.length ? (
-            <ul style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 2 }}>
-              {p.aspects.map((a) => (
-                <li key={a.body + a.type}>
-                  {ASPECT_WORDS[a.type]} your <strong>{a.body.toLowerCase()}</strong> ({a.type}, {a.orb}°)
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p style={{ margin: 0 }}>No tight aspects, so she speaks through her sign and house alone.</p>
-          )}
-
-          <MiniLabel dark={dark}>your affirmations</MiniLabel>
-          <div style={{ display: "grid", gap: 8 }}>
-            {info.affirmations(p.sign, area).map((a) => (
-              <p key={a} style={{ fontFamily: poppins, fontWeight: 800, fontSize: 16.5, lineHeight: 1.35, margin: 0 }}>
-                &ldquo;{a}&rdquo;
-              </p>
+          <div role="tablist" style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "14px 0 4px" }}>
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={tab === t.id}
+                onClick={() => setTab(t.id)}
+                style={{
+                  background: tab === t.id ? ink : "transparent",
+                  color: tab === t.id ? (dark ? "var(--dark)" : "#fff") : (dark ? "#fff" : "var(--dark)"),
+                  border: `1.5px solid ${ink}`,
+                  borderRadius: 999,
+                  padding: "6px 12px",
+                  fontFamily: poppins,
+                  fontSize: 11.5,
+                  fontWeight: 700,
+                  letterSpacing: 0.8,
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                }}
+              >
+                {t.label}
+              </button>
             ))}
           </div>
 
-          <MiniLabel dark={dark}>journal prompts</MiniLabel>
-          <ol style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 6 }}>
-            {info.prompts(p.sign, area).map((q) => (
-              <li key={q} style={{ fontWeight: 700 }}>{q}</li>
-            ))}
-          </ol>
+          {tab === "meaning" && (
+            <div>
+              {connected && <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 17, lineHeight: 1.35, margin: "12px 0 0" }}>{connected}</p>}
+              {signLine && (
+                <>
+                  <MiniLabel dark={dark}>{`what ${p.sign.toLowerCase()} means for her`}</MiniLabel>
+                  <p style={{ margin: 0 }}>{glossify(signLine)}</p>
+                </>
+              )}
+              {houseLine && (
+                <>
+                  <MiniLabel dark={dark}>{`what your ${ord} house means for her`}</MiniLabel>
+                  <p style={{ margin: 0 }}>{glossify(houseLine)}</p>
+                </>
+              )}
+            </div>
+          )}
+
+          {tab === "reclaim" && reclaim && (
+            <div>
+              <MiniLabel dark={dark}>where you give it away</MiniLabel>
+              <p style={{ margin: 0 }}>{reclaim.giveaway}</p>
+              <MiniLabel dark={dark}>how you take it back</MiniLabel>
+              <p style={{ margin: 0 }}>{reclaim.reclaim}</p>
+              <MiniLabel dark={dark}>try this week</MiniLabel>
+              <p style={{ margin: 0, fontWeight: 700 }}>{reclaim.step}</p>
+            </div>
+          )}
+
+          {tab === "aspects" && (
+            <div>
+              {p.aspects.length ? (
+                <ul style={{ margin: "12px 0 0", paddingLeft: 18, display: "grid", gap: 8 }}>
+                  {p.aspects.map((a) => {
+                    const meaning = lilithAspectMeaning(a.body, a.type);
+                    return (
+                      <li key={a.body + a.type}>
+                        <strong>{a.body}</strong> ({a.type}, {a.orb}°){meaning ? `: ${meaning}.` : `: she ${ASPECT_WORDS[a.type]} your ${a.body.toLowerCase()}.`}
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p style={{ margin: "12px 0 0" }}>No tight aspects, so she speaks through her sign and house alone.</p>
+              )}
+            </div>
+          )}
+
+          {tab === "practise" && (
+            <div>
+              <MiniLabel dark={dark}>your affirmations</MiniLabel>
+              <div style={{ display: "grid", gap: 8 }}>
+                {info.affirmations(p.sign, area).map((a) => (
+                  <p key={a} style={{ fontFamily: poppins, fontWeight: 800, fontSize: 16.5, lineHeight: 1.35, margin: 0 }}>
+                    &ldquo;{a}&rdquo;
+                  </p>
+                ))}
+              </div>
+              <MiniLabel dark={dark}>journal prompts</MiniLabel>
+              <ol style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 6 }}>
+                {info.prompts(p.sign, area).map((q) => (
+                  <li key={q} style={{ fontWeight: 700 }}>{q}</li>
+                ))}
+              </ol>
+            </div>
+          )}
 
           <div style={{ marginTop: 14, display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <Link href={`/my-chart/house/${p.house}`} className="no-underline" style={{ fontWeight: 700, color: dark ? "var(--pink)" : "var(--dark)" }}>
-              explore your {ordinalHouse(p.house)} house →
+            <Link href={`/my-chart/house/${p.house}`} className="no-underline" style={{ fontWeight: 700, color: ink }}>
+              explore your {ord} house →
             </Link>
-            <Link href="/journal" className="no-underline" style={{ fontWeight: 700, color: dark ? "var(--pink)" : "var(--dark)" }}>
+            <Link href="/journal" className="no-underline" style={{ fontWeight: 700, color: ink }}>
               journal on this →
             </Link>
           </div>
@@ -270,16 +335,13 @@ export function LilithFamily({ chart }: { chart: ChartData }) {
       <SectionHead title="every lilith in your chart" />
       <LilithMotionStyles />
       <LilithBanner />
-      <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", alignItems: "stretch", marginBottom: 14 }}>
-        <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 320, borderRadius: 18, overflow: "hidden", border: "1.5px solid var(--dark)" }}>
-          <Image src="/lilith/lilith-hero.jpg" alt="Lilith, a woman under a glitter crescent moon with the Black Moon Lilith glyph on her shoulder" fill sizes="(max-width: 600px) 100vw, 360px" style={{ objectFit: "cover" }} />
-        </div>
+      <div style={{ marginBottom: 14 }}>
         <Box tone="white" label="why there's more than one">
           <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 18, lineHeight: 1.35, margin: "0 0 10px" }}>
             The Moon&apos;s orbit wobbles, so astrology tracks four Liliths, and each one answers a different question.
           </p>
           {compare && <p style={{ margin: 0 }}>{glossify(compare)}</p>}
-          <p style={{ margin: "10px 0 0", fontWeight: 700 }}>Open each one for her aspects, affirmations and journal prompts.</p>
+          <p style={{ margin: "10px 0 0", fontWeight: 700 }}>Open each one for her meaning, how to reclaim her power, her aspects, affirmations and journal prompts.</p>
         </Box>
       </div>
       <Stack cols={280}>

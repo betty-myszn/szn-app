@@ -178,3 +178,136 @@ export function lilithSignLine(id: LilithId, sign: string): string | null {
 export function lilithHouseLine(id: LilithId, house: number): string | null {
   return LILITH_HOUSES[house]?.[FIELD[id]] ?? null;
 }
+
+// ── Connected reading ────────────────────────────────────────────────────────────────────────
+// The pieces below join her sign with her house in one sentence, so a Scorpio Lilith in the 2nd
+// house reads as one placement (Scorpio's intensity showing up around money and self-worth),
+// not as two unrelated paragraphs.
+
+interface SignPieces {
+  /** Noun phrase: what this sign's Lilith holds. */
+  core: string;
+  /** Gerund phrase: how she tends to give her power away. */
+  giveaway: string;
+  /** Imperative phrase: how she takes it back. */
+  reclaim: string;
+}
+
+export const LILITH_SIGN_PIECES: Record<string, SignPieces> = {
+  Aries: { core: "your anger, drive and need to go first", giveaway: "waiting for permission and swallowing your anger", reclaim: "go first, say what you want and let yourself be angry" },
+  Taurus: { core: "your appetite for pleasure, comfort and money", giveaway: "denying yourself what you want so you don't look greedy", reclaim: "want it out loud, rest without earning it and let yourself have nice things" },
+  Gemini: { core: "your voice, opinions and sharp mind", giveaway: "softening your words and editing yourself into silence", reclaim: "say it straight, post the take and let your mind be seen" },
+  Cancer: { core: "your needs, moods and longing to be cared for", giveaway: "looking after everyone and asking for nothing back", reclaim: "say what you need and let people look after you" },
+  Leo: { core: "your need to shine and be adored", giveaway: "dimming yourself so nobody thinks you're showing off", reclaim: "take the spotlight, share your work and enjoy being seen" },
+  Virgo: { core: "your messy, imperfect, human side", giveaway: "over-functioning and doing it all perfectly for free", reclaim: "let it be imperfect, stop the unpaid help and charge for your skill" },
+  Libra: { core: "your right to disagree and want things your way", giveaway: "keeping the peace at your own expense", reclaim: "say no beautifully and negotiate for what's fair to you" },
+  Scorpio: { core: "your intensity, desire and power", giveaway: "hiding how much you want and controlling things from the shadows", reclaim: "own your desire, use your power openly and tell the truth" },
+  Sagittarius: { core: "your wildness, freedom and own truth", giveaway: "staying small and sensible to keep everyone comfortable", reclaim: "follow your own beliefs, take up adventure and speak your truth" },
+  Capricorn: { core: "your ambition and hunger to lead", giveaway: "supporting other people's success instead of building your own", reclaim: "take the title, charge your worth and build something that's yours" },
+  Aquarius: { core: "your weirdness and refusal to conform", giveaway: "fitting in so nobody sees how different you are", reclaim: "be openly unconventional and find your fellow misfits" },
+  Pisces: { core: "your sensitivity, intuition and magic", giveaway: "absorbing everyone's pain and calling your gifts silly", reclaim: "trust your intuition, protect your energy and let your magic be seen" },
+};
+
+interface HousePieces {
+  /** Noun phrase: the area of life. */
+  arena: string;
+  /** One practical thing to try this week. */
+  step: string;
+}
+
+export const LILITH_HOUSE_PIECES: Record<number, HousePieces> = {
+  1: { arena: "your body, look and presence", step: "Wear the thing you've been saving for a better version of you, and walk into one room this week without shrinking." },
+  2: { arena: "your money and self-worth", step: "Raise one price, chase one payment you're owed, or buy yourself one thing you've been denying yourself." },
+  3: { arena: "your voice and everyday conversations", step: "Send the message, post the opinion or say the sentence you've been rewriting in your head." },
+  4: { arena: "your home and family", step: "Change one family rule you've been following without question, even if it's as small as how you spend Sunday." },
+  5: { arena: "your love life, pleasure and creativity", step: "Book one date, make one piece of art or do one fun thing purely for yourself this week." },
+  6: { arena: "your work, routines and health", step: "Drop one unpaid task that was never yours, and give your body one hour of real rest." },
+  7: { arena: "your relationships and partnerships", step: "Say one honest need to your partner or closest person, and let them handle their reaction." },
+  8: { arena: "your intimacy, shared money and power", step: "Look at one shared money arrangement or one intimacy pattern, and decide what you actually want from it." },
+  9: { arena: "your beliefs, learning and travel", step: "Write down one belief you were raised with that you no longer agree with, and act on what you believe now." },
+  10: { arena: "your career and public reputation", step: "Put your name on one piece of work, pitch one big thing or ask for the title you've earned." },
+  11: { arena: "your friendships, groups and big dreams", step: "Share one big dream with your people, or join a group where the real you would be celebrated." },
+  12: { arena: "your private world, dreams and spirituality", step: "Spend ten minutes alone with your journal or a candle, and write down what came up in your dreams." },
+};
+
+/** How each Lilith colours the connected reading. */
+const LENS: Record<LilithId, string> = {
+  lilith: "got pushed down",
+  true_lilith: "can flare up fastest",
+  asteroid_lilith: "can show up most through other people",
+  dark_moon_lilith: "can hide deepest",
+};
+
+export function lilithConnectedReading(id: LilithId, sign: string, house: number, ordinal: string): string | null {
+  const s = LILITH_SIGN_PIECES[sign];
+  const h = LILITH_HOUSE_PIECES[house];
+  if (!s || !h) return null;
+  const core = s.core.charAt(0).toUpperCase() + s.core.slice(1);
+  return `${sign} in your ${ordinal} house: ${core} ${LENS[id]} around ${h.arena}.`;
+}
+
+// Each Lilith frames giving away and reclaiming power differently, and only Black Moon uses the
+// house's practical step, so two Liliths in the same sign and house never share a reclaim tab.
+export function lilithReclaim(id: LilithId, sign: string, house: number): { giveaway: string; reclaim: string; step: string } | null {
+  const s = LILITH_SIGN_PIECES[sign];
+  const h = LILITH_HOUSE_PIECES[house];
+  if (!s || !h) return null;
+  switch (id) {
+    case "true_lilith":
+      return {
+        giveaway: `In the heat of the moment you might give your power away by ${s.giveaway}, especially around ${h.arena}.`,
+        reclaim: `Next time she flares, pause, breathe, then ${s.reclaim}.`,
+        step: `When you feel the flare around ${h.arena} this week, wait ten minutes, then act on purpose instead of on reflex.`,
+      };
+    case "asteroid_lilith":
+      return {
+        giveaway: `In your relationships you might give your power away by ${s.giveaway}, especially around ${h.arena}.`,
+        reclaim: `When someone triggers you, ask what they're showing you about yourself, then ${s.reclaim}.`,
+        step: `Notice who triggers you around ${h.arena} this week, and write down the one thing they have that you want for yourself.`,
+      };
+    case "dark_moon_lilith":
+      return {
+        giveaway: `Without even noticing, you might give your power away by ${s.giveaway}, especially around ${h.arena}.`,
+        reclaim: `Go gently with this one: ${s.reclaim}, one small step at a time.`,
+        step: `Before bed this week, write down one moment you held back around ${h.arena} and what you were scared would happen.`,
+      };
+    default:
+      return {
+        giveaway: `You might be giving your power away by ${s.giveaway}, especially around ${h.arena}.`,
+        reclaim: `To take it back, ${s.reclaim}, starting with ${h.arena}.`,
+        step: h.step,
+      };
+  }
+}
+
+// ── Aspects ──────────────────────────────────────────────────────────────────────────────────
+const ASPECT_THEMES: Record<string, string> = {
+  Sun: "your identity and confidence",
+  Moon: "your emotions and need for safety",
+  Mercury: "your voice and the way you think",
+  Venus: "your love life, beauty and money",
+  Mars: "your drive, anger and desire",
+  Jupiter: "your luck, growth and big beliefs",
+  Saturn: "your fears, rules and authority",
+  Uranus: "your need for freedom and rebellion",
+  Neptune: "your dreams, spirituality and boundaries",
+  Pluto: "your power, control and transformation",
+  Chiron: "your deepest wound and healing gift",
+  "North Node": "your purpose and future direction",
+  Ascendant: "how you come across and your body",
+  Midheaven: "your career and public image",
+};
+
+const ASPECT_MEANING: Record<string, (theme: string) => string> = {
+  conjunction: (t) => `she's fused with ${t}, so you can't feel one without the other`,
+  opposition: (t) => `she pulls against ${t}, so it often plays out through other people`,
+  square: (t) => `she clashes with ${t}, and the friction is what pushes you to grow`,
+  trine: (t) => `she flows easily with ${t}, a natural gift you can lean on`,
+  sextile: (t) => `she opens a door to ${t} the moment you take the first step`,
+};
+
+export function lilithAspectMeaning(body: string, type: string): string | null {
+  const theme = ASPECT_THEMES[body];
+  const fn = ASPECT_MEANING[type];
+  return theme && fn ? fn(theme) : null;
+}

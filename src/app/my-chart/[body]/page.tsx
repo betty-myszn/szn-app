@@ -10,6 +10,7 @@ import { getSymbol } from "@/lib/style-data";
 import { glossify } from "@/components/AstroTerm";
 import { Box, SectionHead, makeLead } from "@/components/learn/LearnKit";
 import { LilithFamily } from "@/components/learn/LilithFamily";
+import { LilithIntro } from "@/components/learn/LilithIntro";
 import { LilithMeditation } from "@/components/learn/LilithMeditation";
 import { DeepDiveBody, DeepDiveHero, DeepDivePage, PinkLink, Pill, Stack, goDeeper, toneFromBg } from "@/components/learn/DeepDive";
 
@@ -138,6 +139,8 @@ export default function PlacementPage() {
       </DeepDiveHero>
 
       <DeepDiveBody>
+        {bodyId === "lilith" && <LilithIntro />}
+        {bodyId === "lilith" && <LilithMeditation chart={chart} isAdmin={member.isAdmin} />}
         <SectionHead title="the building blocks" />
         <Stack>
           {/* What this planet/point actually is */}
@@ -172,7 +175,6 @@ export default function PlacementPage() {
         </Stack>
 
         {bodyId === "lilith" && <LilithFamily chart={chart} />}
-        {bodyId === "lilith" && <LilithMeditation chart={chart} isAdmin={member.isAdmin} />}
 
         <SectionHead title="the real talk" />
         <Stack>
