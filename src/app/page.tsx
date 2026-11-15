@@ -8,6 +8,7 @@ import Manifesto from "@/components/Manifesto";
 import MeetBetty from "@/components/MeetBetty";
 import QuoteStrip from "@/components/QuoteStrip";
 import CovenPromoBand from "@/components/CovenPromoBand";
+import BaddieSeasonPromoBand from "@/components/BaddieSeasonPromoBand";
 import { OFFERS, PODCAST } from "@/lib/offers";
 
 const poppins = "var(--font-poppins), Poppins, sans-serif";
@@ -129,6 +130,9 @@ export default function Home() {
       </section>
 
       {/* ─── 1b. THE BAD B*TCH COVEN launch, in the slot the event band (EventPromoBand) used for the full moon ─── */}
+      {/* ─── 1a. YOUR BADDIE SEASON: 2027, Black Friday reading + activation (15 Nov 2026) ─── */}
+      <BaddieSeasonPromoBand />
+
       <CovenPromoBand />
 
       {/* ─── 2. TICKER ─── */}

@@ -64,6 +64,8 @@ export interface BaddieSession {
   /** Set when this one is a hand-made report instead of a Zoom session: replaces the minutes/Zoom
    *  lines on the card, pop-up and share preview, and the booking email asks for sizes, not times. */
   report?: { card: string; popup: string; share: string };
+  /** Sold from its own page (not a card on /baddie-sessions), but booked and emailed like a session. */
+  standalone?: boolean;
   /** Card photo in public/baddie-sessions, and where to anchor the crop so faces stay in frame. */
   image: string;
   imagePosition: string;
@@ -219,10 +221,26 @@ const ALL_OFFERINGS: BaddieSession[] = [
     image: "/baddie-sessions/card-style.jpg", imagePosition: "center 30%",
     cta: "Get your style report", accent: "var(--dark)", accentInk: "var(--lav)", bookingUrl: "https://buy.stripe.com/14AfZibQHh2n79M2yx7kc0M", stripePriceId: "price_1UZU3qJ6s9fRhiJoxMY0BSl6",
   },
+  {
+    slug: "baddie-season-2027", number: "07", emoji: "🔮", name: "Your Baddie Season: 2027",
+    tagline: "Your 2027 reading and activation, babeeee. 🔮",
+    body: [
+      "A personal 2027 report read from your chart, then ninety minutes on Zoom with me where we use hypnosis, visualisation and energy work to step you into the version of you who runs 2027.",
+    ],
+    after: "She walks into 2027 already being her, with the year mapped and the big dates in her diary.",
+    reviews: [],
+    focus: [
+      "Your 2027 read from your astrology and Human Design",
+      "A 90-minute 1:1 activation on Zoom with hypnosis",
+    ],
+    standalone: true,
+    image: "/coven/betty-witch-email.jpg", imagePosition: "center 20%",
+    cta: "Claim your 2027", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/4gMcN64of4fB2Twddb7kc0N", stripePriceId: "price_1Uc2aYJ6s9fRhiJoXnalsjKo",
+  },
 ];
 
 /** The five 1:1 sessions shown on /baddie-sessions. */
-export const BADDIE_SESSIONS = ALL_OFFERINGS.filter((s) => !s.report);
+export const BADDIE_SESSIONS = ALL_OFFERINGS.filter((s) => !s.report && !s.standalone);
 
 /** Sold from /reports since 8 Nov 2026. Stays in the list above so the webhook still sends its order email. */
 export const BADDIE_STYLE_REPORT = ALL_OFFERINGS.find((s) => s.slug === "style")!;

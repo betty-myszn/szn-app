@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Band } from "@/components/Offer";
 import HoloShape from "@/components/HoloShape";
 import SessionCards from "./SessionCards";
+import BaddieSeasonPromoBand from "@/components/BaddieSeasonPromoBand";
 import { BADDIE_SESSIONS, SESSION_OPTIONS, SESSION_PACKAGE, bookingHref } from "@/lib/baddie-sessions";
 import { OG_IMAGE } from "@/lib/site";
 
@@ -134,6 +135,9 @@ export default function BaddieSessionsPage() {
           </div>
         </div>
       </section>
+
+      {/* Your Baddie Season: 2027, the Black Friday reading + activation (15 Nov 2026) */}
+      <BaddieSeasonPromoBand />
 
       {/* Credentials strip */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 28, paddingBottom: 28 }}>
