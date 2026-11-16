@@ -15,7 +15,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 export const metadata: Metadata = {
   title: "Personalised Astrology Reports for Money + Confidence",
   description:
-    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($88 intro price, in your inbox within 48 hours) and Rich B*tch Rising for money, wealth and self-worth ($88, in your inbox within 48 hours).",
+    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($111, in your inbox within 48 hours) and Rich B*tch Rising for money, wealth and self-worth ($111, in your inbox within 48 hours).",
   alternates: { canonical: "/reports" },
   openGraph: {
     title: "MY SZN Reports 💸💜",
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
 };
 
 // Same Stripe Payment Links as the two report pages (birth details are collected on /order/details straight after payment).
-const BBR_BUY_URL = "https://buy.stripe.com/5kQcN6f2TcM7gKm4GF7kc0A";
-const RBR_BUY_URL = "https://buy.stripe.com/bJe3cwf2TaDZalY5KJ7kc0J";
+const BBR_BUY_URL = "https://buy.stripe.com/cNibJ2dYPbI3bq28WV7kc0P";
+const RBR_BUY_URL = "https://buy.stripe.com/6oUeVe2g7cM7cu66ON7kc0O";
 
 const REPORTS = [
   {
@@ -39,7 +39,7 @@ const REPORTS = [
     body: "Nine chapters on the woman you are when nobody's shrinking you, everything that's been keeping you small, and the big, outrageous, slightly unhinged life your chart has been pointing at this WHOLE time, written for the sign AND the house of all fifteen of your placements, so it reads like YOU and absolutely nobody elseee. 💜",
     inside: ["Your Bad B*tch DNA", "Your Money Era", "Your Visibility Power", "Your Desire + Magnetism", "Your F*ck Around & Find Out Energy", "Your Dark Femme + Power", "The Shadow Keeping You Small", "Your Big Dream Energy", "Become That B*tch"],
     extras: ["6 affirmations", "6 journal prompts", "5 bad b*tch moves", "two 30-day challenges", "your main character dates", "a letter from her"],
-    price: "$88 intro price",
+    price: "$111",
     delivery: "in your inbox within 48 hours",
     cta: { label: "get my report", href: BBR_BUY_URL, external: true },
     more: "/reports/bad-btch-report",
@@ -55,7 +55,7 @@ const REPORTS = [
     body: "Your second, tenth and eighth houses, your Venus and your Jupiter, all read together so you can finally see how you're built to get PAID, where the family money stories and good-girl guilt have been running your bank account for agesss, and what happens when you let yourself be rich, ambitious and VERY pleased with yourself about it. 💸",
     inside: ["How you're built to make money", "Your money shadow", "Self-worth, receiving + being THAT woman", "Money, power + financial independence", "Your rich b*tch era starts here"],
     extras: ["money manifestation practices", "shadow work prompts", "affirmations", "practical next moves"],
-    price: "$88",
+    price: "$111",
     delivery: "in your inbox within 48 hours",
     cta: { label: "get my report", href: RBR_BUY_URL, external: true },
     more: "/reports/rich-btch-rising",
@@ -379,10 +379,10 @@ export default function ReportsPage() {
           </p>
           <div className="flex flex-wrap gap-3" style={{ marginTop: 30 }}>
             <a href={BBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
-              get my report · $88
+              get my report · $111
             </a>
             <a href={RBR_BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-foil" style={{ color: "var(--dark)", border: "2px solid #fff", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 30px", display: "inline-block" }}>
-              get rich b*tch rising · $88
+              get rich b*tch rising · $111
             </a>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { OfferHero, Band, ForYouIf, OfferCards, Cover } from "@/components/Offer
 export const metadata: Metadata = {
   title: "The Bad B*tch Report, Your Personalised Astrology Blueprint for Becoming Her",
   description:
-    "The Bad B*tch Report reads your birth chart across nine chapters on money, visibility, desire, power, shadow and your big dream, with affirmations, journal prompts, two 30-day challenges and your main character dates. $88 intro price, in your inbox within 48 hours.",
+    "The Bad B*tch Report reads your birth chart across nine chapters on money, visibility, desire, power, shadow and your big dream, with affirmations, journal prompts, two 30-day challenges and your main character dates. $111, in your inbox within 48 hours.",
   alternates: { canonical: "/reports/bad-btch-report" },
   openGraph: {
     title: "The Bad B*tch Report 💜",
@@ -24,7 +24,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 
 // Stripe Payment Link. Birth details are collected on the checkout page; the webhook files the buyer
 // on the Brevo "Baddie Report PAID" list and sends the 48-hour email (src/lib/email/bad-btch-report.ts).
-const BUY_URL = "https://buy.stripe.com/5kQcN6f2TcM7gKm4GF7kc0A";
+const BUY_URL = "https://buy.stripe.com/cNibJ2dYPbI3bq28WV7kc0P";
 
 // The nine chapters, grouped into the three acts of becoming her. Hooks are the report's own chapter openers.
 const ACTS = [
@@ -81,7 +81,7 @@ const FAQ = [
   ["How it's made", "Your report reads the sign AND the house for all fifteen placements, from my own writing for every one of them, so two women with the same Sun sign get completely different reports. Sorry to your horoscope app. 😘"],
   ["If you don't know your birth time", "Tick \"I don't know my birth time\" on the page after you pay and we'll work with what we've got. Your signs stay accurate, and the house sections are where a birth time makes the biggest difference, so if you can sweet-talk it out of a birth certificate or a family member, it's sooo worth the text."],
   ["How you get it", "Your report lands in your inbox within 48 hours of buying, as a beautifully designed PDF to read in bed, print, highlight and scribble ALLLL over. You'll get a confirmation email with your birth details the second you pay, so you can check we've got them right."],
-  ["What it costs", "$88 at the introductory price, one payment, yours forever. Being early has its perks, babe. 💖"],
+  ["What it costs", "$111, one payment, yours forever, written by hand from your exact birth chart. 💖"],
 ] as const;
 
 export default function BadBtchReportPage() {
@@ -251,7 +251,7 @@ export default function BadBtchReportPage() {
             <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>
               get my report
             </a>
-            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 intro price · in your inbox within 48 hours</span>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$111 · in your inbox within 48 hours</span>
           </div>
         </div>
       </section>

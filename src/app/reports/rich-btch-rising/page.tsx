@@ -3,12 +3,12 @@ import { OfferHero, Band, Tiles, ForYouIf, OfferCards, Cover } from "@/component
 import { RBR_REVIEWS } from "@/lib/report-reviews";
 
 // Rich B*tch Rising: the personalised money report (the Money Blueprint, renamed and repriced to
-// $88, Oct 2026). On sale from 29 Oct 2026, made by hand within 48 hours; /money-blueprint redirects here.
+// $88, Oct 2026; $111 from 16 Nov 2026). On sale from 29 Oct 2026, made by hand within 48 hours; /money-blueprint redirects here.
 
 export const metadata: Metadata = {
   title: "Rich B*tch Rising, Your Personalised Astrology Money Report",
   description:
-    "Rich B*tch Rising is your personalised astrology money report: wealth, earning potential, money blocks, financial independence and self-worth, read from your own birth chart. $88, in your inbox within 48 hours.",
+    "Rich B*tch Rising is your personalised astrology money report: wealth, earning potential, money blocks, financial independence and self-worth, read from your own birth chart. $111, in your inbox within 48 hours.",
   alternates: { canonical: "/reports/rich-btch-rising" },
   openGraph: {
     title: "Rich B*tch Rising 💸",
@@ -21,10 +21,10 @@ export const metadata: Metadata = {
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-// Stripe Payment Link (plink_1UVxdoJ6s9fRhiJo4QetRK8i). Birth details are collected on the checkout page;
+// Stripe Payment Link (plink_1UcLPxJ6s9fRhiJo4r6pK786). Birth details are collected on the checkout page;
 // the webhook files the buyer on the Brevo "💸 Rich B*tch Rising PAID" list and sends the 48-hour email
 // (src/lib/email/bad-btch-report.ts handles both reports).
-const BUY_URL = "https://buy.stripe.com/bJe3cwf2TaDZalY5KJ7kc0J";
+const BUY_URL = "https://buy.stripe.com/6oUeVe2g7cM7cu66ON7kc0O";
 
 // Betty's own Rich B*tch Rising copy (15 Oct 2026), used word for word.
 
@@ -105,7 +105,7 @@ export default function RichBtchRisingPage() {
         <p>Money to leave situations that make you miserable, book flights whenever you fancy, build a business, take care of people you love, buy yourself ridiculous things and make decisions without needing anybody&apos;s permission.</p>
         <p><strong>Welcome to Rich B*tch Rising, your personalised astrology, shadow work and money manifestation report.</strong></p>
         <p>Written specifically for YOU, using your actual birth chart, with insights, exercises and practical guidance to help you understand your relationship with money and start changing it.</p>
-        <p><strong>$88 USD | Only 10 of 15 left, 5 taken | Personalised to your birth chart | In your inbox within 48 hours</strong></p>
+        <p><strong>$111 USD | Only 10 of 15 left, 5 taken | Personalised to your birth chart | In your inbox within 48 hours</strong></p>
         <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ display: "inline-block", marginTop: 12, background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" }}>
           💸 get my report
         </a>
@@ -199,7 +199,7 @@ export default function RichBtchRisingPage() {
             <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "22px 46px", display: "inline-block", border: "2px solid #fff" }}>
               get my report
             </a>
-            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$88 · only 10 of 15 left, 5 taken · in your inbox within 48 hours</span>
+            <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>$111 · only 10 of 15 left, 5 taken · in your inbox within 48 hours</span>
           </div>
         </div>
       </section>

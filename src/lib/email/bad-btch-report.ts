@@ -6,7 +6,7 @@ import { detailsUrl, ensurePendingOrder, sessionHasBirth } from "@/lib/order-det
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
-// The Bad B*tch Report and Rich B*tch Rising are one-off $88 Payment Links (no membership). Birth
+// The Bad B*tch Report and Rich B*tch Rising are one-off $111 Payment Links ($88 until 16 Nov 2026) (no membership). Birth
 // details are collected as custom fields on the Stripe checkout page. When one is paid, the Stripe
 // webhook hands the session here, which:
 //   1. files the buyer on that report's Brevo PAID list with her birth details as attributes,
@@ -17,25 +17,29 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
 // Hardcoded like the welcome-email prices so a missing env var can't silently drop an order;
 // env still overrides.
-export interface PaidReport { name: string; emoji: string; priceId: string; templateId: number; buyerKind: string; adminKind: string }
+export interface PaidReport { name: string; emoji: string; priceIds: string[]; templateId: number; buyerKind: string; adminKind: string }
+
+const ids = (...v: (string | undefined)[]) => v.map((x) => x?.trim() ?? "").filter(Boolean);
 
 const REPORTS: PaidReport[] = [
   {
     name: "Bad B*tch Report", emoji: "💜",
-    priceId: process.env.STRIPE_PRICE_BAD_BTCH_REPORT?.trim() || "price_1UTmY8J6s9fRhiJoUy8SWs7w",
+    // $111 from 16 Nov 2026 (plink_1UcLPzJ6s9fRhiJoexg6LCvU); the old $88 price stays recognised.
+    priceIds: ids(process.env.STRIPE_PRICE_BAD_BTCH_REPORT, "price_1UcLPyJ6s9fRhiJoaKdbVJPK", "price_1UTmY8J6s9fRhiJoUy8SWs7w"),
     templateId: Number(process.env.BREVO_TEMPLATE_BAD_BTCH_REPORT_PAID?.trim() || 77),
     buyerKind: "bad_btch_report_paid", adminKind: "admin_bad_btch_report_order",
   },
   {
     // Payment Link plink_1UVxdoJ6s9fRhiJo4QetRK8i, Brevo list "💸 Rich B*tch Rising PAID" (29 Oct 2026).
     name: "Rich B*tch Rising", emoji: "💸",
-    priceId: process.env.STRIPE_PRICE_RICH_BTCH_RISING?.trim() || "price_1UVxdnJ6s9fRhiJoBJBhLKyo",
+    // $111 from 16 Nov 2026 (plink_1UcLPxJ6s9fRhiJo4r6pK786); the old $88 price stays recognised.
+    priceIds: ids(process.env.STRIPE_PRICE_RICH_BTCH_RISING, "price_1UcLPxJ6s9fRhiJoVCytIxWy", "price_1UVxdnJ6s9fRhiJoBJBhLKyo"),
     templateId: Number(process.env.BREVO_TEMPLATE_RICH_BTCH_RISING_PAID?.trim() || 87),
     buyerKind: "rich_btch_rising_paid", adminKind: "admin_rich_btch_rising_order",
   },
 ];
 
-export const paidReportForPrice = (priceId: string | null | undefined) => (priceId ? REPORTS.find((r) => r.priceId === priceId.trim()) ?? null : null);
+export const paidReportForPrice = (priceId: string | null | undefined) => (priceId ? REPORTS.find((r) => r.priceIds.includes(priceId.trim())) ?? null : null);
 
 interface Birth { date: string; time: string; place: string }
 
