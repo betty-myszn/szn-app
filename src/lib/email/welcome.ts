@@ -8,7 +8,7 @@ type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 // membership tier, because two different prices ($111/mo and $333 upfront) share the same 'monthly'
 // tier but get different emails. The branded template for each is designed and hosted in Brevo and
 // referenced here by id via env, so copy and design changes never require a code deploy.
-export type WelcomeKind = "welcome_monthly" | "welcome_plan" | "welcome_3mo" | "welcome_vip" | "welcome_coven";
+export type WelcomeKind = "welcome_monthly" | "welcome_plan" | "welcome_3mo" | "welcome_vip" | "welcome_coven" | "welcome_coven_la";
 
 interface WelcomeSpec {
   kind: WelcomeKind;
@@ -39,7 +39,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
   price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Bad B*tch Coven founding price
-  price_1UcsgJJ6s9fRhiJoMLRxqvRu: "welcome_coven", // $88 / month, The LA Bad B*tch Coven (includes the online coven)
+  price_1UcsgJJ6s9fRhiJoMLRxqvRu: "welcome_coven_la", // $88 / month, the in-person (LA) Bad B*tch Coven
 };
 
 const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
@@ -50,6 +50,9 @@ const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallb
   welcome_vip: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_VIP, fallbackTemplate: 33, planName: "VIP Membership" },
   // Brevo template #91, source in coven-welcome-email.html at the project root.
   welcome_coven: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_COVEN, fallbackTemplate: 91, planName: "The Bad B*tch Coven" },
+  // Template #93, source in la-coven-welcome-email.html at the project root: what the $88 LA membership
+  // includes, account activation, the first Baddie Brunch + free-seat link, Sagittarius season, meditations.
+  welcome_coven_la: { templateEnv: process.env.BREVO_TEMPLATE_WELCOME_COVEN_LA, fallbackTemplate: 93, planName: "The In-Person Bad B*tch Coven (LA)" },
 };
 
 function kindForPrice(priceId: string): WelcomeKind | null {
