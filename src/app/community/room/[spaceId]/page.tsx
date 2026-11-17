@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ALL_MENTION } from "@/lib/community/mention-tokens";
+import { leapPostWindow } from "@/lib/quantum-leap";
 import { useMember } from "@/lib/use-member";
 import { hasRoomAccess, hasPaidCommunityAccess } from "@/lib/membership-access";
 import { listedRooms, findRoom, isRitualSpace } from "@/lib/community-store";
@@ -35,22 +36,38 @@ const COMPOSE_EMOJIS = [
 // pink on pink: the welcome posts, which go out in Betty's name, showed her an empty gap where every
 // new member's name should have been. On pink the mention is white and underlined instead.
 // "@all" is not a person, so it is highlighted but not linked.
+//
+// Web addresses are clickable too (Betty's daily Quantum Leap posts link to the day's page). A link
+// to this site opens in place; anything else opens in a new tab.
+const URL_SPLIT = /(https?:\/\/[^\s]+)/g;
 function renderContent(text: string, onPink: boolean) {
+  const linkStyle = { color: onPink ? "#fff" : "var(--dark)", fontWeight: 800, textDecoration: "underline", textUnderlineOffset: 3, wordBreak: "break-all" as const };
+  return text.split(URL_SPLIT).flatMap((chunk, c) => {
+    if (!/^https?:\/\//.test(chunk)) return renderMentions(chunk, onPink, `t${c}`);
+    const path = chunk.replace(/^https?:\/\/(www\.)?itsmyszn\.com/i, "");
+    return path !== chunk && path.startsWith("/")
+      ? [<Link key={`u${c}`} href={path} className="no-underline" style={linkStyle}>{chunk}</Link>]
+      : [<a key={`u${c}`} href={chunk} target="_blank" rel="noopener noreferrer" style={linkStyle}>{chunk}</a>];
+  });
+}
+
+function renderMentions(text: string, onPink: boolean, prefix: string) {
   const parts = text.split(/(@[a-z0-9_]+)/gi);
   const mentionStyle = onPink
     ? { color: "#fff", fontWeight: 800, textDecoration: "underline", textUnderlineOffset: 3 }
     : { color: "var(--pink)", fontWeight: 700 };
   return parts.map((part, i) => {
-    if (!part.startsWith("@")) return <span key={i}>{part}</span>;
+    const key = `${prefix}-${i}`;
+    if (!part.startsWith("@")) return <span key={key}>{part}</span>;
     if (part.slice(1).toLowerCase() === ALL_MENTION) {
       return (
-        <span key={i} style={{ ...mentionStyle, textDecoration: "none", background: onPink ? "rgba(255,255,255,0.22)" : "var(--pink-bg)", borderRadius: 6, padding: "0 5px" }}>
+        <span key={key} style={{ ...mentionStyle, textDecoration: "none", background: onPink ? "rgba(255,255,255,0.22)" : "var(--pink-bg)", borderRadius: 6, padding: "0 5px" }}>
           {part}
         </span>
       );
     }
     return (
-      <Link key={i} href={`/community/profile/${part.slice(1).toLowerCase()}`} className="no-underline" style={mentionStyle}>
+      <Link key={key} href={`/community/profile/${part.slice(1).toLowerCase()}`} className="no-underline" style={mentionStyle}>
         {part}
       </Link>
     );
@@ -76,6 +93,13 @@ export default function ChatRoomPage() {
     if (!space) return;
     loadRoomMessages(space.id).then(setMessages);
     markRoomSeen(space.id);
+    // Sag szn 2026: Betty's daily Quantum Leap post is written on the first visit after 8am UK, so
+    // the main room asks for it and reloads once the server has had the chance to post it.
+    if (space.id === "general" && leapPostWindow(Date.now())) {
+      fetch("/api/quantum-leap?ping=1", { cache: "no-store" })
+        .then((r) => (r.status === 204 ? loadRoomMessages(space.id).then(setMessages) : undefined))
+        .catch(() => undefined);
+    }
   }, [space?.id]);
 
   useEffect(() => {

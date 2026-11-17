@@ -35,6 +35,7 @@ import TransitsToYourChart from "@/components/TransitsToYourChart";
 import PasswordPromptBanner from "@/components/PasswordPromptBanner";
 import TrialKeepPanel from "@/components/TrialKeepPanel";
 import YourSeasonBanner from "@/components/YourSeasonBanner";
+import QuantumLeapBand from "@/components/quantum-leap/QuantumLeapBand";
 import ActivationStrip from "@/components/ActivationStrip";
 import WelcomeOverlay from "@/components/WelcomeOverlay";
 import DeepLinkScroll from "@/components/DeepLinkScroll";
@@ -397,6 +398,10 @@ export default function DashboardPage() {
               sign the season is in. */}
           <SectionBoundary name="your-season-banner">
             <YourSeasonBanner name={member.name} sunSign={placements?.sun} season={season} dateOfBirth={chart?.birthData?.dateOfBirth} />
+          </SectionBoundary>
+          {/* Sagittarius szn: today's Quantum Leap move, from the Sun's ingress on 22 Nov 2026. */}
+          <SectionBoundary name="quantum-leap">
+            <QuantumLeapBand style={{ marginBottom: 24 }} />
           </SectionBoundary>
           <div className="flex items-center justify-between gap-4 flex-wrap" style={{ marginBottom: 20 }}>
             <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--grey)" }}>

@@ -11,6 +11,8 @@ import { getSeasonEmbodiment } from "@/lib/season-embodiment";
 import { loadRoomMessages, type ChatMessage } from "@/lib/chat-rooms";
 import { WORKSHOPS } from "@/lib/workshops";
 import { COVEN_CIRCLE, COVEN_MOONS, COVEN_ROOM_ID, COVEN_THEME, moonVisible } from "@/lib/coven-month";
+import QuantumLeapBand from "@/components/quantum-leap/QuantumLeapBand";
+import { qlPromoShowing, QL_PATH } from "@/lib/quantum-leap";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
@@ -109,6 +111,13 @@ export default function CovenHomePage() {
   const circleStarted = now !== null && now >= COVEN_CIRCLE.startsAt;
   const replays = WORKSHOPS.filter((w) => w.hasReplay).slice(-3).reverse();
 
+  // From the moment the Sun enters Sagittarius the coven home switches to the Quantum Leap Experiment.
+  const leapOn = now !== null && qlPromoShowing(now, !!member?.isAdmin);
+  const theme = leapOn
+    ? { label: "✨ the sagittarius szn theme", title: "how to create a biggggg f*cking life.", line: "Thirty days of bold moves, Jupiter magic and baddies cheering you on, so you walk into 2027 already living like HER. 🏹" }
+    : { label: `✨ the ${COVEN_THEME.month} theme${season ? ` · ${season.sign.toLowerCase()} szn` : ""}`, title: COVEN_THEME.title, line: COVEN_THEME.line };
+  const hubLinks = leapOn ? [["🏹", "quantum leap", QL_PATH], ...HUB_LINKS] : HUB_LINKS;
+
   const firstName = member?.name?.trim().split(/\s+/)[0] ?? "";
   const heroArt = (season && HERO_ART[season.sign]) || "/coven/betty-witch-email.jpg";
 
@@ -122,14 +131,17 @@ export default function CovenHomePage() {
             <h1 className="display" style={{ fontSize: "clamp(46px, 7vw, 88px)", lineHeight: 0.95, marginTop: 18 }}>
               welcome back, {firstName || "witch"}.
             </h1>
-            <div style={{ ...label, marginTop: 26 }}>✨ the {COVEN_THEME.month} theme{season ? ` · ${season.sign.toLowerCase()} szn` : ""}</div>
-            <div className="display" style={{ fontSize: "clamp(32px, 4.4vw, 50px)", lineHeight: 1, marginTop: 8 }}>{COVEN_THEME.title}</div>
-            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>{COVEN_THEME.line}</p>
+            <div style={{ ...label, marginTop: 26 }}>{theme.label}</div>
+            <div className="display" style={{ fontSize: "clamp(32px, 4.4vw, 50px)", lineHeight: 1, marginTop: 8 }}>{theme.title}</div>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>{theme.line}</p>
             <DailyMagicButton />
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={heroArt} alt="" className="block w-full aspect-[4/5] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 12%", minHeight: 320 }} />
         </section>
+
+        {/* Sagittarius szn: today's Quantum Leap move (from the Sun's ingress, 22 Nov 2026) */}
+        <QuantumLeapBand />
 
         {/* Lilith: Money & Power Activation + the members' Lilith page (15 Nov 2026) */}
         <Link href="/my-chart/lilith" className="no-underline grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", background: "#08070a", border: "var(--border)", boxShadow: "6px 6px 0 var(--pink)" }}>
@@ -212,7 +224,7 @@ export default function CovenHomePage() {
         <section>
           <h2 className="display" style={sectionTitle}>everything in <span className="pk">your coven.</span></h2>
           <nav aria-label="Everything in your coven" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
-            {HUB_LINKS.filter(([, , href]) => href !== "/your-season/gemini-full-moon" || geminiLive).map(([emoji, name, href], i) => (
+            {hubLinks.filter(([, , href]) => href !== "/your-season/gemini-full-moon" || geminiLive).map(([emoji, name, href], i) => (
               <Link key={href} href={href} className="no-underline" style={{ ...card, ...TILE_COLOURS[i % TILE_COLOURS.length], border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
                 <span style={{ background: "#fff", width: 62, height: 62, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 30, margin: "0 auto", boxShadow: "3px 3px 0 var(--dark)" }}>{emoji}</span>
                 <span style={{ display: "block", fontFamily: pp, fontSize: 18, fontWeight: 800, lineHeight: 1.1, marginTop: 12 }}>{name}</span>
