@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { OfferHero, WaitlistBand } from "@/components/Offer";
 import CovenExplorer from "@/components/CovenExplorer";
 import CovenCountdown from "@/components/CovenCountdown";
@@ -482,6 +483,27 @@ export default function BaddieCovenPage() {
           </div>
         </div>
         <Statement>More friendship. More magic. More women cheering for women. 🪩</Statement>
+      </Section>
+
+      {/* 07b · In LA? The in-person coven and the first Baddie Brunch (Betty, 17 Nov 2026). The $44 online
+          coven does NOT include the brunch: $49 ticket, or upgrade to the $88 in-person coven. */}
+      <Section bg="var(--lav-light)">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+          <div>
+            <div className="tag mb-5">🌴 in LA?</div>
+            <h2 className="display" style={h2}>meet your coven <span className="pk">IRL in LA.</span></h2>
+            <p style={{ ...copy, marginTop: 22, fontWeight: 700, fontSize: 18 }}>LOS ANGELES BADDIESSSSS 💖 Our first Baddie Brunch is Saturday 5th of December, 11:30am to 1:30pm in Silver Lake, hosted by Sublime Luv, our LA Head Baddie.</p>
+            <p style={copy}>Two hours of astrology, manifestation, journaling, delicious food and meeting your new baddie besties, with a printed astrology guide Betty writes from YOUR birth chart.</p>
+            <p style={{ ...copy, fontWeight: 700 }}>The brunch isn&apos;t included in the $44 online coven: grab a $49 ticket, or join the in-person coven for $88 a month, which gets you EVERYTHING online plus a free place at one Baddie Brunch every month.</p>
+            <Link href="/baddie-coven/la" className="no-underline" style={{ ...cta, marginTop: 10 }}>meet the LA coven 🌴</Link>
+          </div>
+          <Link href="/baddie-coven/la#brunch" className="no-underline" style={{ display: "block", position: "relative" }}>
+            <div style={{ border: "var(--border)", borderRadius: 18, overflow: "hidden", transform: "rotate(1.5deg)" }}>
+              <Image src="/events/bacari/patio-fire-pit.jpg" alt="The Bacari Silver Lake patio, home of the first LA Baddie Brunch" width={1600} height={1066} loading="eager" sizes="(max-width: 768px) 100vw, 480px" style={{ display: "block", width: "100%", height: "auto" }} />
+            </div>
+            <span className="holo-sticker" style={{ position: "absolute", left: 12, bottom: -14, transform: "rotate(-3deg)" }}>🪩 the baddie brunch · sat 5th of december</span>
+          </Link>
+        </div>
       </Section>
 
       {/* 08 · The checklist. */}

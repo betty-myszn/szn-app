@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { OfferHero, Band, WaitlistBand, HeroArt } from "@/components/Offer";
+import { OfferHero, Band, WaitlistBand } from "@/components/Offer";
 import { LA_COVEN_CHECKOUT_URL } from "@/lib/events";
 import CovenPriceTable from "@/components/CovenPriceTable";
 import BaddieBrunch, { BRUNCH_FAQS, UPGRADE_MAIL } from "@/components/BaddieBrunch";
@@ -67,7 +67,15 @@ export default function LaCovenPage() {
     <>
       <OfferHero
         offer="baddie-coven-la"
-        art={<HeroArt src="/disco-planet.png" />}
+        bigArt
+        art={
+          <div style={{ position: "relative", width: "100%" }}>
+            <div className="holo-edge" style={{ width: "100%", borderRadius: 22, overflow: "hidden", boxShadow: "10px 12px 0 var(--dark)", background: "var(--lav-light)" }}>
+              <Image src="/coven/la-pink-palms.jpg" alt="Palm trees lining a Los Angeles street under a pink sky" width={1600} height={2400} priority sizes="(max-width: 768px) 100vw, 560px" style={{ display: "block", width: "100%", height: "auto" }} />
+            </div>
+            <span className="holo-sticker" style={{ position: "absolute", left: -10, bottom: 28, transform: "rotate(-4deg)" }}>🌴 los angeles</span>
+          </div>
+        }
         tone="pink"
         ctaButton={(s) => <a href={LA_COVEN_CHECKOUT_URL} className="no-underline" style={s}>🌴 join the LA coven · $88/month</a>}
         extraCta={<a href="#brunch" style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, color: "var(--dark)", textDecoration: "underline" }}>see the baddie brunch →</a>}
