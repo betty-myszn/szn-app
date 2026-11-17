@@ -52,9 +52,54 @@ export interface CosmicEvent {
   priceText?: string;
   /** CSS object-position for the listing card crop, when the subject isn't centred. */
   imagePosition?: string;
+  /** In-person events only: where we meet. */
+  venue?: { name: string; address: string; mapUrl: string };
+  /** Members on one of these Stripe prices come free: they claim a seat on the event page instead of
+   * paying (checked server-side in /api/events/member-rsvp). */
+  freeForPriceIds?: string[];
+  /** In-person events: the paragraphs after the date and place in the "you're booked" email. */
+  bookingNotes?: string[];
 }
 
+// The in-person (LA) Bad B*tch Coven founding price: $88/month for the whole online coven plus a free
+// place at one Baddie Brunch every month. The $44 online coven does NOT include the brunch.
+export const LA_COVEN_PRICE_ID = "price_1UcsgJJ6s9fRhiJoMLRxqvRu";
+export const LA_COVEN_CHECKOUT_URL = "https://buy.stripe.com/5kQbJ26wnh2n51E2yx7kc0Q";
+
 export const EVENTS: CosmicEvent[] = [
+  // The first LA Baddie Brunch (set by Betty 17 Nov 2026), hosted by Sublime Luv, LA Head Baddie. Lives on
+  // the LA coven page (#brunch). Free for in-person coven members ($88/month, one brunch a month);
+  // everyone else, $44 online members included, pays $49.
+  // The $49 Payment Link closes itself after 12 sales. Food and drinks are paid at the restaurant.
+  {
+    slug: "baddie-brunch",
+    href: "/baddie-coven/la#brunch",
+    title: "The Baddie Brunch",
+    subtitle: "The First LA Coven Brunch",
+    edition: "Sagittarius SZN",
+    badge: "LA Coven Brunch · IRL",
+    kind: "irl",
+    status: "published",
+    dateLabel: "Saturday 5th of December 2026 · 11:30am to 1:30pm LA",
+    startsAt: "2026-12-05T11:30:00-08:00",
+    timezoneLabel: "Los Angeles",
+    price: 49,
+    priceText: "$49 · FREE for LA coven members",
+    format: "In-person brunch at Bacari Silver Lake, Los Angeles",
+    image: "/events/bacari/patio-fire-pit.jpg",
+    imageAlt: "The tree-shaded patio at Bacari Silver Lake, with a fire pit, string lights and bistro tables",
+    shortDescription:
+      "A brunch to help you create your big f*cking life and go after your biggest dreams: two hours on the Bacari Silver Lake patio, hosted by Sublime, Head Baddie of LA, with astrology, manifestation, journaling, new baddie besties and a printed Sagittarius season guide Betty writes from YOUR birth chart.",
+    cta: "GRAB MY SEAT 🪩",
+    checkoutUrl: "https://buy.stripe.com/5kQ00kdYP13p0Lo5KJ7kc0R",
+    collectsBirth: true,
+    venue: { name: "Bacari Silver Lake", address: "3626 Sunset Blvd, Los Angeles, CA 90026", mapUrl: "https://maps.google.com/?q=Bacari+Silverlake+3626+Sunset+Blvd+Los+Angeles" },
+    freeForPriceIds: [LA_COVEN_PRICE_ID],
+    bookingNotes: [
+      "Sublime, our Head Baddie of LA, is hosting, and I'm writing your printed Sagittarius season guide from your birth chart right now, with journal prompts, affirmations and manifestation exercises written just for you. It'll be waiting for you at the table.",
+      "Food and drinks are ordered and paid for at Bacari, so come hungry and dressed like the woman who already has the big life.",
+    ],
+  },
   // The coven's first ever event, for coven members (joining is on /baddie-coven, $44/month founding
   // price). 6pm UK = 18:00 GMT on Wed 11 Nov 2026 (moved from 7pm by Betty, 8 Nov).
   {

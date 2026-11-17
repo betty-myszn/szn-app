@@ -47,6 +47,7 @@ const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
   price_1TzVeaJ6s9fRhiJojBgk1aTJ: "social", // $33 / month, Stripe product "MY SZN social"
   price_1UY19kJ6s9fRhiJoJ9kqVlCY: "monthly", // $44 / month, The Bad B*tch Coven founding price (from 9 Nov 2026)
+  price_1UcsgJJ6s9fRhiJoMLRxqvRu: "monthly", // $88 / month, The LA Bad B*tch Coven founding price (online coven + LA events, from 17 Nov 2026)
 };
 
 // Trim so a trailing space or newline pasted into a Railway variable can't silently break the

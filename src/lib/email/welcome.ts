@@ -39,6 +39,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
   price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Bad B*tch Coven founding price
+  price_1UcsgJJ6s9fRhiJoMLRxqvRu: "welcome_coven", // $88 / month, The LA Bad B*tch Coven (includes the online coven)
 };
 
 const SPEC_BY_KIND: Record<WelcomeKind, { templateEnv: string | undefined; fallbackTemplate: number; planName: string }> = {
