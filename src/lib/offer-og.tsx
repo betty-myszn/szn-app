@@ -13,6 +13,7 @@ const PALETTE: Record<OfferSlug | "reports", { bg: string; ink: string; accent: 
   "bad-btch-report": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "personalised confidence report", tagline: "find out what kind of baddie you are" },
   "baddie-coven": { bg: "#C8B4F8", ink: "#1a1a1a", accent: "#FF2D87", kicker: "magical membership", tagline: "your coven is calling, witch" },
   "baddie-coven-la": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "the coven, IRL in LA", tagline: "your coven, in real life" },
+  "baddie-coven-nyc": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "the coven, IRL in NYC", tagline: "your coven, in new york" },
   mastermind: { bg: "#1a1a1a", ink: "#ffffff", accent: "#FF2D87", kicker: "90-day mastermind", tagline: "you didn't come here to play small" },
   retreat: { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "in real life", tagline: "all of you, in real life" },
   book: { bg: "#E8DFFE", ink: "#1a1a1a", accent: "#FF2D87", kicker: "out now on amazon", tagline: "becoming her, in print" },

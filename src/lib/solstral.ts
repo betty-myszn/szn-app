@@ -29,6 +29,7 @@ export const SOLSTRAL_WAITLIST_LISTS: Record<string, string> = {
   "bad-btch-report": "baddie report",
   "baddie-coven": "coven waitlist",
   "baddie-coven-la": "LA coven (IRL) waitlist",
+  "baddie-coven-nyc": "NYC coven (IRL) waitlist",
   retreat: "🌴 The Bad B*tch Retreat",
   book: "MY SZN Book waitlist",
   "money-workshop": "💸 Free Money Workshop 15 Nov",

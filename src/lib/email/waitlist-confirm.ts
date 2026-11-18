@@ -40,8 +40,17 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
     heading: "see you in LA, witch",
     body: [
       "You just joined the waitlist for the LA Bad B*tch Coven, our in-person coven in Los Angeles, and I am SOOO excited to meet you in real life.",
-      "The online coven is for witchy women everywhere, and the LA coven brings it into the room with candles, rituals, creative magic and your girls, face to face. They're priced separately, and you can join one or both.",
-      "The dates, the location and the price come to this list first, before anybody else hears a whisper.",
+      "The LA coven is $88 a month: a free place at one Baddie Brunch every month, hosted by Sublime Luv, our LA Head Baddie, plus EVERYTHING in the online coven.",
+      "Every new Baddie Brunch comes to this list first, before anybody else hears a whisper.",
+    ],
+  },
+  "baddie-coven-nyc": {
+    subject: "You're on the NYC Bad B*tch Coven list 🗽",
+    heading: "see you in New York, baddie",
+    body: [
+      "You just joined the waitlist for the NYC Bad B*tch Coven, and I am SOOO excited to bring our Baddie Brunches to New York.",
+      "Think astrology, manifestation, journaling, delicious food and a table full of ambitious women who want to create BIG lives together, with your own personalised astrology guide at every brunch.",
+      "The first date, the spot and the price come to this list first, before anybody else hears a whisper.",
     ],
   },
   mastermind: {

@@ -16,6 +16,10 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     title: "See you in LA, witch 🌴",
     body: "You're on the LA coven waitlist, which means the dates, the location and the price of our in-person coven land in your inbox before anybody else hears a whisper.",
   },
+  "baddie-coven-nyc": {
+    title: "See you in New York, baddie 🗽",
+    body: "You're on the NYC coven waitlist, so the first Baddie Brunch date, the spot and the price land in your inbox before anybody else hears a whisper.",
+  },
   "rich-btch-rising": {
     title: "YESSSS, you're on the list 💸",
     body: "Your rich b*tch era has officially been put on notice. You'll be the first to know the second your money report opens, so keep an eye on your inbox (and your bank balance, obviously).",

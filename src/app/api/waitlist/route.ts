@@ -30,7 +30,7 @@ function parseBirth(b: unknown): Birth | null {
 }
 
 // Waitlists Betty gets an email about the moment someone new joins.
-const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "retreat", "mastermind"];
+const ALERT_OFFERS: string[] = ["baddie-coven", "baddie-coven-la", "baddie-coven-nyc", "retreat", "mastermind"];
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
