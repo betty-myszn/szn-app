@@ -4,6 +4,7 @@ import { OfferHero, Band, WaitlistBand } from "@/components/Offer";
 import { LA_COVEN_CHECKOUT_URL } from "@/lib/events";
 import CovenPriceTable from "@/components/CovenPriceTable";
 import BaddieBrunch, { BRUNCH_FAQS, UPGRADE_MAIL } from "@/components/BaddieBrunch";
+import BrunchMagicBand from "@/components/BrunchMagicBand";
 
 // The LA Bad B*tch Coven, the coven in real life in Los Angeles, with the Baddie Brunch sitting right
 // on this page (Betty, 17 Nov 2026). The in-person coven is $88/month (founding price, going up):
@@ -91,7 +92,7 @@ export default function LaCovenPage() {
               <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>🌴 The in-person coven, $88/month:</div>
               <ul style={{ listStyle: "none", padding: 0, margin: "8px 0 0", display: "grid", gap: 4, fontSize: 15, lineHeight: 1.5, fontWeight: 600 }}>
                 <li>{tick}EVERYTHING inside the online Bad B*tch Coven.</li>
-                <li>{tick}A free place at one Baddie Brunch every month.</li>
+                <li>{tick}A free place at one Baddie Brunch every month: new friends, and a manifesting theme from each astrology season.</li>
                 <li>{tick}Sublime Luv, our LA Head Baddie, welcoming you in and hosting.</li>
                 <li>{tick}Extra dinners, workshops and special events throughout the year, booked separately.</li>
               </ul>
@@ -142,6 +143,8 @@ export default function LaCovenPage() {
           ))}
         </div>
       </Band>
+
+      <BrunchMagicBand city="LA" />
 
       {/* Sublime, the LA Head Baddie: a real person welcoming women in (bio from Betty's launch caption). */}
       <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>

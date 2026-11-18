@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { OfferHero, Band, WaitlistBand } from "@/components/Offer";
+import BrunchMagicBand from "@/components/BrunchMagicBand";
 
 // The NYC Bad B*tch Coven: the in-person coven coming to New York (Betty, 18 Nov 2026). Waitlist only:
 // no date, venue, price or Head Baddie is set, so none is printed. Modelled on LA's monthly Baddie
@@ -75,7 +76,7 @@ export default function NycCovenPage() {
             <div style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620, color: "var(--dark)" }}>
               <div style={{ fontFamily: pp, fontSize: 17, fontWeight: 800, lineHeight: 1.3 }}>🗽 What we&apos;re bringing to NYC:</div>
               <ul style={{ listStyle: "none", padding: 0, margin: "8px 0 0", display: "grid", gap: 4, fontSize: 15, lineHeight: 1.5, fontWeight: 600 }}>
-                <li>{tick}A Baddie Brunch every month: astrology, manifestation, journaling and delicious food.</li>
+                <li>{tick}A Baddie Brunch every month: new friends, delicious food and manifesting together around each astrology season&apos;s theme.</li>
                 <li>{tick}Your own personalised printed astrology guide at every brunch, written from your chart.</li>
                 <li>{tick}A local Head Baddie welcoming you in and hosting.</li>
                 <li>{tick}Real friendships with ambitious, witchy New York women, IRL.</li>
@@ -107,6 +108,8 @@ export default function NycCovenPage() {
         </div>
         <p style={{ marginTop: 22 }}><strong>The exact format gets shaped with the women on the NYC waitlist, so your sign-up genuinely helps decide what we do together.</strong></p>
       </Band>
+
+      <BrunchMagicBand city="New York" />
 
       <Band wide tag="you'll fit right in if" title="this coven has your name" accent="ALL over it.">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" style={{ marginTop: 26 }}>
