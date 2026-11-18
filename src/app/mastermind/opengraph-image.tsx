@@ -1,6 +1,6 @@
 import { offerOgImage, OG_SIZE } from "@/lib/offer-og";
 
-export const alt = "The MY SZN Mastermind";
+export const alt = "The Bad B*tch Mastermind";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

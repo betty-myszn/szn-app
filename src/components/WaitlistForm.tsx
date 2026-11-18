@@ -33,8 +33,8 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     body: "Your name is written in the book (glitter pen, obviously). We'll send the doors, the dates and the first spell straight to your inbox before anyone else hears a thing.",
   },
   mastermind: {
-    title: "SHE'S ON THE LIST 🪐",
-    body: "Future you just did a little happy dance. The next cohort's dates come to the waitlist first, so you'll have first pick of a seat before it goes anywhere else.",
+    title: "Application received, babe 🪐",
+    body: "Future you just did a little happy dance. I read every single application myself, and I'll be in touch to chat about your 2027 and whether one of the 8 spots is yours, so keep an eye on your inbox.",
   },
   retreat: {
     title: "Application received, babe 🌴",

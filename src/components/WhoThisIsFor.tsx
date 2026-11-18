@@ -13,7 +13,7 @@ const TRAITS = [
   "You want Betty in your corner privately, plus the magic and the fun: rituals, manifestation and a whole lot of pink.",
 ];
 
-export default function WhoThisIsFor() {
+export default function WhoThisIsFor({ traits = TRAITS }: { traits?: string[] }) {
   return (
     <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
       <div className="max-w-3xl mx-auto">
@@ -22,7 +22,7 @@ export default function WhoThisIsFor() {
           this is for you <span className="pk">if…</span>
         </h2>
         <div style={{ marginTop: 32, border: "var(--border)", borderRadius: 18, overflow: "hidden" }}>
-          {TRAITS.map((t, i) => (
+          {traits.map((t, i) => (
             <div key={t} className="flex items-start gap-4" style={{ padding: "18px 22px", borderTop: i ? "var(--border)" : "none", background: i % 2 ? "var(--pink-light)" : "#fff" }}>
               <span aria-hidden="true" style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, color: "var(--pink)", lineHeight: 1.4 }}>✓</span>
               <span style={{ fontSize: 16, lineHeight: 1.6, color: "var(--dark)", fontWeight: 500 }}>{t}</span>

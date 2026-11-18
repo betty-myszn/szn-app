@@ -86,13 +86,13 @@ export const OFFERS: Record<OfferSlug, Offer> = {
   mastermind: {
     slug: "mastermind",
     emoji: "🪐",
-    name: "The MY SZN Mastermind",
+    name: "The Bad B*tch Mastermind",
     href: "/mastermind",
     line: "90 days of becoming HER, with private coaching from Betty every month",
-    price: "$1,500 for 90 days ($500 a month)",
+    price: "$3,333 for 90 days (or 3 payments of $1,111)",
     brevoEnv: "BREVO_LIST_MASTERMIND",
     brevoList: 26,
-    cta: "join the waitlist",
+    cta: "apply for a spot",
   },
   retreat: {
     slug: "retreat",

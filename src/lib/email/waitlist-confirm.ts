@@ -53,13 +53,14 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
       "The first date, the spot and the price come to this list first, before anybody else hears a whisper.",
     ],
   },
+  // An application since 18 Nov 2026 (the January 2027 cohort), so this thanks her for applying.
   mastermind: {
-    subject: "You're on the MY SZN Mastermind list 🪐",
+    subject: "Thanks for applying, babe 🪐 Your Mastermind application is in",
     heading: "future you just did a little happy dance",
     body: [
-      "You're on the waitlist for the MY SZN Mastermind, our 90-day transformation experience with a private 1:1 with me every month, group coaching every season and a small cohort of women who hold you to it.",
-      "It's $1,500 for the 90 days, which is $500 a month for three months.",
-      "The next cohort's dates come to this list first, so you'll get first pick of a seat before it goes anywhere else.",
+      "Your application for the Bad B*tch Mastermind has landed safely, and I'll be reading every word of it myself.",
+      "We start on Monday the 11th of January 2027 with your 1:1 audit, then it's two private sessions with me, Telegram access between calls, group coaching every two weeks and the whole Bad B*tch Coven, included. There are only 8 spots, and it's $3,333 or 3 payments of $1,111.",
+      "I'll be in touch very soon to chat about you and your 2027, so keep a little eye on this inbox. 💜",
     ],
   },
   // The retreat is an application now (26 Oct 2026), so this thanks her for applying, with the villa.

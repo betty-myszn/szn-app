@@ -170,14 +170,14 @@ export default function Home() {
       {/* ─── 4. MASTERMIND ─── */}
       <section className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 88, borderBottom: "var(--border)" }}>
         <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">🪐 the my szn mastermind</div>
+          <div className="tag mb-5">🪐 the bad b*tch mastermind</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 6.5vw, 80px)", color: "#fff", lineHeight: 0.98 }}>
             90 days to <span className="pk">become her.</span>
           </h2>
           <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "rgba(255,255,255,0.88)", marginTop: 24, maxWidth: 740, fontWeight: 500 }}>
             Our premium 90-day transformation experience, where your birth chart and Human Design meet self-concept work, manifestation, shadow work, group coaching and accountability, with a private 1:1 with Betty every single month, for ambitious women who want to make BIGGER moves, more $$$ and their absolute best life.
           </p>
-          <p style={{ fontSize: 16, fontWeight: 800, color: "#fff", marginTop: 16 }}>{OFFERS.mastermind.price}. Waitlist open now.</p>
+          <p style={{ fontSize: 16, fontWeight: 800, color: "#fff", marginTop: 16 }}>{OFFERS.mastermind.price}. Only 8 spots, starting the 11th of January 2027.</p>
           <div style={{ marginTop: 30 }}>
             <Button href="/mastermind" tone="pink">tell me everything</Button>
           </div>
