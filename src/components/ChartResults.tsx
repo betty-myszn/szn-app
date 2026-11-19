@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { track, EVENTS } from "@/lib/analytics";
+import CovenOpenSwitch from "@/components/CovenOpenSwitch";
 import type { ChartData } from "@/types/chart";
 import {
   ZODIAC_SYMBOLS,
@@ -250,8 +251,8 @@ export default function ChartResults({ chart }: ChartResultsProps) {
               {copiedUrl ? "copied!" : "share link"}
             </button>
             <a
-              onClick={() => track(EVENTS.CTA_CLICK, { label: "join_the_membership", location: "results_hero" })}
-              href="/membership"
+              onClick={() => track(EVENTS.CTA_CLICK, { label: "see_the_coven", location: "results_hero" })}
+              href="/baddie-coven"
               style={{
                 background: "var(--pink)",
                 color: "var(--dark)",
@@ -265,7 +266,7 @@ export default function ChartResults({ chart }: ChartResultsProps) {
                 display: "inline-block",
               }}
             >
-              apply for MY SZN &rarr;
+              <CovenOpenSwitch open={<>join the coven</>} closed={<>see the coven</>} />{" "}&rarr;
             </a>
           </div>
         </div>

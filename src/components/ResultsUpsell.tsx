@@ -4,6 +4,7 @@ import Link from "next/link";
 import CovenOpenSwitch from "@/components/CovenOpenSwitch";
 import { OFFERS, type OfferSlug } from "@/lib/offers";
 import { SESSION_OPTIONS } from "@/lib/baddie-sessions";
+import { MASTERMIND, MASTERMIND_STARTS } from "@/lib/mastermind";
 import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -33,7 +34,7 @@ const CARDS: Card[] = [
     body: "Ninety minutes with me, after I've spent two to three hours obsessing over your astrology and your Human Design, with hypnosis, mindset and energy work wherever your goals need them.",
     cta: "pick your session",
   },
-  offerCard("mastermind", "Ninety days of becoming HER, with a private 1:1 with me every single month and a small group of women levelling up right alongside you. 🪐"),
+  offerCard("mastermind", `Ninety days of becoming HER in a group of only ${MASTERMIND.spots}, with calls every two weeks, two private sessions with me and me on Telegram between calls. We start ${MASTERMIND_STARTS}. 🪐`),
 ];
 
 const click = (label: string) => track(EVENTS.CTA_CLICK, { label, location: "results_upsell" });
@@ -66,11 +67,12 @@ export default function ResultsUpsell({ name }: { name?: string }) {
               <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>{coven.emoji} founding witches · {coven.price}</div>
               <h3 style={{ fontFamily: pp, fontSize: "clamp(26px, 4vw, 36px)", fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.05, margin: "10px 0 10px" }}>{coven.name.toLowerCase()}.</h3>
               <p style={{ fontSize: 16, lineHeight: 1.65, margin: 0, fontWeight: 600 }}>
-                Your monthly coven circle, personal guidance for every single season on the platform I built, rituals, money magic and a whole coven of baddies doing it with you. Founding witches lock in $44 a month for as long as they stay, and our FIRST EVER event is the 11/11 manifestation workshop. 🪄
+                Your monthly coven circle, personal guidance for every single season on the platform I built, rituals, money magic and a whole coven of baddies doing it with you. Founding witches lock in $44 a month for as long as they stay, and the replay of our FIRST EVER event, the 11/11 manifestation workshop, is waiting inside for you. 🪄
               </p>
             </div>
             <Link href={coven.href} onClick={() => click("baddie_coven")} className="no-underline inline-block" style={{ marginTop: 20, flexShrink: 0, background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 999, whiteSpace: "nowrap" }}>
-              {coven.cta} →
+              {/* While joining is open the button says so; OFFERS' "join the waitlist" is only true once it closes. */}
+              <CovenOpenSwitch open={<>join the coven</>} closed={<>{coven.cta}</>} /> →
             </Link>
           </div>
         </div>

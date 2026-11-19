@@ -188,17 +188,17 @@ export default function ChartPage() {
           Live your chart inside MY SZN.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--dark)", maxWidth: 480, margin: "0 auto 8px" }}>
-          Your chart is just the beginning. MY SZN is the three-month mastermind where you live it, with a private 1:1 with Betty every month, group coaching every season and a small cohort of women doing it with you.
+          Your chart is just the beginning. Inside the Bad B*tch Coven you get a personalised platform built around YOUR chart and Human Design, a live coven circle every month and a whole coven of baddies doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          Three-month cohorts with Betty · applications open now
+          If you want me up close, <a href="/mastermind" style={{ color: "var(--pink)", textDecoration: "underline" }}>the Bad B*tch Mastermind</a> starts on the 11th of January 2027.
         </p>
-        <a href="/membership" style={{
+        <a href="/baddie-coven" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",
           fontFamily: "var(--font-poppins), Poppins, sans-serif", fontSize: 12, fontWeight: 700,
           letterSpacing: "0.1em", textTransform: "uppercase", padding: "14px 32px", textDecoration: "none",
         }}>
-          join my szn
+          see the coven
         </a>
       </div>
     </>
