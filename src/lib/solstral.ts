@@ -26,6 +26,7 @@ export type SolstralList = SolstralListKey | (string & {});
 export const SOLSTRAL_WAITLIST_LISTS: Record<string, string> = {
   mastermind: "🪐 MY SZN Mastermind waitlist",
   "rich-btch-rising": "💸 Rich B*tch Rising report",
+  "rich-btch-rising-programme": "💸 Rich B*tch Rising programme waitlist",
   "bad-btch-report": "baddie report",
   "baddie-coven": "coven waitlist",
   "baddie-coven-la": "LA coven (IRL) waitlist",

@@ -6,7 +6,7 @@
 // Prices are Betty's confirmed numbers only. Nothing here invents dates, locations or availability:
 // every upcoming offer is waitlist-only until she says it's launching.
 
-export type OfferSlug = "mastermind" | "rich-btch-rising" | "bad-btch-report" | "baddie-coven" | "baddie-coven-la" | "baddie-coven-nyc" | "retreat" | "book" | "money-workshop";
+export type OfferSlug = "mastermind" | "rich-btch-rising" | "rich-btch-rising-programme" | "bad-btch-report" | "baddie-coven" | "baddie-coven-la" | "baddie-coven-nyc" | "retreat" | "book" | "money-workshop";
 
 export interface Offer {
   slug: OfferSlug;
@@ -35,6 +35,20 @@ export const OFFERS: Record<OfferSlug, Offer> = {
     brevoEnv: "BREVO_LIST_RICH_BTCH_RISING",
     brevoList: 25,
     cta: "get my report",
+  },
+  // Rich B*tch Rising, the eight-week money manifestation programme (drafted 19 Nov 2026): astrology,
+  // Human Design, shadow work and witchcraft, with the report above included. Waitlist only, no dates.
+  // $888, and $111 off for women who already bought the report: both confirmed by Betty 19 Nov 2026.
+  "rich-btch-rising-programme": {
+    slug: "rich-btch-rising-programme",
+    emoji: "💸",
+    name: "Rich B*tch Rising",
+    href: "/rich-btch-rising",
+    line: "eight weeks of money manifestation: your chart, your Human Design, your shadows and your spells, all pointed at your bank account",
+    price: "$888 for eight weeks",
+    brevoEnv: "BREVO_LIST_RICH_BTCH_RISING_PROGRAMME",
+    brevoList: 0, // Brevo is retired; sign-ups go to the Solstral list in solstral.ts
+    cta: "join the waitlist",
   },
   "bad-btch-report": {
     slug: "bad-btch-report",

@@ -17,6 +17,15 @@ const COPY: Record<OfferSlug, { subject: string; heading: string; body: string[]
       "You'll be the very first to know the moment it opens, so keep an eye on this inbox (and maybe start picturing what you'll do with the extra $$$).",
     ],
   },
+  "rich-btch-rising-programme": {
+    subject: "You're on the Rich B*tch Rising waitlist 💸",
+    heading: "your rich b*tch era just got its first spell",
+    body: [
+      "You just put your name down for Rich B*tch Rising, my eight-week money manifestation programme, and I am SOOOO excited for you, because you just told the universe you're done being underpaid and the universe LOVES a woman who says it out loud.",
+      "We're going to read your money in your birth chart and your Human Design, dig up the money rules you inherited and are SO over, close every class with a spell and then turn all of it into real moves that land in your real bank account.",
+      "The dates and first pick of the places come to this inbox before anybody else hears a whisper, so keep an eye out, witch.",
+    ],
+  },
   "bad-btch-report": {
     subject: "You're on The Bad B*tch Report list 💜",
     heading: "OMGGGG you're in",

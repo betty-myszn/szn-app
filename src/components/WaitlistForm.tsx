@@ -24,6 +24,10 @@ const CONFIRM: Record<OfferSlug, { title: string; body: string }> = {
     title: "YESSSS, you're on the list 💸",
     body: "Your rich b*tch era has officially been put on notice. You'll be the first to know the second your money report opens, so keep an eye on your inbox (and your bank balance, obviously).",
   },
+  "rich-btch-rising-programme": {
+    title: "YESSSS witch, you're on the list 💸",
+    body: "Your rich b*tch era just got its very first spell. The dates and first pick of the places for Rich B*tch Rising land in your inbox before anybody else hears a whisper, so keep an eye out (and maybe clear a little space on your altar).",
+  },
   "bad-btch-report": {
     title: "OMGGGG you're in 💜",
     body: "Consider this your first act of taking up MORE space. The moment The Bad B*tch Report opens, you'll hear it from us before anyone else does.",

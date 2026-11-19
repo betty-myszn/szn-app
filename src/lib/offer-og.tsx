@@ -10,6 +10,7 @@ export const OG_SIZE = { width: 1200, height: 630 };
 
 const PALETTE: Record<OfferSlug | "reports", { bg: string; ink: string; accent: string; kicker: string; tagline: string }> = {
   "rich-btch-rising": { bg: "#1a1a1a", ink: "#ffffff", accent: "#FF2D87", kicker: "personalised money report", tagline: "your chart wants you RICH, babe" },
+  "rich-btch-rising-programme": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "the money manifestation programme", tagline: "time to get rich, witch" },
   "bad-btch-report": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "personalised confidence report", tagline: "find out what kind of baddie you are" },
   "baddie-coven": { bg: "#C8B4F8", ink: "#1a1a1a", accent: "#FF2D87", kicker: "magical membership", tagline: "your coven is calling, witch" },
   "baddie-coven-la": { bg: "#FF2D87", ink: "#1a1a1a", accent: "#ffffff", kicker: "the coven, IRL in LA", tagline: "your coven, in real life" },
