@@ -10,7 +10,7 @@ import { hasActiveAccess } from "@/lib/membership-access";
 import { getSeasonEmbodiment } from "@/lib/season-embodiment";
 import { loadRoomMessages, type ChatMessage } from "@/lib/chat-rooms";
 import { WORKSHOPS } from "@/lib/workshops";
-import { COVEN_CIRCLE, COVEN_MOONS, COVEN_ROOM_ID, COVEN_THEME, moonVisible } from "@/lib/coven-month";
+import { COVEN_CIRCLE, COVEN_MOONS, COVEN_NEXT, COVEN_ROOM_ID, COVEN_THEME, moonVisible } from "@/lib/coven-month";
 import QuantumLeapBand from "@/components/quantum-leap/QuantumLeapBand";
 import { qlPromoShowing, QL_PATH } from "@/lib/quantum-leap";
 
@@ -215,8 +215,9 @@ export default function CovenHomePage() {
           </section>
         ) : (
           <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(26px, 4vw, 44px)", background: "var(--pink-light)" }}>
-            <div style={label}>🕯️ your next circle</div>
-            <h2 className="display" style={{ fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1, marginTop: 10 }}>your next date is landing here soon, babe.</h2>
+            <div style={label}>🕯️ your next circle{COVEN_NEXT ? " · date coming soon" : ""}</div>
+            <h2 className="display" style={{ fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1, marginTop: 10 }}>{COVEN_NEXT ? `${COVEN_NEXT.title}.` : "your next date is landing here soon, babe."}</h2>
+            {COVEN_NEXT && <p style={{ fontSize: "clamp(17px, 1.7vw, 19px)", lineHeight: 1.5, fontWeight: 700, margin: "14px 0 0", maxWidth: 640 }}>{COVEN_NEXT.line}</p>}
           </section>
         )}
 

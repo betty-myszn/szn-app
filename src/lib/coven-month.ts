@@ -16,6 +16,13 @@ export const COVEN_CIRCLE = {
   endsAt: Date.parse("2026-11-11T19:30:00Z"),
 };
 
+// The next circle once COVEN_CIRCLE has passed and before its date is set. When the date is
+// confirmed, move it into COVEN_CIRCLE with real startsAt/endsAt and set this back to null.
+export const COVEN_NEXT: { title: string; line: string } | null = {
+  title: "the sagittarius season manifestation workshop",
+  line: "Your BIGGGG life vision, your Jupiter luck and the leap into HER, live together on Zoom. The date lands here very soon, babe. 🏹",
+};
+
 export const COVEN_MOONS = [
   { name: "full moon in gemini", type: "full_moon", date: "2026-11-24", sign: "Gemini", degree: 2, when: "tuesday 24 november", at: Date.parse("2026-11-24T14:53:00Z") },
   { name: "new moon in sagittarius", type: "new_moon", date: "2026-12-08", sign: "Sagittarius", degree: 16, when: "tuesday 8 december", at: Date.parse("2026-12-09T00:51:00Z") },

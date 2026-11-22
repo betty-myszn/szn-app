@@ -11,6 +11,7 @@ import type { SeasonDesign, SeasonBlock } from "@/types/season-design";
 import { VIRGO_SEASON } from "@/lib/season-design-virgo";
 import { LIBRA_SEASON } from "@/lib/season-design-libra";
 import { SCORPIO_SEASON } from "@/lib/season-design-scorpio";
+import { SAGITTARIUS_SEASON } from "@/lib/season-design-sagittarius";
 
 const block = (summary: string, identity: string, cycle: string, guidance: string): SeasonBlock => ({
   summary,
@@ -556,6 +557,7 @@ export const SEASON_DESIGNS: Record<string, SeasonDesign> = {
   virgo: VIRGO_SEASON,
   libra: LIBRA_SEASON,
   scorpio: SCORPIO_SEASON,
+  sagittarius: SAGITTARIUS_SEASON,
 };
 
 export function getSeasonDesign(sign: string): SeasonDesign | null {
