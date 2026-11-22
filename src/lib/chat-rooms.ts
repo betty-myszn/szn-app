@@ -6,6 +6,8 @@ export interface ChatMessage {
   author: string;
   content: string;
   createdAt: string;
+  /** Id of the message this one replies to, when it is a reply. */
+  replyTo?: string;
   reactions?: Record<string, string[]>; // emoji -> array of author names who reacted
 }
 
@@ -33,12 +35,13 @@ export async function loadRoomMessages(spaceId: string): Promise<ChatMessage[]> 
       author: row.author,
       content: row.content,
       createdAt: row.created_at,
+      replyTo: row.reply_to ?? undefined,
       reactions: Object.keys(reactions).length > 0 ? reactions : undefined,
     };
   });
 }
 
-export async function addRoomMessage(spaceId: string, _author: string, content: string): Promise<ChatMessage[]> {
+export async function addRoomMessage(spaceId: string, _author: string, content: string, replyTo?: string): Promise<ChatMessage[]> {
   // Posted through the server rather than inserted straight from here, because the message has to
   // be able to notify the people it mentions, and a member's own session must never be able to
   // write into someone else's notification feed. The route resolves "@name" to user ids once and
@@ -47,7 +50,7 @@ export async function addRoomMessage(spaceId: string, _author: string, content: 
   const res = await fetch("/api/chat/send", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ spaceId, content }),
+    body: JSON.stringify({ spaceId, content, replyTo }),
   });
   if (!res.ok) {
     console.error("addRoomMessage: post failed", res.status);

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { EmojiStyle, type EmojiClickData } from "emoji-picker-react";
 import { ALL_MENTION } from "@/lib/community/mention-tokens";
 import { leapPostWindow } from "@/lib/quantum-leap";
 import { useMember } from "@/lib/use-member";
@@ -23,11 +25,26 @@ import {
 const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 const QUICK_REACTIONS = ["👍", "❤️", "😂", "🔥", "✨", "👑"];
-const COMPOSE_EMOJIS = [
-  "😊", "😂", "🥹", "😍", "🔥", "✨", "👑", "💅", "🙌", "👏",
-  "💖", "💯", "🥳", "😭", "🙏", "😮", "🌙", "☀️", "⭐", "🦁",
-  "🐍", "🐐", "🦂", "🌸",
-];
+// The full emoji set (search, categories, skin tones), loaded only when someone opens it so the room
+// itself stays light. Native emoji, so nothing is fetched from an image CDN.
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 16, fontSize: 12, color: "var(--dark)" }}>loading emojis...</div>,
+});
+
+function FullEmojiPicker({ onPick }: { onPick: (emoji: string) => void }) {
+  return (
+    <EmojiPicker
+      onEmojiClick={(e: EmojiClickData) => onPick(e.emoji)}
+      emojiStyle={EmojiStyle.NATIVE}
+      width="100%"
+      height={380}
+      lazyLoadEmojis
+      searchPlaceHolder="search every emoji..."
+      previewConfig={{ showPreview: false }}
+    />
+  );
+}
 
 // Render @mentions as a link to that member's profile. Being tagged also raises a notification, so a
 // mention is a real thing that happens to someone rather than text they had to be in the room to see.
@@ -83,6 +100,9 @@ export default function ChatRoomPage() {
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [showComposeEmoji, setShowComposeEmoji] = useState(false);
   const [unreadMap, setUnreadMap] = useState<Record<string, boolean>>({});
+  const [fullReactFor, setFullReactFor] = useState<ChatMessage | null>(null);
+  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
+  const [flashId, setFlashId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -112,9 +132,14 @@ export default function ChatRoomPage() {
     // on the flip.
   }, [space?.id, season.sign]);
 
+  // Scrolls the list (not the whole page) so the newest message sits in view.
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = bottomRef.current;
+    const list = el?.parentElement;
+    if (el && list) list.scrollTo({ top: list.scrollHeight, behavior: "smooth" });
   }, [messages.length]);
+
+  const byId = useMemo(() => new Map(messages.map((m) => [m.id, m])), [messages]);
 
   // @mention autocomplete: matches a trailing "@partial" at the end of the draft
   const mentionMatch = draft.match(/@(\w*)$/);
@@ -195,9 +220,10 @@ export default function ChatRoomPage() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!draft.trim()) return;
-    const updated = await addRoomMessage(space.id, member.name.toLowerCase(), draft.trim());
+    const updated = await addRoomMessage(space.id, member.name.toLowerCase(), draft.trim(), replyingTo?.id);
     setMessages(updated);
     setDraft("");
+    setReplyingTo(null);
     setShowComposeEmoji(false);
   };
 
@@ -211,10 +237,29 @@ export default function ChatRoomPage() {
     inputRef.current?.focus();
   };
 
+  const startReply = (msg: ChatMessage) => {
+    setReplyingTo(msg);
+    setReactionPickerFor(null);
+    inputRef.current?.focus();
+  };
+
+  // Tapping the quote in a reply jumps back up to the original and flashes it so she can see which one.
+  const jumpTo = (id: string) => {
+    const target = document.getElementById(`msg-${id}`);
+    const list = target?.closest("[data-chat-list]") as HTMLElement | null;
+    if (!target || !list) return;
+    list.scrollTo({ top: target.offsetTop - list.offsetTop - 16, behavior: "smooth" });
+    setFlashId(id);
+    window.setTimeout(() => setFlashId((cur) => (cur === id ? null : cur)), 1600);
+  };
+
+  const snippet = (text: string) => (text.length > 120 ? `${text.slice(0, 120).trimEnd()}…` : text);
+
   const handleReact = async (messageId: string, emoji: string) => {
     const updated = await toggleReaction(space.id, messageId, emoji, member.name.toLowerCase());
     setMessages(updated);
     setReactionPickerFor(null);
+    setFullReactFor(null);
   };
 
   // Free members don't see the ritual rooms in the "other rooms" grid, matching what they can enter.
@@ -257,8 +302,9 @@ export default function ChatRoomPage() {
       <section className="px-5 md:px-8 py-8" style={{ borderBottom: "var(--border)" }}>
         <div className="max-w-3xl mx-auto">
           <div
+            data-chat-list
             className="flex flex-col gap-5 p-6 mb-4"
-            style={{ border: "var(--border)", background: "#fafafa", minHeight: 360, maxHeight: 520, overflowY: "auto" }}
+            style={{ border: "var(--border)", background: "#fafafa", minHeight: 360, maxHeight: 520, overflowY: "auto", position: "relative" }}
           >
             {messages.length === 0 ? (
               <p style={{ fontSize: 13, color: "var(--grey-light)" }}>No messages yet, be the first to say something.</p>
@@ -266,8 +312,9 @@ export default function ChatRoomPage() {
               messages.map((msg) => {
                 const isMe = msg.author.toLowerCase() === member.name.toLowerCase();
                 const reactionEntries = Object.entries(msg.reactions || {});
+                const original = msg.replyTo ? byId.get(msg.replyTo) : undefined;
                 return (
-                  <div key={msg.id} className="flex" style={{ justifyContent: isMe ? "flex-end" : "flex-start" }}>
+                  <div key={msg.id} id={`msg-${msg.id}`} className="flex" style={{ justifyContent: isMe ? "flex-end" : "flex-start" }}>
                     <div style={{ maxWidth: "78%" }}>
                       {!isMe && (
                         <Link
@@ -286,8 +333,44 @@ export default function ChatRoomPage() {
                           border: isMe ? "none" : "1px solid #eee",
                           fontSize: 13,
                           lineHeight: 1.6,
+                          outline: flashId === msg.id ? "3px solid var(--lav)" : "none",
+                          outlineOffset: 2,
+                          transition: "outline-color 0.3s",
                         }}
                       >
+                        {msg.replyTo && (
+                          <button
+                            type="button"
+                            onClick={() => original && jumpTo(original.id)}
+                            className="block w-full text-left"
+                            style={{
+                              marginBottom: 8,
+                              padding: "6px 10px",
+                              background: isMe ? "rgba(0,0,0,0.12)" : "var(--lav-light)",
+                              color: isMe ? "#fff" : "var(--dark)",
+                              border: "none",
+                              borderLeftWidth: 3,
+                              borderLeftStyle: "solid",
+                              borderLeftColor: isMe ? "#fff" : "var(--pink)",
+                              cursor: original ? "pointer" : "default",
+                              fontSize: 12,
+                              lineHeight: 1.45,
+                            }}
+                          >
+                            {original ? (
+                              <>
+                                <span style={{ display: "block", fontSize: 10, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                                  ↩ {original.author.toLowerCase() === member.name.toLowerCase() ? "you" : original.author}
+                                </span>
+                                <span style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                                  {snippet(original.content)}
+                                </span>
+                              </>
+                            ) : (
+                              <span style={{ fontStyle: "italic" }}>↩ replying to a message that was deleted</span>
+                            )}
+                          </button>
+                        )}
                         {renderContent(msg.content, isMe)}
                       </div>
 
@@ -321,7 +404,7 @@ export default function ChatRoomPage() {
                           {reactionPickerFor === msg.id && (
                             <div
                               className="flex gap-1 p-2"
-                              style={{ position: "absolute", bottom: "120%", left: 0, background: "#fff", border: "var(--border)", zIndex: 10, whiteSpace: "nowrap" }}
+                              style={{ position: "absolute", bottom: "120%", ...(isMe ? { right: 0 } : { left: 0 }), background: "#fff", border: "var(--border)", zIndex: 10, whiteSpace: "nowrap" }}
                             >
                               {QUICK_REACTIONS.map((emoji) => (
                                 <button
@@ -332,9 +415,29 @@ export default function ChatRoomPage() {
                                   {emoji}
                                 </button>
                               ))}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setReactionPickerFor(null);
+                                  setShowComposeEmoji(false);
+                                  setFullReactFor(msg);
+                                }}
+                                title="every emoji"
+                                style={{ fontSize: 11, fontWeight: 800, background: "var(--lav-light)", color: "var(--dark)", border: "none", cursor: "pointer", padding: "2px 8px", marginLeft: 2 }}
+                              >
+                                more
+                              </button>
                             </div>
                           )}
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => startReply(msg)}
+                          title="reply to this message"
+                          style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", border: "1px solid #eee", background: "#fff", cursor: "pointer", color: "var(--dark)" }}
+                        >
+                          ↩ reply
+                        </button>
                       </div>
 
                       <div style={{ fontSize: 9, color: "var(--grey-light)", marginTop: 3, textAlign: isMe ? "right" : "left" }}>
@@ -364,24 +467,61 @@ export default function ChatRoomPage() {
           )}
 
           {/* Compose emoji picker */}
-          {showComposeEmoji && (
-            <div className="grid grid-cols-8 gap-1 p-3" style={{ border: "var(--border)", borderBottom: "none", background: "#fff" }}>
-              {COMPOSE_EMOJIS.map((emoji) => (
-                <button
-                  key={emoji}
-                  onClick={() => insertEmoji(emoji)}
-                  style={{ fontSize: 18, background: "none", border: "none", cursor: "pointer", padding: 4 }}
-                >
-                  {emoji}
+          {showComposeEmoji && !fullReactFor && (
+            <div style={{ border: "var(--border)", borderBottom: "none", background: "#fff" }}>
+              <FullEmojiPicker onPick={insertEmoji} />
+            </div>
+          )}
+
+          {/* Reacting with any emoji: opens here under the chat rather than over a bubble, so it never
+              hangs off the side of a phone screen. */}
+          {fullReactFor && (
+            <div style={{ border: "var(--border)", borderBottom: "none", background: "#fff" }}>
+              <div className="flex items-center gap-3 px-4 py-2" style={{ background: "var(--lav-light)", color: "var(--dark)" }}>
+                <div className="flex-1" style={{ minWidth: 0, fontSize: 12, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <strong style={{ fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase" }}>react to {fullReactFor.author.toLowerCase() === member.name.toLowerCase() ? "your message" : fullReactFor.author}:</strong>{" "}
+                  {fullReactFor.content}
+                </div>
+                <button type="button" onClick={() => setFullReactFor(null)} aria-label="close" style={{ fontSize: 16, fontWeight: 700, background: "none", border: "none", cursor: "pointer", color: "var(--dark)", padding: 4 }}>
+                  ✕
                 </button>
-              ))}
+              </div>
+              <FullEmojiPicker onPick={(emoji) => handleReact(fullReactFor.id, emoji)} />
+            </div>
+          )}
+
+          {/* Who she's replying to, sitting on top of the compose box until she sends or cancels. */}
+          {replyingTo && (
+            <div
+              className="flex items-center gap-3 px-4 py-2"
+              style={{ border: "var(--border)", borderBottom: "none", background: "var(--lav-light)", color: "var(--dark)" }}
+            >
+              <div className="flex-1" style={{ minWidth: 0, borderLeft: "3px solid var(--pink)", paddingLeft: 10 }}>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                  ↩ replying to {replyingTo.author.toLowerCase() === member.name.toLowerCase() ? "yourself" : replyingTo.author}
+                </div>
+                <div style={{ fontSize: 12, lineHeight: 1.45, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {replyingTo.content}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setReplyingTo(null)}
+                aria-label="cancel reply"
+                style={{ fontSize: 16, fontWeight: 700, background: "none", border: "none", cursor: "pointer", color: "var(--dark)", padding: 4 }}
+              >
+                ✕
+              </button>
             </div>
           )}
 
           <form onSubmit={handleSend} className="flex gap-0" style={{ border: "var(--border)" }}>
             <button
               type="button"
-              onClick={() => setShowComposeEmoji((v) => !v)}
+              onClick={() => {
+                setFullReactFor(null);
+                setShowComposeEmoji((v) => !v);
+              }}
               style={{ padding: "0 14px", border: "none", borderRight: "var(--border)", background: showComposeEmoji ? "var(--lav-light)" : "#fff", cursor: "pointer", fontSize: 16 }}
               title="add an emoji"
             >
@@ -391,7 +531,10 @@ export default function ChatRoomPage() {
               ref={inputRef}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder={`say something in ${space.label}... (type @ to mention)`}
+              onKeyDown={(e) => {
+                if (e.key === "Escape" && replyingTo) setReplyingTo(null);
+              }}
+              placeholder={replyingTo ? `reply to ${replyingTo.author.toLowerCase() === member.name.toLowerCase() ? "yourself" : replyingTo.author}...`: `say something in ${space.label}... (type @ to mention)`}
               className="flex-1"
               style={{ border: "none", outline: "none", padding: "14px 16px", fontSize: 14 }}
             />

@@ -24,6 +24,8 @@ export const runtime = "nodejs";
 interface SendBody {
   spaceId?: string;
   content?: string;
+  /** Id of the message being replied to, in the same room. */
+  replyTo?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -55,14 +57,32 @@ export async function POST(request: NextRequest) {
   if (!hasAccessFromRow(me)) return NextResponse.json({ error: "members_only" }, { status: 403 });
   const author = ((me?.name as string | null) ?? "").trim() || "babe";
 
+  // A reply has to point at a real message in this same room; anything else is posted as a plain
+  // message rather than refused, so a stale reply (original deleted meanwhile) still gets said.
+  const replyToId = (body.replyTo ?? "").trim();
+  type Original = { id: string; user_id: string; author: string; content: string };
+  let original: Original | null = null;
+  if (replyToId) {
+    const { data } = await supabase
+      .from("chat_messages")
+      .select("id, user_id, author, content")
+      .eq("id", replyToId)
+      .eq("space_id", spaceId)
+      .maybeSingle();
+    original = (data as Original | null) ?? null;
+  }
+
   const id = `${Date.now()}-${user.id.slice(0, 8)}`;
-  const { error: insertError } = await supabase.from("chat_messages").insert({
-    id,
-    space_id: spaceId,
-    user_id: user.id,
-    author,
-    content,
-  });
+  const row: Record<string, string> = { id, space_id: spaceId, user_id: user.id, author, content };
+  let { error: insertError } = await supabase
+    .from("chat_messages")
+    .insert(original ? { ...row, reply_to: original.id } : row);
+  // Until the reply_to column exists (supabase/migrations/2026-11-22-chat-replies.sql) the message is
+  // still posted, just without the link to the original, so the chat never breaks over a reply.
+  if (insertError && original && /reply_to/.test(insertError.message)) {
+    console.error("chat/send: reply_to column missing, posting without it", insertError.message);
+    ({ error: insertError } = await supabase.from("chat_messages").insert(row));
+  }
   if (insertError) {
     console.error("chat/send: insert failed", insertError.message);
     return NextResponse.json({ error: "could_not_post" }, { status: 500 });
@@ -115,13 +135,32 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Tell the person being replied to, unless it's her own message or she was already tagged above.
+  const repliedTo: string[] = [];
+  if (original && original.user_id !== user.id && !recipients.includes(original.user_id)) {
+    await sendMemberNotifications(admin, [
+      {
+        userId: original.user_id,
+        kind: "reply" as const,
+        title: `${author} replied to you in the chat`,
+        body: content,
+        link: `/community/room/${spaceId}`,
+        actor: author,
+        email: true,
+        emailSubject: `${author} replied to you in the MY SZN chat 💜`,
+        emailCta: "SEE THE REPLY",
+      },
+    ]);
+    repliedTo.push(original.user_id);
+  }
+
   await alertAdmins(admin, {
     authorId: user.id,
     author,
     content,
     link: `/community/room/${spaceId}`,
     where: `in ${findRoom(spaceId)?.label ?? "the chat"}`,
-    skip: recipients,
+    skip: [...recipients, ...repliedTo],
   });
 
   return NextResponse.json({ ok: true, id, mentioned: recipients.length, everyone });
