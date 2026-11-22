@@ -84,6 +84,32 @@ const AFFIRMATIONS = [
   "Everything I release tonight makes room for something better.",
 ];
 
+// The journal prompt for the house the full moon lands in, so her first prompt is about her chart.
+const HOUSE_PROMPT: Record<number, string> = {
+  1: "What new words keep coming out of my mouth about who I am, and which old description of myself am I ready to drop for good?",
+  2: "What do I say about money when nobody's listening, and what's the richer sentence I'm choosing from tonight?",
+  3: "Which message have I been drafting in my head for weeks, and what happens in my life once I finally send it?",
+  4: "Which family story have I been living inside, and which version of my history do I choose to keep from now on?",
+  5: "What would I create, wear or flirt with if I stopped worrying about looking silly?",
+  6: "Which thing on my to-do list is my body begging me to drop, and what does my day look like without it?",
+  7: "What's been said between the lines in my closest partnership, and what do I want to say out loud?",
+  8: "What truth about money, intimacy or power have I been avoiding, and how does knowing it give me my power back?",
+  9: "Which belief about what's possible for me has stopped making sense, and what do I believe now?",
+  10: "How would I talk about my work if I was completely proud of it, and who needs to hear me say it?",
+  11: "Who's genuinely cheering for me, and which friendships do I want more of in my bigger life?",
+  12: "What have I been telling myself in private that I'm ready to release tonight?",
+};
+
+const PROMPTS = [
+  "What's the old story I keep telling about myself, and where did I first learn it?",
+  "What did I want to say during the Mercury retrograde that I swallowed instead?",
+  "If I wrote the next chapter of my life like a bestselling novel, what happens in it?",
+  "What conversation would change everything if I had it this week?",
+  "Which two versions of me are pulling in different directions right now, and which one am I choosing?",
+  "What am I ready to stop explaining, justifying or apologising for?",
+  "What's the biggest, slightly embarrassing dream I'm ready to say out loud this Sagittarius season?",
+];
+
 const COVEN: [string, string, string, string][] = [
   ["🔮", "read the full moon in your chart", "Your full lunation reading goes deep on exactly what this moon is lighting up for you, house by house.", READING_HREF],
   ["💬", "say it in the baddie chat", "Post your new story in the chat. Saying it in front of the coven makes it real.", "/community"],
@@ -237,6 +263,27 @@ export default function GeminiFullMoon() {
                 {s.flipped.length} stor{s.flipped.length === 1 ? "y" : "ies"} rewritten. say the new one{s.flipped.length === 1 ? "" : "s"} out loud until your mouth gets used to it. 💋
               </p>
             )}
+          </section>
+
+          {/* Journal prompts */}
+          <section>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>✍️ grab your journal</span>
+            <h2 className="display" style={{ ...sectionTitle, marginTop: 14 }}>full moon <span className="pk">journal prompts.</span></h2>
+            <p style={{ fontSize: 16, fontWeight: 600, marginTop: 10, maxWidth: 700 }}>Gemini thinks out loud, so write fast and don&apos;t edit. Pick the ones that make your stomach flip, those are the ones you need.</p>
+            {moonHouse && (
+              <div className="hd-foil" style={{ marginTop: 22, border: "var(--border)", borderRadius: 20, boxShadow: "6px 6px 0 var(--dark)", padding: "22px 22px", color: "var(--dark)" }}>
+                <div style={{ ...label, fontSize: 11 }}>✨ your prompt · the moon is in your {ORD[moonHouse]} house</div>
+                <p className="display" style={{ fontSize: "clamp(22px, 3vw, 32px)", lineHeight: 1.12, margin: "10px 0 0" }}>{HOUSE_PROMPT[moonHouse]}</p>
+              </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ marginTop: 18 }}>
+              {PROMPTS.map((p, i) => (
+                <div key={p} style={{ ...card, border: "var(--border)", padding: "18px 18px", background: i % 3 === 0 ? "var(--lav-light)" : i % 3 === 1 ? "var(--pink-light)" : "#fff" }}>
+                  <div style={{ ...label, fontSize: 10 }}>prompt {i + 1}</div>
+                  <p style={{ fontSize: 17, lineHeight: 1.45, fontWeight: 700, margin: "8px 0 0" }}>{p}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Ritual: the two letters */}

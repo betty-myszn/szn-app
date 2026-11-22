@@ -41,6 +41,7 @@ import WelcomeOverlay from "@/components/WelcomeOverlay";
 import DeepLinkScroll from "@/components/DeepLinkScroll";
 import SectionBoundary from "@/components/SectionBoundary";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
+import { moonVisible } from "@/lib/coven-month";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, then her
 // szn area by area, the replay band, and a scannable top band (today + cosmic weather + the sky on
@@ -459,6 +460,19 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+
+          {/* Full Moon in Gemini, 24 November. Same window as the Coven home banner (midnight UK the
+              day before, then the three days of the glow), pointing at her personal moon portal. */}
+          {moonVisible(Date.parse("2026-11-24T14:53:00Z"), nowMs) && (
+            <Link href="/your-season/gemini-full-moon" className="no-underline holo-edge bg-glitter flex items-center gap-4 flex-wrap justify-between" style={{ marginTop: 16, borderRadius: 18, padding: "20px 24px", color: "#fff" }}>
+              <div style={{ maxWidth: 560 }}>
+                <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🌕 tuesday 24th of november · 2:53pm UK</span>
+                <div className="display" style={{ fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1, marginTop: 12, color: "#fff" }}>FULL MOON IN GEMINI, BABYYYY! 🌕💬</div>
+                <p style={{ margin: "8px 0 0", fontSize: 15, lineHeight: 1.5, fontWeight: 600, color: "#fff" }}>See where it lands in YOUR chart, then your journal prompts, affirmations and the twins ritual are waiting. ✨</p>
+              </div>
+              <span style={{ background: "var(--pink)", color: "#fff", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", padding: "14px 22px", borderRadius: 40, whiteSpace: "nowrap", border: "2px solid #fff" }}>enter the moon portal →</span>
+            </Link>
+          )}
 
           {/* Virgo new moon, 10 September. Shown from a week out and gone the morning after, so the
               dashboard never carries a banner for a night that has already happened. The date is the

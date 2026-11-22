@@ -143,18 +143,6 @@ export default function CovenHomePage() {
         {/* Sagittarius szn: today's Quantum Leap move (from the Sun's ingress, 22 Nov 2026) */}
         <QuantumLeapBand />
 
-        {/* Lilith: Money & Power Activation + the members' Lilith page (15 Nov 2026) */}
-        <Link href="/my-chart/lilith" className="no-underline grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", background: "#08070a", border: "var(--border)", boxShadow: "6px 6px 0 var(--pink)" }}>
-          <div style={{ padding: "clamp(24px, 3.6vw, 40px)", alignSelf: "center" }}>
-            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🖤 new in your coven</span>
-            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>LILITH: MONEY &amp; POWER ACTIVATION 💸</h2>
-            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your guided hypnosis and goddess activation is HERE, babe, plus your own Lilith page: all four of your Liliths, your shadow work, your Lilith money era and a money exercise written for your placement. 🔮</p>
-            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>meet your lilith →</span>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/lilith/lilith-hero.jpg" alt="Lilith under a glitter crescent moon" className="block w-full aspect-[4/3] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 15%", minHeight: 260 }} />
-        </Link>
-
         {geminiLive && (
           <>
             {/* Full Moon in Gemini (24 Nov 2026) */}
@@ -172,6 +160,18 @@ export default function CovenHomePage() {
             </Link>
           </>
         )}
+
+        {/* Lilith: Money & Power Activation + the members' Lilith page (15 Nov 2026) */}
+        <Link href="/my-chart/lilith" className="no-underline grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", background: "#08070a", border: "var(--border)", boxShadow: "6px 6px 0 var(--pink)" }}>
+          <div style={{ padding: "clamp(24px, 3.6vw, 40px)", alignSelf: "center" }}>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🖤 new in your coven</span>
+            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>LILITH: MONEY &amp; POWER ACTIVATION 💸</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your guided hypnosis and goddess activation is HERE, babe, plus your own Lilith page: all four of your Liliths, your shadow work, your Lilith money era and a money exercise written for your placement. 🔮</p>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>meet your lilith →</span>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/lilith/lilith-hero.jpg" alt="Lilith under a glitter crescent moon" className="block w-full aspect-[4/3] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 15%", minHeight: 260 }} />
+        </Link>
 
         {/* What you might've missed: the last few days' portals, now small and side by side */}
         <section>
