@@ -313,13 +313,16 @@ export async function addComment(postId: string, author: string, content: string
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return loadPosts();
-  await supabase.from("community_comments").insert({
-    id: `${Date.now()}`,
+  const id = `${Date.now()}`;
+  const { error } = await supabase.from("community_comments").insert({
+    id,
     post_id: postId,
     user_id: user.id,
     author,
     content,
   });
+  // Tells Betty (bell + email). The route checks the comment really exists and is this member's.
+  if (!error) fetch("/api/community/comment-alert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) }).catch(() => {});
   return loadPosts();
 }
 

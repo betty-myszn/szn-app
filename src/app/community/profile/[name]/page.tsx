@@ -13,6 +13,7 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 interface FoundMember {
   name: string;
   since: string;
+  id?: string; // only sent when Betty is the one looking
 }
 
 // A member's page, reached from an @mention or a name in the feed. The handle is whatever the link
@@ -183,7 +184,10 @@ export default function ProfilePage() {
             </div>
           )}
           {!isMe && (
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-3">
+              {member.isAdmin && found?.[0]?.id && (
+                <Link href={`/admin/messages?member=${found[0].id}`} className="btn-pink">💌 message her</Link>
+              )}
               <Link href="/community/room/general" className="btn-pink">say hi in the coven</Link>
             </div>
           )}

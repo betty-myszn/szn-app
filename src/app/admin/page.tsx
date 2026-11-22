@@ -263,6 +263,9 @@ export default function AdminPage() {
           <Link href="/admin/messages" className="btn-pink" style={{ display: "inline-block", marginTop: 18 }}>
             💌 member messages
           </Link>
+          <Link href="/admin/members" className="btn-pink" style={{ display: "inline-block", marginTop: 18, marginLeft: 12 }}>
+            👯 all members
+          </Link>
           <Link href="/admin/szn-report" className="btn-pink" style={{ display: "inline-block", marginTop: 18, marginLeft: 12 }}>
             ✦ what members want
           </Link>

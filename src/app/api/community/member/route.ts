@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
   if (!handle || handle.length > 80) return NextResponse.json({ members: [] });
 
   const admin = createAdminClient();
-  const { data, error } = await admin.from("profiles").select("name, created_at, blocked");
+  // Betty gets the account id too, so her view of a profile can open a private chat with her.
+  const { data: me } = await admin.from("profiles").select("is_admin").eq("id", user.id).maybeSingle();
+  const viewerIsAdmin = !!me?.is_admin;
+  const { data, error } = await admin.from("profiles").select("id, name, created_at, blocked");
   if (error) {
     console.error("community/member: profile lookup failed", error.message);
     return NextResponse.json({ error: "lookup_failed" }, { status: 500 });
@@ -32,7 +35,7 @@ export async function GET(request: NextRequest) {
   const members = (data ?? [])
     .filter((row) => !row.blocked && handleMatchesName(handle, row.name as string | null))
     .slice(0, 5)
-    .map((row) => ({ name: (row.name as string).trim(), since: row.created_at as string }));
+    .map((row) => ({ name: (row.name as string).trim(), since: row.created_at as string, ...(viewerIsAdmin ? { id: row.id as string } : {}) }));
 
   return NextResponse.json({ members });
 }

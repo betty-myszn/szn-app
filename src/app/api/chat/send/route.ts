@@ -6,6 +6,7 @@ import { findRoom } from "@/lib/community-store";
 import { hasAccessFromRow } from "@/lib/membership-gate";
 import { resolveMentionedUserIds } from "@/lib/notify/mentions";
 import { mentionsAll } from "@/lib/community/mention-tokens";
+import { alertAdmins } from "@/lib/notify/admin-alert";
 
 export const runtime = "nodejs";
 
@@ -113,6 +114,15 @@ export async function POST(request: NextRequest) {
       }))
     );
   }
+
+  await alertAdmins(admin, {
+    authorId: user.id,
+    author,
+    content,
+    link: `/community/room/${spaceId}`,
+    where: `in ${findRoom(spaceId)?.label ?? "the chat"}`,
+    skip: recipients,
+  });
 
   return NextResponse.json({ ok: true, id, mentioned: recipients.length, everyone });
 }
