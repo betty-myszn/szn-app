@@ -19,8 +19,8 @@ export const COVEN_CIRCLE = {
 // The next circle once COVEN_CIRCLE has passed and before its date is set. When the date is
 // confirmed, move it into COVEN_CIRCLE with real startsAt/endsAt and set this back to null.
 export const COVEN_NEXT: { title: string; line: string } | null = {
-  title: "the sagittarius season manifestation workshop",
-  line: "Your BIGGGG life vision, your Jupiter luck and the leap into HER, live together on Zoom. The date lands here very soon, babe. 🏹",
+  title: "let's create your big f*cking life",
+  line: "The Sagittarius season workshop: go after the outrageous dreams and clear everything that's been holding you back, live together on Zoom. The date lands here very soon, babe. 🏹",
 };
 
 export const COVEN_MOONS = [
