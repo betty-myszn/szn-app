@@ -25,8 +25,8 @@ export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesi
             {r.season.title}
           </h1>
           <p style={{ fontSize: 12, opacity: 0.55, margin: "0 0 18px" }}>{r.season.dates}</p>
-          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 14px" }}>{r.season.intro}</p>
-          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 18px" }}>{r.season.encouraging}</p>
+          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 14px", whiteSpace: "pre-line" }}>{r.season.intro}</p>
+          <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: "0 0 18px", whiteSpace: "pre-line" }}>{r.season.encouraging}</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
             {r.season.activates.map((a) => (
               <span key={a} style={chip}>{a}</span>
@@ -138,7 +138,7 @@ export default function SeasonDesignReadingView({ r, embedded }: { r: SeasonDesi
       <ExpandableBlock header="Money" block={r.money} />
 
       <SectionHead n={12} title="your shadow work this season" />
-      <p style={{ fontSize: 14.5, opacity: 0.75, margin: "0 0 14px", lineHeight: 1.6 }}>{r.shadow.intro}</p>
+      <p style={{ fontSize: 14.5, opacity: 0.75, margin: "0 0 14px", lineHeight: 1.6, whiteSpace: "pre-line" }}>{r.shadow.intro}</p>
       {r.shadow.items.length === 0 ? (
         <p style={{ margin: 0, opacity: 0.65, fontSize: 15, lineHeight: 1.6 }}>
           You have no open centres, which is rare. Your conditioning shows up less through the centres
@@ -280,7 +280,7 @@ function Layer({ label, text, highlight }: { label: string; text: string; highli
       <div style={{ ...eyebrow, marginBottom: 4, color: highlight ? "var(--pink)" : undefined, opacity: highlight ? 0.9 : 0.5 }}>
         {label}
       </div>
-      <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6 }}>{text}</p>
+      <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, whiteSpace: "pre-line" }}>{text}</p>
     </div>
   );
 }
