@@ -141,7 +141,35 @@ export default function CovenHomePage() {
           <img src={heroArt} alt="" className="block w-full aspect-[4/5] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 12%", minHeight: 320 }} />
         </section>
 
-        {/* Sagittarius szn: today's Quantum Leap move (from the Sun's ingress, 22 Nov 2026) */}
+        {/* Sagittarius szn: the main feature from the Sun's ingress (22 Nov 2026), above everything else */}
+        {leapOn && (
+          <section className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", border: "var(--border)", boxShadow: "8px 8px 0 var(--pink)", background: "linear-gradient(160deg, var(--lav-light) 0%, #fff 55%, var(--pink-light) 100%)" }}>
+            <div style={{ padding: "clamp(26px, 4vw, 44px)" }}>
+              <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♐️ sagittarius szn is HERE</span>
+              <h2 className="display" style={{ fontSize: "clamp(38px, 5.6vw, 66px)", lineHeight: 0.96, marginTop: 16 }}>
+                big dreams, big money, <span style={{ color: "var(--pink)" }}>big f*cking life.</span>
+              </h2>
+              <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "12px 0 0", maxWidth: 560 }}>Jupiter is running the show, babe, so this is the season we go after the outrageous dreams for real and clear everything that&apos;s been keeping us small. Here&apos;s everything waiting for you. 🏹</p>
+              <div style={{ display: "grid", gap: 12, marginTop: 22 }}>
+                <Link href={QL_PATH} className="no-underline" style={{ display: "block", background: "var(--dark)", color: "#fff", borderRadius: 18, padding: "16px 20px", boxShadow: "5px 5px 0 var(--pink)" }}>
+                  <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>♐️ starts now</div>
+                  <div className="display" style={{ fontSize: "clamp(22px, 2.6vw, 28px)", lineHeight: 1.05, marginTop: 4, color: "#fff" }}>the 30-day quantum leap challenge →</div>
+                  <div style={{ fontSize: 15, lineHeight: 1.45, fontWeight: 600, marginTop: 6 }}>30 days of breaking through limiting beliefs, receiving MORE and taking BOLD action. Your small-life era is officially over, baddieeee.</div>
+                </Link>
+                <div style={{ background: "#fff", borderRadius: 18, padding: "16px 20px", border: "var(--border)", boxShadow: "5px 5px 0 var(--dark)" }}>
+                  <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>💖 live on zoom · date coming very soon</div>
+                  <div className="display" style={{ fontSize: "clamp(22px, 2.6vw, 28px)", lineHeight: 1.05, marginTop: 4 }}>the big f*cking life masterclass</div>
+                  <div style={{ fontSize: 15, lineHeight: 1.45, fontWeight: 600, marginTop: 6 }}>Your BIGGGG life vision, your Jupiter blueprint and live shadow work to clear what&apos;s been holding you back.</div>
+                </div>
+                <Link href="/dashboard" className="no-underline" style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, textDecoration: "underline", color: "var(--dark)", marginTop: 4 }}>🪐 open your sagittarius szn, written for your chart →</Link>
+              </div>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sagittarius-unicorn.webp" alt="A pink-maned unicorn with the Sagittarius glyph on her hip" className="block order-first md:order-none w-[68%] md:w-full" style={{ maxWidth: 440, height: "auto", alignSelf: "end", justifySelf: "center", padding: "18px 18px 0" }} />
+          </section>
+        )}
+
+        {/* Today's move in the 30-Day Quantum Leap Challenge */}
         <QuantumLeapBand />
 
         {geminiLive && (

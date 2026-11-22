@@ -25,7 +25,7 @@ export default function QuantumLeapBand({ style }: { style?: CSSProperties }) {
   return (
     <section className="holo-edge bg-glitter grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-5" style={{ borderRadius: 26, padding: "clamp(24px, 3.8vw, 40px)", color: "#fff", ...style }}>
       <div>
-        <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🏹 the quantum leap experiment</span>
+        <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🏹 the 30-day quantum leap challenge</span>
         <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 14 }}>
           {over || !day ? "all thirty days, done" : `day ${day.n} of ${QL_DAYS}`}
         </div>
