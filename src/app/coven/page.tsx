@@ -147,7 +147,7 @@ export default function CovenHomePage() {
             <div style={{ padding: "clamp(26px, 4vw, 44px)" }}>
               <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>♐️ sagittarius szn is HERE</span>
               <h2 className="display" style={{ fontSize: "clamp(38px, 5.6vw, 66px)", lineHeight: 0.96, marginTop: 16 }}>
-                big dreams, big money, <span style={{ color: "var(--pink)" }}>big f*cking life.</span>
+                big dreams, biiiiigggg $$$, <span style={{ color: "var(--pink)" }}>big life.</span>
               </h2>
               <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "12px 0 0", maxWidth: 560 }}>Jupiter is running the show, babe, so this is the season we go after the outrageous dreams for real and clear everything that&apos;s been keeping us small. Here&apos;s everything waiting for you. 🏹</p>
               <div style={{ display: "grid", gap: 12, marginTop: 22 }}>
@@ -157,8 +157,8 @@ export default function CovenHomePage() {
                   <div style={{ fontSize: 15, lineHeight: 1.45, fontWeight: 600, marginTop: 6 }}>30 days of breaking through limiting beliefs, receiving MORE and taking BOLD action. Your small-life era is officially over, baddieeee.</div>
                 </Link>
                 <div style={{ background: "#fff", borderRadius: 18, padding: "16px 20px", border: "var(--border)", boxShadow: "5px 5px 0 var(--dark)" }}>
-                  <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>💖 live on zoom · date coming very soon</div>
-                  <div className="display" style={{ fontSize: "clamp(22px, 2.6vw, 28px)", lineHeight: 1.05, marginTop: 4 }}>the big f*cking life masterclass</div>
+                  <div style={{ fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>💖 live on zoom · sunday 29th of november, 7pm uk</div>
+                  <div className="display" style={{ fontSize: "clamp(22px, 2.6vw, 28px)", lineHeight: 1.05, marginTop: 4 }}>the sag szn masterclass: big dreams, biiiiigggg $$$ and big life</div>
                   <div style={{ fontSize: 15, lineHeight: 1.45, fontWeight: 600, marginTop: 6 }}>Your BIGGGG life vision, your Jupiter blueprint and live shadow work to clear what&apos;s been holding you back.</div>
                 </div>
                 <Link href="/dashboard" className="no-underline" style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, textDecoration: "underline", color: "var(--dark)", marginTop: 4 }}>🪐 open your sagittarius szn, written for your chart →</Link>
@@ -223,10 +223,10 @@ export default function CovenHomePage() {
         {circleUpcoming && now !== null ? (
           <section className="holo-edge bg-glitter grid grid-cols-1 md:grid-cols-2" style={{ borderRadius: 26, overflow: "hidden", color: "#fff" }}>
             <div style={{ padding: "clamp(26px, 4vw, 44px)", alignSelf: "center" }}>
-              <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🪄 live this wednesday, 6pm uk</span>
+              <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>{COVEN_CIRCLE.sticker}</span>
               <h2 className="display" style={{ fontSize: "clamp(38px, 5.4vw, 66px)", lineHeight: 0.98, marginTop: 16, color: "#fff" }}>{COVEN_CIRCLE.title}.</h2>
               <p style={{ fontSize: "clamp(17px, 1.7vw, 19px)", lineHeight: 1.5, fontWeight: 700, margin: "14px 0 0", color: "#fff" }}>
-                Our FIRST EVER coven event, babe. Come dressed as your future self, bring your most delusional wishlist and we call it ALL in together. 🎀
+                {COVEN_CIRCLE.note}
               </p>
               {!circleStarted && <Countdown to={COVEN_CIRCLE.startsAt} now={now} />}
               <div className="flex flex-wrap items-center gap-4" style={{ marginTop: 22 }}>
@@ -234,13 +234,13 @@ export default function CovenHomePage() {
                   workshopId={COVEN_CIRCLE.workshopId}
                   enabled={hasActiveAccess(member)}
                   label="join the circle on zoom"
-                  fallback={<p style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#fff" }}>💜 Your Zoom link lands right here tonight, before we go live at 6pm UK.</p>}
+                  fallback={<p style={{ fontSize: 16, fontWeight: 800, margin: 0, color: "#fff" }}>{COVEN_CIRCLE.joinSoon}</p>}
                 />
                 <Link href="/events" className="no-underline btn-pink" style={pinkBtn}>get all the details →</Link>
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/betty-witch-email.jpg" alt="Betty in a pink witch hat and black corset dress" style={{ display: "block", width: "100%", height: "auto", alignSelf: "end" }} />
+            <img src={COVEN_CIRCLE.image} alt="" className="w-[62%] md:w-full" style={{ display: "block", maxWidth: 440, height: "auto", alignSelf: "end", justifySelf: "center", padding: "0 18px" }} />
           </section>
         ) : (
           <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(26px, 4vw, 44px)", background: "var(--pink-light)" }}>

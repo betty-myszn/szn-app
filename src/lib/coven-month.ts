@@ -8,20 +8,20 @@ export const COVEN_THEME = {
 };
 
 export const COVEN_CIRCLE = {
-  workshopId: "coven-11-11",
-  title: "the 11/11 manifestation workshop",
-  when: "Wednesday 11 November, 6pm UK",
-  note: "Come dressed as your future self, babe. 🎀",
-  startsAt: Date.parse("2026-11-11T18:00:00Z"),
-  endsAt: Date.parse("2026-11-11T19:30:00Z"),
+  workshopId: "coven-sag-masterclass",
+  title: "sag szn: big dreams, biiiiigggg $$$ and big life masterclass",
+  when: "Sunday 29th of November, 7pm UK",
+  sticker: "🪄 live sunday 29th of november, 7pm uk",
+  note: "Your BIGGGG life vision, your Jupiter expansion blueprint and live shadow work with astrotapping™ to clear everything that's been holding you back. Bring your most outrageous dreams, babe. 💸✨",
+  joinSoon: "💜 Your Zoom link lands right here before we go live at 7pm UK on Sunday.",
+  image: "/sagittarius-unicorn.webp",
+  startsAt: Date.parse("2026-11-29T19:00:00Z"),
+  endsAt: Date.parse("2026-11-29T20:30:00Z"),
 };
 
 // The next circle once COVEN_CIRCLE has passed and before its date is set. When the date is
 // confirmed, move it into COVEN_CIRCLE with real startsAt/endsAt and set this back to null.
-export const COVEN_NEXT: { title: string; line: string } | null = {
-  title: "the big f*cking life masterclass",
-  line: "Our Sagittarius season masterclass: go after the outrageous dreams and clear everything that's been holding you back, live together on Zoom. The date lands here very soon, babe. 🏹",
-};
+export const COVEN_NEXT: { title: string; line: string } | null = null;
 
 export const COVEN_MOONS = [
   { name: "full moon in gemini", type: "full_moon", date: "2026-11-24", sign: "Gemini", degree: 2, when: "tuesday 24 november", at: Date.parse("2026-11-24T14:53:00Z") },

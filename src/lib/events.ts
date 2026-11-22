@@ -130,6 +130,36 @@ export const EVENTS: CosmicEvent[] = [
     cta: "JOIN THE COVEN 🪄",
     collectsBirth: false,
   },
+  // The Sagittarius season masterclass, for coven members (joining is on /baddie-coven). 7pm UK =
+  // 19:00 GMT on Sun 29 Nov 2026, set by Betty on 22 Nov.
+  {
+    slug: "coven-sag-masterclass",
+    href: "/baddie-coven",
+    title: "Sag Szn: Big Dreams, Biiiiigggg $$$ and Big Life Masterclass",
+    subtitle: "The Sagittarius Season Masterclass",
+    edition: "Sagittarius SZN",
+    badge: "Live Coven Masterclass",
+    kind: "coven",
+    status: "published",
+    dateLabel: "Sunday 29 November 2026 · 7pm UK",
+    startsAt: "2026-11-29T19:00:00Z",
+    localTimes: [
+      "🇬🇧 UK: Sun 29 Nov, 7pm",
+      "🇺🇸 New York: Sun 29 Nov, 2pm",
+      "🇺🇸 Los Angeles: Sun 29 Nov, 11am",
+      "🇦🇺 Sydney: Mon 30 Nov, 6am",
+    ],
+    price: 44,
+    priceText: "Included in the coven",
+    format: "Live online coven masterclass on Zoom",
+    image: "/sagittarius-unicorn.webp",
+    imageAlt: "A pink-maned unicorn with the Sagittarius glyph on her hip",
+    imagePosition: "50% 30%",
+    shortDescription:
+      "Your BIGGGG life vision, your Jupiter expansion blueprint and live shadow work with astrotapping™ to clear everything that's been holding you back, so you walk into 2027 with your Big Life Blueprint. 💸✨",
+    cta: "JOIN THE COVEN 🪄",
+    collectsBirth: false,
+  },
   // The free money workshop has its own page and signup at /money-workshop (waitlist offer
   // "money-workshop"); this entry just lists it on /events. 6pm UK = 18:00 GMT on 15 Nov 2026.
   {

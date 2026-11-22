@@ -208,6 +208,28 @@ export const WORKSHOPS: Workshop[] = [
     callout: null,
     coverImage: "/coven/betty-witch-email.jpg",
   },
+  {
+    id: "coven-sag-masterclass",
+    season: "Sagittarius",
+    label: "the sagittarius season masterclass",
+    kind: "masterclass",
+    blurb: "Big dreams, biiiiigggg money and a big life, mapped to your Jupiter and cleared with live shadow work.",
+    meta: "sun 29 november · 7pm uk · live on zoom",
+    title: "Sag Szn: Big Dreams, Biiiiigggg $$$ and Big Life Masterclass",
+    dark: false,
+    startIso: "2026-11-29T19:00:00Z",
+    durationMinutes: 90,
+    location: "live on zoom, join from here or from the link in your email",
+    hasJoinLink: false,
+    hasReplay: false,
+    replayPublishedAt: null,
+    paragraphs: [
+      "Your BIGGGG life vision, priced up in actual dollars a month, and your Jupiter expansion blueprint: where luck already flows in YOUR chart.",
+      "Then live shadow work with astrotapping™ to clear everything that's been holding you back, and you leave with your Big Life Blueprint for 2027. 💸✨",
+    ],
+    callout: null,
+    coverImage: "/sagittarius-unicorn.webp",
+  },
 ];
 
 export type WorkshopStatus = "tbc" | "upcoming" | "live" | "past";
