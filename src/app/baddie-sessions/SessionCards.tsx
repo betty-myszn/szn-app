@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BADDIE_SESSIONS, SESSION_OPTIONS, SESSION_PACKAGE, bookingHref, type BaddieSession } from "@/lib/baddie-sessions";
+import SignPicker from "./SignPicker";
 
 // The session cards stay short (name, tagline, who she becomes) and the full write-up opens in a
 // pop-up on top of the page. A #slug in the URL (the price card's session list links to them)
@@ -77,7 +78,7 @@ export default function SessionCards() {
       <style>{`.baddie-dialog::backdrop{background:rgba(26,26,26,0.65)}`}</style>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 40 }}>
         {BADDIE_SESSIONS.map((s, i) => (
-          <article key={s.slug} id={s.slug} className={`offer-card ${lastOdd(i, BADDIE_SESSIONS.length)}`} style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
+          <article key={s.slug} id={s.slug} className={`offer-card ${lastOdd(i, BADDIE_SESSIONS.length + 1)}`} style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
             <button type="button" onClick={() => show(s)} style={{ all: "unset", cursor: "pointer", display: "block", background: s.accent, color: s.accentInk, padding: "22px 24px", borderBottom: "var(--border)" }}>
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" }}>{s.emoji} {s.number}</div>
               <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 3vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>{s.name}</h3>
@@ -95,6 +96,23 @@ export default function SessionCards() {
             </div>
           </article>
         ))}
+
+        {/* The twelve sign sessions as ONE card with a sign picker (22 Nov 2026); each sign has its own page. */}
+        <article id="your-sign" className="offer-card" style={{ border: "var(--border)", borderRadius: 24, overflow: "hidden", background: "#fff", display: "flex", flexDirection: "column", scrollMarginTop: 80 }}>
+          <div style={{ background: "var(--dark)", color: "#fff", padding: "22px 24px", borderBottom: "var(--border)" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--pink)" }}>💫 {String(BADDIE_SESSIONS.length + 1).padStart(2, "0")}</div>
+            <h3 style={{ fontFamily: pp, fontWeight: 800, fontSize: "clamp(26px, 3vw, 34px)", lineHeight: 1.05, margin: "8px 0 0", letterSpacing: "-0.02em" }}>Your Sign&apos;s Baddie Session</h3>
+          </div>
+          <div style={{ background: "var(--pink-light)", padding: "18px 18px 20px", borderBottom: "var(--border)" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 10 }}>tap your sun sign</div>
+            <SignPicker />
+          </div>
+          <div style={{ padding: "22px 24px 26px", display: "flex", flexDirection: "column", flex: 1 }}>
+            <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 18, lineHeight: 1.3, margin: 0 }}>Your whole chart, starting with your sign. 💫</p>
+            <p style={{ fontSize: 15.5, lineHeight: 1.65, margin: "12px 0 0" }}>✨ The other five sessions each go after one goal. This one is about the whole of who you are as your sign right now: each sign has its own session, then I read the rest of your chart and your Human Design too.</p>
+            <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, margin: "16px 0 0" }}>{opt.minutes} minutes | ${opt.priceUsd} USD</div>
+          </div>
+        </article>
       </div>
 
       <dialog

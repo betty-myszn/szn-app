@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { SEASON_SLUGS } from "@/lib/season-pages";
+import { SIGN_SESSIONS } from "@/lib/sign-sessions";
 import { livePosts, populatedCategories } from "@/lib/blog";
 
 // Only public, indexable pages belong here. Anything the membership gate redirects, or that is a
@@ -22,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/baddie-coven`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/baddie-coven/la`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/baddie-sessions`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    ...SIGN_SESSIONS.map((s) => ({ url: `${SITE_URL}/baddie-sessions/${s.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: `${SITE_URL}/retreat`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/book`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/seasons`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },

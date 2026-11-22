@@ -6,6 +6,8 @@
 // $555 link (special, normally $666) with a dropdown for the session. The 3-session package is one
 // $888 link (saves $111 on three singles, created 29 Oct 2026); she picks her sessions by email.
 
+import { SIGN_SESSION_OFFERINGS } from "@/lib/sign-sessions";
+
 export const BADDIE_SESSIONS_CONTACT = "hello@thecosmicco.com";
 
 export interface SessionOption {
@@ -236,7 +238,8 @@ const ALL_OFFERINGS: BaddieSession[] = [
     standalone: true,
     image: "/coven/betty-witch-email.jpg", imagePosition: "center 20%",
     cta: "Claim your 2027", accent: "var(--dark)", accentInk: "var(--pink)", bookingUrl: "https://buy.stripe.com/4gMcN64of4fB2Twddb7kc0N", stripePriceId: "price_1Uc2aYJ6s9fRhiJoXnalsjKo",
-  },
+  },  // The twelve sign sessions (22 Nov 2026), each on its own page; see lib/sign-sessions.ts.
+  ...SIGN_SESSION_OFFERINGS,
 ];
 
 /** The five 1:1 sessions shown on /baddie-sessions. */
