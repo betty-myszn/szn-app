@@ -59,6 +59,7 @@ const HERO_ART: Record<string, string> = {
   Leo: "/leo-lion.png",
   Libra: "/libra-moon-full.png",
   Scorpio: "/scorpio-hero.jpg",
+  Sagittarius: "/hero-cutout.png",
 };
 
 function heroImageForSign(sign: string): string | null {
