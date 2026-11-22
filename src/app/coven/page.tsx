@@ -43,6 +43,7 @@ const HUB_LINKS = [
   ["📓", "journal", "/journal"],
   ["🎯", "goals", "/goals"],
   ["🧘‍♀️", "meditations", "/meditations"],
+  ["🫶", "tapping", "/tapping"],
   ["🎧", "subliminals", "/subliminals"],
 ];
 

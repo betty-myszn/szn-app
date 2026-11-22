@@ -33,6 +33,7 @@ const workshopsMenu = [
   { href: "/events/astrology", label: "general astrology", indent: true },
   { href: "/journal", label: "journal" },
   { href: "/meditations", label: "meditations" },
+  { href: "/tapping", label: "tapping" },
   { href: "/subliminals", label: "subliminals" },
 ];
 
@@ -216,7 +217,7 @@ export default function NavBar() {
   const isActive = (href: string) => pathname === href || (href !== "/" && pathname?.startsWith(href + "/"));
   const sznActive = pathname?.startsWith("/dashboard") || pathname?.startsWith("/your-season");
   const chartSectionActive = pathname?.startsWith("/my-chart") || pathname?.startsWith("/human-design");
-  const workshopsSectionActive = ["/events", "/journal", "/meditations", "/subliminals"].some((p) => pathname?.startsWith(p));
+  const workshopsSectionActive = ["/events", "/journal", "/meditations", "/subliminals", "/tapping"].some((p) => pathname?.startsWith(p));
 
   useEffect(() => {
     if (!member) return;
