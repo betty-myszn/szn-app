@@ -115,6 +115,34 @@ export const MEDITATIONS: Meditation[] = [
     ],
     publishedAt: "2026-10-01",
   },
+  {
+    // Cut from the 11/11 workshop recording (79:26 to 90:23), audio only so no member's camera
+    // tile from the Zoom call travels with it.
+    slug: "future-self-timeline",
+    title: "Future Self Timeline Activation",
+    purpose: "Leave the old timeline behind, walk into the one where your dream already happened and ask your future self what to do next.",
+    theme: "11/11 portal",
+    image: "/coven/betty-witch-email.jpg",
+    src: "/meditations/future-self-timeline.mp3",
+    intro: [
+      "Recorded live inside the Bad B*tch Coven on the 11/11 portal, this is the timeline activation Betty led at the end of the workshop, and it had women crying on the call by the time they opened their eyes.",
+      "You float up through a door into the timeline you're leaving, hug the version of you who got you this far, and put everything that can't come with you into the box or the fire. Then you choose a new door, meet the future version of you who already lives there and ask her straight up what she needs you to do right now.",
+    ],
+    workingWith: [
+      "🤍 A white-light cleanse through every chakra, rooting you into the earth",
+      "🚪 The door to your old timeline, and forgiving the version of you inside it",
+      "🔥 Releasing scarcity, fear of being seen and not-good-enough into the fire",
+      "💗 Choosing your new timeline and meeting your future self",
+      "✨ \"I activate this new timeline\", spoken with Betty",
+      "🧭 Asking her what to do next, and knowing you can go back for advice any day",
+    ],
+    howTo: [
+      "Eleven minutes, eyes closed, somewhere you won't be interrupted. Headphones make the doors feel real.",
+      "Have your journal next to you so you can write down what your future self tells you the second you come back.",
+      "Go back to her whenever you feel lost or there's no one around you doing what you're doing. Never while driving.",
+    ],
+    publishedAt: "2026-11-22",
+  },
 ];
 
 // The Lilith activation meditation lives on the member's own Lilith page (/my-chart/lilith), not in
