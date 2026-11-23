@@ -37,6 +37,14 @@ const REPORTS: PaidReport[] = [
     templateId: Number(process.env.BREVO_TEMPLATE_RICH_BTCH_RISING_PAID?.trim() || 87),
     buyerKind: "rich_btch_rising_paid", adminKind: "admin_rich_btch_rising_order",
   },
+  {
+    // The Gemini Full Moon: Manifest a New Reality, $55, 15 spots (Stripe caps the link at 15 sales), 23 Nov 2026.
+    // plink_1Uf4EhJ6s9fRhiJo914NM8b2 (the $44 price_1Uf4Ci… link was retired before launch). Release window: 24 Nov full moon to 9 Dec Sagittarius New Moon.
+    name: "The Gemini Full Moon report", emoji: "🌕",
+    priceIds: ids(process.env.STRIPE_PRICE_FULL_MOON_GEMINI, "price_1Uf4EgJ6s9fRhiJoSNfVWCmb"),
+    templateId: Number(process.env.BREVO_TEMPLATE_FULL_MOON_GEMINI_PAID?.trim() || 95),
+    buyerKind: "full_moon_gemini_paid", adminKind: "admin_full_moon_gemini_order",
+  },
 ];
 
 export const paidReportForPrice = (priceId: string | null | undefined) => (priceId ? REPORTS.find((r) => r.priceIds.includes(priceId.trim())) ?? null : null);
