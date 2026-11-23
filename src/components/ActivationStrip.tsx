@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
-import { isTrial } from "@/lib/membership-access";
+import { isTrial, hasActiveAccess } from "@/lib/membership-access";
 import { trialCountdown } from "@/lib/trial-countdown";
 import { activationState, markActivationStep, reportActivationComplete, type ActivationStep } from "@/lib/activation";
 
@@ -18,6 +18,8 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 // by it, and it stands down before the last three days so it never stacks with TrialKeepPanel, which
 // owns the closing ask.
 const STAND_DOWN_WITH_DAYS_LEFT = 3;
+/** A paying member sees the strip for her first seven days. */
+const FIRST_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 /** How long her szn guide has to be on screen before it counts as read rather than scrolled past.
  *  Long enough that a bounce doesn't tick it, short enough that a real reader gets credit. */
@@ -50,7 +52,13 @@ export default function ActivationStrip({ hasGoal }: { hasGoal: boolean }) {
   // her own dashboard would tick the reading step and land in the activation numbers, which are
   // supposed to describe trials.
   const countdown = ready && member && now !== null && isTrial(member) ? trialCountdown(member.trialExpiresAt, now) : null;
-  const applies = !!countdown && countdown.daysLeft > STAND_DOWN_WITH_DAYS_LEFT;
+  // Trials were retired on 1 October 2026, so the strip now also runs for a paying member's first
+  // week (from when her membership started, or her account if that date is missing). Without this
+  // nobody new saw it at all.
+  const joinedAt = member ? Date.parse(member.membershipStartedAt ?? member.memberSince) : NaN;
+  const inFirstWeek =
+    ready && !!member && now !== null && !isTrial(member) && hasActiveAccess(member) && !member.isAdmin && Number.isFinite(joinedAt) && now - joinedAt < FIRST_WEEK_MS;
+  const applies = (!!countdown && countdown.daysLeft > STAND_DOWN_WITH_DAYS_LEFT) || inFirstWeek;
 
   // Re-read on mount and whenever her goal changes, so ticking one step updates the strip without a
   // reload. `tick` is bumped by the reading observer below.
@@ -101,7 +109,7 @@ export default function ActivationStrip({ hasGoal }: { hasGoal: boolean }) {
               three things that make this click.
             </h2>
           </div>
-          <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, color: "var(--grey-light)" }}>
+          <span style={{ fontFamily: poppins, fontSize: 12, fontWeight: 700, color: "var(--dark)" }}>
             {state.done} of {STEPS.length} done
           </span>
         </div>
@@ -153,7 +161,7 @@ export default function ActivationStrip({ hasGoal }: { hasGoal: boolean }) {
                   >
                     {step.label}
                   </span>
-                  <span style={{ display: "block", fontSize: 12, color: "var(--grey-light)", marginTop: 3 }}>{step.sub}</span>
+                  <span style={{ display: "block", fontSize: 12, color: "var(--dark)", marginTop: 3 }}>{step.sub}</span>
                 </span>
               </Link>
             );

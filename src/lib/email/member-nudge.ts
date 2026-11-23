@@ -1,5 +1,6 @@
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { sendBrevoEmail } from "@/lib/email/brevo";
+import { upcomingWorkshops, formatWorkshopWhenLA } from "@/lib/workshops";
 
 type SupabaseAdmin = ReturnType<typeof createAdminClient>;
 
@@ -41,9 +42,20 @@ export function activeHighlights(now: Date = new Date(), max = 4): NudgeHighligh
   return NUDGE_HIGHLIGHTS.filter((h) => (!h.from || h.from <= today) && (!h.until || h.until >= today)).slice(0, max);
 }
 
-export type NudgeKind = "claim" | "missing";
+export type NudgeKind = "claim" | "missing" | "week1-day1" | "week1-day3" | "week1-day7";
 
-const COPY: Record<NudgeKind, { subject: string; preview: string; heading: string; intro: (email: string) => string[]; button: string; url: string; after: string }> = {
+/** The first-week emails (day 1, 3 and 7 after she joins). Shown to Betty as previews first; flip to
+ *  true once she has approved the copy and they start sending from the daily cron. */
+export const FIRST_WEEK_SEND_APPROVED = true;
+
+/** The next live class as an email card, so every first-week email points at something on the calendar. */
+function nextEventCard(now: Date): NudgeHighlight[] {
+  const next = upcomingWorkshops(now.getTime()).find((w) => w.startIso);
+  if (!next || !next.startIso) return [];
+  return [{ emoji: "🔮", title: `Next live: ${next.title}`, line: `${formatWorkshopWhenLA(next.startIso)}. Tap to add it to your calendar, the Zoom link is right on the event.`, path: "/events" }];
+}
+
+const COPY: Record<NudgeKind, { subject: string; preview: string; heading: string; intro: (email: string) => string[]; button: string; url: string; after: string; cardsTitle?: string; cards?: (now: Date) => NudgeHighlight[] }> = {
   claim: {
     subject: "your coven is waiting for you, babe 🖤",
     preview: "your membership is paid and ready, you just need to walk in",
@@ -67,13 +79,68 @@ const COPY: Record<NudgeKind, { subject: string; preview: string; heading: strin
     url: `${SITE}/login?redirect=%2Fcoven`,
     after: "Forgot your password? Tap \"forgot your password\" on the login page and you'll be back in within seconds. 🦄",
   },
+  "week1-day1": {
+    subject: "welcome to the coven, babe 🖤 start here",
+    preview: "three tiny things that make the whole coven click for you",
+    heading: "YOU'RE IN, BABE. HERE'S WHERE TO START. 🖤✨",
+    intro: () => [
+      "Welcome to the Bad B*tch Coven, I am SO happy you're here. 💗",
+      "There's a LOT inside, so here's the shortcut. Do these three things this week and everything else falls into place: read your season guide (it's your chart, read for the season we're in right now), say hiii in the baddie chat, and set one goal you want this season.",
+    ],
+    button: "start here →",
+    url: `${SITE}/dashboard`,
+    after: "The Start Here box at the top of your season home ticks them off as you go. Stuck on anything at all? Ask me on the help page and I'll answer you myself. 🦄",
+    cardsTitle: "✨ your first three moves",
+    cards: (now) => [
+      { emoji: "📖", title: "Read your season guide", line: "Your own chart, read for this exact season: what it's stirring up for you and how to work with it.", path: "/dashboard" },
+      { emoji: "💬", title: "Say hiii in the baddie chat", line: "Drop your Big 3 and one thing you're calling in. The girls ALWAYS answer.", path: "/community/room/general" },
+      { emoji: "🎯", title: "Set one goal", line: "One thing you want this season, so everything you do in here has a direction.", path: "/goals" },
+      ...nextEventCard(now),
+    ],
+  },
+  "week1-day3": {
+    subject: "babe, the good stuff is hiding in here 👀",
+    preview: "your chart portal, the replay vault and the app on your phone",
+    heading: "THE GOOD STUFF HIDING IN YOUR COVEN. 👀💜",
+    intro: () => [
+      "Three days in! 💗 You've seen your season home, so now let me show you the parts that go DEEP.",
+      "Your whole chart is in there, every placement read for you, plus every masterclass we've ever done, ready to watch whenever you want.",
+    ],
+    button: "open my chart →",
+    url: `${SITE}/my-chart`,
+    after: "Pro tip: put MY SZN on your phone's home screen (Safari: Share, then Add to Home Screen) so the coven is one tap away. 🦄",
+    cardsTitle: "✨ go deeper",
+    cards: () => [
+      { emoji: "🌙", title: "Your full chart", line: "Every placement read for you, in plain English, with what to actually DO with it.", path: "/my-chart" },
+      { emoji: "🎬", title: "The replay vault", line: "Every masterclass and astrotapping session, rewatch as many times as you like.", path: "/events/replays" },
+      { emoji: "💗", title: "Customise your szn", line: "Tell us what you want MORE of (money, love, confidence) and your season leans into it.", path: "/your-season/customise" },
+    ],
+  },
+  "week1-day7": {
+    subject: "one week in the coven 🥂 tell me how it's going",
+    preview: "your first week, your next live session and a direct line to me",
+    heading: "ONE WEEK IN THE COVEN. 🥂💗",
+    intro: () => [
+      "You've officially been a Bad B*tch Coven member for a whole week! 🥂",
+      "I want to hear how it's landing for you. Hit reply and tell me one thing that's shifted, or one thing you want more of, I read every single one. If anything's confusing, tell me that too, so I can fix it.",
+    ],
+    button: "see what's on →",
+    url: `${SITE}/events`,
+    after: "Show up live if you can, the energy in the room is EVERYTHING. If you can't, the replay lands in your vault. 🦄",
+    cardsTitle: "✨ coming up for you",
+    cards: (now) => [
+      ...nextEventCard(now),
+      { emoji: "💌", title: "Message me privately", line: "Questions about your chart, your season or your life, it comes straight to me.", path: "/messages" },
+      { emoji: "🆘", title: "Help, any time", line: "Answers to everything about the coven, or send me your question.", path: "/help" },
+    ],
+  },
 };
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 export function buildNudgeEmail(kind: NudgeKind, email: string, now: Date = new Date()): { subject: string; html: string } {
   const c = COPY[kind];
-  const items = activeHighlights(now);
+  const items = c.cards ? c.cards(now) : activeHighlights(now);
   const cards = items
     .map(
       (h) => `
@@ -104,7 +171,7 @@ export function buildNudgeEmail(kind: NudgeKind, email: string, now: Date = new 
     <p style="margin:0 0 16px;font-weight:700;">Hiii my love, 💜</p>
     ${intro}
     <p style="margin:0 0 22px;">${button}</p>
-    <div style="font-family:Poppins,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:0 0 10px;">✨ what's waiting for you inside</div>
+    <div style="font-family:Poppins,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:0 0 10px;">${esc(c.cardsTitle ?? "✨ what's waiting for you inside")}</div>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;">${cards}</table>
     <p style="margin:0 0 16px;">${esc(c.after)}</p>
     <p style="margin:0 0 24px;font-family:Poppins,Arial,sans-serif;font-weight:800;font-size:18px;">Betty 💜</p>

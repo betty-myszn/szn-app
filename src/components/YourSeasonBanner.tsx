@@ -113,6 +113,13 @@ export default function YourSeasonBanner({
           >
             read your {sign} szn, bb →
           </Link>
+          <Link
+            href="/your-season/birthday"
+            className="no-underline"
+            style={{ display: "inline-block", marginLeft: 10, marginTop: 10, background: "#fff", color: "var(--dark)", border: "2px solid var(--dark)", fontFamily: poppins, fontSize: 12, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "12px 22px", borderRadius: 40 }}
+          >
+            your birthday reading 🎂
+          </Link>
         </div>
       </div>
     </div>
