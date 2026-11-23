@@ -319,8 +319,8 @@ const SCORPIO_SPELLS: Spell[] = [
 
 /** The sticker on an exercise that says which spell it belongs to. */
 export function exerciseSpellTag(exerciseId: string): string | null {
-  if (exerciseId === "tap-out-too-intense") return "🪄 tap this in after any spell";
-  const spell = SCORPIO_SPELLS.find((s) => s.prep === exerciseId);
+  if (exerciseId === "tap-out-too-intense" || exerciseId === "tap-out-unrealistic") return "🪄 tap this in after any spell";
+  const spell = [...SCORPIO_SPELLS, ...SAGITTARIUS_SPELLS].find((s) => s.prep === exerciseId);
   return spell ? `${spell.emoji} prep for ${spell.name} · ${spell.date}` : null;
 }
 
@@ -444,7 +444,184 @@ const SCORPIO: SeasonEmbodiment = {
   ],
 };
 
-const EMBODIMENT: Record<string, SeasonEmbodiment> = { Libra: LIBRA, Scorpio: SCORPIO };
+const SAGITTARIUS_SPELLS: Spell[] = [
+  {
+    id: "big-dream",
+    prep: "dream-audit",
+    emoji: "🏹",
+    name: "the big dream spell",
+    date: "tuesday 8 december",
+    why: "It's the New Moon in Sagittarius, the one night of the year the sky is literally made for planting your biggest dream.",
+    need: "a purple or gold candle, paper, a pen and a glass of water",
+    steps: [
+      "Write your dream at FULL size, no editing, as if it's already happened. Date it 2027 and write it in the present tense: \"I live in…\", \"I earn…\", \"I am…\".",
+      "Light the candle and read it out loud three times, slower every time. Let yourself feel how good it is to be her.",
+      "Hold the glass of water over the page, say the words, then drink the whole thing. You're taking the dream INTO your body, babyyyy.",
+      "Fold the paper towards you and sleep with it under your pillow tonight.",
+      "Within 24 hours, do one thing she would do. Send the email, book the call, look at the flights.",
+    ],
+    say: "I stop shrinking my dreams to fit. This is mine, I'm ready for it, and it's already on its way. So it is.",
+    personal: (house, title) => `Sagittarius szn is moving through your ${house} house of ${title}, so write the dream for that part of your life first, babe.`,
+  },
+  {
+    id: "luck",
+    prep: "realistic-or-ridiculous",
+    emoji: "🍀",
+    name: "the luck spell",
+    date: "thursday 10 december",
+    why: "Thursday is Jupiter's day, Jupiter rules Sagittarius and is the planet of luck, and two days after the New Moon the Moon is in Capricorn, so this luck comes with a plan attached.",
+    need: "an orange or gold candle, a pinch of ground cinnamon, a coin and a pen",
+    steps: [
+      "Write three lucky breaks you're calling in. Make them specific: the client, the yes, the offer, the open door.",
+      "Light the candle and hold the coin in your palm while you read them out loud.",
+      "Stand at your front door, put the cinnamon in your palm and blow it INTO your home while you say the words.",
+      "The coin goes in your purse until your next birthday. Every time you see it, say \"lucky me\".",
+      "Say yes to the next invitation that scares you a little. That's the luck arriving.",
+    ],
+    say: "Luck loves me. Doors open for me. I say yes to the life that's bigger than the one I planned. Lucky me.",
+    personal: (house, title) => `Ask for at least one of your lucky breaks in your ${house} house of ${title}, that's where the szn is pointing.`,
+  },
+  {
+    id: "vision",
+    prep: "retire-the-realist",
+    emoji: "✨",
+    name: "the 2027 vision spell",
+    date: "monday 21 december",
+    why: "It's the last day of Sagittarius szn and the winter solstice, when the Sun moves into Capricorn and the light starts coming back. The dreaming turns into building tonight.",
+    need: "a white candle, paper, an envelope and a pen",
+    steps: [
+      "At sunset, light the candle and write a letter FROM the you of December 2027, to the you sitting here now.",
+      "Have her tell you everything: what happened, what it felt like and the brave move that changed it all.",
+      "Read it out loud, then write one thing you'll do in January to start it.",
+      "Seal it, write \"open 21 December 2027\" on the front and say the words.",
+      "Put the envelope somewhere you'll see it every day, like your mirror or your altar.",
+    ],
+    say: "I've already met her. I know the way. 2027, I'm coming for all of it.",
+    personal: (house, title) => `Let her tell you what changed in your ${house} house of ${title}, the szn has been working on it all month.`,
+  },
+];
+
+// Sagittarius's set was written for Big Dream SZN (SZN-THEMES-Q4-2026.md), not taken from a
+// workshop. Same four kinds as Scorpio: how much she's editing each dream down, the dreams she shrank
+// and what that costs her, the realist who kept her safe, and the "unrealistic" feeling that shows
+// up the second she says the real dream out loud. Spell dates are 2026, from the ephemeris in ET.
+const SAGITTARIUS: SeasonEmbodiment = {
+  sign: "Sagittarius",
+  spells: SAGITTARIUS_SPELLS,
+  ticker: ["sagittarius szn", "big dream szn", "full size", "no more editing", "astrotapping™"],
+  title: ["dream it full size.", "then go get it."],
+  lede:
+    "Sagittarius szn is Big Dream SZN, the month you stop editing your dreams down to what feels realistic, sensible or comfortable for everybody else. Jupiter, the planet of luck and expansion, rules this whole season, so the sky is backing the BIG version. Do these any day of the szn: tap them, fill them in and save the good stuff to your journal.",
+  asks: "what would i choose if it didn't have to be realistic?",
+  chips: [
+    { label: "sun in", value: "sagittarius" },
+    { label: "ruled by", value: "jupiter" },
+    { label: "new moon in", value: "sagittarius" },
+  ],
+  arrive: {
+    title: ["this is a space", "for the big dream."],
+    steps: ["Hand on your heart.", "Feet flat on the floor.", "Three slow, deep breaths.", "Ask: what do I actually want, if nobody gets a vote?"],
+    rules: [
+      { head: "notifications off.", sub: "These few minutes are yours. The group chat can wait." },
+      { head: "no editing allowed.", sub: "Write the dream the size it really is, not the size that feels allowed." },
+      { head: "nobody else gets a vote.", sub: "Not your mum, not your ex, not your followers. Just you." },
+      { head: "feel it in your body.", sub: "Notice where you light up. That's your yes." },
+    ],
+    band: "three breaths. then we dream big.",
+  },
+  exercises: [
+    {
+      kind: "dial",
+      id: "realistic-or-ridiculous",
+      label: "full size or edited down",
+      minutes: 4,
+      ticker: ["big dream szn", "full size", "edited down", "where you shrink it", "dream bigger"],
+      eyebrow: "how big are you dreaming",
+      title: ["full size", "or edited down?"],
+      intro: "Every dream comes in two sizes: the one you really want, and the version you've trimmed down so it feels sensible. Tap where you honestly sit right now in each part of your life.",
+      me: { label: "full size · the real dream", sub: "What I'd choose if nobody was watching." },
+      we: { label: "edited down · the safe version", sub: "What feels realistic and allowed." },
+      areas: ["money", "love", "career", "visibility", "lifestyle", "confidence"],
+      note: "Big Dream SZN wants every dot dragged to the full-size end.",
+      weNote: "you've been editing this dream down to fit. Start your dream audit right here.",
+      meNote: "you're already dreaming full size here, babe. Your work is putting a date on it.",
+      band: "the dots nearest the safe end are where the work is.",
+    },
+    {
+      kind: "audit",
+      id: "dream-audit",
+      label: "the dream audit",
+      minutes: 8,
+      ticker: ["big dream szn", "the audit", "the dream i shrank", "what it costs", "the first move"],
+      eyebrow: "big dream szn",
+      title: ["the dream", "audit."],
+      intro: "Every time you said \"I'd be happy with…\" about something you wanted SO much more of, you shrank a dream. This one shows you which ones, what playing small is costing you, and the first move back to full size.",
+      steps: [
+        "List three dreams you've edited down: the business, the money, the love, the move.",
+        "Score what keeping it small costs YOU, 0 to 10.",
+        "Anything 7 or above: write the first move towards the full-size version.",
+      ],
+      example: { bent: "Said a side hustle would be enough when I want my own business.", cost: 9, reclaim: "Booking a call this week with someone who's already done it." },
+      threshold: 7,
+      head: "the dream i edited down",
+      placeholder: "the dream I made smaller",
+      band: "full size. starting now.",
+      journal: { prompt: "The dream audit: the dreams I edited down, what playing small costs me and my first move back to full size.", type: "win" },
+    },
+    {
+      kind: "retire",
+      id: "retire-the-realist",
+      label: "retire the realist",
+      minutes: 5,
+      ticker: ["the identity shift", "thank her", "release her", "who i am now", "effective today"],
+      eyebrow: "the identity shift",
+      title: ["retire the", "realist."],
+      intro: "The version of you who kept it sensible, planned for the worst and talked you out of the big stuff had a job. She kept you from getting hurt. Pick the one Sagittarius szn is done with and write her a proper retirement letter. She's earned it.",
+      shifts: [
+        { was: "The realist.", becoming: "the one who believes first." },
+        { was: "The one waiting for proof.", becoming: "the one who goes before she's ready." },
+        { was: "The one who plays it safe.", becoming: "the one who says yes to the adventure." },
+        { was: "The one who settles.", becoming: "the one who chooses what she actually wants." },
+        { was: "The one who keeps it small so nobody's uncomfortable.", becoming: "the one who takes up the whole sky." },
+      ],
+      band: "thank her. then let her go.",
+      journal: { prompt: "My notice of retirement: the version of me I'm letting go of this Sagittarius szn.", type: "shadow work" },
+    },
+    {
+      kind: "tapping",
+      id: "tap-out-unrealistic",
+      label: "tap out the “unrealistic”",
+      minutes: 6,
+      ticker: ["astrotapping™", "clear it", "tap it out", "the unrealistic feeling", "embody her"],
+      eyebrow: "astrotapping™",
+      title: ["tap out the", "“unrealistic.”"],
+      intro: "It shows up the second you say the real dream out loud: the voice that says who do you think you are. Rate the feeling first, then tap through the points with the script below.",
+      howItWorks: "Two fingers. Gentle, steady taps, about seven on each point. Say each line out loud and let yourself feel it.",
+      points: [
+        { name: "karate chop", where: "Outer edge of your hand" },
+        { name: "eyebrow", where: "Where your brow begins" },
+        { name: "side of eye", where: "On the bone, outer corner" },
+        { name: "under eye", where: "On the cheekbone" },
+        { name: "under nose", where: "Above your top lip" },
+        { name: "chin", where: "The crease below your lip" },
+        { name: "collarbone", where: "Just below the collarbone" },
+        { name: "under arm", where: "A hand below the armpit" },
+        { name: "top of head", where: "The crown of your head" },
+      ],
+      script: { ticker: ["astrotapping™", "the script", "name it", "soften it", "claim it"], title: "say it. tap it. let it move." },
+      setup: "“Even though part of me thinks this dream is unrealistic and too big for someone like me, I love and accept myself and I'm allowed to want it anyway.”",
+      rounds: [
+        { name: "name it", lines: ["This unrealistic feeling.", "Who do I think I am?", "Scared they'll laugh at me.", "Safer to want less.", "Too big. Too much. Not for me."] },
+        { name: "soften it", lines: ["What if it's realistic for me?", "What if someone like me does this?", "What if wanting it is the first step?", "This feeling can soften now.", "I'm safe to dream this big."] },
+        { name: "claim it", lines: ["My dream is meant for me.", "I'm going after it anyway.", "Luck is on my side.", "I'm stepping into my Big Dream era.", "So it is."] },
+      ],
+      band: "rate it again. 0 to 10. notice what moved.",
+      journal: { prompt: "Astrotapping™ the “unrealistic” feeling: where it started and where it landed.", type: "win" },
+    },
+  ],
+};
+
+const EMBODIMENT: Record<string, SeasonEmbodiment> = { Libra: LIBRA, Scorpio: SCORPIO, Sagittarius: SAGITTARIUS };
 
 export function getSeasonEmbodiment(sign: string): SeasonEmbodiment | null {
   return EMBODIMENT[sign] ?? null;
