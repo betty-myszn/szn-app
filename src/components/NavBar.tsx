@@ -687,6 +687,7 @@ export default function NavBar() {
                     ...(paidMember ? [{ href: "/your-season/customise", label: "customise my szn", isNew: customiseIsNew }] : []),
                     ...(paidMember ? [{ href: "/settings#membership", label: "membership & billing" }] : []),
                     { href: "/settings", label: "settings" },
+                    { href: "/help", label: "help" },
                     ...(admin ? [{ href: "/admin", label: "admin" }] : []),
                   ].map((item: { href: string; label: string; isNew?: boolean }) => (
                     <Link
@@ -1036,6 +1037,9 @@ export default function NavBar() {
               )}
               <Link href="/settings" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
                 settings
+              </Link>
+              <Link href="/help" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
+                help
               </Link>
               {admin && (
                 <Link href="/admin" onClick={() => setOpen(false)} className="no-underline text-[var(--dark)] hover:text-[var(--pink)]">
