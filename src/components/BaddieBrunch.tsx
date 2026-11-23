@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { Band } from "@/components/Offer";
 import EventBookingForm from "@/components/EventBookingForm";
 import CovenPriceTable from "@/components/CovenPriceTable";
@@ -50,7 +51,11 @@ const button = (bg: string, ink = "#fff") => ({ display: "inline-block", backgro
 const frame = { border: "2px solid var(--dark)", borderRadius: 18, overflow: "hidden", background: "#fff" } as const;
 const birthNote = "Your printed astrology guide is written from YOUR chart, so I need your birth details. They stay private and are only used for your guide. 🔒";
 
-export default function BaddieBrunch() {
+// hero: the brunch opens the page (h1), so the first thing a visitor sees is the event and the $49
+// ticket anyone can buy, not the membership (Betty, 23 Nov 2026). middle: extra sections shown after
+// "what's waiting" and before the prices (the LA page puts friends/manifesting + Sublime there).
+export default function BaddieBrunch({ hero = false, middle }: { hero?: boolean; middle?: ReactNode }) {
+  const Title = hero ? "h1" : "h2";
   const event = getEvent(SLUG);
   if (!event) return null;
 
@@ -78,9 +83,9 @@ export default function BaddieBrunch() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-14 items-start">
           <div>
             <span className="holo-sticker">🪩 {event.badge}</span>
-            <h2 className="display" style={{ fontSize: "clamp(46px, 6.4vw, 88px)", color: "var(--dark)", lineHeight: 0.92, marginTop: 22 }}>
+            <Title className="display" style={{ fontSize: "clamp(46px, 6.4vw, 88px)", color: "var(--dark)", lineHeight: 0.92, marginTop: 22 }}>
               the baddie brunch.
-            </h2>
+            </Title>
             <div className="display" style={{ fontSize: "clamp(26px, 3.4vw, 44px)", color: "#fff", lineHeight: 1, marginTop: 10 }}>your future besties are waiting.</div>
             <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 15, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--dark)", marginTop: 22 }}>LA · 5th of December · 11:30am</div>
             <p style={{ fontFamily: pp, fontSize: "clamp(17px, 2vw, 20px)", lineHeight: 1.35, fontWeight: 800, color: "var(--dark)", margin: "10px 0 0", maxWidth: 560 }}>
@@ -91,19 +96,19 @@ export default function BaddieBrunch() {
             </p>
             <div className="grid grid-cols-2 gap-3" style={{ marginTop: 24, maxWidth: 480 }}>
               <div style={{ ...frame, padding: "14px 16px" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>anyone can come</div>
+                <div className="display" style={{ fontSize: 40, lineHeight: 1, marginTop: 6 }}>$49</div>
+                <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>no membership needed</div>
+              </div>
+              <div style={{ ...frame, padding: "14px 16px" }}>
                 <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>LA coven members</div>
                 <div className="display" style={{ fontSize: 40, lineHeight: 1, marginTop: 6, color: "var(--pink)" }}>FREE</div>
                 <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>included in your $88/month</div>
               </div>
-              <div style={{ ...frame, padding: "14px 16px" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>everyone else</div>
-                <div className="display" style={{ fontSize: 40, lineHeight: 1, marginTop: 6 }}>$49</div>
-                <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>one-off ticket</div>
-              </div>
             </div>
             <div className="flex flex-wrap items-center gap-3" style={{ marginTop: 22 }}>
-              <a href="#book" className="no-underline" style={button("var(--dark)")}>{event.cta}</a>
-              <a href="#member" className="no-underline" style={button("#fff", "var(--dark)")}>claim my free seat 🌴</a>
+              <a href="#book" className="no-underline" style={button("var(--dark)")}>grab my seat · $49 🪩</a>
+              <a href="#member" className="no-underline" style={button("#fff", "var(--dark)")}>coven member? free seat 🌴</a>
             </div>
           </div>
           <div className="relative" style={{ paddingBottom: 110 }}>
@@ -160,32 +165,34 @@ export default function BaddieBrunch() {
         <p style={{ marginTop: 22 }}><strong>Food and drinks are ordered and paid for at Bacari, so you can order exactly what you&apos;re craving.</strong></p>
       </Band>
 
+      {middle}
+
       <Band tone="pinkLight" wide tag="how to come" title="two ways" accent="in.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ marginTop: 26 }}>
           <div className="holo-edge" style={{ ...frame, padding: "24px 22px 26px" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🌴 LA coven members</div>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🪩 anyone can come</div>
+            <div className="display" style={{ fontSize: 56, lineHeight: 1, marginTop: 8 }}>$49</div>
+            <p style={{ margin: "10px 0 0", fontWeight: 700 }}>A one-off ticket for this brunch, no membership needed.</p>
+            <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "grid", gap: 6, fontSize: 15, lineHeight: 1.55 }}>
+              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Everything every baddie gets: the hosted brunch, your personalised printed astrology guide and the journaling and manifestation exercises.</li>
+              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Just you and brunch: no subscription, nothing to cancel.</li>
+            </ul>
+            <div style={{ marginTop: 20 }}>
+              <a href="#book" className="no-underline" style={button("var(--dark)")}>grab my seat · $49</a>
+            </div>
+          </div>
+          <div style={{ ...frame, padding: "24px 22px 26px" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🌴 want one every month</div>
             <div className="display" style={{ fontSize: 56, lineHeight: 1, marginTop: 8, color: "var(--pink)" }}>FREE</div>
             <p style={{ margin: "10px 0 0", fontWeight: 700 }}>Included in your LA coven membership, $88 a month.</p>
             <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "grid", gap: 6, fontSize: 15, lineHeight: 1.55 }}>
               <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>A free place at one Baddie Brunch every month, starting with this one.</li>
               <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>EVERYTHING inside the online Bad B*tch Coven: the online workshops and activations, the community and friendship matching.</li>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>$88 is the founding price, and it&apos;s going up.</li>
+              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Two tickets cost more than a month in the LA coven, and $88 is the founding price.</li>
             </ul>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
               <a href={LA_COVEN_CHECKOUT_URL} className="no-underline" style={button("var(--pink)")}>join the LA coven · $88/mo</a>
               <a href="#member" className="no-underline" style={button("#fff", "var(--dark)")}>already in? claim my seat</a>
-            </div>
-          </div>
-          <div style={{ ...frame, padding: "24px 22px 26px" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🪩 everyone else</div>
-            <div className="display" style={{ fontSize: 56, lineHeight: 1, marginTop: 8 }}>$49</div>
-            <p style={{ margin: "10px 0 0", fontWeight: 700 }}>A one-off ticket for the Baddie Brunch.</p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "grid", gap: 6, fontSize: 15, lineHeight: 1.55 }}>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Everything every baddie gets: the hosted brunch, your personalised printed astrology guide and the journaling and manifestation exercises.</li>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Coming to more than one LA gathering? Two tickets cost more than a month in the LA coven.</li>
-            </ul>
-            <div style={{ marginTop: 20 }}>
-              <a href="#book" className="no-underline" style={button("var(--dark)")}>grab a ticket · $49</a>
             </div>
           </div>
         </div>
