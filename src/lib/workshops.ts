@@ -220,7 +220,7 @@ export const WORKSHOPS: Workshop[] = [
     startIso: "2026-11-29T19:00:00Z",
     durationMinutes: 90,
     location: "live on zoom, join from here or from the link in your email",
-    hasJoinLink: false,
+    hasJoinLink: true,
     hasReplay: false,
     replayPublishedAt: null,
     paragraphs: [

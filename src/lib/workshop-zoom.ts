@@ -37,6 +37,12 @@ const ZOOM: Record<string, ZoomDetails> = {
     meetingId: "897 5949 1379",
     passcode: "338922",
   },
+  // Sag Szn: Big Dreams, Biiiiigggg $$$ and Big Life Masterclass, Sun 29 Nov 7pm UK.
+  "coven-sag-masterclass": {
+    url: "https://us06web.zoom.us/j/84763982864?pwd=MI8Y5fXDcV7NgWdPvJgTcS4ahi1uJQ.1",
+    meetingId: "847 6398 2864",
+    passcode: "544308",
+  },
 };
 
 export function zoomFor(workshopId: string): ZoomDetails | null {
