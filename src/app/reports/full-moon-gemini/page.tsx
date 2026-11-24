@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Band, OfferCards } from "@/components/Offer";
+import { BBR_REVIEWS, RBR_REVIEWS } from "@/lib/report-reviews";
 
 // The Gemini Full Moon: Manifest a New Reality. $55, 15 only, made by hand within 48 hours (23 Nov 2026).
 // Betty's own copy (23 Nov 2026), used word for word.
@@ -36,6 +37,20 @@ const SECTIONS = [
   { emoji: "✨", title: "Your Next Timeline", body: "Your personalised Sagittarius New Moon activation, with intentions and practical actions to start creating your new reality before 2027." },
 ];
 
+// Reviews of Betty's other hand-written reports (word for word from report-reviews.ts), each labelled with
+// the report it was written about, since nobody has had a Gemini Full Moon report yet.
+const REVIEWS = [
+  { ...BBR_REVIEWS[0], report: "The Bad B*tch Report" },
+  { ...RBR_REVIEWS[0], report: "Rich B*tch Rising" },
+  { ...BBR_REVIEWS[1], report: "The Bad B*tch Report" },
+];
+
+const STEPS = [
+  { n: "01", t: "Grab your report", b: "Tap the button and pay $55 on the secure Stripe checkout." },
+  { n: "02", t: "Pop in your birth details", b: "Straight after paying, add your date, time and place of birth (there's a box to tick if you don't know your time)." },
+  { n: "03", t: "Your report lands in your inbox", b: "Your personalised PDF report arrives within 48 hours, ready for your release window all the way to the Sagittarius New Moon on the 9th of December." },
+];
+
 const LOOKS = [
   { bg: "#fff", ink: "var(--dark)" },
   { bg: "var(--dark)", ink: "#fff" },
@@ -46,7 +61,7 @@ const LOOKS = [
 const cta = { display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" as const, padding: "20px 40px" };
 
 function Facts() {
-  const items = ["$55 USD", "only 15", "personalised to your birth chart", "in your inbox within 48 hours"];
+  const items = ["$55 USD", "only 15", "personalised PDF from your birth chart", "in your inbox within 48 hours"];
   return (
     <div className="flex flex-wrap gap-2" style={{ marginTop: 22 }}>
       {items.map((t, i) => (
@@ -103,6 +118,42 @@ export default function FullMoonGeminiPage() {
         </a>
       </Band>
 
+      <Band wide tag="three easy steps 🌕" title="how it" accent="works.">
+        <div className="grid md:grid-cols-3 gap-4" style={{ marginTop: 26 }}>
+          {STEPS.map((st) => (
+            <div key={st.n} style={{ background: "#fff", border: "var(--border)", borderRadius: 20, padding: "22px 20px" }}>
+              <div className="display" style={{ fontSize: 44, lineHeight: 0.9, color: "var(--pink)" }}>{st.n}</div>
+              <div style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.2, marginTop: 10 }}>{st.t}</div>
+              <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: "8px 0 0" }}>{st.b}</p>
+            </div>
+          ))}
+        </div>
+      </Band>
+
+      <section className="px-5 md:px-8" style={{ background: "var(--pink-light)", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 76 }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-5"><span className="holo-sticker" style={{ transform: "rotate(-2deg)" }}>✦ the reviews</span></div>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 5.5vw, 62px)", color: "var(--dark)", lineHeight: 1 }}>
+            what baddies say about <span className="pk">my reports. 💜</span>
+          </h2>
+          <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-5 -mx-5 px-5 md:mx-0 md:px-0" style={{ marginTop: 28, paddingBottom: 6, scrollbarWidth: "none" }}>
+            {REVIEWS.map((r) => (
+              <figure key={r.name} className="snap-start shrink-0 w-[84%] md:w-auto" style={{ margin: 0, background: "#fff", border: "var(--border)", borderRadius: 18, padding: "22px 22px 24px", display: "flex", flexDirection: "column", color: "var(--dark)" }}>
+                <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 44, lineHeight: 0.6, color: "var(--pink)" }}>&ldquo;</div>
+                <div style={{ fontFamily: pp, fontWeight: 800, fontSize: 19, lineHeight: 1.3, marginTop: 12 }}>{r.head}</div>
+                <blockquote style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.65 }}>{r.body}</blockquote>
+                <figcaption style={{ marginTop: "auto", paddingTop: 16, fontFamily: pp, fontWeight: 800, fontSize: 15 }}>
+                  {r.name} <span style={{ fontWeight: 600 }}>| on {r.report}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline btn-pink" style={{ ...cta, border: "var(--border)", marginTop: 30 }}>
+            🌕 get my report · $55
+          </a>
+        </div>
+      </section>
+
       <section id="buy" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, borderBottom: "var(--border)", scrollMarginTop: 80 }}>
         <div className="max-w-3xl mx-auto" style={{ color: "#fff" }}>
           <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 68px)", color: "#fff", lineHeight: 1 }}>
@@ -121,6 +172,16 @@ export default function FullMoonGeminiPage() {
       </section>
 
       <OfferCards />
+      {/* Phone only: the button stays in reach while she reads the eight cards. */}
+      <div className="md:hidden" style={{ height: 76 }} aria-hidden />
+      <div className="md:hidden" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 40, background: "var(--dark)", borderTop: "2px solid #fff", padding: "10px 14px calc(10px + env(safe-area-inset-bottom))", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ color: "#fff", fontFamily: pp, fontWeight: 800, fontSize: 13, lineHeight: 1.25, flex: 1 }}>
+          Gemini Full Moon report<br /><span style={{ color: "var(--pink)" }}>$55 · only 15</span>
+        </div>
+        <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="no-underline" style={{ background: "var(--pink)", color: "#fff", fontFamily: pp, fontWeight: 800, fontSize: 14, letterSpacing: "0.06em", textTransform: "uppercase", padding: "14px 18px", border: "2px solid #fff", whiteSpace: "nowrap" }}>
+          get my report
+        </a>
+      </div>
     </>
   );
 }
