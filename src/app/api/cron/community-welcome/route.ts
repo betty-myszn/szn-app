@@ -1,4 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { POST as runMemberNudge } from "../member-nudge/route";
+import { postWeeklyRitual } from "@/lib/community/weekly-rituals";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendMemberNotification } from "@/lib/notify/send";
 import {
@@ -92,10 +94,38 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ test: true, ...result });
   }
 
+  // The daily member nudges ride on this job. Their own pg_cron schedule (supabase/RUN-member-nudge.sql)
+  // was never run, so between 16 and 24 Nov 2026 not one "set up your account" email went out, while this
+  // job ran every night. Calling the handler in-process (same secret) means one working schedule drives
+  // both. member-nudge is idempotent, so if its own schedule is ever added nobody gets anything twice.
+  // A nudge failure never stops the welcome.
+  if (!dryRun) {
+    try {
+      const res = await runMemberNudge(
+        new NextRequest(new URL("/api/cron/member-nudge", request.url), {
+          method: "POST",
+          headers: { "x-cron-secret": request.headers.get("x-cron-secret") ?? "", "content-type": "application/json" },
+          body: "{}",
+        }),
+      );
+      if (!res.ok) console.error("cron/community-welcome: member-nudge returned", res.status);
+    } catch (err) {
+      console.error("cron/community-welcome: member-nudge threw", err instanceof Error ? err.message : err);
+    }
+  }
+
   const sender = await findWelcomeSender(admin);
   if (!sender) {
     console.error("cron/community-welcome: no sender profile, nothing posted");
     return NextResponse.json({ ok: false, error: "no_sender" }, { status: 503 });
+  }
+
+  // Monday / Wednesday / Friday chat ritual (held until RITUALS_APPROVED). Never blocks the welcome.
+  try {
+    const ritual = await postWeeklyRitual(admin, sender, new Date(), dryRun);
+    if (ritual.status === "failed") console.error("cron/community-welcome: ritual failed", ritual.error);
+  } catch (err) {
+    console.error("cron/community-welcome: ritual threw", err instanceof Error ? err.message : err);
   }
 
   const now = Date.now();
