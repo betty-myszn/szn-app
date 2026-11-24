@@ -11,6 +11,7 @@ import { EVENTS } from "@/lib/events";
 import { sendEventBookingConfirmation, sendEventBookingAdminAlert } from "@/lib/email/event-booking";
 import { paidReportForPrice, handlePaidReportPurchase } from "@/lib/email/bad-btch-report";
 import { handleBaddieSessionPurchase, handleBaddieGiftPurchase } from "@/lib/email/baddie-session";
+import { COVEN_GIFT_PRICE_ID, handleCovenGiftPurchase, referrerFromClientRef, rewardReferrer } from "@/lib/coven-offers";
 import { baddieSessionForPrice, isForTwoPrice, isGiftPrice, isPackagePrice, sessionForDropdownValue } from "@/lib/baddie-sessions";
 
 export const runtime = "nodejs";
@@ -379,12 +380,14 @@ export async function POST(request: Request) {
     subscription_cancel_at_period_end: subscription.cancel_at_period_end || subscription.cancel_at != null,
           };
 
+          // A "ref_<member id>" reference is a referral (the friend's checkout), never her own profile.
+          const referred = !!referrerFromClientRef(session.client_reference_id);
           const { profileId, matchedBy } = await findProfileId(admin, {
-            clientReferenceId: session.client_reference_id,
+            clientReferenceId: referred ? null : session.client_reference_id,
             customerId,
             email: session.customer_details?.email,
           });
-          if (matchedBy === "email_fallback") {
+          if (matchedBy === "email_fallback" && !referred) {
             console.error("stripe webhook: checkout completed with no client_reference_id, used email fallback", {
               sessionId: session.id,
               email: session.customer_details?.email,
@@ -408,6 +411,14 @@ export async function POST(request: Request) {
             name: session.customer_details?.name,
             priceId,
           });
+          // Bring a baddie: the member whose link this came through gets a free month. Never fails the webhook.
+          if (referred) {
+            try {
+              await rewardReferrer(admin, stripe, session, customerId);
+            } catch (e) {
+              console.error("stripe webhook: referral reward failed", { sessionId: session.id, error: e instanceof Error ? e.message : e });
+            }
+          }
           await trySendAdminAlert(admin, {
             sessionId: session.id,
             email: session.customer_details?.email,
@@ -425,6 +436,12 @@ export async function POST(request: Request) {
         if (session.mode === "payment") {
           const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
           const priceId = lineItems.data[0]?.price?.id ?? null;
+
+          // Gift a baddie: three months for someone else, granted to HER email, never the buyer.
+          if (priceId === COVEN_GIFT_PRICE_ID) {
+            await handleCovenGiftPurchase(admin, session);
+            break;
+          }
 
           // The Bad B*tch Report and Rich B*tch Rising are one-off reports, never a membership.
           const paidReport = paidReportForPrice(priceId);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
+import BringABaddie from "@/components/BringABaddie";
 import WorkshopJoin from "@/components/WorkshopJoin";
 import DailyMagicButton from "@/components/DailyMagicButton";
 import { useMember } from "@/lib/use-member";
@@ -286,6 +287,9 @@ export default function CovenHomePage() {
           )}
           <Link href={`/community/room/${COVEN_ROOM_ID}`} className="no-underline" style={{ ...blackBtn, marginTop: 22 }}>go to the baddie chat →</Link>
         </section>
+
+        {/* Referral link + gift, straight under the chat (24 Nov 2026). */}
+        {member?.id && <BringABaddie memberId={member.id} />}
 
         {/* Everything in the membership, one tap away */}
         <section>

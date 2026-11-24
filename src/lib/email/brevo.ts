@@ -17,6 +17,8 @@ export interface BrevoTemplateEmail {
   params: Record<string, string>;
   sender?: { email: string; name?: string };
   replyTo?: { email: string; name?: string };
+  /** Last-mile edit of the rendered HTML (e.g. the yearly Coven price line). */
+  transformHtml?: (html: string) => string;
 }
 
 // Replies go to the support inbox so a member can just hit reply.
@@ -66,7 +68,8 @@ async function postSolstralEmail(msg: {
 export async function sendBrevoTemplateEmail(msg: BrevoTemplateEmail): Promise<BrevoSendResult> {
   const rendered = renderTemplate(msg.templateId, msg.params);
   if (!rendered) return { ok: false, error: `email template ${msg.templateId} not found` };
-  return postSolstralEmail({ to: msg.to, subject: rendered.subject, html: rendered.html, replyTo: msg.replyTo });
+  const html = msg.transformHtml ? msg.transformHtml(rendered.html) : rendered.html;
+  return postSolstralEmail({ to: msg.to, subject: rendered.subject, html, replyTo: msg.replyTo });
 }
 
 export async function sendBrevoEmail(msg: BrevoRawEmail): Promise<BrevoSendResult> {

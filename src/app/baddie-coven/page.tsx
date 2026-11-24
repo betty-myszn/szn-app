@@ -305,6 +305,11 @@ function JoinBand() {
           <div style={{ fontFamily: pp, fontSize: "clamp(30px, 4vw, 42px)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.03em" }}>$44 a month, <span className="pk">locked in for as long as you stay.</span></div>
           <CovenCountdown />
           <div style={{ marginTop: 18 }}><CovenJoinCta className="no-underline btn-pink" style={{ ...cta, display: "block", textAlign: "center", padding: "20px 14px" }} /></div>
+          {/* Yearly + gift (24 Nov 2026): quieter than the main button, so $44/month stays the obvious choice. */}
+          <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
+            <CovenJoinCta plan="yearly" className="no-underline" style={{ display: "block", textAlign: "center", border: "var(--border)", borderRadius: 999, padding: "14px 12px", fontFamily: pp, fontSize: 14, fontWeight: 800, color: "var(--dark)", background: "var(--lav-light)" }} />
+            <Link href="/baddie-coven/gift" className="no-underline" style={{ display: "block", textAlign: "center", fontFamily: pp, fontSize: 14, fontWeight: 800, color: "var(--dark)", textDecoration: "underline" }}>🎁 or gift the coven to a baddie →</Link>
+          </div>
           <p style={{ fontSize: 15, lineHeight: 1.5, fontWeight: 600, fontStyle: "italic", margin: "16px 0 0" }}>No pointy hat required, although fabulous accessories are very much encouraged.</p>
         </div>
       </div>

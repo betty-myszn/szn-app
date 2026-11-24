@@ -33,6 +33,7 @@ export const PLAN_COMMITMENT_FROM = "2026-10-06T13:00:00Z"; // the founding door
 export const UPFRONT_PRICE_IDS: ReadonlySet<string> = new Set([
   "price_1TwEXMJ6s9fRhiJoRzDMbrQZ", // $333 once (retired)
   "price_1UM5myJ6s9fRhiJodOXnycqj", // $250 once (current)
+  "price_1UfPYkJ6s9fRhiJo7ONev0us", // $132 once, Coven gift: 3 months for the person it was gifted to
 ]);
 
 export function isUpfrontPrice(priceId: string | null | undefined): boolean {
@@ -47,6 +48,8 @@ const CANONICAL_PRICE_TO_TIER: Record<string, PaidTier> = {
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "vip", // $555 / month
   price_1TzVeaJ6s9fRhiJojBgk1aTJ: "social", // $33 / month, Stripe product "MY SZN social"
   price_1UY19kJ6s9fRhiJoJ9kqVlCY: "monthly", // $44 / month, The Bad B*tch Coven founding price (from 9 Nov 2026)
+  price_1UfPYjJ6s9fRhiJoNukQujnY: "monthly", // $444 / year, The Bad B*tch Coven founding yearly (from 24 Nov 2026)
+  price_1UfPYkJ6s9fRhiJo7ONev0us: "monthly", // $132 once, Coven gift (granted to the recipient by coven-offers, never the buyer)
   price_1UcsgJJ6s9fRhiJoMLRxqvRu: "monthly", // $88 / month, The LA Bad B*tch Coven founding price (online coven + LA events, from 17 Nov 2026)
 };
 

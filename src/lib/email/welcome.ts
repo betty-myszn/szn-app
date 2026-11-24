@@ -39,6 +39,7 @@ const CANONICAL_PRICE_KIND: Record<string, WelcomeKind> = {
   price_1UM5myJ6s9fRhiJodOXnycqj: "welcome_3mo", // $250 once, 3 months upfront (current upfront price)
   price_1TwEZjJ6s9fRhiJoJ0EAROdR: "welcome_vip",
   price_1UY19kJ6s9fRhiJoJ9kqVlCY: "welcome_coven", // $44 / month, The Bad B*tch Coven founding price
+  price_1UfPYjJ6s9fRhiJoNukQujnY: "welcome_coven", // $444 / year, Coven founding yearly
   price_1UcsgJJ6s9fRhiJoMLRxqvRu: "welcome_coven_la", // $88 / month, the in-person (LA) Bad B*tch Coven
 };
 
@@ -155,6 +156,11 @@ export async function sendWelcomeEmail(
       first_name: firstName,
       plan_name: spec.planName,
     },
+    // Yearly Coven joiners share the monthly welcome; only the price line differs.
+    transformHtml:
+      priceId?.trim() === "price_1UfPYjJ6s9fRhiJoNukQujnY"
+        ? (h) => h.replace("<strong>$44 USD a month</strong>", "<strong>$444 USD a year</strong> (two months free)")
+        : undefined,
   });
 
   // Log every attempt, success or failure. A 23505 here means a concurrent send already recorded

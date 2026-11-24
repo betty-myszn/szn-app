@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { POST as runMemberNudge } from "../member-nudge/route";
 import { postWeeklyRitual } from "@/lib/community/weekly-rituals";
+import Stripe from "stripe";
+import { deliverScheduledGifts } from "@/lib/coven-offers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendMemberNotification } from "@/lib/notify/send";
 import {
@@ -118,6 +120,16 @@ export async function POST(request: NextRequest) {
   if (!sender) {
     console.error("cron/community-welcome: no sender profile, nothing posted");
     return NextResponse.json({ ok: false, error: "no_sender" }, { status: 503 });
+  }
+
+  // "Christmas morning" Coven gifts, delivered on the first run from 25 Dec. Never blocks the welcome.
+  if (!dryRun && process.env.STRIPE_SECRET_KEY) {
+    try {
+      const delivered = await deliverScheduledGifts(admin, new Stripe(process.env.STRIPE_SECRET_KEY));
+      if (delivered) console.log("cron/community-welcome: delivered scheduled coven gifts", delivered);
+    } catch (err) {
+      console.error("cron/community-welcome: gift delivery threw", err instanceof Error ? err.message : err);
+    }
   }
 
   // Monday / Wednesday / Friday chat ritual (held until RITUALS_APPROVED). Never blocks the welcome.
