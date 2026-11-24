@@ -14,7 +14,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export const RITUALS_APPROVED = false;
+export const RITUALS_APPROVED = true; // Betty approved 24 Nov 2026
 
 type Ritual = { space: string; texts: readonly string[] };
 
