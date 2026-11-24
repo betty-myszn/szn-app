@@ -47,6 +47,14 @@ const HUB_LINKS = [
   ["🎧", "subliminals", "/subliminals"],
 ];
 
+// Portals for "what you might've missed". Add each new portal here with the moment it happened; the
+// coven home shows the two most recent from the last three weeks.
+const CATCH_UP: { at: number; href: string; title: string; line: string; cta: string }[] = [
+  { at: Date.parse("2026-11-11T11:11:00Z"), href: "/your-season/11-11", title: "🔮 the 11/11 portal + workshop replay", line: "Your North and South Node reading, the 17 exercises and the full manifestation workshop replay.", cta: "watch + open →" },
+  { at: Date.parse("2026-11-13T00:00:00Z"), href: "/your-season/friday-13", title: "♀ friday the 13th: the goddess day portal", line: "Venus and Mercury went direct together. The ritual and spell are still waiting for you.", cta: "open the portal →" },
+  { at: Date.parse("2026-11-24T14:53:00Z"), href: "/your-season/gemini-full-moon", title: "🌕 the gemini full moon portal", line: "Where it landed in your chart, the old story to rewrite and the twins ritual, still glowing.", cta: "open the portal →" },
+];
+
 // Solid brand colours for the hub tiles, so the foil stays special on the cards around them.
 const TILE_COLOURS: CSSProperties[] = [
   { background: "var(--pink)", color: "var(--dark)" },
@@ -118,6 +126,13 @@ export default function CovenHomePage() {
     ? { label: "✨ the sagittarius szn theme", title: "how to create a biggggg f*cking life.", line: "Thirty days of bold moves, Jupiter magic and baddies cheering you on, so you walk into 2027 already living like HER. 🏹" }
     : { label: `✨ the ${COVEN_THEME.month} theme${season ? ` · ${season.sign.toLowerCase()} szn` : ""}`, title: COVEN_THEME.title, line: COVEN_THEME.line };
   const hubLinks = leapOn ? [["🏹", "quantum leap", QL_PATH], ...HUB_LINKS] : HUB_LINKS;
+  const MAIN_HREFS = ["/dashboard", "/community", "/my-chart", "/events/replays", "/meditations"];
+  const mainTiles = MAIN_HREFS.map((h) => hubLinks.find(([, , href]) => href === h)).filter((t): t is string[] => !!t);
+  const moreTiles = hubLinks.filter(([, , href]) => !MAIN_HREFS.includes(href) && !CATCH_UP.some((c) => c.href === href));
+  const missed = now === null ? [] : CATCH_UP
+    .filter((c) => c.at <= now && now - c.at <= 21 * 86400000 && !(geminiLive && c.href === "/your-season/gemini-full-moon"))
+    .sort((a, b) => b.at - a.at)
+    .slice(0, 2);
 
   const firstName = member?.name?.trim().split(/\s+/)[0] ?? "";
   const heroArt = (season && HERO_ART[season.sign]) || "/coven/betty-witch-email.jpg";
@@ -202,22 +217,22 @@ export default function CovenHomePage() {
           <img src="/lilith/lilith-hero.jpg" alt="Lilith under a glitter crescent moon" className="block w-full aspect-[4/3] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 15%", minHeight: 260 }} />
         </Link>
 
-        {/* What you might've missed: the last few days' portals, now small and side by side */}
-        <section>
-          <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>✨ what you might&apos;ve missed, babe</div>
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
-            <Link href="/your-season/friday-13" className="no-underline flex flex-col justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--pink-light)", color: "var(--dark)", padding: "18px 20px", gap: 10 }}>
-              <span style={{ fontFamily: pp, fontSize: 17, fontWeight: 800 }}>♀ friday the 13th: the goddess day portal</span>
-              <span style={{ fontSize: 15, lineHeight: 1.45 }}>Venus and Mercury went direct together. The ritual and spell are still waiting for you.</span>
-              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>open the portal →</span>
-            </Link>
-            <Link href="/your-season/11-11" className="no-underline flex flex-col justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: "var(--lav-light)", color: "var(--dark)", padding: "18px 20px", gap: 10 }}>
-              <span style={{ fontFamily: pp, fontSize: 17, fontWeight: 800 }}>🔮 the 11/11 portal + workshop replay</span>
-              <span style={{ fontSize: 15, lineHeight: 1.45 }}>Your North and South Node reading, the 17 exercises and the full manifestation workshop replay.</span>
-              <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>watch + open →</span>
-            </Link>
-          </div>
-        </section>
+        {/* What you might've missed: picked from CATCH_UP by date, the two most recent portals from the last
+            three weeks, so it never goes stale on its own (24 Nov 2026). A portal still live up top is skipped. */}
+        {missed.length > 0 && (
+          <section>
+            <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>✨ what you might&apos;ve missed, babe</div>
+            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
+              {missed.map((c, i) => (
+                <Link key={c.href} href={c.href} className="no-underline flex flex-col justify-between" style={{ border: "var(--border)", borderRadius: 18, boxShadow: "4px 4px 0 var(--dark)", background: i % 2 ? "var(--lav-light)" : "var(--pink-light)", color: "var(--dark)", padding: "18px 20px", gap: 10 }}>
+                  <span style={{ fontFamily: pp, fontSize: 17, fontWeight: 800 }}>{c.title}</span>
+                  <span style={{ fontSize: 15, lineHeight: 1.45 }}>{c.line}</span>
+                  <span style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>{c.cta}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Next circle */}
         {circleUpcoming && now !== null ? (
@@ -250,17 +265,48 @@ export default function CovenHomePage() {
           </section>
         )}
 
+        {/* Coven chat: moved up under the next circle (24 Nov 2026). The chat is the page members come
+            back for most (10 of 17, and 6 of them on 2+ days), so it sits above the tiles and spells. */}
+        <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(24px, 3.6vw, 38px)", background: "var(--lav-light)" }}>
+          <h2 className="display" style={sectionTitle}>the baddie <span className="pk">chat.</span></h2>
+          {messages.length > 0 ? (
+            <div style={{ display: "grid", gap: 12, marginTop: 20 }}>
+              {messages.map((m) => (
+                <div key={m.id} className="flex items-start gap-3">
+                  <span className="hd-foil" aria-hidden="true" style={{ flexShrink: 0, width: 42, height: 42, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontFamily: pp, fontSize: 17, fontWeight: 800, color: "var(--dark)" }}>{m.author.trim().charAt(0).toUpperCase()}</span>
+                  <div style={{ background: "#fff", border: "var(--border)", borderRadius: "18px 18px 18px 4px", padding: "11px 15px", fontSize: 16, lineHeight: 1.45, maxWidth: 680 }}>
+                    <div style={{ fontFamily: pp, fontSize: 14, fontWeight: 800 }}>{m.author}</div>
+                    {m.content.length > 140 ? `${m.content.slice(0, 140)}...` : m.content}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.5, margin: "14px 0 0" }}>The room is open, babe. Go say hiii and tell us what you&apos;re calling in. 💜</p>
+          )}
+          <Link href={`/community/room/${COVEN_ROOM_ID}`} className="no-underline" style={{ ...blackBtn, marginTop: 22 }}>go to the baddie chat →</Link>
+        </section>
+
         {/* Everything in the membership, one tap away */}
         <section>
           <h2 className="display" style={sectionTitle}>everything in <span className="pk">your coven.</span></h2>
+          {/* Five tiles members actually use (24 Nov 2026 activity), the rest one tap down under "more". */}
           <nav aria-label="Everything in your coven" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" style={{ marginTop: 22 }}>
-            {hubLinks.filter(([, , href]) => href !== "/your-season/gemini-full-moon" || geminiLive).map(([emoji, name, href], i) => (
+            {mainTiles.map(([emoji, name, href], i) => (
               <Link key={href} href={href} className="no-underline" style={{ ...card, ...TILE_COLOURS[i % TILE_COLOURS.length], border: "var(--border)", padding: "20px 16px", textAlign: "center" }}>
                 <span style={{ background: "#fff", width: 62, height: 62, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontSize: 30, margin: "0 auto", boxShadow: "3px 3px 0 var(--dark)" }}>{emoji}</span>
                 <span style={{ display: "block", fontFamily: pp, fontSize: 18, fontWeight: 800, lineHeight: 1.1, marginTop: 12 }}>{name}</span>
               </Link>
             ))}
           </nav>
+          <details style={{ marginTop: 14 }}>
+            <summary style={{ cursor: "pointer", fontFamily: pp, fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", listStyle: "none" }}>＋ more in your coven</summary>
+            <div className="flex flex-wrap gap-2.5" style={{ marginTop: 14 }}>
+              {moreTiles.map(([emoji, name, href]) => (
+                <Link key={href} href={href} className="no-underline" style={{ border: "var(--border)", borderRadius: 999, padding: "10px 16px", fontFamily: pp, fontSize: 15, fontWeight: 800, color: "var(--dark)", background: "#fff" }}>{emoji} {name}</Link>
+              ))}
+            </div>
+          </details>
         </section>
 
         {/* Spells */}
@@ -323,27 +369,6 @@ export default function CovenHomePage() {
             <div className="display" style={{ fontSize: "clamp(32px, 4vw, 46px)", lineHeight: 1, marginTop: 10 }}>{season ? `${season.sign.toLowerCase()} szn, ` : ""}written for your chart.</div>
             <div style={{ ...openLink, marginTop: 14 }}>open my szn →</div>
           </Link>
-        </section>
-
-        {/* Coven chat */}
-        <section className="holo-edge" style={{ borderRadius: 26, padding: "clamp(24px, 3.6vw, 38px)", background: "var(--lav-light)" }}>
-          <h2 className="display" style={sectionTitle}>the baddie <span className="pk">chat.</span></h2>
-          {messages.length > 0 ? (
-            <div style={{ display: "grid", gap: 12, marginTop: 20 }}>
-              {messages.map((m) => (
-                <div key={m.id} className="flex items-start gap-3">
-                  <span className="hd-foil" aria-hidden="true" style={{ flexShrink: 0, width: 42, height: 42, borderRadius: "50%", border: "var(--border)", display: "grid", placeItems: "center", fontFamily: pp, fontSize: 17, fontWeight: 800, color: "var(--dark)" }}>{m.author.trim().charAt(0).toUpperCase()}</span>
-                  <div style={{ background: "#fff", border: "var(--border)", borderRadius: "18px 18px 18px 4px", padding: "11px 15px", fontSize: 16, lineHeight: 1.45, maxWidth: 680 }}>
-                    <div style={{ fontFamily: pp, fontSize: 14, fontWeight: 800 }}>{m.author}</div>
-                    {m.content.length > 140 ? `${m.content.slice(0, 140)}...` : m.content}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.5, margin: "14px 0 0" }}>The room is open, babe. Go say hiii and tell us what you&apos;re calling in. 💜</p>
-          )}
-          <Link href={`/community/room/${COVEN_ROOM_ID}`} className="no-underline" style={{ ...blackBtn, marginTop: 22 }}>go to the baddie chat →</Link>
         </section>
 
         {/* Replays */}

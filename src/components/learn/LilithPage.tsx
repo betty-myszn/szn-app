@@ -339,6 +339,17 @@ export function LilithPage({ chart, isAdmin }: { chart: ChartData; isAdmin: bool
           </div>
         </div>
       </Band>
+
+      {/* Out to the coven: most Lilith visits ended on this page, so the last thing on it is the room
+          where her placement turns into a conversation (24 Nov 2026). */}
+      <Band>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+          <p style={{ fontFamily: poppins, fontWeight: 800, fontSize: 20, lineHeight: 1.3, margin: 0, maxWidth: 560 }}>
+            Your Lilith is in {mean.sign}. Drop it in the astrology room and tell us the part of you it says you were told to tone down. 🖤
+          </p>
+          <Link href="/community/room/astrology" style={{ ...btn(true, false), textDecoration: "none" }}>post my lilith →</Link>
+        </div>
+      </Band>
     </div>
   );
 }

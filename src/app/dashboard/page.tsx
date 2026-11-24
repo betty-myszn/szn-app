@@ -42,6 +42,8 @@ import DeepLinkScroll from "@/components/DeepLinkScroll";
 import SectionBoundary from "@/components/SectionBoundary";
 import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 import { moonVisible } from "@/lib/coven-month";
+import Fold from "@/components/Fold";
+import NowStrip from "@/components/NowStrip";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, then her
 // szn area by area, the replay band, and a scannable top band (today + cosmic weather + the sky on
@@ -355,14 +357,6 @@ export default function DashboardPage() {
   })();
   const pad2 = (n: number) => String(n).padStart(2, "0");
 
-  const ROOMS = [
-    { lab: "the coven", href: "/community" },
-    { lab: `${sign} chat`, href: "/community" },
-    { lab: "business + money", href: "/community" },
-    { lab: "manifestation", href: "/community" },
-    { lab: "ask betty", href: "/community" },
-  ];
-
   const TOOLS = [
     { glyph: "☾", t: "shadow journal", b: "Prompts that move with the sky.", href: "/journal" },
     { glyph: "♀", t: "style codes", b: "Dress like the woman you're becoming.", href: "/style" },
@@ -416,6 +410,9 @@ export default function DashboardPage() {
               </Link>
             )}
           </div>
+
+          {/* What's happening now first: next live class + the chat (24 Nov 2026). */}
+          <NowStrip />
 
           <div
             className="holo-edge grid grid-cols-1 md:grid-cols-[1.35fr_0.95fr]"
@@ -543,9 +540,6 @@ export default function DashboardPage() {
         />
       </SectionBoundary>
 
-      {/* ── new: the Venus Money meditation, straight under the area grid where money lives ── */}
-      <MoneyMeditationBand />
-
       {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
            class that just landed is the most time-sensitive thing on the page. Self-hides once the
            replay is a few days old, and falls back to the slim vault banner. ── */}
@@ -553,6 +547,7 @@ export default function DashboardPage() {
         <ReplayHighlight />
       </SectionBoundary>
 
+      {/* ── Today, right under her picks: short, daily, the habit hook. ── */}
       {/* ── TODAY: the daily hook ── */}
       <section className="px-5 md:px-8" style={{ background: "var(--pink)", borderBottom: "var(--border)", paddingTop: 40, paddingBottom: 40 }}>
         <div className="max-w-6xl mx-auto">
@@ -575,102 +570,176 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── COSMIC WEATHER: high up, live transits ── */}
-      <SectionBoundary name="sky-alert">
-        <SkyAlert chart={chart} />
-      </SectionBoundary>
 
-      {/* ── THE SKY ON HER CHART: live transit-to-natal contacts. Sits directly under the collective
-             weather so the page goes "here is the sky" then "here is what it is doing to YOU". The
-             data was already being computed by /api/your-szn and thrown away; this renders it. ── */}
-      <SectionBoundary name="transits-to-your-chart">
-        <TransitsToYourChart transits={szn?.transits} />
-      </SectionBoundary>
+      {/* ── The rest of the HQ as modules, closed by default (Betty, 24 Nov 2026: "sectioned up rather
+             than really scary amounts of words"). Each opens in place; nothing was removed. ── */}
+      <div style={{ paddingTop: 14, paddingBottom: 14 }}>
+        <Fold id="sky" emoji="🪐" title="what the sky is doing to you" line="The planets moving right now and exactly where they land in your chart." tone="lav">
+        {/* ── COSMIC WEATHER: high up, live transits ── */}
+        <SectionBoundary name="sky-alert">
+          <SkyAlert chart={chart} />
+        </SectionBoundary>
 
-      {/* ── her personalised season guide, straight after the sky: the season is the reason she's
-             here, so her read of it comes before anything that routes her elsewhere ── */}
-      <div id="season-guide" />
-      <SectionBoundary name="season-personalised">
-        <SeasonPersonalised />
-      </SectionBoundary>
-
-      {/* ── UPCOMING MASTERCLASSES: workshops carousel with cover images. Titled by what it is, not
-          by season, because the list runs across seasons (Leo into Virgo), not just this szn. ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 26 }}>
-            <div>
-              <div style={eyebrow}>live with betty</div>
-              <h2 style={sectionHead}>upcoming <span className="pk">masterclasses.</span></h2>
+        {/* ── THE SKY ON HER CHART: live transit-to-natal contacts. Sits directly under the collective
+               weather so the page goes "here is the sky" then "here is what it is doing to YOU". The
+               data was already being computed by /api/your-szn and thrown away; this renders it. ── */}
+        <SectionBoundary name="transits-to-your-chart">
+          <TransitsToYourChart transits={szn?.transits} />
+        </SectionBoundary>
+        </Fold>
+        <Fold id="season-guide" emoji="📖" title={`your full ${sign} szn guide`} line="Where this season lands in your chart, the old pattern to break and your opportunities.">
+        {/* ── her personalised season guide, straight after the sky: the season is the reason she's
+               here, so her read of it comes before anything that routes her elsewhere ── */}
+        <SectionBoundary name="season-personalised">
+          <SeasonPersonalised />
+        </SectionBoundary>
+        </Fold>
+        <Fold id="masterclasses" emoji="🎥" title="masterclasses + replays" line="Every live class coming up, and the ones you can press play on tonight." tone="pink">
+        {/* ── UPCOMING MASTERCLASSES: workshops carousel with cover images. Titled by what it is, not
+            by season, because the list runs across seasons (Leo into Virgo), not just this szn. ── */}
+        <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 26 }}>
+              <div>
+                <div style={eyebrow}>live with betty</div>
+                <h2 style={sectionHead}>upcoming <span className="pk">masterclasses.</span></h2>
+              </div>
+              <div className="flex gap-2.5">
+                <button onClick={() => scrollTrack(-1)} aria-label="previous workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>‹</button>
+                <button onClick={() => scrollTrack(1)} aria-label="next workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>›</button>
+              </div>
             </div>
-            <div className="flex gap-2.5">
-              <button onClick={() => scrollTrack(-1)} aria-label="previous workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>‹</button>
-              <button onClick={() => scrollTrack(1)} aria-label="next workshop" style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid var(--dark)", background: "transparent", color: "var(--dark)", fontSize: 18, cursor: "pointer", display: "grid", placeItems: "center" }}>›</button>
-            </div>
-          </div>
-          <div ref={trackRef} style={{ display: "flex", gap: 16, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory" }}>
-            {workshopSlides.map(({ w, kind }) => (
-              <article className="holo-edge" key={w.id} style={{ flex: "0 0 320px", scrollSnapAlign: "start", borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "#fff", display: "flex", flexDirection: "column" }}>
-                <div
-                  style={{
-                    height: 160,
-                    display: "grid",
-                    placeItems: "center",
-                    background: w.coverImage ? "#211d2c" : "linear-gradient(135deg, var(--pink), var(--lav))",
-                    backgroundImage: w.coverImage ? `url(${w.coverImage})` : undefined,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
-                  {kind === "replay" && (
-                    <span style={{ width: 54, height: 54, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.92)", display: "grid", placeItems: "center", color: "#fff", fontSize: 16, paddingLeft: 3 }}>▶</span>
-                  )}
-                </div>
-                <div style={{ padding: 22, display: "flex", flexDirection: "column", flex: 1 }}>
-                  <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>{w.meta}</div>
-                  <h3 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.15, color: "var(--dark)" }}>{w.title}</h3>
-                  <div style={{ marginTop: "auto", paddingTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-                    <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 40, background: kind === "upcoming" ? "var(--pink)" : "transparent", color: kind === "upcoming" ? "#fff" : "var(--grey)", border: kind === "upcoming" ? "none" : "1.5px solid #ddd" }}>
-                      {kind === "upcoming" ? "upcoming" : "replay"}
-                    </span>
-                    {/* A replay card goes straight to its own card in the vault, an upcoming one to the events page. */}
-                    <Link href={kind === "upcoming" ? "/events" : `/events/replays#${w.id}`} className="no-underline" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
-                      {kind === "upcoming" ? "save my seat →" : "watch →"}
-                    </Link>
+            <div ref={trackRef} style={{ display: "flex", gap: 16, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory" }}>
+              {workshopSlides.map(({ w, kind }) => (
+                <article className="holo-edge" key={w.id} style={{ flex: "0 0 320px", scrollSnapAlign: "start", borderRadius: 22, overflow: "hidden", border: "2px solid var(--dark)", background: "#fff", display: "flex", flexDirection: "column" }}>
+                  <div
+                    style={{
+                      height: 160,
+                      display: "grid",
+                      placeItems: "center",
+                      background: w.coverImage ? "#211d2c" : "linear-gradient(135deg, var(--pink), var(--lav))",
+                      backgroundImage: w.coverImage ? `url(${w.coverImage})` : undefined,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    {kind === "replay" && (
+                      <span style={{ width: 54, height: 54, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.92)", display: "grid", placeItems: "center", color: "#fff", fontSize: 16, paddingLeft: 3 }}>▶</span>
+                    )}
                   </div>
+                  <div style={{ padding: 22, display: "flex", flexDirection: "column", flex: 1 }}>
+                    <div style={{ fontFamily: poppins, fontSize: 11, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "#3C2A70", marginBottom: 10 }}>{w.meta}</div>
+                    <h3 style={{ fontFamily: poppins, fontSize: 19, fontWeight: 800, letterSpacing: "-0.4px", lineHeight: 1.15, color: "var(--dark)" }}>{w.title}</h3>
+                    <div style={{ marginTop: "auto", paddingTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                      <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 40, background: kind === "upcoming" ? "var(--pink)" : "transparent", color: kind === "upcoming" ? "#fff" : "var(--grey)", border: kind === "upcoming" ? "none" : "1.5px solid #ddd" }}>
+                        {kind === "upcoming" ? "upcoming" : "replay"}
+                      </span>
+                      {/* A replay card goes straight to its own card in the vault, an upcoming one to the events page. */}
+                      <Link href={kind === "upcoming" ? "/events" : `/events/replays#${w.id}`} className="no-underline" style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pink)" }}>
+                        {kind === "upcoming" ? "save my seat →" : "watch →"}
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+        </Fold>
+        <Fold id="meditations" emoji="🧘‍♀️" title="this szn's meditations" line="Your season meditation and the Venus money meditation, ready when you are.">
+        {/* ── this szn's meditation (reused) ── */}
+        <SectionBoundary name="season-meditation">
+          <SeasonMeditation sign={season.sign} />
+        </SectionBoundary>
+        {/* ── new: the Venus Money meditation, straight under the area grid where money lives ── */}
+        <MoneyMeditationBand />
+        </Fold>
+        <Fold id="human-design" emoji="🧬" title="your human design this szn" line="How this season works with the way you're built to decide and create." tone="lav">
+        {/* ── human design × season (reused) ── */}
+        <SectionBoundary name="season-design">
+          <SeasonDesignInline />
+        </SectionBoundary>
+        </Fold>
+        <Fold id="toolkit" emoji="🧰" title="everything to use" line="Journal, goals, tapping, subliminals and every tool in your szn.">
+        {/* ── TOOLKIT ── */}
+        <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
+          <div className="max-w-6xl mx-auto">
+            <div style={{ ...eyebrow, color: "var(--pink)" }}>this szn&apos;s toolkit</div>
+            <h2 style={{ ...sectionHead, color: "#3C2A70", marginBottom: 26 }}>everything to <span className="pk">use.</span></h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+              {TOOLS.map((t) => (
+                <Link key={t.t} href={t.href} className="holo-edge no-underline flex flex-col" style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", padding: 24, minHeight: 140, color: "#3C2A70" }}>
+                  <div style={{ fontSize: 22, marginBottom: 12 }}>{t.glyph}</div>
+                  <h3 style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, marginBottom: 6 }}>{t.t}</h3>
+                  <p style={{ margin: 0, fontSize: 12, color: "#3C2A70", opacity: 0.72 }}>{t.b}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+        </Fold>
+        <Fold id="vault" emoji="🗝️" title="your szn so far + the vault" line="Where you are in the season, past szns and your wrapped." tone="pink">
+        {/* ── SEASON PROGRESS ── */}
+        <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <div style={{ ...eyebrow, color: "var(--pink)" }}>season progress</div>
+              <h2 style={{ ...sectionHead, color: "#3C2A70", fontSize: "clamp(24px, 3.6vw, 38px)" }}>
+                {sign} szn · week {seasonProgress.currentWeek} of {seasonProgress.totalWeeks}
+              </h2>
+              <div className="flex gap-1.5" style={{ marginTop: 16 }}>
+                {Array.from({ length: seasonProgress.totalWeeks }).map((_, i) => (
+                  <span key={i} style={{ height: 12, flex: 1, borderRadius: 40, border: "2px solid var(--purple)", background: i < seasonProgress.currentWeek ? "var(--pink)" : "transparent", borderColor: i < seasonProgress.currentWeek ? "var(--pink)" : "var(--purple)" }} />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-8" style={{ color: "#3C2A70" }}>
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>now</div>
+                <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{season.themes[0]}</div>
+              </div>
+              {nextDated && (
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>next up</div>
+                  <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{nextDated.title}</div>
                 </div>
-              </article>
-            ))}
+              )}
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>revisit</div>
+                <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>your replays</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── human design × season (reused) ── */}
-      <SectionBoundary name="season-design">
-        <SeasonDesignInline />
-      </SectionBoundary>
-
-      {/* ── this szn's meditation (reused) ── */}
-      <SectionBoundary name="season-meditation">
-        <SeasonMeditation sign={season.sign} />
-      </SectionBoundary>
-
-      {/* ── TOOLKIT ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={{ ...eyebrow, color: "var(--pink)" }}>this szn&apos;s toolkit</div>
-          <h2 style={{ ...sectionHead, color: "#3C2A70", marginBottom: 26 }}>everything to <span className="pk">use.</span></h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-            {TOOLS.map((t) => (
-              <Link key={t.t} href={t.href} className="holo-edge no-underline flex flex-col" style={{ borderRadius: 14, background: "#fff", border: "2px solid var(--purple)", padding: 24, minHeight: 140, color: "#3C2A70" }}>
-                <div style={{ fontSize: 22, marginBottom: 12 }}>{t.glyph}</div>
-                <h3 style={{ fontFamily: poppins, fontSize: 17, fontWeight: 800, marginBottom: 6 }}>{t.t}</h3>
-                <p style={{ margin: 0, fontSize: 12, color: "#3C2A70", opacity: 0.72 }}>{t.b}</p>
-              </Link>
-            ))}
+        {/* ── THE VAULT: missed something ── */}
+        <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 22 }}>
+              <div>
+                <div style={{ ...eyebrow, color: "var(--grey)" }}>missed something?</div>
+                <h2 style={{ ...sectionHead, fontSize: "clamp(22px, 3.4vw, 34px)" }}>the <span className="pk">vault.</span></h2>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              {[
+                { sym: "✦", t: "every season", b: "Past szns, all in one place.", href: "/seasons" },
+                { sym: "▷", t: "workshop replays", b: "Every class, saved forever.", href: "/events" },
+                { sym: "☾", t: "your wrapped", b: "Everything you've done this szn.", href: "/your-season/wrapped" },
+              ].map((v) => (
+                <Link key={v.t} href={v.href} className="holo-edge no-underline" style={{ borderRadius: 14, border: "2px solid var(--dark)", overflow: "hidden", color: "var(--dark)" }}>
+                  <div style={{ height: 66, display: "grid", placeItems: "center", fontSize: 26, background: "linear-gradient(135deg, var(--lav-light), var(--pink-bg))" }}>{v.sym}</div>
+                  <div style={{ padding: "16px 18px" }}>
+                    <h4 style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, textTransform: "lowercase", marginBottom: 3 }}>{v.t}</h4>
+                    <p style={{ margin: 0, fontSize: 11, color: "var(--grey)" }}>{v.b}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+        </Fold>
+      </div>
 
       {/* ── A QUESTION FROM BETTY (poll, reused logic) ── */}
       {activePoll && (
@@ -709,23 +778,6 @@ export default function DashboardPage() {
         </section>
       )}
 
-      {/* ── THE COMMUNITY ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--dark)", color: "#fff", borderBottom: "var(--border)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="max-w-6xl mx-auto">
-          <div style={{ ...eyebrow, color: "var(--pink)" }}>the community</div>
-          <h2 style={{ ...sectionHead, color: "#fff", marginBottom: 8 }}>the astro girls <span className="pk">support group.</span></h2>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", maxWidth: 460, marginBottom: 22 }}>The women who actually wanna talk about this sh*t with you. Jump into a room.</p>
-          <div className="flex flex-wrap gap-3">
-            {ROOMS.map((r) => (
-              <Link key={r.lab} href={r.href} className="no-underline inline-flex items-center gap-2.5" style={{ borderRadius: 40, border: "2px solid rgba(255,255,255,0.3)", padding: "13px 20px", color: "#fff", fontFamily: poppins, fontWeight: 800, fontSize: 14, textTransform: "lowercase" }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--pink)" }} />
-                {r.lab}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── MESSAGE BETTY: the private line, straight after the rooms, so the community and the one to
              one sit together. Same slim band as the replay vault. ── */}
       <section className="px-5 md:px-8 py-6" style={{ borderBottom: "var(--border)" }}>
@@ -742,66 +794,6 @@ export default function DashboardPage() {
               message betty →
             </span>
           </Link>
-        </div>
-      </section>
-
-      {/* ── SEASON PROGRESS ── */}
-      <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div>
-            <div style={{ ...eyebrow, color: "var(--pink)" }}>season progress</div>
-            <h2 style={{ ...sectionHead, color: "#3C2A70", fontSize: "clamp(24px, 3.6vw, 38px)" }}>
-              {sign} szn · week {seasonProgress.currentWeek} of {seasonProgress.totalWeeks}
-            </h2>
-            <div className="flex gap-1.5" style={{ marginTop: 16 }}>
-              {Array.from({ length: seasonProgress.totalWeeks }).map((_, i) => (
-                <span key={i} style={{ height: 12, flex: 1, borderRadius: 40, border: "2px solid var(--purple)", background: i < seasonProgress.currentWeek ? "var(--pink)" : "transparent", borderColor: i < seasonProgress.currentWeek ? "var(--pink)" : "var(--purple)" }} />
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-8" style={{ color: "#3C2A70" }}>
-            <div>
-              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>now</div>
-              <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{season.themes[0]}</div>
-            </div>
-            {nextDated && (
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>next up</div>
-                <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>{nextDated.title}</div>
-              </div>
-            )}
-            <div>
-              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.7, marginBottom: 6 }}>revisit</div>
-              <div style={{ fontFamily: poppins, fontSize: 15, fontWeight: 700 }}>your replays</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── THE VAULT: missed something ── */}
-      <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 44, paddingBottom: 44 }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between gap-4 flex-wrap" style={{ marginBottom: 22 }}>
-            <div>
-              <div style={{ ...eyebrow, color: "var(--grey)" }}>missed something?</div>
-              <h2 style={{ ...sectionHead, fontSize: "clamp(22px, 3.4vw, 34px)" }}>the <span className="pk">vault.</span></h2>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            {[
-              { sym: "✦", t: "every season", b: "Past szns, all in one place.", href: "/seasons" },
-              { sym: "▷", t: "workshop replays", b: "Every class, saved forever.", href: "/events" },
-              { sym: "☾", t: "your wrapped", b: "Everything you've done this szn.", href: "/your-season/wrapped" },
-            ].map((v) => (
-              <Link key={v.t} href={v.href} className="holo-edge no-underline" style={{ borderRadius: 14, border: "2px solid var(--dark)", overflow: "hidden", color: "var(--dark)" }}>
-                <div style={{ height: 66, display: "grid", placeItems: "center", fontSize: 26, background: "linear-gradient(135deg, var(--lav-light), var(--pink-bg))" }}>{v.sym}</div>
-                <div style={{ padding: "16px 18px" }}>
-                  <h4 style={{ fontFamily: poppins, fontSize: 16, fontWeight: 800, textTransform: "lowercase", marginBottom: 3 }}>{v.t}</h4>
-                  <p style={{ margin: 0, fontSize: 11, color: "var(--grey)" }}>{v.b}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 

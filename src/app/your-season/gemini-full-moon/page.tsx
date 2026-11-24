@@ -362,7 +362,7 @@ export default function GeminiFullMoon() {
 
           <section className="holo-edge bg-glitter flex flex-wrap items-center justify-between gap-5" style={{ borderRadius: 26, padding: "clamp(24px, 3.6vw, 38px)", color: "#fff" }}>
             <div className="display" style={{ fontSize: "clamp(26px, 3.4vw, 40px)", lineHeight: 1.05, color: "#fff", maxWidth: 620 }}>happy full moon, baddie. say the true thing, rewrite the old story and let the whole sky hear you. 🌕</div>
-            <Link href="/community" className="no-underline" style={{ ...pinkBtn, border: "2px solid #fff" }}>tell the coven →</Link>
+            <Link href="/community/room/general" className="no-underline" style={{ ...pinkBtn, border: "2px solid #fff" }}>tell the coven →</Link>
           </section>
         </div>
       </main>
