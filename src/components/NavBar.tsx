@@ -22,7 +22,7 @@ const chartMenu = [
   { href: "/my-chart", label: "astrology chart" },
   { href: "/human-design", label: "human design chart" },
   { href: "/your-season/birthday", label: "birthday reading 🎂" },
-  { href: "/your-season/places", label: "power places 🌍" },
+  { href: "/your-season/places", label: "astro map 🌍" },
 ];
 
 // The live classes and their recordings, one menu. Replays used to be reachable only from inside

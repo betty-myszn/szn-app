@@ -202,3 +202,9 @@
   .acg .mapcard { margin-left: calc(50% - min(620px, 50vw - 32px)); margin-right: calc(50% - min(620px, 50vw - 32px)); }
   .acg .mapbox { height: clamp(440px, 46vw, 600px); }
 }
+.acg .why { display: block; margin-top: 10px; font-size: 14.5px; line-height: 1.55; background: var(--pink-bg); border: 1.5px solid var(--dark); border-radius: 12px; padding: 10px 12px; }
+.acg .why b { font-family: var(--poppins); font-weight: 800; }
+.acg .pills .pill, .acg .pill { flex: 0 0 auto; width: auto; }
+.acg .howto { margin-top: 14px; border: 1.5px dashed var(--dark); border-radius: 14px; padding: 10px 14px; background: #fff; }
+.acg .howto summary { font-weight: 800; font-size: 14px; cursor: pointer; }
+.acg .howto p { font-size: 14.5px; line-height: 1.6; margin: 10px 0 2px; }

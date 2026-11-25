@@ -55,7 +55,7 @@ export default function PowerPlacesPage() {
     return (
       <section className="min-h-[60vh] flex items-center justify-center px-5">
         <div className="text-center" style={{ maxWidth: 420 }}>
-          <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>add your birth details to unlock your power places.</h1>
+          <h1 style={{ fontFamily: poppins, fontSize: 26, fontWeight: 800, marginBottom: 12 }}>add your birth details to unlock your astro map.</h1>
           <Link href="/onboarding" className="btn-pink">add your chart</Link>
         </div>
       </section>

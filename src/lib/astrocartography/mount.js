@@ -1,18 +1,18 @@
-// Your power places: the astrocartography page. Framework-free on purpose, the map is pointer
+// Your astro map: the astrocartography page. Framework-free on purpose, the map is pointer
 // gestures + an SVG viewBox and that is simpler to keep smooth outside React's render cycle.
 // mountPowerPlaces(root, chart) draws everything into root and returns a cleanup function.
 import { computeLines, distanceKm, PLANETS, ANGLES } from "./engine";
-import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY } from "./content";
+import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY, ANGLE_LINE, ANGLE_WHERE, PLANET_PLAIN } from "./content";
 import { LAND } from "./land";
 
 const TEMPLATE = `<section class="hero">
   <div class="wrap">
     <a class="back members" href="/dashboard">← back to my szn</a>
-    <div class="tag" style="margin-top:18px">astrocartography · your power places</div>
+    <div class="tag" style="margin-top:18px">astrocartography · your astro map</div>
     <h1><span class="holo-text">where in the world you glow.</span></h1>
     <p>The minute you were born, every planet was rising, setting, overhead or underneath somewhere on earth. Those spots draw lines across the map, and living, travelling or holidaying near a line switches that planet ON in your life. These are YOURS, babe.</p>
     <div class="birth"><span class="dot"></span><span id="birthline"></span></div>
-    <div style="margin-top:14px"><button class="btn" id="shareBtn">📲 share my power places</button></div>
+    <div style="margin-top:14px"><button class="btn" id="shareBtn">📲 share my astro map</button></div>
 
     <div class="angles" id="angles"></div>
   </div>
@@ -35,6 +35,7 @@ const TEMPLATE = `<section class="hero">
       <div class="tag" id="tabTag"></div>
       <h2 class="h2" id="tabHead" style="margin-top:8px"></h2>
       <p class="lede" id="tabLede"></p>
+      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>career line</b> (career, reputation, money), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
     </div>
 
     <div class="mapcard">
@@ -57,7 +58,7 @@ const TEMPLATE = `<section class="hero">
       <div class="legend">
         <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#FF2D87" stroke-width="3" stroke-linecap="round"/></svg>gift lines</span>
         <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/></svg>growth lines</span>
-        <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#1a1a1a" stroke-width="2.4" stroke-dasharray="2 4" stroke-linecap="round"/></svg>dotted = IC + DSC</span>
+        <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#1a1a1a" stroke-width="2.4" stroke-dasharray="2 4" stroke-linecap="round"/></svg>dotted = home + love lines</span>
       </div>
     </div>
 
@@ -70,7 +71,7 @@ const TEMPLATE = `<section class="hero">
     <div class="locked">
       <div class="tag">the full map</div>
       <h2 class="h2" style="margin-top:8px">unlock <span class="holo-text">every place.</span></h2>
-      <p class="lede">You just saw your top three. Your full power places live inside The Bad B*tch Coven, redrawn for every place you live, visit or dream about.</p>
+      <p class="lede">You just saw your top three. Your full astro map lives inside The Bad B*tch Coven, redrawn for every place you live, visit or dream about.</p>
       <ul class="unlock" id="unlockList"></ul>
       <a class="btn" id="joinBtn" href="/baddie-coven">join the coven</a>
     </div>
@@ -204,7 +205,9 @@ const prox = (d) => (d < 1000 ? Math.pow(1 - d / 1000, 2) : 0);
 const gcKm = (a, b) => { const R = Math.PI / 180, dla = (b.lat - a.lat) * R, dlo = (b.lon - a.lon) * R; const h = Math.sin(dla / 2) ** 2 + Math.cos(a.lat * R) * Math.cos(b.lat * R) * Math.sin(dlo / 2) ** 2; return 2 * 6371 * Math.asin(Math.sqrt(h)); };
 const strength = (d) => (d < 150 ? ["right on it", "s3"] : d < 400 ? ["strong", "s2"] : ["you feel it", "s1"]);
 const km = (d) => (d < 10 ? "on the line" : `${Math.round(d / 10) * 10}km`);
-const lineName = (key) => { const [p, a] = key.split("|"); return `${GLYPH[p]} ${p} ${a}`; };
+const lineName = (key) => { const [p, a] = key.split("|"); return `${GLYPH[p]} ${p} ${ANGLE_LINE[a]}`; };
+// The one sentence that says why a city is on this list, in words a total beginner gets.
+const whyLine = (h, explained) => { const near = h.d < 150 ? "and you're right on the line" : h.d < 400 ? `and the line is only ${km(h.d)} away` : `and the line is ${km(h.d)} away, close enough to feel`; return explained ? `${PLANET_PLAIN[h.line.planet]}, is on your ${ANGLE_LINE[h.line.angle]} here, ${near}.` : `${PLANET_PLAIN[h.line.planet]}, ${ANGLE_WHERE[h.line.angle]}, ${near}.`; };
 
 // Towns she looked up that aren't in the city list (or where she is right now). Kept out of the
 // rankings so a one-off search never becomes a "top pick", and remembered on this device.
@@ -270,7 +273,7 @@ $("angles").innerHTML = [
   ["IC", "under your feet", "home, roots, family, deep rest", true],
   ["ASC", "rising", "you, your body, your glow, your confidence", false],
   ["DSC", "setting", "love, partners, clients, who you attract", true],
-].map(([a, l, w, dash]) => `<div class="angle"><svg width="34" height="10"><line x1="2" y1="5" x2="32" y2="5" stroke="#FF2D87" stroke-width="3" ${dash ? 'stroke-dasharray="2 5"' : ""} stroke-linecap="round"/></svg><b>${a} · ${l}</b><span>${w}</span></div>`).join("");
+].map(([a, l, w, dash]) => `<div class="angle"><svg width="34" height="10"><line x1="2" y1="5" x2="32" y2="5" stroke="#FF2D87" stroke-width="3" ${dash ? 'stroke-dasharray="2 5"' : ""} stroke-linecap="round"/></svg><b>your ${ANGLE_LINE[a]}</b><span>${w}</span></div>`).join("");
 
 // ── tabs + goals ──
 $("goals").innerHTML = GOALS.map((g) => FREE && !FREE_GOALS.has(g.id)
@@ -304,19 +307,27 @@ function renderTab(fly) {
 function renderCards() {
   const W = weights();
   const usedShort = new Set();
+  const usedLead = {};
+  const usedAngle = new Set();
   $("cards").innerHTML = current.map((r, i) => {
     const good = r.c.hits.filter((h) => (W[h.key] || 0) > 0).sort((a, b) => (W[b.key] * prox(b.d)) - (W[a.key] * prox(a.d)));
     const lead = good[0];
     let text = READINGS[lead.key].short;
     if (usedShort.has(text)) text = good[1] && !usedShort.has(READINGS[good[1].key].short) ? READINGS[good[1].key].short : `Go here for ${READINGS[lead.key].use}.`;
     usedShort.add(text);
-    const pills = good.slice(0, 3).map((h) => `<span class="pill ${GIFT.has(h.line.planet) ? "gift" : "grow"}">${GLYPH[h.line.planet]} ${h.line.planet} ${h.line.angle} · ${km(h.d)}</span>`).join("");
+    const pills = good.slice(0, 3).map((h) => `<span class="pill ${GIFT.has(h.line.planet) ? "gift" : "grow"}">${lineName(h.key)} · ${km(h.d)}</span>`).join("");
+    const goalNow = GOALS.find((g) => g.id === S.goal);
+    const firstWithLead = usedLead[lead.key]; if (!firstWithLead) usedLead[lead.key] = r.c.name;
+    const angleExplained = usedAngle.has(lead.line.angle); usedAngle.add(lead.line.angle);
+    if (firstWithLead) text = good[1] && !usedShort.has(READINGS[good[1].key].short) ? READINGS[good[1].key].short : "";
+    const whyLabel = S.trip ? "why it works for you" : S.tab === "activate" ? `why it's your ${goalNow.label} city` : S.tab === "live" ? "why you'd love living here" : "why it's a dream trip";
     return `<button class="card ${i === 0 ? "top" : ""}" data-city="${esc(r.c.name)}">
       ${i === 0 ? '<span class="acg-sticker">your no.1</span>' : ""}
       <span class="rank ${i === 0 ? "holo" : ""}">${i + 1}</span>
       <span style="display:block;min-width:0">
         <h3>${esc(r.c.name)}</h3><div class="country">${esc(r.c.country)} · ${esc(READINGS[lead.key].nick)}</div>
-        <p>${esc(text)}</p><span class="pills">${pills}</span><span class="more">read it →</span>
+        <span class="why"><b>${whyLabel}:</b> ${esc(firstWithLead ? `Same ${lead.line.planet} ${ANGLE_LINE[lead.line.angle]} as ${firstWithLead}, ${lead.d < 150 ? "with you right on it" : `only ${km(lead.d)} away`}, so ${READINGS[lead.key].use} flow here too.` : whyLine(lead, angleExplained))}</span>
+        ${text ? `<p>${esc(text)}</p>` : ""}<span class="pills">${pills}</span><span class="more">read it →</span>
       </span></button>`;
   }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus all ten goals, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
 }
@@ -504,7 +515,7 @@ function layout() {
   const keys = Object.keys(lineEls).filter((k) => (S.focus ? k === S.focus : rel.has(k)));
   for (const k of keys) {
     const l = lineByKey[k];
-    const txt = `${GLYPH[l.planet]} ${l.angle}`;
+    const txt = `${GLYPH[l.planet]} ${ANGLE_LINE[l.angle].replace(" line", "")}`;
     const gift = GIFT.has(l.planet);
     let cands = [];
     if (l.kind === "meridian") { const x = near(X(l.lon)); for (let y = Math.max(vy0 + 30 * u, Y(70)); y < Math.min(vy1 - 20 * u, Y(-45)); y += 34 * u) cands.push([x, y]); }
@@ -797,7 +808,7 @@ async function drawCard() {
   // title
   const first = (birth.name || "").trim().split(/\s+/)[0];
   x.textAlign = "left"; x.textBaseline = "alphabetic";
-  x.fillStyle = "#FF2D87"; x.font = `700 32px ${fam}`; x.fillText((first ? `${first}'s power places` : "my power places").toUpperCase(), 64, 150);
+  x.fillStyle = "#FF2D87"; x.font = `700 32px ${fam}`; x.fillText((first ? `${first}'s astro map` : "my astro map").toUpperCase(), 64, 150);
   x.fillStyle = "#1a1a1a"; x.font = `800 112px ${fam}`; x.fillText("where in the", 58, 280); x.fillText("world i ", 58, 400);
   const w1 = x.measureText("world i ").width; x.fillStyle = "#FF2D87"; x.fillText("glow.", 58 + w1, 400);
   // rows
@@ -810,23 +821,23 @@ async function drawCard() {
     x.textAlign = "left"; x.textBaseline = "alphabetic";
     x.fillStyle = "#FF2D87"; x.font = `700 28px ${fam}`; x.fillText(`${p.e}  ${p.label.toUpperCase()}`, 214, y0 + 56);
     x.fillStyle = "#1a1a1a"; let fs = 60; x.font = `800 ${fs}px ${fam}`; while (x.measureText(p.c.name).width > 760 && fs > 36) { fs -= 4; x.font = `800 ${fs}px ${fam}`; } x.fillText(p.c.name, 212, y0 + 120);
-    x.font = `700 26px ${fam}`; x.textAlign = "right"; x.fillText(`${p.h.line.planet} ${p.h.line.angle}`, 978, y0 + 56); x.textAlign = "left";
+    x.font = `700 26px ${fam}`; x.textAlign = "right"; x.fillText(`${p.h.line.planet} ${ANGLE_LINE[p.h.line.angle]}`, 978, y0 + 56); x.textAlign = "left";
   });
   x.fillStyle = "#1a1a1a"; x.textAlign = "center"; x.font = `700 32px ${fam}`; x.fillText("find yours free at itsmyszn.com/power-places", 540, 1850);
   return new Promise((res) => cv.toBlob(res, "image/png"));
 }
 let shareUrl = null;
 async function openShare() {
-  openSheet(`<div class="tag">share it</div><h2><span class="holo-text">your power places.</span></h2><div class="sharewrap" id="sharewrap"><p class="lede">making your card…</p></div>`);
+  openSheet(`<div class="tag">share it</div><h2><span class="holo-text">your astro map.</span></h2><div class="sharewrap" id="sharewrap"><p class="lede">making your card…</p></div>`);
   try {
     const blob = await drawCard();
     if (shareUrl) URL.revokeObjectURL(shareUrl);
     shareUrl = URL.createObjectURL(blob);
-    const file = new File([blob], "my-power-places.png", { type: "image/png" });
+    const file = new File([blob], "my-astro-map.png", { type: "image/png" });
     const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
     const wrap = root.querySelector("#sharewrap"); if (!wrap) return;
-    wrap.innerHTML = `<img class="shareimg" src="${shareUrl}" alt="your power places card"><div class="sharebtns">${canShare ? `<button class="btn" id="doShare">share to stories</button>` : ""}<a class="btn ${canShare ? "ghost" : ""}" href="${shareUrl}" download="my-power-places.png">save the image</a></div>`;
-    wrap.querySelector("#doShare")?.addEventListener("click", () => navigator.share({ files: [file], title: "my power places" }).catch(() => {}));
+    wrap.innerHTML = `<img class="shareimg" src="${shareUrl}" alt="your astro map card"><div class="sharebtns">${canShare ? `<button class="btn" id="doShare">share to stories</button>` : ""}<a class="btn ${canShare ? "ghost" : ""}" href="${shareUrl}" download="my-astro-map.png">save the image</a></div>`;
+    wrap.querySelector("#doShare")?.addEventListener("click", () => navigator.share({ files: [file], title: "my astro map" }).catch(() => {}));
   } catch (e) { const wrap = root.querySelector("#sharewrap"); if (wrap) wrap.innerHTML = `<p class="lede">The card didn't draw this time, try again in a sec.</p>`; }
 }
 $("shareBtn").addEventListener("click", openShare);
@@ -836,7 +847,7 @@ const UNLOCKS = ["all ten goals, from self-love and money to realisations and yo
 $("unlockList").innerHTML = UNLOCKS.map((u) => `<li>${u}</li>`).join("");
 $("joinBtn").setAttribute("href", JOIN);
 function openJoin() {
-  openSheet(`<div class="tag">the full map</div><h2><span class="holo-text">unlock every place.</span></h2><div class="hook holo">Your full power places live inside The Bad B*tch Coven.</div><ul class="unlock">${UNLOCKS.map((u) => `<li>${u}</li>`).join("")}</ul><a class="btn" href="${JOIN}">join the coven</a>`);
+  openSheet(`<div class="tag">the full map</div><h2><span class="holo-text">unlock every place.</span></h2><div class="hook holo">Your full astro map lives inside The Bad B*tch Coven.</div><ul class="unlock">${UNLOCKS.map((u) => `<li>${u}</li>`).join("")}</ul><a class="btn" href="${JOIN}">join the coven</a>`);
 }
 if (FREE) root.querySelectorAll(".members").forEach((n) => n.remove());
 

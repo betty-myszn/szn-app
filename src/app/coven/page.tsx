@@ -38,7 +38,7 @@ const HUB_LINKS = [
   ["🪐", "my szn", "/dashboard"],
   ["💬", "baddie chat", "/community"],
   ["✨", "my chart", "/my-chart"],
-  ["🌍", "power places", "/your-season/places"],
+  ["🌍", "astro map", "/your-season/places"],
   ["🧬", "human design", "/human-design"],
   ["🕯️", "workshops", "/events"],
   ["🎬", "replays", "/events/replays"],
@@ -196,12 +196,12 @@ export default function CovenHomePage() {
             <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🌍 new in your coven · made for sag szn</span>
             <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14 }}>where in the world <span style={{ color: "var(--pink)" }}>you glow.</span></h2>
             <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 540 }}>Your birth chart drawn across the whole world map, babe. Find your love city, your money city and your glow-up city, see your chart redrawn for wherever you are right now, find out when your lines light up this year and plan the girls&apos; trip that&apos;s magic for BOTH of you. Sag szn is travel szn. 🏹</p>
-            <span style={{ ...pinkBtn, marginTop: 18, border: "var(--border)" }}>find your power places →</span>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "var(--border)" }}>open your astro map →</span>
           </div>
           <div style={{ justifySelf: "center", position: "relative", width: "100%", maxWidth: 270, transform: "rotate(2.5deg)" }}>
             {/* Betty's own power places card, from her chart, as the preview of what every member gets */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/power-places-preview.jpg" alt="Betty's power places card: Istanbul for money, Denver for self-love, Barbados for a glow up, Tahiti for travel" width={720} height={1280} className="block w-full h-auto" style={{ borderRadius: 22, border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }} />
+            <img src="/coven/power-places-preview.jpg" alt="Betty's astro map card: Istanbul for money, Denver for self-love, Barbados for a glow up, Tahiti for travel" width={720} height={1280} className="block w-full h-auto" style={{ borderRadius: 22, border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }} />
             <span style={{ position: "absolute", left: -10, top: 18, transform: "rotate(-7deg)", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px", borderRadius: 999 }}>betty&apos;s map 💅</span>
           </div>
         </Link>

@@ -162,3 +162,18 @@ export const TRANSIT_COPY: Record<string, (natal: string, word: string) => strin
   Neptune: (n, w) => `Neptune is making your ${n} lines dreamy and magnetic. Gorgeous for healing, creating and falling in love with ${w}, with both feet on the ground for anything money.`,
   Pluto: (n, w) => `Pluto is supercharging your ${n} lines. Go to these places to take your power back around ${w} and leave an old version of you behind.`,
 };
+
+// Plain-language names for newbies. A line is named by the part of life it runs, never by MC/IC jargon.
+export const ANGLE_LINE: Record<string, string> = { MC: "career line", IC: "home line", ASC: "glow line", DSC: "love line" };
+export const ANGLE_WHERE: Record<string, string> = {
+  MC: "sits at the very top of your sky here, the part of your chart that runs career, reputation and money",
+  IC: "sits right under your feet here, the part of your chart that runs home, family and feeling safe",
+  ASC: "is rising here, the part of your chart that runs you, your body and your glow",
+  DSC: "is setting here, the part of your chart that runs love, partners and who you attract",
+};
+export const PLANET_PLAIN: Record<string, string> = {
+  Sun: "The Sun, your confidence and shine", Moon: "The Moon, your heart and comfort", Mercury: "Mercury, your voice and ideas planet",
+  Venus: "Venus, your love, beauty and money planet", Mars: "Mars, your drive and fire planet", Jupiter: "Jupiter, your luck and abundance planet",
+  Saturn: "Saturn, your discipline and long-game planet", Uranus: "Uranus, your freedom and breakthrough planet",
+  Neptune: "Neptune, your dreams and intuition planet", Pluto: "Pluto, your power and transformation planet",
+};
