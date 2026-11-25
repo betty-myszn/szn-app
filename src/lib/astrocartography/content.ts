@@ -131,6 +131,17 @@ export const CITIES: { name: string; country: string; lat: number; lon: number }
   ["Medellín", "Colombia", 6.24, -75.58], ["Cartagena", "Colombia", 10.39, -75.48], ["Lima", "Peru", -12.05, -77.04], ["Cusco", "Peru", -13.53, -71.97],
   ["Rio de Janeiro", "Brazil", -22.91, -43.17], ["São Paulo", "Brazil", -23.55, -46.63], ["Salvador", "Brazil", -12.97, -38.5], ["Buenos Aires", "Argentina", -34.6, -58.38],
   ["Santiago", "Chile", -33.45, -70.67],
+  // added 25 Nov 2026: more of where members live and travel
+  ["Brighton", "UK", 50.82, -0.14], ["Bath", "UK", 51.38, -2.36], ["Glasgow", "UK", 55.86, -4.25], ["Cornwall", "UK", 50.27, -5.05], ["Lake Como", "Italy", 45.99, 9.26], ["Sicily", "Italy", 37.6, 14.02],
+  ["Positano", "Italy", 40.63, 14.48], ["Monaco", "Monaco", 43.74, 7.42], ["Saint-Tropez", "France", 43.27, 6.64], ["Provence", "France", 43.95, 4.81], ["Seville", "Spain", 37.39, -5.98], ["Mallorca", "Spain", 39.57, 2.65],
+  ["Brussels", "Belgium", 50.85, 4.35], ["Hamburg", "Germany", 53.55, 9.99], ["Helsinki", "Finland", 60.17, 24.94], ["Krakow", "Poland", 50.06, 19.94], ["Split", "Croatia", 43.51, 16.44], ["Crete", "Greece", 35.24, 24.81],
+  ["Abu Dhabi", "UAE", 24.45, 54.38], ["Riyadh", "Saudi Arabia", 24.71, 46.68], ["Amman", "Jordan", 31.95, 35.93], ["Tbilisi", "Georgia", 41.72, 44.79], ["Sharm El Sheikh", "Egypt", 27.92, 34.33], ["Durban", "South Africa", -29.86, 31.02],
+  ["Ubud", "Indonesia", -8.51, 115.26], ["Koh Samui", "Thailand", 9.51, 100.01], ["Osaka", "Japan", 34.69, 135.5], ["Busan", "South Korea", 35.18, 129.08], ["Siem Reap", "Cambodia", 13.36, 103.86], ["Boracay", "Philippines", 11.97, 121.92],
+  ["Gold Coast", "Australia", -28.02, 153.4], ["Brisbane", "Australia", -27.47, 153.03], ["Adelaide", "Australia", -34.93, 138.6], ["Wellington", "New Zealand", -41.29, 174.78], ["Maui", "USA", 20.8, -156.33], ["Bora Bora", "French Polynesia", -16.5, -151.74],
+  ["Portland", "USA", 45.52, -122.68], ["Palm Springs", "USA", 33.83, -116.55], ["Scottsdale", "USA", 33.49, -111.93], ["Santa Fe", "USA", 35.69, -105.94], ["Salt Lake City", "USA", 40.76, -111.89], ["Houston", "USA", 29.76, -95.37],
+  ["Minneapolis", "USA", 44.98, -93.27], ["Detroit", "USA", 42.33, -83.05], ["Orlando", "USA", 28.54, -81.38], ["Charleston", "USA", 32.78, -79.93], ["Savannah", "USA", 32.08, -81.09], ["Asheville", "USA", 35.6, -82.55],
+  ["Philadelphia", "USA", 39.95, -75.17], ["Calgary", "Canada", 51.05, -114.07], ["Oaxaca", "Mexico", 17.07, -96.73], ["Puerto Vallarta", "Mexico", 20.65, -105.23], ["Mérida", "Mexico", 20.97, -89.62], ["Turks and Caicos", "Turks and Caicos", 21.69, -71.8],
+  ["Bahamas", "Bahamas", 25.03, -77.4], ["St Lucia", "St Lucia", 13.91, -60.98], ["Aruba", "Aruba", 12.52, -69.97], ["Bogotá", "Colombia", 4.71, -74.07], ["Montevideo", "Uruguay", -34.9, -56.16], ["Florianópolis", "Brazil", -27.6, -48.55],
 ] as [string, string, number, number][]).map(([name, country, lat, lon]) => ({ name, country, lat, lon }));
 
 // What each house runs, for "your chart if you lived here" (relocated houses, Placidus like her natal chart).
@@ -164,7 +175,7 @@ export const TRANSIT_COPY: Record<string, (natal: string, word: string) => strin
 };
 
 // Plain-language names for newbies. A line is named by the part of life it runs, never by MC/IC jargon.
-export const ANGLE_LINE: Record<string, string> = { MC: "career line", IC: "home line", ASC: "glow line", DSC: "love line" };
+export const ANGLE_LINE: Record<string, string> = { MC: "money + career line", IC: "home line", ASC: "glow line", DSC: "love line" };
 export const ANGLE_WHERE: Record<string, string> = {
   MC: "sits at the very top of your sky here, the part of your chart that runs career, reputation and money",
   IC: "sits right under your feet here, the part of your chart that runs home, family and feeling safe",
@@ -177,3 +188,24 @@ export const PLANET_PLAIN: Record<string, string> = {
   Saturn: "Saturn, your discipline and long-game planet", Uranus: "Uranus, your freedom and breakthrough planet",
   Neptune: "Neptune, your dreams and intuition planet", Pluto: "Pluto, your power and transformation planet",
 };
+
+// City pop-up practicals: how long to go for (by line) and what to watch for (by planet).
+export const HOW_LONG: Record<string, string> = {
+  MC: "a work trip, a launch, a speaking gig or a move for your career",
+  IC: "living there, long stays and putting down roots, it builds the longer you stay",
+  ASC: "even a week works, perfect for a glow-up trip or a fresh-start holiday",
+  DSC: "go with an open diary, dates, clients and collabs find you while you're there",
+};
+export const WATCH_FOR: Record<string, string> = {
+  Sun: "ego clashes and burning out from being ON all the time",
+  Moon: "big feelings and moodiness, so build in rest and soft days",
+  Mercury: "overthinking and saying yes to too many plans",
+  Venus: "overspending on beautiful things and people-pleasing",
+  Jupiter: "overdoing everything: food, money, promises",
+  Mars: "arguments, rushing and running yourself into the ground",
+  Saturn: "heaviness and loneliness, so go with a clear plan and an end date",
+  Uranus: "sudden changes and plans falling through, stay flexible",
+  Neptune: "blurry boundaries and money confusion, read the small print",
+  Pluto: "power struggles and intensity, choose your people carefully",
+};
+export const TRANSIT_VERB: Record<string, string> = { Jupiter: "lighting up", Saturn: "strengthening", Uranus: "electrifying", Neptune: "softening", Pluto: "supercharging" };

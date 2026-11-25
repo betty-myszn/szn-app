@@ -13,6 +13,7 @@ import { loadRoomMessages, type ChatMessage } from "@/lib/chat-rooms";
 import { WORKSHOPS } from "@/lib/workshops";
 import { COVEN_CIRCLE, COVEN_MOONS, COVEN_NEXT, COVEN_ROOM_ID, COVEN_THEME, moonVisible } from "@/lib/coven-month";
 import QuantumLeapBand from "@/components/quantum-leap/QuantumLeapBand";
+import AstroMapNudge from "@/components/AstroMapNudge";
 import { qlPromoShowing, QL_PATH } from "@/lib/quantum-leap";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -205,6 +206,9 @@ export default function CovenHomePage() {
             <span style={{ position: "absolute", left: -10, top: 18, transform: "rotate(-7deg)", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px", borderRadius: 999 }}>betty&apos;s map 💅</span>
           </div>
         </Link>
+
+        {/* This month's astro map window for her chart */}
+        <AstroMapNudge />
 
         {geminiLive && (
           <>

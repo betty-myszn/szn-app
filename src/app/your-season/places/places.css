@@ -208,3 +208,10 @@
 .acg .howto { margin-top: 14px; border: 1.5px dashed var(--dark); border-radius: 14px; padding: 10px 14px; background: #fff; }
 .acg .howto summary { font-weight: 800; font-size: 14px; cursor: pointer; }
 .acg .howto p { font-size: 14.5px; line-height: 1.6; margin: 10px 0 2px; }
+.acg .when2 { display: block; margin-top: 10px; font-size: 13.5px; line-height: 1.5; }
+.acg .when2 b { font-family: var(--poppins); font-weight: 800; }
+.acg .prac { display: grid; gap: 8px; margin-top: 14px; }
+@media (min-width: 560px) { .acg .prac { grid-template-columns: 1fr 1fr; } }
+.acg .prac > div { border: 1.5px solid var(--dark); border-radius: 14px; padding: 10px 12px; background: var(--lav-light); }
+.acg .prac b { display: block; font-family: var(--poppins); font-weight: 800; font-size: 13px; text-transform: lowercase; }
+.acg .prac span { display: block; font-size: 14px; line-height: 1.5; margin-top: 3px; }

@@ -2,7 +2,7 @@
 // gestures + an SVG viewBox and that is simpler to keep smooth outside React's render cycle.
 // mountPowerPlaces(root, chart) draws everything into root and returns a cleanup function.
 import { computeLines, distanceKm, PLANETS, ANGLES } from "./engine";
-import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY, ANGLE_LINE, ANGLE_WHERE, PLANET_PLAIN } from "./content";
+import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY, ANGLE_LINE, ANGLE_WHERE, PLANET_PLAIN, HOW_LONG, WATCH_FOR, TRANSIT_VERB } from "./content";
 import { LAND } from "./land";
 
 const TEMPLATE = `<section class="hero">
@@ -35,7 +35,7 @@ const TEMPLATE = `<section class="hero">
       <div class="tag" id="tabTag"></div>
       <h2 class="h2" id="tabHead" style="margin-top:8px"></h2>
       <p class="lede" id="tabLede"></p>
-      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>career line</b> (career, reputation, money), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
+      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>money + career line</b> (money, career, reputation), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
     </div>
 
     <div class="mapcard">
@@ -231,6 +231,9 @@ const signOf = (lon) => SIGNS[Math.floor((((lon % 360) + 360) % 360) / 30)];
 const S = { tab: "live", goal: "love", planet: "Venus", focus: null, city: null };
 try { const saved = localStorage.getItem("szn_place_city"); if (saved) S.city = saved; } catch (e) {}
 if (!S.city || !findCity(S.city)) S.city = "London";
+// Open on what she said she wants MORE of in Customise my szn.
+const PICK = opts.startGoal && (opts.startGoal === "live" || GOALS.some((g) => g.id === opts.startGoal)) ? opts.startGoal : null;
+if (PICK && !FREE) { if (PICK === "live") S.tab = "live"; else { S.tab = "activate"; S.goal = PICK; } }
 
 const weights = () => (S.trip ? SCORES.travel : SCORES[S.tab === "activate" ? S.goal : S.tab]);
 function ranked(W = weights(), n = TOPN) {
@@ -283,6 +286,18 @@ root.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", 
 $("goals").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-goal]"); if (!b) return; S.goal = b.dataset.goal; S.focus = null; renderTab(true); b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" }); });
 
 let current = [];
+// Timing windows from the server, kept so every city can say when to go.
+let timing = null;
+function bestWindow(c, W = weights()) {
+  if (!timing) return null;
+  const planets = new Set(c.hits.filter((h) => h.d < 900 && (W[h.key] || 0) > 0).map((h) => h.line.planet));
+  const ws = timing.windows.filter((w) => planets.has(w.natal));
+  if (!ws.length) return null;
+  // Happening now beats coming up; among those, Jupiter (luck) first, then whatever starts soonest.
+  const rank = (w) => (w.start <= timing.today ? 0 : 10) + (w.transit === "Jupiter" ? 0 : 1);
+  return ws.slice().sort((a, b) => rank(a) - rank(b) || a.start.localeCompare(b.start))[0];
+}
+const windowText = (w) => `${w.start <= timing.today ? `now until the ${britishDate(w.end)}` : `the ${britishDate(w.start)} to the ${britishDate(w.end)}`}, while ${w.transit} is ${TRANSIT_VERB[w.transit]} your ${w.natal} lines`;
 function renderTab(fly) {
   root.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-selected", String(!S.trip && b.dataset.tab === S.tab)));
   $("goals").hidden = S.trip || S.tab !== "activate";
@@ -293,7 +308,7 @@ function renderTab(fly) {
   const goal = GOALS.find((g) => g.id === S.goal);
   const copy = trip ? { tag: "girls' trip planner", head: `your trip with ${bestie.name}, MAPPED.`, lede: `Pink and black are your lines, purple are ${bestie.name}'s. The pins are the places that light you BOTH up. Tap live, travel or activate to go back to just you.` }
     : S.tab === "activate" ? { tag: `go here to activate · ${goal.label}`, head: `where to go ${goal.head}.`, lede: GOAL_LEDE[S.goal] } : TAB_COPY[S.tab];
-  $("tabTag").textContent = copy.tag;
+  $("tabTag").textContent = PICK && !trip && ((S.tab === "activate" && S.goal === PICK) || (PICK === "live" && S.tab === "live")) ? `✨ you said you want more of this · ${copy.tag}` : copy.tag;
   $("tabHead").innerHTML = esc(copy.head).replace(/([A-Z]{2,})/g, '<span class="holo-text">$1</span>');
   $("tabLede").textContent = copy.lede;
   current = trip ? bestie.top.map((r) => ({ c: r.c, score: r.score })) : ranked();
@@ -327,7 +342,7 @@ function renderCards() {
       <span style="display:block;min-width:0">
         <h3>${esc(r.c.name)}</h3><div class="country">${esc(r.c.country)} · ${esc(READINGS[lead.key].nick)}</div>
         <span class="why"><b>${whyLabel}:</b> ${esc(firstWithLead ? `Same ${lead.line.planet} ${ANGLE_LINE[lead.line.angle]} as ${firstWithLead}, ${lead.d < 150 ? "with you right on it" : `only ${km(lead.d)} away`}, so ${READINGS[lead.key].use} flow here too.` : whyLine(lead, angleExplained))}</span>
-        ${text ? `<p>${esc(text)}</p>` : ""}<span class="pills">${pills}</span><span class="more">read it →</span>
+        ${text ? `<p>${esc(text)}</p>` : ""}${(() => { const w = bestWindow(r.c); if (!w) return ""; const now = w.start <= timing.today; const soon = !now && Date.parse(w.start) - Date.parse(timing.today) < 60 * 86400000; return now || soon ? `<span class="when2">${now ? "🔥 <b>lit up right now</b>" : "⏳ <b>lights up soon</b>"} · ${esc(windowText(w))}</span>` : ""; })()}<span class="pills">${pills}</span><span class="more">read it →</span>
       </span></button>`;
   }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus all ten goals, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
 }
@@ -515,7 +530,7 @@ function layout() {
   const keys = Object.keys(lineEls).filter((k) => (S.focus ? k === S.focus : rel.has(k)));
   for (const k of keys) {
     const l = lineByKey[k];
-    const txt = `${GLYPH[l.planet]} ${ANGLE_LINE[l.angle].replace(" line", "")}`;
+    const short = { MC: !S.trip && S.tab === "activate" && S.goal === "career" ? "career" : "money", IC: "home", ASC: "glow", DSC: "love" }; const txt = `${GLYPH[l.planet]} ${short[l.angle]}`;
     const gift = GIFT.has(l.planet);
     let cands = [];
     if (l.kind === "meridian") { const x = near(X(l.lon)); for (let y = Math.max(vy0 + 30 * u, Y(70)); y < Math.min(vy1 - 20 * u, Y(-45)); y += 34 * u) cands.push([x, y]); }
@@ -657,7 +672,7 @@ function renderDecode() {
   $("decode").innerHTML = ANGLES.map((a) => {
     const key = `${S.planet}|${a}`, r = READINGS[key], on = citiesOn(key);
     const runs = on.length ? `runs near: ${on.slice(0, 4).map((x) => esc(x.c.name)).join(", ")}` : "mostly over ocean and open land for you";
-    return `<button class="dcard" data-line="${key}"><div class="k">${GLYPH[S.planet]} ${S.planet} ${a} · ${ANGLE_INFO[a].long}</div><h4>${esc(r.nick)}</h4><p>${esc(r.short)}</p><div class="runs">📍 ${runs}</div></button>`;
+    return `<button class="dcard" data-line="${key}"><div class="k">${GLYPH[S.planet]} your ${S.planet} ${ANGLE_LINE[a]}</div><h4>${esc(r.nick)}</h4><p>${esc(r.short)}</p><div class="runs">📍 ${runs}</div></button>`;
   }).join("");
 }
 $("decode").addEventListener("click", (e) => { const b = e.target.closest("[data-line]"); if (b) openLine(b.dataset.line); });
@@ -689,14 +704,21 @@ function openCity(name) {
   const W = weights();
   const hits = c.hits.filter((h) => h.d < 900);
   const lead = hits.slice().sort((a, b) => ((W[b.key] || 0) * prox(b.d)) - ((W[a.key] || 0) * prox(a.d)))[0];
+  const bw = bestWindow(c, W);
+  const prac = lead ? `<div class="prac">
+      <div><b>🌟 go here for</b><span>${esc(READINGS[lead.key].use)}</span></div>
+      <div><b>🧳 how long</b><span>${esc(HOW_LONG[lead.line.angle])}</span></div>
+      <div><b>⏳ best time to go</b><span>${bw ? esc(windowText(bw)) : "any time this year, nothing big is pulling on these lines right now"}</span></div>
+      <div><b>👀 watch out for</b><span>${esc(WATCH_FOR[lead.line.planet])}</span></div>
+    </div>` : "";
   openSheet(`<div class="tag">${esc(c.country)}</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>
-    ${lead ? `<div class="hook holo">${esc(READINGS[lead.key].short)}</div>` : ""}
-    ${hits.map((h) => { const [lab, cls] = strength(h.d); const r = READINGS[h.key]; return `<div class="hitrow"><div class="hithead"><b>${lineName(h.key)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p style="font-family:var(--font-poppins),Poppins,sans-serif;font-weight:800;font-size:15px">${esc(r.nick)}</p><p>${esc(r.full)}</p><p class="use"><b>go here for:</b> ${esc(r.use)}</p></div>`; }).join("") || `<p class="lede">No lines run close to ${esc(c.name)} for you.</p>`}
+    ${lead ? `<div class="hook holo">${esc(whyLine(lead))}</div>${prac}<div class="tag" style="margin-top:22px">every line you're near here</div>` : ""}
+    ${hits.map((h) => { const [lab, cls] = strength(h.d); const r = READINGS[h.key]; return `<div class="hitrow"><div class="hithead"><b>${lineName(h.key)} · ${esc(r.nick)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p>${esc(r.full)}</p></div>`; }).join("") || `<p class="lede">No lines run close to ${esc(c.name)} for you, which makes it a calm, neutral place where your birth chart does the talking.</p>`}
     <div style="margin-top:18px"><button class="btn" data-fly-city="${esc(c.name)}">show it on my map</button></div>`);
 }
 function openLine(key) {
   const [p, a] = key.split("|"), r = READINGS[key], on = citiesOn(key, 400);
-  openSheet(`<div class="tag">${GLYPH[p]} ${p} ${a} · ${ANGLE_INFO[a].long} · ${PLANET_WORD[p]}</div><h2><span class="holo-text">${esc(r.nick)}.</span></h2>
+  openSheet(`<div class="tag">${GLYPH[p]} your ${p} ${ANGLE_LINE[a]} · ${PLANET_WORD[p]}</div><h2><span class="holo-text">${esc(r.nick)}.</span></h2>
     <div class="hook holo">${esc(r.short)}</div><p class="lede">${esc(r.full)}</p><p class="use"><b>go here for:</b> ${esc(r.use)}</p>
     <div class="tag" style="margin-top:20px">cities on this line</div>
     <div class="pills" style="margin-top:10px">${on.length ? on.slice(0, 10).map((x) => `<button class="pill" data-open-city="${esc(x.c.name)}" style="cursor:pointer">${esc(x.c.name)} · ${km(x.d)}</button>`).join("") : '<span class="lede" style="margin:0">This one mostly runs over ocean and wide open land for you.</span>'}</div>
@@ -722,6 +744,7 @@ async function loadTiming() {
   try {
     const j = await fetch("/api/power-places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "timing", planets: natalPlanets }), signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
     const today = j.today;
+    timing = j; if (!S.trip) renderCards();
     const ws = j.windows.slice().sort((a, b) => (a.start <= today ? 0 : 1) - (b.start <= today ? 0 : 1) || a.start.localeCompare(b.start)).slice(0, 4);
     el.innerHTML = ws.map((w) => {
       const now = w.start <= today;
@@ -732,7 +755,7 @@ async function loadTiming() {
         <div class="when${now ? " holo" : ""}">${when}</div>
         <h4>${GLYPH[w.transit]} ${w.transit} ${ASPECT_WORD[w.aspect]} your ${GLYPH[w.natal]} ${w.natal}</h4>
         <p>${esc(TRANSIT_COPY[w.transit](w.natal, PLANET_WORD[w.natal]))}</p>
-        ${near.length ? `<div class="pills">${near.map((x) => `<button class="pill ${GIFT.has(w.natal) ? "gift" : "grow"}" data-open-city="${esc(x.c.name)}">${esc(x.c.name)} · ${x.h.line.angle}</button>`).join("")}</div>` : `<p class="runs">Your ${w.natal} lines mostly run over ocean, so read this one for wherever you are.</p>`}
+        ${near.length ? `<div class="pills">${near.map((x) => `<button class="pill ${GIFT.has(w.natal) ? "gift" : "grow"}" data-open-city="${esc(x.c.name)}">${esc(x.c.name)} · ${ANGLE_LINE[x.h.line.angle]}</button>`).join("")}</div>` : `<p class="runs">Your ${w.natal} lines mostly run over ocean, so read this one for wherever you are.</p>`}
       </div>`;
     }).join("") || `<p class="lede">No big contacts to your planets in the next year, so your map reads exactly as it is drawn.</p>`;
   } catch (e) { if (!signal.aborted) el.innerHTML = `<p class="lede">The sky reading didn't load, refresh the page to try again.</p>`; }

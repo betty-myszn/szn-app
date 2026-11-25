@@ -7,6 +7,13 @@ import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { mountPowerPlaces } from "@/lib/astrocartography/mount";
 import BestieForm from "./BestieForm";
+import { loadSznPicks } from "@/lib/szn-picks-store";
+
+// Customise my szn life areas mapped to the astro map's goals.
+const PICK_TO_GOAL: Record<string, string> = {
+  money: "money", relationships: "love", career: "career", purpose: "realise", confidence: "selflove", mindset: "realise",
+  healing: "healing", "style-fashion": "glow", "health-body": "glow", "home-environment": "live", "spiritual-growth": "healing",
+};
 import "./places.css";
 
 type Mounted = (() => void) & { setBestie?: (chart: unknown, name: string) => void; bestieSlot?: HTMLElement | null };
@@ -28,9 +35,16 @@ export default function PowerPlacesPage() {
   const showing = ready && !!member && !loading && !!chart;
   useEffect(() => {
     if (!showing || !chart || !rootRef.current) return;
-    const m = mountPowerPlaces(rootRef.current, chart) as Mounted;
-    setApi(() => m);
-    return () => { setApi(null); m(); };
+    // Opens on the first thing she picked in Customise my szn (money, love, glow…), if she picked.
+    let m: Mounted | null = null, gone = false;
+    const el = rootRef.current;
+    loadSznPicks().then(({ picks }) => {
+      if (gone) return;
+      const startGoal = picks && picks.length ? PICK_TO_GOAL[picks[0]] : undefined;
+      m = mountPowerPlaces(el, chart, { startGoal }) as Mounted;
+      setApi(() => m);
+    });
+    return () => { gone = true; setApi(null); m?.(); };
   }, [showing, chart]);
 
   if (!ready) return null;
