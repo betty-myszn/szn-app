@@ -168,6 +168,7 @@ export default function RootLayout({
               // sitemap to be discovered, which is a much weaker signal than being linked from
               // every page.
               { label: "reports", href: "/reports" },
+              { label: "free power map", href: "/power-places" },
               { label: "coven", href: "/baddie-coven" },
               { label: "mastermind", href: "/mastermind" },
               { label: "retreat", href: "/retreat" },
