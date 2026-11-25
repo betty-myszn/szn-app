@@ -54,6 +54,7 @@ const HUB_LINKS = [
 const CATCH_UP: { at: number; href: string; title: string; line: string; cta: string }[] = [
   { at: Date.parse("2026-11-11T11:11:00Z"), href: "/your-season/11-11", title: "🔮 the 11/11 portal + workshop replay", line: "Your North and South Node reading, the 17 exercises and the full manifestation workshop replay.", cta: "watch + open →" },
   { at: Date.parse("2026-11-13T00:00:00Z"), href: "/your-season/friday-13", title: "♀ friday the 13th: the goddess day portal", line: "Venus and Mercury went direct together. The ritual and spell are still waiting for you.", cta: "open the portal →" },
+  { at: Date.parse("2026-11-15T00:00:00Z"), href: "/my-chart/lilith", title: "🖤 lilith: money + power activation", line: "Your guided hypnosis and goddess activation, plus your own Lilith page with your shadow work and Lilith money era.", cta: "meet your lilith →" },
   { at: Date.parse("2026-11-24T14:53:00Z"), href: "/your-season/gemini-full-moon", title: "🌕 the gemini full moon portal", line: "Where it landed in your chart, the old story to rewrite and the twins ritual, still glowing.", cta: "open the portal →" },
 ];
 
@@ -222,18 +223,6 @@ export default function CovenHomePage() {
             </Link>
           </>
         )}
-
-        {/* Lilith: Money & Power Activation + the members' Lilith page (15 Nov 2026) */}
-        <Link href="/my-chart/lilith" className="no-underline grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] items-stretch" style={{ borderRadius: 26, overflow: "hidden", color: "#fff", background: "#08070a", border: "var(--border)", boxShadow: "6px 6px 0 var(--pink)" }}>
-          <div style={{ padding: "clamp(24px, 3.6vw, 40px)", alignSelf: "center" }}>
-            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🖤 new in your coven</span>
-            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14, color: "#fff" }}>LILITH: MONEY &amp; POWER ACTIVATION 💸</h2>
-            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 520 }}>Your guided hypnosis and goddess activation is HERE, babe, plus your own Lilith page: all four of your Liliths, your shadow work, your Lilith money era and a money exercise written for your placement. 🔮</p>
-            <span style={{ ...pinkBtn, marginTop: 18, border: "2px solid #fff" }}>meet your lilith →</span>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/lilith/lilith-hero.jpg" alt="Lilith under a glitter crescent moon" className="block w-full aspect-[4/3] md:aspect-auto md:h-full" style={{ objectFit: "cover", objectPosition: "50% 15%", minHeight: 260 }} />
-        </Link>
 
         {/* What you might've missed: picked from CATCH_UP by date, the two most recent portals from the last
             three weeks, so it never goes stale on its own (24 Nov 2026). A portal still live up top is skipped. */}
