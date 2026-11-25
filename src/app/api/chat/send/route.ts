@@ -72,6 +72,19 @@ export async function POST(request: NextRequest) {
     original = (data as Original | null) ?? null;
   }
 
+  // The same words from the same member in the same room within a minute are a double send (a
+  // slow connection plus another tap), not a new message: say it worked and post nothing. Anna's
+  // 21:21 message went in ~15 times this way on 25 Nov 2026.
+  const { data: recentSame } = await supabase
+    .from("chat_messages")
+    .select("id")
+    .eq("space_id", spaceId)
+    .eq("user_id", user.id)
+    .eq("content", content)
+    .gte("created_at", new Date(Date.now() - 60_000).toISOString())
+    .limit(1);
+  if (recentSame && recentSame.length) return NextResponse.json({ ok: true, duplicate: true });
+
   const id = `${Date.now()}-${user.id.slice(0, 8)}`;
   const row: Record<string, string> = { id, space_id: spaceId, user_id: user.id, author, content };
   let { error: insertError } = await supabase

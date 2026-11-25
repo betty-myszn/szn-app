@@ -105,6 +105,7 @@ export default function ChatRoomPage() {
   const [flashId, setFlashId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sendingRef = useRef(false);
 
   const season = useSeason();
   const space = findRoom(params.spaceId);
@@ -217,14 +218,27 @@ export default function ChatRoomPage() {
     );
   }
 
+  // One send at a time, and the box empties the moment she taps, so a slow connection can't turn
+  // extra taps into copies of the same message. The words come back if the post fails.
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!draft.trim()) return;
-    const updated = await addRoomMessage(space.id, member.name.toLowerCase(), draft.trim(), replyingTo?.id);
-    setMessages(updated);
+    const text = draft.trim();
+    if (!text || sendingRef.current) return;
+    sendingRef.current = true;
+    const replyId = replyingTo?.id;
     setDraft("");
     setReplyingTo(null);
     setShowComposeEmoji(false);
+    try {
+      const before = messages.length;
+      const updated = await addRoomMessage(space.id, member.name.toLowerCase(), text, replyId);
+      setMessages(updated);
+      if (!updated.some((m) => m.content === text) && updated.length <= before) setDraft(text);
+    } catch {
+      setDraft(text);
+    } finally {
+      sendingRef.current = false;
+    }
   };
 
   const insertEmoji = (emoji: string) => {
