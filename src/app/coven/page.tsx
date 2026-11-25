@@ -38,6 +38,7 @@ const HUB_LINKS = [
   ["🪐", "my szn", "/dashboard"],
   ["💬", "baddie chat", "/community"],
   ["✨", "my chart", "/my-chart"],
+  ["🌍", "power places", "/your-season/places"],
   ["🧬", "human design", "/human-design"],
   ["🕯️", "workshops", "/events"],
   ["🎬", "replays", "/events/replays"],
@@ -187,6 +188,21 @@ export default function CovenHomePage() {
 
         {/* Today's move in the 30-Day Quantum Leap Challenge */}
         <QuantumLeapBand />
+
+        {/* Power places (astrocartography), new 25 Nov 2026 for sag szn: Sagittarius is the travel sign */}
+        <Link href="/your-season/places" className="no-underline grid grid-cols-1 md:grid-cols-[1.3fr_0.7fr] items-center" style={{ borderRadius: 26, overflow: "hidden", color: "var(--dark)", padding: "clamp(24px, 3.6vw, 40px)", gap: 22, border: "var(--border)", boxShadow: "8px 8px 0 var(--pink)", background: "linear-gradient(150deg, var(--pink-light) 0%, #fff 50%, var(--lav-light) 100%)" }}>
+          <div>
+            <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🌍 new in your coven · made for sag szn</span>
+            <h2 className="display" style={{ fontSize: "clamp(36px, 5.2vw, 62px)", lineHeight: 0.98, marginTop: 14 }}>where in the world <span style={{ color: "var(--pink)" }}>you glow.</span></h2>
+            <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 540 }}>Your birth chart drawn across the whole world map, babe. Find your love city, your money city and your glow-up city, see your chart redrawn for wherever you are right now, find out when your lines light up this year and plan the girls&apos; trip that&apos;s magic for BOTH of you. Sag szn is travel szn. 🏹</p>
+            <span style={{ ...pinkBtn, marginTop: 18, border: "var(--border)" }}>find your power places →</span>
+          </div>
+          <div className="hd-foil" style={{ justifySelf: "center", width: "100%", maxWidth: 300, border: "var(--border)", borderRadius: 22, padding: "20px 22px", transform: "rotate(2deg)", boxShadow: "6px 6px 0 var(--dark)", display: "grid", gap: 8 }}>
+            {["💘 your love city", "💸 your money city", "🪞 your self-love city", "🔥 your next-level city", "👯‍♀️ your girls' trip"].map((t) => (
+              <div key={t} style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "8px 14px" }}>{t}</div>
+            ))}
+          </div>
+        </Link>
 
         {geminiLive && (
           <>
