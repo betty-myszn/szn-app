@@ -16,14 +16,14 @@ export default function BaddieSeasonPromoBand() {
             <span className="pk">2027.</span>
           </h2>
           <p style={{ fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.65, fontWeight: 600, color: "#fff", margin: "18px 0 0", maxWidth: 580 }}>
-            Babyyy, what if 2027 is the year you finally get everything you&apos;ve been manifesting? 🔮 I&apos;ve created something very special: your 12-month astrology forecast, your manifestation blueprint and a private hypnosis activation with me, fully custom and designed around you, your dreams and the life you want to create. You walk into January as HER. 💖
+            Babyyy, what if 2027 is the year you finally get everything you&apos;ve been manifesting? 🔮 I&apos;ve created something very special: your 12-month astrology forecast and manifestation blueprint, fully custom and designed around you, your dreams and the life you want to create, with a private hypnosis activation with me if you want to go all in. You walk into January as HER. 💖
           </p>
           <div className="flex flex-wrap items-center gap-5" style={{ marginTop: 26 }}>
             <Link href={S.href} className="no-underline" style={{ display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 36px", border: "2px solid #fff" }}>
               claim my 2027 →
             </Link>
             <span style={{ fontFamily: pp, fontSize: 18, fontWeight: 800, color: "#fff" }}>
-              ${S.priceUsd} <span style={{ textDecoration: "line-through", marginLeft: 6 }}>${S.wasUsd}</span>
+              report ${S.report.priceUsd} · with activation ${S.priceUsd} <span style={{ textDecoration: "line-through", marginLeft: 6 }}>${S.wasUsd}</span>
             </span>
           </div>
         </div>

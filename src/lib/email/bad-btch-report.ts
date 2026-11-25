@@ -38,6 +38,14 @@ const REPORTS: PaidReport[] = [
     buyerKind: "rich_btch_rising_paid", adminKind: "admin_rich_btch_rising_order",
   },
   {
+    // Your Baddie Season: 2027, the report on its own ($111 from 19 Nov 2026, plink_1UdYtFJ6s9fRhiJoCLRJpJFR).
+    // The $333 report + Zoom activation bundle runs through the Baddie Session flow instead.
+    name: "Your Baddie Season: 2027 report", emoji: "🔮",
+    priceIds: ids(process.env.STRIPE_PRICE_BADDIE_SEASON_2027_REPORT, "price_1UdYtDJ6s9fRhiJoI5OHHSrg"),
+    templateId: Number(process.env.BREVO_TEMPLATE_BADDIE_SEASON_2027_REPORT_PAID?.trim() || 94),
+    buyerKind: "baddie_season_2027_report_paid", adminKind: "admin_baddie_season_2027_report_order",
+  },
+  {
     // The Gemini Full Moon: Manifest a New Reality, $55, 15 spots (Stripe caps the link at 15 sales), 23 Nov 2026.
     // plink_1Uf4EhJ6s9fRhiJo914NM8b2 (the $44 price_1Uf4Ci… link was retired before launch). Release window: 24 Nov full moon to 9 Dec Sagittarius New Moon.
     name: "The Gemini Full Moon report", emoji: "🌕",
