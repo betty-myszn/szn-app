@@ -244,7 +244,10 @@ if (PICK && !FREE) { if (PICK === "live") S.tab = "live"; else { S.tab = "activa
 
 const weights = () => (S.trip ? SCORES.travel : SCORES[S.tab === "activate" ? S.goal : S.tab]);
 function ranked(W = weights(), n = TOPN) {
-  const scored = cities.map((c) => ({ c, score: c.hits.map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((s, v, i) => s + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
+  // Lines bunch together near the poles, so far-north and far-south places sit "near" lots of lines
+  // without really being stronger. Past 55° the score is eased down (Lapland was topping every list).
+  const polar = (lat) => (Math.abs(lat) <= 55 ? 1 : Math.max(0.3, 1 - (Math.abs(lat) - 55) / 20));
+  const scored = cities.map((c) => ({ c, score: polar(c.lat) * c.hits.map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((s, v, i) => s + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
   const out = [];
   for (const r of scored) { if (out.some((o) => gcKm(o.c, r.c) < 700)) continue; out.push(r); if (out.length === n) break; }
   return out;
@@ -779,7 +782,8 @@ function setBestie(chart, name) {
   const W = SCORES.travel;
   const hits = new Map(cities.map((c) => [c, hitsAt(c.lat, c.lon, bl)]));
   const sc = (hs) => hs.reduce((t, h) => t + (W[h.key] || 0) * prox(h.d), 0);
-  const scored = cities.map((c) => { const a = sc(c.hits), b = sc(hits.get(c)); return { c, a, b, score: a > 0 && b > 0 ? Math.sqrt(a * b) : 0 }; }).filter((r) => r.score > 0.3).sort((x, y) => y.score - x.score);
+  const polarB = (lat) => (Math.abs(lat) <= 55 ? 1 : Math.max(0.3, 1 - (Math.abs(lat) - 55) / 20));
+  const scored = cities.map((c) => { const a = sc(c.hits), b = sc(hits.get(c)); return { c, a, b, score: a > 0 && b > 0 ? polarB(c.lat) * Math.sqrt(a * b) : 0 }; }).filter((r) => r.score > 0.3).sort((x, y) => y.score - x.score);
   const top = [];
   for (const r of scored) { if (top.some((o) => gcKm(o.c, r.c) < 700)) continue; top.push(r); if (top.length === 5) break; }
   bestie = { name: name || "your bestie", lines: bl, hits, top };
