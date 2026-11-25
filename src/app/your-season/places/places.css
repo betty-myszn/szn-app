@@ -195,3 +195,10 @@
 .acg .freeonly { display: none; }
 .acg.free .freeonly { display: block; }
 .acg.free { padding-bottom: 56px; }
+
+/* Laptop + desktop: the map breaks out of the 760px reading column to nearly the full screen
+   (max 1240px) and gets taller, so the world reads at a proper size. Text stays narrow. */
+@media (min-width: 900px) {
+  .acg .mapcard { margin-left: calc(50% - min(620px, 50vw - 32px)); margin-right: calc(50% - min(620px, 50vw - 32px)); }
+  .acg .mapbox { height: clamp(440px, 46vw, 600px); }
+}
