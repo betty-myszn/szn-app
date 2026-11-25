@@ -15,7 +15,7 @@ const pp = "var(--font-poppins), Poppins, sans-serif";
 export const metadata: Metadata = {
   title: "Personalised Astrology Reports for Money + Confidence",
   description:
-    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($111, in your inbox within 48 hours) and Rich B*tch Rising for money, wealth and self-worth ($111, in your inbox within 48 hours).",
+    "MY SZN's personalised astrology reports, written by Betty from your exact birth chart: The Bad B*tch Report for confidence, power and visibility ($111, in your inbox within 48 hours), Rich B*tch Rising for money, wealth and self-worth ($111, in your inbox within 48 hours) and The Baddie Style Report for your colours, shapes and key outfits ($111).",
   alternates: { canonical: "/reports" },
   openGraph: {
     title: "MY SZN Reports 💸💜",

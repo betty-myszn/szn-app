@@ -67,6 +67,7 @@ const workMenu: MenuItem[] = [
     children: [
       { href: "/reports/rich-btch-rising", label: "rich b*tch rising" },
       { href: "/reports/bad-btch-report", label: "the bad b*tch report" },
+      { href: "/reports#style-report", label: "the baddie style report" },
     ],
   },
   { href: "/rich-btch-rising", label: "rich b*tch rising (money programme)" },
