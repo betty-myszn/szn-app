@@ -132,3 +132,33 @@ export const CITIES: { name: string; country: string; lat: number; lon: number }
   ["Rio de Janeiro", "Brazil", -22.91, -43.17], ["São Paulo", "Brazil", -23.55, -46.63], ["Salvador", "Brazil", -12.97, -38.5], ["Buenos Aires", "Argentina", -34.6, -58.38],
   ["Santiago", "Chile", -33.45, -70.67],
 ] as [string, string, number, number][]).map(([name, country, lat, lon]) => ({ name, country, lat, lon }));
+
+// What each house runs, for "your chart if you lived here" (relocated houses, Placidus like her natal chart).
+export const HOUSE_MEANING = [
+  "",
+  "you, your body, your look and how fast you move",
+  "your money, your worth and what you own",
+  "your voice, your ideas and your everyday circle",
+  "home, family, roots and how safe you feel",
+  "fun, romance, creativity and being adored",
+  "your daily routine, your health and how you work",
+  "partners, marriage, clients and who you attract",
+  "intimacy, shared money, investments and deep change",
+  "travel, study, teaching, publishing and big beliefs",
+  "career, reputation, being SEEN and your legacy",
+  "friends, community, followers and your future dreams",
+  "rest, spirituality, healing and your inner world",
+];
+
+export const SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+
+// The timing layer: a slow planet touching one of her natal planets switches on every line that
+// natal planet draws, everywhere on her map, for as long as the contact lasts.
+export const ASPECT_WORD: Record<number, string> = { 0: "on", 60: "flowing with", 90: "pushing", 120: "flowing with", 180: "facing" };
+export const TRANSIT_COPY: Record<string, (natal: string, word: string) => string> = {
+  Jupiter: (n, w) => `Jupiter is pouring luck on your ${n} lines, so anything to do with ${w} gets bigger and easier in these places. This is THE window to book the trip.`,
+  Saturn: (n, w) => `Saturn is making your ${n} lines serious. Go to these places to commit, build and finish things around ${w}, and expect results that last.`,
+  Uranus: (n, w) => `Uranus is electrifying your ${n} lines. Expect the sudden yes, the surprise offer and the plot twist around ${w}, so go when you are ready for life to move fast.`,
+  Neptune: (n, w) => `Neptune is making your ${n} lines dreamy and magnetic. Gorgeous for healing, creating and falling in love with ${w}, with both feet on the ground for anything money.`,
+  Pluto: (n, w) => `Pluto is supercharging your ${n} lines. Go to these places to take your power back around ${w} and leave an old version of you behind.`,
+};

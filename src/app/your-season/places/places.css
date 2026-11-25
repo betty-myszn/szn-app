@@ -146,3 +146,52 @@
 .acg .sheet .use { margin-top: 14px; font-size: 14px; line-height: 1.55; }
 .acg .sheet .use b { font-family: var(--poppins); }
 
+
+/* ── added 25 Nov: where you are now, timing, girls' trip, share, free mode ── */
+.acg .btn { cursor: pointer; font-family: inherit; }
+.acg .btn.ghost { background: #fff; }
+.acg .reloc:empty { display: none; }
+.acg .reloc { padding: 18px 16px 20px; border-top: var(--border); background: var(--pink-bg); }
+.acg .relhead { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.acg .relhead > div { background: #fff; border: 1.5px solid var(--dark); border-radius: 16px; padding: 12px; min-width: 0; }
+.acg .relhead small { display: block; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.acg .relhead b { display: block; font-family: var(--poppins); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin-top: 4px; }
+.acg .relhead span { display: block; font-size: 12.5px; font-weight: 700; margin-top: 2px; }
+.acg .moves { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.acg .mv { display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: start; background: #fff; border: 1.5px solid var(--dark); border-radius: 14px; padding: 10px 12px; }
+.acg .mv .g { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--dark); display: grid; place-items: center; font-size: 19px; background: var(--pink-light); font-family: 'DM Sans', sans-serif; }
+.acg .mv b { font-family: var(--poppins); font-weight: 800; font-size: 15px; display: block; line-height: 1.25; }
+.acg .mv p { font-size: 13.5px; line-height: 1.5; margin: 3px 0 0; }
+.acg .timing { display: grid; gap: 12px; margin-top: 18px; }
+@media (min-width: 640px) { .acg .timing { grid-template-columns: 1fr 1fr; } }
+.acg .tcard { border: 1.5px solid var(--dark); border-radius: 18px; padding: 16px; background: #fff; min-width: 0; }
+.acg .tcard.now { border-width: 2px; box-shadow: 4px 4px 0 var(--pink); }
+.acg .tcard .when { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border: 1.5px solid var(--dark); border-radius: 999px; padding: 4px 10px; background: var(--lav-light); }
+.acg .tcard h4 { font-family: var(--poppins); font-weight: 800; font-size: 18px; letter-spacing: -0.01em; line-height: 1.25; margin: 10px 0 0; }
+.acg .tcard p { font-size: 14px; line-height: 1.55; margin: 6px 0 0; }
+.acg .tcard .pill { cursor: pointer; }
+.acg .runs { font-size: 12.5px; font-weight: 700; }
+.acg .bestie { margin-top: 18px; }
+.acg .bestie:empty { display: none; }
+.acg .bform { border: 2px solid var(--dark); border-radius: 22px; padding: 18px 16px; background: var(--lav-light); }
+.acg .bform label { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 8px; color: var(--dark); }
+.acg .bform input, .acg .bform select { color: var(--dark); }
+.acg .bform .err { font-size: 13.5px; font-weight: 700; margin-top: 10px; }
+.acg .bhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 6px 0 4px; }
+.acg .bhead b { font-family: var(--poppins); font-weight: 800; font-size: 16px; }
+.acg .duo { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.acg .duo > span { font-size: 13.5px; line-height: 1.4; border: 1.5px solid var(--dark); border-radius: 12px; padding: 7px 10px; background: var(--pink-light); }
+.acg .duo > span.b { background: var(--lav-light); }
+.acg .duo b { font-family: var(--poppins); font-weight: 800; margin-right: 4px; }
+.acg .shareimg { display: block; width: 100%; max-width: 300px; margin: 16px auto 0; border: 2px solid var(--dark); border-radius: 18px; }
+.acg .sharebtns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.acg .locked { margin-top: 34px; border: 2px solid var(--dark); border-radius: 22px; padding: 22px 18px 24px; background: var(--pink-bg); box-shadow: 5px 5px 0 var(--lav); }
+.acg .unlock { list-style: none; padding: 0; margin: 16px 0 20px; display: grid; gap: 8px; }
+.acg .unlock li { position: relative; padding: 10px 12px 10px 40px; border: 1.5px solid var(--dark); border-radius: 14px; background: #fff; font-size: 14.5px; font-weight: 700; line-height: 1.4; }
+.acg .unlock li::before { content: "✦"; position: absolute; left: 14px; top: 9px; color: var(--pink); font-size: 16px; }
+.acg .lockcard { background: var(--lav-light); border-style: dashed; }
+.acg .lockchip { background: var(--lav-light); }
+.acg.free .closing { display: none; }
+.acg .freeonly { display: none; }
+.acg.free .freeonly { display: block; }
+.acg.free { padding-bottom: 56px; }

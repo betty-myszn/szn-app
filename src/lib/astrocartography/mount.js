@@ -2,16 +2,17 @@
 // gestures + an SVG viewBox and that is simpler to keep smooth outside React's render cycle.
 // mountPowerPlaces(root, chart) draws everything into root and returns a cleanup function.
 import { computeLines, distanceKm, PLANETS, ANGLES } from "./engine";
-import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES } from "./content";
+import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY } from "./content";
 import { LAND } from "./land";
 
 const TEMPLATE = `<section class="hero">
   <div class="wrap">
-    <a class="back" href="/dashboard">← back to my szn</a>
+    <a class="back members" href="/dashboard">← back to my szn</a>
     <div class="tag" style="margin-top:18px">astrocartography · your power places</div>
     <h1><span class="holo-text">where in the world you glow.</span></h1>
     <p>The minute you were born, every planet was rising, setting, overhead or underneath somewhere on earth. Those spots draw lines across the map, and living, travelling or holidaying near a line switches that planet ON in your life. These are YOURS, babe.</p>
     <div class="birth"><span class="dot"></span><span id="birthline"></span></div>
+    <div style="margin-top:14px"><button class="btn" id="shareBtn">📲 share my power places</button></div>
 
     <div class="angles" id="angles"></div>
   </div>
@@ -43,6 +44,7 @@ const TEMPLATE = `<section class="hero">
         <svg id="map" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
           <path id="land" fill="#fff" stroke="#C8B4F8" stroke-width="0.8" vector-effect="non-scaling-stroke"></path>
           <g id="grid"></g>
+          <g id="blines"></g>
           <g id="lines"></g>
           <g id="hits"></g>
           <g id="dots"></g>
@@ -63,12 +65,24 @@ const TEMPLATE = `<section class="hero">
   </div>
 </section>
 
-<section>
+<section class="freeonly">
+  <div class="wrap">
+    <div class="locked">
+      <div class="tag">the full map</div>
+      <h2 class="h2" style="margin-top:8px">unlock <span class="holo-text">every place.</span></h2>
+      <p class="lede">You just saw your top three. Your full power places live inside The Bad B*tch Coven, redrawn for every place you live, visit or dream about.</p>
+      <ul class="unlock" id="unlockList"></ul>
+      <a class="btn" id="joinBtn" href="/baddie-coven">join the coven</a>
+    </div>
+  </div>
+</section>
+
+<section class="members">
   <div class="wrap">
     <div class="block">
-      <div class="tag">check any city</div>
+      <div class="tag">where you are right now</div>
       <h2 class="h2" style="margin-top:8px">what's live where you are.</h2>
-      <p class="lede">Type where you live now, where you were born or where you are booking next, and see exactly which planets you are standing on.</p>
+      <p class="lede">Tap where you are, or type any town in the world. You get the planets you are standing on there, and your whole chart redrawn as if you lived there.</p>
     </div>
     <div class="checker">
       <div class="top">
@@ -79,11 +93,35 @@ const TEMPLATE = `<section class="hero">
         <div class="quick" id="quick"></div>
       </div>
       <div class="result" id="result"></div>
+      <div class="reloc" id="reloc"></div>
     </div>
   </div>
 </section>
 
-<section>
+<section class="members">
+  <div class="wrap">
+    <div class="block">
+      <div class="tag">timing</div>
+      <h2 class="h2" style="margin-top:8px">when your lines <span class="holo-text">light up.</span></h2>
+      <p class="lede">When a slow planet touches one of your planets, every line that planet draws switches ON for a while, wherever it runs. These are your windows for the next year.</p>
+    </div>
+    <div class="timing" id="timing"></div>
+  </div>
+</section>
+
+<section class="members">
+  <div class="wrap">
+    <div class="block">
+      <div class="tag">girls' trip planner</div>
+      <h2 class="h2" style="margin-top:8px">where you glow <span class="holo-text">together.</span></h2>
+      <p class="lede">Add your bestie's birth details and we find the places that light up BOTH of your charts, so the trip is magic for each of you.</p>
+    </div>
+    <div class="bestie" id="bestieSlot"></div>
+    <div class="cards" id="bestieOut"></div>
+  </div>
+</section>
+
+<section class="members">
   <div class="wrap">
     <div class="block">
       <div class="tag">your lines, decoded</div>
@@ -95,7 +133,7 @@ const TEMPLATE = `<section class="hero">
   </div>
 </section>
 
-<section>
+<section class="members">
   <div class="wrap">
     <div class="block">
       <div class="tag">go with intention</div>
@@ -106,7 +144,7 @@ const TEMPLATE = `<section class="hero">
   </div>
 </section>
 
-<section class="closing">
+<section class="closing members">
   <div class="wrap">
     <div class="closegrid">
       <div class="white">
@@ -129,11 +167,18 @@ const TEMPLATE = `<section class="hero">
   <div id="sheetBody"></div>
 </div>`;
 
-export function mountPowerPlaces(root, chartData) {
+export function mountPowerPlaces(root, chartData, opts = {}) {
   const controller = new AbortController();
   const { signal } = controller;
   root.innerHTML = TEMPLATE;
   const CHART = chartData;
+  // Free mode is the public generator: top three for live, travel, love, money and glow up, the map
+  // and the share card. Everything else is the coven's, and shows as a locked teaser.
+  const FREE = !!opts.free;
+  const JOIN = opts.joinHref || "/baddie-coven";
+  const FREE_GOALS = new Set(["love", "money", "glow"]);
+  const TOPN = FREE ? 3 : 5;
+  root.classList.toggle("free", FREE);
 
 const $ = (id) => root.querySelector("#" + id);
 const NS = "http://www.w3.org/2000/svg";
@@ -161,17 +206,34 @@ const strength = (d) => (d < 150 ? ["right on it", "s3"] : d < 400 ? ["strong", 
 const km = (d) => (d < 10 ? "on the line" : `${Math.round(d / 10) * 10}km`);
 const lineName = (key) => { const [p, a] = key.split("|"); return `${GLYPH[p]} ${p} ${a}`; };
 
+// Towns she looked up that aren't in the city list (or where she is right now). Kept out of the
+// rankings so a one-off search never becomes a "top pick", and remembered on this device.
+let extras = [];
+const hitsAt = (lat, lon, ls = lines) => ls.map((l) => ({ key: keyOf(l), line: l, d: distanceKm(l, lat, lon) })).filter((h) => h.d < 1000).sort((a, b) => a.d - b.d);
+function addExtra(c) {
+  const x = { name: c.name, country: c.country || "", lat: +c.lat, lon: +c.lon, extra: true };
+  x.hits = hitsAt(x.lat, x.lon);
+  extras = [x, ...extras.filter((e) => e.name !== x.name)].slice(0, 6);
+  try { localStorage.setItem("szn_place_extra", JSON.stringify(extras.map(({ name, country, lat, lon }) => ({ name, country, lat, lon })))); } catch (e) {}
+  return x;
+}
+try { JSON.parse(localStorage.getItem("szn_place_extra") || "[]").reverse().forEach(addExtra); } catch (e) {}
+const findCity = (name) => cities.find((c) => c.name === name) || extras.find((c) => c.name === name);
+const natalPlanets = CHART.planets.filter((p) => PLANETS.includes(p.name)).map((p) => ({ name: p.name, longitude: p.longitude, house: p.house }));
+const ord = (n) => n + (n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th");
+const britishDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return `${ord(d)} of ${new Date(Date.UTC(y, m - 1, 1)).toLocaleString("en-GB", { month: "long", timeZone: "UTC" })} ${y}`; };
+const signOf = (lon) => SIGNS[Math.floor((((lon % 360) + 360) % 360) / 30)];
+
 // ── state ──
 const S = { tab: "live", goal: "love", planet: "Venus", focus: null, city: null };
 try { const saved = localStorage.getItem("szn_place_city"); if (saved) S.city = saved; } catch (e) {}
-if (!S.city || !cities.some((c) => c.name === S.city)) S.city = "London";
+if (!S.city || !findCity(S.city)) S.city = "London";
 
-const weights = () => SCORES[S.tab === "activate" ? S.goal : S.tab];
-function ranked() {
-  const W = weights();
+const weights = () => (S.trip ? SCORES.travel : SCORES[S.tab === "activate" ? S.goal : S.tab]);
+function ranked(W = weights(), n = TOPN) {
   const scored = cities.map((c) => ({ c, score: c.hits.reduce((s, h) => s + (W[h.key] || 0) * prox(h.d), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
   const out = [];
-  for (const r of scored) { if (out.some((o) => gcKm(o.c, r.c) < 700)) continue; out.push(r); if (out.length === 5) break; }
+  for (const r of scored) { if (out.some((o) => gcKm(o.c, r.c) < 700)) continue; out.push(r); if (out.length === n) break; }
   return out;
 }
 
@@ -193,7 +255,6 @@ const GOAL_LEDE = {
 };
 
 // ── hero ──
-const ord = (n) => n + (n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th");
 (() => {
   const [y, m, d] = birth.dateOfBirth.split("-").map(Number);
   const [hh, mm] = birth.birthTime.split(":").map(Number);
@@ -212,21 +273,27 @@ $("angles").innerHTML = [
 ].map(([a, l, w, dash]) => `<div class="angle"><svg width="34" height="10"><line x1="2" y1="5" x2="32" y2="5" stroke="#FF2D87" stroke-width="3" ${dash ? 'stroke-dasharray="2 5"' : ""} stroke-linecap="round"/></svg><b>${a} · ${l}</b><span>${w}</span></div>`).join("");
 
 // ── tabs + goals ──
-$("goals").innerHTML = GOALS.map((g) => `<button class="chip" data-goal="${g.id}" aria-pressed="${g.id === S.goal}">${g.emoji} ${g.label}</button>`).join("");
-root.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => { S.tab = b.dataset.tab; S.focus = null; renderTab(true); }));
-$("goals").addEventListener("click", (e) => { const b = e.target.closest("[data-goal]"); if (!b) return; S.goal = b.dataset.goal; S.focus = null; renderTab(true); b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" }); });
+$("goals").innerHTML = GOALS.map((g) => FREE && !FREE_GOALS.has(g.id)
+  ? `<button class="chip lockchip" data-join="1">🔒 ${g.label}</button>`
+  : `<button class="chip" data-goal="${g.id}" aria-pressed="${g.id === S.goal}">${g.emoji} ${g.label}</button>`).join("");
+root.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => { S.tab = b.dataset.tab; S.focus = null; S.trip = false; renderTab(true); }));
+$("goals").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-goal]"); if (!b) return; S.goal = b.dataset.goal; S.focus = null; renderTab(true); b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" }); });
 
 let current = [];
 function renderTab(fly) {
-  root.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === S.tab)));
-  $("goals").hidden = S.tab !== "activate";
+  root.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-selected", String(!S.trip && b.dataset.tab === S.tab)));
+  $("goals").hidden = S.trip || S.tab !== "activate";
+  const trip = S.trip && bestie;
+  $("blines").style.display = trip ? "" : "none";
+  const bl = root.querySelector(".legend .bl"); if (bl) bl.hidden = !trip;
   $("goals").querySelectorAll(".chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.goal === S.goal)));
   const goal = GOALS.find((g) => g.id === S.goal);
-  const copy = S.tab === "activate" ? { tag: `go here to activate · ${goal.label}`, head: `where to go ${goal.head}.`, lede: GOAL_LEDE[S.goal] } : TAB_COPY[S.tab];
+  const copy = trip ? { tag: "girls' trip planner", head: `your trip with ${bestie.name}, MAPPED.`, lede: `Pink and black are your lines, purple are ${bestie.name}'s. The pins are the places that light you BOTH up. Tap live, travel or activate to go back to just you.` }
+    : S.tab === "activate" ? { tag: `go here to activate · ${goal.label}`, head: `where to go ${goal.head}.`, lede: GOAL_LEDE[S.goal] } : TAB_COPY[S.tab];
   $("tabTag").textContent = copy.tag;
-  $("tabHead").innerHTML = copy.head.replace(/([A-Z]{2,})/g, '<span class="holo-text">$1</span>');
+  $("tabHead").innerHTML = esc(copy.head).replace(/([A-Z]{2,})/g, '<span class="holo-text">$1</span>');
   $("tabLede").textContent = copy.lede;
-  current = ranked();
+  current = trip ? bestie.top.map((r) => ({ c: r.c, score: r.score })) : ranked();
   renderCards();
   styleLines();
   drawPins();
@@ -251,9 +318,9 @@ function renderCards() {
         <h3>${esc(r.c.name)}</h3><div class="country">${esc(r.c.country)} · ${esc(READINGS[lead.key].nick)}</div>
         <p>${esc(text)}</p><span class="pills">${pills}</span><span class="more">read it →</span>
       </span></button>`;
-  }).join("") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
+  }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus all ten goals, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
 }
-$("cards").addEventListener("click", (e) => { const b = e.target.closest("[data-city]"); if (b) openCity(b.dataset.city); });
+$("cards").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-city]"); if (b) openCity(b.dataset.city); });
 
 // ── map ──
 const svg = $("map"), box = $("mapbox");
@@ -361,6 +428,7 @@ let region = "top";
 $("regions").innerHTML = REGIONS.map(([id, label]) => `<button class="region" data-region="${id}" aria-pressed="${id === region}">${label}</button>`).join("");
 $("regions").addEventListener("click", (e) => { const b = e.target.closest("[data-region]"); if (b) { S.focus = null; styleLines(); setRegion(b.dataset.region, true); } });
 function setRegion(id, fly) {
+  if (id !== "top" && !REGION_BOX[id]) { apply(); return; } // a custom view (after "show it on my map"): keep it, just re-fit the box
   region = id;
   $("regions").querySelectorAll(".region").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.region === id)));
   let t;
@@ -493,23 +561,81 @@ window.addEventListener("resize", () => setRegion(region, false), { signal });
 // ── city checker ──
 const q = $("q"), sug = $("suggest");
 function renderResult() {
-  const c = cities.find((x) => x.name === S.city); if (!c) return;
+  if (FREE) return;
+  const c = findCity(S.city); if (!c) return;
   const hits = c.hits.filter((h) => h.d < 900);
-  $("quick").innerHTML = [...new Set(["London", birth.location.city, current[0] && current[0].c.name].filter(Boolean))].map((n) => `<button class="chip" data-pick="${esc(n)}" aria-pressed="${n === S.city}">${esc(n)}</button>`).join("");
+  $("quick").innerHTML = `<button class="chip" data-locate="1">📍 where I am</button>` + [...new Set(["London", birth.location.city, current[0] && current[0].c.name].filter(Boolean))].map((n) => `<button class="chip" data-pick="${esc(n)}" aria-pressed="${n === S.city}">${esc(n)}</button>`).join("");
   $("result").innerHTML = `<div class="tag">${esc(c.country)}${c.birth ? " · where you were born" : ""}</div><h3>${esc(c.name)}</h3>` + (hits.length
     ? hits.map((h) => { const [lab, cls] = strength(h.d); const r = READINGS[h.key]; return `<div class="hitrow"><div class="hithead"><b>${lineName(h.key)} · ${esc(r.nick)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p>${esc(r.full)}</p></div>`; }).join("")
     : `<p class="lede">No lines run within 900km of ${esc(c.name)}, which makes it a calm, neutral place for you: lovely for a steady everyday life where your natal chart does the talking.</p>`);
+  renderReloc(c);
+}
+
+// Her birth moment redrawn for this place: same planets, new houses.
+const relocCache = {};
+async function renderReloc(c) {
+  const el = $("reloc"); if (FREE) return;
+  const key = `${c.lat.toFixed(2)},${c.lon.toFixed(2)}`;
+  if (!relocCache[key]) el.innerHTML = `<div class="tag">your chart if you lived in ${esc(c.name)}</div><p class="lede">redrawing your chart…</p>`;
+  try {
+    relocCache[key] = relocCache[key] || fetch("/api/power-places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "relocate", julianDay: CHART.julianDay, lat: c.lat, lon: c.lon, planets: natalPlanets }) }).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+    const r = await relocCache[key];
+    if (S.city !== c.name) return;
+    const moved = r.planets.filter((p) => p.natalHouse && p.house !== p.natalHouse);
+    const same = r.planets.filter((p) => p.natalHouse && p.house === p.natalHouse);
+    const rise = signOf(r.ascendant), natalRise = signOf(CHART.ascendant), mc = signOf(r.mc);
+    el.innerHTML = `<div class="tag">your chart if you lived in ${esc(c.name)}</div>
+      <div class="relhead"><div><small>rising</small><b>${rise}</b>${rise !== natalRise ? `<span>was ${natalRise}</span>` : "<span>same as birth</span>"}</div><div><small>top of your chart</small><b>${mc}</b><span>how you are seen at work</span></div></div>
+      ${moved.length ? `<div class="moves">${moved.map((p) => `<div class="mv"><span class="g">${GLYPH[p.name]}</span><div><b>${p.name} moves into your ${ord(p.house)} house</b><p>from your ${ord(p.natalHouse)}. Here it runs ${HOUSE_MEANING[p.house]}.</p></div></div>`).join("")}</div>` : ""}
+      <p class="lede" style="font-size:14px">${moved.length ? (same.length ? `${same.map((p) => p.name).join(", ")} ${same.length === 1 ? "stays" : "stay"} in the same ${same.length === 1 ? "house" : "houses"} as your birth chart.` : "Every planet changes house here, so life would feel like a whole new chart.") : "Every planet stays in the same house here, so this place feels like your birth chart turned up."}</p>`;
+  } catch (e) { delete relocCache[key]; el.innerHTML = ""; }
+}
+
+function locate() {
+  const btn = $("quick").querySelector("[data-locate]");
+  if (!navigator.geolocation) { $("result").insertAdjacentHTML("afterbegin", `<p class="lede">Your browser can't share your location, so type your town instead.</p>`); return; }
+  if (btn) btn.textContent = "finding you…";
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    const near = cities.map((c) => ({ c, d: gcKm(c, { lat, lon }) })).sort((a, b) => a.d - b.d)[0];
+    if (near && near.d < 40) { pickCity(near.c.name); return; }
+    addExtra({ name: "where you are now", country: near ? `near ${near.c.name}` : "", lat, lon });
+    pickCity("where you are now");
+  }, () => {
+    if (btn) btn.textContent = "📍 where I am";
+    $("result").insertAdjacentHTML("afterbegin", `<p class="lede" style="margin:0 0 12px"><b>Location is switched off for this site.</b> Type your town in the search instead.</p>`);
+  }, { timeout: 12000, maximumAge: 600000 });
 }
 function pickCity(name) { S.city = name; try { localStorage.setItem("szn_place_city", name); } catch (e) {} q.value = ""; sug.hidden = true; renderResult(); }
 q.addEventListener("input", () => {
   const v = q.value.trim().toLowerCase();
   if (!v) { sug.hidden = true; return; }
   const m = cities.filter((c) => c.name.toLowerCase().includes(v) || c.country.toLowerCase().includes(v)).sort((a, b) => a.name.toLowerCase().indexOf(v) - b.name.toLowerCase().indexOf(v)).slice(0, 8);
-  sug.innerHTML = m.length ? m.map((c) => `<button data-pick="${esc(c.name)}">${esc(c.name)}<span>${esc(c.country)}</span></button>`).join("") : `<button disabled>we don't have that one yet, try the nearest big city</button>`;
+  const local = m.map((c) => `<button data-pick="${esc(c.name)}">${esc(c.name)}<span>${esc(c.country)}</span></button>`).join("");
+  sug.innerHTML = local || `<button disabled>${v.length >= 3 ? "searching the world…" : "keep typing…"}</button>`;
   sug.hidden = false;
+  // Any town on earth: ask the place search for anything the built-in list doesn't have.
+  clearTimeout(gnTimer);
+  if (v.length >= 3 && m.length < 4) gnTimer = setTimeout(async () => {
+    const seq = ++gnSeq;
+    try {
+      const j = await fetch(`/api/geonames?q=${encodeURIComponent(q.value.trim())}`).then((r) => r.json());
+      if (seq !== gnSeq || sug.hidden) return;
+      const more = (j.geonames || []).filter((g) => g.lat && g.lng && !m.some((c) => c.name === g.name)).slice(0, 6)
+        .map((g) => `<button data-geo="${esc(JSON.stringify({ name: g.name, country: g.countryName || "", lat: +g.lat, lon: +g.lng }))}">${esc(g.name)}<span>${esc([g.adminName1, g.countryName].filter(Boolean).join(", "))}</span></button>`).join("");
+      sug.innerHTML = local + more || `<button disabled>no match, try the nearest big city</button>`;
+    } catch (e) { if (!local) sug.innerHTML = `<button disabled>no match, try the nearest big city</button>`; }
+  }, 280);
 });
-q.addEventListener("keydown", (e) => { if (e.key === "Enter") { const b = sug.querySelector("[data-pick]"); if (b) pickCity(b.dataset.pick); } if (e.key === "Escape") sug.hidden = true; });
-document.addEventListener("click", (e) => { const b = e.target.closest("#suggest [data-pick], #quick [data-pick]"); if (b) pickCity(b.dataset.pick); else if (!e.target.closest(".search")) sug.hidden = true; }, { signal });
+let gnTimer = 0, gnSeq = 0;
+q.addEventListener("keydown", (e) => { if (e.key === "Enter") { const b = sug.querySelector("[data-pick], [data-geo]"); if (b) b.click(); } if (e.key === "Escape") sug.hidden = true; });
+document.addEventListener("click", (e) => {
+  if (!root.contains(e.target)) return;
+  const g = e.target.closest("#suggest [data-geo]");
+  if (g) { const x = JSON.parse(g.dataset.geo); if (!cities.some((c) => c.name === x.name)) addExtra(x); pickCity(x.name); return; }
+  if (e.target.closest("#quick [data-locate]")) { locate(); return; }
+  const b = e.target.closest("#suggest [data-pick], #quick [data-pick]"); if (b) pickCity(b.dataset.pick); else if (!e.target.closest(".search")) sug.hidden = true;
+}, { signal });
 
 // ── planet decoder ──
 $("planets").innerHTML = PLANETS.map((p) => `<button class="pbtn" data-planet="${p}" aria-pressed="${p === S.planet}"><span class="g">${GLYPH[p]}</span><small>${p}</small></button>`).join("");
@@ -548,7 +674,7 @@ function closeSheet() { $("sheet").classList.remove("on"); $("backdrop").classLi
 $("close").addEventListener("click", closeSheet); $("backdrop").addEventListener("click", closeSheet);
 window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet(); }, { signal });
 function openCity(name) {
-  const c = cities.find((x) => x.name === name); if (!c) return;
+  const c = findCity(name); if (!c) return;
   const W = weights();
   const hits = c.hits.filter((h) => h.d < 900);
   const lead = hits.slice().sort((a, b) => ((W[b.key] || 0) * prox(b.d)) - ((W[a.key] || 0) * prox(a.d)))[0];
@@ -571,21 +697,161 @@ $("sheetBody").addEventListener("click", (e) => {
   if (fc || fl) {
     closeSheet();
     $("mapbox").scrollIntoView({ behavior: "smooth", block: "center" });
-    if (fc) { const c = cities.find((x) => x.name === fc.dataset.flyCity); S.focus = null; styleLines(); flyTo(fit(c.lon - 14, c.lon + 14, c.lat - 9, c.lat + 9), 800); }
+    if (fc) { const c = findCity(fc.dataset.flyCity); S.focus = null; styleLines(); flyTo(fit(c.lon - 14, c.lon + 14, c.lat - 9, c.lat + 9), 800); }
     else { S.focus = fl.dataset.flyLine; styleLines(); const on = citiesOn(S.focus, 400)[0]; const l = lineByKey[S.focus]; if (on) flyTo(fit(on.c.lon - 22, on.c.lon + 22, on.c.lat - 14, on.c.lat + 14), 800); else if (l.kind === "meridian") flyTo(fit(l.lon - 30, l.lon + 30, -40, 65), 800); else flyTo(fit(...REGION_BOX.world), 800); }
     regionOff();
   }
 });
 function regionOff() { region = "none"; $("regions").querySelectorAll(".region").forEach((b) => b.setAttribute("aria-pressed", "false")); }
 
+// ── timing: when the slow planets switch her lines on ──
+async function loadTiming() {
+  const el = $("timing");
+  el.innerHTML = `<p class="lede">reading the sky for the next year…</p>`;
+  try {
+    const j = await fetch("/api/power-places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "timing", planets: natalPlanets }), signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+    const today = j.today;
+    const ws = j.windows.slice().sort((a, b) => (a.start <= today ? 0 : 1) - (b.start <= today ? 0 : 1) || a.start.localeCompare(b.start)).slice(0, 4);
+    el.innerHTML = ws.map((w) => {
+      const now = w.start <= today;
+      const when = now ? `on now · until the ${britishDate(w.end)}` : `${britishDate(w.start)} to ${britishDate(w.end)}`;
+      const seen = new Set();
+      const near = cities.flatMap((c) => c.hits.filter((h) => h.line.planet === w.natal && h.d < 350).map((h) => ({ c, h }))).sort((a, b) => a.h.d - b.h.d).filter((x) => !seen.has(x.c) && seen.add(x.c)).slice(0, 4);
+      return `<div class="tcard${now ? " now" : ""}">
+        <div class="when${now ? " holo" : ""}">${when}</div>
+        <h4>${GLYPH[w.transit]} ${w.transit} ${ASPECT_WORD[w.aspect]} your ${GLYPH[w.natal]} ${w.natal}</h4>
+        <p>${esc(TRANSIT_COPY[w.transit](w.natal, PLANET_WORD[w.natal]))}</p>
+        ${near.length ? `<div class="pills">${near.map((x) => `<button class="pill ${GIFT.has(w.natal) ? "gift" : "grow"}" data-open-city="${esc(x.c.name)}">${esc(x.c.name)} · ${x.h.line.angle}</button>`).join("")}</div>` : `<p class="runs">Your ${w.natal} lines mostly run over ocean, so read this one for wherever you are.</p>`}
+      </div>`;
+    }).join("") || `<p class="lede">No big contacts to your planets in the next year, so your map reads exactly as it is drawn.</p>`;
+  } catch (e) { if (!signal.aborted) el.innerHTML = `<p class="lede">The sky reading didn't load, refresh the page to try again.</p>`; }
+}
+$("timing").addEventListener("click", (e) => { const b = e.target.closest("[data-open-city]"); if (b) openCity(b.dataset.openCity); });
+
+// ── girls' trip planner: places that light up both charts ──
+let bestie = null;
+function setBestie(chart, name) {
+  $("blines").innerHTML = "";
+  root.querySelector(".legend .bl")?.remove();
+  if (!chart) { bestie = null; $("bestieOut").innerHTML = ""; if (S.trip) { S.trip = false; renderTab(false); } return; }
+  const bl = computeLines(chart.julianDay, chart.planets);
+  const W = SCORES.travel;
+  const hits = new Map(cities.map((c) => [c, hitsAt(c.lat, c.lon, bl)]));
+  const sc = (hs) => hs.reduce((t, h) => t + (W[h.key] || 0) * prox(h.d), 0);
+  const scored = cities.map((c) => { const a = sc(c.hits), b = sc(hits.get(c)); return { c, a, b, score: a > 0 && b > 0 ? Math.sqrt(a * b) : 0 }; }).filter((r) => r.score > 0.3).sort((x, y) => y.score - x.score);
+  const top = [];
+  for (const r of scored) { if (top.some((o) => gcKm(o.c, r.c) < 700)) continue; top.push(r); if (top.length === 5) break; }
+  bestie = { name: name || "your bestie", lines: bl, hits, top };
+  const lead = (hs) => hs.filter((h) => (W[h.key] || 0) > 0).sort((x, y) => W[y.key] * prox(y.d) - W[x.key] * prox(x.d))[0];
+  const nm = esc(bestie.name);
+  $("bestieOut").innerHTML = top.length ? `<div class="bhead"><b>your trip, for you + ${nm}</b><button class="region" id="bestieMap">show ${nm}'s lines on the map</button></div>` + top.map((r, i) => {
+    const a = lead(r.c.hits), b = lead(hits.get(r.c));
+    return `<button class="card ${i === 0 ? "top" : ""}" data-bcity="${esc(r.c.name)}">
+      ${i === 0 ? '<span class="acg-sticker">your trip</span>' : ""}
+      <span class="rank ${i === 0 ? "holo" : ""}">${i + 1}</span>
+      <span style="display:block;min-width:0"><h3>${esc(r.c.name)}</h3>${r.c.country !== r.c.name ? `<div class="country">${esc(r.c.country)}</div>` : ""}
+        <span class="duo"><span><b>you</b> ${GLYPH[a.line.planet]} ${a.line.planet} ${a.line.angle} · ${esc(READINGS[a.key].nick)}</span><span class="b"><b>${nm}</b> ${GLYPH[b.line.planet]} ${b.line.planet} ${b.line.angle} · ${esc(READINGS[b.key].nick)}</span></span>
+        <span class="more">read it →</span></span></button>`;
+  }).join("") : `<p class="lede">Your charts pull in different directions, so there is no city that lights you both up strongly. Pick from your own travel list and hers and meet in the middle.</p>`;
+  // her lines in lavender, only the ones behind your shared top five
+  const rel = new Set(top.flatMap((r) => hits.get(r.c).filter((h) => (W[h.key] || 0) > 0 && h.d < 900).map((h) => h.key)));
+  let g = "";
+  for (const l of bl) { if (!rel.has(keyOf(l))) continue; const d = pathOf(l); for (const o of OFFS) g += `<path d="${d}" ${o ? `transform="translate(${o} 0)"` : ""} fill="none" stroke="#9C72FC" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke" ${l.angle === "IC" || l.angle === "DSC" ? 'stroke-dasharray="2 5"' : ""}/>`; }
+  $("blines").innerHTML = g;
+  $("blines").style.display = "none";
+  root.querySelector(".legend").insertAdjacentHTML("beforeend", `<span class="bl" hidden><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#9C72FC" stroke-width="3" stroke-linecap="round"/></svg>${nm}'s lines</span>`);
+}
+$("bestieOut").addEventListener("click", (e) => {
+  if (!bestie) return;
+  if (e.target.closest("#bestieMap")) {
+    S.trip = true; S.focus = null; renderTab(true);
+    $("tabsbar").scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  const b = e.target.closest("[data-bcity]"); if (!b) return;
+  const c = findCity(b.dataset.bcity), W = SCORES.travel, nm = esc(bestie.name);
+  const rows = (hs, who) => hs.filter((h) => h.d < 900 && (W[h.key] || 0) > 0).slice(0, 3).map((h) => { const [lab, cls] = strength(h.d); return `<div class="hitrow"><div class="hithead"><b>${who} · ${lineName(h.key)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p style="font-family:var(--font-poppins),Poppins,sans-serif;font-weight:800;font-size:15px">${esc(READINGS[h.key].nick)}</p><p>${esc(READINGS[h.key].short)}</p></div>`; }).join("");
+  openSheet(`<div class="tag">${esc(c.country)} · your trip together</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>${rows(c.hits, "you")}${rows(bestie.hits.get(c), nm)}`);
+});
+
+// ── share card: a story-sized image of her no.1 places ──
+const SHARE_GOALS = [["💘", "love", "love"], ["💸", "money", "money"], ["✨", "glow up", "glow"], ["🏡", "home", "live"]];
+async function drawCard() {
+  const fam = (getComputedStyle(root).getPropertyValue("--font-poppins").trim() || "Poppins") + ", Poppins, sans-serif";
+  try { await Promise.all([document.fonts.load(`800 60px ${fam}`), document.fonts.load(`700 30px ${fam}`)]); } catch (e) {}
+  const cv = document.createElement("canvas"); cv.width = 1080; cv.height = 1920;
+  const x = cv.getContext("2d");
+  const rr = (X0, Y0, w, h, r) => { x.beginPath(); x.roundRect(X0, Y0, w, h, r); };
+  x.fillStyle = "#FFF0F7"; x.fillRect(0, 0, 1080, 1920);
+  const picks = SHARE_GOALS.map(([e, label, id]) => { const r = ranked(SCORES[id], 1)[0]; if (!r) return null; const W = SCORES[id]; const h = r.c.hits.filter((k) => (W[k.key] || 0) > 0).sort((a, b) => W[b.key] * prox(b.d) - W[a.key] * prox(a.d))[0]; return { e, label, c: r.c, h }; }).filter(Boolean);
+  // map
+  const MX = 60, MY = 500, MW = 960, MH = Math.round(960 * (BOT - TOP) / WW);
+  const rel = new Set(picks.map((p) => p.h.key));
+  let paths = "";
+  for (const l of lines) { const on = rel.has(keyOf(l)); paths += `<path d="${pathOf(l)}" fill="none" stroke="${GIFT.has(l.planet) ? "#FF2D87" : "#1a1a1a"}" stroke-width="${on ? 7 : 2.5}" opacity="${on ? 1 : 0.3}" stroke-linecap="round" ${l.angle === "IC" || l.angle === "DSC" ? 'stroke-dasharray="4 10"' : ""}/>`; }
+  const svgTxt = `<svg xmlns="http://www.w3.org/2000/svg" width="${MW * 2}" height="${MH * 2}" viewBox="0 ${TOP} ${WW} ${BOT - TOP}"><rect x="0" y="${TOP}" width="${WW}" height="${BOT - TOP}" fill="#F1EBFF"/><path d="${LAND}" fill="#fff" stroke="#C8B4F8" stroke-width="2"/>${paths}</svg>`;
+  const url = URL.createObjectURL(new Blob([svgTxt], { type: "image/svg+xml" }));
+  try { const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; }); x.save(); rr(MX, MY, MW, MH, 28); x.clip(); x.drawImage(img, MX, MY, MW, MH); x.restore(); } finally { URL.revokeObjectURL(url); }
+  x.lineWidth = 5; x.strokeStyle = "#1a1a1a"; rr(MX, MY, MW, MH, 28); x.stroke();
+  picks.forEach((p, i) => { const px = MX + (p.c.lon + 180) / 360 * MW, py = MY + (Y(p.c.lat) - TOP) / (BOT - TOP) * MH; x.beginPath(); x.arc(px, py, 22, 0, Math.PI * 2); x.fillStyle = i === 0 ? "#FF2D87" : "#fff"; x.fill(); x.lineWidth = 4; x.stroke(); x.fillStyle = "#1a1a1a"; x.font = `800 22px ${fam}`; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(String(i + 1), px, py + 1); });
+  // title
+  const first = (birth.name || "").trim().split(/\s+/)[0];
+  x.textAlign = "left"; x.textBaseline = "alphabetic";
+  x.fillStyle = "#FF2D87"; x.font = `700 32px ${fam}`; x.fillText((first ? `${first}'s power places` : "my power places").toUpperCase(), 64, 150);
+  x.fillStyle = "#1a1a1a"; x.font = `800 112px ${fam}`; x.fillText("where in the", 58, 280); x.fillText("world i ", 58, 400);
+  const w1 = x.measureText("world i ").width; x.fillStyle = "#FF2D87"; x.fillText("glow.", 58 + w1, 400);
+  // rows
+  picks.forEach((p, i) => {
+    const y0 = MY + MH + 50 + i * 196, h = 166;
+    if (i === 0) { x.fillStyle = "#FF2D87"; rr(72, y0 + 12, 948, h, 30); x.fill(); }
+    x.fillStyle = "#fff"; rr(60, y0, 948, h, 30); x.fill(); x.lineWidth = 4; x.strokeStyle = "#1a1a1a"; x.stroke();
+    x.beginPath(); x.arc(140, y0 + h / 2, 44, 0, Math.PI * 2); x.fillStyle = i === 0 ? "#FF2D87" : "#fff"; x.fill(); x.stroke();
+    x.fillStyle = "#1a1a1a"; x.textAlign = "center"; x.textBaseline = "middle"; x.font = `800 40px ${fam}`; x.fillText(String(i + 1), 140, y0 + h / 2 + 2);
+    x.textAlign = "left"; x.textBaseline = "alphabetic";
+    x.fillStyle = "#FF2D87"; x.font = `700 28px ${fam}`; x.fillText(`${p.e}  ${p.label.toUpperCase()}`, 214, y0 + 56);
+    x.fillStyle = "#1a1a1a"; let fs = 60; x.font = `800 ${fs}px ${fam}`; while (x.measureText(p.c.name).width > 760 && fs > 36) { fs -= 4; x.font = `800 ${fs}px ${fam}`; } x.fillText(p.c.name, 212, y0 + 120);
+    x.font = `700 26px ${fam}`; x.textAlign = "right"; x.fillText(`${p.h.line.planet} ${p.h.line.angle}`, 978, y0 + 56); x.textAlign = "left";
+  });
+  x.fillStyle = "#1a1a1a"; x.textAlign = "center"; x.font = `700 32px ${fam}`; x.fillText("find yours free at itsmyszn.com/power-places", 540, 1850);
+  return new Promise((res) => cv.toBlob(res, "image/png"));
+}
+let shareUrl = null;
+async function openShare() {
+  openSheet(`<div class="tag">share it</div><h2><span class="holo-text">your power places.</span></h2><div class="sharewrap" id="sharewrap"><p class="lede">making your card…</p></div>`);
+  try {
+    const blob = await drawCard();
+    if (shareUrl) URL.revokeObjectURL(shareUrl);
+    shareUrl = URL.createObjectURL(blob);
+    const file = new File([blob], "my-power-places.png", { type: "image/png" });
+    const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+    const wrap = root.querySelector("#sharewrap"); if (!wrap) return;
+    wrap.innerHTML = `<img class="shareimg" src="${shareUrl}" alt="your power places card"><div class="sharebtns">${canShare ? `<button class="btn" id="doShare">share to stories</button>` : ""}<a class="btn ${canShare ? "ghost" : ""}" href="${shareUrl}" download="my-power-places.png">save the image</a></div>`;
+    wrap.querySelector("#doShare")?.addEventListener("click", () => navigator.share({ files: [file], title: "my power places" }).catch(() => {}));
+  } catch (e) { const wrap = root.querySelector("#sharewrap"); if (wrap) wrap.innerHTML = `<p class="lede">The card didn't draw this time, try again in a sec.</p>`; }
+}
+$("shareBtn").addEventListener("click", openShare);
+
+// ── free mode: the join ──
+const UNLOCKS = ["all ten goals, from self-love and money to realisations and your next level", "your full top five for every goal, with every reading", "any town in the world checked against your lines", "your whole chart redrawn for anywhere you live", "when each of your lines lights up this year", "a girls' trip planner with your bestie's chart"];
+$("unlockList").innerHTML = UNLOCKS.map((u) => `<li>${u}</li>`).join("");
+$("joinBtn").setAttribute("href", JOIN);
+function openJoin() {
+  openSheet(`<div class="tag">the full map</div><h2><span class="holo-text">unlock every place.</span></h2><div class="hook holo">Your full power places live inside The Bad B*tch Coven.</div><ul class="unlock">${UNLOCKS.map((u) => `<li>${u}</li>`).join("")}</ul><a class="btn" href="${JOIN}">join the coven</a>`);
+}
+if (FREE) root.querySelectorAll(".members").forEach((n) => n.remove());
+
 // go
 renderTab(false);
-renderResult();
-renderDecode();
+if (!FREE) { renderResult(); renderDecode(); loadTiming(); }
 
-  return () => {
+  const cleanup = () => {
     controller.abort();
     document.body.style.overflow = "";
+    if (shareUrl) URL.revokeObjectURL(shareUrl);
+    root.classList.remove("free");
     root.innerHTML = "";
   };
+  cleanup.setBestie = setBestie;
+  cleanup.bestieSlot = FREE ? null : $("bestieSlot");
+  return cleanup;
 }

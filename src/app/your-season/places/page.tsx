@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useMember } from "@/lib/use-member";
 import { useChart } from "@/lib/use-chart";
 import { mountPowerPlaces } from "@/lib/astrocartography/mount";
+import BestieForm from "./BestieForm";
 import "./places.css";
+
+type Mounted = (() => void) & { setBestie?: (chart: unknown, name: string) => void; bestieSlot?: HTMLElement | null };
 
 // Your power places: astrocartography for the member's own chart. Where to live, where to travel and
 // where to go to switch on love, money, career and the rest. Lines are computed in the browser from
@@ -17,13 +21,16 @@ export default function PowerPlacesPage() {
   const { member, ready } = useMember();
   const { chart, loading } = useChart();
   const rootRef = useRef<HTMLDivElement>(null);
+  const [api, setApi] = useState<Mounted | null>(null);
 
   // The chart can arrive while the spinner is still showing, so wait until the container is on the
   // page too (loading/ready/member flip after chart does on some paths).
   const showing = ready && !!member && !loading && !!chart;
   useEffect(() => {
     if (!showing || !chart || !rootRef.current) return;
-    return mountPowerPlaces(rootRef.current, chart);
+    const m = mountPowerPlaces(rootRef.current, chart) as Mounted;
+    setApi(() => m);
+    return () => { setApi(null); m(); };
   }, [showing, chart]);
 
   if (!ready) return null;
@@ -54,5 +61,10 @@ export default function PowerPlacesPage() {
       </section>
     );
   }
-  return <div className="acg" ref={rootRef} />;
+  return (
+    <>
+      <div className="acg" ref={rootRef} />
+      {api?.bestieSlot && createPortal(<BestieForm onChart={(c, n) => api.setBestie?.(c, n)} />, api.bestieSlot)}
+    </>
+  );
 }
