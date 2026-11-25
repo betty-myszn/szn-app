@@ -2,8 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { Band } from "@/components/Offer";
 import EventBookingForm from "@/components/EventBookingForm";
-import CovenPriceTable from "@/components/CovenPriceTable";
-import { getEvent, LA_COVEN_CHECKOUT_URL } from "@/lib/events";
+import { getEvent } from "@/lib/events";
 import { SITE_URL } from "@/lib/site";
 
 // The Baddie Brunch, the first LA coven gathering, as a run of sections that sit INSIDE the LA coven
@@ -24,6 +23,18 @@ const PHOTOS = [
   { src: "/events/bacari/brunch-french-toast.jpg", w: 1200, h: 1600, alt: "French toast with strawberries and syrup on the Bacari brunch table" },
   { src: "/events/bacari/tree-patio-bar.jpg", w: 1600, h: 1066, alt: "The bar under a huge old tree on the Bacari patio" },
   { src: "/events/bacari/patio-sun.jpg", w: 1600, h: 1200, alt: "Morning sun through the bamboo over the Bacari patio tables" },
+];
+
+// The feeling, not the venue (Betty, 25 Nov 2026: "bigger, brighter, women at brunch, the pink brunch
+// vibe"). Free Unsplash photos, the same set as the LA Head Baddie carousel. The Bacari shots alone
+// showed empty tables, so the venue band keeps just two of them.
+const MOOD = [
+  { src: "/events/brunch-mood/women-toasting.jpg", w: 1600, h: 1066, alt: "A table of women clinking pink cocktails together at brunch" },
+  { src: "/events/brunch-mood/pink-brunch-table.jpg", w: 1067, h: 1600, alt: "A pink brunch table from above, with coffee, eggs, strawberries and orange slices" },
+  { src: "/events/brunch-mood/pink-table-pancakes.jpg", w: 1600, h: 1066, alt: "Pancakes and a pink cocktail on a pink table at brunch" },
+  { src: "/events/brunch-mood/glasses-clink.jpg", w: 1067, h: 1600, alt: "Two women clinking glasses of bubbles" },
+  { src: "/events/brunch-mood/croissant-flowers.jpg", w: 1068, h: 1600, alt: "A croissant and strawberries beside pink flowers" },
+  { src: "/events/brunch-mood/pink-round-table.jpg", w: 1600, h: 1066, alt: "A round pink brunch table laid with plates, toast and coffee" },
 ];
 
 // From Betty's launch caption: the guide is printed and written from each woman's own chart.
@@ -54,7 +65,7 @@ const birthNote = "Your printed astrology guide is written from YOUR chart, so I
 // hero: the brunch opens the page (h1), so the first thing a visitor sees is the event and the $49
 // ticket anyone can buy, not the membership (Betty, 23 Nov 2026). middle: extra sections shown after
 // "what's waiting" and before the prices (the LA page puts friends/manifesting + Sublime there).
-export default function BaddieBrunch({ hero = false, middle }: { hero?: boolean; middle?: ReactNode }) {
+export default function BaddieBrunch({ hero = false, afterHero, middle }: { hero?: boolean; afterHero?: ReactNode; middle?: ReactNode }) {
   const Title = hero ? "h1" : "h2";
   const event = getEvent(SLUG);
   if (!event) return null;
@@ -94,47 +105,63 @@ export default function BaddieBrunch({ hero = false, middle }: { hero?: boolean;
             <p style={{ fontSize: "clamp(16px, 1.9vw, 18px)", lineHeight: 1.6, fontWeight: 600, color: "var(--dark)", margin: "12px 0 0", maxWidth: 560 }}>
               Two hours of astrology, manifestation, journaling, delicious food and meeting your new baddie besties at Bacari Silver Lake, 11:30am to 1:30pm, with a printed astrology guide written from YOUR birth chart.
             </p>
-            <div className="grid grid-cols-2 gap-3" style={{ marginTop: 24, maxWidth: 480 }}>
-              <div style={{ ...frame, padding: "14px 16px" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>anyone can come</div>
-                <div className="display" style={{ fontSize: 40, lineHeight: 1, marginTop: 6 }}>$49</div>
+            {/* Ticket only (Betty, 25 Nov 2026): one price, one button, and the real deadline + seat cap
+                from the posts (the Payment Link closes itself at 12 sales). */}
+            <div className="flex flex-wrap items-stretch gap-3" style={{ marginTop: 24, maxWidth: 560 }}>
+              <div style={{ ...frame, padding: "14px 18px" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>your seat</div>
+                <div className="display" style={{ fontSize: 44, lineHeight: 1, marginTop: 6 }}>$49</div>
                 <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>no membership needed</div>
               </div>
-              <div style={{ ...frame, padding: "14px 16px" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>LA coven members</div>
-                <div className="display" style={{ fontSize: 40, lineHeight: 1, marginTop: 6, color: "var(--pink)" }}>FREE</div>
-                <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>included in your $88/month</div>
+              <div style={{ ...frame, padding: "14px 18px", background: "var(--dark)", color: "#fff", flex: "1 1 220px" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pink)" }}>⏳ booking closes</div>
+                <div className="display" style={{ fontSize: 26, lineHeight: 1.1, marginTop: 8 }}>Sunday 29th of November</div>
+                <div style={{ fontSize: 13, fontWeight: 700, marginTop: 6 }}>only 12 seats at the table 🪩</div>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-3" style={{ marginTop: 22 }}>
               <a href="#book" className="no-underline" style={button("var(--dark)")}>grab my seat · $49 🪩</a>
-              <a href="#member" className="no-underline" style={button("#fff", "var(--dark)")}>coven member? free seat 🌴</a>
             </div>
           </div>
-          <div className="relative" style={{ paddingBottom: 110 }}>
-            <div style={{ ...frame, transform: "rotate(1.5deg)", marginLeft: "8%" }}>
-              <Image src={PHOTOS[0].src} alt={PHOTOS[0].alt} width={PHOTOS[0].w} height={PHOTOS[0].h} sizes="(max-width: 1024px) 100vw, 560px" style={{ display: "block", width: "100%", height: "auto" }} />
+          <div className="relative" style={{ paddingBottom: 120 }}>
+            <div style={{ ...frame, transform: "rotate(1.5deg)", marginLeft: "6%", boxShadow: "8px 8px 0 var(--dark)" }}>
+              <Image src={MOOD[0].src} alt={MOOD[0].alt} width={MOOD[0].w} height={MOOD[0].h} priority sizes="(max-width: 1024px) 100vw, 580px" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
-            <div className="absolute" style={{ ...frame, width: "30%", left: 0, bottom: 0, transform: "rotate(-5deg)", boxShadow: "6px 6px 0 var(--dark)" }}>
-              <Image src={PHOTOS[1].src} alt={PHOTOS[1].alt} width={PHOTOS[1].w} height={PHOTOS[1].h} sizes="220px" style={{ display: "block", width: "100%", height: "auto" }} />
+            <div className="absolute" style={{ ...frame, width: "36%", left: 0, bottom: 0, transform: "rotate(-5deg)", boxShadow: "6px 6px 0 var(--dark)" }}>
+              <Image src={MOOD[1].src} alt={MOOD[1].alt} width={MOOD[1].w} height={MOOD[1].h} sizes="240px" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
-            <span className="holo-sticker absolute" style={{ right: 6, bottom: 0, transform: "rotate(3deg)" }}>☀️ brunch on the patio</span>
+            <span className="holo-sticker absolute" style={{ right: 6, bottom: 10, transform: "rotate(3deg)" }}>🥂 come solo, leave with a crew</span>
           </div>
         </div>
       </section>
 
-      <Band tag="the first LA coven brunch" title="brunch with your future" accent="best friends.">
+      {afterHero}
+
+      <Band wide tag="the first LA coven brunch" title="brunch with your future" accent="best friends.">
         <p>The Bad B*tch Coven is bringing the Baddie Brunch to LA, because more women should be making $$$, chasing outrageous dreams and doing it with a table of bad b*tches cheering them on.</p>
         <p>We&apos;re talking ambitious, witchy, creative, slightly DELULU women who want to travel the world, build businesses, manifest ridiculous amounts of money and make incredible friends along the way, because being sensible is BORRRRING.</p>
         <p><strong>You&apos;ll walk in solo and leave with new baddie besties in your phone and a printed guide to the BIGGEST Sagittarius season of your life.</strong></p>
+        {/* Big, bright mood photos: two large, then two tall, so the table looks full and alive. */}
+        <div className="grid grid-cols-2 gap-3 md:gap-4" style={{ marginTop: 28 }}>
+          {[MOOD[2], MOOD[5]].map((p) => (
+            <div key={p.src} style={{ ...frame, aspectRatio: "3 / 2", position: "relative", boxShadow: "6px 6px 0 var(--dark)" }}>
+              <Image src={p.src} alt={p.alt} fill sizes="(max-width: 768px) 50vw, 560px" style={{ objectFit: "cover" }} />
+            </div>
+          ))}
+          {[MOOD[3], MOOD[4]].map((p) => (
+            <div key={p.src} style={{ ...frame, aspectRatio: "4 / 5", position: "relative", boxShadow: "6px 6px 0 var(--dark)" }}>
+              <Image src={p.src} alt={p.alt} fill sizes="(max-width: 768px) 50vw, 560px" style={{ objectFit: "cover" }} />
+            </div>
+          ))}
+        </div>
       </Band>
 
       <Band tone="lav" wide tag="where we're brunching" title="bacari" accent="silver lake.">
         <p>A tree-shaded patio with a fire pit, string lights, candles on every table and a brunch menu that&apos;s going to make choosing VERY hard.</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3" style={{ marginTop: 26 }}>
-          {PHOTOS.map((p) => (
-            <div key={p.src} style={{ ...frame, aspectRatio: "4 / 5", position: "relative" }}>
-              <Image src={p.src} alt={p.alt} fill sizes="(max-width: 768px) 50vw, 33vw" style={{ objectFit: "cover" }} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3" style={{ marginTop: 26 }}>
+          {[PHOTOS[0], PHOTOS[1]].map((p) => (
+            <div key={p.src} style={{ ...frame, aspectRatio: "3 / 2", position: "relative" }}>
+              <Image src={p.src} alt={p.alt} fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: "cover" }} />
             </div>
           ))}
         </div>
@@ -167,90 +194,20 @@ export default function BaddieBrunch({ hero = false, middle }: { hero?: boolean;
 
       {middle}
 
-      <Band tone="pinkLight" wide tag="how to come" title="two ways" accent="in.">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ marginTop: 26 }}>
-          <div className="holo-edge" style={{ ...frame, padding: "24px 22px 26px" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🪩 anyone can come</div>
-            <div className="display" style={{ fontSize: 56, lineHeight: 1, marginTop: 8 }}>$49</div>
-            <p style={{ margin: "10px 0 0", fontWeight: 700 }}>A one-off ticket for this brunch, no membership needed.</p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "grid", gap: 6, fontSize: 15, lineHeight: 1.55 }}>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Everything every baddie gets: the hosted brunch, your personalised printed astrology guide and the journaling and manifestation exercises.</li>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Just you and brunch: no subscription, nothing to cancel.</li>
-            </ul>
-            <div style={{ marginTop: 20 }}>
-              <a href="#book" className="no-underline" style={button("var(--dark)")}>grab my seat · $49</a>
-            </div>
-          </div>
-          <div style={{ ...frame, padding: "24px 22px 26px" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase" }}>🌴 want one every month</div>
-            <div className="display" style={{ fontSize: 56, lineHeight: 1, marginTop: 8, color: "var(--pink)" }}>FREE</div>
-            <p style={{ margin: "10px 0 0", fontWeight: 700 }}>Included in your LA coven membership, $88 a month.</p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "grid", gap: 6, fontSize: 15, lineHeight: 1.55 }}>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>A free place at one Baddie Brunch every month, starting with this one.</li>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>EVERYTHING inside the online Bad B*tch Coven: the online workshops and activations, the community and friendship matching.</li>
-              <li><span style={{ color: "var(--pink)", fontWeight: 800 }}>✦ </span>Two tickets cost more than a month in the LA coven, and $88 is the founding price.</li>
-            </ul>
-            <div className="flex flex-wrap gap-3" style={{ marginTop: 20 }}>
-              <a href={LA_COVEN_CHECKOUT_URL} className="no-underline" style={button("var(--pink)")}>join the LA coven · $88/mo</a>
-              <a href="#member" className="no-underline" style={button("#fff", "var(--dark)")}>already in? claim my seat</a>
-            </div>
-          </div>
-        </div>
-
-
-        {/* Betty, 17 Nov: make it obvious the $44 online coven does NOT include LA events. */}
-        <div style={{ ...frame, marginTop: 16, padding: "20px 22px", background: "var(--dark)", color: "#fff" }}>
-          <div style={{ fontFamily: pp, fontSize: 20, fontWeight: 800, lineHeight: 1.25 }}>💻 In the online coven for $44?</div>
-          <p style={{ margin: "8px 0 0", fontSize: 15.5, lineHeight: 1.65 }}>
-            Your $44 membership covers everything online, and the monthly Baddie Brunch comes with the in-person LA coven, which is $88 a month and includes EVERYTHING online too. <strong>Upgrade and your brunch seat is free.</strong> Email{" "}
-            <a href={UPGRADE_MAIL} style={{ color: "#fff", fontWeight: 800, textDecoration: "underline" }}>hello@thecosmicco.com</a> with &quot;upgrade me to LA&quot; and we&apos;ll switch your plan, so you&apos;re only ever paying for one membership.
-          </p>
-        </div>
-      </Band>
-
-      <section id="member" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92, scrollMarginTop: 80 }}>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
-              LA coven member?
-              <br />
-              <span className="pk">claim your free seat.</span>
-            </h2>
-            <div style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500 }}>
-              <p style={{ margin: "0 0 14px", fontWeight: 800 }}>Use the email you joined the LA coven with and your seat is saved on the spot.</p>
-              <p style={{ margin: 0 }}>Places are limited, so claim yours now and your confirmation lands in your inbox with the address and a calendar link. 🌴</p>
-            </div>
-            <div style={{ marginTop: 26 }}><CovenPriceTable tone="dark" /></div>
-          </div>
-          <EventBookingForm
-            slug={event.slug}
-            mode="member"
-            cta="SAVE MY FREE SEAT 🌴"
-            collectsBirth={event.collectsBirth}
-            birthNote={birthNote}
-            priceNote="Free with your $88/month LA coven membership"
-            notMemberHint={
-              <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#fff" }}>
-                In the $44 online coven?{" "}
-                <a href={UPGRADE_MAIL} style={{ color: "#fff", fontWeight: 800, textDecoration: "underline" }}>Email us to upgrade to LA</a>, or{" "}
-                <a href="#book" style={{ color: "#fff", fontWeight: 800, textDecoration: "underline" }}>grab a $49 ticket</a>.
-              </p>
-            }
-          />
-        </div>
-      </section>
-
       <section id="book" className="px-5 md:px-8" style={{ background: "var(--dark)", borderTop: "2px solid var(--pink)", paddingTop: 84, paddingBottom: 92, scrollMarginTop: 80 }}>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           <div>
             <h2 className="display" style={{ fontSize: "clamp(36px, 6vw, 68px)", color: "#fff", lineHeight: 0.98 }}>
-              not a member?
+              grab your seat.
               <br />
-              <span className="pk">grab a $49 ticket.</span>
+              <span className="pk">$49, no membership.</span>
             </h2>
             <div style={{ fontSize: 17, lineHeight: 1.75, color: "#fff", marginTop: 22, fontWeight: 500 }}>
               <p style={{ margin: "0 0 14px", fontWeight: 800 }}>Hosted brunch + your personalised printed astrology guide + journaling + new baddie besties.</p>
-              <p style={{ margin: 0 }}>Pop your details in, pay securely with Stripe and Betty starts writing your guide from your chart. 💜</p>
+              <p style={{ margin: "0 0 14px" }}>Pop your details in, pay securely with Stripe and Betty starts writing your guide from your chart. 💜</p>
+              <p style={{ margin: 0, fontWeight: 800 }}>⏳ Booking closes Sunday 29th of November, and there are only 12 seats at the table.</p>
+              <p id="member" style={{ margin: "14px 0 0", fontSize: 15 }}>Already in the LA coven? Your seat is free, so{" "}
+                <a href={UPGRADE_MAIL.replace("Upgrade%20me%20to%20the%20LA%20coven", "Save%20my%20brunch%20seat")} style={{ color: "#fff", fontWeight: 800, textDecoration: "underline" }}>email us</a> and we&apos;ll save it for you. 🌴</p>
             </div>
           </div>
           <EventBookingForm

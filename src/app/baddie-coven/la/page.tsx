@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Band, WaitlistBand } from "@/components/Offer";
-import { LA_COVEN_CHECKOUT_URL } from "@/lib/events";
-import CovenPriceTable from "@/components/CovenPriceTable";
-import BaddieBrunch, { BRUNCH_FAQS, UPGRADE_MAIL } from "@/components/BaddieBrunch";
+import BaddieBrunch, { BRUNCH_FAQS } from "@/components/BaddieBrunch";
 import BrunchMagicBand from "@/components/BrunchMagicBand";
 
 // The LA Bad B*tch Coven, the coven in real life in Los Angeles, with the Baddie Brunch sitting right
@@ -50,12 +48,10 @@ const FIT = [
 ];
 
 const FAQS: [string, string][] = [
-  ["Do I have to join the coven to come to the brunch?", "Not at all, babe. Anyone can grab a $49 ticket for the Baddie Brunch, no membership and nothing to cancel. The LA coven is only for women who want a brunch every month, and for them it's included."],
-  ["When is the first Baddie Brunch?", "Saturday 5th of December, 11:30am to 1:30pm, hosted by Sublime Luv, our LA Head Baddie. It's free for in-person coven members and $49 for everyone else."],
+  ["Do I have to join anything to come to the brunch?", "Not at all, babe. Anyone can grab a $49 ticket for the Baddie Brunch, no membership and nothing to cancel."],
+  ["When is the first Baddie Brunch?", "Saturday 5th of December, 11:30am to 1:30pm, hosted by Sublime Luv, our LA Head Baddie. Tickets are $49 and booking closes Sunday 29th of November."],
   ["Where in LA is it?", "The first Baddie Brunch is at Bacari Silver Lake, 3626 Sunset Blvd, on their gorgeous tree-shaded patio."],
-  ["How much is the in-person coven?", "$88 a month, and that's the founding price, so it's going up. You get EVERYTHING inside the online Bad B*tch Coven plus a free place at one Baddie Brunch every month. Extra dinners, workshops and special events are booked separately."],
-  ["I'm in the online coven for $44. Is the brunch included?", "Not yet, babe. The $44 online coven covers everything online, and the monthly Baddie Brunch comes with the $88 in-person coven, which includes EVERYTHING online too. Email hello@thecosmicco.com with \"upgrade me to LA\" and we'll switch your plan, so you only ever pay for one membership. Or grab a $49 ticket."],
-  ["How often will we meet?", "Every month at the Baddie Brunch, plus extra dinners, workshops, magical gatherings and special events throughout the year, which you can book separately."],
+  ["Will there be more?", "YESSS. This is the first LA Baddie Brunch, and there'll be one every season, plus dinners, workshops and magical gatherings. Join the LA list at the bottom of this page to hear first."],
   ...BRUNCH_FAQS,
   ["Can I come on my own?", "YESSS, and most women will. You'll walk in solo and leave with a whole crew, that's kind of the point."],
   ["Do I need to know astrology or witchcraft?", "Not even a little. Total beginners are welcome, and the women who've been doing this for years love helping you figure out your chart."],
@@ -67,53 +63,43 @@ export default function LaCovenPage() {
   return (
     <>
       {/* The brunch opens the page (Betty, 23 Nov 2026): the event and the $49 ticket anyone can buy come
-          first, the $88 membership after, so nobody reads it as subscription-only. */}
+          first. Ticket only from 25 Nov 2026 (Betty): no membership pitch on this page until after the brunch. */}
       <BaddieBrunch
         hero
+        afterHero={
+          /* Sublime, the LA Head Baddie, straight after the hero (Betty, 25 Nov 2026): she answers "who
+             will I talk to if I come alone?". Bio from her own DM to Betty, 18 Nov 2026. */
+          <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 72, paddingBottom: 80 }}>
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-10 md:gap-14 items-center">
+              <div className="grid grid-cols-2 gap-4 items-start">
+                <div style={{ border: "2px solid var(--dark)", borderRadius: 22, overflow: "hidden", transform: "rotate(-2deg)", boxShadow: "8px 8px 0 var(--pink)" }}>
+                  <Image src="/coven/la/sublime-2.jpg" alt="Sublime Luv in a white ruffled dress and a crystal crown, surrounded by greenery" width={1080} height={1350} sizes="(max-width: 768px) 50vw, 340px" style={{ display: "block", width: "100%", height: "auto" }} />
+                </div>
+                <div style={{ border: "2px solid var(--dark)", borderRadius: 22, overflow: "hidden", transform: "rotate(2deg)", marginTop: 40, boxShadow: "8px 8px 0 var(--dark)" }}>
+                  <Image src="/coven/la/sublime-1.jpg" alt="Sublime Luv, LA Head Baddie, in a neon top against a painted rainbow wall" width={1080} height={1405} sizes="(max-width: 768px) 50vw, 340px" style={{ display: "block", width: "100%", height: "auto" }} />
+                </div>
+              </div>
+              <div>
+                <div className="tag mb-5">your host · our LA head baddie</div>
+                <h2 className="display" style={{ fontSize: "clamp(36px, 5.4vw, 64px)", lineHeight: 0.98, color: "var(--dark)" }}>
+                  say hiii to <span className="pk">sublime luv.</span>
+                </h2>
+                <div className="offer-copy" style={{ marginTop: 22, color: "var(--dark)" }}>
+                  <p><strong>Sublime is an LA spoken-word and teaching artist, host and community builder who&apos;s spent over a decade bringing people together.</strong></p>
+                  <p>She&apos;s famous for turning a room of strangers into a room of friends, so if you&apos;re coming on your own, she&apos;s the first hug at the door and the one who makes sure you never wonder who to talk to. She loves astrology, personal growth and a good conversation, and she&apos;s here to help LA baddies connect, explore and live a little louder. 🔊</p>
+                  <p><a href="https://www.instagram.com/queensublimeluv/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dark)", fontWeight: 800, textDecoration: "underline" }}>Go give @queensublimeluv some LOVE 💖</a></p>
+                </div>
+              </div>
+            </div>
+          </section>
+        }
         middle={
           <>
             <BrunchMagicBand city="LA" />
 
-            {/* Sublime, the LA Head Baddie: a real person welcoming women in (bio from Betty's launch caption). */}
-            <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
-              <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 items-center">
-                <div className="grid grid-cols-2 gap-3 items-start">
-                  <div style={{ border: "2px solid var(--dark)", borderRadius: 18, overflow: "hidden", transform: "rotate(-2deg)" }}>
-                    <Image src="/coven/la/sublime-1.jpg" alt="Sublime Luv, LA Head Baddie, in a neon top against a painted rainbow wall" width={1080} height={1405} sizes="(max-width: 768px) 50vw, 240px" style={{ display: "block", width: "100%", height: "auto" }} />
-                  </div>
-                  <div style={{ border: "2px solid var(--dark)", borderRadius: 18, overflow: "hidden", transform: "rotate(2deg)", marginTop: 34 }}>
-                    <Image src="/coven/la/sublime-2.jpg" alt="Sublime Luv in a white ruffled dress and a crystal crown, surrounded by greenery" width={1080} height={1350} sizes="(max-width: 768px) 50vw, 240px" style={{ display: "block", width: "100%", height: "auto" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="tag mb-5">meet our LA head baddie</div>
-                  <h2 className="display" style={{ fontSize: "clamp(32px, 5vw, 58px)", lineHeight: 1, color: "var(--dark)" }}>
-                    say hiii to <span className="pk">sublime luv.</span>
-                  </h2>
-                  <div className="offer-copy" style={{ marginTop: 22, color: "var(--dark)" }}>
-                    <p>Sublime is a spoken-word artist, poet, creative entrepreneur and an absolute powerhouse who&apos;s passionate about helping creatives build their brands and get PAIDDDDD.</p>
-                    <p>She&apos;s hosting our LA Baddie Brunches, bringing her creative magic to the manifestation exercises, journaling sessions and conversations about creating BIGGGG F*CKING LIVES, so you never walk in wondering who to talk to.</p>
-                    <p><a href="https://www.instagram.com/queensublimeluv/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dark)", fontWeight: 800, textDecoration: "underline" }}>Go give @queensublimeluv some LOVE 💖</a></p>
-                  </div>
-                </div>
-              </div>
-            </section>
           </>
         }
       />
-
-      <Band tone="pinkLight" wide tag="want one every month" title="your coven," accent="irl. 💖">
-        <p><strong>For $88/month, you get EVERYTHING inside the online Bad B*tch Coven, PLUS a complimentary place at one Baddie Brunch every month in your city.</strong></p>
-        <p>Think astrology, manifestation, personalised seasonal guides, journaling, delicious food and a table full of ambitious women who want to create BIGGGG F*CKING LIVES together.</p>
-        <p>Your brunch ticket is included in your membership, with food and drinks purchased separately. We&apos;ll also be hosting extra dinners, workshops, magical gatherings and special events throughout the year, which you can book separately.</p>
-        <p><strong>Because your social calendar deserves to be just as f*cking fabulous as the life you&apos;re building. 🪩💸💖</strong></p>
-        <div style={{ marginTop: 26 }}><CovenPriceTable /></div>
-        <div className="flex flex-wrap items-center gap-4" style={{ marginTop: 22 }}>
-          <a href={LA_COVEN_CHECKOUT_URL} className="no-underline" style={{ display: "inline-block", background: "var(--pink)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 32px", border: "2px solid var(--dark)" }}>join the LA coven · $88/month</a>
-          <span style={{ fontFamily: pp, fontWeight: 800, fontSize: 15 }}>$88 is the founding price, and it&apos;s going up.</span>
-        </div>
-        <p style={{ marginTop: 22 }}><strong>Already in the online coven for $44? Your membership doesn&apos;t include the Baddie Brunch, so upgrade to the in-person coven and your monthly brunch is free. Email <a href={UPGRADE_MAIL} style={{ color: "var(--dark)", textDecoration: "underline" }}>hello@thecosmicco.com</a> with &quot;upgrade me to LA&quot; and we&apos;ll switch your plan, so you only ever pay for one membership.</strong></p>
-      </Band>
 
       <Band tag="sound familiar" title="you're growing. your social life" accent="hasn't caught up.">
         <p>You&apos;re the one in the group chat who wants to talk about Saturn returns, money spells and the life you&apos;re building, while everyone else wants to talk about what they watched last night.</p>
