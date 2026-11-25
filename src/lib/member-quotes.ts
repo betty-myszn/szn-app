@@ -3,6 +3,8 @@
 export interface MemberQuote {
   name: string;
   quote: string;
+  /** Shown after the name. Defaults to "my szn member". */
+  role?: string;
 }
 
 export const MEMBER_QUOTES: Record<string, MemberQuote> = {
@@ -18,4 +20,8 @@ export const MEMBER_QUOTES: Record<string, MemberQuote> = {
   amelia: { name: "Amelia K.", quote: "The hypnosis has surprised me the most. I started listening consistently during the SZN and noticed I was responding differently to situations that would normally send me straight into self-doubt. It wasn't this huge dramatic overnight moment. I just suddenly realised one day that I wasn't behaving like the old version of me anymore." },
   danielle: { name: "Danielle C.", quote: "I came into group coaching completely stuck over a career decision I'd been going backwards and forwards on for months. Betty asked me about three questions and suddenly I could see EXACTLY what I was doing 😂 I left knowing what I wanted, made the decision that week and honestly felt about 20kg lighter." },
   zara: { name: "Zara K.", quote: "My 90-day intention was to stop saying I wanted a different life while continuing to make exactly the same choices. I've changed jobs, started earning more, become more visible and finally started a project I'd talked about for nearly two years. Seeing it all written down at the end of the 90 days was actually quite emotional because I hadn't realised how much had changed." },
+  // Your Baddie Season: 2027 beta readers (supplied by Betty 25 Nov 2026; they had the report before launch).
+  jessica2027: { name: "Jessica M.", role: "2027 report beta reader", quote: "I genuinely wasn't prepared for how personal this was going to be. I've been feeling like I'm on the edge of a massive life change for months, but I couldn't articulate what I actually wanted. Reading my 2027 report felt like someone had opened up my brain and organised everything. I've highlighted entire paragraphs and started planning my year around the key dates. I'm actually EXCITED about what's next." },
+  lauren2027: { name: "Lauren W.", role: "2027 report beta reader", quote: "As a business owner, I've spent thousands on strategy sessions and business coaching, but nobody has ever approached my business through the lens of my astrology like this. Understanding when to prioritise visibility, money, expansion and rest was incredibly helpful. I finally feel like I can stop forcing things and build a business that works with who I actually am." },
+  ashleigh2027: { name: "Ashleigh R.", role: "2027 report + activation beta reader", quote: "Okay, I actually cried. I've had a really difficult couple of years and somewhere in all of that, I stopped dreaming about what my life could look like. This report reminded me of all the things I used to want before I started settling. The activation was beautiful, too. I'm going into 2027 with a completely different mindset." },
 };

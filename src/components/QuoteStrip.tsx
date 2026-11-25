@@ -17,7 +17,7 @@ export default function QuoteStrip({ ids, label = "from inside my szn", tone = "
               <div aria-hidden="true" style={{ fontFamily: pp, fontSize: 46, fontWeight: 800, color: "var(--pink)", lineHeight: 0.8, marginBottom: 8 }}>&ldquo;</div>
               <blockquote style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: "var(--dark)", flex: 1 }}>{q.quote}</blockquote>
               <figcaption style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--pink)", marginTop: 16 }}>
-                {q.name} · my szn member
+                {q.name} · {q.role ?? "my szn member"}
               </figcaption>
             </figure>
           ))}

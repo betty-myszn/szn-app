@@ -9,7 +9,7 @@ export default function BaddieSeasonPromoBand() {
     <section className="px-5 md:px-8 overflow-hidden" style={{ background: "var(--dark)", borderBottom: "var(--border)", paddingTop: 60, paddingBottom: 64 }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
         <div>
-          <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>🔮 black friday · only {S.spots} sessions at this price</span>
+          <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>💸 baddie friday · $222 off · only {S.spots} sessions</span>
           <h2 className="display" style={{ fontSize: "clamp(42px, 5.6vw, 76px)", color: "#fff", lineHeight: 0.95, marginTop: 22 }}>
             your baddie season:
             <br />
