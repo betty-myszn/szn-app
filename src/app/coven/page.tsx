@@ -197,10 +197,11 @@ export default function CovenHomePage() {
             <p style={{ fontSize: 17, lineHeight: 1.5, fontWeight: 600, margin: "10px 0 0", maxWidth: 540 }}>Your birth chart drawn across the whole world map, babe. Find your love city, your money city and your glow-up city, see your chart redrawn for wherever you are right now, find out when your lines light up this year and plan the girls&apos; trip that&apos;s magic for BOTH of you. Sag szn is travel szn. 🏹</p>
             <span style={{ ...pinkBtn, marginTop: 18, border: "var(--border)" }}>find your power places →</span>
           </div>
-          <div className="hd-foil" style={{ justifySelf: "center", width: "100%", maxWidth: 300, border: "var(--border)", borderRadius: 22, padding: "20px 22px", transform: "rotate(2deg)", boxShadow: "6px 6px 0 var(--dark)", display: "grid", gap: 8 }}>
-            {["💘 your love city", "💸 your money city", "🪞 your self-love city", "🔥 your next-level city", "👯‍♀️ your girls' trip"].map((t) => (
-              <div key={t} style={{ fontFamily: pp, fontSize: 16, fontWeight: 800, background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "8px 14px" }}>{t}</div>
-            ))}
+          <div style={{ justifySelf: "center", position: "relative", width: "100%", maxWidth: 270, transform: "rotate(2.5deg)" }}>
+            {/* Betty's own power places card, from her chart, as the preview of what every member gets */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/coven/power-places-preview.jpg" alt="Betty's power places card: Dubai for love, Istanbul for money, Barbados for a glow up, Tahiti for home" width={720} height={1280} className="block w-full h-auto" style={{ borderRadius: 22, border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }} />
+            <span style={{ position: "absolute", left: -10, top: 18, transform: "rotate(-7deg)", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px", borderRadius: 999 }}>betty&apos;s map 💅</span>
           </div>
         </Link>
 
