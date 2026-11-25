@@ -35,7 +35,7 @@ const TEMPLATE = `<section class="hero">
       <div class="tag" id="tabTag"></div>
       <h2 class="h2" id="tabHead" style="margin-top:8px"></h2>
       <p class="lede" id="tabLede"></p>
-      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>money + career line</b> (money, career, reputation), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
+      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>career line</b> (career, reputation, being seen), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Your <b>money lines</b> are your Jupiter and Venus lines: wherever those run, money comes to you easier. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
     </div>
 
     <div class="mapcard">
@@ -206,8 +206,15 @@ const gcKm = (a, b) => { const R = Math.PI / 180, dla = (b.lat - a.lat) * R, dlo
 const strength = (d) => (d < 150 ? ["right on it", "s3"] : d < 400 ? ["strong", "s2"] : ["you feel it", "s1"]);
 const km = (d) => (d < 10 ? "on the line" : `${Math.round(d / 10) * 10}km`);
 const lineName = (key) => { const [p, a] = key.split("|"); return `${GLYPH[p]} ${p} ${ANGLE_LINE[a]}`; };
+// On the money tab a Jupiter or Venus line is named a money line, because money is its own thing.
+const moneyName = (key) => { const [p] = key.split("|"); return !S.trip && S.tab === "activate" && S.goal === "money" && (p === "Jupiter" || p === "Venus") ? `${GLYPH[p]} ${p} money line` : lineName(key); };
 // The one sentence that says why a city is on this list, in words a total beginner gets.
-const whyLine = (h, explained) => { const near = h.d < 150 ? "and you're right on the line" : h.d < 400 ? `and the line is only ${km(h.d)} away` : `and the line is ${km(h.d)} away, close enough to feel`; return explained ? `${PLANET_PLAIN[h.line.planet]}, is on your ${ANGLE_LINE[h.line.angle]} here, ${near}.` : `${PLANET_PLAIN[h.line.planet]}, ${ANGLE_WHERE[h.line.angle]}, ${near}.`; };
+const MONEY_ROUTE = { MC: "through your work and being SEEN", IC: "through home, property and family", ASC: "through YOU, your face and your personal brand", DSC: "through partners, clients and collabs" };
+const whyLine = (h, explained) => {
+  if (!S.trip && S.tab === "activate" && S.goal === "money" && (h.line.planet === "Jupiter" || h.line.planet === "Venus")) {
+    const near = h.d < 150 ? "and you're right on it" : `and it's only ${km(h.d)} away`;
+    return `${PLANET_PLAIN[h.line.planet]}, draws one of your money lines here, ${near}. Here the money comes ${MONEY_ROUTE[h.line.angle]}.`;
+  } const near = h.d < 150 ? "and you're right on the line" : h.d < 400 ? `and the line is only ${km(h.d)} away` : `and the line is ${km(h.d)} away, close enough to feel`; return explained ? `${PLANET_PLAIN[h.line.planet]}, is on your ${ANGLE_LINE[h.line.angle]} here, ${near}.` : `${PLANET_PLAIN[h.line.planet]}, ${ANGLE_WHERE[h.line.angle]}, ${near}.`; };
 
 // Towns she looked up that aren't in the city list (or where she is right now). Kept out of the
 // rankings so a one-off search never becomes a "top pick", and remembered on this device.
@@ -237,7 +244,7 @@ if (PICK && !FREE) { if (PICK === "live") S.tab = "live"; else { S.tab = "activa
 
 const weights = () => (S.trip ? SCORES.travel : SCORES[S.tab === "activate" ? S.goal : S.tab]);
 function ranked(W = weights(), n = TOPN) {
-  const scored = cities.map((c) => ({ c, score: c.hits.reduce((s, h) => s + (W[h.key] || 0) * prox(h.d), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
+  const scored = cities.map((c) => ({ c, score: c.hits.map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((s, v, i) => s + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
   const out = [];
   for (const r of scored) { if (out.some((o) => gcKm(o.c, r.c) < 700)) continue; out.push(r); if (out.length === n) break; }
   return out;
@@ -249,7 +256,7 @@ const TAB_COPY = {
 };
 const GOAL_LEDE = {
   love: "Your Venus, Jupiter, Moon and Sun setting lines, the ones that pull your person towards you.",
-  money: "Your Jupiter, Venus and Sun lines at the top of the chart, where your work turns into serious dollars.",
+  money: "Your money lines are your Jupiter and Venus lines. Wherever they run, money comes to you easier, and every city below shows you HOW it comes.",
   career: "Top-of-the-chart lines where your name travels and the right people notice you.",
   glow: "Rising lines where you look and feel your absolute best from day one.",
   healing: "Soft home lines and dreamy Neptune spots where your nervous system finally exhales.",
@@ -330,7 +337,7 @@ function renderCards() {
     let text = READINGS[lead.key].short;
     if (usedShort.has(text)) text = good[1] && !usedShort.has(READINGS[good[1].key].short) ? READINGS[good[1].key].short : `Go here for ${READINGS[lead.key].use}.`;
     usedShort.add(text);
-    const pills = good.slice(0, 3).map((h) => `<span class="pill ${GIFT.has(h.line.planet) ? "gift" : "grow"}">${lineName(h.key)} · ${km(h.d)}</span>`).join("");
+    const pills = good.slice(0, 3).map((h) => `<span class="pill ${GIFT.has(h.line.planet) ? "gift" : "grow"}">${moneyName(h.key)} · ${km(h.d)}</span>`).join("");
     const goalNow = GOALS.find((g) => g.id === S.goal);
     const firstWithLead = usedLead[lead.key]; if (!firstWithLead) usedLead[lead.key] = r.c.name;
     const angleExplained = usedAngle.has(lead.line.angle); usedAngle.add(lead.line.angle);
@@ -341,7 +348,7 @@ function renderCards() {
       <span class="rank ${i === 0 ? "holo" : ""}">${i + 1}</span>
       <span style="display:block;min-width:0">
         <h3>${esc(r.c.name)}</h3><div class="country">${esc(r.c.country)} · ${esc(READINGS[lead.key].nick)}</div>
-        <span class="why"><b>${whyLabel}:</b> ${esc(firstWithLead ? `Same ${lead.line.planet} ${ANGLE_LINE[lead.line.angle]} as ${firstWithLead}, ${lead.d < 150 ? "with you right on it" : `only ${km(lead.d)} away`}, so ${READINGS[lead.key].use} flow here too.` : whyLine(lead, angleExplained))}</span>
+        <span class="why"><b>${whyLabel}:</b> ${esc(firstWithLead ? `Same ${moneyName(lead.key).replace(/^\S+ /, "")} as ${firstWithLead}, ${lead.d < 150 ? "with you right on it" : `only ${km(lead.d)} away`}, so ${!S.trip && S.tab === "activate" && S.goal === "money" ? "the money flows here too" : `${READINGS[lead.key].use} flow here too`}.` : whyLine(lead, angleExplained))}</span>
         ${text ? `<p>${esc(text)}</p>` : ""}${(() => { const w = bestWindow(r.c); if (!w) return ""; const now = w.start <= timing.today; const soon = !now && Date.parse(w.start) - Date.parse(timing.today) < 60 * 86400000; return now || soon ? `<span class="when2">${now ? "🔥 <b>lit up right now</b>" : "⏳ <b>lights up soon</b>"} · ${esc(windowText(w))}</span>` : ""; })()}<span class="pills">${pills}</span><span class="more">read it →</span>
       </span></button>`;
   }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus all ten goals, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
@@ -530,7 +537,7 @@ function layout() {
   const keys = Object.keys(lineEls).filter((k) => (S.focus ? k === S.focus : rel.has(k)));
   for (const k of keys) {
     const l = lineByKey[k];
-    const short = { MC: !S.trip && S.tab === "activate" && S.goal === "career" ? "career" : "money", IC: "home", ASC: "glow", DSC: "love" }; const txt = `${GLYPH[l.planet]} ${short[l.angle]}`;
+    const moneyTab = !S.trip && S.tab === "activate" && S.goal === "money" && (SCORES.money[k] || 0) >= 5; const txt = moneyTab ? `${GLYPH[l.planet]} money` : `${GLYPH[l.planet]} ${{ MC: "career", IC: "home", ASC: "glow", DSC: "love" }[l.angle]}`;
     const gift = GIFT.has(l.planet);
     let cands = [];
     if (l.kind === "meridian") { const x = near(X(l.lon)); for (let y = Math.max(vy0 + 30 * u, Y(70)); y < Math.min(vy1 - 20 * u, Y(-45)); y += 34 * u) cands.push([x, y]); }

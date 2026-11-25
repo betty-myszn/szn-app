@@ -73,7 +73,8 @@ export const SCORES: Record<string, Record<string, number>> = {
   travel: { "Jupiter|ASC": 10, "Jupiter|DSC": 8, "Jupiter|MC": 8, "Jupiter|IC": 6, "Venus|ASC": 10, "Venus|DSC": 9, "Venus|MC": 7, "Venus|IC": 6, "Sun|ASC": 8, "Sun|MC": 6, "Sun|DSC": 6, "Uranus|ASC": 6, "Uranus|DSC": 4, "Mars|ASC": 5, "Moon|DSC": 4, "Mercury|ASC": 5, "Neptune|ASC": 5, "Moon|ASC": 4,
     "Saturn|ASC": -5, "Saturn|DSC": -3, "Pluto|DSC": -2 },
   love: { "Venus|DSC": 10, "Venus|ASC": 8, "Jupiter|DSC": 8, "Moon|DSC": 7, "Sun|DSC": 6, "Venus|IC": 5, "Mars|DSC": 5, "Venus|MC": 4, "Neptune|DSC": 3 },
-  money: { "Jupiter|MC": 10, "Venus|MC": 9, "Sun|MC": 7, "Jupiter|IC": 5, "Venus|IC": 5, "Jupiter|ASC": 6, "Pluto|MC": 5, "Saturn|MC": 2, "Jupiter|DSC": 5, "Mercury|MC": 4 },
+  // Money is its own thing (Betty): money lines are Jupiter (abundance) and Venus (receiving, value) on any angle, never "career".
+  money: { "Jupiter|MC": 10, "Venus|MC": 9, "Jupiter|ASC": 8, "Jupiter|IC": 8, "Venus|IC": 7, "Venus|ASC": 7, "Jupiter|DSC": 6, "Venus|DSC": 6 },
   career: { "Sun|MC": 10, "Jupiter|MC": 9, "Venus|MC": 7, "Mercury|MC": 7, "Saturn|MC": 6, "Pluto|MC": 6, "Mars|MC": 6, "Uranus|MC": 5, "Moon|MC": 5 },
   glow: { "Venus|ASC": 10, "Sun|ASC": 9, "Jupiter|ASC": 8, "Mars|ASC": 7, "Pluto|ASC": 4, "Moon|ASC": 4 },
   healing: { "Moon|IC": 8, "Neptune|IC": 7, "Jupiter|IC": 7, "Neptune|ASC": 6, "Moon|ASC": 6, "Venus|IC": 6, "Pluto|IC": 4 },
@@ -175,9 +176,9 @@ export const TRANSIT_COPY: Record<string, (natal: string, word: string) => strin
 };
 
 // Plain-language names for newbies. A line is named by the part of life it runs, never by MC/IC jargon.
-export const ANGLE_LINE: Record<string, string> = { MC: "money + career line", IC: "home line", ASC: "glow line", DSC: "love line" };
+export const ANGLE_LINE: Record<string, string> = { MC: "career line", IC: "home line", ASC: "glow line", DSC: "love line" };
 export const ANGLE_WHERE: Record<string, string> = {
-  MC: "sits at the very top of your sky here, the part of your chart that runs career, reputation and money",
+  MC: "sits at the very top of your sky here, the part of your chart that runs career, reputation and being SEEN",
   IC: "sits right under your feet here, the part of your chart that runs home, family and feeling safe",
   ASC: "is rising here, the part of your chart that runs you, your body and your glow",
   DSC: "is setting here, the part of your chart that runs love, partners and who you attract",
