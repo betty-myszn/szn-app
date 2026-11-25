@@ -4,7 +4,6 @@ import Link from "next/link";
 import CovenOpenSwitch from "@/components/CovenOpenSwitch";
 import { OFFERS, type OfferSlug } from "@/lib/offers";
 import { SESSION_OPTIONS } from "@/lib/baddie-sessions";
-import { MASTERMIND, MASTERMIND_STARTS } from "@/lib/mastermind";
 import { track, EVENTS } from "@/lib/analytics";
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
@@ -34,7 +33,6 @@ const CARDS: Card[] = [
     body: "Ninety minutes with me, after I've spent two to three hours obsessing over your astrology and your Human Design, with hypnosis, mindset and energy work wherever your goals need them.",
     cta: "pick your session",
   },
-  offerCard("mastermind", `Ninety days of becoming HER in a group of only ${MASTERMIND.spots}, with calls every two weeks, two private sessions with me and me on Telegram between calls. We start ${MASTERMIND_STARTS}. 🪐`),
 ];
 
 const click = (label: string) => track(EVENTS.CTA_CLICK, { label, location: "results_upsell" });
@@ -60,7 +58,7 @@ export default function ResultsUpsell({ name }: { name?: string }) {
         {/* The coven, featured: foil card, so everything on it stays solid black (no holo on holo). */}
         <div className="hd-foil" style={{ position: "relative", marginTop: 40, border: "var(--border)", borderRadius: 24, padding: "30px 28px", boxShadow: "10px 12px 0 var(--dark)", color: "var(--dark)" }}>
           <span style={{ position: "absolute", top: -14, right: 18, transform: "rotate(4deg)", background: "var(--dark)", color: "#fff", borderRadius: 999, padding: "7px 14px", fontFamily: pp, fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            <CovenOpenSwitch open={<>open again · until tuesday the 24th</>} closed={<>founding price · join the waitlist</>} />
+            <CovenOpenSwitch open={<>founding price · ends christmas eve</>} closed={<>founding price · join the waitlist</>} />
           </span>
           <div className="md:flex md:items-center md:justify-between gap-8">
             <div style={{ maxWidth: 600 }}>
@@ -77,7 +75,7 @@ export default function ResultsUpsell({ name }: { name?: string }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginTop: 32 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginTop: 32 }}>
           {CARDS.map((c) => (
             <div key={c.key} style={{ display: "flex", flexDirection: "column", background: "#fff", border: "var(--border)", borderRadius: 22, padding: "26px 24px", boxShadow: "7px 9px 0 var(--pink)", color: "var(--dark)" }}>
               <div style={{ fontSize: 30, lineHeight: 1 }}>{c.emoji}</div>

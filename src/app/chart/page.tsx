@@ -191,7 +191,7 @@ export default function ChartPage() {
           Your chart is just the beginning. Inside the Bad B*tch Coven you get a personalised platform built around YOUR chart and Human Design, a live coven circle every month and a whole coven of baddies doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          If you want me up close, <a href="/mastermind" style={{ color: "var(--pink)", textDecoration: "underline" }}>the Bad B*tch Mastermind</a> starts on the 11th of January 2027.
+          If you want me one to one, <Link href="/baddie-sessions" style={{ color: "var(--pink)", textDecoration: "underline" }}>book a Baddie Session</Link> with me.
         </p>
         <a href="/baddie-coven" style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

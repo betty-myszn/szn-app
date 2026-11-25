@@ -15,7 +15,9 @@ const poppins = "var(--font-poppins), Poppins, sans-serif";
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // The MY SZN brand homepage (13 Oct 2026). Introduces the whole universe: two reports, the Baddie
-// Coven, the Mastermind, the Retreat, the podcast and the book, each with its own section and link.
+// Coven, the Retreat, the podcast and the book, each with its own section and link. The Mastermind
+// was taken off the site on 19 Nov 2026 (Betty is launching a money course instead); its page code
+// is kept, and /mastermind redirects to the coven.
 // The old homepage (the Mastermind sales page) now lives at /mastermind almost word for word.
 //
 // Section jobs, so nothing gets sold twice:
@@ -52,7 +54,6 @@ const UNIVERSE = [
   OFFERS["rich-btch-rising"],
   OFFERS["bad-btch-report"],
   OFFERS["baddie-coven"],
-  OFFERS.mastermind,
   OFFERS.retreat,
   { ...PODCAST, line: "the weekly pep talk your future self would give you", slug: "podcast" },
   OFFERS.book,
@@ -72,12 +73,13 @@ function Button({ href, children, tone = "dark" }: { href: string; children: Rea
 }
 
 // The "your baddie szn" grid: Betty's copy word for word, each way in on its own brand colour so the
-// grid reads as a colour block instead of seven matching boxes. Wide cards break the rhythm.
+// grid reads as a colour block instead of seven matching boxes. Wide cards break the rhythm (2+1, 1+2,
+// 1+1+1). Rich B*tch Rising, the money programme, took the Mastermind's slot on 25 Nov 2026.
 const SZN_WAYS: { emoji: string; title: string; body: string; href: string; ctaLabel: string; bg: string; ink: string; head?: string; cta: string; wide?: boolean }[] = [
   { emoji: "🪐", title: "Get your Astro & HD reports", body: "Your birth chart has RECEIPTS, babe. Find out how you're wired, where your money magic lives, what makes you magnetic and how to use your astrology to your advantage.", href: "/reports", ctaLabel: "get your report", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)", wide: true },
   { emoji: "🦄", title: "Join the Bad B*tch Coven", body: "Witches, weirdos and wonderful women, ASSEMBLE. Make new friends, cast spells, get creative and find the kind of girl gang you've always wanted.", href: "/baddie-coven", ctaLabel: "join the coven", bg: "var(--lav)", ink: "var(--dark)", cta: "var(--dark)" },
   { emoji: "💜", title: "Book a 1:1 session", body: "Got big dreams and some sh*t to work through? Let's get into it. Astrology, manifestation, shadow work, money and becoming the most powerful version of YOU.", href: "/baddie-sessions", ctaLabel: "book a session", bg: "var(--dark)", ink: "#fff", head: "var(--pink)", cta: "var(--pink)" },
-  { emoji: "🔥", title: "Join the mastermind", body: "Big dreams. Bigger moves. Women who actually want to see you WIN. Get coaching, accountability and a whole room of baddies who refuse to play small.", href: "/mastermind", ctaLabel: "join the mastermind", bg: "var(--pink-light)", ink: "var(--dark)", cta: "var(--pink)", wide: true },
+  { emoji: "💸", title: "Join Rich B*tch Rising", body: "Eight weeks of money manifestation with me, babe. Your chart, your Human Design, your shadows and your spells, ALL pointed at your bank account. 💸", href: "/rich-btch-rising", ctaLabel: "join the waitlist", bg: "var(--pink-light)", ink: "var(--dark)", cta: "var(--pink)", wide: true },
   { emoji: "🌴", title: "Come to our retreat", body: "Pack your bags, b*tch. We're going to MEXICO. Think astrology, witchcraft, shadow work, sisterhood and the kind of experiences you'll be talking about for YEARS.", href: "/retreat", ctaLabel: "come with us", bg: "var(--lav-light)", ink: "var(--dark)", cta: "var(--pink)" },
   { emoji: "🎤", title: "Listen to the podcast", body: "Big conversations, wild stories, astrology, money, manifestation and women who are doing whatever the f*ck they want. Pop your headphones in, babe.", href: "/podcast", ctaLabel: "listen", bg: "var(--dark)", ink: "#fff", head: "#fff", cta: "var(--pink)" },
   { emoji: "📖", title: "Read our book", body: "Consider this your permission slip to stop following everyone else's rules. Get into the astrology, self-discovery and practical magic that'll help you write your own damn story.", href: "/book", ctaLabel: "get the book", bg: "var(--pink)", ink: "var(--dark)", head: "#fff", cta: "var(--dark)" },
@@ -167,23 +169,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 4. MASTERMIND ─── */}
-      <section className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 88, borderBottom: "var(--border)" }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="tag mb-5">🪐 the bad b*tch mastermind</div>
-          <h2 className="display" style={{ fontSize: "clamp(36px, 6.5vw, 80px)", color: "#fff", lineHeight: 0.98 }}>
-            90 days to <span className="pk">become her.</span>
-          </h2>
-          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "rgba(255,255,255,0.88)", marginTop: 24, maxWidth: 740, fontWeight: 500 }}>
-            Our premium 90-day transformation experience, where your birth chart and Human Design meet self-concept work, manifestation, shadow work, group coaching and accountability, with a private 1:1 with Betty every single month, for ambitious women who want to make BIGGER moves, more $$$ and their absolute best life.
-          </p>
-          <p style={{ fontSize: 16, fontWeight: 800, color: "#fff", marginTop: 16 }}>{OFFERS.mastermind.price}. Only 8 spots, starting the 11th of January 2027.</p>
-          <div style={{ marginTop: 30 }}>
-            <Button href="/mastermind" tone="pink">tell me everything</Button>
-          </div>
-        </div>
-      </section>
-
       {/* ─── 5. REPORTS ─── */}
       <section className="px-5 md:px-8" style={{ background: "var(--lav-light)", borderBottom: "var(--border)", paddingTop: 76, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto">
@@ -191,16 +176,18 @@ export default function Home() {
           <h2 className="display" style={{ fontSize: "clamp(34px, 6vw, 72px)", color: "var(--dark)", lineHeight: 1 }}>
             your chart, <span className="pk">in writing.</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5" style={{ marginTop: 30 }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ marginTop: 30 }}>
             {[
-              { o: OFFERS["rich-btch-rising"], bg: "var(--pink)", ink: "var(--dark)", body: "Your personalised money report: wealth, earning potential, money blocks, financial independence and the self-worth that decides what you charge." },
-              { o: OFFERS["bad-btch-report"], bg: "var(--dark)", ink: "#fff", body: "Your personalised confidence report: personal power, visibility, self-expression, boundaries and becoming your most unapologetic self." },
-            ].map(({ o, bg, ink, body }) => (
-              <Link key={o.slug} href={o.href} className="no-underline offer-card" style={{ background: bg, color: ink, border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
-                <div style={{ fontSize: 38 }}>{o.emoji}</div>
-                <h3 className="display" style={{ fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1, marginTop: 10, color: ink }}>{o.name}</h3>
+              { key: "rich-btch-rising", emoji: OFFERS["rich-btch-rising"].emoji, name: OFFERS["rich-btch-rising"].name, href: OFFERS["rich-btch-rising"].href, cta: OFFERS["rich-btch-rising"].cta, bg: "var(--pink)", ink: "var(--dark)", ctaInk: "#fff", body: "Your personalised money report: wealth, earning potential, money blocks, financial independence and the self-worth that decides what you charge." },
+              { key: "bad-btch-report", emoji: OFFERS["bad-btch-report"].emoji, name: OFFERS["bad-btch-report"].name, href: OFFERS["bad-btch-report"].href, cta: OFFERS["bad-btch-report"].cta, bg: "var(--dark)", ink: "#fff", ctaInk: "var(--pink)", body: "Your personalised confidence report: personal power, visibility, self-expression, boundaries and becoming your most unapologetic self." },
+              // Added 25 Nov 2026: the Style Report sells from /reports, where #style-report opens its page.
+              { key: "style-report", emoji: "👗", name: "The Baddie Style Report", href: "/reports#style-report", cta: "get my report", bg: "#fff", ink: "var(--dark)", ctaInk: "var(--pink)", body: "Your personalised style report: your colours, your shapes, a few key outfits and the key pieces to buy, read from your Venus, Rising and Moon and picked to your budget." },
+            ].map(({ key, emoji, name, href, cta, bg, ink, ctaInk, body }) => (
+              <Link key={key} href={href} className="no-underline offer-card" style={{ background: bg, color: ink, border: "var(--border)", borderRadius: 22, padding: "30px 26px", display: "block" }}>
+                <div style={{ fontSize: 38 }}>{emoji}</div>
+                <h3 className="display" style={{ fontSize: "clamp(28px, 3.4vw, 40px)", lineHeight: 1, marginTop: 10, color: ink }}>{name}</h3>
                 <p style={{ fontSize: 16, lineHeight: 1.7, marginTop: 14, fontWeight: 500 }}>{body}</p>
-                <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: o.slug === "bad-btch-report" ? "var(--pink)" : "#fff" }}>{o.cta} →</div>
+                <div style={{ fontFamily: poppins, fontSize: 13, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 18, color: ctaInk }}>{cta} →</div>
               </Link>
             ))}
           </div>
@@ -212,7 +199,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="tag mb-5" style={{ color: "var(--dark)" }}>🦄 the bad b*tch coven</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 6.5vw, 80px)", color: "var(--dark)", lineHeight: 0.98 }}>
-            a clubhouse <span style={{ color: "#fff" }}>for witches.</span>
+            a home <span style={{ color: "#fff" }}>for witches.</span>
           </h2>
           <p style={{ fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.75, color: "var(--dark)", marginTop: 24, maxWidth: 740, fontWeight: 600 }}>
             Our ongoing magical membership, with a live coven circle every month, a platform personalised to your birth chart and Human Design, moon rituals, shadow work, chat rooms and a community of women who bring a ridiculous amount of magic into their everyday lives together.

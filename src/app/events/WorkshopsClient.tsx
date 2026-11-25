@@ -124,7 +124,7 @@ export default function WorkshopsClient() {
           </h2>
           {member && (
             <p style={{ fontSize: 14, color: "var(--grey)", lineHeight: 1.8, maxWidth: 540, margin: "16px auto 0" }}>
-              A live group mastermind every season, replays and rituals, all part of your three months. Show up live for the full experience, or catch the replay in your own time.
+              A live coven circle every month, plus the replays and rituals, all part of your membership. Show up live for the full experience, or catch the replay in your own time.
             </p>
           )}
         </div>

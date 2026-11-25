@@ -151,7 +151,7 @@ export default function SeasonsIndexPage() {
             ))}
           </div>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--dark)", marginTop: 26, maxWidth: 760 }}>
-            Every month you get a private 1:1 with Betty, every season has a live group mastermind and its own hypnosis, and the cohort moves through all three seasons together.
+            Inside the Bad B*tch Coven you live every season against your own chart, with a live coven circle every month and rituals waiting for every new and full moon.
           </p>
         </div>
       </section>
@@ -218,7 +218,7 @@ export default function SeasonsIndexPage() {
             lock in for the <span style={{ color: "#fff" }}>next chapter.</span>
           </h2>
           <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--dark)", fontWeight: 600, marginTop: 20 }}>
-            Founding price: $555 a month for three months, worth $1,111 a month, and it's going up after the founding cohort.
+            Live every season against your own chart inside the Bad B*tch Coven, with baddies all over the world doing it with you.
           </p>
           <DoorButton center />
         </div>

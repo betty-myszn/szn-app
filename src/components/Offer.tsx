@@ -115,7 +115,7 @@ export function WaitlistBand({ offer, title, accent, body, question, questions, 
 export function OfferCards({ exclude, title = "the rest of the universe", tone = "lav" }: { exclude?: OfferSlug | OfferSlug[]; title?: string; tone?: Tone }) {
   const skip: string[] = Array.isArray(exclude) ? exclude : exclude ? [exclude] : [];
   const cards = [
-    ...(["rich-btch-rising", "bad-btch-report", "baddie-coven", "mastermind", "retreat"] as OfferSlug[]).map((s) => OFFERS[s]),
+    ...(["rich-btch-rising", "bad-btch-report", "baddie-coven", "retreat"] as OfferSlug[]).map((s) => OFFERS[s]),
     { ...PODCAST, line: "the weekly pep talk your future self would give you", slug: "podcast" },
     OFFERS.book,
   ].filter((c) => !skip.includes(c.slug));

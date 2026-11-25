@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s | MY SZN",
   },
   description:
-    "MY SZN is a universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and unapologetic: personalised money + confidence reports, The Bad B*tch Coven, the 90-day Mastermind, The Bad B*tch Retreat, the podcast and the book.",
+    "MY SZN is a universe of astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and unapologetic: personalised money + confidence reports, The Bad B*tch Coven, 1:1 Baddie Sessions with Betty, The Bad B*tch Retreat, the podcast and the book.",
   // Default canonical for the home page. Every other route overrides it with its own, which is what
   // stops query-string and trailing-slash variants being indexed as separate pages.
   alternates: { canonical: "/" },
@@ -53,12 +53,12 @@ export const metadata: Metadata = {
     url: "/",
     siteName: SITE_NAME,
     title: "MY SZN, a Universe for Women Becoming HER 💜",
-    description: "Astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and completely obsessed with their lives. Reports, The Bad B*tch Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book.",
+    description: "Astrology, manifestation, creativity and sisterhood for women who want to be rich, confident and completely obsessed with their lives. Reports, The Bad B*tch Coven, The Bad B*tch Retreat, the podcast and the book.",
   },
   twitter: {
     card: "summary_large_image",
     title: "MY SZN, a Universe for Women Becoming HER 💜",
-    description: "Astrology, manifestation, creativity and sisterhood for women becoming HER. Reports, The Bad B*tch Coven, the Mastermind, The Bad B*tch Retreat, the podcast and the book."
+    description: "Astrology, manifestation, creativity and sisterhood for women becoming HER. Reports, The Bad B*tch Coven, The Bad B*tch Retreat, the podcast and the book."
   },
   robots: {
     index: true,
@@ -92,7 +92,7 @@ const siteJsonLd = {
       legalName: "The Cosmic Co.",
       url: SITE_URL,
       description:
-        "A three-month mastermind for ambitious women that reads astrology and Human Design together as one system, combining birth chart work, Human Design, live coaching and subconscious rewiring.",
+        "Astrology, Human Design, manifestation and sisterhood for ambitious women, read together as one system: personalised reports, The Bad B*tch Coven and private coaching with Betty.",
       sameAs: ["https://instagram.com/itsmyszn"],
     },
     {
@@ -169,7 +169,6 @@ export default function RootLayout({
               // every page.
               { label: "reports", href: "/reports" },
               { label: "coven", href: "/baddie-coven" },
-              { label: "mastermind", href: "/mastermind" },
               { label: "retreat", href: "/retreat" },
               { label: "podcast", href: "/podcast" },
               { label: "book", href: "/book" },

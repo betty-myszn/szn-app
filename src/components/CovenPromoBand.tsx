@@ -6,7 +6,7 @@ import { OFFERS } from "@/lib/offers";
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
 // The homepage spotlight for the Bad B*tch Coven launch, in the slot under the hero that EventPromoBand
-// fills while an event is on sale. Launch facts (9 Nov, 4 days, $44 founding, 11/11) match the
+// fills while an event is on sale. The $44 founding price ends Christmas Eve (lib/coven-launch.ts); copy matches the
 // coven page; the countdown hides itself once the doors close.
 export default function CovenPromoBand() {
   const coven = OFFERS["baddie-coven"];
@@ -15,7 +15,7 @@ export default function CovenPromoBand() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
         <div>
           <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>
-            <CovenOpenSwitch open={<>🦄 the bad b*tch coven · open until tuesday the 24th</>} closed={<>🦄 opens 9 nov · 4 days only</>} />
+            <CovenOpenSwitch open={<>🦄 the bad b*tch coven · founding price ends christmas eve</>} closed={<>🦄 the bad b*tch coven</>} />
           </span>
           <h2 className="display" style={{ fontSize: "clamp(42px, 5.2vw, 72px)", color: "var(--dark)", lineHeight: 0.95, marginTop: 22 }}>
             <CovenOpenSwitch
@@ -27,10 +27,10 @@ export default function CovenPromoBand() {
             For women who want to live BIG lives, manifest outrageous things, make seriouuuus money and become completely obsessed with their own lives, with a monthly coven circle, personal guidance every season and a whole coven of baddies doing it with you.
           </p>
           <p style={{ fontFamily: pp, fontWeight: 800, fontSize: 17, color: "var(--dark)", margin: "14px 0 0" }}>
-            🎥 the 11/11 manifestation workshop replay is inside for members
+            🪩 our Sagittarius season Quantum Leap Challenge is happening inside right now
           </p>
           <p style={{ fontSize: 16, fontWeight: 600, color: "var(--dark)", margin: "6px 0 0" }}>
-            🔒 Join the coven and you can watch it tonight.
+            🔒 Join the coven today and you&apos;re straight in with us.
           </p>
           <div style={{ marginTop: 18 }}>
             <CovenCountdown />

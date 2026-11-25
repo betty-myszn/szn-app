@@ -72,7 +72,6 @@ const workMenu: MenuItem[] = [
   },
   { href: "/rich-btch-rising", label: "rich b*tch rising (money programme)" },
   { href: "/baddie-sessions", label: "the baddie sessions (1:1)" },
-  { href: "/mastermind", label: "the mastermind" },
 ];
 
 // The coven has its own menu: online (anywhere) and in person in LA, priced separately.

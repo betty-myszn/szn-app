@@ -99,11 +99,11 @@ const MEMBERS_ONLY = [
 
 const BENEFITS: Array<[string, string]> = [
   ["pick up where you left off", "your chart, journal, goals and progress are all still saved on this account."],
-  ["betty, privately, every month", "a private 1:1 every month and a live group mastermind every season."],
+  ["a live circle, every month", "one live coven circle a month with Betty and the whole coven, plus every replay."],
   ["coaching + community", "the member rooms and the women who actually talk about this stuff with you."],
   ["a platform that evolves with you", "your portal changes with the season and the version of you that's ready to emerge."],
   ["the full vault, always", "every replay, workbook and resource, yours for as long as you stay."],
-  ["three months, locked in", "one chapter of three zodiac seasons, with the doors opening for a few days at the start of every season."],
+  ["cancel anytime", "no contracts and no guilt trips, you can cancel in a couple of clicks from your settings."],
 ];
 
 // Read from the real schedule rather than a hardcoded list, so a woman who just lost access is never
@@ -208,7 +208,7 @@ export default async function TrialEndedPage() {
             <p>
               {"Your chart, your journal, your goals and everything you started this week are still saved. Join and you pick up in the exact same account, right where you left off."}
             </p>
-            <Link href="/membership" className="cta">see when the doors open</Link>
+            <Link href="/baddie-coven" className="cta">see the coven</Link>
             <p className="micro" style={{ marginTop: 14 }}>
               the doors open for a few days at the start of every season.
             </p>

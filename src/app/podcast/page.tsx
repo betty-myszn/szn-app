@@ -207,13 +207,13 @@ export default function PodcastPage() {
           love the podcast? go deeper.
         </div>
         <h2 style={{ fontFamily: pp, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 12 }}>
-          The Bad B*tch Mastermind.
+          The Bad B*tch Coven.
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "#fff", maxWidth: 480, margin: "0 auto 8px" }}>
-          Everything from the podcast, taken to the next level: your 1:1 audit and two private sessions with Betty, Telegram access between calls, group coaching every two weeks and only 8 women in the room.
+          Everything from the podcast, taken to the next level: a live coven circle every month, a personalised platform built around YOUR chart and Human Design, and a whole coven of baddies doing it with you.
         </p>
         <p style={{ fontSize: 12, color: "var(--pink)", fontWeight: 700, marginBottom: 20 }}>
-          Three-month cohorts with Betty · waitlist open now
+          online, from anywhere in the world 💜
         </p>
         <a href={JOIN_CTA.href} style={{
           display: "inline-block", background: "var(--pink)", color: "var(--dark)",

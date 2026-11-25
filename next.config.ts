@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/membership", destination: "/baddie-coven", permanent: false },
+      // The Mastermind is off the site for now (19 Nov 2026): Betty is launching a money course
+      // instead. The page code is kept; remove this line to bring it back.
+      { source: "/mastermind", destination: "/baddie-coven", permanent: false },
       // Back to The Bad B*tch Coven (10 Nov 2026) after a day as "The Bad B*tch Club". Links already
       // sent with the club addresses land on the coven pages. Only these exact pages.
       { source: "/bad-btch-club", destination: "/baddie-coven", permanent: false },

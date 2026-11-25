@@ -85,7 +85,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   { q: "Are the sessions online?", a: "Yes, all on Zoom, so you can join from anywhere in the world, in your pyjamas, with a matcha. Love that for you." },
   {
     q: "Can I work with Betty for longer?",
-    a: <>Obsessed with that energy. Grab <a href="#package" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd}, book another Baddie Session whenever you&apos;re ready for round two, or go full throttle for ninety days in <a href="/mastermind" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>the Bad B*tch Mastermind</a>.</>,
+    a: <>Obsessed with that energy. Grab <a href="#package" style={{ color: "var(--pink)", fontWeight: 700, textDecoration: "underline" }}>three sessions for ${SESSION_PACKAGE.priceUsd}</a> and save ${SESSION_PACKAGE.wasUsd - SESSION_PACKAGE.priceUsd} and book another Baddie Session whenever you&apos;re ready for round two.</>,
   },
 ];
 

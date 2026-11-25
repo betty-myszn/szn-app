@@ -17,12 +17,11 @@ export interface Cta {
 }
 
 /** The join: the default ask for anyone who isn't a member. */
-// Oct 2026: every MY SZN offer is waitlist-only while the ecosystem relaunches, and the old
-// "apply for my szn" join was the Mastermind (private 1:1s with Betty), so it now lands on the
-// Mastermind waitlist. /membership itself redirects to The Bad B*tch Coven.
+// 19 Nov 2026: the Mastermind is off the site (Betty is launching a money course instead), so the
+// join lands on The Bad B*tch Coven, the paid membership. /membership redirects there too.
 export const JOIN_CTA: Cta = {
-  href: "/mastermind#waitlist",
-  label: "join the mastermind waitlist",
+  href: "/baddie-coven",
+  label: "join the coven",
 };
 
 /**

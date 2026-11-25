@@ -320,7 +320,7 @@ function JoinBand() {
 /** The rest of MY SZN, kept small so it never competes with the waitlist. */
 function MoreMySzn() {
   const links = [
-    ...(["rich-btch-rising", "bad-btch-report", "mastermind", "retreat", "book"] as OfferSlug[]).map((s) => OFFERS[s]),
+    ...(["rich-btch-rising", "bad-btch-report", "retreat", "book"] as OfferSlug[]).map((s) => OFFERS[s]),
     PODCAST,
   ];
   return (

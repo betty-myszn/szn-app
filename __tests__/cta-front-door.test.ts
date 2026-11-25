@@ -60,10 +60,11 @@ describe("joining is the only front door", () => {
     expect(offenders).toEqual([]);
   });
 
+  // The join is The Bad B*tch Coven since 19 Nov 2026, when Betty took the Mastermind off the site.
   it("routes non-members to the join", async () => {
     const { JOIN_CTA, joinCta } = await import("@/lib/cta");
-    expect(JOIN_CTA.href).toBe("/mastermind#waitlist");
-    expect(joinCta(false).href).toBe("/mastermind#waitlist");
+    expect(JOIN_CTA.href).toBe("/baddie-coven");
+    expect(joinCta(false).href).toBe("/baddie-coven");
     expect(joinCta(true, "#pricing").href).toBe("#pricing");
   });
 });
