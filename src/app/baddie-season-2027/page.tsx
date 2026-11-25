@@ -189,7 +189,8 @@ export default function BaddieSeason2027Page() {
 
       {/* Plan your next era */}
       <section className="px-5 md:px-8" style={{ background: "var(--pink-light)", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
+          <div>
           <Tag>your 2027, mapped out</Tag>
           <H2>babyyyyy, <span className="pk">let&apos;s plan your next era.</span></H2>
           <div style={{ marginTop: 26, maxWidth: 760 }}>
@@ -198,6 +199,13 @@ export default function BaddieSeason2027Page() {
             <p style={copy()}>I&apos;ve created something very special for the ambitious women who are DONE putting their dreams on next year&apos;s to-do list. Your very own personalised guide to 2027.</p>
             <p style={{ ...copy(), fontWeight: 800 }}>The dates. The opportunities. The big changes. The money months. The relationship energy. The places in the world to explore. The patterns you&apos;re ready to leave behind.</p>
             <p style={{ fontFamily: pp, fontWeight: 900, fontSize: 26, textTransform: "uppercase", margin: "8px 0 0" }}>We&apos;re getting INTO IT. 🪐</p>
+          </div>
+          </div>
+          <div className="flex justify-center">
+            <div className="holo-edge" style={{ width: "min(420px, 86vw)", borderRadius: 24, overflow: "hidden", transform: "rotate(-2deg)", boxShadow: "12px 14px 0 var(--dark)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/coven/betty-sparkle.jpg" alt="Betty in a pink sequin two-piece against a silver tinsel backdrop" style={{ display: "block", width: "100%", height: "auto" }} />
+            </div>
           </div>
         </div>
       </section>
@@ -328,7 +336,7 @@ export default function BaddieSeason2027Page() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 items-center">
           <div className="flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/betty-founder.png" alt="Betty Andrews, astrologer and founder of MY SZN" style={{ width: "min(340px, 80vw)", borderRadius: 24, border: "var(--border)", objectFit: "cover", aspectRatio: "4 / 5", boxShadow: "10px 12px 0 var(--pink)" }} />
+            <img src="/coven/betty-sparkle.jpg" alt="Betty Andrews, astrologer and founder of MY SZN, in a pink sequin two-piece" style={{ width: "min(340px, 80vw)", borderRadius: 24, border: "var(--border)", objectFit: "cover", aspectRatio: "4 / 5", boxShadow: "10px 12px 0 var(--pink)" }} />
           </div>
           <div>
             <Tag>meet your astrologer</Tag>
