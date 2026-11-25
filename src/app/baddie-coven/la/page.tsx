@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     description: "Saturday 5th of December at Bacari Silver Lake. $49, anyone can come, no membership needed.",
     url: "/baddie-coven/la",
     type: "website",
-    images: [{ url: "/events/bacari/patio-fire-pit.jpg", width: 1600, height: 1066, alt: "The patio at Bacari Silver Lake, home of the first LA Baddie Brunch" }],
+    images: [{ url: "/events/brunch-mood/women-toasting.jpg", width: 1600, height: 1066, alt: "A table of women clinking pink cocktails together at brunch" }],
   },
-  twitter: { card: "summary_large_image", images: ["/events/bacari/patio-fire-pit.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/events/brunch-mood/women-toasting.jpg"] },
 };
 
 const pp = "var(--font-poppins), Poppins, sans-serif";
