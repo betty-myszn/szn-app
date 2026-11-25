@@ -823,7 +823,7 @@ async function drawCard() {
     x.fillStyle = "#1a1a1a"; let fs = 60; x.font = `800 ${fs}px ${fam}`; while (x.measureText(p.c.name).width > 760 && fs > 36) { fs -= 4; x.font = `800 ${fs}px ${fam}`; } x.fillText(p.c.name, 212, y0 + 120);
     x.font = `700 26px ${fam}`; x.textAlign = "right"; x.fillText(`${p.h.line.planet} ${ANGLE_LINE[p.h.line.angle]}`, 978, y0 + 56); x.textAlign = "left";
   });
-  x.fillStyle = "#1a1a1a"; x.textAlign = "center"; x.font = `700 32px ${fam}`; x.fillText("find yours free at itsmyszn.com/power-places", 540, 1850);
+  x.fillStyle = "#1a1a1a"; x.textAlign = "center"; x.font = `700 32px ${fam}`; x.fillText("made with MY SZN · itsmyszn.com", 540, 1850);
   return new Promise((res) => cv.toBlob(res, "image/png"));
 }
 let shareUrl = null;
