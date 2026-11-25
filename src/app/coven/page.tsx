@@ -200,7 +200,7 @@ export default function CovenHomePage() {
           <div style={{ justifySelf: "center", position: "relative", width: "100%", maxWidth: 270, transform: "rotate(2.5deg)" }}>
             {/* Betty's own power places card, from her chart, as the preview of what every member gets */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/coven/power-places-preview.jpg" alt="Betty's power places card: Dubai for love, Istanbul for money, Barbados for a glow up, Tahiti for home" width={720} height={1280} className="block w-full h-auto" style={{ borderRadius: 22, border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }} />
+            <img src="/coven/power-places-preview.jpg" alt="Betty's power places card: Istanbul for money, Denver for self-love, Barbados for a glow up, Tahiti for travel" width={720} height={1280} className="block w-full h-auto" style={{ borderRadius: 22, border: "var(--border)", boxShadow: "6px 6px 0 var(--dark)" }} />
             <span style={{ position: "absolute", left: -10, top: 18, transform: "rotate(-7deg)", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px", borderRadius: 999 }}>betty&apos;s map 💅</span>
           </div>
         </Link>
