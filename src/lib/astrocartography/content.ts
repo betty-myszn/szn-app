@@ -78,17 +78,23 @@ export const SCORES: Record<string, Record<string, number>> = {
   glow: { "Venus|ASC": 10, "Sun|ASC": 9, "Jupiter|ASC": 8, "Mars|ASC": 7, "Pluto|ASC": 4, "Moon|ASC": 4 },
   healing: { "Moon|IC": 8, "Neptune|IC": 7, "Jupiter|IC": 7, "Neptune|ASC": 6, "Moon|ASC": 6, "Venus|IC": 6, "Pluto|IC": 4 },
   create: { "Neptune|MC": 8, "Venus|MC": 8, "Mercury|MC": 7, "Neptune|ASC": 7, "Uranus|MC": 6, "Mercury|ASC": 6, "Sun|MC": 5, "Venus|ASC": 5, "Moon|MC": 4 },
+  selflove: { "Venus|ASC": 10, "Sun|ASC": 9, "Moon|ASC": 8, "Venus|IC": 7, "Moon|IC": 6, "Jupiter|ASC": 6, "Sun|IC": 5, "Neptune|ASC": 3 },
+  realise: { "Uranus|ASC": 10, "Uranus|MC": 10, "Neptune|ASC": 7, "Mercury|ASC": 6, "Mercury|MC": 4, "Jupiter|MC": 5, "Pluto|ASC": 6, "Neptune|MC": 5, "Uranus|IC": 4, "Mercury|IC": 4 },
+  challenge: { "Saturn|MC": 9, "Saturn|ASC": 9, "Pluto|ASC": 9, "Pluto|MC": 8, "Mars|ASC": 8, "Mars|MC": 7, "Saturn|DSC": 6, "Pluto|DSC": 6, "Mars|DSC": 5, "Saturn|IC": 5, "Pluto|IC": 5, "Uranus|ASC": 4 },
   adventure: { "Jupiter|ASC": 9, "Uranus|ASC": 8, "Mars|ASC": 7, "Jupiter|DSC": 6, "Uranus|DSC": 6, "Sun|ASC": 6, "Mercury|ASC": 5 },
 };
 
 export const GOALS = [
   { id: "love", label: "love", emoji: "💘", head: "to fall in LOVE" },
+  { id: "selflove", label: "self-love", emoji: "🪞", head: "to fall in love with YOURSELF" },
   { id: "money", label: "money", emoji: "💸", head: "to make serious MONEY" },
   { id: "career", label: "career", emoji: "👑", head: "to get SEEN for your work" },
   { id: "glow", label: "glow up", emoji: "✨", head: "for a full GLOW UP" },
   { id: "healing", label: "healing", emoji: "🌙", head: "to HEAL and feel held" },
   { id: "create", label: "creativity", emoji: "🎨", head: "to make your best WORK" },
   { id: "adventure", label: "adventure", emoji: "🌍", head: "for a wild ADVENTURE" },
+  { id: "realise", label: "realisations", emoji: "💡", head: "for the big REALISATIONS" },
+  { id: "challenge", label: "challenge", emoji: "🔥", head: "to be CHALLENGED into your next level" },
 ];
 
 export const CITIES: { name: string; country: string; lat: number; lon: number }[] = ([

@@ -187,6 +187,9 @@ const GOAL_LEDE = {
   healing: "Soft home lines and dreamy Neptune spots where your nervous system finally exhales.",
   create: "Mercury, Venus and Neptune lines that open the creative floodgates.",
   adventure: "Jupiter and Uranus rising lines for the trip you tell stories about for years.",
+  selflove: "Your Venus, Sun and Moon rising lines, plus your softest home lines, where you catch your reflection and actually like her.",
+  realise: "Uranus, Neptune and Mercury lines where the penny drops, the old story cracks open and you see your life from a whole new angle.",
+  challenge: "Saturn, Pluto and Mars lines. These places push you hard, so go with intention, for a set amount of time, and come home a whole new level of you.",
 };
 
 // ── hero ──
