@@ -1,9 +1,10 @@
 // Your astro map: the astrocartography page. Framework-free on purpose, the map is pointer
 // gestures + an SVG viewBox and that is simpler to keep smooth outside React's render cycle.
 // mountPowerPlaces(root, chart) draws everything into root and returns a cleanup function.
-import { computeLines, distanceKm, PLANETS, ANGLES } from "./engine";
-import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY, ANGLE_LINE, ANGLE_WHERE, PLANET_PLAIN, HOW_LONG, WATCH_FOR, TRANSIT_VERB } from "./content";
+import { computeLines, distanceKm, PLANETS, BODIES, ANGLES } from "./engine";
+import { GLYPH, GIFT, ANGLE_INFO, PLANET_WORD, READINGS, SCORES, GOALS, CITIES, HOUSE_MEANING, SIGNS, ASPECT_WORD, TRANSIT_COPY, ANGLE_LINE, ANGLE_WHERE, PLANET_PLAIN, HOW_LONG, WATCH_FOR, TRANSIT_VERB, SIGN_STYLE, RULER, HOUSE_SHORT, ASPECT_TONE, GOAL_BLURB } from "./content";
 import { LAND } from "./land";
+import { MORE_CITIES, ISLANDS } from "./cities-more";
 
 const TEMPLATE = `<section class="hero">
   <div class="wrap">
@@ -14,7 +15,17 @@ const TEMPLATE = `<section class="hero">
     <div class="birth"><span class="dot"></span><span id="birthline"></span></div>
     <div style="margin-top:14px"><button class="btn" id="shareBtn">📲 share my astro map</button></div>
 
-    <div class="angles" id="angles"></div>
+  </div>
+</section>
+
+<section class="want" id="wantSec">
+  <div class="wrap">
+    <div class="tag">start here</div>
+    <h2 class="h2" style="margin-top:8px">pick what you want <span class="holo-text">MORE</span> of.</h2>
+    <p class="lede">Tap one and your map ranks every place on earth for it, with the WHY in plain words.</p>
+    <div class="wantgrid" id="want"></div>
+    <div class="tag" style="margin-top:18px">or go for</div>
+    <div class="wantmore" id="wantMore"></div>
   </div>
 </section>
 
@@ -35,11 +46,11 @@ const TEMPLATE = `<section class="hero">
       <div class="tag" id="tabTag"></div>
       <h2 class="h2" id="tabHead" style="margin-top:8px"></h2>
       <p class="lede" id="tabLede"></p>
-      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>career line</b> (career, reputation, being seen), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Your <b>money lines</b> are your Jupiter and Venus lines: wherever those run, money comes to you easier. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p></details>
+      <details class="howto"><summary>new to this? how to read your map</summary><p>Every planet in your chart draws lines across the world map. Live, travel or holiday near one of those lines and that planet switches ON in your life. Each planet has four lines: the <b>career line</b> (career, reputation, being seen), the <b>home line</b> (home, family, feeling safe), the <b>glow line</b> (you, your body, your confidence) and the <b>love line</b> (love, partners, who you attract). The closer a city sits to a line, the stronger it works: under 150km is right on it, under 400km is strong, under 900km you still feel it. Your <b>money lines</b> are your Jupiter and Venus lines: wherever those run, money comes to you easier. Pink lines are your easy, lucky planets. Black lines are your growth planets, the ones that push you to level up.</p><div class="angles" id="angles"></div></details>
     </div>
 
     <div class="mapcard">
-      <div class="maphead"><b>your lines</b><span style="font-size:12px;font-weight:700">tap a line or a pin</span></div>
+      <div class="maphead"><b>your lines</b><span style="display:flex;align-items:center;gap:10px"><span class="maptip" style="font-size:12px;font-weight:700">tap a line or a pin</span><button class="region bigbtn" id="bigMap" aria-pressed="false">⤢ full screen</button></span></div>
       <div class="regions" id="regions"></div>
       <div class="mapbox" id="mapbox">
         <svg id="map" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -115,7 +126,7 @@ const TEMPLATE = `<section class="hero">
     <div class="block">
       <div class="tag">girls' trip planner</div>
       <h2 class="h2" style="margin-top:8px">where you glow <span class="holo-text">together.</span></h2>
-      <p class="lede">Add your bestie's birth details and we find the places that light up BOTH of your charts, so the trip is magic for each of you.</p>
+      <p class="lede">Add your bestie's birth details, pick the vibe of the trip, and we find the places that light up BOTH of your charts, plus the dates when you're both lit up, so the trip is magic for each of you.</p>
     </div>
     <div class="bestie" id="bestieSlot"></div>
     <div class="cards" id="bestieOut"></div>
@@ -194,7 +205,14 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const lines = computeLines(CHART.julianDay, CHART.planets);
 const lineByKey = Object.fromEntries(lines.map((l) => [keyOf(l), l]));
 const birth = CHART.birthData;
-const cities = CITIES.slice();
+// Hand-picked dream destinations first, then the extended list (every country's biggest towns).
+const cities = CITIES.slice().concat(MORE_CITIES.map(([name, country, lat, lon]) => ({ name, country, lat, lon, extended: true })));
+// Places we never recommend while there is war or a do-not-travel warning. They still work in search.
+const NO_GO = new Set(["Afghanistan", "Iraq", "Syria", "Yemen", "Somalia", "Libya", "South Sudan", "Sudan", "North Korea", "Russia", "Ukraine", "Belarus", "Iran", "Haiti", "Mali", "Burkina Faso", "Niger", "Central African Republic", "DR Congo", "Myanmar", "Venezuela", "Palestine"]);
+const pickable = (c) => !NO_GO.has(c.country) && !c.extra;
+const featured = (c) => !c.extended;
+// Extended towns rank a step below the hand-picked dream destinations: they win only when they sit much closer to the line.
+const EXT = 0.6;
 if (!cities.some((c) => c.name.toLowerCase() === birth.location.city.toLowerCase())) {
   cities.push({ name: birth.location.city, country: birth.location.country === "United Kingdom" ? "UK" : birth.location.country, lat: birth.location.latitude, lon: birth.location.longitude, birth: true });
 }
@@ -207,11 +225,12 @@ const strength = (d) => (d < 150 ? ["right on it", "s3"] : d < 400 ? ["strong", 
 const km = (d) => (d < 10 ? "on the line" : `${Math.round(d / 10) * 10}km`);
 const lineName = (key) => { const [p, a] = key.split("|"); return `${GLYPH[p]} ${p} ${ANGLE_LINE[a]}`; };
 // On the money tab a Jupiter or Venus line is named a money line, because money is its own thing.
-const moneyName = (key) => { const [p] = key.split("|"); return !S.trip && S.tab === "activate" && S.goal === "money" && (p === "Jupiter" || p === "Venus") ? `${GLYPH[p]} ${p} money line` : lineName(key); };
+const MONEY_BODIES = new Set(["Jupiter", "Venus", "Part of Fortune"]);
+const moneyName = (key) => { const [p] = key.split("|"); return !S.trip && S.tab === "activate" && S.goal === "money" && MONEY_BODIES.has(p) ? `${GLYPH[p]} ${p} money line` : lineName(key); };
 // The one sentence that says why a city is on this list, in words a total beginner gets.
 const MONEY_ROUTE = { MC: "through your work and being SEEN", IC: "through home, property and family", ASC: "through YOU, your face and your personal brand", DSC: "through partners, clients and collabs" };
 const whyLine = (h, explained) => {
-  if (!S.trip && S.tab === "activate" && S.goal === "money" && (h.line.planet === "Jupiter" || h.line.planet === "Venus")) {
+  if (!S.trip && S.tab === "activate" && S.goal === "money" && MONEY_BODIES.has(h.line.planet)) {
     const near = h.d < 150 ? "and you're right on it" : `and it's only ${km(h.d)} away`;
     return `${PLANET_PLAIN[h.line.planet]}, draws one of your money lines here, ${near}. Here the money comes ${MONEY_ROUTE[h.line.angle]}.`;
   } const near = h.d < 150 ? "and you're right on the line" : h.d < 400 ? `and the line is only ${km(h.d)} away` : `and the line is ${km(h.d)} away, close enough to feel`; return explained ? `${PLANET_PLAIN[h.line.planet]}, is on your ${ANGLE_LINE[h.line.angle]} here, ${near}.` : `${PLANET_PLAIN[h.line.planet]}, ${ANGLE_WHERE[h.line.angle]}, ${near}.`; };
@@ -233,6 +252,23 @@ const natalPlanets = CHART.planets.filter((p) => PLANETS.includes(p.name)).map((
 const ord = (n) => n + (n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th");
 const britishDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return `${ord(d)} of ${new Date(Date.UTC(y, m - 1, 1)).toLocaleString("en-GB", { month: "long", timeZone: "UTC" })} ${y}`; };
 const signOf = (lon) => SIGNS[Math.floor((((lon % 360) + 360) % 360) / 30)];
+// Her chart, not anyone's: what this planet means for HER (sign, house, what it rules, its loudest aspect).
+const NATAL = Object.fromEntries((CHART.planets || []).map((p) => [p.name, p]));
+const yourTake = (p) => {
+  const P = NATAL[p]; if (!P) return [];
+  const out = [];
+  const where = P.house ? ` in your ${ord(P.house)} house` : "";
+  out.push(`Your ${p} is in ${P.sign}${where}, so here it plays out ${SIGN_STYLE[P.sign] || "in your own way"}${P.house ? `, and it carries ${HOUSE_SHORT[P.house]} with it` : ""}.`);
+  if (PLANETS.includes(p) && Array.isArray(CHART.houses)) {
+    const rules = [...new Set(CHART.houses.filter((h) => RULER[h.sign] === p && h.house !== P.house).map((h) => HOUSE_SHORT[h.house]))];
+    if (rules.length) out.push(`It also rules ${rules.length > 1 ? rules.slice(0, -1).join(", ") + " and " + rules[rules.length - 1] : rules[0]} in your chart, so these places switch those on too.`);
+  }
+  const asp = (CHART.aspects || []).filter((a) => (a.planet1 === p || a.planet2 === p) && ASPECT_TONE[a.type] && PLANET_WORD[a.planet1 === p ? a.planet2 : a.planet1] && a.orb <= 5).sort((a, b) => a.orb - b.orb)[0];
+  if (asp) { const o = asp.planet1 === p ? asp.planet2 : asp.planet1; out.push(`${ASPECT_TONE[asp.type](o, PLANET_WORD[o])}.`); }
+  if (P.retrograde && PLANETS.includes(p) && p !== "Sun" && p !== "Moon") out.push(`It was retrograde when you were born, so these places get better every time you go back.`);
+  return out;
+};
+const yoursBox = (p) => { const t = yourTake(p); return t.length ? `<div class="yours"><b>in YOUR chart</b><p>${t.map(esc).join(" ")}</p></div>` : ""; };
 
 // ── state ──
 const S = { tab: "live", goal: "love", planet: "Venus", focus: null, city: null };
@@ -241,13 +277,15 @@ if (!S.city || !findCity(S.city)) S.city = "London";
 // Open on what she said she wants MORE of in Customise my szn.
 const PICK = opts.startGoal && (opts.startGoal === "live" || GOALS.some((g) => g.id === opts.startGoal)) ? opts.startGoal : null;
 if (PICK && !FREE) { if (PICK === "live") S.tab = "live"; else { S.tab = "activate"; S.goal = PICK; } }
+// No pick yet: open on the first location type from the launch, rich b*tch.
+if (!PICK && !FREE) { S.tab = "activate"; S.goal = "money"; }
 
-const weights = () => (S.trip ? SCORES.travel : SCORES[S.tab === "activate" ? S.goal : S.tab]);
+const weights = () => (S.trip ? SCORES[(bestie && bestie.vibe) || "travel"] : SCORES[S.tab === "activate" ? S.goal : S.tab]);
 function ranked(W = weights(), n = TOPN) {
   // Lines bunch together near the poles, so far-north and far-south places sit "near" lots of lines
   // without really being stronger. Past 55° the score is eased down (Lapland was topping every list).
   const polar = (lat) => (Math.abs(lat) <= 55 ? 1 : Math.max(0.3, 1 - (Math.abs(lat) - 55) / 20));
-  const scored = cities.map((c) => ({ c, score: polar(c.lat) * c.hits.map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((s, v, i) => s + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
+  const scored = cities.filter(pickable).map((c) => ({ c, score: (c.extended ? EXT : 1) * polar(c.lat) * c.hits.map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((s, v, i) => s + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
   const out = [];
   for (const r of scored) { if (out.some((o) => gcKm(o.c, r.c) < 700)) continue; out.push(r); if (out.length === n) break; }
   return out;
@@ -260,14 +298,19 @@ const TAB_COPY = {
 const GOAL_LEDE = {
   love: "Your Venus, Jupiter, Moon and Sun setting lines, the ones that pull your person towards you.",
   money: "Your money lines are your Jupiter and Venus lines. Wherever they run, money comes to you easier, and every city below shows you HOW it comes.",
-  career: "Top-of-the-chart lines where your name travels and the right people notice you.",
+  career: "Your top-of-the-chart lines, where you're seen, recognised and celebrated and your public profile grows. Hello, international it girl era.",
   glow: "Rising lines where you look and feel your absolute best from day one.",
   healing: "Soft home lines and dreamy Neptune spots where your nervous system finally exhales.",
   create: "Mercury, Venus and Neptune lines that open the creative floodgates.",
   adventure: "Jupiter and Uranus rising lines for the trip you tell stories about for years.",
   selflove: "Your Venus, Sun and Moon rising lines, plus your softest home lines, where you catch your reflection and actually like her.",
   realise: "Uranus, Neptune and Mercury lines where the penny drops, the old story cracks open and you see your life from a whole new angle.",
-  challenge: "Saturn, Pluto and Mars lines. These places push you hard, so go with intention, for a set amount of time, and come home a whole new level of you.",
+  fame: "Your top-of-the-chart lines plus your Neptune glamour, Uranus go-viral and Lilith cut-through lines, where your name travels, the press calls and the audience grows.",
+  peace: "Your Moon, Venus and Jupiter home lines and your softest Neptune spots, with every heavy line counted against a place, so the top of this list is where your whole body finally exhales.",
+  power: "Your Pluto, Mars and Sun lines, where you feel magnetic, ambitious and confident. Some of these places push you hard, so go with an intention and come home an even bigger version of yourself.",
+  girlstrip: "Your Venus and Jupiter rising and setting lines, where friendship, pleasure and adventure flow and you make memories you're still talking about at 85. Add your bestie below to find the places that light up BOTH your charts.",
+  business: "Your top-of-the-chart and partnership lines, for entrepreneurship, leadership, clients and collabs. Your next business headquarters might be somewhere you've never even considered.",
+  dreamlife: "Your softest home lines plus your Venus and Jupiter lines, where belonging, romance and creativity come together into a life you LOOOOVE waking up to.",
 };
 
 // ── hero ──
@@ -295,6 +338,20 @@ $("goals").innerHTML = GOALS.map((g) => FREE && !FREE_GOALS.has(g.id)
 root.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => { S.tab = b.dataset.tab; S.focus = null; S.trip = false; renderTab(true); }));
 $("goals").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-goal]"); if (!b) return; S.goal = b.dataset.goal; S.focus = null; renderTab(true); b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" }); });
 
+// The big picker at the top: the launch location types as tiles, the rest as chips, plus live + travel.
+const BIG = ["money", "career", "fame", "girlstrip", "power", "business", "dreamlife", "peace"];
+$("want").innerHTML = BIG.map((id) => { const g = GOALS.find((x) => x.id === id); const top = ranked(SCORES[id], 1)[0]; return `<button class="wtile" data-want="${id}"><span class="we">${g.emoji}</span><b>${esc(g.label)}</b><small>${esc(GOAL_BLURB[id] || "")}</small>${top ? `<span class="wno1">your no.1 · ${esc(top.c.name)}</span>` : ""}</button>`; }).join("");
+$("wantMore").innerHTML = GOALS.filter((g) => !BIG.includes(g.id)).map((g) => `<button class="chip" data-want="${g.id}">${g.emoji} ${esc(g.label)}</button>`).join("")
+  + `<button class="chip" data-want="tab:live">🏡 where to live</button><button class="chip" data-want="tab:travel">✈️ where to travel</button>`;
+root.querySelector("#wantSec").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-want]"); if (!b) return;
+  const v = b.dataset.want; S.focus = null; S.trip = false;
+  if (v.startsWith("tab:")) S.tab = v.slice(4); else { S.tab = "activate"; S.goal = v; }
+  renderTab(true);
+  $("tabTag").closest(".block").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+const syncWant = () => root.querySelectorAll("#wantSec [data-want]").forEach((b) => { const v = b.dataset.want; b.setAttribute("aria-pressed", String(!S.trip && (v.startsWith("tab:") ? S.tab === v.slice(4) : S.tab === "activate" && S.goal === v))); });
+
 let current = [];
 // Timing windows from the server, kept so every city can say when to go.
 let timing = null;
@@ -315,6 +372,7 @@ function renderTab(fly) {
   $("blines").style.display = trip ? "" : "none";
   const bl = root.querySelector(".legend .bl"); if (bl) bl.hidden = !trip;
   $("goals").querySelectorAll(".chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.goal === S.goal)));
+  syncWant();
   const goal = GOALS.find((g) => g.id === S.goal);
   const copy = trip ? { tag: "girls' trip planner", head: `your trip with ${bestie.name}, MAPPED.`, lede: `Pink and black are your lines, purple are ${bestie.name}'s. The pins are the places that light you BOTH up. Tap live, travel or activate to go back to just you.` }
     : S.tab === "activate" ? { tag: `go here to activate · ${goal.label}`, head: `where to go ${goal.head}.`, lede: GOAL_LEDE[S.goal] } : TAB_COPY[S.tab];
@@ -354,13 +412,15 @@ function renderCards() {
         <span class="why"><b>${whyLabel}:</b> ${esc(firstWithLead ? `Same ${moneyName(lead.key).replace(/^\S+ /, "")} as ${firstWithLead}, ${lead.d < 150 ? "with you right on it" : `only ${km(lead.d)} away`}, so ${!S.trip && S.tab === "activate" && S.goal === "money" ? "the money flows here too" : `${READINGS[lead.key].use} flow here too`}.` : whyLine(lead, angleExplained))}</span>
         ${text ? `<p>${esc(text)}</p>` : ""}${(() => { const w = bestWindow(r.c); if (!w) return ""; const now = w.start <= timing.today; const soon = !now && Date.parse(w.start) - Date.parse(timing.today) < 60 * 86400000; return now || soon ? `<span class="when2">${now ? "🔥 <b>lit up right now</b>" : "⏳ <b>lights up soon</b>"} · ${esc(windowText(w))}</span>` : ""; })()}<span class="pills">${pills}</span><span class="more">read it →</span>
       </span></button>`;
-  }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus all ten goals, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
+  }).join("") + (FREE && current.length ? `<button class="card lockcard" data-join="1"><span class="rank">🔒</span><span style="display:block;min-width:0"><h3>your no.4 and no.5</h3><p>Plus every location type, every town on earth and the rest of your map, inside the coven.</p><span class="more">unlock it →</span></span></button>` : "") || `<p class="lede">No strong lines for this one yet, try another.</p>`;
 }
 $("cards").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-city]"); if (b) openCity(b.dataset.city); });
 
 // ── map ──
 const svg = $("map"), box = $("mapbox");
-$("land").setAttribute("d", LAND);
+// Little islands under hand-picked island spots the coarse land outline leaves out, so no pin floats in the sea.
+const ISLAND_R = 0.3 * K;
+$("land").setAttribute("d", LAND + ISLANDS.map(([, la, lo]) => `M${(X(lo) - ISLAND_R).toFixed(1)},${Y(la).toFixed(1)}a${ISLAND_R},${ISLAND_R} 0 1,0 ${2 * ISLAND_R},0a${ISLAND_R},${ISLAND_R} 0 1,0 ${-2 * ISLAND_R},0`).join(""));
 for (const o of [-WW, WW]) { const u = document.createElementNS(NS, "use"); u.setAttribute("href", "#land"); u.setAttribute("x", o); $("land").after(u); }
 (() => { // light graticule: equator + tropics
   let g = "";
@@ -407,7 +467,7 @@ $("hits").addEventListener("click", (e) => { const k = e.target.dataset && e.tar
 
 // city dots (all) + pins (ranked)
 function drawDots() {
-  $("dots").innerHTML = OFFS.map((o) => cities.map((c) => `<circle data-city="${esc(c.name)}" cx="${X(c.lon) + o}" cy="${Y(c.lat)}" r="1" fill="#1a1a1a" stroke="#fff" style="cursor:pointer"/>`).join("")).join("");
+  $("dots").innerHTML = OFFS.map((o) => cities.filter(featured).map((c) => `<circle data-city="${esc(c.name)}" cx="${X(c.lon) + o}" cy="${Y(c.lat)}" r="1" fill="#1a1a1a" stroke="#fff" style="cursor:pointer"/>`).join("")).join("");
 }
 function drawPins() {
   $("pins").innerHTML = current.map((r, i) => `<g data-city="${esc(r.c.name)}" data-x="${X(r.c.lon)}" data-y="${Y(r.c.lat)}" style="cursor:pointer"><line stroke="#1a1a1a"/><circle fill="${i === 0 ? "#FF2D87" : "#fff"}" stroke="#1a1a1a"/><text text-anchor="middle" dominant-baseline="central" style="font-family:var(--font-poppins),Poppins,sans-serif" font-weight="800" fill="#1a1a1a">${i + 1}</text></g>`).join("");
@@ -534,7 +594,7 @@ function layout() {
     }
   });
   // city names when zoomed in
-  if (V.s > worldS() * 3) cities.forEach((c) => { if (current.some((r) => r.c === c)) return; const x = near(X(c.lon)), y = Y(c.lat); if (inView(x, y)) label(x, y - 14 * u, c.name, "#fff", "#1a1a1a", 10, false); });
+  if (V.s > worldS() * 3) cities.forEach((c) => { if (c.extended) return; if (current.some((r) => r.c === c)) return; const x = near(X(c.lon)), y = Y(c.lat); if (inView(x, y)) label(x, y - 14 * u, c.name, "#fff", "#1a1a1a", 10, false); });
   // line labels for the highlighted lines
   const rel = relevant();
   const keys = Object.keys(lineEls).filter((k) => (S.focus ? k === S.focus : rel.has(k)));
@@ -674,9 +734,9 @@ document.addEventListener("click", (e) => {
 }, { signal });
 
 // ── planet decoder ──
-$("planets").innerHTML = PLANETS.map((p) => `<button class="pbtn" data-planet="${p}" aria-pressed="${p === S.planet}"><span class="g">${GLYPH[p]}</span><small>${p}</small></button>`).join("");
+$("planets").innerHTML = BODIES.map((p) => `<button class="pbtn" data-planet="${p}" aria-pressed="${p === S.planet}"><span class="g">${GLYPH[p]}</span><small>${p}</small></button>`).join("");
 $("planets").addEventListener("click", (e) => { const b = e.target.closest("[data-planet]"); if (!b) return; S.planet = b.dataset.planet; renderDecode(); });
-function citiesOn(key, max = 350) { return cities.map((c) => ({ c, d: (c.hits.find((h) => h.key === key) || {}).d ?? Infinity })).filter((x) => x.d < max).sort((a, b) => a.d - b.d); }
+function citiesOn(key, max = 350) { return cities.filter(pickable).map((c) => ({ c, d: (c.hits.find((h) => h.key === key) || {}).d ?? Infinity })).filter((x) => x.d < max).sort((a, b) => (a.c.extended ? 1 : 0) - (b.c.extended ? 1 : 0) || a.d - b.d); }
 function renderDecode() {
   $("planets").querySelectorAll(".pbtn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.planet === S.planet)));
   $("decode").innerHTML = ANGLES.map((a) => {
@@ -691,7 +751,7 @@ $("decode").addEventListener("click", (e) => { const b = e.target.closest("[data
 (() => {
   const picks = [];
   for (const p of ["Saturn", "Pluto", "Mars"]) {
-    const best = cities.flatMap((c) => c.hits.filter((h) => h.line.planet === p).map((h) => ({ c, h }))).sort((a, b) => a.h.d - b.h.d).find((x) => !picks.some((o) => o.c === x.c));
+    const best = cities.filter(featured).flatMap((c) => c.hits.filter((h) => h.line.planet === p).map((h) => ({ c, h }))).sort((a, b) => a.h.d - b.h.d).find((x) => !picks.some((o) => o.c === x.c));
     if (best) picks.push(best);
   }
   $("care").innerHTML = picks.map(({ c, h }) => `<button class="ccard" data-city="${esc(c.name)}"><div class="k">${lineName(h.key)} · ${km(h.d)}</div><h4>${esc(c.name)}</h4><p>${esc(READINGS[h.key].short)} Best for ${esc(READINGS[h.key].use)}.</p></button>`).join("");
@@ -722,14 +782,14 @@ function openCity(name) {
       <div><b>👀 watch out for</b><span>${esc(WATCH_FOR[lead.line.planet])}</span></div>
     </div>` : "";
   openSheet(`<div class="tag">${esc(c.country)}</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>
-    ${lead ? `<div class="hook holo">${esc(whyLine(lead))}</div>${prac}<div class="tag" style="margin-top:22px">every line you're near here</div>` : ""}
+    ${lead ? `<div class="hook holo">${esc(whyLine(lead))}</div>${yoursBox(lead.line.planet)}${prac}<div class="tag" style="margin-top:22px">every line you're near here</div>` : ""}
     ${hits.map((h) => { const [lab, cls] = strength(h.d); const r = READINGS[h.key]; return `<div class="hitrow"><div class="hithead"><b>${lineName(h.key)} · ${esc(r.nick)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p>${esc(r.full)}</p></div>`; }).join("") || `<p class="lede">No lines run close to ${esc(c.name)} for you, which makes it a calm, neutral place where your birth chart does the talking.</p>`}
     <div style="margin-top:18px"><button class="btn" data-fly-city="${esc(c.name)}">show it on my map</button></div>`);
 }
 function openLine(key) {
   const [p, a] = key.split("|"), r = READINGS[key], on = citiesOn(key, 400);
   openSheet(`<div class="tag">${GLYPH[p]} your ${p} ${ANGLE_LINE[a]} · ${PLANET_WORD[p]}</div><h2><span class="holo-text">${esc(r.nick)}.</span></h2>
-    <div class="hook holo">${esc(r.short)}</div><p class="lede">${esc(r.full)}</p><p class="use"><b>go here for:</b> ${esc(r.use)}</p>
+    <div class="hook holo">${esc(r.short)}</div><p class="lede">${esc(r.full)}</p>${yoursBox(p)}<p class="use"><b>go here for:</b> ${esc(r.use)}</p>
     <div class="tag" style="margin-top:20px">cities on this line</div>
     <div class="pills" style="margin-top:10px">${on.length ? on.slice(0, 10).map((x) => `<button class="pill" data-open-city="${esc(x.c.name)}" style="cursor:pointer">${esc(x.c.name)} · ${km(x.d)}</button>`).join("") : '<span class="lede" style="margin:0">This one mostly runs over ocean and wide open land for you.</span>'}</div>
     <div style="margin-top:20px"><button class="btn" data-fly-line="${key}">show it on my map</button></div>`);
@@ -760,7 +820,7 @@ async function loadTiming() {
       const now = w.start <= today;
       const when = now ? `on now · until the ${britishDate(w.end)}` : `${britishDate(w.start)} to ${britishDate(w.end)}`;
       const seen = new Set();
-      const near = cities.flatMap((c) => c.hits.filter((h) => h.line.planet === w.natal && h.d < 350).map((h) => ({ c, h }))).sort((a, b) => a.h.d - b.h.d).filter((x) => !seen.has(x.c) && seen.add(x.c)).slice(0, 4);
+      const near = cities.filter(featured).flatMap((c) => c.hits.filter((h) => h.line.planet === w.natal && h.d < 350).map((h) => ({ c, h }))).sort((a, b) => a.h.d - b.h.d).filter((x) => !seen.has(x.c) && seen.add(x.c)).slice(0, 4);
       return `<div class="tcard${now ? " now" : ""}">
         <div class="when${now ? " holo" : ""}">${when}</div>
         <h4>${GLYPH[w.transit]} ${w.transit} ${ASPECT_WORD[w.aspect]} your ${GLYPH[w.natal]} ${w.natal}</h4>
@@ -770,57 +830,105 @@ async function loadTiming() {
     }).join("") || `<p class="lede">No big contacts to your planets in the next year, so your map reads exactly as it is drawn.</p>`;
   } catch (e) { if (!signal.aborted) el.innerHTML = `<p class="lede">The sky reading didn't load, refresh the page to try again.</p>`; }
 }
+// Full-screen map: the whole screen, for exploring every line and town up close.
+function setBig(on) {
+  root.querySelector(".mapcard").classList.toggle("full", on);
+  $("bigMap").textContent = on ? "✕ close" : "⤢ full screen"; $("bigMap").setAttribute("aria-pressed", String(on));
+  document.body.style.overflow = on ? "hidden" : "";
+  requestAnimationFrame(() => setRegion(region === "none" ? "top" : region, false));
+}
+$("bigMap").addEventListener("click", () => setBig(!root.querySelector(".mapcard").classList.contains("full")));
+window.addEventListener("keydown", (e) => { if (e.key === "Escape" && root.querySelector(".mapcard.full")) setBig(false); }, { signal });
 $("timing").addEventListener("click", (e) => { const b = e.target.closest("[data-open-city]"); if (b) openCity(b.dataset.openCity); });
 
 // ── girls' trip planner: places that light up both charts ──
+// Pick the vibe of the trip, see the places that light you BOTH up, and the dates when both of your
+// lines are switched on at once (her timing comes from the same /api/power-places maths as yours).
+const VIBES = [["girlstrip", "🍸 girls' trip"], ["glow", "✨ glow-up trip"], ["money", "💸 rich b*tch retreat"], ["peace", "🕊️ peace + reset"], ["adventure", "🌍 adventure"], ["business", "💻 business retreat"], ["power", "🔥 power trip"]];
 let bestie = null;
-function setBestie(chart, name) {
-  $("blines").innerHTML = "";
-  root.querySelector(".legend .bl")?.remove();
-  if (!chart) { bestie = null; $("bestieOut").innerHTML = ""; if (S.trip) { S.trip = false; renderTab(false); } return; }
-  const bl = computeLines(chart.julianDay, chart.planets);
-  const W = SCORES.travel;
-  const hits = new Map(cities.map((c) => [c, hitsAt(c.lat, c.lon, bl)]));
+const winFor = (tm, hs, W) => {
+  if (!tm) return null;
+  const ps = new Set(hs.filter((h) => h.d < 900 && (W[h.key] || 0) > 0).map((h) => h.line.planet));
+  const ws = tm.windows.filter((w) => ps.has(w.natal));
+  if (!ws.length) return null;
+  const rank = (w) => (w.start <= tm.today ? 0 : 10) + (w.transit === "Jupiter" ? 0 : 1);
+  return ws.slice().sort((x, y) => rank(x) - rank(y) || x.start.localeCompare(y.start))[0];
+};
+// Best dates for the two of you: the overlap of your windows if there is one, otherwise each of yours.
+function tripWhen(c, W) {
+  const a = winFor(timing, c.hits, W), b2 = winFor(bestie.timing, bestie.hits.get(c), W), nm = bestie.name;
+  if (a && b2) {
+    const st = a.start > b2.start ? a.start : b2.start, en = a.end < b2.end ? a.end : b2.end;
+    if (st <= en) return `${st <= (timing?.today || st) ? `now until the ${britishDate(en)}` : `the ${britishDate(st)} to the ${britishDate(en)}`}, when BOTH of your lines are lit up 🔥`;
+    return `yours: ${windowText(a)}. ${nm}'s: the ${britishDate(b2.start)} to the ${britishDate(b2.end)}`;
+  }
+  if (a) return `${windowText(a)}`;
+  if (b2) return `the ${britishDate(b2.start)} to the ${britishDate(b2.end)}, while ${b2.transit} is ${TRANSIT_VERB[b2.transit]} ${nm}'s ${b2.natal} lines`;
+  return "any time this year, nothing big is pulling on these lines for either of you";
+}
+function bestieRank() {
+  const W = SCORES[bestie.vibe], hits = bestie.hits;
   const sc = (hs) => hs.reduce((t, h) => t + (W[h.key] || 0) * prox(h.d), 0);
   const polarB = (lat) => (Math.abs(lat) <= 55 ? 1 : Math.max(0.3, 1 - (Math.abs(lat) - 55) / 20));
-  const scored = cities.map((c) => { const a = sc(c.hits), b = sc(hits.get(c)); return { c, a, b, score: a > 0 && b > 0 ? polarB(c.lat) * Math.sqrt(a * b) : 0 }; }).filter((r) => r.score > 0.3).sort((x, y) => y.score - x.score);
+  const scored = cities.filter(pickable).map((c) => { const a = sc(c.hits), b = sc(hits.get(c)); return { c, a, b, score: a > 0 && b > 0 ? (c.extended ? EXT : 1) * polarB(c.lat) * Math.sqrt(a * b) : 0 }; }).filter((r) => r.score > 0.3).sort((x, y) => y.score - x.score);
   const top = [];
   for (const r of scored) { if (top.some((o) => gcKm(o.c, r.c) < 700)) continue; top.push(r); if (top.length === 5) break; }
-  bestie = { name: name || "your bestie", lines: bl, hits, top };
+  bestie.top = top;
+}
+function renderBestie() {
+  const W = SCORES[bestie.vibe], hits = bestie.hits, nm = esc(bestie.name), top = bestie.top;
   const lead = (hs) => hs.filter((h) => (W[h.key] || 0) > 0).sort((x, y) => W[y.key] * prox(y.d) - W[x.key] * prox(x.d))[0];
-  const nm = esc(bestie.name);
-  $("bestieOut").innerHTML = top.length ? `<div class="bhead"><b>your trip, for you + ${nm}</b><button class="region" id="bestieMap">show ${nm}'s lines on the map</button></div>` + top.map((r, i) => {
+  const vibes = `<div class="tag" style="margin-top:6px">pick the vibe of the trip</div><div class="wantmore" id="vibes">${VIBES.map(([id, l]) => `<button class="chip" data-vibe="${id}" aria-pressed="${id === bestie.vibe}">${l}</button>`).join("")}</div>`;
+  $("bestieOut").innerHTML = vibes + (top.length ? `<div class="bhead"><b>your ${esc(VIBES.find((v) => v[0] === bestie.vibe)[1].replace(/^\S+ /, ""))}, for you + ${nm}</b><button class="region" id="bestieMap">show ${nm}'s lines on the map</button></div>` + top.map((r, i) => {
     const a = lead(r.c.hits), b = lead(hits.get(r.c));
     return `<button class="card ${i === 0 ? "top" : ""}" data-bcity="${esc(r.c.name)}">
       ${i === 0 ? '<span class="acg-sticker">your trip</span>' : ""}
       <span class="rank ${i === 0 ? "holo" : ""}">${i + 1}</span>
       <span style="display:block;min-width:0"><h3>${esc(r.c.name)}</h3>${r.c.country !== r.c.name ? `<div class="country">${esc(r.c.country)}</div>` : ""}
-        <span class="duo"><span><b>you</b> ${GLYPH[a.line.planet]} ${a.line.planet} ${a.line.angle} · ${esc(READINGS[a.key].nick)}</span><span class="b"><b>${nm}</b> ${GLYPH[b.line.planet]} ${b.line.planet} ${b.line.angle} · ${esc(READINGS[b.key].nick)}</span></span>
+        <span class="duo"><span><b>you</b> ${GLYPH[a.line.planet]} ${a.line.planet} ${ANGLE_LINE[a.line.angle]} · ${esc(READINGS[a.key].nick)}</span><span class="b"><b>${nm}</b> ${GLYPH[b.line.planet]} ${b.line.planet} ${ANGLE_LINE[b.line.angle]} · ${esc(READINGS[b.key].nick)}</span></span>
+        <span class="lit"><b>⏳ when:</b> ${esc(tripWhen(r.c, W))}</span>
         <span class="more">read it →</span></span></button>`;
-  }).join("") : `<p class="lede">Your charts pull in different directions, so there is no city that lights you both up strongly. Pick from your own travel list and hers and meet in the middle.</p>`;
+  }).join("") : `<p class="lede">Your charts pull in different directions for this vibe, so there is no city that lights you both up strongly. Try another vibe above.</p>`);
   // her lines in lavender, only the ones behind your shared top five
   const rel = new Set(top.flatMap((r) => hits.get(r.c).filter((h) => (W[h.key] || 0) > 0 && h.d < 900).map((h) => h.key)));
   let g = "";
-  for (const l of bl) { if (!rel.has(keyOf(l))) continue; const d = pathOf(l); for (const o of OFFS) g += `<path d="${d}" ${o ? `transform="translate(${o} 0)"` : ""} fill="none" stroke="#9C72FC" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke" ${l.angle === "IC" || l.angle === "DSC" ? 'stroke-dasharray="2 5"' : ""}/>`; }
+  for (const l of bestie.lines) { if (!rel.has(keyOf(l))) continue; const d = pathOf(l); for (const o of OFFS) g += `<path d="${d}" ${o ? `transform="translate(${o} 0)"` : ""} fill="none" stroke="#9C72FC" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke" ${l.angle === "IC" || l.angle === "DSC" ? 'stroke-dasharray="2 5"' : ""}/>`; }
   $("blines").innerHTML = g;
+  if (S.trip) renderTab(false);
+}
+function setBestie(chart, name) {
+  $("blines").innerHTML = "";
+  root.querySelector(".legend .bl")?.remove();
+  if (!chart) { bestie = null; $("bestieOut").innerHTML = ""; if (S.trip) { S.trip = false; renderTab(false); } return; }
+  const bl = computeLines(chart.julianDay, chart.planets);
+  bestie = { name: name || "your bestie", lines: bl, hits: new Map(cities.map((c) => [c, hitsAt(c.lat, c.lon, bl)])), top: [], vibe: bestie?.vibe || "girlstrip", timing: null };
+  bestieRank(); renderBestie();
   $("blines").style.display = "none";
-  root.querySelector(".legend").insertAdjacentHTML("beforeend", `<span class="bl" hidden><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#9C72FC" stroke-width="3" stroke-linecap="round"/></svg>${nm}'s lines</span>`);
+  root.querySelector(".legend").insertAdjacentHTML("beforeend", `<span class="bl" hidden><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#9C72FC" stroke-width="3" stroke-linecap="round"/></svg>${esc(bestie.name)}'s lines</span>`);
+  const mine = bestie, bp = chart.planets.filter((p) => PLANETS.includes(p.name)).map((p) => ({ name: p.name, longitude: p.longitude, house: p.house }));
+  fetch("/api/power-places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "timing", planets: bp }), signal })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((j) => { if (bestie === mine) { bestie.timing = j; renderBestie(); } }).catch(() => {});
 }
 $("bestieOut").addEventListener("click", (e) => {
   if (!bestie) return;
+  const v = e.target.closest("[data-vibe]");
+  if (v) { bestie.vibe = v.dataset.vibe; bestieRank(); renderBestie(); return; }
   if (e.target.closest("#bestieMap")) {
     S.trip = true; S.focus = null; renderTab(true);
     $("tabsbar").scrollIntoView({ behavior: "smooth", block: "start" });
     return;
   }
   const b = e.target.closest("[data-bcity]"); if (!b) return;
-  const c = findCity(b.dataset.bcity), W = SCORES.travel, nm = esc(bestie.name);
+  const c = findCity(b.dataset.bcity), W = SCORES[bestie.vibe], nm = esc(bestie.name);
   const rows = (hs, who) => hs.filter((h) => h.d < 900 && (W[h.key] || 0) > 0).slice(0, 3).map((h) => { const [lab, cls] = strength(h.d); return `<div class="hitrow"><div class="hithead"><b>${who} · ${lineName(h.key)}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p style="font-family:var(--font-poppins),Poppins,sans-serif;font-weight:800;font-size:15px">${esc(READINGS[h.key].nick)}</p><p>${esc(READINGS[h.key].short)}</p></div>`; }).join("");
-  openSheet(`<div class="tag">${esc(c.country)} · your trip together</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>${rows(c.hits, "you")}${rows(bestie.hits.get(c), nm)}`);
+  const lead = c.hits.filter((h) => (W[h.key] || 0) > 0).sort((x, y) => W[y.key] * prox(y.d) - W[x.key] * prox(x.d))[0];
+  const prac = `<div class="prac"><div><b>⏳ best time to go together</b><span>${esc(tripWhen(c, W))}</span></div>${lead ? `<div><b>🧳 how long</b><span>${esc(HOW_LONG[lead.line.angle])}</span></div><div><b>🌟 plan it around</b><span>${esc(READINGS[lead.key].use)}</span></div>` : ""}</div>`;
+  openSheet(`<div class="tag">${esc(c.country)} · your trip together</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>${prac}<div class="tag" style="margin-top:22px">what it does for you</div>${rows(c.hits, "you")}<div class="tag" style="margin-top:22px">what it does for ${nm}</div>${rows(bestie.hits.get(c), nm)}`);
 });
 
 // ── share card: a story-sized image of her no.1 places ──
-const SHARE_GOALS = [["💘", "love", "love"], ["💸", "money", "money"], ["✨", "glow up", "glow"], ["🏡", "home", "live"]];
+// The launch location types (and no love row: plenty of members are taken, Betty included).
+const SHARE_GOALS = [["💸", "rich b*tch", "money"], ["🪩", "main character", "career"], ["🍸", "girls' trip", "girlstrip"], ["🏡", "dream life", "dreamlife"]];
 async function drawCard() {
   const fam = (getComputedStyle(root).getPropertyValue("--font-poppins").trim() || "Poppins") + ", Poppins, sans-serif";
   try { await Promise.all([document.fonts.load(`800 60px ${fam}`), document.fonts.load(`700 30px ${fam}`)]); } catch (e) {}
@@ -877,7 +985,7 @@ async function openShare() {
 $("shareBtn").addEventListener("click", openShare);
 
 // ── free mode: the join ──
-const UNLOCKS = ["all ten goals, from self-love and money to realisations and your next level", "your full top five for every goal, with every reading", "any town in the world checked against your lines", "your whole chart redrawn for anywhere you live", "when each of your lines lights up this year", "a girls' trip planner with your bestie's chart"];
+const UNLOCKS = ["every location type, from rich b*tch and main character to your dream life", "your full top five for every goal, with every reading", "any town in the world checked against your lines", "your whole chart redrawn for anywhere you live", "when each of your lines lights up this year", "a girls' trip planner with your bestie's chart"];
 $("unlockList").innerHTML = UNLOCKS.map((u) => `<li>${u}</li>`).join("");
 $("joinBtn").setAttribute("href", JOIN);
 function openJoin() {

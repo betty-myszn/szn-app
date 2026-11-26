@@ -1,6 +1,6 @@
 // Copy, cities and scoring for the astrocartography page.
-export const GLYPH: Record<string, string> = { Sun: "☉︎", Moon: "☽︎", Mercury: "☿︎", Venus: "♀︎", Mars: "♂︎", Jupiter: "♃︎", Saturn: "♄︎", Uranus: "♅︎", Neptune: "♆︎", Pluto: "♇︎" };
-export const GIFT = new Set(["Sun", "Moon", "Mercury", "Venus", "Jupiter"]);
+export const GLYPH: Record<string, string> = { Sun: "☉︎", Moon: "☽︎", Mercury: "☿︎", Venus: "♀︎", Mars: "♂︎", Jupiter: "♃︎", Saturn: "♄︎", Uranus: "♅︎", Neptune: "♆︎", Pluto: "♇︎", "North Node": "☊︎", Chiron: "⚷︎", Lilith: "⚸︎", "Part of Fortune": "⊗︎" };
+export const GIFT = new Set(["Sun", "Moon", "Mercury", "Venus", "Jupiter", "North Node", "Part of Fortune"]);
 
 export const ANGLE_INFO = {
   MC: { name: "MC", long: "on top of the world", what: "career, reputation, being SEEN" },
@@ -12,6 +12,7 @@ export const ANGLE_INFO = {
 export const PLANET_WORD = {
   Sun: "your light", Moon: "your heart", Mercury: "your voice", Venus: "love + money", Mars: "your fire",
   Jupiter: "your luck", Saturn: "your legacy", Uranus: "your freedom", Neptune: "your dreams", Pluto: "your power",
+  "North Node": "your destiny", Chiron: "your healing", Lilith: "your wild power", "Part of Fortune": "your luck + joy",
 };
 
 export const READINGS: Record<string, { nick: string; short: string; full: string; use: string }> = {
@@ -64,38 +65,75 @@ export const READINGS: Record<string, { nick: string; short: string; full: strin
   "Pluto|IC": { nick: "the deep roots line", short: "Home brings up everything buried, perfect for therapy and total renewal.", full: "Pluto at the base of your chart digs into family history and your deepest emotions. It can be profoundly healing work, and intense to live in. Brilliant for shadow work, ancestral healing or a full rebirth move.", use: "shadow work, ancestral healing, total renewal" },
   "Pluto|ASC": { nick: "the phoenix line", short: "You transform completely here, with a magnetic presence nobody can ignore.", full: "Pluto rising makes you powerful, private and seriously magnetic. You shed old versions of yourself fast, which is thrilling and sometimes uncomfortable. A strong place for a total transformation, best visited with a clear intention.", use: "transformation, magnetism, reinvention" },
   "Pluto|DSC": { nick: "the obsession line", short: "Intense, all-consuming relationships that change you forever.", full: "Pluto setting brings deep, passionate and sometimes controlling connections. Nothing is casual here. Amazing for transformational partnerships and soul-level love, provided you keep your power in your own hands.", use: "soul-level love, transformational partnerships" },
+  // The four extra points (added 26 Nov 2026): destiny, healing, wild power and luck.
+  "North Node|MC": { nick: "the destiny career line", short: "The career your soul came here for gets LOUD here, and the right doors open.", full: "Your North Node at the top of your chart points to the work you are growing into. It can feel a little outside your comfort zone at first, then everything clicks, and you meet the mentors, platforms and opportunities that move your path forward years in one go.", use: "the big career leap, your purpose work, finding your calling" },
+  "North Node|IC": { nick: "home of your future self", short: "A place that grows you into who you are becoming, from the roots up.", full: "Your North Node under your feet makes this a place to build a new foundation. Old family patterns lose their grip, and you get to decide what home, safety and belonging mean for the woman you are becoming. Slow to settle, deeply worth it.", use: "a fresh start, a new home base, breaking family patterns" },
+  "North Node|ASC": { nick: "becoming her", short: "You step into the woman you are meant to be, fast, and people meet the new you.", full: "Your North Node rising is one of the strongest growth lines on any map. You show up as your future self here, and strangers treat you like her before you fully feel it. Perfect for a reinvention trip, a new look or the year you finally go for it.", use: "reinvention, becoming your future self, a fresh chapter" },
+  "North Node|DSC": { nick: "the fated people line", short: "Destined meetings: the partners, mentors and collaborators who change your path.", full: "Your North Node setting here brings the people you were always meant to meet. Relationships and partnerships that start here pull you towards your purpose, and they often feel familiar from the very first conversation.", use: "meeting your person, mentors, game-changing collabs" },
+  "Chiron|MC": { nick: "the healer's platform", short: "Your wound becomes your work here: teaching, healing and sharing your story lands.", full: "Chiron at the top of your chart turns what hurt you into what you are known for. Coaching, healing, writing and speaking about your story all land with real impact here. Expect to feel exposed at first, then hugely respected for it.", use: "healing work, teaching, sharing your story" },
+  "Chiron|IC": { nick: "the healing home", short: "Old family stuff comes up to be healed, gently, if you let it.", full: "Chiron under your feet brings the roots work to the surface. This is a powerful place for therapy, ancestral healing and making peace with where you come from. Live here when you are ready to do the work, visit when you need a breakthrough.", use: "inner child work, family healing, therapy retreats" },
+  "Chiron|ASC": { nick: "the soft reset", short: "You feel tender and seen here, and that softness becomes your superpower.", full: "Chiron rising makes you more sensitive in your body and your confidence, which brings up old insecurities so they can finally go. People feel safe with you here, and you leave with a softer, stronger relationship to yourself.", use: "body healing, self-acceptance, wellness retreats" },
+  "Chiron|DSC": { nick: "the healing love line", short: "Relationships here touch old wounds and help heal them, with the right people.", full: "Chiron setting here brings healers, teachers and people who mirror your old patterns in love. With the right person it is the most healing relationship of your life. Keep your eyes open and your standards high.", use: "healing relationships, therapy, working with a mentor" },
+  "Lilith|MC": { nick: "the unapologetic icon", short: "You get known for the thing you were told to tone down, and it works.", full: "Lilith at the top of your chart makes your public image bold, magnetic and a little controversial. The parts of you that never fit in become your brand here. Brilliant for content that cuts through, feminist work and refusing to play small.", use: "bold content, going viral, owning your edge" },
+  "Lilith|IC": { nick: "the wild woman's den", short: "Home is where you stop performing and let the untamed you out.", full: "Lilith under your feet makes home a place of raw honesty. You stop people-pleasing, rules you inherited fall away and your instincts get very loud. Intense to live in, incredible for a solo retreat where you remember who you are.", use: "solo retreats, shadow work, reclaiming yourself" },
+  "Lilith|ASC": { nick: "untamed and magnetic", short: "You are sexy, fearless and impossible to ignore here, and nobody can make you shrink.", full: "Lilith rising turns up your raw magnetism. You say what you mean, wear what you want and take up your space, and people feel it the second you walk in. Some will find it too much, so let them, because this is you unfiltered.", use: "confidence, sex appeal, saying the scary thing" },
+  "Lilith|DSC": { nick: "the forbidden chemistry line", short: "Magnetic, taboo-tinged attraction and partners who bring out your wild side.", full: "Lilith setting here pulls in intense, unconventional and very seductive people. The chemistry is electric and the power dynamics are real, so you learn fast what you will and will not accept. Thrilling for a fling, eye-opening for love.", use: "passion, chemistry, learning your boundaries" },
+  "Part of Fortune|MC": { nick: "the jackpot career line", short: "Your joy and your success line up: doing what you love pays here.", full: "Your Part of Fortune at the top of your chart is a gorgeous money and success line. The work that lights you up gets rewarded, recognition feels easy and you are lucky in public. Launch here, sell here, get paid here.", use: "money from what you love, launches, lucky breaks" },
+  "Part of Fortune|IC": { nick: "the lucky home", short: "Home feels like a lucky charm, and property and family bring joy and fortune.", full: "Your Part of Fortune under your feet makes this a happy, lucky place to live. Property decisions tend to work out, home life feels abundant and you feel at peace in your skin. A dream spot for a forever home or a long stay.", use: "a happy home, property, family, feeling content" },
+  "Part of Fortune|ASC": { nick: "lucky girl on arrival", short: "Lucky girl syndrome, located: things just go your way when you are here.", full: "Your Part of Fortune rising means good luck follows YOU around this part of the world. Upgrades, freebies, perfect timing and happy accidents stack up. Book the trip, wear the outfit and say yes to the invite.", use: "a lucky holiday, saying yes, being in the right place" },
+  "Part of Fortune|DSC": { nick: "the lucky connections line", short: "Fortune arrives through people: partners, clients and deals that feel meant to be.", full: "Your Part of Fortune setting here brings luck through other people. The client who changes your year, the partner who adores you, the introduction that opens every door. Go with an open diary and let people find you.", use: "dream clients, lucky partnerships, the right introductions" },
 };
 
 // Weights per "Planet|Angle". Live includes negatives so heavy lines push a city down.
 export const SCORES: Record<string, Record<string, number>> = {
   live: { "Moon|IC": 10, "Venus|IC": 10, "Jupiter|IC": 10, "Sun|IC": 7, "Venus|ASC": 8, "Jupiter|ASC": 8, "Moon|ASC": 6, "Sun|ASC": 6, "Jupiter|MC": 7, "Venus|MC": 6, "Jupiter|DSC": 6, "Venus|DSC": 7, "Sun|MC": 4, "Mercury|IC": 4, "Mercury|ASC": 3, "Moon|DSC": 4,
-    "Saturn|IC": -9, "Saturn|ASC": -6, "Pluto|IC": -6, "Pluto|ASC": -5, "Mars|IC": -6, "Mars|DSC": -4, "Neptune|IC": -4, "Neptune|ASC": -3, "Uranus|IC": -4, "Saturn|DSC": -3 },
+    "Saturn|IC": -9, "Saturn|ASC": -6, "Pluto|IC": -6, "Pluto|ASC": -5, "Mars|IC": -6, "Mars|DSC": -4, "Neptune|IC": -4, "Neptune|ASC": -3, "Uranus|IC": -4, "Saturn|DSC": -3, "Part of Fortune|IC": 7, "North Node|IC": 4, "Lilith|IC": -3, "Chiron|IC": -2 },
   travel: { "Jupiter|ASC": 10, "Jupiter|DSC": 8, "Jupiter|MC": 8, "Jupiter|IC": 6, "Venus|ASC": 10, "Venus|DSC": 9, "Venus|MC": 7, "Venus|IC": 6, "Sun|ASC": 8, "Sun|MC": 6, "Sun|DSC": 6, "Uranus|ASC": 6, "Uranus|DSC": 4, "Mars|ASC": 5, "Moon|DSC": 4, "Mercury|ASC": 5, "Neptune|ASC": 5, "Moon|ASC": 4,
-    "Saturn|ASC": -5, "Saturn|DSC": -3, "Pluto|DSC": -2 },
-  love: { "Venus|DSC": 10, "Venus|ASC": 8, "Jupiter|DSC": 8, "Moon|DSC": 7, "Sun|DSC": 6, "Venus|IC": 5, "Mars|DSC": 5, "Venus|MC": 4, "Neptune|DSC": 3 },
+    "Saturn|ASC": -5, "Saturn|DSC": -3, "Pluto|DSC": -2, "Part of Fortune|ASC": 7, "North Node|ASC": 5, "Part of Fortune|DSC": 4 },
+  love: { "Venus|DSC": 10, "Venus|ASC": 8, "Jupiter|DSC": 8, "Moon|DSC": 7, "Sun|DSC": 6, "Venus|IC": 5, "Mars|DSC": 5, "Venus|MC": 4, "Neptune|DSC": 3, "North Node|DSC": 6, "Part of Fortune|DSC": 5, "Lilith|DSC": 3 },
   // Money is its own thing (Betty): money lines are Jupiter (abundance) and Venus (receiving, value) on any angle, never "career".
-  money: { "Jupiter|MC": 10, "Venus|MC": 9, "Jupiter|ASC": 8, "Jupiter|IC": 8, "Venus|IC": 7, "Venus|ASC": 7, "Jupiter|DSC": 6, "Venus|DSC": 6 },
-  career: { "Sun|MC": 10, "Jupiter|MC": 9, "Venus|MC": 7, "Mercury|MC": 7, "Saturn|MC": 6, "Pluto|MC": 6, "Mars|MC": 6, "Uranus|MC": 5, "Moon|MC": 5 },
-  glow: { "Venus|ASC": 10, "Sun|ASC": 9, "Jupiter|ASC": 8, "Mars|ASC": 7, "Pluto|ASC": 4, "Moon|ASC": 4 },
-  healing: { "Moon|IC": 8, "Neptune|IC": 7, "Jupiter|IC": 7, "Neptune|ASC": 6, "Moon|ASC": 6, "Venus|IC": 6, "Pluto|IC": 4 },
-  create: { "Neptune|MC": 8, "Venus|MC": 8, "Mercury|MC": 7, "Neptune|ASC": 7, "Uranus|MC": 6, "Mercury|ASC": 6, "Sun|MC": 5, "Venus|ASC": 5, "Moon|MC": 4 },
-  selflove: { "Venus|ASC": 10, "Sun|ASC": 9, "Moon|ASC": 8, "Venus|IC": 7, "Moon|IC": 6, "Jupiter|ASC": 6, "Sun|IC": 5, "Neptune|ASC": 3 },
-  realise: { "Uranus|ASC": 10, "Uranus|MC": 10, "Neptune|ASC": 7, "Mercury|ASC": 6, "Mercury|MC": 4, "Jupiter|MC": 5, "Pluto|ASC": 6, "Neptune|MC": 5, "Uranus|IC": 4, "Mercury|IC": 4 },
-  challenge: { "Saturn|MC": 9, "Saturn|ASC": 9, "Pluto|ASC": 9, "Pluto|MC": 8, "Mars|ASC": 8, "Mars|MC": 7, "Saturn|DSC": 6, "Pluto|DSC": 6, "Mars|DSC": 5, "Saturn|IC": 5, "Pluto|IC": 5, "Uranus|ASC": 4 },
-  adventure: { "Jupiter|ASC": 9, "Uranus|ASC": 8, "Mars|ASC": 7, "Jupiter|DSC": 6, "Uranus|DSC": 6, "Sun|ASC": 6, "Mercury|ASC": 5 },
+  money: { "Jupiter|MC": 10, "Venus|MC": 9, "Jupiter|ASC": 8, "Jupiter|IC": 8, "Venus|IC": 7, "Venus|ASC": 7, "Jupiter|DSC": 6, "Venus|DSC": 6, "Part of Fortune|MC": 9, "Part of Fortune|ASC": 7, "Part of Fortune|IC": 6, "Part of Fortune|DSC": 6 },
+  career: { "Sun|MC": 10, "Jupiter|MC": 9, "Venus|MC": 7, "Mercury|MC": 7, "Saturn|MC": 6, "Pluto|MC": 6, "Mars|MC": 6, "Uranus|MC": 5, "Moon|MC": 5, "North Node|MC": 7, "Lilith|MC": 6, "Part of Fortune|MC": 6, "Chiron|MC": 4 },
+  glow: { "Venus|ASC": 10, "Sun|ASC": 9, "Jupiter|ASC": 8, "Mars|ASC": 7, "Pluto|ASC": 4, "Moon|ASC": 4, "Part of Fortune|ASC": 6, "Lilith|ASC": 5, "North Node|ASC": 5 },
+  healing: { "Moon|IC": 8, "Neptune|IC": 7, "Jupiter|IC": 7, "Neptune|ASC": 6, "Moon|ASC": 6, "Venus|IC": 6, "Pluto|IC": 4, "Chiron|IC": 7, "Chiron|ASC": 6, "Part of Fortune|IC": 4 },
+  create: { "Neptune|MC": 8, "Venus|MC": 8, "Mercury|MC": 7, "Neptune|ASC": 7, "Uranus|MC": 6, "Mercury|ASC": 6, "Sun|MC": 5, "Venus|ASC": 5, "Moon|MC": 4, "Lilith|MC": 4, "North Node|MC": 4 },
+  selflove: { "Venus|ASC": 10, "Sun|ASC": 9, "Moon|ASC": 8, "Venus|IC": 7, "Moon|IC": 6, "Jupiter|ASC": 6, "Sun|IC": 5, "Neptune|ASC": 3, "Chiron|ASC": 5, "Lilith|ASC": 6, "Part of Fortune|ASC": 5 },
+  realise: { "Uranus|ASC": 10, "Uranus|MC": 10, "Neptune|ASC": 7, "Mercury|ASC": 6, "Mercury|MC": 4, "Jupiter|MC": 5, "Pluto|ASC": 6, "Neptune|MC": 5, "Uranus|IC": 4, "Mercury|IC": 4, "North Node|ASC": 7, "North Node|MC": 6, "Chiron|ASC": 5 },
+  // Fame: going viral, press, a big audience. Top-of-chart lines first, plus Neptune glamour, Uranus virality, Lilith cut-through.
+  fame: { "Sun|MC": 10, "Jupiter|MC": 9, "Venus|MC": 9, "Neptune|MC": 8, "Uranus|MC": 8, "Lilith|MC": 7, "Pluto|MC": 7, "North Node|MC": 7, "Part of Fortune|MC": 6, "Sun|ASC": 6, "Venus|ASC": 5, "Mercury|MC": 5, "Moon|MC": 5 },
+  // Peace: calm, safe, soft. Home and Moon lines, Neptune calm, and every heavy line counts against a place.
+  peace: { "Moon|IC": 10, "Venus|IC": 9, "Jupiter|IC": 8, "Neptune|ASC": 6, "Neptune|IC": 6, "Moon|ASC": 6, "Venus|ASC": 5, "Part of Fortune|IC": 7, "Sun|IC": 5, "Chiron|IC": 3,
+    "Mars|ASC": -6, "Mars|IC": -7, "Mars|MC": -3, "Saturn|ASC": -6, "Saturn|IC": -7, "Pluto|ASC": -6, "Pluto|IC": -6, "Uranus|ASC": -5, "Uranus|IC": -5, "Lilith|IC": -4, "Lilith|ASC": -3 },
+  // Power: magnetic, ambitious, confident, and the places that push you into a bigger version of you.
+  power: { "Pluto|ASC": 10, "Mars|ASC": 9, "Sun|ASC": 8, "Pluto|MC": 8, "Mars|MC": 8, "Sun|MC": 7, "Saturn|MC": 6, "Saturn|ASC": 5, "Uranus|ASC": 5, "Pluto|DSC": 4, "Mars|DSC": 4, "Lilith|ASC": 9, "Lilith|MC": 8, "North Node|MC": 5 },
+  // Girls' trip: friendship, pleasure, adventure, connection. Rising + setting lines, the ones you feel on a short stay.
+  girlstrip: { "Venus|ASC": 10, "Jupiter|ASC": 10, "Jupiter|DSC": 8, "Venus|DSC": 7, "Sun|ASC": 7, "Moon|DSC": 6, "Mercury|ASC": 6, "Uranus|ASC": 6, "Mercury|DSC": 5, "Mars|ASC": 4, "Neptune|ASC": 3, "Saturn|ASC": -4, "Part of Fortune|ASC": 7, "Part of Fortune|DSC": 5 },
+  // Business baddie: entrepreneurship, leadership, clients and collaborators, career expansion.
+  business: { "Jupiter|MC": 10, "Mercury|MC": 9, "Sun|MC": 9, "Mars|MC": 8, "Uranus|MC": 7, "Mercury|DSC": 7, "Jupiter|DSC": 7, "Pluto|MC": 6, "Saturn|MC": 6, "Venus|MC": 5, "Sun|DSC": 4, "Part of Fortune|MC": 7, "North Node|MC": 6, "Part of Fortune|DSC": 5 },
+  // Dream life: belonging, emotional fulfilment, romance, creativity. Home lines first, softened by heavy ones.
+  dreamlife: { "Venus|IC": 10, "Moon|IC": 10, "Jupiter|IC": 10, "Sun|IC": 7, "Venus|DSC": 7, "Venus|ASC": 6, "Jupiter|DSC": 6, "Moon|ASC": 5, "Neptune|IC": 4, "Jupiter|ASC": 5,
+    "Saturn|IC": -8, "Pluto|IC": -5, "Mars|IC": -5, "Uranus|IC": -3, "Part of Fortune|IC": 8, "North Node|IC": 5 },
+  adventure: { "Jupiter|ASC": 9, "Uranus|ASC": 8, "Mars|ASC": 7, "Jupiter|DSC": 6, "Uranus|DSC": 6, "Sun|ASC": 6, "Mercury|ASC": 5, "Part of Fortune|ASC": 5, "North Node|ASC": 5 },
 };
 
+// The six location types from the ASTRO MAPS launch carousel (25 Nov 2026) come first, named exactly
+// as the carousel sells them, then the extras. "money" keeps its id (Customise my szn maps to it).
 export const GOALS = [
+  { id: "money", label: "rich b*tch", emoji: "💸", head: "to make serious MONEY" },
+  { id: "career", label: "main character", emoji: "🪩", head: "to be SEEN, recognised and celebrated" },
+  { id: "fame", label: "fame", emoji: "🌟", head: "to get FAMOUS" },
+  { id: "girlstrip", label: "girls' trip", emoji: "🍸", head: "for the GIRLS' TRIP" },
+  { id: "power", label: "power", emoji: "🔥", head: "to step into your POWER" },
+  { id: "business", label: "business baddie", emoji: "💻", head: "to build your BUSINESS" },
+  { id: "dreamlife", label: "dream life", emoji: "🏡", head: "to build your DREAM LIFE" },
+  { id: "peace", label: "peace", emoji: "🕊️", head: "to feel PEACE" },
   { id: "love", label: "love", emoji: "💘", head: "to fall in LOVE" },
   { id: "selflove", label: "self-love", emoji: "🪞", head: "to fall in love with YOURSELF" },
-  { id: "money", label: "money", emoji: "💸", head: "to make serious MONEY" },
-  { id: "career", label: "career", emoji: "👑", head: "to get SEEN for your work" },
   { id: "glow", label: "glow up", emoji: "✨", head: "for a full GLOW UP" },
   { id: "healing", label: "healing", emoji: "🌙", head: "to HEAL and feel held" },
   { id: "create", label: "creativity", emoji: "🎨", head: "to make your best WORK" },
   { id: "adventure", label: "adventure", emoji: "🌍", head: "for a wild ADVENTURE" },
   { id: "realise", label: "realisations", emoji: "💡", head: "for the big REALISATIONS" },
-  { id: "challenge", label: "challenge", emoji: "🔥", head: "to be CHALLENGED into your next level" },
 ];
 
 export const CITIES: { name: string; country: string; lat: number; lon: number }[] = ([
@@ -285,6 +323,7 @@ export const PLANET_PLAIN: Record<string, string> = {
   Venus: "Venus, your love, beauty and money planet", Mars: "Mars, your drive and fire planet", Jupiter: "Jupiter, your luck and abundance planet",
   Saturn: "Saturn, your discipline and long-game planet", Uranus: "Uranus, your freedom and breakthrough planet",
   Neptune: "Neptune, your dreams and intuition planet", Pluto: "Pluto, your power and transformation planet",
+  "North Node": "Your North Node, your destiny point", Chiron: "Chiron, your wound-into-medicine point", Lilith: "Lilith, your wild, unapologetic power point", "Part of Fortune": "Your Part of Fortune, your luck and joy point",
 };
 
 // City pop-up practicals: how long to go for (by line) and what to watch for (by planet).
@@ -305,5 +344,46 @@ export const WATCH_FOR: Record<string, string> = {
   Uranus: "sudden changes and plans falling through, stay flexible",
   Neptune: "blurry boundaries and money confusion, read the small print",
   Pluto: "power struggles and intensity, choose your people carefully",
+  "North Node": "feeling out of your comfort zone at first, that is the point",
+  Chiron: "old insecurities coming up, so go gently and take support",
+  Lilith: "power games and burning bridges, keep your fire aimed well",
+  "Part of Fortune": "getting so comfy you coast, keep saying yes",
 };
 export const TRANSIT_VERB: Record<string, string> = { Jupiter: "lighting up", Saturn: "strengthening", Uranus: "electrifying", Neptune: "softening", Pluto: "supercharging" };
+
+// ── her chart, not anyone's: the personal layer on every line (added 26 Nov 2026) ──
+// How a planet behaves in each sign, short enough to sit in one sentence.
+export const SIGN_STYLE: Record<string, string> = {
+  Aries: "fast, bold and first in line", Taurus: "slow, sensual and built to last", Gemini: "chatty, curious and full of ideas",
+  Cancer: "soft, protective and deeply emotional", Leo: "loud, generous and made for the spotlight", Virgo: "precise, helpful and a bit of a perfectionist",
+  Libra: "charming, pretty and all about the people", Scorpio: "intense, private and all-or-nothing", Sagittarius: "free, lucky and always up for more",
+  Capricorn: "ambitious, strategic and serious about results", Aquarius: "original, independent and ahead of its time", Pisces: "dreamy, intuitive and magical",
+};
+// Modern rulers, so a line can say which parts of her life that planet runs.
+export const RULER: Record<string, string> = {
+  Aries: "Mars", Taurus: "Venus", Gemini: "Mercury", Cancer: "Moon", Leo: "Sun", Virgo: "Mercury",
+  Libra: "Venus", Scorpio: "Pluto", Sagittarius: "Jupiter", Capricorn: "Saturn", Aquarius: "Uranus", Pisces: "Neptune",
+};
+// Short life-area names per house, for "it also runs your money and your love life".
+export const HOUSE_SHORT = ["", "you and your glow", "your money", "your voice and ideas", "home and family", "romance and fun", "your health and daily work", "love and partners", "shared money and intimacy", "travel and big beliefs", "your career and reputation", "your friends and following", "your inner world"];
+// How her strongest natal aspect colours a line.
+export const ASPECT_TONE: Record<string, (other: string, word: string) => string> = {
+  conjunction: (o, w) => `It sits right on top of your ${o}, so ${w} switches on here too`,
+  trine: (o, w) => `It flows with your ${o}, so ${w} comes along easily here too`,
+  sextile: (o, w) => `It is backed by your ${o}, so ${w} opens doors here too`,
+  square: (o, w) => `It is pushed by your ${o}, so expect some friction around ${w}, the kind that makes you grow`,
+  opposition: (o, w) => `It faces your ${o}, so this place asks you to balance it with ${w}`,
+};
+// One line per location type for the big "what do you want more of" picker.
+export const GOAL_BLURB: Record<string, string> = {
+  money: "money, abundance and receiving more $$$",
+  career: "being seen, celebrated and recognised",
+  fame: "going viral, press and a big audience",
+  girlstrip: "friendship, pleasure and adventure",
+  power: "magnetic, confident and unstoppable",
+  business: "clients, leadership and your next HQ",
+  dreamlife: "belonging, romance and a life you love",
+  peace: "calm, safe and soft",
+  love: "meeting your person", selflove: "falling for yourself", glow: "your full glow up", healing: "rest and healing",
+  create: "your best creative work", adventure: "the trip of a lifetime", realise: "the big penny-drop moments",
+};

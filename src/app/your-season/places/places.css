@@ -215,3 +215,32 @@
 .acg .prac > div { border: 1.5px solid var(--dark); border-radius: 14px; padding: 10px 12px; background: var(--lav-light); }
 .acg .prac b { display: block; font-family: var(--poppins); font-weight: 800; font-size: 13px; text-transform: lowercase; }
 .acg .prac span { display: block; font-size: 14px; line-height: 1.5; margin-top: 3px; }
+
+/* "pick what you want MORE of": the big picker at the top (26 Nov 2026) */
+.acg .want { padding: 26px 0 8px; }
+.acg .wantgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.acg .wtile { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; background: #fff; border: 2px solid var(--dark); border-radius: 18px; padding: 14px 14px 13px; cursor: pointer; box-shadow: 4px 5px 0 var(--dark); color: var(--dark); font: inherit; transition: transform .12s; }
+.acg .wtile:active { transform: translate(2px, 2px); box-shadow: 2px 3px 0 var(--dark); }
+.acg .wtile .we { font-size: 24px; line-height: 1; }
+.acg .wtile b { font-family: var(--poppins); font-weight: 800; font-size: 16px; letter-spacing: -0.01em; text-transform: lowercase; }
+.acg .wtile small { font-size: 12.5px; line-height: 1.35; font-weight: 600; color: var(--dark); }
+.acg .wtile[aria-pressed="true"] { background: var(--pink); color: #fff; box-shadow: 4px 5px 0 var(--dark); }
+.acg .wtile[aria-pressed="true"] small { color: #fff; }
+.acg .wantgrid .wtile:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.acg .wantmore { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+@media (min-width: 760px) { .acg .wantgrid { grid-template-columns: repeat(4, 1fr); } .acg .wantgrid .wtile:last-child:nth-child(odd) { grid-column: auto; } }
+/* her chart layer inside a line or city sheet */
+.acg .yours { margin-top: 14px; background: var(--lav-light, #E8DFFE); border: 2px solid var(--dark); border-radius: 16px; padding: 14px 16px; }
+.acg .yours b { display: block; font-family: var(--poppins); font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+.acg .yours p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--dark); }
+
+/* full-screen map */
+.acg .mapcard.full { position: fixed; inset: 0; z-index: 80; margin: 0 !important; border-radius: 0; border: 0; box-shadow: none; display: flex; flex-direction: column; }
+.acg .mapcard.full .mapbox { flex: 1; height: auto; }
+.acg .mapcard.full .maptip { display: none; }
+.acg .bigbtn { white-space: nowrap; }
+/* her no.1 on each picker tile */
+.acg .wtile .wno1 { margin-top: 6px; display: inline-block; background: var(--pink-light); border: 1.5px solid var(--dark); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; font-weight: 800; color: var(--dark); }
+.acg .wtile[aria-pressed="true"] .wno1 { background: #fff; }
+.acg .card .lit { display: block; margin-top: 8px; font-size: 13px; line-height: 1.45; font-weight: 600; }
+.acg .card .lit b { font-weight: 800; }
