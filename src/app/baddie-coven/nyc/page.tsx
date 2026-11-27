@@ -53,6 +53,10 @@ const FAQS: [string, string][] = [
   ["I can't wait. Is there anything I can join now?", "The online Bad B*tch Coven is for witchy women everywhere, with a live coven circle every month, your personalised astrology platform and the coven chat rooms."],
 ];
 
+const AREAS = ["Manhattan", "Brooklyn", "Queens", "The Bronx", "Staten Island", "Long Island", "New Jersey", "Westchester / upstate", "Visiting NYC"];
+
+const btn = { display: "inline-block", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" } as const;
+
 const card = { border: "2px solid var(--dark)", borderRadius: 18, background: "#fff", padding: "20px 20px 22px", color: "var(--dark)" } as const;
 
 export default function NycCovenPage() {
@@ -62,8 +66,10 @@ export default function NycCovenPage() {
         offer="baddie-coven-nyc"
         bigArt
         art={
+          // Desktop only: on a phone the planet stacked under the button and left a screen of empty pink
+          // before the form. Phones get a smaller planet inside the intro instead (below).
           // eslint-disable-next-line @next/next/no-img-element
-          <img src="/disco-planet.png" alt="" aria-hidden="true" style={{ width: "100%", maxWidth: 520, height: "auto" }} />
+          <img src="/disco-planet.png" alt="" aria-hidden="true" className="hidden md:block" style={{ width: "100%", maxWidth: 520, height: "auto" }} />
         }
         tone="pink"
         kicker="the coven, IRL in NYC"
@@ -71,6 +77,8 @@ export default function NycCovenPage() {
         accent="IRL in NYC."
         intro={
           <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/disco-planet.png" alt="" aria-hidden="true" className="block md:hidden mx-auto" style={{ width: "min(220px, 56vw)", height: "auto", marginTop: -34, marginBottom: -22 }} />
             <p style={{ margin: "0 0 12px", fontFamily: pp, fontWeight: 800 }}>NEW YORK BADDIESSSSS 💖🪩🗽</p>
             <p style={{ margin: 0, fontWeight: 500 }}>The Bad B*tch Coven is coming to New York, because we want more women making $$$, chasing outrageous dreams and having a group of bad b*tches cheering them on while they do it.</p>
             <div style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620, color: "var(--dark)" }}>
@@ -84,6 +92,27 @@ export default function NycCovenPage() {
             </div>
           </>
         }
+      />
+
+      {/* The form sits straight under the hero (Betty, 27 Nov 2026): most visitors arrive warm from
+          Threads and came to sign up, so they shouldn't scroll 7,000px to do it. The rest of the page
+          is there for anyone who wants convincing, with buttons back up to #waitlist. */}
+      <WaitlistBand
+        offer="baddie-coven-nyc"
+        title="the NYC coven"
+        accent="is calling. 🗽"
+        body={
+          <>
+            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Your future best friends are already in New York, babe.</p>
+            <p style={{ margin: "0 0 14px", color: "#fff" }}>Put your name down and you&apos;ll hear the first Baddie Brunch date, the spot and the price before anybody else.</p>
+            <p style={{ margin: 0, fontFamily: pp, fontWeight: 800, color: "#fff" }}>See you in real life, witch. 💜</p>
+          </>
+        }
+        questions={[
+          // A dropdown, so the venue can be picked from a clean count by area.
+          { label: "Which part of New York are you in?", type: "select", required: true, options: AREAS },
+          { label: "What would you love to do together IRL?", type: "textarea" },
+        ]}
       />
 
       <Band tag="sound familiar" title="you're growing. your social life" accent="hasn't caught up.">
@@ -107,6 +136,7 @@ export default function NycCovenPage() {
           ))}
         </div>
         <p style={{ marginTop: 22 }}><strong>The exact format gets shaped with the women on the NYC waitlist, so your sign-up genuinely helps decide what we do together.</strong></p>
+        <a href="#waitlist" className="no-underline" style={{ ...btn, marginTop: 10 }}>save me a seat 🗽</a>
       </Band>
 
       <BrunchMagicBand city="New York" />
@@ -143,19 +173,10 @@ export default function NycCovenPage() {
         </div>
       </Band>
 
-      <WaitlistBand
-        offer="baddie-coven-nyc"
-        title="the NYC coven"
-        accent="is calling. 🗽"
-        body={
-          <>
-            <p style={{ margin: "0 0 14px", color: "#fff", fontWeight: 800 }}>Your future best friends are already in New York, babe.</p>
-            <p style={{ margin: "0 0 14px", color: "#fff" }}>Put your name down and you&apos;ll hear the first Baddie Brunch date, the spot and the price before anybody else.</p>
-            <p style={{ margin: 0, fontFamily: pp, fontWeight: 800, color: "#fff" }}>See you in real life, witch. 💜</p>
-          </>
-        }
-        question="Which part of NYC are you in, and what would you love to do together IRL?"
-      />
+      <Band tone="lav" tag="the first brunch is coming" title="your seat at the" accent="NYC table. 🗽">
+        <p>Put your name down and you&apos;ll hear the first Baddie Brunch date, the spot and the price before anybody else.</p>
+        <a href="#waitlist" className="no-underline" style={{ ...btn, marginTop: 10 }}>join the NYC waitlist</a>
+      </Band>
     </>
   );
 }
