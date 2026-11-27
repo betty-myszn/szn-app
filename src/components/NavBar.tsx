@@ -271,7 +271,7 @@ export default function NavBar() {
       <div className="flex items-center justify-between px-5 md:px-8 py-[14px] md:py-[18px]">
         <Link
           href={memberHomeHref(member)}
-          className="no-underline flex items-center gap-1"
+          className="no-underline flex items-center gap-1 shrink-0"
           style={{
             fontFamily: "var(--font-poppins), Poppins, sans-serif",
             fontWeight: 800,
@@ -739,7 +739,7 @@ export default function NavBar() {
             <>
               <Link
                 href="/login"
-                className="no-underline"
+                className="no-underline hidden sm:inline"
                 style={{
                   color: "var(--dark)",
                   fontSize: 10,

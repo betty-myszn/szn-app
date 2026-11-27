@@ -28,14 +28,6 @@ const DEADLINE = "the Baddie Friday price ends at 11:59pm UK time on Monday the 
 const cta = (bg: string, ink = "#fff") => ({ display: "inline-block", background: bg, color: ink, fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" as const, padding: "20px 34px", border: "2px solid #fff", textAlign: "center" as const });
 const outline = { ...cta("transparent"), border: "2px solid #fff" };
 
-const ENERGIES = [
-  { emoji: "💸", title: "rich b*tch energy", body: "Explore your strongest astrological periods for financial growth, increasing your income, raising your prices, asking for more and expanding your relationship with receiving." },
-  { emoji: "💍", title: "big love energy", body: "Whether you're manifesting your husband, dating internationally, getting married or deepening your existing relationship, we'll explore the astrology supporting your romantic life in 2027." },
-  { emoji: "💻", title: "business baddie energy", body: "Discover your strongest periods for launching, expanding, rebranding, signing clients, making big business decisions and bringing those ideas out of your Notes app." },
-  { emoji: "🪩", title: "international it girl energy", body: "Explore your astrology around fame, visibility, recognition, building an audience and becoming known for what you do." },
-  { emoji: "🌍", title: "big world energy", body: "Discover the places in the world that astrologically support your ambitions, friendships, finances, creativity and personal expansion." },
-  { emoji: "🔥", title: "powerful woman energy", body: "Understand where your chart invites you to become more confident, magnetic, independent and unapologetic about what you want." },
-];
 
 const PARTS = [
   {
@@ -91,21 +83,8 @@ const FAQ = [
   ["Is this therapy?", "This is an astrology and coaching experience. It isn't therapy, medical treatment or financial advice, and it doesn't replace professional support."],
 ] as const;
 
-const SHE = ["She knows her astrology.", "She knows what she wants.", "She charges more.", "She takes up space.", "She books the flight.", "She sends the pitch.", "She puts herself out there.", "She allows herself to be loved, celebrated and paid.", "She stops waiting for permission to create the life she wants."];
 
 const EXPERIENCES = [
-  {
-    key: "report",
-    tag: "🪐 your baddie season report",
-    price: <>${S.report.priceUsd} <span style={{ fontSize: "0.42em", letterSpacing: "0.08em" }}>USD</span></>,
-    sub: "Your personalised astrological guide to the entire year.",
-    points: ["Your 12-month astrology forecast", "Your personalised manifestation blueprint", "Astrology and Human Design insights", "Your 2027 personal power dates", "Guidance tailored to your goals", "Delivered to your inbox within 48 hours"],
-    fit: "Perfect for the woman who wants to plan her year, understand her energy and start making intentional moves.",
-    href: S.report.buyUrl,
-    button: `get my 2027 report · $${S.report.priceUsd}`,
-    bg: "#fff",
-    btn: "var(--dark)",
-  },
   {
     key: "bundle",
     tag: "💸 the full baddie experience",
@@ -117,6 +96,18 @@ const EXPERIENCES = [
     button: `claim my private activation · $${S.priceUsd}`,
     bg: "var(--pink-light)",
     btn: "var(--pink)",
+  },
+  {
+    key: "report",
+    tag: "🪐 your baddie season report",
+    price: <>${S.report.priceUsd} <span style={{ fontSize: "0.42em", letterSpacing: "0.08em" }}>USD</span></>,
+    sub: "Your personalised astrological guide to the entire year.",
+    points: ["Your 12-month astrology forecast", "Your personalised manifestation blueprint", "Astrology and Human Design insights", "Your 2027 personal power dates", "Guidance tailored to your goals", "Delivered to your inbox within 48 hours"],
+    fit: "Perfect for the woman who wants to plan her year, understand her energy and start making intentional moves.",
+    href: S.report.buyUrl,
+    button: `get my 2027 report · $${S.report.priceUsd}`,
+    bg: "#fff",
+    btn: "var(--dark)",
   },
 ];
 
@@ -170,8 +161,8 @@ export default function BaddieSeason2027Page() {
               <p style={{ margin: 0 }}>Because we&apos;re going into this year knowing what the actual f*ck we&apos;re doing. 💅</p>
             </div>
             <div className="flex flex-col sm:flex-row flex-wrap gap-4" style={{ marginTop: 30 }}>
-              <a href={S.report.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={outline}>your report · ${S.report.priceUsd}</a>
               <a href={S.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={cta("var(--pink)")}>report + private activation · ${S.priceUsd}</a>
+              <a href={S.report.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={outline}>just the report · ${S.report.priceUsd}</a>
             </div>
             <p style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, color: "#fff", marginTop: 16, letterSpacing: "0.03em", lineHeight: 1.5 }}>
               Normally ${S.wasUsd}. Save $222 this Baddie Friday. Only {S.spots} private activations at this price, and {DEADLINE}.
@@ -180,7 +171,7 @@ export default function BaddieSeason2027Page() {
           <div className="flex justify-center" style={{ position: "relative" }}>
             <div className="holo-edge" style={{ width: "min(440px, 86vw)", borderRadius: 24, overflow: "hidden", transform: "rotate(2deg)", boxShadow: "12px 14px 0 var(--pink)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={S.image} alt="Betty in a pink witch hat, black satin dress and pink feather gloves" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src="/coven/baddie-2027-email-hero.jpg" alt="Your 2027 starts now: Betty in pink sequins beside May and August 2027 calendars with the big dates circled" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
             <span className="holo-sticker" style={{ position: "absolute", top: -10, right: 4, zIndex: 5, transform: "rotate(7deg)", fontSize: 12 }}>✨ your next era, planned</span>
           </div>
@@ -204,27 +195,9 @@ export default function BaddieSeason2027Page() {
           <div className="flex justify-center">
             <div className="holo-edge" style={{ width: "min(420px, 86vw)", borderRadius: 24, overflow: "hidden", transform: "rotate(-2deg)", boxShadow: "12px 14px 0 var(--dark)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/coven/betty-sparkle.jpg" alt="Betty in a pink sequin two-piece against a silver tinsel backdrop" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src={S.image} alt="Betty in a pink witch hat, black satin dress and pink feather gloves" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* What are we manifesting */}
-      <section className="px-5 md:px-8" style={{ background: "#fff", borderBottom: "var(--border)", paddingTop: 80, paddingBottom: 84 }}>
-        <div className="max-w-6xl mx-auto">
-          <Tag>pick your energy</Tag>
-          <H2>what are we <span className="pk">manifesting in 2027?</span></H2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" style={{ marginTop: 36 }}>
-            {ENERGIES.map((e, i) => (
-              <div key={e.title} style={{ background: i % 2 ? "var(--lav-light)" : "var(--pink-light)", color: "var(--dark)", border: "var(--border)", borderRadius: 20, padding: "24px 22px 26px", boxShadow: "6px 7px 0 var(--dark)" }}>
-                <div style={{ fontSize: 34, lineHeight: 1 }}>{e.emoji}</div>
-                <div style={{ fontFamily: pp, fontSize: 22, fontWeight: 900, lineHeight: 1.1, marginTop: 12, textTransform: "uppercase" }}>{e.title}</div>
-                <p style={{ fontSize: 15.5, lineHeight: 1.65, marginTop: 10, fontWeight: 500 }}>{e.body}</p>
-              </div>
-            ))}
-          </div>
-          <p style={{ fontFamily: pp, fontWeight: 900, fontSize: "clamp(20px, 2.4vw, 26px)", color: "var(--dark)", marginTop: 36 }}>Whatever you&apos;re calling in, <span className="pk">we&apos;re making your 2027 personal.</span></p>
         </div>
       </section>
 
@@ -371,20 +344,14 @@ export default function BaddieSeason2027Page() {
       {/* Final CTA */}
       <section id="buy" className="px-5 md:px-8 bg-glitter" style={{ paddingTop: 84, paddingBottom: 92 }}>
         <div className="max-w-4xl mx-auto">
-          <span className="holo-sticker" style={{ display: "inline-block", transform: "rotate(-2deg)" }}>💸 she&apos;s already dreaming bigger</span>
-          <ul style={{ listStyle: "none", padding: 0, margin: "28px 0 0" }}>
-            {SHE.map((l, i) => (
-              <li key={l} style={{ fontFamily: pp, fontWeight: 900, fontSize: "clamp(20px, 3.4vw, 32px)", lineHeight: 1.15, padding: "5px 0", color: i % 2 ? "var(--pink)" : "#fff", letterSpacing: "-0.01em" }}>{l}</li>
-            ))}
-          </ul>
-          <h2 className="display" style={{ fontSize: "clamp(32px, 5vw, 58px)", color: "#fff", lineHeight: 1, marginTop: 40 }}>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 5vw, 58px)", color: "#fff", lineHeight: 1 }}>
             2027 is your baddie season.
             <br />
             <span className="pk">let&apos;s make it a BIGGGGG f*cking life.</span> 💸🪩
           </h2>
           <div className="flex flex-col sm:flex-row flex-wrap gap-4" style={{ marginTop: 34 }}>
-            <a href={S.report.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={outline}>get my personalised report · ${S.report.priceUsd}</a>
             <a href={S.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={cta("var(--pink)")}>book my report + private activation · ${S.priceUsd}</a>
+            <a href={S.report.buyUrl} target="_blank" rel="noopener noreferrer" className="no-underline" style={outline}>just the report · ${S.report.priceUsd}</a>
           </div>
           <p style={{ fontFamily: pp, fontSize: 15, fontWeight: 800, color: "#fff", marginTop: 18, lineHeight: 1.55 }}>
             Normally ${S.wasUsd}. Save $222 this Baddie Friday. Only {S.spots} private activations available at this price, and {DEADLINE}.
