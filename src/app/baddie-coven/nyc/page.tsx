@@ -57,6 +57,8 @@ const AREAS = ["Manhattan", "Brooklyn", "Queens", "The Bronx", "Staten Island", 
 
 const btn = { display: "inline-block", background: "var(--dark)", color: "#fff", fontFamily: pp, fontSize: 15, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "20px 40px" } as const;
 
+const skyline = { height: "auto", objectFit: "cover", border: "var(--border)", borderRadius: 18, boxShadow: "10px 12px 0 var(--dark)", transform: "rotate(2deg)" } as const;
+
 const card = { border: "2px solid var(--dark)", borderRadius: 18, background: "#fff", padding: "20px 20px 22px", color: "var(--dark)" } as const;
 
 export default function NycCovenPage() {
@@ -66,10 +68,11 @@ export default function NycCovenPage() {
         offer="baddie-coven-nyc"
         bigArt
         art={
-          // Desktop only: on a phone the planet stacked under the button and left a screen of empty pink
-          // before the form. Phones get a smaller planet inside the intro instead (below).
+          // The skyline tells her at a glance this is HER city (Betty, 27 Nov 2026). Unsplash photo
+          // fT6-YkB0nfg (free licence), tinted to the brand pink/black. Desktop only: phones get a
+          // shorter crop inside the intro (below) so the form stays close to the top.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src="/disco-planet.png" alt="" aria-hidden="true" className="hidden md:block" style={{ width: "100%", maxWidth: 520, height: "auto" }} />
+          <img src="/coven/nyc-pink-skyline.jpg" alt="The New York skyline and the Empire State Building at dusk, tinted pink" className="hidden md:block" style={{ ...skyline, width: "100%", aspectRatio: "1000 / 1170" }} />
         }
         tone="pink"
         kicker="the coven, IRL in NYC"
@@ -78,7 +81,7 @@ export default function NycCovenPage() {
         intro={
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/disco-planet.png" alt="" aria-hidden="true" className="block md:hidden mx-auto" style={{ width: "min(220px, 56vw)", height: "auto", marginTop: -34, marginBottom: -22 }} />
+            <img src="/coven/nyc-pink-skyline.jpg" alt="" aria-hidden="true" className="block md:hidden" style={{ ...skyline, width: "100%", aspectRatio: "4 / 3", objectPosition: "center 42%", marginBottom: 26 }} />
             <p style={{ margin: "0 0 12px", fontFamily: pp, fontWeight: 800 }}>NEW YORK BADDIESSSSS 💖🪩🗽</p>
             <p style={{ margin: 0, fontWeight: 500 }}>The Bad B*tch Coven is coming to New York, because we want more women making $$$, chasing outrageous dreams and having a group of bad b*tches cheering them on while they do it.</p>
             <div style={{ marginTop: 20, background: "#fff", border: "2px solid var(--dark)", borderRadius: 16, padding: "16px 20px", maxWidth: 620, color: "var(--dark)" }}>
