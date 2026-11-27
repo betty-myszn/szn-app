@@ -228,7 +228,7 @@
 .acg .wtile[aria-pressed="true"] small { color: #fff; }
 .acg .wantgrid .wtile:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .acg .wantmore { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-@media (min-width: 760px) { .acg .wantgrid { grid-template-columns: repeat(4, 1fr); } .acg .wantgrid .wtile:last-child:nth-child(odd) { grid-column: auto; } }
+@media (min-width: 760px) { .acg .wantgrid { grid-template-columns: repeat(3, 1fr); } .acg .wantgrid .wtile:last-child:nth-child(odd) { grid-column: auto; } }
 /* her chart layer inside a line or city sheet */
 .acg .yours { margin-top: 14px; background: var(--lav-light, #E8DFFE); border: 2px solid var(--dark); border-radius: 16px; padding: 14px 16px; }
 .acg .yours b { display: block; font-family: var(--poppins); font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }

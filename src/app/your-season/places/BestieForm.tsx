@@ -71,8 +71,8 @@ export default function BestieForm({ onChart }: { onChart: (chart: ChartData | n
   return (
     <form className="bform" onSubmit={(e: FormEvent) => { e.preventDefault(); void run(name.trim(), details); }}>
       <div style={{ marginBottom: 16 }}>
-        <label style={labelStyle} htmlFor="bestie-name">her first name</label>
-        <input id="bestie-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chloe" style={inputStyle} autoComplete="off" />
+        <label style={labelStyle} htmlFor="bestie-name">their first name</label>
+        <input id="bestie-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="your bestie or your partner" style={inputStyle} autoComplete="off" />
       </div>
       <div style={{ display: "grid", gap: 16 }}>
         <BirthDetailsFields value={details} onChange={(p) => setDetails((d) => ({ ...d, ...p }))} labelStyle={labelStyle} inputStyle={inputStyle} noteColor="#1a1a1a" />

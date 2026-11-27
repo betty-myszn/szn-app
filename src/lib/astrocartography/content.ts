@@ -107,6 +107,9 @@ export const SCORES: Record<string, Record<string, number>> = {
   // Power: magnetic, ambitious, confident, and the places that push you into a bigger version of you.
   power: { "Pluto|ASC": 10, "Mars|ASC": 9, "Sun|ASC": 8, "Pluto|MC": 8, "Mars|MC": 8, "Sun|MC": 7, "Saturn|MC": 6, "Saturn|ASC": 5, "Uranus|ASC": 5, "Pluto|DSC": 4, "Mars|DSC": 4, "Lilith|ASC": 9, "Lilith|MC": 8, "North Node|MC": 5 },
   // Girls' trip: friendship, pleasure, adventure, connection. Rising + setting lines, the ones you feel on a short stay.
+  // Already partnered: romance that lasts. Venus + Moon home and love lines, softness and devotion; the
+  // classic break-up lines (Saturn, Uranus, Pluto, Mars on the love line) count against a place.
+  honeymoon: { "Venus|DSC": 10, "Venus|IC": 9, "Moon|IC": 8, "Jupiter|DSC": 8, "Venus|ASC": 7, "Moon|DSC": 7, "Jupiter|IC": 7, "Sun|DSC": 5, "Neptune|DSC": 4, "Part of Fortune|DSC": 5, "Mars|DSC": -4, "Saturn|DSC": -7, "Uranus|DSC": -6, "Pluto|DSC": -5, "Saturn|IC": -3 },
   girlstrip: { "Venus|ASC": 10, "Jupiter|ASC": 10, "Jupiter|DSC": 8, "Venus|DSC": 7, "Sun|ASC": 7, "Moon|DSC": 6, "Mercury|ASC": 6, "Uranus|ASC": 6, "Mercury|DSC": 5, "Mars|ASC": 4, "Neptune|ASC": 3, "Saturn|ASC": -4, "Part of Fortune|ASC": 7, "Part of Fortune|DSC": 5 },
   // Business baddie: entrepreneurship, leadership, clients and collaborators, career expansion.
   business: { "Jupiter|MC": 10, "Mercury|MC": 9, "Sun|MC": 9, "Mars|MC": 8, "Uranus|MC": 7, "Mercury|DSC": 7, "Jupiter|DSC": 7, "Pluto|MC": 6, "Saturn|MC": 6, "Venus|MC": 5, "Sun|DSC": 4, "Part of Fortune|MC": 7, "North Node|MC": 6, "Part of Fortune|DSC": 5 },
@@ -123,6 +126,7 @@ export const GOALS = [
   { id: "career", label: "main character", emoji: "🪩", head: "to be SEEN, recognised and celebrated" },
   { id: "fame", label: "fame", emoji: "🌟", head: "to get FAMOUS" },
   { id: "girlstrip", label: "girls' trip", emoji: "🍸", head: "for the GIRLS' TRIP" },
+  { id: "honeymoon", label: "honeymoon + couples", emoji: "💞", head: "for a ROMANTIC trip together" },
   { id: "power", label: "power", emoji: "🔥", head: "to step into your POWER" },
   { id: "business", label: "business baddie", emoji: "💻", head: "to build your BUSINESS" },
   { id: "dreamlife", label: "dream life", emoji: "🏡", head: "to build your DREAM LIFE" },
@@ -380,6 +384,7 @@ export const GOAL_BLURB: Record<string, string> = {
   career: "being seen, celebrated and recognised",
   fame: "going viral, press and a big audience",
   girlstrip: "friendship, pleasure and adventure",
+  honeymoon: "romance, anniversaries and falling deeper",
   power: "magnetic, confident and unstoppable",
   business: "clients, leadership and your next HQ",
   dreamlife: "belonging, romance and a life you love",

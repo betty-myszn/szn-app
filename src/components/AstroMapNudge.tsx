@@ -13,9 +13,10 @@ import { britishDate } from "@/lib/format-date";
 type Win = { transit: string; aspect: number; natal: string; start: string; end: string };
 const pp = "var(--font-poppins), Poppins, sans-serif";
 
-export default function AstroMapNudge() {
+export default function AstroMapNudge({ onDashboard = false }: { onDashboard?: boolean }) {
   const { chart } = useChart();
   const [view, setView] = useState<{ w: Win; today: string; cities: { name: string; line: string }[] } | null>(null);
+  const [none, setNone] = useState(false);
 
   useEffect(() => {
     if (!chart) return;
@@ -27,7 +28,7 @@ export default function AstroMapNudge() {
         if (gone) return;
         const live = j.windows.filter((w) => w.start <= j.today);
         const pick = live.find((w) => w.transit === "Jupiter") ?? live[0] ?? j.windows[0];
-        if (!pick) return;
+        if (!pick) { setNone(true); return; }
         const lines = computeLines(chart.julianDay, chart.planets).filter((l) => l.planet === pick.natal);
         const near = CITIES.map((c) => {
           const best = lines.map((l) => ({ l, d: distanceKm(l, c.lat, c.lon) })).sort((a, b) => a.d - b.d)[0];
@@ -39,13 +40,23 @@ export default function AstroMapNudge() {
     return () => { gone = true; };
   }, [chart]);
 
-  if (!view) return null;
+  // On the dashboard the astro map always has a door, even in a month with no window lit up.
+  if (!view) {
+    if (!onDashboard || !none) return null;
+    return (
+      <Link href="/your-season/places" className="no-underline" style={{ display: "block", border: "var(--border)", borderRadius: 22, padding: "20px 22px", background: "#fff", boxShadow: "5px 5px 0 var(--pink)", color: "var(--dark)" }}>
+        <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>🌍 your astro map</div>
+        <div className="display" style={{ fontSize: "clamp(22px, 2.8vw, 30px)", lineHeight: 1.1, marginTop: 6 }}>where in the world you glow: your rich b*tch city, your birthday trip and your honeymoon spot.</div>
+        <div style={{ fontFamily: pp, fontSize: 13, fontWeight: 800, textDecoration: "underline", marginTop: 12 }}>open your astro map →</div>
+      </Link>
+    );
+  }
   const { w, today, cities } = view;
   const now = w.start <= today;
   return (
     <Link href="/your-season/places" className="no-underline" style={{ display: "block", border: "var(--border)", borderRadius: 22, padding: "20px 22px", background: "#fff", boxShadow: "5px 5px 0 var(--dark)", color: "var(--dark)" }}>
       <div style={{ fontFamily: pp, fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pink)" }}>
-        ⏳ {now ? "your lines lighting up right now" : "your next lines to light up"}
+        {onDashboard ? "🌍 your astro map · " : "⏳ "}{now ? "your lines lighting up right now" : "your next lines to light up"}
       </div>
       <div className="display" style={{ fontSize: "clamp(22px, 2.8vw, 30px)", lineHeight: 1.1, marginTop: 6 }}>
         {GLYPH[w.transit]} {w.transit} is {TRANSIT_VERB[w.transit]} your {w.natal} lines {now ? `until the ${britishDate(w.end)}` : `from the ${britishDate(w.start)}`}.

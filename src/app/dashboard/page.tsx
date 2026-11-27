@@ -44,6 +44,7 @@ import { isEclipseSeasonLive } from "@/lib/eclipse-season-gate";
 import { moonVisible } from "@/lib/coven-month";
 import Fold from "@/components/Fold";
 import NowStrip from "@/components/NowStrip";
+import AstroMapNudge from "@/components/AstroMapNudge";
 
 // The member dashboard: the season HQ. A light pastel hero with the per-season cut-out, then her
 // szn area by area, the replay band, and a scannable top band (today + cosmic weather + the sky on
@@ -543,6 +544,15 @@ export default function DashboardPage() {
       {/* ── newest replay spotlight: straight under the hero and the eclipse banner, because a
            class that just landed is the most time-sensitive thing on the page. Self-hides once the
            replay is a few days old, and falls back to the slim vault banner. ── */}
+      {/* ── her astro map: the window lighting up her lines right now, with the cities it switches on ── */}
+      <SectionBoundary name="astro-map">
+        <section className="px-5 md:px-8" style={{ paddingTop: 28, paddingBottom: 8 }}>
+          <div className="max-w-6xl mx-auto">
+            <AstroMapNudge onDashboard />
+          </div>
+        </section>
+      </SectionBoundary>
+
       <SectionBoundary name="replay-highlight">
         <ReplayHighlight />
       </SectionBoundary>

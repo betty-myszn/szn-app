@@ -11,6 +11,9 @@ swisseph.swe_set_ephe_path(path.join(process.cwd(), "ephe"));
 // personal data is stored or looked up here):
 //  relocate: her birth moment redrawn for another place, Placidus like her natal chart, so the page
 //            can say which house each planet moves into if she lives there.
+//  solarReturn: the exact moment of her next birthday (the Sun back on its natal degree) and where every
+//            planet is at that moment, so the page can draw her birthday chart's lines and say where on
+//            earth to be for it. The moment is the same everywhere; WHERE she is changes the chart's angles.
 //  timing:   when the slow planets touch her natal planets over the next year, which is when the
 //            lines of that natal planet are switched on everywhere on her map.
 
@@ -58,6 +61,22 @@ export async function POST(request: NextRequest) {
         mc: h.mc,
         planets: planets.map((p) => ({ name: p.name, natalHouse: p.house ?? null, house: houseOf(p.longitude, cusps) })),
       });
+    }
+
+    if (body.action === "solarReturn") {
+      const sun = planets.find((p) => p.name === "Sun");
+      if (!sun) return NextResponse.json({ error: "Sun required" }, { status: 400 });
+      const flags = swisseph.SEFLG_SWIEPH;
+      const sunAt = (jd: number) => (swisseph.swe_calc_ut(jd, swisseph.SE_SUN, flags) as { longitude: number }).longitude;
+      // Start from yesterday so a birthday later today still counts, then walk to the moment the Sun
+      // is exactly back on her natal degree (Newton steps on the Sun's ~0.9856°/day motion).
+      let jd = jdOf(Date.now() - DAY_MS);
+      jd += (((sun.longitude - sunAt(jd)) % 360) + 360) % 360 / 0.9856;
+      for (let i = 0; i < 8; i++) { let d = sun.longitude - sunAt(jd); d = ((d + 540) % 360) - 180; jd += d / 0.9856; if (Math.abs(d) < 1e-7) break; }
+      const BODIES: [string, number][] = [["Sun", swisseph.SE_SUN], ["Moon", swisseph.SE_MOON], ["Mercury", swisseph.SE_MERCURY], ["Venus", swisseph.SE_VENUS], ["Mars", swisseph.SE_MARS], ["Jupiter", swisseph.SE_JUPITER], ["Saturn", swisseph.SE_SATURN], ["Uranus", swisseph.SE_URANUS], ["Neptune", swisseph.SE_NEPTUNE], ["Pluto", swisseph.SE_PLUTO], ["North Node", swisseph.SE_TRUE_NODE], ["Chiron", swisseph.SE_CHIRON], ["Lilith", swisseph.SE_MEAN_APOG]];
+      const out = BODIES.map(([name, id]) => { const r = swisseph.swe_calc_ut(jd, id, flags) as { longitude: number; latitude: number }; return { name, longitude: r.longitude, latitude: r.latitude || 0 }; });
+      const utc = new Date((jd - 2440587.5) * DAY_MS).toISOString();
+      return NextResponse.json({ julianDay: jd, utc, planets: out }, { headers: { "Cache-Control": "private, max-age=3600" } });
     }
 
     if (body.action === "timing") {

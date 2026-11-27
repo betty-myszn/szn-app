@@ -124,12 +124,27 @@ const TEMPLATE = `<section class="hero">
 <section class="members">
   <div class="wrap">
     <div class="block">
-      <div class="tag">girls' trip planner</div>
+      <div class="tag">trip planner · your bestie or your partner</div>
       <h2 class="h2" style="margin-top:8px">where you glow <span class="holo-text">together.</span></h2>
-      <p class="lede">Add your bestie's birth details, pick the vibe of the trip, and we find the places that light up BOTH of your charts, plus the dates when you're both lit up, so the trip is magic for each of you.</p>
+      <p class="lede">Add your bestie's or your partner's birth details, pick the vibe (girls' trip, couples trip, honeymoon energy and more), and we find the places that light up BOTH of your charts, plus the dates when you're both lit up, so the trip is magic for each of you.</p>
     </div>
     <div class="bestie" id="bestieSlot"></div>
     <div class="cards" id="bestieOut"></div>
+  </div>
+</section>
+
+<section class="members">
+  <div class="wrap">
+    <div class="block">
+      <div class="tag">birthday trip</div>
+      <h2 class="h2" style="margin-top:8px">where to spend your <span class="holo-text">birthday.</span></h2>
+      <p class="lede">Every birthday the Sun returns to the exact spot it was in when you were born, and WHERE you are at that moment sets the tone for your whole year. Pick what you want your next year to be about and we find where to be.</p>
+    </div>
+    <div class="srwhen" id="srWhen"><p class="lede">working out your birthday moment…</p></div>
+    <div class="tag" style="margin-top:18px">make your next year about</div>
+    <div class="wantmore" id="srThemes"></div>
+    <div class="srhome" id="srHome"></div>
+    <div class="cards" id="srOut"></div>
   </div>
 </section>
 
@@ -308,6 +323,7 @@ const GOAL_LEDE = {
   fame: "Your top-of-the-chart lines plus your Neptune glamour, Uranus go-viral and Lilith cut-through lines, where your name travels, the press calls and the audience grows.",
   peace: "Your Moon, Venus and Jupiter home lines and your softest Neptune spots, with every heavy line counted against a place, so the top of this list is where your whole body finally exhales.",
   power: "Your Pluto, Mars and Sun lines, where you feel magnetic, ambitious and confident. Some of these places push you hard, so go with an intention and come home an even bigger version of yourself.",
+  honeymoon: "Your Venus and Moon home and love lines, where romance feels easy, you feel adored and the two of you fall deeper. Lines that shake relationships up count against a place, so the top of this list is pure romance.",
   girlstrip: "Your Venus and Jupiter rising and setting lines, where friendship, pleasure and adventure flow and you make memories you're still talking about at 85. Add your bestie below to find the places that light up BOTH your charts.",
   business: "Your top-of-the-chart and partnership lines, for entrepreneurship, leadership, clients and collabs. Your next business headquarters might be somewhere you've never even considered.",
   dreamlife: "Your softest home lines plus your Venus and Jupiter lines, where belonging, romance and creativity come together into a life you LOOOOVE waking up to.",
@@ -339,7 +355,7 @@ root.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", 
 $("goals").addEventListener("click", (e) => { if (e.target.closest("[data-join]")) { openJoin(); return; } const b = e.target.closest("[data-goal]"); if (!b) return; S.goal = b.dataset.goal; S.focus = null; renderTab(true); b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" }); });
 
 // The big picker at the top: the launch location types as tiles, the rest as chips, plus live + travel.
-const BIG = ["money", "career", "fame", "girlstrip", "power", "business", "dreamlife", "peace"];
+const BIG = ["money", "career", "fame", "girlstrip", "honeymoon", "power", "business", "dreamlife", "peace"];
 $("want").innerHTML = BIG.map((id) => { const g = GOALS.find((x) => x.id === id); const top = ranked(SCORES[id], 1)[0]; return `<button class="wtile" data-want="${id}"><span class="we">${g.emoji}</span><b>${esc(g.label)}</b><small>${esc(GOAL_BLURB[id] || "")}</small>${top ? `<span class="wno1">your no.1 · ${esc(top.c.name)}</span>` : ""}</button>`; }).join("");
 $("wantMore").innerHTML = GOALS.filter((g) => !BIG.includes(g.id)).map((g) => `<button class="chip" data-want="${g.id}">${g.emoji} ${esc(g.label)}</button>`).join("")
   + `<button class="chip" data-want="tab:live">🏡 where to live</button><button class="chip" data-want="tab:travel">✈️ where to travel</button>`;
@@ -702,7 +718,7 @@ function locate() {
     $("result").insertAdjacentHTML("afterbegin", `<p class="lede" style="margin:0 0 12px"><b>Location is switched off for this site.</b> Type your town in the search instead.</p>`);
   }, { timeout: 12000, maximumAge: 600000 });
 }
-function pickCity(name) { S.city = name; try { localStorage.setItem("szn_place_city", name); } catch (e) {} q.value = ""; sug.hidden = true; renderResult(); }
+function pickCity(name) { S.city = name; try { localStorage.setItem("szn_place_city", name); } catch (e) {} q.value = ""; sug.hidden = true; renderResult(); renderSR(); }
 q.addEventListener("input", () => {
   const v = q.value.trim().toLowerCase();
   if (!v) { sug.hidden = true; return; }
@@ -844,7 +860,7 @@ $("timing").addEventListener("click", (e) => { const b = e.target.closest("[data
 // ── girls' trip planner: places that light up both charts ──
 // Pick the vibe of the trip, see the places that light you BOTH up, and the dates when both of your
 // lines are switched on at once (her timing comes from the same /api/power-places maths as yours).
-const VIBES = [["girlstrip", "🍸 girls' trip"], ["glow", "✨ glow-up trip"], ["money", "💸 rich b*tch retreat"], ["peace", "🕊️ peace + reset"], ["adventure", "🌍 adventure"], ["business", "💻 business retreat"], ["power", "🔥 power trip"]];
+const VIBES = [["girlstrip", "🍸 girls' trip"], ["honeymoon", "💞 couples trip"], ["glow", "✨ glow-up trip"], ["money", "💸 rich b*tch retreat"], ["peace", "🕊️ peace + reset"], ["adventure", "🌍 adventure"], ["business", "💻 business retreat"], ["power", "🔥 power trip"]];
 let bestie = null;
 const winFor = (tm, hs, W) => {
   if (!tm) return null;
@@ -926,6 +942,81 @@ $("bestieOut").addEventListener("click", (e) => {
   openSheet(`<div class="tag">${esc(c.country)} · your trip together</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>${prac}<div class="tag" style="margin-top:22px">what it does for you</div>${rows(c.hits, "you")}<div class="tag" style="margin-top:22px">what it does for ${nm}</div>${rows(bestie.hits.get(c), nm)}`);
 });
 
+// ── birthday trip: where to be for her solar return ──
+// The Sun's return moment comes from /api/power-places (solarReturn). Its planets draw lines exactly
+// like her birth chart does, so a city near a birthday-chart line has that planet on an angle for the
+// whole year ahead. Benefics on the angles = the place to be; Saturn, Mars and Pluto there count against it.
+const SR_THEMES = [["money", "💸 rich b*tch year"], ["career", "🪩 main character year"], ["fame", "🌟 fame year"], ["love", "💘 love year"], ["glow", "✨ glow-up year"], ["business", "💻 business year"], ["peace", "🕊️ peace year"], ["healing", "🌙 healing year"], ["adventure", "🌍 adventure year"]];
+const SR_HARD = { "Saturn|ASC": -7, "Saturn|MC": -5, "Saturn|DSC": -4, "Saturn|IC": -5, "Mars|ASC": -5, "Mars|DSC": -4, "Mars|IC": -4, "Pluto|ASC": -5, "Pluto|IC": -4, "Pluto|DSC": -3, "Neptune|ASC": -3, "Uranus|IC": -3 };
+const SR_ANGLE = {
+  MC: "crowns your birthday chart here, so career, reputation and being SEEN take centre stage all year",
+  ASC: "rises in your birthday chart here, so the year is all about YOU: your body, your glow and a fresh start",
+  DSC: "sets in your birthday chart here, so love, partners and the people who change your year come to you",
+  IC: "anchors your birthday chart here, so home, family and a deep inner reset carry the year",
+};
+const SR = { theme: "money", lines: null, hits: null, moment: null };
+const srW = () => ({ ...SR_HARD, ...SCORES[SR.theme] });
+const srSay = (h) => `${PLANET_PLAIN[h.line.planet] || h.line.planet}, ${SR_ANGLE[h.line.angle]}.`;
+function srRank() {
+  const W = srW();
+  const polar = (lat) => (Math.abs(lat) <= 55 ? 1 : Math.max(0.3, 1 - (Math.abs(lat) - 55) / 20));
+  const scored = cities.filter(pickable).map((c) => ({ c, score: (c.extended ? EXT : 1) * polar(c.lat) * SR.hits.get(c).map((h) => (W[h.key] || 0) * prox(h.d)).sort((a, b) => b - a).reduce((t, v, i) => t + (i === 0 ? v : v * (v < 0 ? 1 : 0.4)), 0) })).filter((r) => r.score > 0.4).sort((a, b) => b.score - a.score);
+  const top = [];
+  for (const r of scored) { if (top.some((o) => gcKm(o.c, r.c) < 700)) continue; top.push(r); if (top.length === 5) break; }
+  return top;
+}
+function renderSR() {
+  if (!SR.hits) return;
+  const W = srW();
+  $("srThemes").querySelectorAll("[data-srt]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.srt === SR.theme)));
+  const lead = (hs) => hs.filter((h) => (W[h.key] || 0) > 0).sort((a, b) => W[b.key] * prox(b.d) - W[a.key] * prox(a.d))[0];
+  const top = srRank();
+  $("srOut").innerHTML = top.map((r, i) => {
+    const h = lead(SR.hits.get(r.c));
+    const pills = SR.hits.get(r.c).filter((x) => (W[x.key] || 0) > 0 && x.d < 700).slice(0, 3).map((x) => `<span class="pill ${GIFT.has(x.line.planet) ? "gift" : "grow"}">${GLYPH[x.line.planet]} birthday ${ANGLE_LINE[x.line.angle]} · ${km(x.d)}</span>`).join("");
+    return `<button class="card ${i === 0 ? "top" : ""}" data-srcity="${esc(r.c.name)}">
+      ${i === 0 ? '<span class="acg-sticker">your birthday spot</span>' : ""}
+      <span class="rank ${i === 0 ? "holo" : ""}">${i + 1}</span>
+      <span style="display:block;min-width:0"><h3>${esc(r.c.name)}</h3>${r.c.country !== r.c.name ? `<div class="country">${esc(r.c.country)}</div>` : ""}
+        ${h ? `<span class="why"><b>why it's your birthday spot:</b> ${esc(srSay(h))}</span>` : ""}
+        <span class="pills">${pills}</span>
+        <span class="more">read it →</span></span></button>`;
+  }).join("") || `<p class="lede">No place lights this one up strongly for your next birthday, so try another theme above.</p>`;
+  // If she stays where she is: what her birthday chart does there.
+  const here = findCity(S.city) || cities.find((c) => c.birth);
+  if (here) {
+    const hs = hitsAt(here.lat, here.lon, SR.lines).filter((x) => x.d < 600);
+    const best = hs.slice().sort((a, b) => Math.abs((srW()[b.key] || 0) * prox(b.d)) - Math.abs((srW()[a.key] || 0) * prox(a.d)))[0];
+    $("srHome").innerHTML = `<div class="yours" style="margin:16px 0 4px"><b>if you stay in ${esc(here.name)}</b><p>${best ? esc(srSay(best)) + (((srW()[best.key] || 0) < 0) ? " That makes it a heavier, work-hard kind of year, so a birthday trip to one of the places below shifts the whole tone." : " Gorgeous, staying put works for you this year.") : "No birthday-chart planets land on an angle there, so it would be a calm, neutral year. A trip to one of the places below switches something ON."}</p></div>`;
+  }
+}
+async function loadSR() {
+  const sun = (CHART.planets || []).find((p) => p.name === "Sun"); if (!sun) return;
+  try {
+    const j = await fetch("/api/power-places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "solarReturn", planets: [{ name: "Sun", longitude: sun.longitude }] }), signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+    SR.lines = computeLines(j.julianDay, j.planets);
+    SR.hits = new Map(cities.map((c) => [c, hitsAt(c.lat, c.lon, SR.lines)]));
+    const d = new Date(j.utc);
+    const day = d.toLocaleDateString("en-GB", { weekday: "long" });
+    const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const time = d.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true }).replace(" ", "");
+    $("srWhen").innerHTML = `<div class="hook holo" style="border:2px solid var(--dark);border-radius:18px;padding:16px;font-family:var(--poppins);font-weight:800;font-size:17px;line-height:1.4">🎂 your next birthday moment: ${esc(day)} the ${esc(britishDate(iso))} at ${esc(time)}, your time.</div><p class="lede" style="font-size:14px;margin-top:10px">Be wherever you choose for that exact moment, so arrive the day before and stay the night. The chart is set the second the Sun lands, and it can fall the day before or after your birthday.</p>`;
+    renderSR();
+  } catch (e) { if (!signal.aborted) $("srWhen").innerHTML = `<p class="lede">Your birthday moment didn't load, refresh the page to try again.</p>`; }
+}
+$("srThemes").innerHTML = SR_THEMES.map(([id, l]) => `<button class="chip" data-srt="${id}" aria-pressed="${id === SR.theme}">${l}</button>`).join("");
+$("srThemes").addEventListener("click", (e) => { const b = e.target.closest("[data-srt]"); if (!b) return; SR.theme = b.dataset.srt; renderSR(); });
+$("srOut").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-srcity]"); if (!b) return;
+  const c = findCity(b.dataset.srcity), W = srW();
+  const hs = SR.hits.get(c).filter((h) => h.d < 900 && (W[h.key] || 0) !== 0).slice(0, 5);
+  openSheet(`<div class="tag">${esc(c.country)} · your birthday trip</div><h2><span class="holo-text">${esc(c.name)}.</span></h2>
+    ${root.querySelector("#srWhen .hook")?.outerHTML || ""}
+    <div class="tag" style="margin-top:22px">your birthday chart here</div>
+    ${hs.map((h) => { const [lab, cls] = strength(h.d); return `<div class="hitrow"><div class="hithead"><b>${GLYPH[h.line.planet]} ${h.line.planet} · birthday ${ANGLE_LINE[h.line.angle]}</b><span class="strength ${cls}">${lab} · ${km(h.d)}</span></div><p>${esc(srSay(h))}${(W[h.key] || 0) < 0 ? " Go with intention, this one asks you to work for it." : ""}</p></div>`; }).join("")}
+    <div style="margin-top:18px"><button class="btn" data-open-city="${esc(c.name)}">see my everyday map for ${esc(c.name)}</button></div>`);
+});
+
 // ── share card: a story-sized image of her no.1 places ──
 // The launch location types (and no love row: plenty of members are taken, Betty included).
 const SHARE_GOALS = [["💸", "rich b*tch", "money"], ["🪩", "main character", "career"], ["🍸", "girls' trip", "girlstrip"], ["🏡", "dream life", "dreamlife"]];
@@ -995,7 +1086,7 @@ if (FREE) root.querySelectorAll(".members").forEach((n) => n.remove());
 
 // go
 renderTab(false);
-if (!FREE) { renderResult(); renderDecode(); loadTiming(); }
+if (!FREE) { renderResult(); renderDecode(); loadTiming(); loadSR(); }
 
   const cleanup = () => {
     controller.abort();
