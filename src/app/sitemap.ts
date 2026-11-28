@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { SEASON_SLUGS } from "@/lib/season-pages";
+import { GIFT_SIGNS } from "@/lib/gift-guide";
 import { SIGN_SESSIONS } from "@/lib/sign-sessions";
 import { livePosts, populatedCategories } from "@/lib/blog";
 
@@ -35,6 +36,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.1 },
   ];
 
+  const giftGuides: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/gift-guide`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.7 },
+    ...GIFT_SIGNS.map((sign) => ({
+      url: `${SITE_URL}/gift-guide/${sign}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+  ];
+
   const seasons: MetadataRoute.Sitemap = SEASON_SLUGS.map((slug) => ({
     url: `${SITE_URL}/seasons/${slug}`,
     lastModified: now,
@@ -60,5 +71,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...core, ...seasons, ...blogCategories, ...blogPosts];
+  return [...core, ...seasons, ...giftGuides, ...blogCategories, ...blogPosts];
 }
